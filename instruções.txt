@@ -1,0 +1,44 @@
+﻿Intruções de instalação e configuração
+---------------------------------------
+
+---------------------------------------
+O arquivo para criação do banco de dados é o banco.sql. 
+---------------------------------------
+
+
+---------------------------------------
+Dentro da pasta 'Application' -> 'Config' edite o arquivo 'config.php' na seguinte linha. 
+
+$config['base_url']	= ''; 
+
+Aqui você colocará a url base de sua aplicação, se colocar na raiz do servidor por exemplo colocará assim: $config['base_url']	= 'http://127.0.0.1'; ou 'http://dominio.com'
+
+Se colocar dentro de uma pasta com nome por exemplo 'mapos' ficará assim:
+$config['base_url']	= 'http://127.0.0.1/mapos';
+
+
+Obs: Em alguns casos no ambiente local (localhost) é necessário especificar a porta.
+Exemplo: $config['base_url']	= 'http://127.0.0.1:3000/mapos';
+---------------------------------------
+
+
+---------------------------------------
+Dentro da pasta 'Application' -> 'Config' edite o arquivo 'database.php' e coloque os dados de acesso ao banco de dados. 
+---------------------------------------
+
+---------------------------------------
+O logotipo se encontra dentro da pasta assets/img. Caso queira trocá-lo, basta substituir pelo logo desejado com o mesmo nome (logo.png). 
+---------------------------------------
+
+---------------------------------------
+Dados de acesso
+Email: admin@admin.com
+Senha: 123456
+---------------------------------------
+
+
+Qualquer dúvida ou problema contate -> silva018-mg@yahoo.com.br
+
+
+
+
