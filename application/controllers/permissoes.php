@@ -156,10 +156,6 @@ class Permissoes extends CI_Controller {
 
     function editar() {
 
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
         
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
