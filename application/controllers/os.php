@@ -63,6 +63,12 @@ class Os extends CI_Controller {
 	
     function adicionar(){
 
+
+        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aOs')){
+           $this->session->set_flashdata('error','Você não tem permissão para adicionar O.S.');
+           redirect(base_url());
+        }
+
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
         
@@ -119,6 +125,7 @@ class Os extends CI_Controller {
     }
     
     public function adicionarAjax(){
+
         $this->load->library('form_validation');
 
         if ($this->form_validation->run('os') == false) {
@@ -151,13 +158,16 @@ class Os extends CI_Controller {
          
     }
 
-
-    
     function editar() {
 
         if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
             $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
+        }
+
+        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
+           $this->session->set_flashdata('error','Você não tem permissão para editar O.S.');
+           redirect(base_url());
         }
 
         $this->load->library('form_validation');
@@ -219,6 +229,11 @@ class Os extends CI_Controller {
             redirect('mapos');
         }
 
+        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
+           $this->session->set_flashdata('error','Você não tem permissão para visualizar O.S.');
+           redirect(base_url());
+        }
+
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
@@ -233,6 +248,11 @@ class Os extends CI_Controller {
 	
     function excluir(){
 
+        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dOs')){
+           $this->session->set_flashdata('error','Você não tem permissão para excluir O.S.');
+           redirect(base_url());
+        }
+        
         $id =  $this->input->post('id');
         if ($id == null){
 

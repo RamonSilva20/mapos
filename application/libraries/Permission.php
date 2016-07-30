@@ -12,7 +12,6 @@
  * e... Editar
  * d... Deletar ou Desabilitar
  * c... Cadastrar
- * array de permissoes para o autosig.
  */
 
 
