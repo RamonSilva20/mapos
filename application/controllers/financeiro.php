@@ -166,9 +166,10 @@ class Financeiro extends CI_Controller {
 
 		$this->load->library('pagination');
         
-        $config['base_url'] = base_url().'financeiro/lancamentos';
-        $config['total_rows'] = $this->financeiro_model->count('lancamentos');
-        $config['per_page'] = 100;
+        $config['base_url'] = site_url().'/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao;
+        $config['total_rows'] = $this->financeiro_model->count('lancamentos',$where);
+        $config['per_page'] = 20;
+        $config['page_query_string'] = TRUE;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
         $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
@@ -180,10 +181,17 @@ class Financeiro extends CI_Controller {
         $config['prev_tag_open'] = '<li>';
         $config['prev_tag_close'] = '</li>';
         $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';	
+        $config['next_tag_close'] = '</li>';
+        $config['first_link'] = 'Primeira';
+        $config['last_link'] = 'Última';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
         $this->pagination->initialize($config); 	
 
-		$this->data['results'] = $this->financeiro_model->get('lancamentos','idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto',$where,$config['per_page'],$this->uri->segment(3));
+		$this->data['results'] = $this->financeiro_model->get('lancamentos','idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto',$where,$config['per_page'],$this->input->get('per_page'));
        
 	    $this->data['view'] = 'financeiro/lancamentos';
        	$this->load->view('tema/topo',$this->data);

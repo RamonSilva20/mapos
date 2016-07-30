@@ -69,8 +69,13 @@ class Financeiro_model extends CI_Model {
 		return FALSE;        
     }
 
-    function count($table) {
-        return $this->db->count_all($table);
+    function count($table, $where) {
+
+        $this->db->from($table);
+        if($where){
+            $this->db->where($where);
+        }
+        return $this->db->count_all_results();
     }
 
 }
