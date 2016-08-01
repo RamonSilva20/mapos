@@ -49,17 +49,14 @@ class Permission{
                 // compara a atividade requisitada com a permissão.
                 if ($this->Permission[0][$atividade] == 1) {
                     return true;
-                } else {
-                    return false;
-                }
-            }
-            else{
+                } 
                 return false;
+
             }
-        }
-        else{
             return false;
         }
+        return false;
+
 
     }
     private function loadPermission($id = null){
@@ -76,17 +73,12 @@ class Permission{
                 //Atribui as permissoes ao atributo permission
                 $this->Permission = array($array);
                 return true;
-
-                
             }
-            else{
-                return false;
-            }
+            return false;
             
         }
-        else{
-            return false;
-        }
+        return false;
+
 
     }
 }
