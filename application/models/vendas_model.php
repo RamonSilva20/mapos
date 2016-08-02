@@ -31,7 +31,7 @@ class Vendas_model extends CI_Model {
     }
 
     function getById($id){
-        $this->db->select('vendas.*, clientes.*, usuarios.*');
+        $this->db->select('vendas.*, clientes.*, usuarios.telefone, usuarios.email,usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes','clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios','usuarios.idUsuarios = vendas.usuarios_id');
