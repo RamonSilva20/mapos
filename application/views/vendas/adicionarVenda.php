@@ -30,7 +30,7 @@
 
                                         <div class="span2">
                                             <label for="dataInicial">Data da Venda<span class="required">*</span></label>
-                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value=""  />
+                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y'); ?>"  />
                                         </div>
                                         <div class="span5">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
