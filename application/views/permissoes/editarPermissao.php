@@ -394,25 +394,9 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-
-        $("#marcarTodos").click(function(){
-
-            if ($(this).attr("checked")){
-              $('.marcar').each(
-                 function(){
-                    $(this).attr("checked", true);
-                 }
-              );
-           }else{
-              $('.marcar').each(
-                 function(){
-                    $(this).attr("checked", false);
-                 }
-              );
-           }
-
-        });   
-
+    $("#marcarTodos").change(function () {
+        $("input:checkbox").prop('checked', $(this).prop("checked"));
+    });   
 
  
     $("#formPermissao").validate({

@@ -381,23 +381,9 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        $(document).on('click', '#marcarTodos', function(event) {
-            if($(this).prop('checked')){
-
-              $('.marcar').each(
-                 function(){
-                    $(this).attr("checked", true);
-                 }
-              );
-           }else{
-
-              $('.marcar').each(
-                 function(){
-                    $(this).attr("checked", false);
-                 }
-              );
-           }
-        });
+    $("#marcarTodos").change(function () {
+        $("input:checkbox").prop('checked', $(this).prop("checked"));
+    });
        
 
  
