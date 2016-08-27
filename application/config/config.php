@@ -14,7 +14,17 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+if (defined('ENVIRONMENT')){
+	switch (ENVIRONMENT){
+		case 'production':
+			$config['base_url'] = 'http://mapos.com.br/';
+			break;
+
+		case 'development':
+			$config['base_url'] = 'http://mapos.dev/';
+			break;
+	}
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +36,7 @@ $config['base_url']	= '';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

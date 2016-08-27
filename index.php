@@ -18,7 +18,20 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
+setlocale(LC_ALL, "pt_BR", "pt_BR.utf-8", "portuguese");
+date_default_timezone_set('America/Sao_Paulo');
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if($_SERVER['SERVER_NAME'] == 'mapos.com.br'){ // Aqui vai o site base em produção
+	define('ENVIRONMENT', 'production');
+}else if(preg_match('/mapos.dev/i',$_SERVER['SERVER_NAME'])){ // Aqui um dominio local - bem como localhost
 	define('ENVIRONMENT', 'development');
+}else{
+	define('ENVIRONMENT', 'production');
+}
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

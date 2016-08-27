@@ -1,15 +1,32 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
-
-
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost'; 
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'banco';
+if (defined('ENVIRONMENT')){
+	switch (ENVIRONMENT){
+		case 'production':
+			$db['default']['hostname'] = 'caminho.do.servidor'; // muitas vezes é localhost
+			$db['default']['username'] = 'usuario.do.servidor';
+			$db['default']['password'] = 'senha.do.servidor';
+			$db['default']['database'] = 'banco.do.servidor';
+			break;
+
+		case 'development':
+			$db['default']['username'] = 'root';
+			$db['default']['password'] = 'root';
+			$db['default']['database'] = 'banco';
+			break;
+
+		default:
+			$db['default']['hostname'] = 'caminho.do.servidor'; // muitas vezes é localhost
+			$db['default']['username'] = 'usuario.do.servidor';
+			$db['default']['password'] = 'senha.do.servidor';
+			$db['default']['database'] = 'banco.do.servidor';
+			break;
+	}
+}
+
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
