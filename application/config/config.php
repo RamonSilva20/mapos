@@ -12,19 +12,19 @@
 |
 | If this is not set then CodeIgniter will guess the protocol, domain and
 | path to your installation.
-|
-*/
-if (defined('ENVIRONMENT')){
-	switch (ENVIRONMENT){
-		case 'production':
-			$config['base_url'] = 'http://mapos.com.br/';
-			break;
+*|
 
-		case 'development':
-			$config['base_url'] = 'http://mapos.dev/';
-			break;
-	}
-}
+ if (defined('ENVIRONMENT')){
+ 	switch (ENVIRONMENT){
+ 		case 'production':
+ 			$config['base_url'] = 'http://mapos.com.br/';
+ 			break;
+
+ 		case 'development':
+ 			$config['base_url'] = 'http://mapos.dev/';
+ 			break;
+ 	}
+ }
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +36,8 @@ if (defined('ENVIRONMENT')){
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '';
+$config['base_url'] = 'http://localhost/mapos/';
+$config['index_page'] = 'index.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -259,7 +260,8 @@ $config['sess_expiration']		= 7200;
 $config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= FALSE;
 $config['sess_use_database']	= TRUE;
-$config['sess_table_name']		= 'ci_sessions';
+$config['sess_save_path']		= 'ci_sessions';
+$config['sess_driver']		= 'database';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;
 $config['sess_time_to_update']	= 300;

@@ -38,6 +38,7 @@
 |
 */
 
+$route['(:any)'] = "mapos/$1";
 $route['default_controller'] = "mapos";
 $route['404_override'] = '';
 

@@ -8,15 +8,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Table `ci_sessions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
-  `session_id` VARCHAR(40) NOT NULL DEFAULT '0',
-  `ip_address` VARCHAR(45) NOT NULL DEFAULT '0',
-  `user_agent` VARCHAR(120) NOT NULL,
-  `last_activity` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `user_data` TEXT NOT NULL,
-  PRIMARY KEY (`session_id`),
-  INDEX `last_activity_idx` (`last_activity` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+        `id` varchar(40) NOT NULL,
+        `ip_address` varchar(45) NOT NULL,
+        `timestamp` int(10) unsigned DEFAULT 0 NOT NULL,
+        `data` blob NOT NULL,
+        KEY `ci_sessions_timestamp` (`timestamp`)
+);
 
 
 -- -----------------------------------------------------
