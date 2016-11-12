@@ -8,13 +8,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Table `ci_sessions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
-        `id` varchar(40) NOT NULL,
+        `id` varchar(128) NOT NULL,
         `ip_address` varchar(45) NOT NULL,
         `timestamp` int(10) unsigned DEFAULT 0 NOT NULL,
         `data` blob NOT NULL,
         KEY `ci_sessions_timestamp` (`timestamp`)
 );
-
 
 -- -----------------------------------------------------
 -- Table `clientes`
@@ -84,6 +83,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `idUsuarios` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(80) NOT NULL,
+  `usuario` VARCHAR(80) NOT NULL,
   `rg` VARCHAR(20) NULL DEFAULT NULL,
   `cpf` VARCHAR(20) NOT NULL,
   `rua` VARCHAR(70) NULL DEFAULT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `cidade` VARCHAR(45) NULL DEFAULT NULL,
   `estado` VARCHAR(20) NULL DEFAULT NULL,
   `email` VARCHAR(80) NOT NULL,
-  `senha` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(255) NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
   `celular` VARCHAR(20) NULL DEFAULT NULL,
   `situacao` TINYINT(1) NOT NULL,
@@ -361,8 +361,8 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 
 
 
-INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `nivel`, `permissoes_id`) VALUES
-(1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '0000-0000', '', 1, '2013-11-22', 1, 1);
+INSERT INTO `usuarios` (`idUsuarios`, `nome`,`usuario` ,`rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `nivel`, `permissoes_id`) VALUES
+(1, 'admin', 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '$2y$10$66ofwMBpn7TMfg1Ob/2vz.PqTgtLy4wACaNglj5592CEHzDrsf80u', '0000-0000', '', 1, '2013-11-22', 1, 1);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

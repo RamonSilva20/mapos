@@ -1,7 +1,5 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
-    
 <head>
         <title>Map Os</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,19 +10,19 @@
         <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
     </head>
     <body>
-        <div id="loginbox">            
-            <form  class="form-vertical" id="formLogin" method="post" action="<?php echo base_url()?>index.php/mapos/verificarLogin">
-                  <?php if($this->session->flashdata('error') != null){?>
+        <div id="loginbox">
+            <form  class="form-vertical" id="formLogin" method="post" action="<?=site_url('verificarLogin') ?>">
+                  <?php if($this->session->flashdata('error') != null):?>
                         <div class="alert alert-danger">
                           <button type="button" class="close" data-dismiss="alert">&times;</button>
                           <?php echo $this->session->flashdata('error');?>
                        </div>
-                  <?php }?>
+                  <?php endif;?>
                 <div class="control-group normal_text"> <h3><img src="<?php echo base_url()?>assets/img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
-                            <span class="add-on bg_lg"><i class="icon-user"></i></span><input id="email" name="email" type="text" placeholder="Email" />
+                            <span class="add-on bg_lg"><i class="icon-user"></i></span><input id="email" name="email" type="text" placeholder="Email ou Usuário" />
                         </div>
                     </div>
                 </div>
@@ -36,14 +34,14 @@
                     </div>
                 </div>
                 <div class="form-actions" style="text-align: center">
-                    <button class="btn btn-info btn-large"/> Logar</button>
+                    <button class="btn btn-info btn-large"/>Logar</button>
                 </div>
             </form>
-       
+
         </div>
-        
-        
-        
+
+
+
         <script src="<?php echo base_url()?>assets/js/bootstrap.min.js"></script>
         <script src="<?php echo base_url()?>assets/js/validate.js"></script>
 
@@ -55,27 +53,29 @@
 
                 $('#email').focus();
                 $("#formLogin").validate({
-                     rules :{
-                          email: { required: true, email: true},
+                   rules :{
+                          email: { required: true},
+                          // email: { required: true, email: true},
                           senha: { required: true}
                     },
                     messages:{
                           email: { required: 'Campo Requerido.', email: 'Insira Email válido'},
                           senha: {required: 'Campo Requerido.'}
                     },
-                   submitHandler: function( form ){       
-                         var dados = $( form ).serialize();
-                         
-                    
+                   submitHandler: function(form){
+                         var dados = $(form).serialize();
+
+
                         $.ajax({
                           type: "POST",
-                          url: "<?php echo base_url();?>index.php/mapos/verificarLogin?ajax=true",
+                          url: "<?=site_url('verificarLogin?ajax=true') ?>",
                           data: dados,
                           dataType: 'json',
                           success: function(data)
                           {
                             if(data.result == true){
-                                window.location.href = "<?php echo base_url();?>index.php/mapos";
+                                console.log('entrou no if');
+                                window.location.href = "<?=site_url() ?>";
                             }
                             else{
                                 $('#call-modal').trigger('click');
@@ -123,12 +123,3 @@
     </body>
 
 </html>
-
-
-
-
-
-
-
-
-

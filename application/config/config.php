@@ -36,8 +36,8 @@
 | variable so that it is blank.
 |
 */
-$config['base_url'] = 'http://localhost/mapos/';
-$config['index_page'] = 'index.php';
+$config['base_url'] = 'http://localhost/';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

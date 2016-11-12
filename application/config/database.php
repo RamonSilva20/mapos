@@ -8,21 +8,21 @@ if (defined('ENVIRONMENT')){
 		case 'production':
 			$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
 			$db['default']['username'] = 'root';
-			$db['default']['password'] = '1234';
+			$db['default']['password'] = '';
 			$db['default']['database'] = 'mapos';
 			break;
 
 		case 'development':
 		$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
 			$db['default']['username'] = 'root';
-			$db['default']['password'] = '1234';
+			$db['default']['password'] = '';
 			$db['default']['database'] = 'mapos';
 			break;
 
 		default:
 			$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
 			$db['default']['username'] = 'root';
-			$db['default']['password'] = '1234';
+			$db['default']['password'] = '';
 			$db['default']['database'] = 'mapos';
 			break;
 	}
