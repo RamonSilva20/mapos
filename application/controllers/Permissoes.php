@@ -1,19 +1,16 @@
 <?php
 
-class Permissoes extends CI_Controller {
-    
+class Permissoes extends MY_Acesso {
+
 
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
-    
+
   function __construct() {
       parent::__construct();
-      if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
-          redirect('mapos/login');
-      }
 
       if(!$this->permission->checkPermission($this->session->userdata('permissao'),'cPermissao')){
         $this->session->set_flashdata('error','Você não tem permissão para configurar as permissões no sistema.');
@@ -24,16 +21,16 @@ class Permissoes extends CI_Controller {
       $this->load->model('permissoes_model', '', TRUE);
       $this->data['menuConfiguracoes'] = 'Permissões';
   }
-	
+
 	function index(){
 		$this->gerenciar();
 	}
 
 	function gerenciar(){
-        
+
         $this->load->library('pagination');
-        
-        
+
+
         $config['base_url'] = base_url().'index.php/permissoes/gerenciar/';
         $config['total_rows'] = $this->permissoes_model->count('permissoes');
         $config['per_page'] = 10;
@@ -56,17 +53,17 @@ class Permissoes extends CI_Controller {
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->pagination->initialize($config); 	
+        $this->pagination->initialize($config);
 
 		  $this->data['results'] = $this->permissoes_model->get('permissoes','idPermissao,nome,data,situacao','',$config['per_page'],$this->uri->segment(3));
-       
+
 	    $this->data['view'] = 'permissoes/permissoes';
        	$this->load->view('tema/topo',$this->data);
 
-       
-		
+
+
     }
-	
+
     function adicionar() {
 
         $this->load->library('form_validation');
@@ -76,7 +73,7 @@ class Permissoes extends CI_Controller {
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            
+
             $nomePermissao = $this->input->post('nome');
             $cadastro = date('Y-m-d');
             $situacao = 1;
@@ -156,7 +153,7 @@ class Permissoes extends CI_Controller {
 
     function editar() {
 
-        
+
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
@@ -164,7 +161,7 @@ class Permissoes extends CI_Controller {
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            
+
             $nomePermissao = $this->input->post('nome');
             $situacao = $this->input->post('situacao');
             $permissoes = array(
@@ -239,24 +236,24 @@ class Permissoes extends CI_Controller {
         $this->load->view('tema/topo', $this->data);
 
     }
-	
+
     function excluir(){
 
-        
+
         $id =  $this->input->post('id');
         if ($id == null){
 
-            $this->session->set_flashdata('error','Erro ao tentar excluir serviço.');            
+            $this->session->set_flashdata('error','Erro ao tentar excluir serviço.');
             redirect(base_url().'index.php/servicos/gerenciar/');
         }
 
         $this->db->where('servicos_id', $id);
         $this->db->delete('servicos_os');
 
-        $this->servicos_model->delete('servicos','idServicos',$id);             
-        
+        $this->servicos_model->delete('servicos','idServicos',$id);
 
-        $this->session->set_flashdata('success','Serviço excluido com sucesso!');            
+
+        $this->session->set_flashdata('success','Serviço excluido com sucesso!');
         redirect(base_url().'index.php/servicos/gerenciar/');
     }
 }

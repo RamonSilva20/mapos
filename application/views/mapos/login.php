@@ -11,7 +11,8 @@
     </head>
     <body>
         <div id="loginbox">
-            <form  class="form-vertical" id="formLogin" method="post" action="<?=site_url('verificarLogin') ?>">
+            <?=form_open(site_url('verificarLogin'),'class="form-vertical" id="formLogin"') ?>
+            <!-- <form   method="post" action="""> -->
                   <?php if($this->session->flashdata('error') != null):?>
                         <div class="alert alert-danger">
                           <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -59,7 +60,7 @@
                           senha: { required: true}
                     },
                     messages:{
-                          email: { required: 'Campo Requerido.', email: 'Insira Email válido'},
+                          email: { required: 'Campo Requerido.'},
                           senha: {required: 'Campo Requerido.'}
                     },
                    submitHandler: function(form){

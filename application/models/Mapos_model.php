@@ -20,9 +20,7 @@ class Mapos_model extends CI_Model {
         if($where){
             $this->db->where($where);
         }
-
         $query = $this->db->get();
-
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
@@ -116,8 +114,8 @@ class Mapos_model extends CI_Model {
     }
 
 	  function count($table){
-		return $this->db->count_all($table);
-	}
+		    return $this->db->count_all($table);
+	  }
 
     function getOsAbertas(){
         $this->db->select('os.*, clientes.nomeCliente');
@@ -199,6 +197,7 @@ class Mapos_model extends CI_Model {
 
     public function getSenhaUsuario($email)
     {
+      $this->db->select('senha, email');
       $this->db->where('email',$email);
       $this->db->or_where('usuario',$email);
       $this->db->where('situacao',1);

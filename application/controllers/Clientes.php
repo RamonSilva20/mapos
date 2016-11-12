@@ -1,23 +1,20 @@
 <?php
 
-class Clientes extends CI_Controller {
-    
+class Clientes extends MY_Acesso {
+
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
-    
+
     function __construct() {
         parent::__construct();
-            if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))){
-            redirect('mapos/login');
-            }
             $this->load->helper(array('codegen_helper'));
             $this->load->model('clientes_model','',TRUE);
             $this->data['menuClientes'] = 'clientes';
-	}	
-	
+	}
+
 	function index(){
 		$this->gerenciar();
 	}
@@ -30,8 +27,8 @@ class Clientes extends CI_Controller {
         }
         $this->load->library('table');
         $this->load->library('pagination');
-        
-   
+
+
         $config['base_url'] = base_url().'index.php/clientes/gerenciar/';
         $config['total_rows'] = $this->clientes_model->count('clientes');
         $config['per_page'] = 10;
@@ -53,25 +50,81 @@ class Clientes extends CI_Controller {
         $config['first_tag_close'] = '</li>';
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
-        
-        $this->pagination->initialize($config); 	
-        
+
+        $this->pagination->initialize($config);
+
 	    $this->data['results'] = $this->clientes_model->get('clientes','idClientes,nomeCliente,documento,telefone,celular,email,rua,numero,bairro,cidade,estado,cep','',$config['per_page'],$this->uri->segment(3));
-       	
+
        	$this->data['view'] = 'clientes/clientes';
        	$this->load->view('tema/topo',$this->data);
-	  
-       
-		
+
+
+
     }
-	
+
     function adicionar() {
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aCliente')){
            $this->session->set_flashdata('error','Você não tem permissão para adicionar clientes.');
            redirect(base_url());
         }
 
+
         $this->load->library('form_validation');
+
+        $config = array(
+            array(
+                    'field' => 'nomeCliente',
+                    'label' => 'Nome',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'documento',
+                    'label' => 'Documento',
+                    'rules' => 'required',
+            ),
+            array(
+                    'field' => 'telefone',
+                    'label' => 'Telefone',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'email',
+                    'label' => 'Email',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'rua',
+                    'label' => 'Rua',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'numero',
+                    'label' => 'Número',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'bairro',
+                    'label' => 'Bairro',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'cidade',
+                    'label' => 'Cidade',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'estado',
+                    'label' => 'Estado',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'cep',
+                    'label' => 'Cep',
+                    'rules' => 'required'
+            )
+        );
+
+        $this->form_validation->set_rules($config);
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('clientes') == false) {
@@ -170,22 +223,22 @@ class Clientes extends CI_Controller {
         $this->data['view'] = 'clientes/visualizar';
         $this->load->view('tema/topo', $this->data);
 
-        
+
     }
-	
+
     public function excluir(){
 
-            
+
             if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dCliente')){
                $this->session->set_flashdata('error','Você não tem permissão para excluir clientes.');
                redirect(base_url());
             }
 
-            
+
             $id =  $this->input->post('id');
             if ($id == null){
 
-                $this->session->set_flashdata('error','Erro ao tentar excluir cliente.');            
+                $this->session->set_flashdata('error','Erro ao tentar excluir cliente.');
                 redirect(base_url().'index.php/clientes/gerenciar/');
             }
 
@@ -231,10 +284,9 @@ class Clientes extends CI_Controller {
 
 
 
-            $this->clientes_model->delete('clientes','idClientes',$id); 
+            $this->clientes_model->delete('clientes','idClientes',$id);
 
-            $this->session->set_flashdata('success','Cliente excluido com sucesso!');            
+            $this->session->set_flashdata('success','Cliente excluido com sucesso!');
             redirect(base_url().'index.php/clientes/gerenciar/');
     }
 }
-

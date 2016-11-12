@@ -1,19 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Arquivos extends CI_Controller {
+class Arquivos extends MY_Acesso {
 
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
 
 	public function __construct(){
 		parent::__construct();
 
-		if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))){
-        	redirect('mapos/login');
-        }
 
         $this->load->helper(array('codegen_helper'));
         $this->load->model('arquivos_model','',TRUE);
@@ -38,8 +35,8 @@ class Arquivos extends CI_Controller {
 
         if($pesquisa == null && $de == null && $ate == null){
 
-            
-                   
+
+
             $config['base_url'] = base_url().'index.php/arquivos/gerenciar';
             $config['total_rows'] = $this->arquivos_model->count('documentos');
             $config['per_page'] = 10;
@@ -61,11 +58,11 @@ class Arquivos extends CI_Controller {
             $config['first_tag_close'] = '</li>';
             $config['last_tag_open'] = '<li>';
             $config['last_tag_close'] = '</li>';
-            
-            $this->pagination->initialize($config);     
-            
+
+            $this->pagination->initialize($config);
+
             $this->data['results'] = $this->arquivos_model->get('documentos','idDocumentos,documento,descricao,file,path,url,cadastro,categoria,tamanho,tipo','',$config['per_page'],$this->uri->segment(3));
-        
+
         }
         else{
 
@@ -76,7 +73,7 @@ class Arquivos extends CI_Controller {
 
                 if($ate != null){
                     $ate = explode('/', $ate);
-                    $ate = $ate[2].'-'.$ate[1].'-'.$ate[0]; 
+                    $ate = $ate[2].'-'.$ate[1].'-'.$ate[0];
                 }
                 else{
                     $ate = $de;
@@ -156,7 +153,7 @@ class Arquivos extends CI_Controller {
             $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
-        
+
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eArquivo')){
           $this->session->set_flashdata('error','Você não tem permissão para editar arquivos.');
           redirect(base_url());
@@ -182,7 +179,7 @@ class Arquivos extends CI_Controller {
             $data = array(
                 'documento' => $this->input->post('nome'),
                 'descricao' => $this->input->post('descricao'),
-                'cadastro' => $data,           
+                'cadastro' => $data,
             );
 
             if ($this->arquivos_model->edit('documentos', $data, 'idDocumentos', $this->input->post('idDocumentos')) == TRUE) {
@@ -202,7 +199,7 @@ class Arquivos extends CI_Controller {
 
 
     public function download($id = null){
-    	
+
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vArquivo')){
           $this->session->set_flashdata('error','Você não tem permissão para visualizar arquivos.');
           redirect(base_url());
@@ -219,7 +216,7 @@ class Arquivos extends CI_Controller {
 
     	$path = $file->path;
 
-		$this->zip->read_file($path); 
+		$this->zip->read_file($path);
 
 		$this->zip->download('file'.date('d-m-Y-H.i.s').'.zip');
     }
@@ -240,7 +237,7 @@ class Arquivos extends CI_Controller {
     	$file = $this->arquivos_model->getById($id);
 
     	$this->db->where('idDocumentos', $id);
-        
+
         if($this->db->delete('documentos')){
 
         	$path = $file->path;
@@ -264,7 +261,7 @@ class Arquivos extends CI_Controller {
           $this->session->set_flashdata('error','Você não tem permissão para adicionar arquivos.');
           redirect(base_url());
         }
-	
+
     	$date = date('d-m-Y');
 
 		$config['upload_path'] = './assets/arquivos/'.$date;

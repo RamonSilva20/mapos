@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Mapos extends CI_Controller {
+class Mapos extends MY_Controller {
 
 
     /**
@@ -16,17 +16,14 @@ class Mapos extends CI_Controller {
     }
     public function index()
     {
-        if((!$this->session->userdata('session_id'))  OR (!$this->session->logado)){
-            redirect('login');
-        }
+        $this->data['ordens']                   = $this->mapos_model->getOsAbertas();
+        $this->data['produtos']                 = $this->mapos_model->getProdutosMinimo();
+        $this->data['os']                       = $this->mapos_model->getOsEstatisticas();
+        $this->data['estatisticas_financeiro']  = $this->mapos_model->getEstatisticasFinanceiro();
+        $this->data['menuPainel']               = 'Painel';
+        $this->data['view']                     = 'mapos/painel';
 
-        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-        $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
-        $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['menuPainel'] = 'Painel';
-        $this->data['view'] = 'mapos/painel';
-        $this->load->view('tema/topo',  $this->data);
+        $this->load->view('tema/topo');
 
     }
     public function minhaConta()
@@ -78,9 +75,8 @@ class Mapos extends CI_Controller {
     }
     public function login()
     {
-
+        $this->load->helper('form');
         $this->load->view('mapos/login');
-
     }
     public function sair()
     {
@@ -90,43 +86,48 @@ class Mapos extends CI_Controller {
     }
     public function verificarLogin()
     {
+        // carrega bibliotecas do CI
         $this->load->library('form_validation');
-        $this->load->helper('form');
+
+        // configurações do formulario de login
+        // torna obrigatório preencher email e senha.
         $this->form_validation->set_rules('email','Email','required');
         $this->form_validation->set_rules('senha','Senha','required');
+
         $ajax = $this->input->get('ajax');
 
-        $email ='admin@admin.com';
-        $senha = '123456';
-        $usuario = $this->mapos_model->getSenhaUsuario($email);
+        // $email ='admin@admin.com';
+        // $senha = '123456';
+        $email = $this->input->post('email');
+        $senha = $this->input->post('senha');
 
+
+        $usuario = $this->mapos_model->getSenhaUsuario($email);
+        // var_dump($usuario, password_verify($senha, $usuario[0]->senha));
+        // exit;
 
         if ($this->form_validation->run() == false) {
             if($ajax == true){
                 // $json = array('result' => false);
-                $json = array('result' => false);
+                $json = array('result' => false, 'nao entrou' => 12);
                 echo json_encode($json);
             }
             else{
                 $this->session->set_flashdata('error','Os dados de acesso estão incorretos.');
-                // redirect($this->login);
+                redirect('login');
             }
         }else
         {
-          // $email = $this->input->post('email');
-          // $senha = $this->input->post('senha');
-            // $this->db->select('senha');
-            $this->db->where('email',$email);
-            // $this->db->where('senha',$senha);
-            // $this->db->where('situacao',1);
-            $this->db->limit(1);
-            $usuario = $this->db->get('usuarios')->row();
-
-              if(password_verify($senha, $usuario->senha)){
-                  $this->db->where('email',$email);
+              if(password_verify($senha, $usuario[0]->senha)){
+                  $this->db->where('email',$usuario[0]->email);
                   $this->db->limit(1);
                   $usuario = $this->db->get('usuarios')->row();
-                  $dados = array('session_id' => session_id(), 'nome' => $usuario->nome, 'id' => $usuario->idUsuarios,'permissao' => $usuario->permissoes_id , 'logado' => TRUE);
+                  $dados = array(
+                    'session_id'  => session_id(),
+                    'nome'        => $usuario->nome,
+                    'id'          => $usuario->idUsuarios,
+                    'permissao'   => $usuario->permissoes_id,
+                    'logado'      => TRUE);
                   $this->session->set_userdata($dados);
 
                   if($ajax == true){
@@ -134,19 +135,20 @@ class Mapos extends CI_Controller {
                       echo json_encode($json);
                   }
                   else{
+                      $json = array('result' => false);
                       redirect('');
                   }
-            }else{
-                if($ajax == true){
-                    // $json = array('result' => false);
-                    $json = array('result' => true);
-                    echo json_encode($json);
-                }
-                else{
-                    $this->session->set_flashdata('error','Os dados de acesso estão incorretos.');
-                    redirect($this->login);
-                }
-            }
+              }else{
+                  if($ajax == true){
+                      // $json = array('result' => false);
+                      $json = array('result' => true);
+                      echo json_encode($json);
+                  }
+                  else{
+                      $this->session->set_flashdata('error','Os dados de acesso estão incorretos.');
+                      redirect($this->login);
+                  }
+              }
         }
     }
     public function backup()
@@ -359,7 +361,8 @@ class Mapos extends CI_Controller {
 
         }
     }
-    public function editarLogo(){
+    public function editarLogo()
+    {
 
         if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))){
             redirect('index.php/mapos/login');

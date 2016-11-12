@@ -1,34 +1,29 @@
 <?php
 
-class Os extends CI_Controller {
-    
+class Os extends MY_Acesso {
+
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
 
     function __construct() {
         parent::__construct();
-        
-        if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-		
 		$this->load->helper(array('form','codegen_helper'));
 		$this->load->model('os_model','',TRUE);
 		$this->data['menuOs'] = 'OS';
-	}	
-	
+	}
+
 	function index(){
 		$this->gerenciar();
 	}
 
 	function gerenciar(){
-        
+
         $this->load->library('pagination');
-        
-        
+
+
         $config['base_url'] = base_url().'index.php/os/gerenciar/';
         $config['total_rows'] = $this->os_model->count('os');
         $config['per_page'] = 10;
@@ -50,17 +45,17 @@ class Os extends CI_Controller {
         $config['first_tag_close'] = '</li>';
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
-        	
-        $this->pagination->initialize($config); 	
+
+        $this->pagination->initialize($config);
 
 		$this->data['results'] = $this->os_model->get('os','idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico','',$config['per_page'],$this->uri->segment(3));
-       
+
 	    $this->data['view'] = 'os/os';
        	$this->load->view('tema/topo',$this->data);
-      
-		
+
+
     }
-	
+
     function adicionar(){
 
 
@@ -71,7 +66,7 @@ class Os extends CI_Controller {
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-        
+
         if ($this->form_validation->run('os') == false) {
            $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
@@ -80,7 +75,7 @@ class Os extends CI_Controller {
             $dataFinal = $this->input->post('dataFinal');
 
             try {
-                
+
                 $dataInicial = explode('/', $dataInicial);
                 $dataInicial = $dataInicial[2].'-'.$dataInicial[1].'-'.$dataInicial[0];
 
@@ -92,7 +87,7 @@ class Os extends CI_Controller {
                 }
 
             } catch (Exception $e) {
-               $dataInicial = date('Y/m/d'); 
+               $dataInicial = date('Y/m/d');
                $dataFinal = date('Y/m/d');
             }
 
@@ -115,15 +110,15 @@ class Os extends CI_Controller {
                 redirect('os/editar/'.$id);
 
             } else {
-                
+
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
         }
-         
+
         $this->data['view'] = 'os/adicionarOs';
         $this->load->view('tema/topo', $this->data);
     }
-    
+
     public function adicionarAjax(){
 
         $this->load->library('form_validation');
@@ -155,7 +150,7 @@ class Os extends CI_Controller {
 
             }
         }
-         
+
     }
 
     function editar() {
@@ -181,7 +176,7 @@ class Os extends CI_Controller {
             $dataFinal = $this->input->post('dataFinal');
 
             try {
-                
+
                 $dataInicial = explode('/', $dataInicial);
                 $dataInicial = $dataInicial[2].'-'.$dataInicial[1].'-'.$dataInicial[0];
 
@@ -189,7 +184,7 @@ class Os extends CI_Controller {
                 $dataFinal = $dataFinal[2].'-'.$dataFinal[1].'-'.$dataFinal[0];
 
             } catch (Exception $e) {
-               $dataInicial = date('Y/m/d'); 
+               $dataInicial = date('Y/m/d');
             }
 
             $data = array(
@@ -219,7 +214,7 @@ class Os extends CI_Controller {
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['view'] = 'os/editarOs';
         $this->load->view('tema/topo', $this->data);
-   
+
     }
 
     public function visualizar(){
@@ -243,20 +238,20 @@ class Os extends CI_Controller {
 
         $this->data['view'] = 'os/visualizarOs';
         $this->load->view('tema/topo', $this->data);
-       
+
     }
-	
+
     function excluir(){
 
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dOs')){
            $this->session->set_flashdata('error','Você não tem permissão para excluir O.S.');
            redirect(base_url());
         }
-        
+
         $id =  $this->input->post('id');
         if ($id == null){
 
-            $this->session->set_flashdata('error','Erro ao tentar excluir OS.');            
+            $this->session->set_flashdata('error','Erro ao tentar excluir OS.');
             redirect(base_url().'index.php/os/gerenciar/');
         }
 
@@ -269,18 +264,18 @@ class Os extends CI_Controller {
         $this->db->where('os_id', $id);
         $this->db->delete('anexos');
 
-        $this->os_model->delete('os','idOs',$id);             
-        
+        $this->os_model->delete('os','idOs',$id);
 
-        $this->session->set_flashdata('success','OS excluída com sucesso!');            
+
+        $this->session->set_flashdata('success','OS excluída com sucesso!');
         redirect(base_url().'index.php/os/gerenciar/');
 
 
-        
+
     }
 
     public function autoCompleteProduto(){
-        
+
         if (isset($_GET['term'])){
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteProduto($q);
@@ -317,7 +312,7 @@ class Os extends CI_Controller {
 
     public function adicionarProduto(){
 
-        
+
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
         $subtotal = $preco * $quantidade;
@@ -332,19 +327,19 @@ class Os extends CI_Controller {
         if($this->os_model->add('produtos_os', $data) == true){
             $sql = "UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?";
             $this->db->query($sql, array($quantidade, $produto));
-            
+
             echo json_encode(array('result'=> true));
         }else{
             echo json_encode(array('result'=> false));
         }
-      
+
     }
 
     function excluirProduto(){
-        
+
             $ID = $this->input->post('idProduto');
             if($this->os_model->delete('produtos_os','idProdutos_os',$ID) == true){
-                
+
                 $quantidade = $this->input->post('quantidade');
                 $produto = $this->input->post('produto');
 
@@ -352,17 +347,17 @@ class Os extends CI_Controller {
                 $sql = "UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?";
 
                 $this->db->query($sql, array($quantidade, $produto));
-                
+
                 echo json_encode(array('result'=> true));
             }
             else{
                 echo json_encode(array('result'=> false));
-            }           
+            }
     }
 
     public function adicionarServico(){
 
-        
+
         $data = array(
             'servicos_id'=> $this->input->post('idServico'),
             'os_id'=> $this->input->post('idOsServico'),
@@ -399,9 +394,9 @@ class Os extends CI_Controller {
             'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
             'max_size'      => 0,
             );
-    
+
         $this->upload->initialize( $upload_conf );
-        
+
         foreach($_FILES['userfile'] as $key=>$val)
         {
             $i = 1;
@@ -409,33 +404,33 @@ class Os extends CI_Controller {
             {
                 $field_name = "file_".$i;
                 $_FILES[$field_name][$key] = $v;
-                $i++;   
+                $i++;
             }
         }
         unset($_FILES['userfile']);
-    
+
 
         $error = array();
         $success = array();
-        
+
         foreach($_FILES as $field_name => $file)
         {
             if ( ! $this->upload->do_upload($field_name))
             {
-       
+
                 $error['upload'][] = $this->upload->display_errors();
             }
             else
             {
 
                 $upload_data = $this->upload->data();
-                
+
                 if($upload_data['is_image'] == 1){
 
                    // set the resize config
                     $resize_conf = array(
-    
-                        'source_image'  => $upload_data['full_path'], 
+
+                        'source_image'  => $upload_data['full_path'],
                         'new_image'     => $upload_data['file_path'].'thumbs/thumb_'.$upload_data['file_name'],
                         'width'         => 200,
                         'height'        => 125
@@ -453,7 +448,7 @@ class Os extends CI_Controller {
                         $this->load->model('Os_model');
                         $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'] ,base_url().'assets/anexos/','thumb_'.$upload_data['file_name'],realpath('./assets/anexos/'));
 
-                    } 
+                    }
                 }
                 else{
 
@@ -462,9 +457,9 @@ class Os extends CI_Controller {
                     $this->load->model('Os_model');
 
                     $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'] ,base_url().'assets/anexos/','',realpath('./assets/anexos/'));
- 
+
                 }
-                
+
             }
         }
 
@@ -477,7 +472,7 @@ class Os extends CI_Controller {
         {
             echo json_encode(array('result'=> true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .'));
         }
-        
+
 
     }
 
@@ -494,9 +489,9 @@ class Os extends CI_Controller {
             unlink($file->path.'/'.$file->anexo);
 
             if($file->thumb != null){
-                unlink($file->path.'/thumbs/'.$file->thumb);    
+                unlink($file->path.'/thumbs/'.$file->thumb);
             }
-            
+
             if($this->os_model->delete('anexos','idAnexos',$id) == true){
 
                 echo json_encode(array('result'=> true, 'mensagem' => 'Anexo excluído com sucesso.'));
@@ -505,15 +500,15 @@ class Os extends CI_Controller {
                 echo json_encode(array('result'=> false, 'mensagem' => 'Erro ao tentar excluir anexo.'));
             }
 
-            
+
         }
     }
 
 
     public function downloadanexo($id = null){
-        
+
         if($id != null && is_numeric($id)){
-            
+
             $this->db->where('idAnexos', $id);
             $file = $this->db->get('anexos',1)->row();
 
@@ -521,12 +516,12 @@ class Os extends CI_Controller {
 
             $path = $file->path;
 
-            $this->zip->read_file($path.'/'.$file->anexo); 
+            $this->zip->read_file($path.'/'.$file->anexo);
 
-            $this->zip->download('file'.date('d-m-Y-H.i.s').'.zip'); 
+            $this->zip->download('file'.date('d-m-Y-H.i.s').'.zip');
 
         }
-      
+
     }
 
 
@@ -534,7 +529,7 @@ class Os extends CI_Controller {
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
- 
+
 
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -545,7 +540,7 @@ class Os extends CI_Controller {
             $recebimento = $this->input->post('recebimento');
 
             try {
-                
+
                 $vencimento = explode('/', $vencimento);
                 $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
 
@@ -555,9 +550,9 @@ class Os extends CI_Controller {
 
                 }
             } catch (Exception $e) {
-               $vencimento = date('Y/m/d'); 
+               $vencimento = date('Y/m/d');
             }
-            
+
             $data = array(
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
@@ -570,14 +565,14 @@ class Os extends CI_Controller {
                 'tipo' => $this->input->post('tipo')
             );
 
-            if ($this->os_model->add('lancamentos',$data) == TRUE) { 
-                
-                $os = $this->input->post('os_id'); 
+            if ($this->os_model->add('lancamentos',$data) == TRUE) {
+
+                $os = $this->input->post('os_id');
 
                 $this->db->set('faturado',1);
                 $this->db->set('valorTotal',$this->input->post('valor'));
                 $this->db->where('idOs', $os);
-                $this->db->update('os'); 
+                $this->db->update('os');
 
                 $this->session->set_flashdata('success','OS faturada com sucesso!');
                 $json = array('result'=>  true);
@@ -594,8 +589,7 @@ class Os extends CI_Controller {
         $this->session->set_flashdata('error','Ocorreu um erro ao tentar faturar OS.');
         $json = array('result'=>  false);
         echo json_encode($json);
-        
+
     }
 
 }
-

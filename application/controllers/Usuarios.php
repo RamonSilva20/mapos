@@ -1,6 +1,6 @@
 <?php
 
-class Usuarios extends CI_Controller {
+class Usuarios extends MY_Acesso {
 
 
     /**
@@ -12,9 +12,6 @@ class Usuarios extends CI_Controller {
     function __construct() {
 
         parent::__construct();
-        if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'cUsuario')){
           $this->session->set_flashdata('error','Você não tem permissão para configurar os usuários.');
           redirect(base_url());
@@ -72,7 +69,61 @@ class Usuarios extends CI_Controller {
 
         $this->load->library('form_validation');
 	      $this->data['custom_error'] = '';
+        $config = array(
+            array(
+                    'field' => 'nomeCliente',
+                    'label' => 'Nome',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'documento',
+                    'label' => 'Documento',
+                    'rules' => 'required',
+            ),
+            array(
+                    'field' => 'telefone',
+                    'label' => 'Telefone',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'email',
+                    'label' => 'Email',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'rua',
+                    'label' => 'Rua',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'numero',
+                    'label' => 'Número',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'bairro',
+                    'label' => 'Bairro',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'cidade',
+                    'label' => 'Cidade',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'estado',
+                    'label' => 'Estado',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'cep',
+                    'label' => 'Cep',
+                    'rules' => 'required'
+            )
+        );
 
+        $this->form_validation->set_rules($config);
+        
         if ($this->form_validation->run('usuarios') == false)
         {
              $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">'.validation_errors().'</div>' : false);

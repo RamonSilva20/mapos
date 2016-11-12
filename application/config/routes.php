@@ -38,9 +38,19 @@
 |
 */
 
-$route['(:any)'] = "mapos/$1";
-$route['default_controller'] = "mapos";
-$route['404_override'] = '';
+$route['vendas']              = "vendas";
+$route['usuarios']            = "usuarios";
+$route['servicos']            = "servicos";
+$route['relatorios']          = "relatorios";
+$route['produtos']            = "produtos";
+$route['permissoes']          = "permissoes";
+$route['os']                  = "os";
+$route['financeiro']          = "financeiro";
+$route['arquivos']            = "arquivos";
+$route['clientes']            = "clientes";
+$route['(:any)']              = "mapos/$1";
+$route['default_controller']  = "mapos";
+$route['404_override']        = '';
 
 
 

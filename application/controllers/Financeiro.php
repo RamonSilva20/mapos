@@ -1,19 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Financeiro extends CI_Controller {
+class Financeiro extends MY_Acesso {
 
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
 
 	public function __construct()
 	{
 		parent::__construct();
-		if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))){
-        	redirect('mapos/login');
-        }
         $this->load->model('financeiro_model','',TRUE);
         $this->data['menuFinanceiro'] = 'financeiro';
         $this->load->helper(array('codegen_helper'));
@@ -36,11 +33,11 @@ class Financeiro extends CI_Controller {
         if($periodo == 'todos'){
 
             if($situacao == 'previsto'){
-                $where = 'data_vencimento > "'.date('Y-m-d').'" AND baixado = "0"'; 
+                $where = 'data_vencimento > "'.date('Y-m-d').'" AND baixado = "0"';
             }
             else{
                 if($situacao == 'atrasado'){
-                    $where = 'data_vencimento < "'.date('Y-m-d').'" AND baixado = "0"'; 
+                    $where = 'data_vencimento < "'.date('Y-m-d').'" AND baixado = "0"';
                 }
                 else{
                     if($situacao == 'realizado'){
@@ -55,10 +52,10 @@ class Financeiro extends CI_Controller {
         }
         else{
 
-            // busca lançamentos do dia 
+            // busca lançamentos do dia
             if($periodo == null || $periodo == 'dia'){
                 $where = 'data_vencimento = "'.date('Y-m-d'.'"');
-            
+
 
             } // fim lançamentos dia
 
@@ -70,17 +67,17 @@ class Financeiro extends CI_Controller {
                     $semana = $this->getThisWeek();
 
                     if(! isset($situacao) || $situacao == 'todos'){
-                    
-                        $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.$semana[1].'"'; 
+
+                        $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.$semana[1].'"';
 
                     }
                     else{
                         if($situacao == 'previsto'){
-                            $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$semana[1].'" AND baixado = "0"'; 
+                            $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$semana[1].'" AND baixado = "0"';
                         }
                         else{
                             if($situacao == 'atrasado'){
-                                $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"'; 
+                                $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
                             }
                             else{
                                 if($situacao == 'realizado'){
@@ -92,7 +89,7 @@ class Financeiro extends CI_Controller {
                             }
                         }
                     }
-                
+
                 } // fim lançamentos dia
                 else{
 
@@ -100,30 +97,30 @@ class Financeiro extends CI_Controller {
 
 
                     if($periodo == 'mes'){
-                        
+
                         $mes = $this->getThisMonth();
-                        
+
                         if(! isset($situacao) || $situacao == 'todos'){
-                    
-                            $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'"'; 
+
+                            $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'"';
 
                         }
                         else{
                             if($situacao == 'previsto'){
-                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$mes[1].'" AND baixado = "0"'; 
+                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$mes[1].'" AND baixado = "0"';
                             }
                             else{
                                 if($situacao == 'atrasado'){
-                                    $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"'; 
+                                    $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
                                 }
                                 else{
                                     if($situacao == 'realizado'){
-                                        $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "1"';    
+                                        $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "1"';
                                     }
                                     else{
                                         $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "0"';
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -132,40 +129,40 @@ class Financeiro extends CI_Controller {
                     // busca lançamentos do ano
                     else{
                         $ano = $this->getThisYear();
-                        
+
                         if(! isset($situacao) || $situacao == 'todos'){
-                    
+
                             $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'"';
 
                         }
                         else{
                             if($situacao == 'previsto'){
-                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$ano[1].'" AND baixado = "0"'; 
+                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$ano[1].'" AND baixado = "0"';
                             }
                             else{
                                 if($situacao == 'atrasado'){
-                                    $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"'; 
+                                    $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
                                 }
                                 else{
                                     if($situacao == 'realizado'){
-                                        $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'" AND baixado = "1"';        
+                                        $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'" AND baixado = "1"';
                                     }
                                     else{
                                         $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'" AND baixado = "0"';
                                     }
-                                    
+
                                 }
                             }
-                        }   
+                        }
                     }
                 }
-            }    
+            }
         }
 
-	
+
 
 		$this->load->library('pagination');
-        
+
         $config['base_url'] = site_url().'/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao;
         $config['total_rows'] = $this->financeiro_model->count('lancamentos',$where);
         $config['per_page'] = 20;
@@ -189,10 +186,10 @@ class Financeiro extends CI_Controller {
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->pagination->initialize($config); 	
+        $this->pagination->initialize($config);
 
 		$this->data['results'] = $this->financeiro_model->get('lancamentos','idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto',$where,$config['per_page'],$this->input->get('per_page'));
-       
+
 	    $this->data['view'] = 'financeiro/lancamentos';
        	$this->load->view('tema/topo',$this->data);
 	}
@@ -225,14 +222,14 @@ class Financeiro extends CI_Controller {
             if($vencimento == null){
                 $vencimento = date('d/m/Y');
             }
-            
+
             try {
-                
+
                 $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];   
+                $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
 
             } catch (Exception $e) {
-               $vencimento = date('Y/m/d'); 
+               $vencimento = date('Y/m/d');
             }
 
             $data = array(
@@ -256,7 +253,7 @@ class Financeiro extends CI_Controller {
 
         $this->session->set_flashdata('error','Ocorreu um erro ao tentar adicionar receita.');
         redirect($urlAtual);
-        
+
     }
 
 
@@ -287,12 +284,12 @@ class Financeiro extends CI_Controller {
             }
 
             try {
-                
+
                 $vencimento = explode('/', $vencimento);
                 $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
 
             } catch (Exception $e) {
-               $vencimento = date('Y/m/d'); 
+               $vencimento = date('Y/m/d');
             }
 
             $data = array(
@@ -317,12 +314,12 @@ class Financeiro extends CI_Controller {
 
         $this->session->set_flashdata('error','Ocorreu um erro ao tentar adicionar despesa.');
         redirect($urlAtual);
-        
-        
+
+
     }
 
 
-    public function editar(){   
+    public function editar(){
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eLancamento')){
            $this->session->set_flashdata('error','Você não tem permissão para editar lançamentos.');
            redirect(base_url());
@@ -346,7 +343,7 @@ class Financeiro extends CI_Controller {
             $pagamento = $this->input->post('pagamento');
 
             try {
-                
+
                 $vencimento = explode('/', $vencimento);
                 $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
 
@@ -354,7 +351,7 @@ class Financeiro extends CI_Controller {
                 $pagamento = $pagamento[2].'-'.$pagamento[1].'-'.$pagamento[0];
 
             } catch (Exception $e) {
-               $vencimento = date('Y/m/d'); 
+               $vencimento = date('Y/m/d');
             }
 
             $data = array(
@@ -394,7 +391,7 @@ class Financeiro extends CI_Controller {
 
     }
 
-    public function excluirLancamento(){   
+    public function excluirLancamento(){
 
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dLancamento')){
            $this->session->set_flashdata('error','Você não tem permissão para excluir lançamentos.');
@@ -409,7 +406,7 @@ class Financeiro extends CI_Controller {
     	}
     	else{
 
-    		$result = $this->financeiro_model->delete('lancamentos','idLancamentos',$id); 
+    		$result = $this->financeiro_model->delete('lancamentos','idLancamentos',$id);
     		if($result){
     			$json = array('result'=>  true);
     			echo json_encode($json);
@@ -418,7 +415,7 @@ class Financeiro extends CI_Controller {
     			$json = array('result'=>  false);
     			echo json_encode($json);
     		}
-    		
+
     	}
     }
 
@@ -447,7 +444,7 @@ class Financeiro extends CI_Controller {
     protected function getThisMonth(){
 
         $mes = date('m');
-        $ano = date('Y'); 
+        $ano = date('Y');
         $qtdDiasMes = date('t');
         $inicia = $ano."-".$mes."-01";
 
@@ -456,4 +453,3 @@ class Financeiro extends CI_Controller {
     }
 
 }
-
