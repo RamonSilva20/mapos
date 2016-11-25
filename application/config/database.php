@@ -14,8 +14,8 @@ if (defined('ENVIRONMENT')){
 
 		case 'development':
 		$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
-			$db['default']['username'] = 'root';
-			$db['default']['password'] = '';
+			$db['default']['username'] = 'gus';
+			$db['default']['password'] = 'Gust4v0;';
 			$db['default']['database'] = 'mapos';
 			break;
 

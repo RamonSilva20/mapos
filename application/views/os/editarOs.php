@@ -25,13 +25,13 @@
                         <div class="tab-pane active" id="tab1">
 
                             <div class="span12" id="divCadastrarOs">
-                                
+
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
                                     <?php echo form_hidden('idOs',$result->idOs) ?>
-                                    
+
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>#Protocolo: <?php echo $result->idOs ?></h3>
-                                        
+
                                         <div class="span6" style="margin-left: 0">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>"  />
@@ -144,7 +144,7 @@
                                         <?php
                                         $total = 0;
                                         foreach ($produtos as $p) {
-                                            
+
                                             $total = $total + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
@@ -153,7 +153,7 @@
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
-                                       
+
                                         <tr>
                                             <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?php echo number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></strong></td>
@@ -222,7 +222,7 @@
                                 <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
                                     <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8"s method="post">
                                     <div class="span10">
-                                
+
                                         <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs?>" />
                                         <label for="">Anexo</label>
                                         <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
@@ -233,9 +233,9 @@
                                     </div>
                                     </form>
                                 </div>
-                
+
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
-                                    <?php 
+                                    <?php
                                     $cont = 1;
                                     $flag = 5;
                                     foreach ($anexos as $a) {
@@ -250,11 +250,11 @@
                                         }
 
                                         if($cont == $flag){
-                                           echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>'; 
+                                           echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>';
                                            $flag += 4;
                                         }
                                         else{
-                                           echo '<div class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>'; 
+                                           echo '<div class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>';
                                         }
                                         $cont ++;
                                     } ?>
@@ -262,7 +262,7 @@
 
                             </div>
                         </div>
-                
+
 
 
                     </div>
@@ -281,7 +281,7 @@
 
 
 
- 
+
 <!-- Modal visualizar anexo -->
 <div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -312,47 +312,50 @@
   <h3 id="myModalLabel">Faturar Venda</h3>
 </div>
 <div class="modal-body">
-    
+
     <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
-    <div class="span12" style="margin-left: 0"> 
+    <div class="span12" style="margin-left: 0">
       <label for="descricao">Descrição</label>
       <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> "  />
-      
-    </div>  
-    <div class="span12" style="margin-left: 0"> 
-      <div class="span12" style="margin-left: 0"> 
+
+    </div>
+    <div class="span12" style="margin-left: 0">
+      <div class="span12" style="margin-left: 0">
         <label for="cliente">Cliente*</label>
         <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
         <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
         <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
       </div>
-      
-      
+
+
     </div>
-    <div class="span12" style="margin-left: 0"> 
-      <div class="span4" style="margin-left: 0">  
+    <div class="span12" style="margin-left: 0">
+      <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
-        <input type="hidden" id="tipo" name="tipo" value="receita" /> 
+        <input type="hidden" id="tipo" name="tipo" value="receita" />
         <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total,2); ?> "  />
       </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
         <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"  />
       </div>
-      
+
     </div>
-    
-    <div class="span12" style="margin-left: 0"> 
+
+    <div class="span12" style="margin-left: 0">
       <div class="span4" style="margin-left: 0">
         <label for="recebido">Recebido?</label>
-        &nbsp &nbsp &nbsp &nbsp <input  id="recebido" type="checkbox" name="recebido" value="1" /> 
+        &nbsp &nbsp &nbsp &nbsp <input  id="recebido" type="checkbox" name="recebido" value="1" />
       </div>
       <div id="divRecebimento" class="span8" style=" display: none">
         <div class="span6">
           <label for="recebimento">Data Recebimento</label>
-          <input class="span12 datepicker" id="recebimento" type="text" name="recebimento" /> 
+          <input class="span12 datepicker" id="recebimento" type="text" name="recebimento" />
         </div>
         <div class="span6">
+          <label for="desconto">Desconto</label>
+          <input class="span12 money" id="desconto" type="text" name="desconto" value="0" />
+
           <label for="formaPgto">Forma Pgto</label>
           <select name="formaPgto" id="formaPgto" class="span12">
             <option value="Dinheiro">Dinheiro</option>
@@ -360,13 +363,13 @@
             <option value="Cheque">Cheque</option>
             <option value="Boleto">Boleto</option>
             <option value="Depósito">Depósito</option>
-            <option value="Débito">Débito</option>        
-          </select> 
+            <option value="Débito">Débito</option>
+          </select>
       </div>
-      
+
     </div>
-    
-    
+
+
 </div>
 <div class="modal-footer">
   <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
@@ -382,8 +385,8 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    
-    $(".money").maskMoney(); 
+
+    $(".money").maskMoney();
 
      $('#recebido').click(function(event) {
         var flag = $(this).is(':checked');
@@ -401,18 +404,18 @@ $(document).ready(function(){
          total_servico = $('#total-servico').val();
          valor = valor.replace(',', '' );
          total_servico = total_servico.replace(',', '' );
-         total_servico = parseFloat(total_servico); 
+         total_servico = parseFloat(total_servico);
          valor = parseFloat(valor);
          $('#valor').val(valor + total_servico);
      });
-     
+
      $("#formFaturar").validate({
           rules:{
              descricao: {required:true},
              cliente: {required:true},
              valor: {required:true},
              vencimento: {required:true}
-      
+
           },
           messages:{
              descricao: {required: 'Campo Requerido.'},
@@ -420,7 +423,7 @@ $(document).ready(function(){
              valor: {required: 'Campo Requerido.'},
              vencimento: {required: 'Campo Requerido.'}
           },
-          submitHandler: function( form ){       
+          submitHandler: function( form ){
             var dados = $( form ).serialize();
             $('#btn-cancelar-faturar').trigger('click');
             $.ajax({
@@ -431,7 +434,7 @@ $(document).ready(function(){
               success: function(data)
               {
                 if(data.result == true){
-                    
+
                     window.location.reload(true);
                 }
                 else{
@@ -454,7 +457,7 @@ $(document).ready(function(){
                  $("#estoque").val(ui.item.estoque);
                  $("#preco").val(ui.item.preco);
                  $("#quantidade").focus();
-                 
+
 
             }
       });
@@ -466,7 +469,7 @@ $(document).ready(function(){
 
                  $("#idServico").val(ui.item.id);
                  $("#precoServico").val(ui.item.preco);
-                 
+
 
             }
       });
@@ -561,7 +564,7 @@ $(document).ready(function(){
                 }
 
              }
-             
+
        });
 
        $("#formServicos").validate({
@@ -571,9 +574,9 @@ $(document).ready(function(){
           messages:{
              servico: {required: 'Insira um serviço'}
           },
-          submitHandler: function( form ){       
+          submitHandler: function( form ){
                  var dados = $( form ).serialize();
-                 
+
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
@@ -599,10 +602,10 @@ $(document).ready(function(){
 
 
         $("#formAnexos").validate({
-         
-          submitHandler: function( form ){       
+
+          submitHandler: function( form ){
                 //var dados = $( form ).serialize();
-                var dados = new FormData(form); 
+                var dados = new FormData(form);
                 $("#form-anexos").hide('1000');
                 $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -622,11 +625,11 @@ $(document).ready(function(){
 
                     }
                     else{
-                        $("#divAnexos").html('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> '+data.mensagem+'</div>');      
+                        $("#divAnexos").html('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> '+data.mensagem+'</div>');
                     }
                   },
                   error : function() {
-                      $("#divAnexos").html('<div class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> Ocorreu um erro. Verifique se você anexou o(s) arquivo(s).</div>');      
+                      $("#divAnexos").html('<div class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> Ocorreu um erro. Verifique se você anexou o(s) arquivo(s).</div>');
                   }
 
                   });
@@ -652,7 +655,7 @@ $(document).ready(function(){
                   {
                     if(data.result == true){
                         $( "#divProdutos" ).load("<?php echo current_url();?> #divProdutos" );
-                        
+
                     }
                     else{
                         alert('Ocorreu um erro ao tentar excluir produto.');
@@ -661,7 +664,7 @@ $(document).ready(function(){
                   });
                   return false;
             }
-            
+
        });
 
 
@@ -707,7 +710,7 @@ $(document).ready(function(){
        $(document).on('click', '#excluir-anexo', function(event) {
            event.preventDefault();
 
-           var link = $(this).attr('link'); 
+           var link = $(this).attr('link');
            $('#modal-anexo').modal('hide');
            $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -737,7 +740,3 @@ $(document).ready(function(){
 });
 
 </script>
-
-
-
-

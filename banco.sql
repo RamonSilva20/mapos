@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
   `valor` VARCHAR(15) NOT NULL,
+  `desconto` DECIMAL(12,2) DEFAULT 0,
   `data_vencimento` DATE NOT NULL,
   `data_pagamento` DATE NULL DEFAULT NULL,
   `baixado` TINYINT(1) NULL DEFAULT NULL,
@@ -63,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
+-- ALTER TABLE lancamentos ADD COLUMN `desconto` DECIMAL(12,2) DEFAULT 0;
 
 -- -----------------------------------------------------
 -- Table `permissoes`

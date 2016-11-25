@@ -62,15 +62,35 @@ class Servicos extends MY_Acesso {
 
 
 
-    }
+  }
 
-    function adicionar() {
+  function adicionar() {
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aServico')){
            $this->session->set_flashdata('error','Você não tem permissão para adicionar serviços.');
            redirect(base_url());
         }
 
         $this->load->library('form_validation');
+
+        $config = array(
+            array(
+                    'field' => 'nome',
+                    'label' => 'Nome',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'preco',
+                    'label' => 'Preço',
+                    'rules' => 'required',
+            ),
+            array(
+                    'field' => 'descricao',
+                    'label' => 'Descrição',
+                    'rules' => 'required'
+            )
+        );
+        $this->form_validation->set_rules($config);
+
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('servicos') == false) {
@@ -97,12 +117,31 @@ class Servicos extends MY_Acesso {
 
     }
 
-    function editar() {
+  function editar() {
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eServico')){
            $this->session->set_flashdata('error','Você não tem permissão para editar serviços.');
            redirect(base_url());
         }
         $this->load->library('form_validation');
+
+        $config = array(
+            array(
+                    'field' => 'nome',
+                    'label' => 'Nome',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'preco',
+                    'label' => 'Preço',
+                    'rules' => 'required',
+            ),
+            array(
+                    'field' => 'descricao',
+                    'label' => 'Descrição',
+                    'rules' => 'required'
+            )
+        );
+        $this->form_validation->set_rules($config);
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('servicos') == false) {
@@ -131,7 +170,7 @@ class Servicos extends MY_Acesso {
 
     }
 
-    function excluir(){
+  function excluir(){
 
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dServico')){
            $this->session->set_flashdata('error','Você não tem permissão para excluir serviços.');

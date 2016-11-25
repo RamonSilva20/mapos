@@ -1,5 +1,5 @@
 /*
-* @Copyright (c) 2010 Aurélio Saraiva (aureliosaraiva@gmail.com)
+* @Copyright (c) 2010 Aurï¿½lio Saraiva (aureliosaraiva@gmail.com)
 * @Page http://github.com/plentz/jquery-maskmoney
 * try at http://inovaideia.com.br/maskInputMoney/
 
@@ -33,7 +33,7 @@
 (function($) {
 	$.fn.maskMoney = function(settings) {
 		settings = $.extend({
-			symbol:'US$',
+			symbol:'R$',
 			decimal:'.',
 			precision:2,
 			thousands:',',
@@ -66,7 +66,7 @@
 					return false;
 				}
 
-				var key = String.fromCharCode(k);  // Valor para o código da Chave
+				var key = String.fromCharCode(k);  // Valor para o cï¿½digo da Chave
 				preventDefault(e);
 				input.val(maskValue(input.val()+key));
 			}

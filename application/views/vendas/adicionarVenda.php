@@ -1,6 +1,7 @@
-<link rel="stylesheet" href="<?php echo base_url();?>js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url('js/jquery.min.js')?>"></script>
+<link rel="stylesheet" href="<?php echo base_url('js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css');?>" />
+<script type="text/javascript" src="<?php echo base_url('js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
+<script type="text/javascript" src="<?php echo base_url('js/jquery.validate.js')?>"></script>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -11,7 +12,7 @@
                 <h5>Cadastro de venda</h5>
             </div>
             <div class="widget-content nopadding">
-                
+
 
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
@@ -42,9 +43,9 @@
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value=""  />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value=""  />
                                         </div>
-                                        
+
                                     </div>
-                              
+
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <button class="btn btn-success" id="btnContinuar"><i class="icon-share-alt icon-white"></i> Continuar</button>
@@ -60,11 +61,11 @@
 
                 </div>
 
-                
+
 .
-             
+
         </div>
-        
+
     </div>
 </div>
 </div>
@@ -75,12 +76,12 @@
 $(document).ready(function(){
 
       $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteCliente",
+            source: "<?php echo site_url('vendas/autoCompleteCliente'); ?>",
             minLength: 1,
             select: function( event, ui ) {
 
                  $("#clientes_id").val(ui.item.id);
-                
+
 
             }
       });
@@ -96,8 +97,8 @@ $(document).ready(function(){
             }
       });
 
-      
-      
+
+
 
       $("#formVendas").validate({
           rules:{
@@ -123,8 +124,7 @@ $(document).ready(function(){
        });
 
     $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
-   
+
 });
 
 </script>
-
