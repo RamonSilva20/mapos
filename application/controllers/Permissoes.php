@@ -1,37 +1,35 @@
 <?php
 
-class Permissoes extends MY_Acesso {
-
-
+class Permissoes extends MY_Acesso
+{
     /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
-  function __construct() {
+   * author: Ramon Silva
+   * email: silva018-mg@yahoo.com.br.
+   */
+  public function __construct()
+  {
       parent::__construct();
 
-      if(!$this->permission->checkPermission($this->session->userdata('permissao'),'cPermissao')){
-        $this->session->set_flashdata('error','Você não tem permissão para configurar as permissões no sistema.');
-        redirect(base_url());
+      if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+          $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
+          redirect(base_url());
       }
 
       $this->load->helper(array('form', 'codegen_helper'));
-      $this->load->model('permissoes_model', '', TRUE);
+      $this->load->model('permissoes_model', '', true);
       $this->data['menuConfiguracoes'] = 'Permissões';
   }
 
-	function index(){
-		$this->gerenciar();
-	}
+    public function index()
+    {
+        $this->gerenciar();
+    }
 
-	function gerenciar(){
-
+    public function gerenciar()
+    {
         $this->load->library('pagination');
 
-
-        $config['base_url'] = base_url().'index.php/permissoes/gerenciar/';
+        $config['base_url'] = site_url('permissoes/gerenciar/');
         $config['total_rows'] = $this->permissoes_model->count('permissoes');
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -55,25 +53,21 @@ class Permissoes extends MY_Acesso {
 
         $this->pagination->initialize($config);
 
-		  $this->data['results'] = $this->permissoes_model->get('permissoes','idPermissao,nome,data,situacao','',$config['per_page'],$this->uri->segment(3));
+        $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $config['per_page'], $this->uri->segment(3));
 
-	    $this->data['view'] = 'permissoes/permissoes';
-       	$this->load->view('tema/topo',$this->data);
-
-
-
+        $this->data['view'] = 'permissoes/permissoes';
+        $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar() {
-
+    public function adicionar()
+    {
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {
-
             $nomePermissao = $this->input->post('nome');
             $cadastro = date('Y-m-d');
             $situacao = 1;
@@ -134,13 +128,11 @@ class Permissoes extends MY_Acesso {
                 'nome' => $nomePermissao,
                 'data' => $cadastro,
                 'permissoes' => $permissoes,
-                'situacao' => $situacao
+                'situacao' => $situacao,
             );
-
-            if ($this->permissoes_model->add('permissoes', $data) == TRUE) {
-
+            if ($this->permissoes_model->add('permissoes', $data) == true) {
                 $this->session->set_flashdata('success', 'Permissão adicionada com sucesso!');
-                redirect(base_url() . 'index.php/permissoes/adicionar/');
+                redirect(base_url().'index.php/permissoes/adicionar/');
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
@@ -148,20 +140,17 @@ class Permissoes extends MY_Acesso {
 
         $this->data['view'] = 'permissoes/adicionarPermissao';
         $this->load->view('tema/topo', $this->data);
-
     }
 
-    function editar() {
-
-
+    public function editar()
+    {
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {
-
             $nomePermissao = $this->input->post('nome');
             $situacao = $this->input->post('situacao');
             $permissoes = array(
@@ -219,12 +208,12 @@ class Permissoes extends MY_Acesso {
             $data = array(
                 'nome' => $nomePermissao,
                 'permissoes' => $permissoes,
-                'situacao' => $situacao
+                'situacao' => $situacao,
             );
 
-            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == TRUE) {
+            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
                 $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
-                redirect(base_url() . 'index.php/permissoes/editar/'.$this->input->post('idPermissao'));
+                redirect(base_url().'index.php/permissoes/editar/'.$this->input->post('idPermissao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
             }
@@ -234,30 +223,25 @@ class Permissoes extends MY_Acesso {
 
         $this->data['view'] = 'permissoes/editarPermissao';
         $this->load->view('tema/topo', $this->data);
-
     }
 
-    function excluir(){
-
-
-        $id =  $this->input->post('id');
-        if ($id == null){
-
-            $this->session->set_flashdata('error','Erro ao tentar excluir serviço.');
-            redirect(base_url().'index.php/servicos/gerenciar/');
+    public function desativar()
+    {
+        $id = $this->input->post('id');
+        if ($id == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir serviço.');
+            redirect(site_url('permissoes/gerenciar'));
         }
 
-        $this->db->where('servicos_id', $id);
-        $this->db->delete('servicos_os');
+        $this->db->where('idPermissao', $id);
+        $this->db->delete('permissoes');
 
-        $this->servicos_model->delete('servicos','idServicos',$id);
+        $this->permissoes_model->delete('servicos', 'idServicos', $id);
 
-
-        $this->session->set_flashdata('success','Serviço excluido com sucesso!');
-        redirect(base_url().'index.php/servicos/gerenciar/');
+        $this->session->set_flashdata('success', 'Serviço excluido com sucesso!');
+        redirect(base_url('permissoes/gerenciar'));
     }
 }
-
 
 /* End of file permissoes.php */
 /* Location: ./application/controllers/permissoes.php */

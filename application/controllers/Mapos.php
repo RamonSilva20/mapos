@@ -20,14 +20,14 @@ class Mapos extends MY_Controller
         if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
-        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-        $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
-        $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['menuPainel'] = 'Painel';
-        $this->data['view'] = 'mapos/painel';
-
-        $this->load->view('tema/topo');
+        $this->data['ordens']                   = $this->mapos_model->getOsAbertas();
+        $this->data['produtos']                 = $this->mapos_model->getProdutosMinimo();
+        $this->data['os']                       = $this->mapos_model->getOsEstatisticas();
+        $this->data['estatisticas_financeiro']  = $this->mapos_model->getEstatisticasFinanceiro();
+        $this->data['menuPainel']               = 'Painel';
+        $this->data['view']                     = 'mapos/painel';
+        $this->load->view('tema/topo', $this->data);
+        // $this->load->view('mapos/painel', $this->data);
     }
     public function minhaConta()
     {
@@ -101,12 +101,10 @@ class Mapos extends MY_Controller
         $senha = $this->input->post('senha');
 
         $usuario = $this->mapos_model->getSenhaUsuario($email);
-        // var_dump($usuario, password_verify($senha, $usuario[0]->senha));
-        // exit;
+
 
         if ($this->form_validation->run() == false) {
             if ($ajax == true) {
-                // $json = array('result' => false);
                 $json = array('result' => false, 'nao entrou' => 12);
                 echo json_encode($json);
             } else {

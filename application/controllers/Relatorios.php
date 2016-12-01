@@ -57,15 +57,24 @@ class Relatorios extends MY_Acesso{
     public function clientesRapid(){
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'rCliente')){
            $this->session->set_flashdata('error','Você não tem permissão para gerar relatórios de clientes.');
-           redirect(base_url());
+           redirect(site_url());
         }
 
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
 
-        $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirClientes', $data);
-        $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
-        pdf_create($html, 'relatorio_clientes' . date('d/m/y'), TRUE);
+        // $this->load->helper('mpdf');
+        $this->load->view('relatorios/imprimir/imprimirClientes', $data);
+        // $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
+        // Create an instance of the class:
+
+        // $mpdf = new mPDF();
+
+        // Write some HTML code:
+        // $mpdf->WriteHTML('asdasd');
+        //
+        // // Output a PDF file directly to the browser
+        // $mpdf->Output();
+        // pdf_create($html, 'relatorio_clientes' . date('d/m/y'), TRUE);
     }
 
     public function produtosRapid(){

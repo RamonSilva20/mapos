@@ -71,39 +71,7 @@ class Produtos extends MY_Acesso {
 
         $this->load->library('form_validation');
 
-        $config = array(
-            array(
-                    'field' => 'descricao',
-                    'label' => 'Descrição',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'unidade',
-                    'label' => 'Unidade',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'precoCompra',
-                    'label' => 'Preço de Compra',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'precoVenda',
-                    'label' => 'Preço de Venda',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'estoque',
-                    'label' => 'Estoque',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'estoqueMinimo',
-                    'label' => 'Estoque Mínimo',
-                    'rules' => 'required'
-            )
-        );
-        $this->form_validation->set_rules($config);
+
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('produtos') == false) {
@@ -147,39 +115,7 @@ class Produtos extends MY_Acesso {
         }
         $this->load->library('form_validation');
 
-        $config = array(
-            array(
-                    'field' => 'descricao',
-                    'label' => 'Descrição',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'unidade',
-                    'label' => 'Unidade',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'precoCompra',
-                    'label' => 'Preço de Compra',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'precoVenda',
-                    'label' => 'Preço de Venda',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'estoque',
-                    'label' => 'Estoque',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'estoqueMinimo',
-                    'label' => 'Estoque Mínimo',
-                    'rules' => 'required'
-            )
-        );
-        $this->form_validation->set_rules($config);
+      
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('produtos') == false) {

@@ -1,29 +1,31 @@
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/dist/excanvas.min.js"></script><![endif]-->
+<!-- [if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/dist/excanvas.min.js"></script><![endif]-->
 
-<script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/dist/jquery.jqplot.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/dist/jquery.jqplot.min.css" />
+<script language="javascript" type="text/javascript" src="<?=base_url('js/jquery.min.js');?>"></script>
+<script language="javascript" type="text/javascript" src="<?=base_url('js/dist/jquery.jqplot.min.js')?>"></script>
+<link rel="stylesheet" type="text/css" href="<?=base_url('js/dist/jquery.jqplot.min.css');?>" />
 
-<script type="text/javascript" src="<?php echo base_url();?>js/dist/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+<script type="text/javascript" src="<?=base_url('js/dist/plugins/jqplot.pieRenderer.min.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('js/dist/plugins/jqplot.donutRenderer.min.js');?>"></script>
 
-<!--Action boxes-->
+<!--Action boxes -->
   <div class="container-fluid">
     <div class="quick-actions_homepage">
       <ul class="quick-actions">
         <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){ ?>
-            <li class="bg_lb"> <a href="<?php echo site_url('clientes')?>"> <i class="icon-group"></i> Clientes</a> </li>
+            <li class="bg_lb"> <a href="<?=site_url('clientes')?>"> <i class="icon-group"></i> Clientes</a> </li>
         <?php } ?>
         <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){ ?>
-            <li class="bg_lg"> <a href="<?php echo site_url('produtos')?>"> <i class="icon-barcode"></i> Produtos</a> </li>
+            <li class="bg_lg"> <a href="<?=site_url('produtos')?>"> <i class="icon-barcode"></i> Produtos</a> </li>
         <?php } ?>
         <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vServico')){ ?>
-            <li class="bg_ly"> <a href="<?php echo site_url('servicos')?>"> <i class="icon-wrench"></i> Serviços</a> </li>
+            <li class="bg_ly"> <a href="<?=site_url('servicos')?>"> <i class="icon-wrench"></i> Serviços</a> </li>
         <?php } ?>
         <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){ ?>
-            <li class="bg_lo"> <a href="<?php echo site_url('os')?>"> <i class="icon-tags"></i> OS</a> </li>
+            <li class="bg_lo"> <a href="<?=site_url('os')?>"> <i class="icon-tags"></i> OS</a> </li>
         <?php } ?>
-        <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vVenda')){ ?>
-            <li class="bg_ls"> <a href="<?php echo site_url('vendas')?>"><i class="icon-shopping-cart"></i> Vendas</a></li>
+        <?php
+        if($this->permission->checkPermission($this->session->userdata('permissao'),'vVenda')){ ?>
+            <li class="bg_ls"> <a href="<?=site_url('vendas')?>"><i class="icon-shopping-cart"></i> Vendas</a></li>
         <?php } ?>
       </ul>
     </div>

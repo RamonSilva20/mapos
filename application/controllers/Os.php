@@ -62,23 +62,7 @@ class Os extends MY_Acesso
 
         $this->load->library('form_validation');
 
-        $config = array(
-            array(
-                    'field' => 'clientes_id',
-                    'label' => 'Cliente',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'usuarios_id',
-                    'label' => 'Técnico',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'status',
-                    'label' => 'Status',
-                    'rules' => 'required'
-            )
-        );
+
 
         $this->form_validation->set_rules($config);
         $this->data['custom_error'] = '';

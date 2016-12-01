@@ -69,60 +69,7 @@ class Clientes extends MY_Acesso {
       }
       $this->load->library('form_validation');
 
-      $config = array(
-          array(
-                  'field' => 'nomeCliente',
-                  'label' => 'Nome',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'documento',
-                  'label' => 'Documento',
-                  'rules' => 'required',
-          ),
-          array(
-                  'field' => 'telefone',
-                  'label' => 'Telefone',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'email',
-                  'label' => 'Email',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'rua',
-                  'label' => 'Rua',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'numero',
-                  'label' => 'Número',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'bairro',
-                  'label' => 'Bairro',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'cidade',
-                  'label' => 'Cidade',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'estado',
-                  'label' => 'Estado',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'cep',
-                  'label' => 'Cep',
-                  'rules' => 'required'
-          )
-      );
 
-      $this->form_validation->set_rules($config);
       $this->data['custom_error'] = '';
 
       if ($this->form_validation->run('clientes') == false) {
@@ -171,60 +118,7 @@ class Clientes extends MY_Acesso {
 
       $this->load->library('form_validation');
 
-      $config = array(
-          array(
-                  'field' => 'nomeCliente',
-                  'label' => 'Nome',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'documento',
-                  'label' => 'Documento',
-                  'rules' => 'required',
-          ),
-          array(
-                  'field' => 'telefone',
-                  'label' => 'Telefone',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'email',
-                  'label' => 'Email',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'rua',
-                  'label' => 'Rua',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'numero',
-                  'label' => 'Número',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'bairro',
-                  'label' => 'Bairro',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'cidade',
-                  'label' => 'Cidade',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'estado',
-                  'label' => 'Estado',
-                  'rules' => 'required'
-          ),
-          array(
-                  'field' => 'cep',
-                  'label' => 'Cep',
-                  'rules' => 'required'
-          )
-      );
-
-      $this->form_validation->set_rules($config);
+      
       $this->data['custom_error'] = '';
 
       if ($this->form_validation->run('clientes') == false) {

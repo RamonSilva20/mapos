@@ -174,25 +174,7 @@ class Financeiro extends MY_Acesso
         }
 
         $this->load->library('form_validation');
-        $config = array(
-            array(
-                    'field' => 'cliente',
-                    'label' => 'Cliente',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'valor',
-                    'label' => 'Valor',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'vencimento',
-                    'label' => 'Data de Vencimento',
-                    'rules' => 'required'
-            )
-        );
 
-        $this->form_validation->set_rules($config);
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
         if ($this->form_validation->run('receita') == false) {

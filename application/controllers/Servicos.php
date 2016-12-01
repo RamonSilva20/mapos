@@ -72,24 +72,6 @@ class Servicos extends MY_Acesso {
 
         $this->load->library('form_validation');
 
-        $config = array(
-            array(
-                    'field' => 'nome',
-                    'label' => 'Nome',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'preco',
-                    'label' => 'Preço',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'descricao',
-                    'label' => 'Descrição',
-                    'rules' => 'required'
-            )
-        );
-        $this->form_validation->set_rules($config);
 
         $this->data['custom_error'] = '';
 
@@ -124,24 +106,7 @@ class Servicos extends MY_Acesso {
         }
         $this->load->library('form_validation');
 
-        $config = array(
-            array(
-                    'field' => 'nome',
-                    'label' => 'Nome',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'preco',
-                    'label' => 'Preço',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'descricao',
-                    'label' => 'Descrição',
-                    'rules' => 'required'
-            )
-        );
-        $this->form_validation->set_rules($config);
+        
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('servicos') == false) {

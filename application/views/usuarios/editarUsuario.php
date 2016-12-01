@@ -19,7 +19,12 @@
                             <input id="nome" type="text" name="nome" value="<?php echo $result->nome; ?>"  />
                         </div>
                     </div>
-
+                    <div class="control-group">
+                      <label for="usuario" class="control-label">Usuário<span class="required">*</span></label>
+                      <div class="controls">
+                        <input id="usuario" type="text" name="usuario" value="<?=$result->usuario ?>"  />
+                      </div>
+                    </div>
                     <div class="control-group">
                         <label for="rg" class="control-label">RG<span class="required">*</span></label>
                         <div class="controls">
@@ -187,5 +192,3 @@
 
       });
 </script>
-
-

@@ -67,25 +67,7 @@ class Vendas extends MY_Acesso
         }
 
         $this->load->library('form_validation');
-        $config = array(
-            array(
-                    'field' => 'dataVenda',
-                    'label' => 'Data de venda',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'cliente',
-                    'label' => 'Cliente',
-                    'rules' => 'required',
-            ),
-            array(
-                    'field' => 'tecnico',
-                    'label' => 'Tecnico',
-                    'rules' => 'required'
-            )
-        );
-
-        $this->form_validation->set_rules($config);
+        
 
         $this->data['custom_error'] = '';
 

@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="<?php echo base_url();?>css/blue.css" class="skin-color" />
     <script type="text/javascript"  src="<?php echo base_url();?>js/jquery-1.10.2.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
- 
+
   <body style="background-color: transparent">
 
 
 
       <div class="container-fluid">
-    
+
           <div class="row-fluid">
               <div class="span12">
 
@@ -50,14 +50,14 @@
                           ?>
                       </tbody>
                   </table>
-                  
+
                   </div>
-                   
+
               </div>
                   <h5 style="text-align: right">Data do Relatório: <?php echo date('d/m/Y');?></h5>
 
           </div>
-     
+
 
 
       </div>
@@ -78,10 +78,3 @@
             <script src="<?php echo base_url();?>js/dashboard.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
