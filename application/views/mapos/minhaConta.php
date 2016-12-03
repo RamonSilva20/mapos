@@ -10,18 +10,16 @@
                 <div class="row-fluid">
                     <div class="span12" style="min-height: 260px">
                         <ul class="site-stats">
-                            <li class="bg_ls span12"><strong>Nome: <?php echo $usuario->nome?></strong></li>
-                            <li class="bg_lb span12" style="margin-left: 0"><strong>Telefone: <?php echo $usuario->telefone?></strong></li>
-                            <li class="bg_lg span12" style="margin-left: 0"><strong>Email: <?php echo $usuario->email?></strong></li>
-                            <li class="bg_lo span12" style="margin-left: 0"><strong>Nível: <?php echo $usuario->permissao; ?></strong></li>
+                            <li class="bg_ls span12"><strong>Nome: <?=$usuario->nome?></strong></li>
+                            <li class="bg_lb span12" style="margin-left: 0"><strong>Telefone: <?=$usuario->telefone?></strong></li>
+                            <li class="bg_lg span12" style="margin-left: 0"><strong>Email: <?=$usuario->email?></strong></li>
+                            <li class="bg_lo span12" style="margin-left: 0"><strong>Nível: <?=$usuario->permissao?></strong></li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
 <div class="span6">
         <div class="widget-box">
             <div class="widget-title">
@@ -33,8 +31,8 @@
             <div class="widget-content">
                 <div class="row-fluid">
                     <div class="span12" style="min-height: 260px">
-                        <form id="formSenha" action="<?php echo base_url();?>index.php/mapos/alterarSenha" method="post">
-                        
+                        <form id="formSenha" action="<?=site_url('mapos/alterarSenha')?>" method="post">
+
                         <div class="span12" style="margin-left: 0">
                             <label for="">Senha Atual</label>
                             <input type="password" id="oldSenha" name="oldSenha" class="span12" />
@@ -52,29 +50,24 @@
                         </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
-
-<script src="<?php echo base_url()?>js/jquery.validate.js"></script>
+<script src="<?base_url('assets/js/jquery.validate.js')?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-
         $('#formSenha').validate({
             rules :{
-                  oldSenha: {required: true},  
+                  oldSenha: {required: true},
                   novaSenha: { required: true},
                   confirmarSenha: { equalTo: "#novaSenha"}
             },
             messages:{
-                  oldSenha: {required: 'Campo Requerido'},  
+                  oldSenha: {required: 'Campo Requerido'},
                   novaSenha: { required: 'Campo Requerido.'},
                   confirmarSenha: {equalTo: 'As senhas não combinam.'}
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight:function(element, errorClass, validClass) {

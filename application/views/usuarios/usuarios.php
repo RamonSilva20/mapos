@@ -1,4 +1,4 @@
-<a href="<?php echo base_url()?>index.php/usuarios/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Usuário</a>
+<a href="<?=site_url('usuarios/adicionar')?>" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Usuário</a>
 <?php
 if(!$results){?>
         <div class="widget-box">
@@ -72,7 +72,7 @@ if(!$results){?>
             echo '<td>'.$r->telefone.'</td>';
             echo '<td>'.$r->permissao.'</td>';
             echo '<td>
-                      <a href="'.base_url().'index.php/usuarios/editar/'.$r->idUsuarios.'" class="btn btn-info tip-top" title="Editar Usuário"><i class="icon-pencil icon-white"></i></a>
+                      <a href="'.site_url('usuarios/editar/').''.$r->idUsuarios.'" class="btn btn-info tip-top" title="Editar Usuário"><i class="icon-pencil icon-white"></i></a>
                   </td>';
             echo '</tr>';
         }?>

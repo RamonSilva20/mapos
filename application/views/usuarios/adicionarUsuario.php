@@ -11,94 +11,95 @@
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">'.$custom_error.'</div>';
                 } ?>
-                <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal" >
+                <form action="<?=current_url()?>" id="formUsuario" method="post" class="form-horizontal" >
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="nome" type="text" name="nome" value="<?php echo set_value('nome'); ?>"  />
+                            <input id="nome" type="text" name="nome" value="<?=set_value('nome')?>"  />
                         </div>
                     </div>
                     <div class="control-group">
                       <label for="usuario" class="control-label">Usuário<span class="required">*</span></label>
                       <div class="controls">
-                        <input id="usuario" type="text" name="usuario" value="<?php echo set_value('usuario'); ?>"  />
+                        <input id="usuario" type="text" name="usuario" value="<?=set_value('usuario')?>"  />
                       </div>
                     </div>
 
                     <div class="control-group">
                         <label for="rg" class="control-label">RG<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="rg" type="text" name="rg" value="<?php echo set_value('rg'); ?>"  />
+                            <input id="rg" type="text" name="rg" value="<?=set_value('rg')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cpf" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>"  />
+                            <input id="cpf" type="text" name="cpf" value="<?=set_value('cpf')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>"  />
+                          <input id="rua" type="text" name="rua" value="<?=set_value('rua')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="numero" class="control-label">Numero<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>"  />
+                            <input id="numero" type="text" name="numero" value="<?=set_value('numero')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="bairro" type="text" name="bairro" value="<?php echo set_value('bairro'); ?>"  />
+                            <input id="bairro" type="text" name="bairro" value="<?=set_value('bairro')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cidade" type="text" name="cidade" value="<?php echo set_value('cidade'); ?>"  />
+                            <input id="cidade" type="text" name="cidade" value="<?=set_value('cidade')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="estado" class="control-label">Estado<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>"  />
+                            <input id="estado" type="text" name="estado" value="<?=set_value('estado')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>"  />
+
+                            <input id="email" type="text" name="email" value="<?=set_value('email')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="senha" class="control-label">Senha<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>"  />
+                            <input id="senha" type="password" name="senha" value="<?=set_value('senha')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>"  />
+                            <input id="telefone" type="text" name="telefone" value="<?=set_value('telefone')?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>"  />
+                            <input id="celular" type="text" name="celular" value="<?=set_value('celular')?>"  />
                         </div>
                     </div>
 
@@ -127,7 +128,7 @@
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <a href="<?site_url('usuarios')?>" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -140,7 +141,7 @@
 </div>
 
 
-<script  src="<?php echo base_url()?>js/jquery.validate.js"></script>
+<script  src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
 <script type="text/javascript">
       $(document).ready(function(){
 

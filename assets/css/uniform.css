@@ -44,12 +44,36 @@ div.button span {
 
 /* INPUT & TEXTAREA */
 
-
+input.text,
+input.email, 
+input.password,
+textarea.uniform {
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  padding: 3px;
+  color: #777;
+  background: url('../img/bg-input-focus.png') repeat-x 0px 0px;
+  background: url('../img/bg-input.png') repeat-x 0px 0px;
+  border-top: solid 1px #aaa;
+  border-left: solid 1px #aaa;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  outline: 0;
+}
 
 input.text:focus,
 input.email:focus,
 input.password:focus,
 textarea.uniform:focus {
+  -webkit-box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+  border-color: #999;
+  background: url('../img/bg-input-focus.png') repeat-x 0px 0px;
 }
 
 /* SPRITES */

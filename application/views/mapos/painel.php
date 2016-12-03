@@ -64,7 +64,7 @@
                                 echo '<td>'.$p->estoqueMinimo.'</td>';
                                 echo '<td>';
                                 if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                                    echo '<a href="'.base_url().'index.php/produtos/editar/'.$p->idProdutos.'" class="btn btn-info"> <i class="icon-pencil" ></i> </a>  ';
+                                    echo '<a href="'.site_url('produtos/editar/'.$p->idProdutos).'" class="btn btn-info"> <i class="icon-pencil" ></i> </a>  ';
                                 }
                                 echo '</td>';
                                 echo '</tr>';
@@ -107,7 +107,7 @@
                                 echo '<td>'.$o->nomeCliente.'</td>';
                                 echo '<td>';
                                 if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                                    echo '<a href="'.base_url().'index.php/os/visualizar/'.$o->idOs.'" class="btn"> <i class="icon-eye-open" ></i> </a> ';
+                                    echo '<a href="'.site_url('os/visualizar/'.$o->idOs).'" class="btn"> <i class="icon-eye-open" ></i> </a> ';
                                 }
                                 echo '</td>';
                                 echo '</tr>';
@@ -229,7 +229,7 @@
 
 
 
-<script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
+<script src="<?=base_url('js/bootstrap.min.js')?>"></script>
 
 
 <?php if($os != null) {?>

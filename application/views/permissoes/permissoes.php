@@ -1,4 +1,4 @@
-<a href="<?php echo base_url();?>index.php/permissoes/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Permissão</a>
+<a href="<?=site_url('permissoes/adicionar')?>" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Permissão</a>
 <?php
 if(!$results){?>
 
@@ -32,7 +32,7 @@ if(!$results){?>
     </div>
 
 <?php }else{
-	
+
 
 ?>
 <div class="widget-box">
@@ -66,13 +66,13 @@ if(!$results){?>
             echo '<td>'.date('d/m/Y',strtotime($r->data)).'</td>';
             echo '<td>'.$situacao.'</td>';
             echo '<td>
-                      <a href="'.base_url().'index.php/permissoes/editar/'.$r->idPermissao.'" class="btn btn-info tip-top" title="Editar Permissão"><i class="icon-pencil icon-white"></i></a>
+                      <a href="'.site_url('permissoes/editar/').$r->idPermissao.'" class="btn btn-info tip-top" title="Editar Permissão"><i class="icon-pencil icon-white"></i></a>
                       <a href="#modal-excluir" role="button" data-toggle="modal" permissao="'.$r->idPermissao.'" class="btn btn-danger tip-top" title="Desativar Permissão"><i class="icon-remove icon-white"></i></a>
                   </td>';
             echo '</tr>';
         }?>
         <tr>
-            
+
         </tr>
     </tbody>
 </table>
@@ -82,10 +82,10 @@ if(!$results){?>
 
 
 
- 
+
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?php echo base_url() ?>index.php/permissoes/desativar" method="post" >
+  <form action="<?=site_url('permissoes/desativar') ?>" method="post" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h5 id="myModalLabel">Desativar Permissão</h5>
@@ -107,7 +107,7 @@ $(document).ready(function(){
 
 
    $(document).on('click', 'a', function(event) {
-        
+
         var permissao = $(this).attr('permissao');
         $('#idPermissao').val(permissao);
 

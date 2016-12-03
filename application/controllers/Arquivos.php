@@ -37,7 +37,7 @@ class Arquivos extends MY_Acesso
         $ate = $this->input->get('data2');
 
         if ($pesquisa == null && $de == null && $ate == null) {
-            $config['base_url'] = base_url().'index.php/arquivos/gerenciar';
+            $config['base_url'] = site_url('arquivos/gerenciar');
             $config['total_rows'] = $this->arquivos_model->count('documentos');
             $config['per_page'] = 10;
             $config['next_link'] = 'Próxima';
@@ -152,7 +152,7 @@ class Arquivos extends MY_Acesso
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $this->form_validation->set_rules('nome', '', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', '', 'trim|required');
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {

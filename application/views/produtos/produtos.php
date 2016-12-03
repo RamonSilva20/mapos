@@ -1,5 +1,5 @@
 <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aProduto')){ ?>
-    <a href="<?php echo base_url();?>index.php/produtos/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Produto</a>
+    <a href="<?=site_url('produtos/adicionar')?>" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Produto</a>
 <?php } ?>
 
 <?php
@@ -68,36 +68,36 @@ if(!$results){?>
             echo '<td>'.$r->descricao.'</td>';
             echo '<td>'.$r->estoque.'</td>';
             echo '<td>'.number_format($r->precoVenda,2,',','.').'</td>';
-            
+
             echo '<td>';
             if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/visualizar/'.$r->idProdutos.'" class="btn tip-top" title="Visualizar Produto"><i class="icon-eye-open"></i></a>  '; 
+                echo '<a style="margin-right: 1%" href="'.site_url('produtos/visualizar/').$r->idProdutos.'" class="btn tip-top" title="Visualizar Produto"><i class="icon-eye-open"></i></a>  ';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/editar/'.$r->idProdutos.'" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>'; 
+                echo '<a style="margin-right: 1%" href="'.site_url('produtos/editar/').$r->idProdutos.'" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'dProduto')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="'.$r->idProdutos.'" class="btn btn-danger tip-top" title="Excluir Produto"><i class="icon-remove icon-white"></i></a>'; 
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="'.$r->idProdutos.'" class="btn btn-danger tip-top" title="Excluir Produto"><i class="icon-remove icon-white"></i></a>';
             }
-                     
+
             echo '</td>';
             echo '</tr>';
         }?>
         <tr>
-            
+
         </tr>
     </tbody>
 </table>
 </div>
 </div>
-	
+
 <?php echo $this->pagination->create_links();}?>
 
 
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?php echo base_url() ?>index.php/produtos/excluir" method="post" >
+  <form action="<?=site_url('produtos/excluir')?>" method="post" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h5 id="myModalLabel">Excluir Produto</h5>
@@ -120,7 +120,7 @@ $(document).ready(function(){
 
 
    $(document).on('click', 'a', function(event) {
-        
+
         var produto = $(this).attr('produto');
         $('#idProduto').val(produto);
 

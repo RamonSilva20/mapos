@@ -1,6 +1,6 @@
 <div class="span12" style="margin-left: 0; margin-top: 0">
     <div class="span12" style="margin-left: 0">
-        <form action="<?php echo current_url()?>">
+        <form action="<?=current_url()?>">
         <div class="span10" style="margin-left: 0">
             <input type="text" class="span12" name="termo" placeholder="Digite o termo a pesquisar" />
         </div>
@@ -18,12 +18,8 @@
                     <i class="icon-barcode"></i>
                 </span>
                 <h5>Produtos</h5>
-
             </div>
-
             <div class="widget-content nopadding">
-
-               
                 <table class="table table-bordered ">
                     <thead>
                         <tr style="backgroud-color: #2D335B">
@@ -46,25 +42,21 @@
 
                             echo '<td>';
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+                                echo '<a style="margin-right: 1%" href="' . site_url('produtos/visualizar/') . '' . $r->idProdutos . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
                             }
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                                echo '<a href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
-                            
+                                echo '<a href="' . site_url('produtos/editar/') . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         } ?>
                         <tr>
-
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-
     <!--Clientes-->
     <div class="span6">
         <div class="widget-box" style="min-height: 200px">
@@ -73,12 +65,8 @@
                     <i class="icon-user"></i>
                 </span>
                 <h5>Clientes</h5>
-
             </div>
-
             <div class="widget-content nopadding">
-
-
                 <table class="table table-bordered ">
                     <thead>
                         <tr>
@@ -99,30 +87,24 @@
                             echo '<td>' . $r->nomeCliente . '</td>';
                             echo '<td>' . $r->documento . '</td>';
                             echo '<td>';
-
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                            } 
+                                echo '<a style="margin-right: 1%" href="' . site_url('clientes/visualizar/') . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                            }
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
-                            
-                            
+                                echo '<a href="' . base_url('clientes/editar/') . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
                         ?>
                         <tr>
-
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
     </div>
-    
     <!--Serviços-->
     <div class="span6" style="margin-left: 0">
         <div class="widget-box" style="min-height: 200px">
@@ -131,12 +113,8 @@
                     <i class="icon-wrench"></i>
                 </span>
                 <h5>Serviços</h5>
-
             </div>
-
             <div class="widget-content nopadding">
-
-
                 <table class="table table-bordered ">
                     <thead>
                         <tr style="backgroud-color: #2D335B">
@@ -158,23 +136,19 @@
                             echo '<td>' . $r->preco . '</td>';
                             echo '<td>';
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eServico')){
-                                echo '<a href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
-                                
+                                echo '<a href="' . base_url('servicos/editar/' ). $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
                         ?>
                         <tr>
-
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-
     <!--Ordens de Serviço-->
     <div class="span6">
          <div class="widget-box" style="min-height: 200px">
@@ -183,12 +157,8 @@
                     <i class="icon-tags"></i>
                 </span>
                 <h5>Ordens de Serviço</h5>
-
             </div>
-
             <div class="widget-content nopadding">
-
-
                 <table class="table table-bordered ">
                     <thead>
                         <tr style="backgroud-color: #2D335B">
@@ -213,11 +183,11 @@
 
                             echo '<td>';
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                            } 
+                                echo '<a style="margin-right: 1%" href="' . site_url('os/visualizar/' ) . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                            }
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
-                            }  
+                                echo '<a href="' . base_url('os/editar/') . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -230,8 +200,4 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
-

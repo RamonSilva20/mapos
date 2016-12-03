@@ -9,8 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/osRapid"><i class="icon-tags"></i> <small>Todas as OS</small></a></li>
-                    
+                    <li><a target="_blank" href="<?=site_url('relatorios/osRapid')?>"><i class="icon-tags"></i> <small>Todas as OS</small></a></li>
+
                 </ul>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="widget-content">
                 <div class="span12 well">
 
-                    <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/osCustom" method="get">
+                    <form target="_blank" action="<?=base_url('relatorios/osCustom')?>" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Data de:</label>
@@ -79,15 +79,15 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url();?>js/maskmoney.js"></script>
+<link rel="stylesheet" href="<?=base_url('js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css');?>" />
+<script type="text/javascript" src="<?=base_url('js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
+<script src="<?=base_url('js/maskmoney.js')?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".money").maskMoney();
-        
+
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?=site_url('os/autoCompleteCliente')?>",
             minLength: 2,
             select: function( event, ui ) {
 
@@ -98,7 +98,7 @@
       });
 
       $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
+            source: "<?=site_url('os/autoCompleteUsuario')?>",
             minLength: 2,
             select: function( event, ui ) {
 

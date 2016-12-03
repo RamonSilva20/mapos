@@ -1,7 +1,7 @@
 
 .fc {
     direction: ltr;
-    text-align: left; border:1px solid #dadada;
+    text-align: left;
 }
 .fc table {
     border-collapse: collapse;
@@ -96,7 +96,7 @@ html .fc, .fc table {
     border: 1px solid #D5D5D5;
 }
 .fc-state-highlight {
-    background: url("../images/backgrounds/calActiveBg.html") repeat-x scroll 0 0 #F5F5F5;
+    background: url("../images/backgrounds/calActiveBg.png") repeat-x scroll 0 0 #F5F5F5;
 }
 .fc-cell-overlay {
     background: none repeat scroll 0 0 #99CCFF;
@@ -183,7 +183,8 @@ a.fc-event {
     text-align: right;
 }
 .fc-event-skin {
-    background-color: #fb7a2c;
+    background-color: #333333;
+    background-image: -moz-linear-gradient(top, #333333 0%, #000000 100%);
     border-color: #000000;
     border-radius: 2px 2px 2px 2px;
     color: #FFFFFF;
@@ -400,5 +401,5 @@ table.fc-border-separate {
 }
 
 #external-events .external-event {
-	margin-bottom: 5px; cursor:all-scroll;
+	margin-bottom: 5px;
 }

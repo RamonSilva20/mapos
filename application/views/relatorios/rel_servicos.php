@@ -9,7 +9,7 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/servicosRapid"><i class="icon-wrench"></i> <small>Todos os Serviços</small></a></li>
+                    <li><a target="_blank" href="<?=site_url('relatorios/servicosRapid')?>"><i class="icon-wrench"></i> <small>Todos os Serviços</small></a></li>
                 </ul>
             </div>
         </div>
@@ -25,8 +25,8 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    
-                    <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/servicosCustom" method="get">
+
+                    <form target="_blank" action="<?=site_url('relatorios/servicosCustom') ?>" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Preço de:</label>
@@ -37,7 +37,7 @@
                                 <input type="text"  name="precoFinal" class="span12 money" />
                             </div>
                         </div>
- 
+
                         <div class="span12" style="margin-left: 0; text-align: center">
                             <input type="reset" class="btn" value="Limpar" />
                             <button class="btn btn-inverse"><i class="icon-print icon-white"></i> Imprimir</button>
@@ -51,11 +51,9 @@
 </div>
 
 
-<script src="<?php echo base_url();?>js/maskmoney.js"></script>
+<script src="<?=base_url('js/maskmoney.js');?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".money").maskMoney();
-
-
     });
 </script>

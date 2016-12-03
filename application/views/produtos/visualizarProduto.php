@@ -13,33 +13,32 @@
                     <tbody>
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Descrição</strong></td>
-                            <td><?php echo $result->descricao ?></td>
+                            <td><?=$result->descricao?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Unidade</strong></td>
-                            <td><?php echo $result->unidade ?></td>
+                            <td><?=$result->unidade?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Compra</strong></td>
-                            <td>R$ <?php echo $result->precoCompra; ?></td>
+                            <td>R$ <?=$result->precoCompra?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Venda</strong></td>
-                            <td>R$ <?php echo $result->precoVenda; ?></td>
+                            <td>R$ <?=$result->precoVenda?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque</strong></td>
-                            <td><?php echo $result->estoque; ?></td>
+                            <td><?=$result->estoque?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque Mínimo</strong></td>
-                            <td><?php echo $result->estoqueMinimo; ?></td>
+                            <td><?=$result->estoqueMinimo?></td>
                         </tr>
-                  
                     </tbody>
+
                 </table>
             </div>
         </div>
     </div>
 </div>
-

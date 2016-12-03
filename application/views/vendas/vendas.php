@@ -68,15 +68,15 @@ if(!$results){?>
             echo '<tr>';
             echo '<td>'.$r->idVendas.'</td>';
             echo '<td>'.$dataVenda.'</td>';
-            echo '<td><a href="'.base_url().'index.php/clientes/visualizar/'.$r->idClientes.'">'.$r->nomeCliente.'</a></td>';
+            echo '<td><a href="'.site_url('clientes/visualizar/'.$r->idClientes.'">'.$r->nomeCliente).'"></a></td>';
             echo '<td>'.$faturado.'</td>';
 
             echo '<td>';
             if($this->permission->checkPermission($this->session->userdata('permissao'),'vVenda')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/vendas/visualizar/'.$r->idVendas.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                echo '<a style="margin-right: 1%" href="'.site_url('vendas/visualizar/'.$r->idVendas).'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'eVenda')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/vendas/editar/'.$r->idVendas.'" class="btn btn-info tip-top" title="Editar venda"><i class="icon-pencil icon-white"></i></a>';
+                echo '<a style="margin-right: 1%" href="'.site_url('vendas/editar/'.$r->idVendas).'" class="btn btn-info tip-top" title="Editar venda"><i class="icon-pencil icon-white"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'dVenda')){
                 echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="'.$r->idVendas.'" class="btn btn-danger tip-top" title="Excluir Venda"><i class="icon-remove icon-white"></i></a>';
@@ -98,7 +98,7 @@ if(!$results){?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?php echo base_url() ?>index.php/vendas/excluir" method="post" >
+  <form action="<?=site_url('vendas/excluir')?>" method="post" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h5 id="myModalLabel">Excluir Venda</h5>

@@ -1,7 +1,7 @@
 
-<link rel="stylesheet" href="<?php echo base_url();?>js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.validate.js"></script>
+<link rel="stylesheet" href="<?=base_url('assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css')?>" />
+<script type="text/javascript" src="<?=base_url('assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -12,8 +12,6 @@
                 <h5>Editar OS</h5>
             </div>
             <div class="widget-content nopadding">
-
-
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
@@ -23,25 +21,21 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
-
                             <div class="span12" id="divCadastrarOs">
-
-                                <form action="<?php echo current_url(); ?>" method="post" id="formOs">
+                                <form action="<?=current_url()?>" method="post" id="formOs">
                                     <?php echo form_hidden('idOs',$result->idOs) ?>
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>#Protocolo: <?php echo $result->idOs ?></h3>
-
+                                        <h3>#Protocolo: <?=$result->idOs?></h3>
                                         <div class="span6" style="margin-left: 0">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>"  />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>"  />
+                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?=$result->nomeCliente?>"  />
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?=$result->clientes_id?>"  />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value=""  />
                                         </div>
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>"  />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>"  />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?$result->nome?>"  />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?$result->usuarios_id?>"  />
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
@@ -57,39 +51,35 @@
                                         </div>
                                         <div class="span3">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>"  />
+                                            <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value="<?=date('d/m/Y', strtotime($result->dataInicial))?>"  />
                                         </div>
                                         <div class="span3">
                                             <label for="dataFinal">Data Final</label>
-                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>"  />
+                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?=date('d/m/Y', strtotime($result->dataFinal))?>"  />
                                         </div>
-
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>"  />
                                         </div>
                                     </div>
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-
                                         <div class="span6">
                                             <label for="descricaoProduto">Descrição Produto/Serviço</label>
-                                            <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto?></textarea>
+                                            <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?=$result->descricaoProduto?></textarea>
                                         </div>
                                         <div class="span6">
                                             <label for="defeito">Defeito</label>
-                                            <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito?></textarea>
+                                            <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"><?=$result->defeito?></textarea>
                                         </div>
-
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6">
                                             <label for="observacoes">Observações</label>
-                                            <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                            <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"><?=$result->observacoes?></textarea>
                                         </div>
                                         <div class="span6">
                                             <label for="laudoTecnico">Laudo Técnico</label>
-                                            <textarea class="span12" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
+                                            <textarea class="span12" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?=$result->laudoTecnico?></textarea>
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
@@ -98,23 +88,20 @@
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar OS</a>
-                                            <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                            <a href="<?=site_url('os/visualizar/') ?><?=$result->idOs?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar OS</a>
+                                            <a href="<?=site_url('os') ?>" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-
                         </div>
-
-
                         <!--Produtos-->
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
+                                <form id="formProdutos" action="<?=site_url('os/adicionarProduto')?>" method="post">
                                     <div class="span8">
                                         <input type="hidden" name="idProduto" id="idProduto" />
-                                        <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?php echo $result->idOs?>" />
+                                        <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?=$result->idOs?>" />
                                         <input type="hidden" name="estoque" id="estoque" value=""/>
                                         <input type="hidden" name="preco" id="preco" value=""/>
                                         <label for="">Produto</label>
@@ -153,25 +140,22 @@
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
-
                                         <tr>
                                             <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?php echo number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></strong></td>
+                                            <td><strong>R$ <?=number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($total,2); ?>"></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
-
                         <!--Serviços-->
                         <div class="tab-pane" id="tab3">
                             <div class="span12" style="padding: 1%; margin-left: 0">
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                    <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico" method="post">
+                                    <form id="formServicos" action="<?=site_url('os/adicionarServico')?>" method="post">
                                     <div class="span10">
                                         <input type="hidden" name="idServico" id="idServico" />
-                                        <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs?>" />
+                                        <input type="hidden" name="idOsServico" id="idOsServico" value="<?=$result->idOs?>" />
                                         <input type="hidden" name="precoServico" id="precoServico" value=""/>
                                         <label for="">Serviço</label>
                                         <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
@@ -206,24 +190,20 @@
 
                                         <tr>
                                             <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?php echo number_format($total,2,',','.');?><input type="hidden" id="total-servico" value="<?php echo number_format($total,2); ?>"></strong></td>
+                                            <td><strong>R$ <?=number_format($total,2,',','.')?><input type="hidden" id="total-servico" value="<?=number_format($total,2) ?>"></strong></td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
-
-
                         <!--Anexos-->
                         <div class="tab-pane" id="tab4">
                             <div class="span12" style="padding: 1%; margin-left: 0">
                                 <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
                                     <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8"s method="post">
                                     <div class="span10">
-
-                                        <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs?>" />
+                                        <input type="hidden" name="idOsServico" id="idOsServico" value="<?=$result->idOs?>" />
                                         <label for="">Anexo</label>
                                         <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
                                     </div>
@@ -233,19 +213,17 @@
                                     </div>
                                     </form>
                                 </div>
-
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
                                     <?php
                                     $cont = 1;
                                     $flag = 5;
                                     foreach ($anexos as $a) {
-
                                         if($a->thumb == null){
-                                            $thumb = base_url().'assets/img/icon-file.png';
-                                            $link = base_url().'assets/img/icon-file.png';
+                                            $thumb = base_url('assets/img/icon-file.png');
+                                            $link = base_url('assets/img/icon-file.png');
                                         }
                                         else{
-                                            $thumb = base_url().'assets/anexos/thumbs/'.$a->thumb;
+                                            $thumb = base_url('assets/anexos/thumbs/').$a->thumb;
                                             $link = $a->url.$a->anexo;
                                         }
 
@@ -262,26 +240,12 @@
 
                             </div>
                         </div>
-
-
-
                     </div>
-
                 </div>
-
-
-.
-
         </div>
-
     </div>
 </div>
 </div>
-
-
-
-
-
 <!-- Modal visualizar anexo -->
 <div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -299,49 +263,39 @@
     <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
   </div>
 </div>
-
-
-
-
-
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<form id="formFaturar" action="<?php echo current_url() ?>" method="post">
+<form id="formFaturar" action="<?=current_url()?>" method="post">
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   <h3 id="myModalLabel">Faturar Venda</h3>
 </div>
 <div class="modal-body">
-
     <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
     <div class="span12" style="margin-left: 0">
       <label for="descricao">Descrição</label>
-      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> "  />
+      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?$result->idOs?> "  />
 
     </div>
     <div class="span12" style="margin-left: 0">
       <div class="span12" style="margin-left: 0">
         <label for="cliente">Cliente*</label>
-        <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-        <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
-        <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
+        <input class="span12" id="cliente" type="text" name="cliente" value="<?=$result->nomeCliente?>" />
+        <input type="hidden" name="clientes_id" id="clientes_id" value="<?=$result->clientes_id?>">
+        <input type="hidden" name="os_id" id="os_id" value="<?=$result->idOs?>">
       </div>
-
-
     </div>
     <div class="span12" style="margin-left: 0">
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total,2); ?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($total,2)?> "  />
       </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
         <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"  />
       </div>
-
     </div>
-
     <div class="span12" style="margin-left: 0">
       <div class="span4" style="margin-left: 0">
         <label for="recebido">Recebido?</label>
@@ -355,7 +309,6 @@
         <div class="span6">
           <label for="desconto">Desconto</label>
           <input class="span12 money" id="desconto" type="text" name="desconto" value="0" />
-
           <label for="formaPgto">Forma Pgto</label>
           <select name="formaPgto" id="formaPgto" class="span12">
             <option value="Dinheiro">Dinheiro</option>
@@ -366,10 +319,7 @@
             <option value="Débito">Débito</option>
           </select>
       </div>
-
     </div>
-
-
 </div>
 <div class="modal-footer">
   <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
@@ -377,11 +327,8 @@
 </div>
 </form>
 </div>
-
-
-
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.validate.js"></script>
-<script src="<?php echo base_url();?>js/maskmoney.js"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
+<script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -408,7 +355,6 @@ $(document).ready(function(){
          valor = parseFloat(valor);
          $('#valor').val(valor + total_servico);
      });
-
      $("#formFaturar").validate({
           rules:{
              descricao: {required:true},
@@ -428,7 +374,7 @@ $(document).ready(function(){
             $('#btn-cancelar-faturar').trigger('click');
             $.ajax({
               type: "POST",
-              url: "<?php echo base_url();?>index.php/os/faturar",
+              url: "<?=site_url('os/faturar')?>",
               data: dados,
               dataType: 'json',
               success: function(data)
@@ -449,7 +395,7 @@ $(document).ready(function(){
      });
 
      $("#produto").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProduto",
+            source: "<?=site_url('os/autoCompleteProduto'); ?>",
             minLength: 2,
             select: function( event, ui ) {
 
@@ -457,49 +403,34 @@ $(document).ready(function(){
                  $("#estoque").val(ui.item.estoque);
                  $("#preco").val(ui.item.preco);
                  $("#quantidade").focus();
-
-
             }
       });
 
       $("#servico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteServico",
+            source: "<?=site_url('os/autoCompleteServico')?>",
             minLength: 2,
             select: function( event, ui ) {
 
                  $("#idServico").val(ui.item.id);
                  $("#precoServico").val(ui.item.preco);
-
-
             }
       });
 
 
       $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?=site_url('os/autoCompleteCliente')?>",
             minLength: 2,
             select: function( event, ui ) {
-
                  $("#clientes_id").val(ui.item.id);
-
-
             }
       });
-
       $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
+            source: "<?=site_url('os/autoCompleteUsuario')?>",
             minLength: 2,
             select: function( event, ui ) {
-
                  $("#usuarios_id").val(ui.item.id);
-
-
             }
       });
-
-
-
-
       $("#formOs").validate({
           rules:{
              cliente: {required:true},
@@ -522,10 +453,6 @@ $(document).ready(function(){
                 $(element).parents('.control-group').addClass('success');
             }
        });
-
-
-
-
       $("#formProdutos").validate({
           rules:{
              quantidade: {required:true}
@@ -544,13 +471,13 @@ $(document).ready(function(){
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/os/adicionarProduto",
+                  url: "<?=site_url('os/adicionarProduto')?>",
                   data: dados,
                   dataType: 'json',
                   success: function(data)
                   {
                     if(data.result == true){
-                        $( "#divProdutos" ).load("<?php echo current_url();?> #divProdutos" );
+                        $( "#divProdutos" ).load("<?current_url()?> #divProdutos" );
                         $("#quantidade").val('');
                         $("#produto").val('').focus();
                     }
@@ -559,14 +486,10 @@ $(document).ready(function(){
                     }
                   }
                   });
-
                   return false;
                 }
-
              }
-
        });
-
        $("#formServicos").validate({
           rules:{
              servico: {required:true}
@@ -576,17 +499,16 @@ $(document).ready(function(){
           },
           submitHandler: function( form ){
                  var dados = $( form ).serialize();
-
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/os/adicionarServico",
+                  url: "<?=site_url('os/adicionarServico')?>",
                   data: dados,
                   dataType: 'json',
                   success: function(data)
                   {
                     if(data.result == true){
-                        $( "#divServicos" ).load("<?php echo current_url();?> #divServicos" );
+                        $( "#divServicos" ).load("<?=current_url()?> #divServicos" );
                         $("#servico").val('').focus();
                     }
                     else{
@@ -594,7 +516,6 @@ $(document).ready(function(){
                     }
                   }
                   });
-
                   return false;
                 }
 
@@ -610,7 +531,7 @@ $(document).ready(function(){
                 $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/os/anexar",
+                  url: "<?site_url('os/anexar')?>",
                   data: dados,
                   mimeType:"multipart/form-data",
                   contentType: false,
@@ -620,9 +541,8 @@ $(document).ready(function(){
                   success: function(data)
                   {
                     if(data.result == true){
-                        $("#divAnexos" ).load("<?php echo current_url();?> #divAnexos" );
+                        $("#divAnexos" ).load("<?=current_url()?> #divAnexos" );
                         $("#userfile").val('');
-
                     }
                     else{
                         $("#divAnexos").html('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> '+data.mensagem+'</div>');
@@ -648,14 +568,13 @@ $(document).ready(function(){
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/os/excluirProduto",
+                  url: "<?=site_url('os/excluirProduto');?>",
                   data: "idProduto="+idProduto+"&quantidade="+quantidade+"&produto="+produto,
                   dataType: 'json',
                   success: function(data)
                   {
                     if(data.result == true){
-                        $( "#divProdutos" ).load("<?php echo current_url();?> #divProdutos" );
-
+                        $( "#divProdutos" ).load("<?=current_url()?> #divProdutos" );
                     }
                     else{
                         alert('Ocorreu um erro ao tentar excluir produto.');
@@ -666,22 +585,19 @@ $(document).ready(function(){
             }
 
        });
-
-
-
        $(document).on('click', 'span', function(event) {
             var idServico = $(this).attr('idAcao');
             if((idServico % 1) == 0){
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/os/excluirServico",
+                  url: "<?=site_url('os/excluirServico')?>",
                   data: "idServico="+idServico,
                   dataType: 'json',
                   success: function(data)
                   {
                     if(data.result == true){
-                        $("#divServicos").load("<?php echo current_url();?> #divServicos" );
+                        $("#divServicos").load("<?=current_url()?> #divServicos" );
 
                     }
                     else{
@@ -691,29 +607,22 @@ $(document).ready(function(){
                   });
                   return false;
             }
-
        });
-
-
        $(document).on('click', '.anexo', function(event) {
            event.preventDefault();
            var link = $(this).attr('link');
            var id = $(this).attr('imagem');
-           var url = '<?php echo base_url(); ?>os/excluirAnexo/';
+           var url = '<?=site_url('os/excluirAnexo/')?>';
            $("#div-visualizar-anexo").html('<img src="'+link+'" alt="">');
            $("#excluir-anexo").attr('link', url+id);
 
-           $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/"+id);
-
+           $("#download").attr('href', "<?site_url('os/downloadanexo/')?>"+id);
        });
-
        $(document).on('click', '#excluir-anexo', function(event) {
            event.preventDefault();
-
            var link = $(this).attr('link');
            $('#modal-anexo').modal('hide');
            $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
-
            $.ajax({
                   type: "POST",
                   url: link,
@@ -721,7 +630,7 @@ $(document).ready(function(){
                   success: function(data)
                   {
                     if(data.result == true){
-                        $("#divAnexos" ).load("<?php echo current_url();?> #divAnexos" );
+                        $("#divAnexos" ).load("<?=current_url()?> #divAnexos" );
                     }
                     else{
                         alert(data.mensagem);
@@ -729,14 +638,6 @@ $(document).ready(function(){
                   }
             });
        });
-
-
-
        $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
-
-
-
-
 });
-
 </script>

@@ -1,6 +1,6 @@
-<script type="text/javascript" src="<?php echo base_url('js/jquery.min.js')?>"></script>
-<link rel="stylesheet" href="<?php echo base_url();?>js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.min.js')?>"></script>
+<link rel="stylesheet" href="<?=base_url('assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css')?>" />
+<script type="text/javascript" src="<?=base_url('assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
 
 
 <div class="row-fluid" style="margin-top:0">
@@ -25,25 +25,25 @@
 
                             <div class="span12" id="divEditarVenda">
 
-                                <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
-                                    <?php echo form_hidden('idVendas',$result->idVendas) ?>
+                                <form action="<?=current_url()?>" method="post" id="formVendas">
+                                    <?=form_hidden('idVendas',$result->idVendas)?>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>#Venda: <?php echo $result->idVendas ?></h3>
+                                        <h3>#Venda: <?=$result->idVendas?></h3>
                                         <div class="span2" style="margin-left: 0">
                                             <label for="dataFinal">Data Final</label>
-                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>"  />
+                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?=date('d/m/Y', strtotime($result->dataVenda)); ?>"  />
                                         </div>
                                         <div class="span5" >
                                             <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>"  />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>"  />
+                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?=$result->nomeCliente?>"  />
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?=$result->clientes_id?>"  />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value=""  />
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>"  />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>"  />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?=$result->nome?>"  />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?=$result->usuarios_id?>"  />
                                         </div>
 
                                     </div>
@@ -58,8 +58,8 @@
                                             <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                            <a href="<?=site_url('vendas/visualizar/')?><?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
+                                            <a href="<?=site_url('vendas') ?>" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
 
                                     </div>
@@ -68,10 +68,10 @@
 
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
 
-                                        <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                        <form id="formProdutos" action="<?=site_url('vendas/adicionarProduto')?>" method="post">
                                             <div class="span8">
                                                 <input type="hidden" name="idProduto" id="idProduto" />
-                                                <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas?>" />
+                                                <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?$result->idVendas?>" />
                                                 <input type="hidden" name="estoque" id="estoque" value=""/>
                                                 <input type="hidden" name="preco" id="preco" value=""/>
                                                 <label for="">Produto</label>
@@ -113,7 +113,7 @@
 
                                                 <tr>
                                                     <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                                    <td><strong>R$ <?php echo number_format($total,2,',','.');?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></td>
+                                                    <td><strong>R$ <?=number_format($total,2,',','.')?></strong> <input type="hidden" id="total-venda" value="<?=number_format($total,2)?>"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -144,7 +144,7 @@
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<form id="formFaturar" action="<?php echo current_url() ?>" method="post">
+<form id="formFaturar" action="<?=current_url()?>" method="post">
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   <h3 id="myModalLabel">Faturar Venda</h3>
@@ -154,15 +154,15 @@
     <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
     <div class="span12" style="margin-left: 0">
       <label for="descricao">Descrição</label>
-      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idVendas; ?> "  />
+      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?=$result->idVendas?> "  />
 
     </div>
     <div class="span12" style="margin-left: 0">
       <div class="span12" style="margin-left: 0">
         <label for="cliente">Cliente*</label>
-        <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-        <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
-        <input type="hidden" name="vendas_id" id="vendas_id" value="<?php echo $result->idVendas; ?>">
+        <input class="span12" id="cliente" type="text" name="cliente" value="<?=$result->nomeCliente?>" />
+        <input type="hidden" name="clientes_id" id="clientes_id" value="<?=$result->clientes_id?>">
+        <input type="hidden" name="vendas_id" id="vendas_id" value="<?=$result->idVendas?>">
       </div>
 
 
@@ -171,7 +171,7 @@
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total,2); ?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($total,2)?> "  />
       </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
@@ -215,8 +215,8 @@
 </div>
 
 
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.validate.js"></script>
-<script src="<?php echo base_url();?>js/maskmoney.js"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
+<script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -258,7 +258,7 @@ $(document).ready(function(){
             $('#btn-cancelar-faturar').trigger('click');
             $.ajax({
               type: "POST",
-              url: "<?php echo site_url('vendas/faturar');?>",
+              url: "<?=site_url('vendas/faturar')?>",
               data: dados,
               dataType: 'json',
               success: function(data)
@@ -279,7 +279,7 @@ $(document).ready(function(){
      });
 
      $("#produto").autocomplete({
-            source: "<?php echo site_url('vendas/autoCompleteProduto'); ?>",
+            source: "<?=site_url('vendas/autoCompleteProduto')?>",
             minLength: 2,
             select: function( event, ui ) {
 
@@ -295,7 +295,7 @@ $(document).ready(function(){
 
 
       $("#cliente").autocomplete({
-            source: "<?php echo site_url('vendas/autoCompleteCliente'); ?>",
+            source: "<?=site_url('vendas/autoCompleteCliente')?>",
             minLength: 2,
             select: function( event, ui ) {
 
@@ -306,7 +306,7 @@ $(document).ready(function(){
       });
 
       $("#tecnico").autocomplete({
-            source: "<?php echo site_url('vendas/autoCompleteUsuario'); ?>",
+            source: "<?=site_url('vendas/autoCompleteUsuario')?>",
             minLength: 2,
             select: function( event, ui ) {
 
@@ -362,13 +362,13 @@ $(document).ready(function(){
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo site_url('vendas/adicionarProduto');?>",
+                  url: "<?=site_url('vendas/adicionarProduto')?>",
                   data: dados,
                   dataType: 'json',
                   success: function(data)
                   {
                     if(data.result == true){
-                        $("#divProdutos" ).load("<?php echo current_url();?> #divProdutos" );
+                        $("#divProdutos" ).load("<?=current_url()?> #divProdutos" );
                         $("#quantidade").val('');
                         $("#produto").val('').focus();
                     }
@@ -395,7 +395,7 @@ $(document).ready(function(){
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
-                  url: "<?php echo base_url();?>index.php/vendas/excluirProduto",
+                  url: "<?=site_url('vendas/excluirProduto');?>",
                   data: "idProduto="+idProduto+"&quantidade="+quantidade+"&produto="+produto,
                   dataType: 'json',
                   success: function(data)

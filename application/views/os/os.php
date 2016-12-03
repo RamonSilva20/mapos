@@ -1,5 +1,5 @@
 <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aOs')){ ?>
-    <a href="<?php echo base_url();?>index.php/os/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar OS</a>
+    <a href="<?=site_url('os/adicionar')?>" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar OS</a>
 <?php } ?>
 
 <?php
@@ -73,38 +73,35 @@ if(!$results){?>
             echo '<td>'.$dataInicial.'</td>';
             echo '<td>'.$dataFinal.'</td>';
             echo '<td>'.$r->status.'</td>';
-            
-            
+
+
             echo '<td>';
             if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/visualizar/'.$r->idOs.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+                echo '<a style="margin-right: 1%" href="'.site_url('os/visualizar/').$r->idOs.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/editar/'.$r->idOs.'" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
+                echo '<a style="margin-right: 1%" href="'.site_url('os/editar/').$r->idOs.'" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'dOs')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="'.$r->idOs.'" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  '; 
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="'.$r->idOs.'" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
             }
-            
-                      
-                      
             echo  '</td>';
             echo '</tr>';
         }?>
         <tr>
-            
+
         </tr>
     </tbody>
 </table>
 </div>
 </div>
-	
+
 <?php echo $this->pagination->create_links();}?>
 
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?php echo base_url() ?>index.php/os/excluir" method="post" >
+  <form action="<?=site_url('os/excluir')?>" method="post" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h5 id="myModalLabel">Excluir OS</h5>
@@ -119,23 +116,11 @@ if(!$results){?>
   </div>
   </form>
 </div>
-
-
-
-
-
-
 <script type="text/javascript">
 $(document).ready(function(){
-
-
    $(document).on('click', 'a', function(event) {
-        
         var os = $(this).attr('os');
         $('#idOs').val(os);
-
     });
-
 });
-
 </script>

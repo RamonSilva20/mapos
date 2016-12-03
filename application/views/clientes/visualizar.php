@@ -5,9 +5,8 @@
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
             <div class="buttons">
                     <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/clientes/editar/'.$result->idClientes.'"><i class="icon-pencil icon-white"></i> Editar</a>'; 
+                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.site_url('clientes/editar/').$result->idClientes.'"><i class="icon-pencil icon-white"></i> Editar</a>';
                     } ?>
-                    
             </div>
         </ul>
     </div>
@@ -29,15 +28,15 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
-                                                    <td><?php echo $result->nomeCliente ?></td>
+                                                    <td><?=$result->nomeCliente?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Documento</strong></td>
-                                                    <td><?php echo $result->documento ?></td>
+                                                    <td><?=$result->documento?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
-                                                    <td><?php echo date('d/m/Y',  strtotime($result->dataCadastro)) ?></td>
+                                                    <td><?=date('d/m/Y',  strtotime($result->dataCadastro))?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -58,15 +57,15 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
-                                                    <td><?php echo $result->telefone ?></td>
+                                                    <td><?=$result->telefone?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Celular</strong></td>
-                                                    <td><?php echo $result->celular ?></td>
+                                                    <td><?=$result->celular?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Email</strong></td>
-                                                    <td><?php echo $result->email ?></td>
+                                                    <td><?=$result->email?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -87,23 +86,23 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="text-align: right; width: 30%"><strong>Rua</strong></td>
-                                                    <td><?php echo $result->rua ?></td>
+                                                    <td><?=$result->rua?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Número</strong></td>
-                                                    <td><?php echo $result->numero ?></td>
+                                                    <td><?=$result->numero ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Bairro</strong></td>
-                                                    <td><?php echo $result->bairro ?></td>
+                                                    <td><?=$result->bairro?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Cidade</strong></td>
-                                                    <td><?php echo $result->cidade ?> - <?php echo $result->estado ?></td>
+                                                    <td><?=$result->cidade?> - <?=$result->estado?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>CEP</strong></td>
-                                                    <td><?php echo $result->cep ?></td>
+                                                    <td><?=$result->cep?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -111,17 +110,10 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-          
         </div>
-
-
         <!--Tab 2-->
         <div id="tab2" class="tab-pane" style="min-height: 300px">
             <?php if (!$results) { ?>
-                
                         <table class="table table-bordered ">
                             <thead>
                                 <tr style="backgroud-color: #2D335B">
@@ -134,18 +126,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
                                     <td colspan="6">Nenhuma OS Cadastrada</td>
                                 </tr>
                             </tbody>
                         </table>
-                
                 <?php } else { ?>
-
-
-              
-
                         <table class="table table-bordered ">
                             <thead>
                                 <tr style="backgroud-color: #2D335B">
@@ -171,24 +157,19 @@
 
                     echo '<td>';
                     if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                        echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+                        echo '<a href="' . site_url('os/visualizar/'). $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
                     }
                     if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                        echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
+                        echo '<a href="' . site_url('os/editar/'). $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
                     }
-                    
                     echo  '</td>';
                     echo '</tr>';
                 } ?>
                             <tr>
-
                             </tr>
                         </tbody>
                     </table>
-            
-
             <?php  } ?>
-
         </div>
     </div>
 </div>

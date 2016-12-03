@@ -9,7 +9,7 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/financeiroRapid"><i class="icon-user"></i> <small>Relatório do mês</small></a></li>
+                    <li><a target="_blank" href="<?=site_url('relatorios/financeiroRapid')?>"><i class="icon-user"></i> <small>Relatório do mês</small></a></li>
                 </ul>
             </div>
         </div>
@@ -24,9 +24,9 @@
                 <h5>Relatórios Customizáveis</h5>
             </div>
             <div class="widget-content">
-                <form target="_blank" action="<?php echo base_url()?>index.php/relatorios/financeiroCustom" method="get">
+                <form target="_blank" action="<?=site_url('relatorios/financeiroCustom')?>" method="get">
                 <div class="span12 well">
-                    
+
                     <div class="span6">
                         <label for="">Vencimento de:</label>
                         <input type="date" name="dataInicial" class="span12" />
@@ -35,7 +35,7 @@
                         <label for="">até:</label>
                         <input type="date" name="dataFinal" class="span12" />
                     </div>
-                    
+
                 </div>
 
                 <div class="span12 well" style="margin-left: 0">
@@ -53,7 +53,7 @@
                             <option value="todos">Todos</option>
                             <option value="pago">Pago</option>
                             <option value="pendente">Pendente</option>
-    
+
                         </select>
                     </div>
 

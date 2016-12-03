@@ -3,11 +3,11 @@
 <head>
         <title>Map Os</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
-        <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
+        <link rel="stylesheet" href="<?=base_url('assets/css/bootstrap.min.css')?>" />
+        <link rel="stylesheet" href="<?=base_url('assets/css/bootstrap-responsive.min.css')?>" />
+        <link rel="stylesheet" href="<?=base_url('assets/css/matrix-login.css')?>" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-        <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
+        <script src="<?=base_url('assets/js/jquery-1.10.2.min.js')?>"></script>
     </head>
     <body>
         <div id="loginbox">
@@ -16,10 +16,10 @@
                   <?php if($this->session->flashdata('error') != null):?>
                         <div class="alert alert-danger">
                           <button type="button" class="close" data-dismiss="alert">&times;</button>
-                          <?php echo $this->session->flashdata('error');?>
+                          <?=$this->session->flashdata('error')?>
                        </div>
                   <?php endif;?>
-                <div class="control-group normal_text"> <h3><img src="<?php echo base_url()?>assets/img/logo.png" alt="Logo" /></h3></div>
+                <div class="control-group normal_text"> <h3><img src="<?=base_url('assets/img/logo.png')?>" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
@@ -38,20 +38,11 @@
                     <button class="btn btn-info btn-large"/>Logar</button>
                 </div>
             </form>
-
         </div>
-
-
-
-        <script src="<?php echo base_url()?>assets/js/bootstrap.min.js"></script>
-        <script src="<?php echo base_url()?>assets/js/validate.js"></script>
-
-
-
-
+        <script src="<?=base_url('assets/js/bootstrap.min.js')?>"></script>
+        <script src="<?=base_url('assets/js/validate.js')?>"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-
                 $('#email').focus();
                 $("#formLogin").validate({
                    rules :{
@@ -65,8 +56,6 @@
                     },
                    submitHandler: function(form){
                          var dados = $(form).serialize();
-
-
                         $.ajax({
                           type: "POST",
                           url: "<?=site_url('verificarLogin?ajax=true') ?>",
@@ -76,17 +65,15 @@
                           {
                             if(data.result == true){
                                 console.log('entrou no if');
-                                window.location.href = "<?=site_url() ?>";
+                                window.location.href = "<?=site_url()?>";
                             }
                             else{
                                 $('#call-modal').trigger('click');
                             }
                           }
                           });
-
                           return false;
                     },
-
                     errorClass: "help-inline",
                     errorElement: "span",
                     highlight:function(element, errorClass, validClass) {
@@ -97,15 +84,9 @@
                         $(element).parents('.control-group').addClass('success');
                     }
                 });
-
             });
-
         </script>
-
-
-
         <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-
         <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -116,11 +97,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-
           </div>
         </div>
-
-
     </body>
-
 </html>

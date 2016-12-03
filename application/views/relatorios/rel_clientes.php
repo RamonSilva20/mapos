@@ -9,7 +9,7 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a href="<?php echo base_url()?>index.php/relatorios/clientesRapid" target="_blank"><i class="icon-user"></i> <small>Todos os Clientes</small></a></li>
+                    <li><a href="<?=site_url('relatorios/clientesRapid')?>" target="_blank"><i class="icon-user"></i> <small>Todos os Clientes</small></a></li>
                 </ul>
             </div>
         </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?php echo base_url()?>index.php/relatorios/clientesCustom" method="get">
+                    <form target="_blank" action="<?=site_url('relatorios/clientesCustom')?>" method="get">
                     <div class="span4">
                         <label for="">Cadastrado de:</label>
                         <input type="date" name="dataInicial" class="span12" />

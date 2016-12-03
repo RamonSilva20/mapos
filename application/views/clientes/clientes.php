@@ -1,19 +1,15 @@
 <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aCliente')){ ?>
-    <a href="<?php echo base_url();?>index.php/clientes/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Cliente</a>    
+    <a href="<?=site_url('clientes/adicionar')?>" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Cliente</a>
 <?php } ?>
-
 <?php
 if(!$results){?>
-
         <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
                 <i class="icon-user"></i>
             </span>
             <h5>Clientes</h5>
-
         </div>
-
         <div class="widget-content nopadding">
             <table class="table table-bordered">
                 <thead>
@@ -33,10 +29,7 @@ if(!$results){?>
             </table>
         </div>
     </div>
-
 <?php }else{
-	
-
 ?>
 <div class="widget-box">
      <div class="widget-title">
@@ -44,12 +37,8 @@ if(!$results){?>
             <i class="icon-user"></i>
          </span>
         <h5>Clientes</h5>
-
      </div>
-
 <div class="widget-content nopadding">
-
-
 <table class="table table-bordered ">
     <thead>
         <tr>
@@ -69,34 +58,27 @@ if(!$results){?>
             echo '<td>'.$r->telefone.'</td>';
             echo '<td>';
             if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-                echo '<a href="'.base_url().'index.php/clientes/visualizar/'.$r->idClientes.'" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+                echo '<a href="'.site_url('clientes/visualizar/').$r->idClientes.'" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                echo '<a href="'.base_url().'index.php/clientes/editar/'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>'; 
+                echo '<a href="'.site_url('clientes/editar/').$r->idClientes.'" style="margin-right: 1%" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'dCliente')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" cliente="'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-danger tip-top" title="Excluir Cliente"><i class="icon-remove icon-white"></i></a>'; 
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" cliente="'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-danger tip-top" title="Excluir Cliente"><i class="icon-remove icon-white"></i></a>';
             }
-
-              
             echo '</td>';
             echo '</tr>';
         }?>
         <tr>
-            
         </tr>
     </tbody>
 </table>
 </div>
 </div>
 <?php echo $this->pagination->create_links();}?>
-
-
-
- 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post" >
+  <form action="<?=site_url('clientes/excluir')?>" method="post" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h5 id="myModalLabel">Excluir Cliente</h5>
@@ -111,23 +93,11 @@ if(!$results){?>
   </div>
   </form>
 </div>
-
-
-
-
-
-
 <script type="text/javascript">
 $(document).ready(function(){
-
-
    $(document).on('click', 'a', function(event) {
-        
         var cliente = $(this).attr('cliente');
         $('#idCliente').val(cliente);
-
     });
-
 });
-
 </script>

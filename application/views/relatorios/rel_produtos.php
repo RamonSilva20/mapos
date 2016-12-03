@@ -9,9 +9,9 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/produtosRapid"><i class="icon-barcode"></i> <small>Todos os Produtos</small></a></li>
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/produtosRapidMin"><i class="icon-barcode"></i> <small>Com Estoque Mínimo</small></a></li>
-                    
+                    <li><a target="_blank" href="<?=site_url('relatorios/produtosRapid')?>"><i class="icon-barcode"></i> <small>Todos os Produtos</small></a></li>
+                    <li><a target="_blank" href="<?=site_url('relatorios/produtosRapidMin')?>"><i class="icon-barcode"></i> <small>Com Estoque Mínimo</small></a></li>
+
                 </ul>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="widget-content">
                 <div class="span12 well">
                     <div class="span12 alert alert-info">Deixe em branco caso não deseje utilizar o parâmetro.</div>
-                    <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/produtosCustom" method="get">
+                    <form target="_blank" action="<?=site_url('relatorios/produtosCustom')?>" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Preço de Venda de:</label>
@@ -62,11 +62,9 @@
 </div>
 
 
-<script src="<?php echo base_url();?>js/maskmoney.js"></script>
+<script src="<?=base_url('js/maskmoney.js');?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".money").maskMoney();
-
-      
     });
 </script>
