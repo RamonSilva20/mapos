@@ -132,7 +132,18 @@
 
         function Popup(data)
         {
-            var mywindow = window.open('', 'MapOs', 'height=600,width=800');
+            var mywindow = window.open('', 'mydiv', 'height=600,width=800');
+            mywindow.document.open();
+            mywindow.document.onreadystatechange=function(){
+             if(this.readyState==='complete'){
+              this.onreadystatechange=function(){};
+              mywindow.focus();
+              mywindow.print();
+              mywindow.close();
+             }
+            }
+
+
             mywindow.document.write('<html><head><title>Map Os</title>');
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap.min.css' />");
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap-responsive.min.css' />");
@@ -140,12 +151,12 @@
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/matrix-media.css' />");
 
 
-            mywindow.document.write('</head><body >');
-            mywindow.document.write(data);
-            mywindow.document.write('</body></html>');
+            mywindow.document.write("</head><body >");
+            mywindow.document.write(data);          
+            mywindow.document.write("</body></html>");
 
-            mywindow.print();
-            mywindow.close();
+            mywindow.document.close(); // necessary for IE >= 10
+
 
             return true;
         }

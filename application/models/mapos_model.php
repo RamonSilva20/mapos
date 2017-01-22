@@ -42,11 +42,12 @@ class Mapos_model extends CI_Model {
         $this->db->limit(1);
         $usuario = $this->db->get('usuarios')->row();
 
+        $oldSenha = $this->encrypt->sha1($oldSenha);
         if($usuario->senha != $oldSenha){
             return false;
         }
         else{
-            $this->db->set('senha',$senha);
+            $this->db->set('senha',$this->encrypt->sha1($senha));
             $this->db->where('idUsuarios',$id);
             return $this->db->update('usuarios');    
         }

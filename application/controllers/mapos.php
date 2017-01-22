@@ -46,6 +46,8 @@ class Mapos extends CI_Controller {
             redirect('mapos/login');
         }
 
+        $this->load->library('encrypt');
+        
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
         $result = $this->mapos_model->alterarSenha($senha,$oldSenha,$this->session->userdata('id'));
