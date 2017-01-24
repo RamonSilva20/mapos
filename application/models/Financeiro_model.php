@@ -31,6 +31,30 @@ class Financeiro_model extends CI_Model
 
         return $result;
     }
+    public function getTotalDespesas($where = '')
+    {
+        $this->db->select('(sum(valor) - sum(desconto)) as total_despesa');
+        $this->db->from('lancamentos');
+        $this->db->where($where);
+        $this->db->where('tipo', 'despesa');
+
+        $query = $this->db->get()->result();
+        $result = $query[0]->total_despesa;
+
+        return $result;
+    }
+    public function getTotalReceitas($where = '')
+    {
+        $this->db->select('(sum(valor) - sum(desconto)) as total_receita');
+        $this->db->from('lancamentos');
+        $this->db->where($where);
+        $this->db->where('tipo', 'receita');
+
+        $query = $this->db->get()->result();
+        $result = $query[0]->total_receita;
+
+        return $result;
+    }
 
     public function getById($id)
     {

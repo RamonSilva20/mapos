@@ -161,6 +161,8 @@ class Financeiro extends MY_Acesso
         $this->pagination->initialize($config);
 
         $this->data['results'] = $this->financeiro_model->get('lancamentos', 'idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto,desconto', $where, $config['per_page'], $this->input->get('per_page'));
+        $this->data['total_despesas'] = $this->financeiro_model->getTotalDespesas($where);
+        $this->data['total_receitas'] = $this->financeiro_model->getTotalReceitas($where);
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);

@@ -137,16 +137,16 @@ if(!$results){?>
     </tbody>
     <tfoot>
     	<tr>
-    		<td colspan="5" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
-    		<td colspan="2" style="text-align: left; color: green"><strong>R$ <?=number_format($totalReceita,2,',','.') ?></strong></td>
+    		<td colspan="7" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
+    		<td colspan="2" style="text-align: left; color: green"><strong>R$ <?=number_format($total_receitas,2,',','.') ?></strong></td>
     	</tr>
     	<tr>
-    		<td colspan="5" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
-    		<td colspan="2" style="text-align: left; color: red"><strong>R$ <?=number_format($totalDespesa,2,',','.') ?></strong></td>
+    		<td colspan="7" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
+    		<td colspan="2" style="text-align: left; color: red"><strong>R$ <?=number_format($total_despesas,2,',','.') ?></strong></td>
     	</tr>
     	<tr>
-    		<td colspan="5" style="text-align: right"> <strong>Saldo:</strong></td>
-    		<td colspan="2" style="text-align: left;"><strong>R$ <?=number_format($totalReceita - $totalDespesa,2,',','.') ?></strong></td>
+    		<td colspan="7" style="text-align: right"> <strong>Saldo:</strong></td>
+    		<td colspan="2" style="text-align: left;"><strong>R$ <?=number_format($total_receitas - $total_despesas,2,',','.') ?></strong></td>
     	</tr>
     </tfoot>
 </table>
@@ -282,7 +282,7 @@ if(!$results){?>
 </div>
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form id="formEditar" action="<?site_url('financeiro/editar')?>" method="post">
+  <form id="formEditar" action="<?=site_url('financeiro/editar')?>" method="post">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">MapOS - Editar Lançamento</h3>
