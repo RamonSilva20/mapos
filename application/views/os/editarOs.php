@@ -35,7 +35,7 @@
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?$result->nome?>"  />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?$result->usuarios_id?>"  />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?=$result->usuarios_id?>"  />
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
