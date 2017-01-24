@@ -2,13 +2,15 @@
     <title>MAPOS</title>
     <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/main.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/blue.css" class="skin-color" />
-    <script type="text/javascript"  src="<?php echo base_url();?>js/jquery-1.10.2.min.js"></script>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+      <link rel="stylesheet" href="<?php echo base_url('assets/css/relatorios.css');?>" />
+    <!-- <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css');?>" /> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap-responsive.min.css');?>" /> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url('assets/css/fullcalendar.css');?>" />
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/main.css');?>" />
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/blue.css');?>" class="skin-color" /> -->
+    <!-- <script type="text/javascript"  src="<?php echo base_url('assets/js/jquery-1.10.2.min.js');?>"></script> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
 
   <body style="background-color: transparent">
 
@@ -25,7 +27,7 @@
                       </div>
                       <div class="widget-content nopadding">
 
-                  <table class="table table-bordered">
+                  <table class="table table-bordered" >
                       <thead>
                           <tr>
                               <th style="font-size: 1.2em; padding: 5px;">Nome</th>
@@ -68,13 +70,13 @@
 
             <!-- Arquivos js-->
 
-            <script src="<?php echo base_url();?>js/excanvas.min.js"></script>
-            <script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
-            <script src="<?php echo base_url();?>js/jquery.flot.min.js"></script>
-            <script src="<?php echo base_url();?>js/jquery.flot.resize.min.js"></script>
-            <script src="<?php echo base_url();?>js/jquery.peity.min.js"></script>
-            <script src="<?php echo base_url();?>js/fullcalendar.min.js"></script>
-            <script src="<?php echo base_url();?>js/sosmc.js"></script>
-            <script src="<?php echo base_url();?>js/dashboard.js"></script>
+            <!-- <script src="<?php echo base_url('assets/js/excanvas.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/bootstrap.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/jquery.flot.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/jquery.flot.resize.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/jquery.peity.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/fullcalendar.min.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/sosmc.js');?>"></script> -->
+            <!-- <script src="<?php echo base_url('assets/js/dashboard.js');?>"></script> -->
   </body>
 </html>

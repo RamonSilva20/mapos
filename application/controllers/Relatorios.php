@@ -62,19 +62,24 @@ class Relatorios extends MY_Acesso{
 
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
 
-        // $this->load->helper('mpdf');
-        $this->load->view('relatorios/imprimir/imprimirClientes', $data);
-        // $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
-        // Create an instance of the class:
+        $this->load->helper('mpdf');
+        // $this->load->view('relatorios/imprimir/imprimirClientes', $data);
+        $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
+        // // Create an instance of the class:
+        //
+
+
+        // sleep(60);
 
         // $mpdf = new mPDF();
-
-        // Write some HTML code:
-        // $mpdf->WriteHTML('asdasd');
         //
-        // // Output a PDF file directly to the browser
+        // // Write some HTML code:
+        // $mpdf->WriteHTML($html);
+        // $mpdf->WriteHTML('asdadasd');
+        // //
+        // // // Output a PDF file directly to the browser
         // $mpdf->Output();
-        // pdf_create($html, 'relatorio_clientes' . date('d/m/y'), TRUE);
+        pdf_create($html, 'relatorio_clientes' . date('d/m/y'), TRUE);
     }
 
     public function produtosRapid(){
@@ -86,9 +91,9 @@ class Relatorios extends MY_Acesso{
         $data['produtos'] = $this->Relatorios_model->produtosRapid();
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirProdutos', $data);
-        $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
-        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), TRUE);
+        $this->load->view('relatorios/imprimir/imprimirProdutos', $data);
+        // $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
+        // pdf_create($html, 'relatorio_produtos' . date('d/m/y'), TRUE);
     }
 
     public function produtosRapidMin(){

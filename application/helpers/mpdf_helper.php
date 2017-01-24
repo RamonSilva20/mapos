@@ -20,9 +20,9 @@ function pdf_create($html, $filename, $stream = TRUE)
     }
     else
     {
-        $mpdf->Output('./uploads/temp/' . $filename . '.pdf', 'F');
-        
-        return './uploads/temp/' . $filename . '.pdf';
+        $mpdf->Output('./assets/uploads/temp/' . $filename . '.pdf', 'F');
+
+        return './assets/uploads/temp/' . $filename . '.pdf';
     }
 }
 

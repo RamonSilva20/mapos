@@ -2,7 +2,7 @@
     <title>MAPOS</title>
     <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css');?>" />
     <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" />
     <link rel="stylesheet" href="<?php echo base_url();?>css/main.css" />
@@ -77,4 +77,3 @@
             <script src="<?php echo base_url();?>js/dashboard.js"></script>
   </body>
 </html>
-

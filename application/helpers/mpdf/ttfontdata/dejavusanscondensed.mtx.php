@@ -2,25 +2,25 @@
 $name='DejaVuSansCondensed';
 $type='TTF';
 $desc=array (
-  'CapHeight' => 729,
-  'XHeight' => 547,
-  'FontBBox' => '[-918 -415 1513 1167]',
+  'CapHeight' => 729.0,
+  'XHeight' => 547.0,
+  'FontBBox' => '[-918 -463 1614 1232]',
   'Flags' => 4,
-  'Ascent' => 928,
-  'Descent' => -236,
-  'Leading' => 0,
-  'ItalicAngle' => 0,
-  'StemV' => 87,
-  'MissingWidth' => 540,
+  'Ascent' => 928.0,
+  'Descent' => -236.0,
+  'Leading' => 0.0,
+  'ItalicAngle' => 0.0,
+  'StemV' => 87.0,
+  'MissingWidth' => 540.0,
 );
 $unitsPerEm=2048;
 $up=-63;
 $ut=44;
 $strp=259;
 $strs=50;
-$ttffile='C:/Program Files (x86)/EasyPHPNew-12.1/www/mapos/application/helpers/mpdf/ttfonts/DejaVuSansCondensed.ttf';
+$ttffile='/home/pandorga/documentos/localhost/mapos/application/helpers/mpdf/ttfonts/DejaVuSansCondensed.ttf';
 $TTCfontID='0';
-$originalsize=664972;
+$originalsize=690388;
 $sip=false;
 $smp=false;
 $BMPselected=true;
@@ -34,7 +34,7 @@ $fontmetrics='win';
 // usWinAscent/usWinDescent = 928, -236
 // hhea Ascent/Descent/LineGap = 928, -236, 0
 $useOTL=255;
-$rtlPUAstr='\x{0E1E5}-\x{0E1EF}\x{0E1F1}-\x{0E202}\x{0E21E}\x{0E220}-\x{0E226}\x{0E228}\x{0E233}-\x{0E294}\x{0E2A2}-\x{0E2F6}\x{0EF00}-\x{0EF19}';
+$rtlPUAstr='\x{0E238}-\x{0E242}\x{0E244}-\x{0E255}\x{0E271}\x{0E273}-\x{0E279}\x{0E27B}\x{0E286}-\x{0E2E7}\x{0E2F5}-\x{0E349}\x{0EF00}-\x{0EF19}';
 $GSUBScriptLang=array (
   'DFLT' => 'DFLT ',
   'arab' => 'DFLT KUR  SND  URD  ',
@@ -49,7 +49,7 @@ $GSUBScriptLang=array (
   'hebr' => 'DFLT ',
   'kana' => 'DFLT ',
   'lao ' => 'DFLT ',
-  'latn' => 'DFLT ISM  KSM  LSM  MOL  NSM  ROM  SKS  SSM  ',
+  'latn' => 'DFLT CAT  ESP  GAL  ISM  KSM  LSM  MOL  NSM  ROM  SKS  SSM  ',
   'math' => 'DFLT ',
   'nko ' => 'DFLT ',
   'ogam' => 'DFLT ',
@@ -62,17 +62,21 @@ $GSUBFeatures=array (
   array (
     'DFLT' => 
     array (
-      ' RQD' => 
+      'case' => 
       array (
         0 => 0,
       ),
+      ' RQD' => 
+      array (
+        0 => 1,
+      ),
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
       'dlig' => 
       array (
-        0 => 22,
+        0 => 24,
       ),
     ),
   ),
@@ -82,122 +86,122 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 1,
-        1 => 3,
+        0 => 2,
+        1 => 4,
       ),
       'fina' => 
       array (
-        0 => 8,
+        0 => 9,
       ),
       'medi' => 
       array (
-        0 => 10,
+        0 => 11,
       ),
       'init' => 
       array (
-        0 => 12,
+        0 => 13,
       ),
       'rlig' => 
       array (
-        0 => 13,
-        1 => 14,
-        2 => 15,
+        0 => 14,
+        1 => 15,
+        2 => 16,
       ),
       'liga' => 
       array (
-        0 => 16,
-        1 => 18,
+        0 => 17,
+        1 => 19,
       ),
     ),
     'KUR ' => 
     array (
       'ccmp' => 
       array (
-        0 => 1,
-        1 => 3,
+        0 => 2,
+        1 => 4,
       ),
       'fina' => 
       array (
-        0 => 8,
+        0 => 9,
       ),
       'medi' => 
       array (
-        0 => 10,
+        0 => 11,
       ),
       'init' => 
       array (
-        0 => 12,
+        0 => 13,
       ),
       'rlig' => 
       array (
-        0 => 13,
-        1 => 14,
-        2 => 15,
+        0 => 14,
+        1 => 15,
+        2 => 16,
       ),
       'liga' => 
       array (
-        0 => 16,
-        1 => 18,
+        0 => 17,
+        1 => 19,
       ),
     ),
     'SND ' => 
     array (
       'ccmp' => 
       array (
-        0 => 1,
-        1 => 3,
+        0 => 2,
+        1 => 4,
       ),
       'fina' => 
       array (
-        0 => 8,
+        0 => 9,
       ),
       'medi' => 
       array (
-        0 => 10,
+        0 => 11,
       ),
       'init' => 
       array (
-        0 => 12,
+        0 => 13,
       ),
       'rlig' => 
       array (
-        0 => 14,
-        1 => 15,
+        0 => 15,
+        1 => 16,
       ),
       'liga' => 
       array (
-        0 => 16,
-        1 => 18,
+        0 => 17,
+        1 => 19,
       ),
     ),
     'URD ' => 
     array (
       'ccmp' => 
       array (
-        0 => 1,
-        1 => 3,
+        0 => 2,
+        1 => 4,
       ),
       'fina' => 
       array (
-        0 => 8,
+        0 => 9,
       ),
       'medi' => 
       array (
-        0 => 10,
+        0 => 11,
       ),
       'init' => 
       array (
-        0 => 12,
+        0 => 13,
       ),
       'rlig' => 
       array (
-        0 => 14,
-        1 => 15,
+        0 => 15,
+        1 => 16,
       ),
       'liga' => 
       array (
-        0 => 16,
-        1 => 18,
+        0 => 17,
+        1 => 19,
       ),
     ),
   ),
@@ -207,11 +211,11 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
       'dlig' => 
       array (
-        0 => 19,
+        0 => 21,
       ),
     ),
   ),
@@ -221,7 +225,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -231,7 +235,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -241,7 +245,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -251,32 +255,32 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
     ),
     'MKD ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 5,
+        0 => 6,
       ),
     ),
     'SRB ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 5,
+        0 => 6,
       ),
     ),
   ),
@@ -286,7 +290,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -296,8 +300,42 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
+        0 => 3,
+        1 => 4,
+      ),
+      'aalt' => 
+      array (
+        0 => 27,
+      ),
+      'salt' => 
+      array (
+        0 => 28,
+      ),
+    ),
+  ),
+  'hani' => 
+  array (
+    'DFLT' => 
+    array (
+      'ccmp' => 
+      array (
+        0 => 4,
+      ),
+    ),
+  ),
+  'hebr' => 
+  array (
+    'DFLT' => 
+    array (
+      'ccmp' => 
+      array (
         0 => 2,
-        1 => 3,
+        1 => 4,
+        2 => 5,
+      ),
+      'hlig' => 
+      array (
+        0 => 20,
       ),
       'aalt' => 
       array (
@@ -309,47 +347,13 @@ $GSUBFeatures=array (
       ),
     ),
   ),
-  'hani' => 
-  array (
-    'DFLT' => 
-    array (
-      'ccmp' => 
-      array (
-        0 => 3,
-      ),
-    ),
-  ),
-  'hebr' => 
-  array (
-    'DFLT' => 
-    array (
-      'ccmp' => 
-      array (
-        0 => 1,
-        1 => 3,
-        2 => 4,
-      ),
-      'aalt' => 
-      array (
-        0 => 23,
-      ),
-      'salt' => 
-      array (
-        0 => 24,
-      ),
-      'hlig' => 
-      array (
-        0 => 38,
-      ),
-    ),
-  ),
   'kana' => 
   array (
     'DFLT' => 
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -359,7 +363,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -367,278 +371,303 @@ $GSUBFeatures=array (
   array (
     'DFLT' => 
     array (
+      'case' => 
+      array (
+        0 => 0,
+      ),
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
+      ),
+    ),
+    'CAT ' => 
+    array (
+      'case' => 
+      array (
+        0 => 0,
+      ),
+    ),
+    'ESP ' => 
+    array (
+      'case' => 
+      array (
+        0 => 0,
+      ),
+    ),
+    'GAL ' => 
+    array (
+      'case' => 
+      array (
+        0 => 0,
       ),
     ),
     'ISM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'KSM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'LSM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'MOL ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'NSM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'ROM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'SKS ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
     'SSM ' => 
     array (
       'ccmp' => 
       array (
-        0 => 2,
-        1 => 3,
+        0 => 3,
+        1 => 4,
       ),
       'locl' => 
       array (
-        0 => 6,
+        0 => 7,
       ),
       'liga' => 
       array (
-        0 => 17,
+        0 => 18,
       ),
       'dlig' => 
       array (
-        0 => 20,
+        0 => 22,
       ),
       'hlig' => 
       array (
-        0 => 21,
+        0 => 23,
       ),
       'salt' => 
       array (
-        0 => 27,
+        0 => 29,
       ),
       'aalt' => 
       array (
-        0 => 28,
+        0 => 30,
       ),
     ),
   ),
@@ -648,7 +677,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -658,24 +687,24 @@ $GSUBFeatures=array (
     array (
       ' RQD' => 
       array (
-        0 => 0,
+        0 => 1,
       ),
       'ccmp' => 
       array (
-        0 => 1,
-        1 => 3,
+        0 => 2,
+        1 => 4,
       ),
       'fina' => 
       array (
-        0 => 7,
+        0 => 8,
       ),
       'medi' => 
       array (
-        0 => 9,
+        0 => 10,
       ),
       'init' => 
       array (
-        0 => 11,
+        0 => 12,
       ),
     ),
   ),
@@ -685,7 +714,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -695,7 +724,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -705,7 +734,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -715,7 +744,7 @@ $GSUBFeatures=array (
     array (
       'ccmp' => 
       array (
-        0 => 3,
+        0 => 4,
       ),
     ),
   ),
@@ -723,34 +752,34 @@ $GSUBFeatures=array (
 $GSUBLookups=array (
   0 => 
   array (
-    'Type' => 6,
-    'Flag' => 9,
+    'Type' => 1,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 42506,
+      0 => 660952,
     ),
     'MarkFilteringSet' => '',
   ),
   1 => 
   array (
     'Type' => 6,
-    'Flag' => 1,
+    'Flag' => 9,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 42630,
+      0 => 660974,
     ),
     'MarkFilteringSet' => '',
   ),
   2 => 
   array (
     'Type' => 6,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 42710,
+      0 => 661098,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -758,41 +787,41 @@ $GSUBLookups=array (
   array (
     'Type' => 6,
     'Flag' => 0,
-    'SubtableCount' => 10,
+    'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 43602,
-      1 => 43690,
-      2 => 43778,
-      3 => 43866,
-      4 => 43954,
-      5 => 44042,
-      6 => 44108,
-      7 => 44180,
-      8 => 44252,
-      9 => 44324,
+      0 => 661182,
     ),
     'MarkFilteringSet' => '',
   ),
   4 => 
+  array (
+    'Type' => 6,
+    'Flag' => 0,
+    'SubtableCount' => 10,
+    'Subtables' => 
+    array (
+      0 => 662074,
+      1 => 662162,
+      2 => 662250,
+      3 => 662338,
+      4 => 662426,
+      5 => 662514,
+      6 => 662580,
+      7 => 662652,
+      8 => 662724,
+      9 => 662796,
+    ),
+    'MarkFilteringSet' => '',
+  ),
+  5 => 
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44390,
-    ),
-    'MarkFilteringSet' => '',
-  ),
-  5 => 
-  array (
-    'Type' => 1,
-    'Flag' => 0,
-    'SubtableCount' => 1,
-    'Subtables' => 
-    array (
-      0 => 44428,
+      0 => 662862,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -803,18 +832,18 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44440,
+      0 => 662900,
     ),
     'MarkFilteringSet' => '',
   ),
   7 => 
   array (
     'Type' => 1,
-    'Flag' => 9,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44452,
+      0 => 662912,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -825,7 +854,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44528,
+      0 => 662924,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -836,7 +865,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44786,
+      0 => 663000,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -847,7 +876,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 44862,
+      0 => 663266,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -858,7 +887,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45094,
+      0 => 663342,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -869,18 +898,18 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45170,
+      0 => 663576,
     ),
     'MarkFilteringSet' => '',
   ),
   13 => 
   array (
-    'Type' => 4,
-    'Flag' => 1,
+    'Type' => 1,
+    'Flag' => 9,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45402,
+      0 => 663652,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -891,18 +920,18 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45462,
+      0 => 663886,
     ),
     'MarkFilteringSet' => '',
   ),
   15 => 
   array (
     'Type' => 4,
-    'Flag' => 9,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45604,
+      0 => 663946,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -913,51 +942,51 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45642,
+      0 => 664088,
     ),
     'MarkFilteringSet' => '',
   ),
   17 => 
   array (
     'Type' => 4,
-    'Flag' => 0,
+    'Flag' => 9,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45712,
+      0 => 664126,
     ),
     'MarkFilteringSet' => '',
   ),
   18 => 
   array (
     'Type' => 4,
-    'Flag' => 1,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45772,
+      0 => 664196,
     ),
     'MarkFilteringSet' => '',
   ),
   19 => 
   array (
     'Type' => 4,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 45964,
+      0 => 664256,
     ),
     'MarkFilteringSet' => '',
   ),
   20 => 
   array (
     'Type' => 4,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46040,
+      0 => 664448,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -968,7 +997,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46064,
+      0 => 664472,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -979,51 +1008,51 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46088,
+      0 => 664548,
     ),
     'MarkFilteringSet' => '',
   ),
   23 => 
   array (
-    'Type' => 1,
-    'Flag' => 1,
+    'Type' => 4,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46244,
+      0 => 664572,
     ),
     'MarkFilteringSet' => '',
   ),
   24 => 
   array (
-    'Type' => 1,
-    'Flag' => 1,
+    'Type' => 4,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46256,
+      0 => 664596,
     ),
     'MarkFilteringSet' => '',
   ),
   25 => 
   array (
     'Type' => 1,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46268,
+      0 => 664752,
     ),
     'MarkFilteringSet' => '',
   ),
   26 => 
   array (
     'Type' => 1,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46306,
+      0 => 664764,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1034,18 +1063,18 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46344,
+      0 => 664776,
     ),
     'MarkFilteringSet' => '',
   ),
   28 => 
   array (
-    'Type' => 3,
+    'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46374,
+      0 => 664814,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1056,29 +1085,29 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46432,
+      0 => 664852,
     ),
     'MarkFilteringSet' => '',
   ),
   30 => 
   array (
-    'Type' => 1,
+    'Type' => 3,
     'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46490,
+      0 => 664882,
     ),
     'MarkFilteringSet' => '',
   ),
   31 => 
   array (
     'Type' => 1,
-    'Flag' => 0,
+    'Flag' => 1,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46552,
+      0 => 664940,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1089,7 +1118,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46568,
+      0 => 664952,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1100,7 +1129,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46584,
+      0 => 665006,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1111,7 +1140,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46600,
+      0 => 665068,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1122,7 +1151,7 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46616,
+      0 => 665084,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1133,29 +1162,40 @@ $GSUBLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46632,
+      0 => 665100,
     ),
     'MarkFilteringSet' => '',
   ),
   37 => 
   array (
     'Type' => 1,
-    'Flag' => 1,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46658,
+      0 => 665116,
     ),
     'MarkFilteringSet' => '',
   ),
   38 => 
   array (
-    'Type' => 4,
-    'Flag' => 1,
+    'Type' => 1,
+    'Flag' => 0,
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 46670,
+      0 => 665132,
+    ),
+    'MarkFilteringSet' => '',
+  ),
+  39 => 
+  array (
+    'Type' => 1,
+    'Flag' => 0,
+    'SubtableCount' => 1,
+    'Subtables' => 
+    array (
+      0 => 665148,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1691,7 +1731,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 1782,
+      0 => 619770,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1702,7 +1742,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 1872,
+      0 => 619860,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1713,7 +1753,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 2336,
+      0 => 620324,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1724,7 +1764,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 2394,
+      0 => 620382,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1735,8 +1775,8 @@ $GPOSLookups=array (
     'SubtableCount' => 2,
     'Subtables' => 
     array (
-      0 => 2544,
-      1 => 3280,
+      0 => 620532,
+      1 => 621268,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1747,7 +1787,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 4496,
+      0 => 622484,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1758,7 +1798,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 4866,
+      0 => 622854,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1769,7 +1809,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 10096,
+      0 => 628196,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1780,7 +1820,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 10358,
+      0 => 628458,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1791,7 +1831,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 10812,
+      0 => 628912,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1802,7 +1842,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 16006,
+      0 => 634218,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1813,7 +1853,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 16310,
+      0 => 634522,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1824,7 +1864,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 16750,
+      0 => 634962,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1835,12 +1875,12 @@ $GPOSLookups=array (
     'SubtableCount' => 6,
     'Subtables' => 
     array (
-      0 => 17192,
-      1 => 18642,
-      2 => 18770,
-      3 => 19696,
-      4 => 24146,
-      5 => 30578,
+      0 => 635404,
+      1 => 636890,
+      2 => 637018,
+      3 => 637944,
+      4 => 642468,
+      5 => 648952,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1851,7 +1891,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 30914,
+      0 => 649288,
     ),
     'MarkFilteringSet' => '',
   ),
@@ -1862,7 +1902,7 @@ $GPOSLookups=array (
     'SubtableCount' => 1,
     'Subtables' => 
     array (
-      0 => 41080,
+      0 => 659454,
     ),
     'MarkFilteringSet' => '',
   ),

@@ -367,7 +367,7 @@ if(!$results){?>
   </div>
 </div>
 <script src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
-<script src="<?=base_url('assets/>js/maskmoney.js')?>"></script>
+<script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
 		$(".money").maskMoney();

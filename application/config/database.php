@@ -7,23 +7,23 @@ if (defined('ENVIRONMENT')){
 	switch (ENVIRONMENT){
 		case 'production':
 			$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
-			$db['default']['username'] = 'root';
-			$db['default']['password'] = '';
-			$db['default']['database'] = 'mapos';
+			$db['default']['username'] = 'usuario';
+			$db['default']['password'] = 'senha';
+			$db['default']['database'] = 'nome_base_dados';
 			break;
 
 		case 'development':
 		$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
-			$db['default']['username'] = 'gus';
-			$db['default']['password'] = 'Gust4v0;';
-			$db['default']['database'] = 'mapos';
+			$db['default']['username'] = 'usuario';
+			$db['default']['password'] = 'senha';
+			$db['default']['database'] = 'nome_base_dados';
 			break;
 
 		default:
 			$db['default']['hostname'] = 'localhost'; // muitas vezes é localhost
-			$db['default']['username'] = 'root';
-			$db['default']['password'] = '';
-			$db['default']['database'] = 'mapos';
+			$db['default']['username'] = 'usuario';
+			$db['default']['password'] = 'senha';
+			$db['default']['database'] = 'nome_base_dados';
 			break;
 	}
 }
