@@ -325,6 +325,6 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
- require FCPATH . 'vendor/autoload.php';
+ // require FCPATH . 'vendor/autoload.php';
  
 require_once BASEPATH.'core/CodeIgniter.php';

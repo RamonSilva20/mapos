@@ -42,6 +42,14 @@
         <?php } ?>
       </ul>
     </div>
+    <div class="quick-actions_homepage" style="text-align:left">
+      <a class="btn btn-info" href="<?=site_url('clientes/adicionar')?>">Novo Cliente</a>
+      <a class="btn btn-success" href="<?=site_url('clientes/adicionar')?>">Novo Produto</a>
+      <a class="btn btn-warning" href="<?=site_url('clientes/adicionar')?>">Novo Serviço</a>
+      <a class="btn btn-danger" href="<?=site_url('clientes/adicionar')?>">Nova OS</a>
+      <a class="btn btn-primary" href="<?=site_url('clientes/adicionar')?>">Nova Venda</a>
+
+    </div>
   </div>
 <!--End-Action boxes-->
 
@@ -51,9 +59,9 @@
 
     <div class="span12">
 
-        <div class="widget-box">
-            <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
-            <div class="widget-content">
+        <div class="widget-box accordion-group ">
+            <div class="widget-title" data-toggle="collapse" href="#estoqueMinimo"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
+            <div class="widget-content nopadding in collapse" id="estoqueMinimo" style="height: auto;">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -97,8 +105,8 @@
     <div class="span12" style="margin-left: 0">
 
         <div class="accordion-group widget-box">
-            <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Em Aberto</h5></div>
-            <div class="widget-content">
+            <div class="widget-title" data-toggle="collapse" href="#servicoAberto"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Em Aberto</h5></div>
+            <div class="widget-content nopadding in collapse" id="servicoAberto" style="height: auto;">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -136,7 +144,48 @@
             </div>
         </div>
     </div>
+     <div class="span12" style="margin-left: 0">
 
+        <div class="accordion-group widget-box">
+            <div class="widget-title" data-toggle="collapse" href="#ordens_orcamento"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Orçamento</h5></div>
+            <div class="widget-content nopadding in collapse" id="ordens_orcamento" style="height: auto;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Cliente</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if($ordens_orcamento != null){
+                            foreach ($ordens_orcamento as $o) {
+                                echo '<tr>';
+                                echo '<td>'.$o->idOs.'</td>';
+                                echo '<td>'.date('d/m/Y' ,strtotime($o->dataInicial)).'</td>';
+                                echo '<td>'.date('d/m/Y' ,strtotime($o->dataFinal)).'</td>';
+                                echo '<td>'.$o->nomeCliente.'</td>';
+                                echo '<td>';
+                                if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
+                                    echo '<a href="'.site_url('os/visualizar/'.$o->idOs).'" class="btn"> <i class="icon-eye-open" ></i> </a> ';
+                                }
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                        else{
+                            echo '<tr><td colspan="3">Nenhuma OS em orçamento.</td></tr>';
+                        }
+
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 

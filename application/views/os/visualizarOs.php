@@ -47,6 +47,7 @@
                                             <li>
                                                 <span><h5>Cliente</h5>
                                                 <span><?=$result->nomeCliente?></span><br/>
+                                                <span><?=$result->clienteCelular?> / <?=$result->clienteTelefone?> </span><br/>
                                                 <span><?=$result->rua?>, <?=$result->numero?>, <?=$result->bairro?></span><br/>
                                                 <span><?=$result->cidade?> - <?=$result->estado?></span>
                                             </li>

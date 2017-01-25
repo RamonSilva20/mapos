@@ -64,7 +64,6 @@ class Os extends MY_Acesso
 
 
 
-        $this->form_validation->set_rules($config);
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('os') == false) {

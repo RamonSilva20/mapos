@@ -122,7 +122,15 @@ class Mapos_model extends CI_Model {
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status','Aberto');
-        $this->db->limit(10);
+        // $this->db->limit(10);
+        return $this->db->get()->result();
+    }    
+    function getOsOrcamentos(){
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status','Orçamento');
+        // $this->db->limit(10);
         return $this->db->get()->result();
     }
 
