@@ -47,7 +47,6 @@
                 $("#formLogin").validate({
                    rules :{
                           email: { required: true},
-                          // email: { required: true, email: true},
                           senha: { required: true}
                     },
                     messages:{
@@ -58,7 +57,7 @@
                          var dados = $(form).serialize();
                         $.ajax({
                           type: "POST",
-                          url: "<?=site_url('verificarLogin?ajax=true') ?>",
+                          url: "<?=site_url('verificarLogin?ajax=true')?>",
                           data: dados,
                           dataType: 'json',
                           success: function(data)

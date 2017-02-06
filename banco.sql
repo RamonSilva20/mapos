@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `desconto` DECIMAL(12,2) DEFAULT 0,
   `data_vencimento` DATE NOT NULL,
   `data_pagamento` DATE NULL DEFAULT NULL,
-  `baixado` TINYINT(1) NULL DEFAULT NULL,
+  `baixado` TINYINT(1) NULL DEFAULT 0,
   `cliente_fornecedor` VARCHAR(255) NULL DEFAULT NULL,
   `forma_pgto` VARCHAR(100) NULL DEFAULT NULL,
   `tipo` VARCHAR(45) NULL DEFAULT NULL,

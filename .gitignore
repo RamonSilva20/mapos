@@ -28,3 +28,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 alterações.txt
 teste.php
+/assets/uploads/*

@@ -7,12 +7,14 @@ class Mapos_model extends CI_Model {
      *
      */
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
     }
 
 
-    function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
+    function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array')
+    {
 
         $this->db->select($fields);
         $this->db->from($table);
@@ -25,7 +27,8 @@ class Mapos_model extends CI_Model {
         return $result;
     }
 
-    function getById($id){
+    function getById($id)
+    {
         $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
         $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
@@ -34,7 +37,8 @@ class Mapos_model extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function alterarSenha($senha,$oldSenha,$id){
+    public function alterarSenha($senha,$oldSenha,$id)
+    {
 
         $this->db->where('idUsuarios', $id);
         $this->db->limit(1);
@@ -48,11 +52,10 @@ class Mapos_model extends CI_Model {
             $this->db->where('idUsuarios',$id);
             return $this->db->update('usuarios');
         }
-
-
     }
 
-    function pesquisar($termo){
+    function pesquisar($termo)
+    {
          $data = array();
          // buscando clientes
          $this->db->like('nomeCliente',$termo);
@@ -75,22 +78,22 @@ class Mapos_model extends CI_Model {
          $data['servicos'] = $this->db->get('servicos')->result();
 
          return $data;
-
-
     }
 
 
-    function add($table,$data){
+    function add($table,$data)
+    {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1')
 		      {
-			return TRUE;
-		  }
+  			return TRUE;
+  		  }
 
-	    return FALSE;
+  	    return FALSE;
     }
 
-    function edit($table,$data,$fieldID,$ID){
+    function edit($table,$data,$fieldID,$ID)
+    {
         $this->db->where($fieldID,$ID);
         $this->db->update($table, $data);
 
@@ -122,6 +125,7 @@ class Mapos_model extends CI_Model {
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status','Aberto');
+        $this->db->order_by('idOs', 'DESC');
         // $this->db->limit(10);
         return $this->db->get()->result();
     }    
@@ -130,6 +134,7 @@ class Mapos_model extends CI_Model {
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status','Orçamento');
+        $this->db->order_by('idOs', 'DESC');
         // $this->db->limit(10);
         return $this->db->get()->result();
     }
@@ -206,10 +211,11 @@ class Mapos_model extends CI_Model {
     public function getSenhaUsuario($email)
     {
       $this->db->select('senha, email');
+      $this->db->limit(1);
       $this->db->where('email',$email);
       $this->db->or_where('usuario',$email);
-      $this->db->where('situacao',1);
-      $this->db->limit(1);
-      return $this->db->get('usuarios')->result();
+      $this->db->where('situacao', 1);
+
+      return $this->db->get('usuarios');
     }
 }

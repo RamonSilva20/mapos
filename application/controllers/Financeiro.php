@@ -32,110 +32,148 @@ class Financeiro extends MY_Acesso
         $where = '';
         $periodo = $this->input->get('periodo');
         $situacao = $this->input->get('situacao');
+        $dataInicial = $this->input->get('dataInicial');
+        $dataFinal = $this->input->get('dataFinal');
 
-        // busca todos os lançamentos
-        if ($periodo == 'todos') {
-            if ($situacao == 'previsto') {
-                $where = 'data_vencimento > "'.date('Y-m-d').'" AND baixado = "0"';
-            } else {
-                if ($situacao == 'atrasado') {
-                    $where = 'data_vencimento < "'.date('Y-m-d').'" AND baixado = "0"';
-                } else {
-                    if ($situacao == 'realizado') {
-                        $where = 'baixado = "1"';
-                    }
-
-                    if ($situacao == 'pendente') {
-                        $where = 'baixado = "0"';
-                    }
+        if(!empty($dataFinal) AND !empty($dataInicial) ){
+            if(!empty($situacao)){
+                switch ($situacao){
+                    case 'todos':
+                        $situacao = '';
+                        break;
+                    case 'previsto':
+                        $situacao = ' AND (baixado = 0)';
+                        break;
+                    case 'atrasado':
+                        $situacao = ' AND (baixado = 0)';
+                        break;
+                    case 'realizado':
+                        $situacao = ' AND (baixado = 1)';
+                        break;
+                    case 'pendente':
+                        $situacao = ' AND (baixado = 0)';
+                        break;
+                    default:
+                        $situacao = '';
+                        break;
                 }
             }
-        } else {
-
-            // busca lançamentos do dia
-            if ($periodo == null || $periodo == 'dia') {
-                $where = 'data_vencimento = "'.date('Y-m-d'.'"');
-            } // fim lançamentos dia
-
-            else {
-
-                // busca lançamentos da semana
-                if ($periodo == 'semana') {
+            $where = sprintf('(data_vencimento BETWEEN "%s" AND "%s") %s ', $dataInicial, $dataFinal, $situacao);
+        }else{
+            switch ($periodo){
+                // busca todos os lançamentos
+                case 'todos':
+                    switch ($situacao) {
+                        case 'previsto':
+                            $where = sprintf('data_vencimento > "%s" AND baixado = 0', date('Y-m-d'));
+                            break;
+                        case 'atrasado':
+                            $where = sprintf('data_vencimento < "%s" AND baixado = 0', date('Y-m-d'));
+                            break;
+                        case 'realizado':
+                            $where = 'baixado = 1';
+                            break;
+                        case 'pendente':
+                            $where = 'baixado = 0';
+                            break;
+                        default:
+                            $where = 'baixado = 0 OR baixado = 1';
+                            break;
+                    }
+                break;
+                case 'semana':
                     $semana = $this->getThisWeek();
-
-                    if (!isset($situacao) || $situacao == 'todos') {
-                        $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.$semana[1].'"';
-                    } else {
-                        if ($situacao == 'previsto') {
-                            $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$semana[1].'" AND baixado = "0"';
-                        } else {
-                            if ($situacao == 'atrasado') {
-                                $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'realizado') {
-                                    $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.$semana[1].'" AND baixado = "1"';
-                                } else {
-                                    $where = 'data_vencimento BETWEEN "'.$semana[0].'" AND "'.$semana[1].'" AND baixado = "0"';
-                                }
-                            }
-                        }
+                    switch ($situacao){
+                        case 'todos':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s"',$semana[0], $semana[1]);
+                            break;
+                        case 'previsto':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = 0', date('Y-m-d') ,$semana[1]);
+                            break;
+                        case 'pendente':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = 0', $semana[0], $semana[1]);
+                            break;
+                        case 'atrasado':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = "0"',$semana[0], date('Y-m-d'));
+                            break;
+                        case 'realizado':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = "1"', $semana[0], $semana[1]);
+                            break;
+                        default:
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = "0"',$semana[0] ,$semana[1]);
+                            break;
                     }
-                } // fim lançamentos dia
-                else {
-
-                    // busca lançamento do mês
-
-                    if ($periodo == 'mes') {
-                        $mes = $this->getThisMonth();
-
-                        if (!isset($situacao) || $situacao == 'todos') {
+                    break;
+                case 'mes':
+                    $mes = $this->getThisMonth();
+                    switch ($situacao){
+                        case 'todos':
                             $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'"';
-                        } else {
-                            if ($situacao == 'previsto') {
-                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$mes[1].'" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'atrasado') {
-                                    $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'realizado') {
-                                        $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "1"';
-                                    } else {
-                                        $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "0"';
-                                    }
-                                }
-                            }
-                        }
+                            break;
+                        case 'previsto':
+                            $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$mes[1].'" AND baixado = "0"';
+                            break;
+                        case 'pendente':
+                            $where = sprintf('(data_vencimento BETWEEN "%s" AND "%s") AND baixado = 0', $mes[0], $mes[1]);
+                            break;
+                        case 'atrasado':
+                            $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
+                            break;
+                        case 'realizado':
+                            $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "1"';
+                            break;
+                        default:
+                            $where = 'data_vencimento BETWEEN "'.$mes[0].'" AND "'.$mes[1].'" AND baixado = "0"';
                     }
-
-                    // busca lançamentos do ano
-                    else {
-                        $ano = $this->getThisYear();
-
-                        if (!isset($situacao) || $situacao == 'todos') {
-                            $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'"';
-                        } else {
-                            if ($situacao == 'previsto') {
-                                $where = 'data_vencimento BETWEEN "'.date('Y-m-d').'" AND "'.$ano[1].'" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'atrasado') {
-                                    $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.date('Y-m-d').'" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'realizado') {
-                                        $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'" AND baixado = "1"';
-                                    } else {
-                                        $where = 'data_vencimento BETWEEN "'.$ano[0].'" AND "'.$ano[1].'" AND baixado = "0"';
-                                    }
-                                }
-                            }
-                        }
+                    break;
+                case 'ano':
+                    $ano = $this->getThisYear();
+                    switch ($situacao) {
+                        case 'todos':
+                            $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '"';
+                            break;
+                        case 'pendente':
+                            $where = sprintf('data_vencimento BETWEEN "%s" AND "%s" AND baixado = 0', $ano[0], $ano[1]);
+                            break;
+                        case 'previsto':
+                            $where = 'data_vencimento BETWEEN "' . date('Y-m-d') . '" AND "' . $ano[1] . '" AND baixado = "0"';
+                            break;
+                        case 'atrasado':
+                            $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
+                            break;
+                        case 'realizado':
+                            $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '" AND baixado = "1"';
+                            break;
+                        default:
+                            $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '"';
+                            break;
                     }
-                }
+                    break;
+                case 'dia':
+                    switch ($situacao) {
+                        case 'pendente':
+                            $where = sprintf('data_vencimento = "%s" AND baixado = 0',date('Y-m-d'));
+                            break;
+                        case 'previsto':
+                            $where = sprintf('data_vencimento = "%s" AND baixado = 0',date('Y-m-d'));
+                            break;
+                        case 'atrasado':
+                            $where = sprintf('data_vencimento = "%s" AND baixado = 0',date('Y-m-d'));
+                            break;
+                        default:
+                            $where = sprintf('data_vencimento = "%s"',date('Y-m-d'));
+                            break;
+                    }
+                    break;
+                default:
+                    $where = sprintf('data_vencimento = "%s"', date('Y-m-d'));
+                    break;
             }
         }
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url().'/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao;
+        $config['base_url'] = site_url('/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao);
         $config['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
@@ -159,7 +197,6 @@ class Financeiro extends MY_Acesso
         $config['last_tag_close'] = '</li>';
 
         $this->pagination->initialize($config);
-
         $this->data['results'] = $this->financeiro_model->get('lancamentos', 'idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto,desconto', $where, $config['per_page'], $this->input->get('per_page'));
         $this->data['total_despesas'] = $this->financeiro_model->getTotalDespesas($where);
         $this->data['total_receitas'] = $this->financeiro_model->getTotalReceitas($where);
@@ -207,7 +244,7 @@ class Financeiro extends MY_Acesso
                 'desconto' => set_value('desconto'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-                'baixado' => $this->input->post('recebido'),
+                'baixado' => $this->input->post('recebido') ? 1 : 0,
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),

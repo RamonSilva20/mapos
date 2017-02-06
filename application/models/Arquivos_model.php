@@ -80,7 +80,6 @@ class Arquivos_model extends CI_Model {
         $this->db->limit(10);
         return $this->db->get('documentos')->result();
     }
-
 }
 
 /* End of file arquivos_model.php */

@@ -58,7 +58,7 @@
                                             <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?=site_url('vendas/visualizar/')?><?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
+                                            <a href="<?=site_url('vendas/visualizar/')?><?=$result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
                                             <a href="<?=site_url('vendas') ?>" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
 
@@ -71,7 +71,7 @@
                                         <form id="formProdutos" action="<?=site_url('vendas/adicionarProduto')?>" method="post">
                                             <div class="span8">
                                                 <input type="hidden" name="idProduto" id="idProduto" />
-                                                <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?$result->idVendas?>" />
+                                                <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?=$result->idVendas?>" />
                                                 <input type="hidden" name="estoque" id="estoque" value=""/>
                                                 <input type="hidden" name="preco" id="preco" value=""/>
                                                 <label for="">Produto</label>

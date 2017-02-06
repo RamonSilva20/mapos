@@ -21,7 +21,7 @@
 
 
 <div id="modalCadastrar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form action="<?site_url('mapos/cadastrarEmitente')?>" id="formCadastrar" enctype="multipart/form-data" method="post" class="form-horizontal" >
+  <form action="<?=site_url('mapos/cadastrarEmitente')?>" id="formCadastrar" enctype="multipart/form-data" method="post" class="form-horizontal" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">MapOS - Cadastrar Dados do Emitente</h3>

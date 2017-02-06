@@ -3,6 +3,8 @@
 
 <?php $situacao = $this->input->get('situacao');
 	  $periodo = $this->input->get('periodo');
+	  $dataInicial = $this->input->get('dataInicial');
+	  $dataFinal = $this->input->get('dataFinal');
  ?>
 <style type="text/css">
 	label.error{
@@ -43,11 +45,27 @@
         <option value="pendente" <?php if($situacao == 'pendente'){ echo 'selected';} ?>>Pendente</option>
 			</select>
 		</div>
-		<div class="span4" >
-			&nbsp
-			<button type="submit" class="span12 btn btn-primary">Filtrar</button>
-		</div>
-	</form>
+		
+	
+</div>
+<div class="span12" style="margin-left: 0">
+    <div class="span5" style="margin-left: 0;"></div>
+    <div class="span7" style="margin-left: 0">
+        <div class="span4" style="margin-left: 0" >
+            <label>Data Inicial <i class="icon-info-sign tip-top" title="Selecione a data inicial dos lançamentos."></i></label>
+            <input type="text" name="dataInicial" class="datepickerFiltro span12" value="<?=$dataInicial?>">
+        </div>
+        <div class="span4">
+            <label>Data Final <i class="icon-info-sign tip-top" title="Selecione a data final dos lançamentos."></i></label>
+            <input type="text" name="dataFinal" class="datepickerFiltro span12" value="<?=$dataInicial?>">
+        </div>
+        <div class="span4">
+            <br>
+            <button type="submit" class="span12 btn btn-primary" style="margin-top: 5px">Filtrar</button>
+        </div>
+
+    </div>
+    </form>
 </div>
 <div class="span12" style="margin-left: 0;">
 <?php
@@ -98,7 +116,7 @@ if(!$results){?>
             <th>Vencimento</th>
             <th>Status</th>
 						<th>Desconto</th>
-            <th>Valor Recebido</th>
+            <th>Valor</th>
             <th></th>
         </tr>
     </thead>
@@ -473,5 +491,6 @@ if(!$results){?>
         return false;
     });
     $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    $(".datepickerFiltro" ).datepicker({ dateFormat: 'yy-mm-dd' });
 	});
 </script>

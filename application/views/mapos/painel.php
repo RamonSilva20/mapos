@@ -39,15 +39,21 @@
             <li class="bg_ls">
               <span class="label label-success"><?=$this->db->count_all('vendas')?></span>
                <a href="<?=site_url('vendas')?>"><i class="icon-shopping-cart"></i> Vendas</a></li>
+        <?php } ?>        
+        <?php
+        if($this->permission->checkPermission($this->session->userdata('permissao'),'vLancamento')){ ?>
+            <li class="bg_lb">
+              <span class="label label-success"><?=$this->db->count_all('lancamentos')?></span>
+               <a href="<?=site_url('financeiro/lancamentos')?>"><i class="icon icon-money"></i>Financeiro</a></li>
         <?php } ?>
       </ul>
     </div>
     <div class="quick-actions_homepage" style="text-align:left">
       <a class="btn btn-info" href="<?=site_url('clientes/adicionar')?>">Novo Cliente</a>
-      <a class="btn btn-success" href="<?=site_url('clientes/adicionar')?>">Novo Produto</a>
-      <a class="btn btn-warning" href="<?=site_url('clientes/adicionar')?>">Novo Serviço</a>
-      <a class="btn btn-danger" href="<?=site_url('clientes/adicionar')?>">Nova OS</a>
-      <a class="btn btn-primary" href="<?=site_url('clientes/adicionar')?>">Nova Venda</a>
+      <a class="btn btn-success" href="<?=site_url('produtos/adicionar')?>">Novo Produto</a>
+      <a class="btn btn-warning" href="<?=site_url('servicos/adicionar')?>">Novo Serviço</a>
+      <a class="btn btn-danger" href="<?=site_url('os/adicionar')?>">Nova OS</a>
+      <a class="btn btn-primary" href="<?=site_url('vendas/adicionar')?>">Nova Venda</a>
 
     </div>
   </div>
@@ -56,57 +62,10 @@
 
 
 <div class="row-fluid" style="margin-top: 0">
-
-    <div class="span12">
-
-        <div class="widget-box accordion-group ">
-            <div class="widget-title" data-toggle="collapse" href="#estoqueMinimo"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
-            <div class="widget-content nopadding in collapse" id="estoqueMinimo" style="height: auto;">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Produto</th>
-                            <th>Preço de Venda</th>
-                            <th>Estoque</th>
-                            <th>Estoque Mínimo</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if($produtos != null){
-                            foreach ($produtos as $p) {
-                                echo '<tr>';
-                                echo '<td>'.$p->idProdutos.'</td>';
-                                echo '<td>'.$p->descricao.'</td>';
-                                echo '<td>R$ '.$p->precoVenda.'</td>';
-                                echo '<td>'.$p->estoque.'</td>';
-                                echo '<td>'.$p->estoqueMinimo.'</td>';
-                                echo '<td>';
-                                if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                                    echo '<a href="'.site_url('produtos/editar/'.$p->idProdutos).'" class="btn btn-info"> <i class="icon-pencil" ></i> </a>  ';
-                                }
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-                        }
-                        else{
-                            echo '<tr><td colspan="3">Nenhum produto com estoque baixo.</td></tr>';
-                        }
-
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <div class="span12" style="margin-left: 0">
-
         <div class="accordion-group widget-box">
             <div class="widget-title" data-toggle="collapse" href="#servicoAberto"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Em Aberto</h5></div>
-            <div class="widget-content nopadding in collapse" id="servicoAberto" style="height: auto;">
+            <div class="widget-content nopadding collapse" id="servicoAberto" style="height: auto;">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -144,11 +103,10 @@
             </div>
         </div>
     </div>
-     <div class="span12" style="margin-left: 0">
-
+    <div class="span12" style="margin-left: 0">
         <div class="accordion-group widget-box">
             <div class="widget-title" data-toggle="collapse" href="#ordens_orcamento"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Orçamento</h5></div>
-            <div class="widget-content nopadding in collapse" id="ordens_orcamento" style="height: auto;">
+            <div class="widget-content nopadding collapse" id="ordens_orcamento" style="height: 0px;">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -186,10 +144,49 @@
             </div>
         </div>
     </div>
+    <div class="span12" style="margin-left: 0">
+        <div class="widget-box accordion-group ">
+            <div class="widget-title" data-toggle="collapse" href="#estoqueMinimo"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
+            <div class="widget-content nopadding collapse" id="estoqueMinimo" style="height: 0px;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produto</th>
+                            <th>Preço de Venda</th>
+                            <th>Estoque</th>
+                            <th>Estoque Mínimo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if($produtos != null){
+                            foreach ($produtos as $p) {
+                                echo '<tr>';
+                                echo '<td>'.$p->idProdutos.'</td>';
+                                echo '<td>'.$p->descricao.'</td>';
+                                echo '<td>R$ '.$p->precoVenda.'</td>';
+                                echo '<td>'.$p->estoque.'</td>';
+                                echo '<td>'.$p->estoqueMinimo.'</td>';
+                                echo '<td>';
+                                if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
+                                    echo '<a href="'.site_url('produtos/editar/'.$p->idProdutos).'" class="btn btn-info"> <i class="icon-pencil" ></i> </a>  ';
+                                }
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                        else{
+                            echo '<tr><td colspan="3">Nenhum produto com estoque baixo.</td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
 <?php if($estatisticas_financeiro != null){
       if($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null){  ?>
 <div class="row-fluid" style="margin-top: 0">

@@ -29,10 +29,12 @@ class Financeiro_model extends CI_Model
 
         $result = !$one ? $query->result() : $query->row();
 
+        // var_dump($this->db);
         return $result;
     }
     public function getTotalDespesas($where = '')
     {
+
         $this->db->select('(sum(valor) - sum(desconto)) as total_despesa');
         $this->db->from('lancamentos');
         $this->db->where($where);
@@ -99,11 +101,11 @@ class Financeiro_model extends CI_Model
 
     public function count($table, $where)
     {
+
         $this->db->from($table);
         if ($where) {
             $this->db->where($where);
         }
-
         return $this->db->count_all_results();
     }
 }

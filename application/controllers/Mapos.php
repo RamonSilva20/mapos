@@ -95,47 +95,56 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required');
 
         $ajax = $this->input->get('ajax');
-
-        // $email ='admin@admin.com';
-        // $senha = '123456';
+        
         $email = $this->input->post('email');
         $senha = $this->input->post('senha');
 
         $usuario = $this->mapos_model->getSenhaUsuario($email);
-
-
         if ($this->form_validation->run() == false) {
-            if ($ajax == true) {
-                $json = array('result' => false, 'nao entrou' => 12);
+            if ($ajax == 'true') {
+                $json = array('result' => false);
+                $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
                 echo json_encode($json);
             } else {
                 $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
                 redirect('login');
             }
         } else {
-            if (password_verify($senha, $usuario[0]->senha)) {
-                $this->db->where('email', $usuario[0]->email);
-                $this->db->limit(1);
-                $usuario = $this->db->get('usuarios')->row();
-                $dados = array(
-                    'session_id' => session_id(),
-                    'nome' => $usuario->nome,
-                    'id' => $usuario->idUsuarios,
-                    'permissao' => $usuario->permissoes_id,
-                    'logado' => true, );
-                $this->session->set_userdata($dados);
+            if($usuario->num_rows() > 0){ 
+                $usuario = $usuario->result();
+                if (password_verify($senha, $usuario[0]->senha)) {
+                    $this->db->where('email', $usuario[0]->email);
+                    $this->db->limit(1);
+                    $usuario = $this->db->get('usuarios')->row();
+                    $dados = array(
+                        'session_id' => session_id(),
+                        'nome' => $usuario->nome,
+                        'id' => $usuario->idUsuarios,
+                        'permissao' => $usuario->permissoes_id,
+                        'logado' => true, );
+                    $this->session->set_userdata($dados);
 
-                if ($ajax == true) {
-                    $json = array('result' => true);
-                    echo json_encode($json);
-                } else {
+                    if ($ajax == 'true') {
+                        $json = array('result' => true);
+                        echo json_encode($json);
+                    } else {
+                        $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
+                        redirect('');
+                    }
+                }else{
+                    if ($ajax == 'true') {
+                    $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
                     $json = array('result' => false);
-                    redirect('');
+                    echo json_encode($json);
+                    } else {
+                        $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
+                        redirect($this->login);
+                    }
                 }
-            } else {
-                if ($ajax == true) {
-                    // $json = array('result' => false);
-                      $json = array('result' => true);
+            }else {
+                if ($ajax == 'true') {
+                    $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
+                    $json = array('result' => false);
                     echo json_encode($json);
                 } else {
                     $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');

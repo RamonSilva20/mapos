@@ -151,6 +151,7 @@
                         <!--Serviços-->
                         <div class="tab-pane" id="tab3">
                             <div class="span12" style="padding: 1%; margin-left: 0">
+                              <a class="btn btn-success" href="#"><i class="icon-white icon-plus"></i> Novo Serviço</a> <br> <br>
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
                                     <form id="formServicos" action="<?=site_url('os/adicionarServico')?>" method="post">
                                     <div class="span10">
@@ -274,7 +275,7 @@
     <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
     <div class="span12" style="margin-left: 0">
       <label for="descricao">Descrição</label>
-      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?$result->idOs?> "  />
+      <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?=$result->idOs?> "  />
 
     </div>
     <div class="span12" style="margin-left: 0">
@@ -477,7 +478,7 @@ $(document).ready(function(){
                   success: function(data)
                   {
                     if(data.result == true){
-                        $( "#divProdutos" ).load("<?current_url()?> #divProdutos" );
+                        $( "#divProdutos" ).load("<?=current_url()?> #tab2" );
                         $("#quantidade").val('');
                         $("#produto").val('').focus();
                     }

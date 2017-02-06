@@ -1,4 +1,7 @@
 <?php $totalServico = 0; $totalProdutos = 0;?>
+<style type="text/css">
+    @media print{button.assinatura_cliente{display:none;}}
+</style>
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
@@ -162,7 +165,14 @@
                                     </table>
                         <?php }?>
                         <hr />
+
                         <h4 style="text-align: right">Valor Total: R$ <?=number_format($totalProdutos + $totalServico,2,',','.')?></h4>
+                        <span class="assinatura_cliente">
+                            <h5 style="text-align:left">Recebido por:____________________________________</h5>
+                            <h5 style="text-align:left">Data: ____/____/________</h5>
+                            <h5 style="text-align:left">Assinatura: _____________________________________</h5>
+                        </span>
+                        <button class="assinatura_cliente" onclick="$('.assinatura_cliente').remove();">Remover Assinatura</button>
                     </div>
                 </div>
             </div>
@@ -172,6 +182,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#imprimir").click(function(){
+            $('button.assinatura_cliente').remove();
             PrintElem('#printOs');
         })
 
@@ -193,10 +204,15 @@
             mywindow.document.write("</head><body >");
             mywindow.document.write(data);
             mywindow.document.write("</body></html>");
-
-            setTimeout(function(){
+            // $(document).ready(){
+            // }
+            $('.invoice-content').ready(function() {
+              // Handler for .ready() called.
                 mywindow.print();
-            }, 50);
+
+            });
+            setTimeout(function(){
+            }, 200);
 
             return true;
         }

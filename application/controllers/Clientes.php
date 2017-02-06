@@ -101,6 +101,52 @@ class Clientes extends MY_Acesso {
       $this->load->view('tema/topo', $this->data);
 
   }
+   function adicionarAjax() {
+      if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aCliente')){
+         $this->session->set_flashdata('error','Você não tem permissão para adicionar clientes.');
+         redirect(base_url());
+      }
+      $this->load->library('form_validation');
+
+
+      $this->data['custom_error'] = '';
+      $ajax  = $this->input->get('ajax');
+      if ($this->form_validation->run('clientes') == false) {
+          $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+      } else {
+
+          $data = array(
+              'nomeCliente' => set_value('nomeCliente'),
+              'documento' => set_value('documento'),
+              'telefone' => set_value('telefone'),
+              'celular' => $this->input->post('celular'),
+              'email' => set_value('email'),
+              'rua' => set_value('rua'),
+              'numero' => set_value('numero'),
+              'bairro' => set_value('bairro'),
+              'cidade' => set_value('cidade'),
+              'estado' => set_value('estado'),
+              'cep' => set_value('cep'),
+              'dataCadastro' => date('Y-m-d')
+          );
+          if ($ajax == true) {
+            if ($this->clientes_model->add('clientes', $data) == TRUE) {
+                $this->session->set_flashdata('success','Cliente adicionado com sucesso!');
+                $json = array('result' => true);
+            } else {
+                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                $json = array('result' => false);
+            }
+          } else {
+              $json = array('result' => false);
+          }
+              echo json_encode($json);
+
+      }
+      // $this->data['view'] = 'clientes/adicionarCliente';
+      // $this->load->view('tema/topo', $this->data);
+
+  }
 
   function editar() {
 

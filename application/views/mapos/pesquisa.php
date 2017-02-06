@@ -91,7 +91,7 @@
                                 echo '<a style="margin-right: 1%" href="' . site_url('clientes/visualizar/') . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
                             }
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                                echo '<a href="' . base_url('clientes/editar/') . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
+                                echo '<a href="' . site_url('clientes/editar/') . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
                             }
                             echo '</td>';
                             echo '</tr>';
@@ -136,7 +136,7 @@
                             echo '<td>' . $r->preco . '</td>';
                             echo '<td>';
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eServico')){
-                                echo '<a href="' . base_url('servicos/editar/' ). $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>';
+                                echo '<a href="' . site_url('servicos/editar/' ). $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>';
                             }
                             echo '</td>';
                             echo '</tr>';
@@ -186,7 +186,7 @@
                                 echo '<a style="margin-right: 1%" href="' . site_url('os/visualizar/' ) . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
                             }
                             if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                                echo '<a href="' . base_url('os/editar/') . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
+                                echo '<a href="' . site_url('os/editar/') . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
                             }
                             echo '</td>';
                             echo '</tr>';
