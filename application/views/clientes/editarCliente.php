@@ -28,14 +28,14 @@
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?=$result->telefone?>"  />
+                            <input id="telefone" class="telefone" type="text" name="telefone" value="<?=$result->telefone?>"  />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?=$result->celular?>"  />
+                            <input id="celular" class="telefone" type="text" name="celular" value="<?=$result->celular?>"  />
                         </div>
                     </div>
 
@@ -101,6 +101,8 @@
     </div>
 </div>
 <script src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
+<script src="<?=base_url('assets/js/jquery.maskedinput.js')?>"></script>
+<script src="<?=base_url('assets/js/foneMask.js')?>"></script>
 <script type="text/javascript">
       $(document).ready(function(){
            $('#formCliente').validate({

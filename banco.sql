@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS `os` (
   `status` VARCHAR(45) NULL DEFAULT NULL,
   `observacoes` TEXT NULL DEFAULT NULL,
   `laudoTecnico` TEXT NULL DEFAULT NULL,
+  `descontoTotal` DECIMAL(12,2) DEFAULT 0,
   `valorTotal` VARCHAR(15) NULL DEFAULT NULL,
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NOT NULL,
@@ -180,7 +181,8 @@ CREATE TABLE IF NOT EXISTS `produtos_os` (
   `quantidade` INT(11) NOT NULL,
   `os_id` INT(11) NOT NULL,
   `produtos_id` INT(11) NOT NULL,
-  `subTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `desconto` DECIMAL(12,2) DEFAULT 0,
+  `subTotal` DECIMAL(12,2) NULL DEFAULT 0,
   PRIMARY KEY (`idProdutos_os`),
   INDEX `fk_produtos_os_os1` (`os_id` ASC),
   INDEX `fk_produtos_os_produtos1` (`produtos_id` ASC),
@@ -205,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `servicos` (
   `idServicos` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
   `descricao` VARCHAR(45) NULL DEFAULT NULL,
-  `preco` DECIMAL(10,2) NOT NULL,
+  `preco` DECIMAL(10,2) NULL DEFAULT 0,
   PRIMARY KEY (`idServicos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
@@ -219,7 +221,8 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
   `idServicos_os` INT(11) NOT NULL AUTO_INCREMENT,
   `os_id` INT(11) NOT NULL,
   `servicos_id` INT(11) NOT NULL,
-  `subTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `desconto` DECIMAL(12,2) DEFAULT 0,
+  `subTotal` DECIMAL(12,2) NULL DEFAULT 0,
   PRIMARY KEY (`idServicos_os`),
   INDEX `fk_servicos_os_os1` (`os_id` ASC),
   INDEX `fk_servicos_os_servicos1` (`servicos_id` ASC),

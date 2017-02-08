@@ -26,62 +26,8 @@
                                     <?php echo form_hidden('idOs',$result->idOs) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>#Protocolo: <?=$result->idOs?></h3>
-                                        <div class="span6" style="margin-left: 0">
-                                            <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?=$result->nomeCliente?>"  />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?=$result->clientes_id?>"  />
-                                            <input id="valorTotal" type="hidden" name="valorTotal" value=""  />
-                                        </div>
-                                        <div class="span6">
-                                            <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?=$result->nome?>"  />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?=$result->usuarios_id?>"  />
-                                        </div>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option <?php if($result->status == 'Orçamento'){echo 'selected';} ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if($result->status == 'Aberto'){echo 'selected';} ?> value="Aberto">Aberto</option>
-                                                <option <?php if($result->status == 'Faturado'){echo 'selected';} ?> value="Faturado">Faturado</option>
-                                                <option <?php if($result->status == 'Finalizado'){echo 'selected';} ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if($result->status == 'Cancelado'){echo 'selected';} ?> value="Cancelado">Cancelado</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value="<?=date('d/m/Y', strtotime($result->dataInicial))?>"  />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataFinal">Data Final</label>
-                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?=date('d/m/Y', strtotime($result->dataFinal))?>"  />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="garantia">Garantia</label>
-                                            <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>"  />
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6">
-                                            <label for="descricaoProduto">Descrição Produto/Serviço</label>
-                                            <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?=$result->descricaoProduto?></textarea>
-                                        </div>
-                                        <div class="span6">
-                                            <label for="defeito">Defeito</label>
-                                            <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"><?=$result->defeito?></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6">
-                                            <label for="observacoes">Observações</label>
-                                            <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"><?=$result->observacoes?></textarea>
-                                        </div>
-                                        <div class="span6">
-                                            <label for="laudoTecnico">Laudo Técnico</label>
-                                            <textarea class="span12" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?=$result->laudoTecnico?></textarea>
-                                        </div>
-                                    </div>
+                                    <?=$_form ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <?php if($result->faturado == 0){ ?>
@@ -99,17 +45,20 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formProdutos" action="<?=site_url('os/adicionarProduto')?>" method="post">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <input type="hidden" name="idProduto" id="idProduto" />
                                         <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?=$result->idOs?>" />
                                         <input type="hidden" name="estoque" id="estoque" value=""/>
                                         <input type="hidden" name="preco" id="preco" value=""/>
-                                        <label for="">Produto</label>
+                                        <label for="produto">Produto</label>
                                         <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
                                     </div>
                                     <div class="span2">
-                                        <label for="">Quantidade</label>
+                                        <label for="quantidade">Quantidade</label>
                                         <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                    </div><div class="span2">
+                                        <label for="desconto">Desconto</label>
+                                        <input type="text" placeholder="Desconto" id="desconto" name="desconto" class="span12" />
                                     </div>
                                     <div class="span2">
                                         <label for="">.</label>
@@ -122,9 +71,11 @@
                                     <thead>
                                         <tr>
                                             <th>Produto</th>
+                                            <th>Valor</th>
                                             <th>Quantidade</th>
-                                            <th>Ações</th>
                                             <th>Sub-total</th>
+                                            <th>Desconto</th>
+                                            <th>Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -132,16 +83,18 @@
                                         $total = 0;
                                         foreach ($produtos as $p) {
 
-                                            $total = $total + $p->subTotal;
+                                            $total += $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
+                                            echo '<td>R$'.number_format($p->precoVenda,2,',','.').'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
-                                            echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($p->desconto,2,',','.').'</td>';
+                                            echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '</tr>';
                                         }?>
                                         <tr>
-                                            <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?=number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($total,2); ?>"></strong></td>
                                         </tr>
                                     </tbody>
@@ -158,8 +111,14 @@
                                         <input type="hidden" name="idServico" id="idServico" />
                                         <input type="hidden" name="idOsServico" id="idOsServico" value="<?=$result->idOs?>" />
                                         <input type="hidden" name="precoServico" id="precoServico" value=""/>
-                                        <label for="">Serviço</label>
-                                        <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
+                                        <div class="span8">
+                                            <label for="servico">Serviço</label>
+                                            <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
+                                        </div>
+                                        <div class="span4" style="padding-left: 1%; margin-left: 0">
+                                            <label for="desconto" >Desconto</label>
+                                            <input type="text" class="span12" name="desconto" id="desconto" />
+                                        </div>
                                     </div>
                                     <div class="span2">
                                         <label for="">.</label>
@@ -172,25 +131,29 @@
                                         <thead>
                                             <tr>
                                                 <th>Serviço</th>
-                                                <th>Ações</th>
+                                                <th>Valor</th>
+                                                <th>Desconto</th>
                                                 <th>Sub-total</th>
+                                                <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
                                         $total = 0;
                                         foreach ($servicos as $s) {
-                                            $preco = $s->preco;
-                                            $total = $total + $preco;
+                                            $preco = $s->subTotal;
+                                            $total += $preco;
                                             echo '<tr>';
                                             echo '<td>'.$s->nome.'</td>';
+                                            echo '<td>'.$s->preco.'</td>';
+                                            echo '<td>R$ '.number_format($s->desconto,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($s->subTotal,2,',','.').'</td>';
                                             echo '<td><span idAcao="'.$s->idServicos_os.'" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
-                                            echo '<td>R$ '.number_format($s->preco,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?=number_format($total,2,',','.')?><input type="hidden" id="total-servico" value="<?=number_format($total,2) ?>"></strong></td>
                                         </tr>
                                         </tbody>
@@ -290,8 +253,12 @@
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($total,2)?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($valorTotal,2,',','.')?> "  />
       </div>
+      <div class="span4" >
+          <label for="desconto">Desconto</label>
+          <input class="span12 money" id="desconto" type="text" name="desconto" value="<?=number_format($TotalDescontoOs,2,',','.')?>" />
+    </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
         <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"  />
@@ -308,8 +275,7 @@
           <input class="span12 datepicker" id="recebimento" type="text" name="recebimento" />
         </div>
         <div class="span6">
-          <label for="desconto">Desconto</label>
-          <input class="span12 money" id="desconto" type="text" name="desconto" value="0" />
+          
           <label for="formaPgto">Forma Pgto</label>
           <select name="formaPgto" id="formaPgto" class="span12">
             <option value="Dinheiro">Dinheiro</option>

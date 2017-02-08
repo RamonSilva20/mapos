@@ -23,73 +23,13 @@
                                 <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
                                 <form action="<?=current_url()?>" method="post" id="formOs">
-
-                                    <div class="span12" style="padding: 1%">
-                                        <div class="span6">
-                                            <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value=""  />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value=""  />
-                                        </div>
-                                        <div class="span6">
-                                            <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value=""  />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value=""  />
-                                        </div>
+                                  <?=$_form ?>
+                                  <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <div class="span6 offset3" style="text-align: center">
+                                        <button class="btn btn-success" id="btnContinuar"><i class="icon-share-alt icon-white"></i> Continuar</button>
+                                        <a href="<?=site_url('os')?>" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option value="Orçamento">Orçamento</option>
-                                                <option value="Aberto">Aberto</option>
-                                                <option value="Em Andamento">Em Andamento</option>
-                                                <option value="Finalizado">Finalizado</option>
-                                                <option value="Cancelado">Cancelado</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value=""  />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataFinal">Data Final</label>
-                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value=""  />
-                                        </div>
-
-                                        <div class="span3">
-                                            <label for="garantia">Garantia</label>
-                                            <input id="garantia" type="text" class="span12" name="garantia" value=""  />
-                                        </div>
-                                    </div>
-
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-
-                                        <div class="span6">
-                                            <label for="descricaoProduto">Descrição Produto/Serviço</label>
-                                            <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
-                                        </div>
-                                        <div class="span6">
-                                            <label for="defeito">Defeito</label>
-                                            <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"></textarea>
-                                        </div>
-
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6">
-                                            <label for="observacoes">Observações</label>
-                                            <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
-                                        </div>
-                                        <div class="span6">
-                                            <label for="laudoTecnico">Laudo Técnico</label>
-                                            <textarea class="span12" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="text-align: center">
-                                            <button class="btn btn-success" id="btnContinuar"><i class="icon-share-alt icon-white"></i> Continuar</button>
-                                            <a href="<?=site_url('os')?>" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
-                                        </div>
-                                    </div>
+                                  </div>
                                 </form>
                             </div>
                         </div>

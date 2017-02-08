@@ -110,6 +110,8 @@ class Os extends MY_Acesso
         }
 
         $this->data['view'] = 'os/adicionarOs';
+        $this->_ListaStatus();
+        $this->data['_form'] =  $this->load->view('os/_form', $this->data, true);
         $this->load->view('tema/topo', $this->data);
     }
 
@@ -195,12 +197,15 @@ class Os extends MY_Acesso
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
         }
-
+        $this->data['TotalDescontoOs'] = $this->os_model->TotalDescontoOs($this->uri->segment(3));
+        $this->data['valorTotal'] = $this->os_model->TotalValorOs($this->uri->segment(3));
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['view'] = 'os/editarOs';
+        $this->_ListaStatus();
+        $this->data['_form'] =  $this->load->view('os/_form', $this->data, true);
         $this->load->view('tema/topo', $this->data);
     }
 
@@ -291,12 +296,14 @@ class Os extends MY_Acesso
     {
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
-        $subtotal = $preco * $quantidade;
+        $desconto = $this->input->post('desconto');
+        $subtotal = ($preco * $quantidade) - $desconto;
         $produto = $this->input->post('idProduto');
         $data = array(
             'quantidade' => $quantidade,
             'subTotal' => $subtotal,
             'produtos_id' => $produto,
+            'desconto' => $desconto,
             'os_id' => $this->input->post('idOsProduto'),
         );
 
@@ -331,7 +338,9 @@ class Os extends MY_Acesso
     {
         $data = array(
             'servicos_id' => $this->input->post('idServico'),
-            'os_id' => $this->input->post('idOsServico'),
+            'desconto' => $this->input->post('desconto'),
+            'subtotal' => $this->input->post('precoServico') - $this->input->post('desconto'),
+            'os_id' => $this->input->post('idOsServico')
         );
 
         if ($this->os_model->add('servicos_os', $data) == true) {
@@ -484,6 +493,8 @@ class Os extends MY_Acesso
             $data = array(
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
+                // number_format($number, 2, ',', ' ')
+                'desconto' => str_replace(',', '.', str_replace('.','', $this->input->post('desconto'))),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -516,5 +527,14 @@ class Os extends MY_Acesso
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
         $json = array('result' => false);
         echo json_encode($json);
+    }
+    private function _ListaStatus(){
+        return $this->data['lista_status'] = array(
+                    'Orçamento'  => 'Orçamento',
+                    'Aberto'     => 'Aberto',
+                    'Faturado'   => 'Faturado',
+                    'Finalizado' => 'Finalizado',
+                    'Cancelado'  => 'Cancelado'
+                );
     }
 }

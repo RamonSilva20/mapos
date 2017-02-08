@@ -43,7 +43,7 @@ class Os_model extends CI_Model
 
     public function getProdutos($id = null)
     {
-        $this->db->select('produtos_os.*, produtos.*');
+        $this->db->select('produtos_os.*, produtos_os.desconto as desconto, produtos.*');
         $this->db->from('produtos_os');
         $this->db->join('produtos', 'produtos.idProdutos = produtos_os.produtos_id');
         $this->db->where('os_id', $id);
@@ -176,5 +176,49 @@ class Os_model extends CI_Model
         $this->db->where('os_id', $os);
 
         return $this->db->get('anexos')->result();
+    }
+    public function TotalDescontoOs($id)
+    {
+        $this->db->select('(sum(produtos_os.desconto) - sum(servicos_os.desconto)) as TotalDesconto');
+        $this->db->from('produtos_os');
+        $this->db->where('produtos_os.os_id', $id);
+        $this->db->join('servicos_os', 'servicos_os.os_id = '.$id, 'left');
+        $resultado = $this->db->get();
+        if($resultado->num_rows() === 1 ){
+            if (is_array($resultado->result())) {
+                if (is_object($resultado->result()[0])) {
+                    $resultado =  $resultado->result()[0]->TotalDesconto;
+                }else{
+                    $resultado = FALSE;
+                }
+            }else{
+                $resultado = FALSE;
+            }
+        }else{
+            $resultado = FALSE;
+        }
+        return $resultado;
+    }
+    public function TotalValorOs($id)
+    {
+        $this->db->select('(sum(produtos_os.subTotal) - sum(servicos_os.subTotal)) as total');
+        $this->db->from('produtos_os');
+        $this->db->where('produtos_os.os_id', $id);
+        $this->db->join('servicos_os', 'servicos_os.os_id = '.$id, 'left');
+        $resultado = $this->db->get();
+        if($resultado->num_rows() === 1 ){
+            if (is_array($resultado->result())) {
+                if (is_object($resultado->result()[0])) {
+                    $resultado =  $resultado->result()[0]->total;
+                }else{
+                    $resultado = FALSE;
+                }
+            }else{
+                $resultado = FALSE;
+            }
+        }else{
+            $resultado = FALSE;
+        }
+        return $resultado;
     }
 }
