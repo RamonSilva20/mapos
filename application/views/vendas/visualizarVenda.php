@@ -78,7 +78,9 @@
                                     <thead>
                                         <tr>
                                             <th style="font-size: 15px">Produto</th>
+                                            <th style="font-size: 15px">Valor Unitário</th>
                                             <th style="font-size: 15px">Quantidade</th>
+                                            <th style="font-size: 15px">Desconto</th>
                                             <th style="font-size: 15px">Sub-total</th>
                                         </tr>
                                     </thead>
@@ -90,15 +92,17 @@
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
+                                            echo '<td>'.$p->precoVenda.'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
+                                            echo '<td>'.$p->desconto.'</td>';
 
-                                            echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($p->subTotal - $p->desconto,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?=number_format($totalProdutos,2,',','.')?></strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                            <td><strong>R$ <?=number_format($result->valorTotal - $result->descontoTotal,2,',','.')?></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -106,8 +110,9 @@
 
 
                         <hr />
-
-                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($totalProdutos,2,',','.')?></h4>
+                        <h4 style="text-align: right">Sub Total: R$ <?=number_format($result->valorTotal,2,',','.')?></h4>
+                        <h4 style="text-align: right">Desconto Total: R$ <?=number_format($result->descontoTotal,2,',','.')?></h4>
+                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($result->valorTotal - $result->descontoTotal,2,',','.')?></h4>
 
                     </div>
 

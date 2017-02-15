@@ -366,6 +366,7 @@ $(document).ready(function(){
                     if(data.result == true){
                         $("#divProdutos" ).load("<?=current_url()?> #divProdutos" );
                         $("#quantidade").val('');
+                        $('input[name=desconto]').val('');
                         $("#produto").val('').focus();
                     }
                     else{
@@ -400,7 +401,6 @@ $(document).ready(function(){
             {
               if(data.result == true){
                   $( "#divProdutos" ).load("<?=current_url()?> #divProdutos");
-
               } 
               else{
                   alert('Ocorreu um erro ao tentar excluir produto.');
