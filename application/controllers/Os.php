@@ -223,6 +223,8 @@ class Os extends MY_Acesso
 
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
+        $this->data['TotalDescontoOs'] = $this->os_model->TotalDescontoOs($this->uri->segment(3));
+        $this->data['valorTotal'] = $this->os_model->TotalValorOs($this->uri->segment(3));
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -492,7 +494,8 @@ class Os extends MY_Acesso
 
             $data = array(
                 'descricao' => set_value('descricao'),
-                'valor' => $this->input->post('valor'),
+                // 'valor' => $this->input->post('valor'),
+                'valor' => str_replace(',', '.', str_replace('.','', $this->input->post('valor'))),
                 // number_format($number, 2, ',', ' ')
                 'desconto' => str_replace(',', '.', str_replace('.','', $this->input->post('desconto'))),
                 'clientes_id' => $this->input->post('clientes_id'),

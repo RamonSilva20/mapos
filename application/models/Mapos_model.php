@@ -120,12 +120,12 @@ class Mapos_model extends CI_Model {
 		    return $this->db->count_all($table);
 	  }
 
-    function getOsAbertas(){
+    function getOsAbertas($coluna, $ordem = 'ASC'){
         $this->db->select('os.*, clientes.nomeCliente');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status','Aberto');
-        $this->db->order_by('idOs', 'DESC');
+        $this->db->order_by($coluna, $ordem);
         // $this->db->limit(10);
         return $this->db->get()->result();
     }    

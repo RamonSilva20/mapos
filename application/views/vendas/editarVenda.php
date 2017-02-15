@@ -47,10 +47,6 @@
                                         </div>
 
                                     </div>
-
-
-
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
 
                                         <div class="span8 offset2" style="text-align: center">
@@ -69,20 +65,24 @@
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
 
                                         <form id="formProdutos" action="<?=site_url('vendas/adicionarProduto')?>" method="post">
-                                            <div class="span8">
+                                            <div class="span6">
                                                 <input type="hidden" name="idProduto" id="idProduto" />
                                                 <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?=$result->idVendas?>" />
                                                 <input type="hidden" name="estoque" id="estoque" value=""/>
                                                 <input type="hidden" name="preco" id="preco" value=""/>
-                                                <label for="">Produto</label>
+                                                <label for="produto">Produto</label>
                                                 <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
                                             </div>
                                             <div class="span2">
-                                                <label for="">Quantidade</label>
+                                                <label for="quantidade">Quantidade</label>
                                                 <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
                                             </div>
                                             <div class="span2">
-                                                <label for="">&nbsp</label>
+                                                <label for="desconto">Desconto</label>
+                                                <input type="text" class="money" placeholder="Desconto" id="desconto" name="desconto" class="span12" />
+                                            </div>
+                                            <div class="span2">
+                                                <label for="btnAdicionarProduto">&nbsp</label>
                                                 <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="icon-white icon-plus"></i> Adicionar</button>
                                             </div>
                                         </form>
@@ -92,38 +92,45 @@
                                             <thead>
                                                 <tr>
                                                     <th>Produto</th>
+                                                    <th>Preço</th>
                                                     <th>Quantidade</th>
-                                                    <th>Ações</th>
+                                                    <th>Desconto</th>
                                                     <th>Sub-total</th>
+                                                    <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
                                                 $total = 0;
+                                                $totalSemDesconto = 0;
                                                 foreach ($produtos as $p) {
 
-                                                    $total = $total + $p->subTotal;
-                                                    echo '<tr>';
-                                                    echo '<td>'.$p->descricao.'</td>';
-                                                    echo '<td>'.$p->quantidade.'</td>';
-                                                    echo '<td><a href="" idAcao="'.$p->idItens.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-                                                    echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
-                                                    echo '</tr>';
+                                                    $total += $p->subTotal - $p->desconto;
+                                                    $totalSemDesconto += $p->subTotal;
+                                                    printf(
+                                                      '<tr>
+                                                        <td>%s</td>
+                                                        <td>%s</td>
+                                                        <td>%s</td>
+                                                        <td>%s</td>
+                                                        <td>R$ %s</td>
+                                                        <td><a href="#" desconto="%s" idAcao="%s" prodAcao="%s" quantAcao="%s" id_venda="%s" valor_produto = "%s" title="Excluir Produto" class="btn btn-danger btnExcluirProduto"><i class="icon-remove icon-white"></i></a></td>
+                                                      </tr>',$p->descricao,$p->precoVenda, $p->quantidade, $p->desconto, $p->subTotal - $p->desconto, $p->desconto, $p->idItens,$p->idProdutos,$p->quantidade,$result->idVendas,$p->precoVenda);
                                                 }?>
 
                                                 <tr>
-                                                    <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                                    <td><strong>R$ <?=number_format($total,2,',','.')?></strong> <input type="hidden" id="total-venda" value="<?=number_format($total,2)?>"></td>
+                                                    <td colspan="5" style="text-align: right"><strong>Sub Total:</strong></td>
+                                                    <td><strong>R$ <?=number_format($result->valorTotal,2,',','.')?></strong> <input type="hidden" id="subtotal" value="<?=number_format($result->valorTotal,2)?>"></td>
+                                                </tr>
+                                                    <td colspan="5" style="text-align: right"><strong>Total Desconto:</strong></td>
+                                                    <td><strong>R$ <?=number_format($result->descontoTotal,2,',','.')?></strong> <input type="hidden" id="total-desconto" value="<?=number_format($result->descontoTotal,2)?>"></td>
+                                                </tr>
+                                                    <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
+                                                    <td><strong>R$ <?=number_format($result->valorTotal - $result->descontoTotal,2,',','.')?></strong> <input type="hidden" id="total-venda" value="<?=number_format($total,2)?>"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
-
-
-
-
-
                                     </div>
-
                             </div>
 
                         </div>
@@ -131,12 +138,7 @@
                     </div>
 
                 </div>
-
-
-.
-
         </div>
-
     </div>
 </div>
 </div>
@@ -171,7 +173,11 @@
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($total,2)?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=$result->valorTotal?> "  />
+      </div> 
+      <div class="span4" style="margin-left: 0">
+        <label for="valor">Desconto*</label>
+        <input class="span12 money" id="desconto" type="text" name="desconto" value="<?=$result->descontoTotal?> "  />
       </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>
@@ -214,7 +220,6 @@
 </form>
 </div>
 
-
 <script type="text/javascript" src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
 <script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 <script type="text/javascript">
@@ -234,7 +239,7 @@ $(document).ready(function(){
 
      $(document).on('click', '#btn-faturar', function(event) {
        event.preventDefault();
-         valor = $('#total-venda').val();
+         valor = $('#valor').val();
          valor = valor.replace(',', '' );
          $('#valor').val(valor);
      });
@@ -278,7 +283,7 @@ $(document).ready(function(){
           }
      });
 
-     $("#produto").autocomplete({
+    $("#produto").autocomplete({
             source: "<?=site_url('vendas/autoCompleteProduto')?>",
             minLength: 2,
             select: function( event, ui ) {
@@ -290,11 +295,8 @@ $(document).ready(function(){
 
 
             }
-      });
-
-
-
-      $("#cliente").autocomplete({
+    });
+    $("#cliente").autocomplete({
             source: "<?=site_url('vendas/autoCompleteCliente')?>",
             minLength: 2,
             select: function( event, ui ) {
@@ -303,9 +305,9 @@ $(document).ready(function(){
 
 
             }
-      });
+    });
 
-      $("#tecnico").autocomplete({
+    $("#tecnico").autocomplete({
             source: "<?=site_url('vendas/autoCompleteUsuario')?>",
             minLength: 2,
             select: function( event, ui ) {
@@ -314,11 +316,8 @@ $(document).ready(function(){
 
 
             }
-      });
-
-
-
-      $("#formVendas").validate({
+    });
+    $("#formVendas").validate({
           rules:{
              cliente: {required:true},
              tecnico: {required:true},
@@ -339,12 +338,9 @@ $(document).ready(function(){
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
             }
-       });
+    });
 
-
-
-
-      $("#formProdutos").validate({
+    $("#formProdutos").validate({
           rules:{
              quantidade: {required:true}
           },
@@ -382,39 +378,39 @@ $(document).ready(function(){
                 }
 
              }
+    });
+   
+    $(document).on('click', '.btnExcluirProduto', function(event) {
+      var idProduto = $(this).attr('idAcao');
+      var dados = 
+            {'idProduto': $(this).attr('idAcao'), 
+            'id_venda': $(this).attr('id_venda'),
+            'quantidade': $(this).attr('quantAcao'),
+            'produto': $(this).attr('prodAcao'),
+            'valor_produto': $(this).attr('valor_produto'),
+            'desconto': $(this).attr('desconto')};
+      if((idProduto % 1) == 0){
+          $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+          $.ajax({
+            type: "POST",
+            url: "<?=site_url('vendas/excluirProduto')?>",
+            data: dados,
+            dataType: 'json',
+            success: function(data)
+            {
+              if(data.result == true){
+                  $( "#divProdutos" ).load("<?=current_url()?> #divProdutos");
 
-       });
-
-
-
-       $(document).on('click', 'a', function(event) {
-            var idProduto = $(this).attr('idAcao');
-            var quantidade = $(this).attr('quantAcao');
-            var produto = $(this).attr('prodAcao');
-            if((idProduto % 1) == 0){
-                $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
-                $.ajax({
-                  type: "POST",
-                  url: "<?=site_url('vendas/excluirProduto');?>",
-                  data: "idProduto="+idProduto+"&quantidade="+quantidade+"&produto="+produto,
-                  dataType: 'json',
-                  success: function(data)
-                  {
-                    if(data.result == true){
-                        $( "#divProdutos" ).load("<?php echo current_url();?> #divProdutos" );
-
-                    }
-                    else{
-                        alert('Ocorreu um erro ao tentar excluir produto.');
-                    }
-                  }
-                  });
-                  return false;
+              } 
+              else{
+                  alert('Ocorreu um erro ao tentar excluir produto.');
+              }
             }
-
-       });
-
-       $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
+            });
+            return false;
+      }
+    });
+    $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
 
 
 

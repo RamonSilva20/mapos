@@ -1,11 +1,8 @@
 <!-- [if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/dist/excanvas.min.js"></script><![endif]-->
 
-<script language="javascript" type="text/javascript" src="<?=base_url('assets/js/jquery.min.js');?>"></script>
-<script language="javascript" type="text/javascript" src="<?=base_url('assets/js/dist/jquery.jqplot.min.js')?>"></script>
 <link rel="stylesheet" type="text/css" href="<?=base_url('assets/js/dist/jquery.jqplot.min.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/painel.css');?>" />
 
-<script type="text/javascript" src="<?=base_url('assets/js/dist/plugins/jqplot.pieRenderer.min.js');?>"></script>
-<script type="text/javascript" src="<?=base_url('assets/js/dist/plugins/jqplot.donutRenderer.min.js');?>"></script>
 
 <!--Action boxes -->
   <div class="container-fluid">
@@ -64,9 +61,13 @@
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12" style="margin-left: 0">
         <div class="accordion-group widget-box">
-            <div class="widget-title" data-toggle="collapse" href="#servicoAberto"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Em Aberto</h5></div>
+            <div class="widget-title" data-toggle="collapse" href="#servicoAberto">
+            <span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span>
+            <h5>Ordens de Serviço Em Aberto</h5>
+
+            </div>
             <div class="widget-content nopadding collapse" id="servicoAberto" style="height: auto;">
-                <table class="table table-bordered">
+                <table class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -107,7 +108,7 @@
         <div class="accordion-group widget-box">
             <div class="widget-title" data-toggle="collapse" href="#ordens_orcamento"><span class="icon"><i class="icon-chevron-down"></i></span><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Orçamento</h5></div>
             <div class="widget-content nopadding collapse" id="ordens_orcamento" style="height: 0px;">
-                <table class="table table-bordered">
+                <table class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -259,7 +260,16 @@
     </div>
 </div>
 <?php } ?>
+
+<script language="javascript" type="text/javascript" src="<?=base_url('assets/js/jquery.min.js');?>"></script>
+<script language="javascript" type="text/javascript" src="<?=base_url('assets/js/dist/jquery.jqplot.min.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.dataTables.min.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/select2.min.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/dist/plugins/jqplot.pieRenderer.min.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/dist/plugins/jqplot.donutRenderer.min.js');?>"></script>
 <script src="<?=base_url('assets/js/bootstrap.min.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/matrix.tables.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('assets/js/matrix.js');?>"></script>
 
 
 <?php if($os != null) {?>

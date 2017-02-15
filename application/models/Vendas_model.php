@@ -10,6 +10,7 @@ class Vendas_model extends CI_Model
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br.
      */
+    private $table = 'vendas';
     public function __construct()
     {
         parent::__construct();
@@ -138,6 +139,57 @@ class Vendas_model extends CI_Model
             }
             echo json_encode($row_set);
         }
+    }
+    public function getTotalDesconto()
+    {
+        $this->db->select('desconto');
+        $this->db->from('totalDesconto');
+        $this->db->where('produtos_os.os_id', $id);
+        $resultado = $this->db->get();
+        if($resultado->num_rows() === 1 ){
+            if (is_array($resultado->result())) {
+                if (is_object($resultado->result()[0])) {
+                    $resultado =  $resultado->result()[0]->TotalDesconto;
+                }else{
+                    $resultado = FALSE;
+                }
+            }else{
+                $resultado = FALSE;
+            }
+        }else{
+            $resultado = FALSE;
+        }
+        return $resultado;
+    }
+    private function _updateDescontoTotal($desconto, $id, $opercao_matematica = '+')
+    {
+        $this->db->set('descontoTotal', "descontoTotal {$opercao_matematica} {$desconto}", FALSE);
+        return $this->_salvaUpdateValida($id, 'idVendas');
+    }      
+    private function _updateValorTotal($valorTotal, $id, $opercao_matematica = '+')
+    {
+        $this->db->set('valorTotal', "valorTotal {$opercao_matematica} {$valorTotal}", FALSE);
+        return $this->_salvaUpdateValida($id, 'idVendas');
+    }
+    private function _salvaUpdateValida($id, $campo_where)
+    {
+        $id = intval($id);
+        if ($id > 0) {
+            $this->db->where($campo_where, $id);
+            $resultado = $this->db->update($this->table);
+        }else{
+            $resultado = false;
+        }
+        return $resultado;
+    }
+    private function _converteValorParaAmericano($valor)
+    {
+        return str_replace(',', '.', str_replace('.','', $valor));
+    }
+    public function AdicionarProduto($id = 0, $desconto = 0, $valorTotal = 0, $opercao_matematica = '+')
+    {
+        $resultado = $this->_updateDescontoTotal($desconto, $id, $opercao_matematica);
+        $resultado = $this->_updateValorTotal($valorTotal, $id, $opercao_matematica);
     }
 }
 

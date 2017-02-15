@@ -111,7 +111,9 @@
                                     <thead>
                                         <tr>
                                             <th>Produto</th>
+                                            <th>Valor</th>
                                             <th>Quantidade</th>
+                                            <th>Desconto</th>
                                             <th>Sub-total</th>
                                         </tr>
                                     </thead>
@@ -123,14 +125,16 @@
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
+                                            echo '<td>'.$p->precoVenda.'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
+                                            echo '<td>'.$p->desconto.'</td>';
 
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?=number_format($totalProdutos,2,',','.')?></strong></td>
                                         </tr>
                                     </tbody>
@@ -142,6 +146,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Serviço</th>
+                                                <th>Valor</th>
+                                                <th>Desconto</th>
                                                 <th>Sub-total</th>
                                             </tr>
                                         </thead>
@@ -149,16 +155,17 @@
                                             <?php
                                         setlocale(LC_MONETARY, 'en_US');
                                         foreach ($servicos as $s) {
-                                            $preco = $s->preco;
-                                            $totalServico = $totalServico + $preco;
+                                            $totalServico += $s->preco - $s->desconto;
                                             echo '<tr>';
                                             echo '<td>'.$s->nome.'</td>';
-                                            echo '<td>R$ '.number_format($s->preco, 2, ',', '.').'</td>';
+                                            echo '<td>'.$s->preco.'</td>';
+                                            echo '<td>'.$s->desconto.'</td>';
+                                            echo '<td>R$ '.number_format($s->preco - $s->desconto, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td colspan="1" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?=number_format($totalServico, 2, ',', '.')?></strong></td>
                                         </tr>
                                         </tbody>
@@ -166,7 +173,9 @@
                         <?php }?>
                         <hr />
 
-                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($totalProdutos + $totalServico,2,',','.')?></h4>
+                        <h4 style="text-align: right">Subtotal: R$ <?=number_format($valorTotal,2,',','.')?></h4>
+                        <h4 style="text-align: right">Desconto Total: R$ <?=number_format($TotalDescontoOs,2,',','.')?></h4>
+                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($valorTotal - $TotalDescontoOs,2,',','.')?></h4>
                         <span class="assinatura_cliente">
                             <h5 style="text-align:left">Recebido por:____________________________________</h5>
                             <h5 style="text-align:left">Data: ____/____/________</h5>

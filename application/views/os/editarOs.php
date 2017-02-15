@@ -73,8 +73,8 @@
                                             <th>Produto</th>
                                             <th>Valor</th>
                                             <th>Quantidade</th>
-                                            <th>Sub-total</th>
                                             <th>Desconto</th>
+                                            <th>Sub-total</th>
                                             <th>Ações</th>
                                         </tr>
                                     </thead>
@@ -88,8 +88,8 @@
                                             echo '<td>'.$p->descricao.'</td>';
                                             echo '<td>R$'.number_format($p->precoVenda,2,',','.').'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
-                                            echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '<td>R$ '.number_format($p->desconto,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '</tr>';
                                         }?>
@@ -253,7 +253,7 @@
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($valorTotal,2,',','.')?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($valorTotal,2,',','.')?>"  />
       </div>
       <div class="span4" >
           <label for="desconto">Desconto</label>
@@ -314,13 +314,13 @@ $(document).ready(function(){
 
      $(document).on('click', '#btn-faturar', function(event) {
        event.preventDefault();
-         valor = $('#total-venda').val();
+         valor = $('#valor').val();
          total_servico = $('#total-servico').val();
          valor = valor.replace(',', '' );
          total_servico = total_servico.replace(',', '' );
          total_servico = parseFloat(total_servico);
          valor = parseFloat(valor);
-         $('#valor').val(valor + total_servico);
+         // $('#valor').val(valor);
      });
      $("#formFaturar").validate({
           rules:{

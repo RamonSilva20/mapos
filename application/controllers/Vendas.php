@@ -137,13 +137,14 @@ class Vendas extends MY_Acesso
 
             if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas')) == true) {
                 $this->session->set_flashdata('success', 'Venda editada com sucesso!');
-                redirect(base_url().'index.php/vendas/editar/'.$this->input->post('idVendas'));
+                redirect(site_url().'/vendas/editar/'.$this->input->post('idVendas'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
         }
 
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        // $this->data['totalDesconto']= $this->vendas_model->getTotalDesconto($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['view'] = 'vendas/editarVenda';
         $this->load->view('tema/topo', $this->data);
@@ -237,17 +238,22 @@ class Vendas extends MY_Acesso
             $quantidade = $this->input->post('quantidade');
             $subtotal = $preco * $quantidade;
             $produto = $this->input->post('idProduto');
+            $desconto = $this->input->post('desconto');
+            $id_venda = $this->input->post('idVendasProduto');
+            $valor_produto = $this->input->post('preco');
             $data = array(
                 'quantidade' => $quantidade,
                 'subTotal' => $subtotal,
                 'produtos_id' => $produto,
-                'vendas_id' => $this->input->post('idVendasProduto'),
+                'desconto' => $desconto,
+                'vendas_id' => $id_venda,
+
             );
 
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
                 $sql = 'UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?';
                 $this->db->query($sql, array($quantidade, $produto));
-
+                $this->vendas_model->AdicionarProduto($id_venda,$desconto, $valor_produto * $quantidade);
                 echo json_encode(array('result' => true));
             } else {
                 echo json_encode(array('result' => false));
@@ -257,20 +263,22 @@ class Vendas extends MY_Acesso
 
     public function excluirProduto()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para editar Vendas');
-            redirect(base_url());
-        }
+        // if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
+        //     $this->session->set_flashdata('error', 'Você não tem permissão para editar Vendas');
+        //     redirect(base_url());
+        // }
 
         $ID = $this->input->post('idProduto');
         if ($this->vendas_model->delete('itens_de_vendas', 'idItens', $ID) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
-
+            $desconto = $this->input->post('desconto');
+            $id_venda = $this->input->post('id_venda');
+            $valor_produto = $this->input->post('valor_produto');
             $sql = 'UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?';
+            $this->vendas_model->AdicionarProduto($id_venda,$desconto, $valor_produto, '-');
 
             $this->db->query($sql, array($quantidade, $produto));
-
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -308,6 +316,7 @@ class Vendas extends MY_Acesso
             $data = array(
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
+                'desconto' => $this->input->post('desconto'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,

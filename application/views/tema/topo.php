@@ -168,26 +168,18 @@
     } ?>">
           <a href="#"><i class="icon icon-cog"></i> <span>Configurações</span> <span class="label"><i class="icon-chevron-down"></i></span></a>
           <ul>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
-        ?>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
                 <li><a href="<?=site_url('usuarios')?>">Usuários</a></li>
-            <?php
-    } ?>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-        ?>
+            <?php } ?>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
                 <li><a href="<?=site_url('mapos/emitente')?>">Emitente</a></li>
-            <?php
-    } ?>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
-        ?>
+            <?php } ?>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                 <li><a href="<?=site_url('permissoes')?>">Permissões</a></li>
-            <?php
-    } ?>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) {
-        ?>
+            <?php } ?>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                 <li><a href="<?=site_url('mapos/backup')?>">Backup</a></li>
-            <?php
-    } ?>
+            <?php } ?>
 
           </ul>
         </li>
@@ -199,11 +191,14 @@
 </div>
 <div id="content">
   <div id="content-header">
-    <div id="breadcrumb"> <a href="<?=site_url()?>" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a> <?php if ($this->uri->segment(1) != null) {
-    ?><a href="<?=site_url('$this->uri->segment(1)')?>" class="tip-bottom" title="<?=ucfirst($this->uri->segment(1))?>"><?=ucfirst($this->uri->segment(1))?></a> <?php if ($this->uri->segment(2) != null) {
+    <div id="breadcrumb"> <a href="<?=site_url()?>" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a> 
+    <?php if ($this->uri->segment(1) != null):?>
+      <a href="<?=site_url($this->uri->segment(1))?>" class="tip-bottom" title="<?=ucfirst($this->uri->segment(1))?>"><?=ucfirst($this->uri->segment(1))?></a> 
+      <?php if ($this->uri->segment(2) != null):
         ?><a href="<?=site_url($this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3) )?>" class="current tip-bottom" title="<?=ucfirst($this->uri->segment(2)); ?>"><?php echo ucfirst($this->uri->segment(2));
-    } ?></a> <?php
-}?></div>
+        endif; ?></a> <?php
+      endif;?>
+    </div>
   </div>
   <div class="container-fluid">
     <div class="row-fluid">
@@ -240,11 +235,7 @@
   <div id="footer" class="span12"> <?=date('Y')?> &copy; MAP OS - Equipe MapOs Github</div>
 </div>
 <!--end-Footer-part-->
-
-
 <script src="<?=base_url('assets/js/bootstrap.min.js')?>"></script>
 <script src="<?=base_url('assets/js/matrix.js')?>"></script>
-
-
 </body>
 </html>

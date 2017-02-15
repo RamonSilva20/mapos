@@ -179,7 +179,7 @@ class Os_model extends CI_Model
     }
     public function TotalDescontoOs($id)
     {
-        $this->db->select('(sum(produtos_os.desconto) - sum(servicos_os.desconto)) as TotalDesconto');
+        $this->db->select('(sum(produtos_os.desconto) + sum(servicos_os.desconto)) as TotalDesconto');
         $this->db->from('produtos_os');
         $this->db->where('produtos_os.os_id', $id);
         $this->db->join('servicos_os', 'servicos_os.os_id = '.$id, 'left');
@@ -201,10 +201,12 @@ class Os_model extends CI_Model
     }
     public function TotalValorOs($id)
     {
-        $this->db->select('(sum(produtos_os.subTotal) - sum(servicos_os.subTotal)) as total');
-        $this->db->from('produtos_os');
-        $this->db->where('produtos_os.os_id', $id);
-        $this->db->join('servicos_os', 'servicos_os.os_id = '.$id, 'left');
+        $this->db->select('(sum(p.precoVenda) + sum(s.preco)) as total');
+        $this->db->from('produtos_os po');
+        $this->db->where('po.os_id', $id);
+        $this->db->join('servicos_os so', 'so.os_id = '.$id, 'left');
+        $this->db->join('servicos s', 's.idServicos = so.servicos_id', 'left');
+        $this->db->join('produtos p', 'p.idProdutos = po.produtos_id', 'left');
         $resultado = $this->db->get();
         if($resultado->num_rows() === 1 ){
             if (is_array($resultado->result())) {
