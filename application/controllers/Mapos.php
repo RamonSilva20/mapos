@@ -20,10 +20,9 @@ class Mapos extends MY_Controller
         if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
-        $this->config->load('ordem_tabelas');
-        $coluna_ordem_abertas = $this->config->item('mapos');
+      
 
-        $this->data['ordens'  ]                 = $this->mapos_model->getOsAbertas($coluna_ordem_abertas['mapos']['ordens_abertas']);
+        $this->data['ordens'  ]                 = $this->mapos_model->getOsAbertas();
         $this->data['ordens_orcamento']         = $this->mapos_model->getOsOrcamentos();
         $this->data['produtos']                 = $this->mapos_model->getProdutosMinimo();
         $this->data['os']                       = $this->mapos_model->getOsEstatisticas();
@@ -31,7 +30,6 @@ class Mapos extends MY_Controller
         $this->data['menuPainel']               = 'Painel';
         $this->data['view']                     = 'mapos/painel';
         $this->load->view('tema/topo', $this->data);
-        // $this->load->view('mapos/painel', $this->data);
     }
     public function minhaConta()
     {

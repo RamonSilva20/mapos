@@ -1,6 +1,6 @@
 <?php
 
-class Os_model extends CI_Model
+class Os_model extends MY_Model
 {
     /**
      * author: Ramon Silva
@@ -9,6 +9,8 @@ class Os_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        $this->table = 'os';
+        $this->idName = 'idOs';
     }
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -222,5 +224,10 @@ class Os_model extends CI_Model
             $resultado = FALSE;
         }
         return $resultado;
+    }
+    public function AdicionarProduto($id = 0, $desconto = 0, $valorTotal = 0, $opercao_matematica = '+')
+    {
+        $resultado = $this->_updateDescontoTotal($desconto, $id, $opercao_matematica);
+        $resultado = $this->_updateValorTotal($valorTotal, $id, $opercao_matematica);
     }
 }

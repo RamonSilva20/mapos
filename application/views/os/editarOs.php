@@ -58,7 +58,7 @@
                                         <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
                                     </div><div class="span2">
                                         <label for="desconto">Desconto</label>
-                                        <input type="text" placeholder="Desconto" id="desconto" name="desconto" class="span12" />
+                                        <input type="text" placeholder="Desconto" id="desconto" name="desconto" class="span12 money" value="0.00"/>
                                     </div>
                                     <div class="span2">
                                         <label for="">.</label>
@@ -80,22 +80,28 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $total = 0;
+                                         $totalProduto = 0;
+                                         $descontoTotalProduto = 0;
+                                         $precoVendaProduto = 0;
                                         foreach ($produtos as $p) {
 
-                                            $total += $p->subTotal;
+                                            $descontoTotalProduto += $p->desconto;
+                                            $precoVendaProduto += $p->precoVenda * $p->quantidade;
+                                            $totalProduto += $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
                                             echo '<td>R$'.number_format($p->precoVenda,2,',','.').'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
                                             echo '<td>R$ '.number_format($p->desconto,2,',','.').'</td>';
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
-                                            echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+                                            echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" idOs = "'.$result->idOs.'" desconto = "'.$p->desconto.'" preco = "'.$p->precoVenda.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '</tr>';
                                         }?>
-                                        <tr>
-                                            <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?=number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($total,2); ?>"></strong></td>
+                                        <tr >
+                                            <td style="text-align: right"><strong>Total:</strong></td>
+                                            <td style="text-align: center" colspan="2"><strong>R$ <?=number_format($precoVendaProduto,2,',','.');?></strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($descontoTotalProduto,2,',','.');?></strong></td>
+                                            <td style="text-align: center" colspan="2"><strong>R$ <?=number_format($totalProduto,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($totalProduto,2); ?>"></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -117,7 +123,7 @@
                                         </div>
                                         <div class="span4" style="padding-left: 1%; margin-left: 0">
                                             <label for="desconto" >Desconto</label>
-                                            <input type="text" class="span12" name="desconto" id="desconto" />
+                                            <input type="text" class="span12 money" name="desconto" id="desconto" />
                                         </div>
                                     </div>
                                     <div class="span2">
@@ -139,22 +145,27 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                        $total = 0;
+                                        $subTotalServicos = 0;
+                                        $totalDescontoServicos = 0;
+                                        $totalServicos = 0;
                                         foreach ($servicos as $s) {
-                                            $preco = $s->subTotal;
-                                            $total += $preco;
+                                            $subTotalServicos += $s->subTotal;
+                                            $totalDescontoServicos += $s->desconto;
+                                            $totalServicos += $s->preco;
                                             echo '<tr>';
                                             echo '<td>'.$s->nome.'</td>';
-                                            echo '<td>'.$s->preco.'</td>';
+                                            echo '<td>R$ '.number_format($s->preco,2,',','.').'</td>';
                                             echo '<td>R$ '.number_format($s->desconto,2,',','.').'</td>';
                                             echo '<td>R$ '.number_format($s->subTotal,2,',','.').'</td>';
-                                            echo '<td><span idAcao="'.$s->idServicos_os.'" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
+                                            echo '<td><span idAcao="'.$s->idServicos_os.'" desconto="'.$s->desconto.'" idOs = "'.$result->idOs.'" precoServico="'.$s->preco.'" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
                                             echo '</tr>';
                                         }?>
 
-                                        <tr>
-                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?=number_format($total,2,',','.')?><input type="hidden" id="total-servico" value="<?=number_format($total,2) ?>"></strong></td>
+                                        <tr >
+                                            <td style="text-align: left"><strong>Total:</strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($totalServicos,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($totalServicos,2); ?>"></strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($totalDescontoServicos,2,',','.');?></strong></td>
+                                            <td style="text-align: left" colspan="2"><strong>R$ <?=number_format($subTotalServicos,2,',','.');?></strong></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -444,8 +455,9 @@ $(document).ready(function(){
                   success: function(data)
                   {
                     if(data.result == true){
-                        $( "#divProdutos" ).load("<?=current_url()?> #tab2" );
+                        $( "#divProdutos" ).load("<?=current_url()?> #divProdutos" );
                         $("#quantidade").val('');
+                        $("#produto").val('').focus();
                         $("#produto").val('').focus();
                     }
                     else{
@@ -531,12 +543,15 @@ $(document).ready(function(){
             var idProduto = $(this).attr('idAcao');
             var quantidade = $(this).attr('quantAcao');
             var produto = $(this).attr('prodAcao');
+            var idOs = $(this).attr('idOs');
+            var desconto = $(this).attr('desconto');
+            var preco = $(this).attr('preco');
             if((idProduto % 1) == 0){
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
                   url: "<?=site_url('os/excluirProduto');?>",
-                  data: "idProduto="+idProduto+"&quantidade="+quantidade+"&produto="+produto,
+                  data: "idProduto="+idProduto+"&quantidade="+quantidade+"&produto="+produto+'&idOs='+idOs+'&desconto='+desconto+'&preco='+preco,
                   dataType: 'json',
                   success: function(data)
                   {
@@ -554,12 +569,15 @@ $(document).ready(function(){
        });
        $(document).on('click', 'span', function(event) {
             var idServico = $(this).attr('idAcao');
+            var idOs = $(this).attr('idOs');
+            var desconto = $(this).attr('desconto');
+            var precoServico = $(this).attr('precoServico');
             if((idServico % 1) == 0){
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                   type: "POST",
                   url: "<?=site_url('os/excluirServico')?>",
-                  data: "idServico="+idServico,
+                  data: "idServico="+idServico+"&desconto="+desconto+"&idOs="+idOs+"&precoServico="+precoServico,
                   dataType: 'json',
                   success: function(data)
                   {

@@ -10,10 +10,10 @@ class Vendas_model extends CI_Model
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br.
      */
-    private $table = 'vendas';
-    public function __construct()
+    public function __construct($table = 'vendas')
     {
         parent::__construct();
+        $this->table = $table;
     }
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')

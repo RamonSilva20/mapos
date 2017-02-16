@@ -119,23 +119,29 @@
                                     </thead>
                                     <tbody>
                                         <?php
-
+                                         $totalProduto = 0;
+                                         $descontoTotalProduto = 0;
+                                         $precoVendaProduto = 0;
                                         foreach ($produtos as $p) {
 
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
+                                            $descontoTotalProduto += $p->desconto;
+                                            $precoVendaProduto += $p->precoVenda * $p->quantidade;
+                                            $totalProduto += $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
-                                            echo '<td>'.$p->precoVenda.'</td>';
-                                            echo '<td>'.$p->quantidade.'</td>';
-                                            echo '<td>'.$p->desconto.'</td>';
+                                             echo '<td>R$ '.number_format($p->precoVenda, 2, ',', '.').'</td>';
+                                             echo '<td>'.$p->quantidade.'</td>';
+                                             echo '<td>R$ '.number_format($p->desconto, 2, ',', '.').'</td>';
 
                                             echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?=number_format($totalProdutos,2,',','.')?></strong></td>
+                                            <td style="text-align: left"><strong>Total:</strong></td>
+                                            <td style="text-align: center" colspan="2"><strong>R$ <?=number_format($precoVendaProduto,2,',','.');?></strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($descontoTotalProduto,2,',','.');?></strong></td>
+                                            <td style="text-align: center" colspan="2"><strong>R$ <?=number_format($totalProduto,2,',','.');?><input type="hidden" id="total-venda" value="<?=number_format($totalProduto,2); ?>"></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -153,29 +159,36 @@
                                         </thead>
                                         <tbody>
                                             <?php
+                                        $subTotalServicos = 0;
+                                        $totalDescontoServicos = 0;
+                                        $totalServicos = 0;
                                         setlocale(LC_MONETARY, 'en_US');
                                         foreach ($servicos as $s) {
-                                            $totalServico += $s->preco - $s->desconto;
+                                            $subTotalServicos += $s->subTotal;
+                                            $totalDescontoServicos += $s->desconto;
+                                            $totalServicos += $s->preco;
                                             echo '<tr>';
                                             echo '<td>'.$s->nome.'</td>';
-                                            echo '<td>'.$s->preco.'</td>';
-                                            echo '<td>'.$s->desconto.'</td>';
+                                            echo '<td>R$ '.number_format($s->preco, 2, ',', '.').'</td>';
+                                            echo '<td>R$ '.number_format($s->desconto, 2, ',', '.').'</td>';
                                             echo '<td>R$ '.number_format($s->preco - $s->desconto, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
 
-                                        <tr>
-                                            <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?=number_format($totalServico, 2, ',', '.')?></strong></td>
+                                        <tr >
+                                            <td style="text-align: left"><strong>Total:</strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($totalServicos,2,',','.');?></strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($totalDescontoServicos,2,',','.');?></strong></td>
+                                            <td style="text-align: center"><strong>R$ <?=number_format($subTotalServicos,2,',','.');?></strong></td>
                                         </tr>
                                         </tbody>
                                     </table>
                         <?php }?>
                         <hr />
 
-                        <h4 style="text-align: right">Subtotal: R$ <?=number_format($valorTotal,2,',','.')?></h4>
-                        <h4 style="text-align: right">Desconto Total: R$ <?=number_format($TotalDescontoOs,2,',','.')?></h4>
-                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($valorTotal - $TotalDescontoOs,2,',','.')?></h4>
+                        <h4 style="text-align: right">Subtotal: R$ <?=number_format($result->valorTotal,2,',','.')?></h4>
+                        <h4 style="text-align: right">Desconto Total: R$ <?=number_format($result->descontoTotal,2,',','.')?></h4>
+                        <h4 style="text-align: right">Valor Total: R$ <?=number_format($result->valorTotal - $result->descontoTotal,2,',','.')?></h4>
                         <span class="assinatura_cliente">
                             <h5 style="text-align:left">Recebido por:____________________________________</h5>
                             <h5 style="text-align:left">Data: ____/____/________</h5>

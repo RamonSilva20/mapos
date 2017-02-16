@@ -299,8 +299,11 @@ class Os extends MY_Acesso
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
         $desconto = $this->input->post('desconto');
-        $subtotal = ($preco * $quantidade) - $desconto;
+        $desconto = $desconto === '' ? 0.00 : $desconto;
+        $subtotal = str_replace(',', '.',($preco * $quantidade) - $desconto);
         $produto = $this->input->post('idProduto');
+        // var_dump($subtotal);
+        // exit;
         $data = array(
             'quantidade' => $quantidade,
             'subTotal' => $subtotal,
@@ -312,8 +315,9 @@ class Os extends MY_Acesso
         if ($this->os_model->add('produtos_os', $data) == true) {
             $sql = 'UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?';
             $this->db->query($sql, array($quantidade, $produto));
+            $this->os_model->AdicionarProduto($this->input->post('idOsProduto'),str_replace(',', '.',$desconto), str_replace(',', '.',$preco * $quantidade));
 
-            echo json_encode(array('result' => true));
+            echo json_encode(array('result' => true, 'desconto' => floatval($desconto), 'valorTotal'=>str_replace(',', '.',$preco * $quantidade)));
         } else {
             echo json_encode(array('result' => false));
         }
@@ -322,13 +326,17 @@ class Os extends MY_Acesso
     public function excluirProduto()
     {
         $ID = $this->input->post('idProduto');
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $ID) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
+            $idOs = $this->input->post('idOs');
+            $preco = $this->input->post('preco');
+            $desconto = $this->input->post('desconto');
 
             $sql = 'UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?';
-
             $this->db->query($sql, array($quantidade, $produto));
+            $this->os_model->AdicionarProduto($idOs,$desconto, $this->os_model->_converteValorParaAmericano($preco * $quantidade), '-');
 
             echo json_encode(array('result' => true));
         } else {
@@ -346,6 +354,7 @@ class Os extends MY_Acesso
         );
 
         if ($this->os_model->add('servicos_os', $data) == true) {
+            $this->os_model->AdicionarProduto($data['os_id'],floatval($data['desconto']), floatval($this->input->post('precoServico')));
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -356,6 +365,7 @@ class Os extends MY_Acesso
     {
         $ID = $this->input->post('idServico');
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
+            $this->os_model->AdicionarProduto($this->input->post('idOs'),$this->input->post('desconto'), $this->input->post('precoServico'), '-');
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
