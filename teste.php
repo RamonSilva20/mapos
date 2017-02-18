@@ -1,14 +1,23 @@
 <?php
-// Require composer autoload
-require_once 'vendor/autoload.php';
 
-// Create an instance of the class:
 
-$mpdf = new mPDF();
 
-// Write some HTML code:
+class Teste 
+{
 
-$mpdf->WriteHTML('Hello World');
+	var $mensagem = '999';
 
-// Output a PDF file directly to the browser
-$mpdf->Output();
+	function amensagem($m)
+	{
+		$this->mensagem = $m;
+		return '33';
+	}
+
+	function diga(){
+		echo $this->mensagem;
+	}
+}
+
+$a = new Teste();
+
+var_dump($a->amensagem('Hello word!')->diga());
