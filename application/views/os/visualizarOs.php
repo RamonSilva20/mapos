@@ -186,8 +186,8 @@
                         <?php }?>
                         <hr />
 
-                        <h4 style="text-align: right">Subtotal: R$ <?=number_format($result->valorTotal,2,',','.')?></h4>
-                        <h4 style="text-align: right">Desconto Total: R$ <?=number_format($result->descontoTotal,2,',','.')?></h4>
+                        <h6 style="text-align: right">Subtotal: R$ <?=number_format($result->valorTotal,2,',','.')?></h6>
+                        <h6 style="text-align: right">Desconto Total: R$ <?=number_format($result->descontoTotal,2,',','.')?></h6>
                         <h4 style="text-align: right">Valor Total: R$ <?=number_format($result->valorTotal - $result->descontoTotal,2,',','.')?></h4>
                         <span class="assinatura_cliente">
                             <h5 style="text-align:left">Recebido por:____________________________________</h5>

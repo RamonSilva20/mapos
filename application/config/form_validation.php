@@ -10,9 +10,14 @@ $config = array('clientes' => array(array(
                                 	'rules'=>'required'
                                 ),
 								array(
-                                	'field'=>'telefone',
+                                    'field'=>'telefone',
+                                    'label'=>'Telefone',
+                                    'rules'=>'required'
+                                ),
+                                array(
+                                	'field'=>'celular',
                                 	'label'=>'Telefone',
-                                	'rules'=>'required'
+                                	'rules'=>''
                                 ),
 								array(
                                 	'field'=>'email',

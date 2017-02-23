@@ -1,4 +1,4 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+  SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
@@ -44,7 +44,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `lancamentos` (
   `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
-  `valor` VARCHAR(15) NOT NULL,
+  `valor` DECIMAL(12,2) DEFAULT 0.00,
   `desconto` DECIMAL(12,2) DEFAULT 0.00,
   `data_vencimento` DATE NOT NULL,
   `data_pagamento` DATE NULL DEFAULT NULL,
@@ -163,8 +163,8 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `idProdutos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(80) NOT NULL,
   `unidade` VARCHAR(10) NULL DEFAULT NULL,
-  `precoCompra` DECIMAL(10,2) NULL DEFAULT NULL,
-  `precoVenda` DECIMAL(10,2) NOT NULL,
+  `precoCompra` DECIMAL(12,2) DEFAULT 0.00,
+  `precoVenda` DECIMAL(12,2) DEFAULT 0.00,
   `estoque` INT(11) NOT NULL,
   `estoqueMinimo` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`idProdutos`))
@@ -178,11 +178,11 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `produtos_os` (
   `idProdutos_os` INT(11) NOT NULL AUTO_INCREMENT,
-  `quantidade` INT(11) NOT NULL,
+  `quantidade` INT(11) NOT NULL DEFAULT 0,
   `os_id` INT(11) NOT NULL,
   `produtos_id` INT(11) NOT NULL,
   `desconto` DECIMAL(12,2) DEFAULT 0.00,
-  `subTotal` DECIMAL(12,2) NULL DEFAULT 0.00,
+  `subTotal`DECIMAL(12,2) DEFAULT 0.00,
   PRIMARY KEY (`idProdutos_os`),
   INDEX `fk_produtos_os_os1` (`os_id` ASC),
   INDEX `fk_produtos_os_produtos1` (`produtos_id` ASC),
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `servicos` (
   `idServicos` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
   `descricao` VARCHAR(45) NULL DEFAULT NULL,
-  `preco` DECIMAL(10,2) NULL DEFAULT 0,
+  `preco` DECIMAL(10,2) NULL DEFAULT 0.00,
   PRIMARY KEY (`idServicos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
@@ -221,8 +221,8 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
   `idServicos_os` INT(11) NOT NULL AUTO_INCREMENT,
   `os_id` INT(11) NOT NULL,
   `servicos_id` INT(11) NOT NULL,
-  `desconto` DECIMAL(12,2) DEFAULT 0,
-  `subTotal` DECIMAL(12,2) NULL DEFAULT 0,
+  `desconto` DECIMAL(12,2) DEFAULT 0.00,
+  `subTotal` DECIMAL(12,2) DEFAULT 0.00,
   PRIMARY KEY (`idServicos_os`),
   INDEX `fk_servicos_os_os1` (`os_id` ASC),
   INDEX `fk_servicos_os_servicos1` (`servicos_id` ASC),
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `dataVenda` DATE NULL,
   `valorTotal` DECIMAL(12,2) DEFAULT 0.00,
   `descontoTotal` DECIMAL(12,2) DEFAULT 0.00,
-  `desconto` VARCHAR(45) NULL,
+  `desconto` DECIMAL(12,2) DEFAULT 0.00,
   `faturado` TINYINT(1) NULL,
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NULL,
@@ -280,8 +280,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
   `idItens` INT NOT NULL AUTO_INCREMENT,
-  `subTotal` VARCHAR(45) NULL,
-  `quantidade` INT(11) NULL,
+  `subTotal` DECIMAL(12,2) DEFAULT 0.00,
+  `quantidade` INT(11) DEFAULT 0,
   `vendas_id` INT NOT NULL,
   `desconto` DECIMAL(12,2) DEFAULT 0.00,
   `produtos_id` INT(11) NOT NULL,
@@ -364,13 +364,8 @@ ENGINE = InnoDB;
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES
 (1, 'Administrador', 'a:38:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
 
-
-
-
-
 INSERT INTO `usuarios` (`idUsuarios`, `nome`,`usuario` ,`rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `nivel`, `permissoes_id`) VALUES
 (1, 'admin', 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '$2y$10$66ofwMBpn7TMfg1Ob/2vz.PqTgtLy4wACaNglj5592CEHzDrsf80u', '0000-0000', '', 1, '2013-11-22', 1, 1);
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

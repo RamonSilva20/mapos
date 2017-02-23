@@ -70,7 +70,7 @@
      </div>
 </div>
 
-
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.min.js')?>"></script>
 <script src="<?=base_url('assets/js/jquery.validate.js')?>"></script>
 <script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 <script type="text/javascript">

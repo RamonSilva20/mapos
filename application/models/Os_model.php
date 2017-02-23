@@ -13,13 +13,13 @@ class Os_model extends MY_Model
         $this->idName = 'idOs';
     }
 
-    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $order_by = array('coluna' => 'idOs', 'order' => 'DESC'))
     {
         $this->db->select($fields.',clientes.nomeCliente');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->limit($perpage, $start);
-        $this->db->order_by('idOs', 'desc');
+        $this->db->order_by($order_by['coluna'],$order_by['order']);
         if ($where) {
             $this->db->where($where);
         }
@@ -27,7 +27,7 @@ class Os_model extends MY_Model
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();
-
+        // var_dump($result, $this->db);
         return $result;
     }
 

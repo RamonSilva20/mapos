@@ -22,7 +22,7 @@ class Mapos extends MY_Controller
         }
       
 
-        $this->data['ordens'  ]                 = $this->mapos_model->getOsAbertas();
+        $this->data['ordens']                   = $this->mapos_model->getOsAbertas();
         $this->data['ordens_orcamento']         = $this->mapos_model->getOsOrcamentos();
         $this->data['produtos']                 = $this->mapos_model->getProdutosMinimo();
         $this->data['os']                       = $this->mapos_model->getOsEstatisticas();
@@ -363,6 +363,51 @@ class Mapos extends MY_Controller
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
             redirect(base_url().'index.php/mapos/emitente');
+        }
+    }
+    function os_aberta(){
+        // if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
+        //     redirect('index.php/mapos/login');
+        //     echo json_encode(0);
+        // }
+        $this->load->model('os_model');
+         // "draw": 1,
+         //  "recordsTotal": 57,
+         //  "recordsFiltered": 57,
+        // get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+        // search[value]:tiago
+        $post_dados = $this->input->post();
+        if ($post_dados['search']['value']) {
+            $where_form = "AND clientes.nomeCliente LIKE '%{$post_dados['search']['value']}%'" ;
+        }else{
+            $where_form = '';
+        }
+        $where = sprintf('os.status = "%s" %s', $post_dados['status_os'], $where_form);
+        $perpage = $post_dados['length'];
+        $start = $post_dados['start'];
+        $campos = 'os.idOs, os.dataFinal, os.dataInicial, clientes.nomeCliente';
+        $order_by = array('coluna' => $post_dados['columns'][$post_dados['order'][0]['column']]['data'], 'order' => $post_dados['order'][0]['dir']);
+        
+        $oss = $this->os_model->get('os', $campos, $where, $perpage, $start, $one = false, $array = 'array',  $order_by);
+
+        // // $oss = $this->mapos_model->getOsAbertas(); 
+        // var_dump($_POST);
+        if (is_array($oss)) {
+            $new_oss = array();
+            foreach ($oss as $idx => $os) {
+                $new_oss[] = [
+                "idOs" => $os->idOs, 
+                "dataInicial" => date('d/m/Y' ,strtotime($os->dataInicial)), 
+                "dataFinal" => date('d/m/Y' ,strtotime($os->dataFinal)), 
+                "nomeCliente" => $os->nomeCliente, 
+                "botao" => sprintf("<a href='%s' class='btn'> <i class='icon-eye-open' ></i> </a><a style='margin-right: 1px' href='%s' class='btn btn-info tip-top' data-original-title='Editar OS'><i class='icon-pencil icon-white'></i></a> ", site_url('os/visualizar/'.$os->idOs), site_url('os/editar/'.$os->idOs)) ];
+            }
+            $total_rows = count($new_oss);
+            $resultado = ['data' => $new_oss, "recordsTotal" => $total_rows, "recordsFiltered" => $total_rows];
+            echo json_encode($resultado);
+        }else{
+            echo json_encode(0);
+            
         }
     }
 }

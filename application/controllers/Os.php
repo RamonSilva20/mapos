@@ -355,9 +355,9 @@ class Os extends MY_Acesso
 
         if ($this->os_model->add('servicos_os', $data) == true) {
             $this->os_model->AdicionarProduto($data['os_id'],floatval($data['desconto']), floatval($this->input->post('precoServico')));
-            echo json_encode(array('result' => true));
+            echo json_encode(['result' => true]);
         } else {
-            echo json_encode(array('result' => false));
+            echo json_encode(['result' => false]);
         }
     }
 

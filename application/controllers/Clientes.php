@@ -68,8 +68,18 @@ class Clientes extends MY_Acesso {
          redirect(base_url());
       }
       $this->load->library('form_validation');
-
-
+      $this->config->load('form_validation');
+      $validate_rules = $this->config->item('clientes');
+      // var_dump($validate_rules);
+      $rules_js = array();
+      foreach ($validate_rules as $key => $rule) {
+        if (strpos($rule['rules'], 'required') !==   false) {
+          $rules_js[$rule['field']] = true;
+        }else{
+          $rules_js[$rule['field']] = false;
+        }
+      }
+      $this->data['validate_rules'] = $rules_js;
       $this->data['custom_error'] = '';
 
       if ($this->form_validation->run('clientes') == false) {

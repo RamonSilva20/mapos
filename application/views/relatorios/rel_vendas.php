@@ -65,9 +65,9 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="<?=base_url('js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css')?>" />
-<script type="text/javascript" src="<?=base_url('js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
-<script src="<?=base_url('js/maskmoney.js')?>"></script>
+<link rel="stylesheet" href="<?=base_url('assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css')?>" />
+<script type="text/javascript" src="<?=base_url('assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js')?>"></script>
+<script src="<?=base_url('assets/js/maskmoney.js')?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".money").maskMoney();

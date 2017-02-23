@@ -51,7 +51,7 @@
 </div>
 
 
-<script src="<?=base_url('js/maskmoney.js');?>"></script>
+<script src="<?=base_url('assets/js/maskmoney.js');?>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".money").maskMoney();

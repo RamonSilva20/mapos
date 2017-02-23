@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="<?=base_url('assets/css/bootstrap-responsive.min.css')?>" />
 <link rel="stylesheet" href="<?=base_url('assets/css/matrix-style.css')?>" />
 <link rel="stylesheet" href="<?=base_url('assets/css/matrix-media.css')?>" />
-<link href="<?=base_url('assets/font-awesome/css/font-awesome.css')?>" rel="stylesheet" />
+<link rel="stylesheet" href="<?=base_url('assets/font-awesome/css/font-awesome.css')?>"  />
 <link rel="stylesheet" href="<?=base_url('assets/css/fullcalendar.css')?>" />
 <link rel="icon" href="<?=base_url('assets/img/favicon.png')?>">
 

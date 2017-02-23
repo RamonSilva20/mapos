@@ -93,6 +93,7 @@ if(!$results){?>
   </div>
   </form>
 </div>
+<script type="text/javascript" src="<?=base_url('assets/js/jquery.min.js')?>"></script>
 <script type="text/javascript">
 $(document).ready(function(){
    $(document).on('click', 'a', function(event) {
