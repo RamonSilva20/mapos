@@ -14,6 +14,7 @@ class Mapos extends MY_Controller
     {
         parent::__construct();
         $this->load->model('mapos_model');
+
     }
     public function index()
     {

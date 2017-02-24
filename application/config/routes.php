@@ -38,6 +38,7 @@
 |
 */
 
+$route['configuracoes']       = "configuracoes";
 $route['vendas']              = "vendas";
 $route['usuarios']            = "usuarios";
 $route['servicos']            = "servicos";
