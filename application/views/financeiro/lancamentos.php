@@ -100,11 +100,14 @@
       <?php } else{?>
           <tbody>
               <?php
-              $totalReceita = 0;
+              // $totalReceita = 0;
+              // $totalDespesa = 0;
               foreach ($results as $r) {
                   $vencimento = date(('d/m/Y'),strtotime($r->data_vencimento));
-                  if($r->baixado == 0){$status = 'Pendente';}else{ $status = 'Pago';};
-                  if($r->tipo == 'receita'){ $label = 'success'; $totalReceita += $r->valor -$r->desconto;} else{$label = 'important'; $totalDespesa += $r->valor - $r->desconto;}
+                  // if($r->baixado == 0){$status = 'Pendente';}else{ $status = 'Pago';};
+                  $status = ($r->baixado == 0) ? 'Pendente' : 'Pago';
+                  // if($r->tipo == 'receita'){ $label = 'success'; $totalReceita += $r->valor -$r->desconto;} else{$label = 'important'; $totalDespesa += $r->valor - $r->desconto;}
+                  $label = ($r->tipo == 'receita')?  'success' : 'important';
                   echo '<tr>';
                   echo '<td>'.$r->idLancamentos.'</td>';
                   echo '<td><span class="label label-'.$label.'">'.ucfirst($r->tipo).'</span></td>';
@@ -128,7 +131,7 @@
 
               </tr>
           </tbody>
-
+          <?php } ?>
           <tfoot>
             <tr>
               <td colspan="7" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
@@ -145,7 +148,6 @@
           </tfoot>
 
 
-              <?php }?>
           
       </table>
     </div>

@@ -173,7 +173,7 @@ class Financeiro extends MY_Acesso
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url('/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao);
+        $config['base_url'] = site_url('/financeiro/lancamentos/?periodo='.$periodo.'&situacao='.$situacao.'&dataInicial='.$dataInicial.'&dataFinal='.$dataFinal);
         $config['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;

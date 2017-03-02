@@ -264,7 +264,7 @@
       <div class="span4" style="margin-left: 0">
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" />
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($valorTotal,2,',','.')?>"  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?=number_format($result->valorTotal,2,',','.')?>"  />
       </div>
       <div class="span4" >
           <label for="desconto">Desconto</label>

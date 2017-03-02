@@ -17,7 +17,7 @@
     array (
       'field' => 'telefone',
       'label' => 'Telefone',
-      'rules' => '',
+      'rules' => 'required',
     ),
     3 => 
     array (
@@ -29,43 +29,43 @@
     array (
       'field' => 'email',
       'label' => 'Email',
-      'rules' => '|valid_email',
+      'rules' => 'required|valid_email',
     ),
     5 => 
     array (
       'field' => 'rua',
       'label' => 'Rua',
-      'rules' => '',
+      'rules' => 'required',
     ),
     6 => 
     array (
       'field' => 'numero',
       'label' => 'Número',
-      'rules' => '',
+      'rules' => 'required',
     ),
     7 => 
     array (
       'field' => 'bairro',
       'label' => 'Bairro',
-      'rules' => '',
+      'rules' => 'required',
     ),
     8 => 
     array (
       'field' => 'cidade',
       'label' => 'Cidade',
-      'rules' => '',
+      'rules' => 'required',
     ),
     9 => 
     array (
       'field' => 'estado',
       'label' => 'Estado',
-      'rules' => '',
+      'rules' => 'required',
     ),
     10 => 
     array (
       'field' => 'cep',
       'label' => 'CEP',
-      'rules' => '',
+      'rules' => 'required',
     ),
   ),
   'servicos' => 
