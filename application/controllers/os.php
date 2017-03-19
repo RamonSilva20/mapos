@@ -28,6 +28,32 @@ class Os extends CI_Controller {
         
         $this->load->library('pagination');
         
+        $where_array = array();
+
+        $pesquisa = $this->input->get('pesquisa');
+        $status = $this->input->get('status');
+        $de = $this->input->get('data');
+        $ate = $this->input->get('data2');
+
+        if($pesquisa){
+           $where_array['pesquisa'] = $pesquisa;
+        }
+        if($status){
+            $where_array['status'] = $status;
+        }
+        if($de){
+
+            $de = explode('/', $de);
+            $de = $de[2].'-'.$de[1].'-'.$de[0];
+
+            $where_array['de'] = $de;
+        }
+        if($ate){
+            $ate = explode('/', $ate);
+            $ate = $ate[2].'-'.$ate[1].'-'.$ate[0];
+
+            $where_array['ate'] = $ate;
+        }
         
         $config['base_url'] = base_url().'index.php/os/gerenciar/';
         $config['total_rows'] = $this->os_model->count('os');
@@ -53,7 +79,7 @@ class Os extends CI_Controller {
         	
         $this->pagination->initialize($config); 	
 
-		$this->data['results'] = $this->os_model->get('os','idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico','',$config['per_page'],$this->uri->segment(3));
+		$this->data['results'] = $this->os_model->getOs('os','idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico',$where_array,$config['per_page'],$this->uri->segment(3));
        
 	    $this->data['view'] = 'os/os';
        	$this->load->view('tema/topo',$this->data);
