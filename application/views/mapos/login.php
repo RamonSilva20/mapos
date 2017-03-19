@@ -3,13 +3,14 @@
 <html lang="pt-br">
     
 <head>
-        <title>Map Os</title><meta charset="UTF-8" />
+        <title>MAP OS</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-        <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
+        <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <script src="<?php echo base_url()?>js/jquery-1.10.2.min.js"></script>
+        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
     </head>
     <body>
         <div id="loginbox">            
@@ -31,12 +32,13 @@
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
-                            <span class="add-on bg_ly"><i class="icon-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
+                            <span class="add-on bg_lb"><i class="icon-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
                         </div>
                     </div>
                 </div>
                 <div class="form-actions" style="text-align: center">
-                    <button class="btn btn-info btn-large"/> Logar</button>
+                    <div id="progress-acessar" class='hide progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>
+                    <button id="btn-acessar" class="btn btn-success btn-large"/> Acessar</button>
                 </div>
             </form>
        
@@ -65,7 +67,8 @@
                     },
                    submitHandler: function( form ){       
                          var dados = $( form ).serialize();
-                         
+                         $('#btn-acessar').addClass('disabled');
+                         $('#progress-acessar').removeClass('hide');
                     
                         $.ajax({
                           type: "POST",
@@ -78,6 +81,11 @@
                                 window.location.href = "<?php echo base_url();?>index.php/mapos";
                             }
                             else{
+
+
+                                $('#btn-acessar').removeClass('disabled');
+                                $('#progress-acessar').addClass('hide');
+                                
                                 $('#call-modal').trigger('click');
                             }
                           }
