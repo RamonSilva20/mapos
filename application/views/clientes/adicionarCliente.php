@@ -104,7 +104,7 @@
 </div>
 
 
-<script src="<?php echo base_url()?>js/jquery.validate.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
       $(document).ready(function(){
            $('#formCliente').validate({

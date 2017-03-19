@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
         <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        <script src="<?php echo base_url()?>js/jquery-1.10.2.min.js"></script>
+        <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
     </head>
     <body>
