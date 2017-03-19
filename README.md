@@ -10,7 +10,7 @@ Sistema de Controle de Ordens de Serviço
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
 
 ### Requerimento
-* PHP >= 5.4.0
+* PHP >= 5.4.0 <= 5.6
 * MySQL
 
 ### Créditos
