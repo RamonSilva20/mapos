@@ -235,9 +235,15 @@ class Financeiro extends CI_Controller {
                $vencimento = date('Y/m/d'); 
             }
 
+            $valor = $this->input->post('valor');
+
+            if(!validate_money($valor)){
+                $valor = str_replace(array(',','.'), array('',''), $valor);
+            }
+
             $data = array(
                 'descricao' => set_value('descricao'),
-				'valor' => set_value('valor'),
+				'valor' => $valor,
 				'data_vencimento' => $vencimento,
 				'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
 				'baixado' => $this->input->post('recebido'),
@@ -295,9 +301,15 @@ class Financeiro extends CI_Controller {
                $vencimento = date('Y/m/d'); 
             }
 
+            $valor = $this->input->post('valor');
+
+            if(!validate_money($valor)){
+                $valor = str_replace(array(',','.'), array('',''), $valor);
+            }
+
             $data = array(
                 'descricao' => set_value('descricao'),
-				'valor' => set_value('valor'),
+				'valor' => $valor,
 				'data_vencimento' => $vencimento,
 				'data_pagamento' => $pagamento != null ? $pagamento : date('Y-m-d'),
 				'baixado' => $this->input->post('pago'),

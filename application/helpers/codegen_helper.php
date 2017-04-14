@@ -28,3 +28,12 @@ function clean_header($array){
     }
     return $arr;
 }
+
+function validate_money($valor){
+
+    if(preg_match("/^([0-9]*)\.(\d{2})$/", $valor)){
+        return true;
+    }
+    return false;
+    
+}
