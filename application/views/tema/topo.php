@@ -30,7 +30,10 @@
    
     <li class=""><a title="" href="<?php echo base_url();?>index.php/mapos/minhaConta"><i class="icon icon-star"></i> <span class="text">Minha Conta</span></a></li>
     <li class=""><a title="" href="<?php echo base_url();?>index.php/mapos/sair"><i class="icon icon-share-alt"></i> <span class="text">Sair do Sistema</span></a></li>
+    <li class="pull-right"><a href="https://github.com/RamonSilva20/mapos" target="_blank"><i class="icon icon-asterisk"></i> <span class="text">Versão: <?php echo $this->config->item('app_version'); ?></span></a></li>
+    
   </ul>
+
 </div>
 
 <!--start-top-serch-->
@@ -168,7 +171,7 @@
 </div>
 <!--Footer-part-->
 <div class="row-fluid">
-  <div id="footer" class="span12"> <?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva</div>
+  <div id="footer" class="span12"> <a href="https://github.com/RamonSilva20/mapos" target="_blank"><?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva </a></div>
 </div>
 <!--end-Footer-part-->
 
