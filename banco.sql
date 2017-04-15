@@ -100,7 +100,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `celular` VARCHAR(20) NULL DEFAULT NULL,
   `situacao` TINYINT(1) NOT NULL,
   `dataCadastro` DATE NOT NULL,
-  `nivel` INT(11) NOT NULL,
   `permissoes_id` INT NOT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
