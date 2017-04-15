@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['app_version'] = '2.6.3'; 
+$config['app_version'] = '2.6.4'; 
 
 /*
 |--------------------------------------------------------------------------
