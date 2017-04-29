@@ -10,7 +10,7 @@ class Produtos extends CI_Controller {
     
     function __construct() {
         parent::__construct();
-        if ((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))) {
+        if( (!session_id()) || (!$this->session->userdata('logado'))){
             redirect('mapos/login');
         }
 

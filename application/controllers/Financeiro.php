@@ -11,8 +11,8 @@ class Financeiro extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		if((!$this->session->userdata('session_id')) || (!$this->session->userdata('logado'))){
-        	redirect('mapos/login');
+		if( (!session_id()) || (!$this->session->userdata('logado'))){
+            redirect('mapos/login');
         }
         $this->load->model('financeiro_model','',TRUE);
         $this->data['menuFinanceiro'] = 'financeiro';
