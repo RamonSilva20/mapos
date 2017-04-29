@@ -196,4 +196,11 @@ class Mapos_model extends CI_Model {
         return $this->db->update('emitente'); 
          
     }
+
+    public function check_credentials($email) {
+        $this->db->where('email', $email);
+        $this->db->where('situacao', 1);
+        $this->db->limit(1);
+        return $this->db->get('usuarios')->row();
+    }
 }

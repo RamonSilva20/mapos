@@ -162,7 +162,7 @@
                            </div>
                       <?php }?>
                           
-                      <?php if(isset($view)){echo $this->load->view($view);}?>
+                      <?php if(isset($view)){echo $this->load->view($view, null, true);}?>
 
 
       </div>
