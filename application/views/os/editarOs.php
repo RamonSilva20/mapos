@@ -69,6 +69,7 @@
                                             <label for="garantia">Garantia</label>
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>"  />
                                         </div>
+
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
