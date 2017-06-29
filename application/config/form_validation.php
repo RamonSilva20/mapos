@@ -2,294 +2,294 @@
 $config = array('clientes' => array(array(
                                 	'field'=>'nomeCliente',
                                 	'label'=>'Nome',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'documento',
                                 	'label'=>'CPF/CNPJ',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'telefone',
                                 	'label'=>'Telefone',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'email',
                                 	'label'=>'Email',
-                                	'rules'=>'required|trim|valid_email|xss_clean'
+                                	'rules'=>'required|trim|valid_email'
                                 ),
 								array(
                                 	'field'=>'rua',
                                 	'label'=>'Rua',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'numero',
                                 	'label'=>'Número',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'bairro',
                                 	'label'=>'Bairro',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'cidade',
                                 	'label'=>'Cidade',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'estado',
                                 	'label'=>'Estado',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'cep',
                                 	'label'=>'CEP',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ))
                 ,
                 'servicos' => array(array(
                                     'field'=>'nome',
                                     'label'=>'Nome',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'descricao',
                                     'label'=>'',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'preco',
                                     'label'=>'',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ))
                 ,
                 'produtos' => array(array(
                                     'field'=>'descricao',
                                     'label'=>'',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'unidade',
                                     'label'=>'Unidade',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'precoCompra',
                                     'label'=>'Preo de Compra',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'precoVenda',
                                     'label'=>'Preo de Venda',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'estoque',
                                     'label'=>'Estoque',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'estoqueMinimo',
                                     'label'=>'Estoque Mnimo',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ))
                 ,
                 'usuarios' => array(array(
                                     'field'=>'nome',
                                     'label'=>'Nome',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'rg',
                                     'label'=>'RG',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'cpf',
                                     'label'=>'CPF',
-                                    'rules'=>'required|trim|xss_clean|is_unique[usuarios.cpf]'
+                                    'rules'=>'required|trim|is_unique[usuarios.cpf]'
                                 ),
                                 array(
                                     'field'=>'rua',
                                     'label'=>'Rua',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'numero',
                                     'label'=>'Numero',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'bairro',
                                     'label'=>'Bairro',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'cidade',
                                     'label'=>'Cidade',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'estado',
                                     'label'=>'Estado',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'email',
                                     'label'=>'Email',
-                                    'rules'=>'required|trim|valid_email|xss_clean'
+                                    'rules'=>'required|trim|valid_email'
                                 ),
                                 array(
                                     'field'=>'senha',
                                     'label'=>'Senha',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'telefone',
                                     'label'=>'Telefone',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'situacao',
                                     'label'=>'Situacao',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ))
                 ,      
                 'os' => array(array(
                                     'field'=>'dataInicial',
                                     'label'=>'DataInicial',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'dataFinal',
                                     'label'=>'DataFinal',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'garantia',
                                     'label'=>'Garantia',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'descricaoProduto',
                                     'label'=>'DescricaoProduto',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'defeito',
                                     'label'=>'Defeito',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'status',
                                     'label'=>'Status',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'observacoes',
                                     'label'=>'Observacoes',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'clientes_id',
                                     'label'=>'clientes',
-                                    'rules'=>'trim|xss_clean|required'
+                                    'rules'=>'trim|required'
                                 ),
                                 array(
                                     'field'=>'usuarios_id',
                                     'label'=>'usuarios_id',
-                                    'rules'=>'trim|xss_clean|required'
+                                    'rules'=>'trim|required'
                                 ),
                                 array(
                                     'field'=>'laudoTecnico',
                                     'label'=>'Laudo Tecnico',
-                                    'rules'=>'trim|xss_clean'
+                                    'rules'=>'trim'
                                 ))
 
                   ,
 				'tiposUsuario' => array(array(
                                 	'field'=>'nomeTipo',
                                 	'label'=>'NomeTipo',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ),
 								array(
                                 	'field'=>'situacao',
                                 	'label'=>'Situacao',
-                                	'rules'=>'required|trim|xss_clean'
+                                	'rules'=>'required|trim'
                                 ))
 
                 ,
                 'receita' => array(array(
                                     'field'=>'descricao',
                                     'label'=>'Descrição',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'valor',
                                     'label'=>'Valor',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'vencimento',
                                     'label'=>'Data Vencimento',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                         
                                 array(
                                     'field'=>'cliente',
                                     'label'=>'Cliente',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'tipo',
                                     'label'=>'Tipo',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ))
                 ,
                 'despesa' => array(array(
                                     'field'=>'descricao',
                                     'label'=>'Descrição',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'valor',
                                     'label'=>'Valor',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'vencimento',
                                     'label'=>'Data Vencimento',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'fornecedor',
                                     'label'=>'Fornecedor',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ),
                                 array(
                                     'field'=>'tipo',
                                     'label'=>'Tipo',
-                                    'rules'=>'required|trim|xss_clean'
+                                    'rules'=>'required|trim'
                                 ))
                 ,
                 'vendas' => array(array(
 
                                     'field' => 'dataVenda',
                                     'label' => 'Data da Venda',
-                                    'rules' => 'required|trim|xss_clean'
+                                    'rules' => 'required|trim'
                                 ),
                                 array(
                                     'field'=>'clientes_id',
                                     'label'=>'clientes',
-                                    'rules'=>'trim|xss_clean|required'
+                                    'rules'=>'trim|required'
                                 ),
                                 array(
                                     'field'=>'usuarios_id',
                                     'label'=>'usuarios_id',
-                                    'rules'=>'trim|xss_clean|required'
+                                    'rules'=>'trim|required'
                                 ))
 		);
 			   

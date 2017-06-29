@@ -8,15 +8,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Table `ci_sessions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
-  `session_id` VARCHAR(40) NOT NULL DEFAULT '0',
-  `ip_address` VARCHAR(45) NOT NULL DEFAULT '0',
-  `user_agent` VARCHAR(120) NOT NULL,
-  `last_activity` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `user_data` TEXT NOT NULL,
-  PRIMARY KEY (`session_id`),
-  INDEX `last_activity_idx` (`last_activity` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+        `id` varchar(128) NOT NULL,
+        `ip_address` varchar(45) NOT NULL,
+        `timestamp` int(10) unsigned DEFAULT 0 NOT NULL,
+        `data` blob NOT NULL,
+        KEY `ci_sessions_timestamp` (`timestamp`)
+);
 
 
 -- -----------------------------------------------------
@@ -25,6 +22,8 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `clientes` (
   `idClientes` INT(11) NOT NULL AUTO_INCREMENT,
   `nomeCliente` VARCHAR(255) NOT NULL,
+  `sexo` VARCHAR(20) NULL,
+  `pessoa_fisica` BOOLEAN NOT NULL DEFAULT 1,
   `documento` VARCHAR(20) NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
   `celular` VARCHAR(20) NULL DEFAULT NULL,
@@ -42,6 +41,36 @@ AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
+
+-- -----------------------------------------------------
+-- Table `categorias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `categorias` (
+  `idCategorias` INT NOT NULL AUTO_INCREMENT,
+  `categoria` VARCHAR(80) NULL,
+  `cadastro` DATE NULL,
+  `status` TINYINT(1) NULL,
+  `tipo` VARCHAR(15) NULL,
+  PRIMARY KEY (`idCategorias`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `contas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `contas` (
+  `idContas` INT NOT NULL AUTO_INCREMENT,
+  `conta` VARCHAR(45) NULL,
+  `banco` VARCHAR(45) NULL,
+  `numero` VARCHAR(45) NULL,
+  `saldo` DECIMAL(10,2) NULL,
+  `cadastro` DATE NULL,
+  `status` TINYINT(1) NULL,
+  `tipo` VARCHAR(80) NULL,
+  PRIMARY KEY (`idContas`))
+ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `lancamentos`
 -- -----------------------------------------------------
@@ -57,11 +86,25 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `tipo` VARCHAR(45) NULL DEFAULT NULL,
   `anexo` VARCHAR(250) NULL,
   `clientes_id` INT(11) NULL DEFAULT NULL,
+  `categorias_id` INT NULL,
+  `contas_id` INT NULL,
   PRIMARY KEY (`idLancamentos`),
   INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC),
+  INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC),
+  INDEX `fk_lancamentos_contas1_idx` (`contas_id` ASC),
   CONSTRAINT `fk_lancamentos_clientes1`
     FOREIGN KEY (`clientes_id`)
     REFERENCES `clientes` (`idClientes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_categorias1`
+    FOREIGN KEY (`categorias_id`)
+    REFERENCES `categorias` (`idCategorias`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_contas1`
+    FOREIGN KEY (`contas_id`)
+    REFERENCES `contas` (`idContas`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -95,12 +138,11 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `cidade` VARCHAR(45) NULL DEFAULT NULL,
   `estado` VARCHAR(20) NULL DEFAULT NULL,
   `email` VARCHAR(80) NOT NULL,
-  `senha` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
   `celular` VARCHAR(20) NULL DEFAULT NULL,
   `situacao` TINYINT(1) NOT NULL,
   `dataCadastro` DATE NOT NULL,
-  `nivel` INT(11) NOT NULL,
   `permissoes_id` INT NOT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
@@ -122,11 +164,11 @@ CREATE TABLE IF NOT EXISTS `os` (
   `dataInicial` DATE NULL DEFAULT NULL,
   `dataFinal` DATE NULL DEFAULT NULL,
   `garantia` VARCHAR(45) NULL DEFAULT NULL,
-  `descricaoProduto` VARCHAR(150) NULL DEFAULT NULL,
-  `defeito` VARCHAR(150) NULL DEFAULT NULL,
+  `descricaoProduto` TEXT NULL DEFAULT NULL,
+  `defeito` TEXT NULL DEFAULT NULL,
   `status` VARCHAR(45) NULL DEFAULT NULL,
-  `observacoes` VARCHAR(150) NULL DEFAULT NULL,
-  `laudoTecnico` VARCHAR(150) NULL DEFAULT NULL,
+  `observacoes` TEXT NULL DEFAULT NULL,
+  `laudoTecnico` TEXT NULL DEFAULT NULL,
   `valorTotal` VARCHAR(15) NULL DEFAULT NULL,
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NOT NULL,
@@ -336,6 +378,89 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `marcas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `marcas` (
+  `idMarcas` INT NOT NULL AUTO_INCREMENT,
+  `marca` VARCHAR(100) NULL,
+  `cadastro` DATE NULL,
+  `situacao` TINYINT(1) NULL,
+  PRIMARY KEY (`idMarcas`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `equipamentos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `equipamentos` (
+  `idEquipamentos` INT NOT NULL AUTO_INCREMENT,
+  `equipamento` VARCHAR(150) NOT NULL,
+  `num_serie` VARCHAR(80) NULL,
+  `modelo` VARCHAR(80) NULL,
+  `cor` VARCHAR(45) NULL,
+  `descricao` VARCHAR(150) NULL,
+  `tensao` VARCHAR(45) NULL,
+  `potencia` VARCHAR(45) NULL,
+  `voltagem` VARCHAR(45) NULL,
+  `data_fabricacao` DATE NULL,
+  `marcas_id` INT NULL,
+  `clientes_id` INT(11) NULL,
+  PRIMARY KEY (`idEquipamentos`),
+  INDEX `fk_equipanentos_marcas1_idx` (`marcas_id` ASC),
+  INDEX `fk_equipanentos_clientes1_idx` (`clientes_id` ASC),
+  CONSTRAINT `fk_equipanentos_marcas1`
+    FOREIGN KEY (`marcas_id`)
+    REFERENCES `marcas` (`idMarcas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_equipanentos_clientes1`
+    FOREIGN KEY (`clientes_id`)
+    REFERENCES `clientes` (`idClientes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `equipamentos_os`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `equipamentos_os` (
+  `idEquipamentos_os` INT NOT NULL AUTO_INCREMENT,
+  `defeito_declarado` VARCHAR(200) NULL,
+  `defeito_encontrado` VARCHAR(200) NULL,
+  `solucao` VARCHAR(45) NULL,
+  `equipamentos_id` INT NULL,
+  `os_id` INT(11) NULL,
+  PRIMARY KEY (`idEquipamentos_os`),
+  INDEX `fk_equipamentos_os_equipanentos1_idx` (`equipamentos_id` ASC),
+  INDEX `fk_equipamentos_os_os1_idx` (`os_id` ASC),
+  CONSTRAINT `fk_equipamentos_os_equipanentos1`
+    FOREIGN KEY (`equipamentos_id`)
+    REFERENCES `equipamentos` (`idEquipamentos`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_equipamentos_os_os1`
+    FOREIGN KEY (`os_id`)
+    REFERENCES `os` (`idOs`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `logs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `logs` (
+  `idLogs` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(80) NULL,
+  `tarefa` VARCHAR(100) NULL,
+  `data` DATE NULL,
+  `hora` TIME NULL,
+  `ip` VARCHAR(45) NULL,
+  PRIMARY KEY (`idLogs`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `emitente`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `emitente` (
@@ -361,11 +486,8 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 (1, 'Administrador', 'a:38:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
 
 
-
-
-
-INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `nivel`, `permissoes_id`) VALUES
-(1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Brasília', 'DF', 'admin@admin.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '0000-0000', '', 1, '2013-11-22', 1, 1);
+INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`) VALUES
+(1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '94556715d7862d57e603e5e7389e0174227388d94090370517e3cfe5b1cccfbf3647bacd8dfc6190492c42d19e76df96308236c87c83ff78c37c01678d675e4fZE8TIK5YP2vt2j7+3ta7mfbOgY8wdMfs/vPCG5YBWh4=', '0000-0000', '', 1, '2013-11-22', 1);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
