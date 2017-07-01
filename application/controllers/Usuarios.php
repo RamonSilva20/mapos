@@ -128,18 +128,18 @@ class Usuarios extends CI_Controller {
 
         $this->load->library('form_validation');    
 		$this->data['custom_error'] = '';
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('rg', 'RG', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('cpf', 'CPF', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('rua', 'Rua', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('numero', 'Número', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('estado', 'Estado', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('situacao', 'Situação', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
+        $this->form_validation->set_rules('rg', 'RG', 'trim|required');
+        $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
+        $this->form_validation->set_rules('rua', 'Rua', 'trim|required');
+        $this->form_validation->set_rules('numero', 'Número', 'trim|required');
+        $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
+        $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required');
+        $this->form_validation->set_rules('estado', 'Estado', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required');
+        $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required');
+        $this->form_validation->set_rules('situacao', 'Situação', 'trim|required');
+        $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
 
         if ($this->form_validation->run() == false)
         {

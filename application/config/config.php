@@ -1,7 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-$config['app_version'] = '3.0'; 
+date_default_timezone_set('America/Sao_Paulo');
+
+
+$config['app_version'] = '3.1'; 
 
 /*
 |--------------------------------------------------------------------------

@@ -72,7 +72,7 @@ class Permissoes extends CI_Controller {
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -160,7 +160,7 @@ class Permissoes extends CI_Controller {
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {

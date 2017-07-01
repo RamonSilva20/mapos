@@ -15,7 +15,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 5. Configure os dados de acesso ao banco de dados no arquivo `database.php`.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
 
-### Atualização para versão 3.0
+### Atualização para versão 3.1
 
 1. Substitua a todos os arquivos.
 2. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).

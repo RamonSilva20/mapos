@@ -344,11 +344,11 @@ class Financeiro extends CI_Controller {
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
 
-        $this->form_validation->set_rules('descricao', '', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('fornecedor', '', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('valor', '', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('vencimento', '', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('pagamento', '', 'trim|xss_clean');
+        $this->form_validation->set_rules('descricao', '', 'trim|required');
+        $this->form_validation->set_rules('fornecedor', '', 'trim|required');
+        $this->form_validation->set_rules('valor', '', 'trim|required');
+        $this->form_validation->set_rules('vencimento', '', 'trim|required');
+        $this->form_validation->set_rules('pagamento', '', 'trim');
 
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);

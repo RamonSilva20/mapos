@@ -231,16 +231,16 @@ class Mapos extends CI_Controller {
         }
 
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome','Razão Social','required|xss_clean|trim');
-        $this->form_validation->set_rules('cnpj','CNPJ','required|xss_clean|trim');
-        $this->form_validation->set_rules('ie','IE','required|xss_clean|trim');
-        $this->form_validation->set_rules('logradouro','Logradouro','required|xss_clean|trim');
-        $this->form_validation->set_rules('numero','Número','required|xss_clean|trim');
-        $this->form_validation->set_rules('bairro','Bairro','required|xss_clean|trim');
-        $this->form_validation->set_rules('cidade','Cidade','required|xss_clean|trim');
-        $this->form_validation->set_rules('uf','UF','required|xss_clean|trim');
-        $this->form_validation->set_rules('telefone','Telefone','required|xss_clean|trim');
-        $this->form_validation->set_rules('email','E-mail','required|xss_clean|trim');
+        $this->form_validation->set_rules('nome','Razão Social','required|trim');
+        $this->form_validation->set_rules('cnpj','CNPJ','required|trim');
+        $this->form_validation->set_rules('ie','IE','required|trim');
+        $this->form_validation->set_rules('logradouro','Logradouro','required|trim');
+        $this->form_validation->set_rules('numero','Número','required|trim');
+        $this->form_validation->set_rules('bairro','Bairro','required|trim');
+        $this->form_validation->set_rules('cidade','Cidade','required|trim');
+        $this->form_validation->set_rules('uf','UF','required|trim');
+        $this->form_validation->set_rules('telefone','Telefone','required|trim');
+        $this->form_validation->set_rules('email','E-mail','required|trim');
 
 
         
@@ -294,16 +294,16 @@ class Mapos extends CI_Controller {
         }
 
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome','Razão Social','required|xss_clean|trim');
-        $this->form_validation->set_rules('cnpj','CNPJ','required|xss_clean|trim');
-        $this->form_validation->set_rules('ie','IE','required|xss_clean|trim');
-        $this->form_validation->set_rules('logradouro','Logradouro','required|xss_clean|trim');
-        $this->form_validation->set_rules('numero','Número','required|xss_clean|trim');
-        $this->form_validation->set_rules('bairro','Bairro','required|xss_clean|trim');
-        $this->form_validation->set_rules('cidade','Cidade','required|xss_clean|trim');
-        $this->form_validation->set_rules('uf','UF','required|xss_clean|trim');
-        $this->form_validation->set_rules('telefone','Telefone','required|xss_clean|trim');
-        $this->form_validation->set_rules('email','E-mail','required|xss_clean|trim');
+        $this->form_validation->set_rules('nome','Razão Social','required|trim');
+        $this->form_validation->set_rules('cnpj','CNPJ','required|trim');
+        $this->form_validation->set_rules('ie','IE','required|trim');
+        $this->form_validation->set_rules('logradouro','Logradouro','required|trim');
+        $this->form_validation->set_rules('numero','Número','required|trim');
+        $this->form_validation->set_rules('bairro','Bairro','required|trim');
+        $this->form_validation->set_rules('cidade','Cidade','required|trim');
+        $this->form_validation->set_rules('uf','UF','required|trim');
+        $this->form_validation->set_rules('telefone','Telefone','required|trim');
+        $this->form_validation->set_rules('email','E-mail','required|trim');
 
 
         

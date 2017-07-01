@@ -253,9 +253,9 @@ class Vendas extends CI_Controller {
         }
 
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('quantidade', 'Quantidade', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('idProduto', 'Produto', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('idVendasProduto', 'Vendas', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('quantidade', 'Quantidade', 'trim|required');
+        $this->form_validation->set_rules('idProduto', 'Produto', 'trim|required');
+        $this->form_validation->set_rules('idVendasProduto', 'Vendas', 'trim|required');
         
         if($this->form_validation->run() == false){
            echo json_encode(array('result'=> false)); 
