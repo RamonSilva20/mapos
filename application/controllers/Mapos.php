@@ -92,6 +92,11 @@ class Mapos extends CI_Controller {
 
     public function verificarLogin(){
         
+        header('Access-Control-Allow-Origin: '.base_url());
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        header('Access-Control-Max-Age: 1000');
+        header('Access-Control-Allow-Headers: Content-Type');
+        
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email','E-mail','valid_email|required|trim');
         $this->form_validation->set_rules('senha','Senha','required|trim');
