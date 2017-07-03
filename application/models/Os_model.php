@@ -161,7 +161,7 @@ class Os_model extends CI_Model {
         $this->db->limit(5);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
-        if($query->num_rows > 0){
+        if($query->num_rows() > 0){
             foreach ($query->result_array() as $row){
                 $row_set[] = array('label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']);
             }
@@ -175,7 +175,7 @@ class Os_model extends CI_Model {
         $this->db->limit(5);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
-        if($query->num_rows > 0){
+        if($query->num_rows() > 0){
             foreach ($query->result_array() as $row){
                 $row_set[] = array('label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']);
             }
@@ -190,7 +190,7 @@ class Os_model extends CI_Model {
         $this->db->like('nome', $q);
         $this->db->where('situacao',1);
         $query = $this->db->get('usuarios');
-        if($query->num_rows > 0){
+        if($query->num_rows() > 0){
             foreach ($query->result_array() as $row){
                 $row_set[] = array('label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']);
             }
@@ -204,7 +204,7 @@ class Os_model extends CI_Model {
         $this->db->limit(5);
         $this->db->like('nome', $q);
         $query = $this->db->get('servicos');
-        if($query->num_rows > 0){
+        if($query->num_rows() > 0){
             foreach ($query->result_array() as $row){
                 $row_set[] = array('label'=>$row['nome'].' | Preço: R$ '.$row['preco'],'id'=>$row['idServicos'],'preco'=>$row['preco']);
             }
