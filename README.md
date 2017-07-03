@@ -1,6 +1,6 @@
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1_ | Nova versão em desenvolvimento - Sugestões no Issue #37
+#### _Versão 3.1.1_ | Nova versão em desenvolvimento - Sugestões no Issue #37
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
@@ -15,7 +15,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 5. Configure os dados de acesso ao banco de dados no arquivo `database.php`.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
 
-### Atualização para versão 3.1
+### Atualização para versão 3.*
 
 1. Remova a pasta system da instalação atual
 2. Copie os novos arquivos e substitua.
