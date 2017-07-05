@@ -46,7 +46,8 @@ class Mapos extends CI_Controller {
             redirect('mapos/login');
         }
 
-        $this->load->library('encrypt');
+        $this->load->library('encryption');
+        $this->encryption->initialize(array('driver' => 'mcrypt'));
         
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
