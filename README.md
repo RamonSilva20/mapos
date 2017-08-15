@@ -1,38 +1,36 @@
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1.4_ | Nova versão em desenvolvimento - Sugestões no Issue #37
+## Sobre o MapOS
+
+#### _Versão 4.0_ | Versão baseada no Laravel atualmente em desenvolvimento
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
 ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.  
 
-### Instalação
 
-1. Faça o download dos arquivos
-2. Extraia o pacote e copie para seu webserver.
-3. Configure sua URL no arquivo `config.php` alterando a base_url. 
-4. Crie o banco de dados e execute o arquivo `banco.sql` para criar as tabelas.
-5. Configure os dados de acesso ao banco de dados no arquivo `database.php`.
-6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
+## MapOS Colaboradores
 
-### Atualização para versão 3.*
+We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
 
-1. Remova a pasta system da instalação atual
-2. Copie os novos arquivos e substitua.
-3. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
-4. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
-5. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
+- **[Ramon Silva](silva018-mg@yahoo.com.br)**
+
+## Contribuindo
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+
+1 - Clone o repositório
+2 - Crie um banco de dados vazio
+3 - Faça uma cópia do arquivo .env.example e renomeie para .env e insira as configurações do banco de dados
+4 - Execute os seguintes comandos
+    composer install
+    bower install
+    php artisan migrate --seed
+    php artisan key:generate
+    php artisan vendor:publish
+5 - Acesse o sistema com as credencias: admin@admin.com - 123456
 
 
-### Frameworks/Bibliotecas
-* [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
-* [twbs/bootstrap](https://github.com/twbs/bootstrap) 
-* [jquery/jquery](https://github.com/jquery/jquery) 
-* [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
+## Licença
 
-### Requerimento
-* PHP >= 5.4.0
-* MySQL
-
-### Créditos
-* Ramon Silva - silva018-mg@yahoo.com.br
+O sistema MapOS é open source licensiado sobre a [MIT license](http://opensource.org/licenses/MIT).

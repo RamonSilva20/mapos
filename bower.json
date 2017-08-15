@@ -1,0 +1,22 @@
+{
+  "name": "mapos",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Ramon Silva <silva018-mg@yahoo.com.br>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "gentelella": "^1.4.0",
+    "remarkable-bootstrap-notify": "^3.1.3"
+  }
+}
