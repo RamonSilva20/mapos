@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Mapos\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,10 +13,6 @@ class Brand extends Model
      */
     protected $fillable = [
         'brand','active'
-    ];
-
-    protected $guarded = [
-        'id', 'created_at', 'updated_at'
     ];
 
 }

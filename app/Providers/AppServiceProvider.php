@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Mapos\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

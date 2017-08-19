@@ -218,7 +218,16 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
+
+          <div class="page-title">
+              <div class="title_left">
+                  <h3>&nbsp</h3>
+              </div>
+          </div>
+          <div class="clearfix"></div>
+
           @yield('content')
+
         </div>
         <!-- /page content -->
 

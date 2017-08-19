@@ -34,6 +34,9 @@ Route::group(['middleware' => 'web'], function () {
 	// Brands
 	Route::get('brands', 'BrandController@index')->name('brands');
 	Route::get('brands/list', 'BrandController@get_list')->name('brands.list');
+	Route::get('brands/create', 'BrandController@create')->name('brands.create');
+	Route::post('brands/store', 'BrandController@store')->name('brands.store');
+	Route::get('brands/destroy/{brand}', 'BrandController@destroy')->name('brands.destroy');
 
 	// Clients
 });
