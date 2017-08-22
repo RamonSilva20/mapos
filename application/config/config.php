@@ -4,7 +4,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 
-$config['app_version'] = '3.1.5'; 
+$config['app_version'] = '3.1.6'; 
 
 /*
 |--------------------------------------------------------------------------
