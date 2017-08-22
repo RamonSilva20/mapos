@@ -12,7 +12,7 @@
                         echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/vendas/editar/'.$result->idVendas.'"><i class="icon-pencil icon-white"></i> Editar</a>'; 
                     } ?>
                     
-                    <a id="imprimir" title="Imprimir" class="btn btn-mini btn-inverse" href=""><i class="icon-print icon-white"></i> Imprimir</a>
+                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url()?>/vendas/imprimir/<?php echo $result->idVendas; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -118,48 +118,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#imprimir").click(function(){         
-            PrintElem('#printOs');
-        })
-
-        function PrintElem(elem)
-        {
-            Popup($(elem).html());
-        }
-
-        function Popup(data)
-        {
-            var mywindow = window.open('', 'mydiv', 'height=600,width=800');
-            mywindow.document.open();
-            mywindow.document.onreadystatechange=function(){
-             if(this.readyState==='complete'){
-              this.onreadystatechange=function(){};
-              mywindow.focus();
-              mywindow.print();
-              mywindow.close();
-             }
-            }
-
-
-            mywindow.document.write('<html><head><title>Map Os</title>');
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap-responsive.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/matrix-style.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/matrix-media.css' />");
-
-
-            mywindow.document.write("</head><body >");
-            mywindow.document.write(data);          
-            mywindow.document.write("</body></html>");
-
-            mywindow.document.close(); // necessary for IE >= 10
-
-
-            return true;
-        }
-
-    });
-</script>
