@@ -16,12 +16,12 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
 
 ### Atualização para versão 3.*
-
-1. Remova a pasta system da instalação atual
-2. Copie os novos arquivos e substitua.
-3. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
-4. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
-5. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
+1. Faça backup do banco de dados
+2. Remova a pasta system da instalação atual
+3. Copie os novos arquivos e substitua.
+4. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
+5. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
+6. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
 
 
 ### Frameworks/Bibliotecas
