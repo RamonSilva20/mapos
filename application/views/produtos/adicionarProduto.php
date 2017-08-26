@@ -1,3 +1,34 @@
+<style>
+/* Hiding the checkbox, but allowing it to be focused */
+.badgebox
+{
+    opacity: 0;
+}
+
+.badgebox + .badge
+{
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+	width: 27px;
+}
+
+.badgebox:focus + .badge
+{
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+    
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+}
+
+.badgebox:checked + .badge
+{
+    /* Move the check mark back when checked */
+	text-indent: 0;
+}
+</style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -17,10 +48,18 @@
                         </div>
                     </div>
 
+
                     <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                        <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                            <input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />
+                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada 
+                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
+                                <span class="badge" >&check;</span>
+                            </label>
+                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída 
+                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
+                                <span class="badge" >&check;</span>
+                            </label>
                         </div>
                     </div>
 
@@ -37,6 +76,19 @@
                             <input id="precoVenda" class="money" type="text" name="precoVenda" value="<?php echo set_value('precoVenda'); ?>"  />
                         </div>
                     </div>
+
+                    <div class="control-group">
+                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                    <div class="controls">
+                        <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
+                        <select id="unidade" name="unidade">
+                            <option value="UN">Unidade</option>
+                            <option value="KG">Kilograma</option>
+                            <option value="LT">Litro</option>
+                            <option value="CX">Caixa</option>
+                        </select>
+                    </div>
+                    </div>                     
 
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>

@@ -209,6 +209,8 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `precoVenda` DECIMAL(10,2) NOT NULL,
   `estoque` INT(11) NOT NULL,
   `estoqueMinimo` INT(11) NULL DEFAULT NULL,
+  `saida`	TINYINT(1) NULL DEFAULT NULL,
+  `entrada`	TINYINT(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idProdutos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2

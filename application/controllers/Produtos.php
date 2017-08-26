@@ -89,7 +89,9 @@ class Produtos extends CI_Controller {
                 'precoCompra' => $precoCompra,
                 'precoVenda' => $precoVenda,
                 'estoque' => set_value('estoque'),
-                'estoqueMinimo' => set_value('estoqueMinimo')
+                'estoqueMinimo' => set_value('estoqueMinimo'),
+                'saida' => set_value('saida'),
+                'entrada' => set_value('entrada'),
             );
 
             if ($this->produtos_model->add('produtos', $data) == TRUE) {
@@ -131,7 +133,9 @@ class Produtos extends CI_Controller {
                 'precoCompra' => $precoCompra,
                 'precoVenda' => $precoVenda,
                 'estoque' => $this->input->post('estoque'),
-                'estoqueMinimo' => $this->input->post('estoqueMinimo')
+                'estoqueMinimo' => $this->input->post('estoqueMinimo'),
+                'saida' => set_value('saida'),
+                'entrada' => set_value('entrada'),                
             );
 
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == TRUE) {
