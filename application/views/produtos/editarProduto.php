@@ -18,12 +18,6 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="unidade" type="text" name="unidade" value="<?php echo $result->unidade; ?>"  />
-                        </div>
-                    </div>
 
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
@@ -38,6 +32,18 @@
                             <input id="precoVenda" class="money" type="text" name="precoVenda" value="<?php echo $result->precoVenda; ?>"  />
                         </div>
                     </div>
+
+                    <div class="control-group">
+                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                    <div class="controls">
+                        <select id="unidade" name="unidade">
+                            <option value="UN" <?=($result->unidade == 'UN')?'selected':''?>>Unidade</option>
+                            <option value="KG" <?=($result->unidade == 'KG')?'selected':''?>>Kilograma</option>
+                            <option value="LT" <?=($result->unidade == 'LT')?'selected':''?>>Litro</option>
+                            <option value="CX" <?=($result->unidade == 'CX')?'selected':''?>>Caixa</option>
+                        </select>                        
+                    </div>
+                    </div>                    
 
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
