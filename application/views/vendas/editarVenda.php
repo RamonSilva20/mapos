@@ -278,7 +278,7 @@ $(document).ready(function(){
      });
 
      $("#produto").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProduto",
+            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProdutoSaida",
             minLength: 2,
             select: function( event, ui ) {
 

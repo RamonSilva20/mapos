@@ -337,6 +337,15 @@ class Os extends CI_Controller {
 
     }
 
+    public function autoCompleteProdutoSaida(){
+        
+        if (isset($_GET['term'])){
+            $q = strtolower($_GET['term']);
+            $this->os_model->autoCompleteProdutoSaida($q);
+        }
+
+    }
+
     public function autoCompleteCliente(){
 
         if (isset($_GET['term'])){
