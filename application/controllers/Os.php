@@ -622,7 +622,7 @@ class Os extends CI_Controller {
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
-                'baixado' => $this->input->post('recebido'),
+                'baixado' => $this->input->post('recebido') ? : 0,
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo')

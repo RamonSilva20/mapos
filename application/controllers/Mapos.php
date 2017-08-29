@@ -153,10 +153,11 @@ class Mapos extends CI_Controller {
         $this->load->dbutil();
         $prefs = array(
                 'format'      => 'zip',
+                'foreign_key_checks' => false,
                 'filename'    => 'backup'.date('d-m-Y').'.sql'
               );
 
-        $backup =& $this->dbutil->backup($prefs);
+        $backup = $this->dbutil->backup($prefs);
 
         $this->load->helper('file');
         write_file(base_url().'backup/backup.zip', $backup);
