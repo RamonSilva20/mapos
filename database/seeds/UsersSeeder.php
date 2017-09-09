@@ -11,6 +11,18 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
+
+        DB::table('persons')->insert([
+            'id' => 1,
+            'company' => 0,
+            'name' => 'Administrador',
+            'email' => 'admin@admin.com',
+        ]);
+
+        DB::table('employees')->insert([
+            'person_id' => 1
+        ]);
+
         DB::table('permissions')->insert([
             'id' => 1,
             'permission' => 'Administrador',
@@ -23,6 +35,7 @@ class UsersSeeder extends Seeder
             'email'     => 'admin@admin.com',
             'password'  => bcrypt('123456'),
             'permission_id' => 1,
+            'person_id' => 1,
         ]); 
     }
 }
