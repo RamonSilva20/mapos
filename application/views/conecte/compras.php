@@ -68,7 +68,7 @@ if(!$results){?>
             echo '<td>'.$faturado.'</td>';
             
             echo '<td><a href="'.base_url().'index.php/mine/visualizarCompra/'.$r->idVendas.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>
-                     
+                      <a href="'.base_url().'index.php/mine/imprimirCompra/'.$r->idVendas.'" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>
                       
                   </td>';
             echo '</tr>';

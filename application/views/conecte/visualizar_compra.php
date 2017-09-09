@@ -9,7 +9,7 @@
                 <h5>Venda</h5>
                 <div class="buttons">
                     
-                    <a id="imprimir" title="Imprimir" class="btn btn-mini btn-inverse" href=""><i class="icon-print icon-white"></i> Imprimir</a>
+                    <a id="imprimir" target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/mine/imprimirCompra/<?php echo $result->idVendas; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -115,35 +115,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#imprimir").click(function(){         
-            PrintElem('#printOs');
-        })
-
-        function PrintElem(elem)
-        {
-            Popup($(elem).html());
-        }
-
-        function Popup(data)
-        {
-            var mywindow = window.open('', 'MapOs', 'height=600,width=800');
-            mywindow.document.write('<html><head><title>Map Os</title>');
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap.min.css' /><link rel='stylesheet' href='<?php echo base_url();?>assets/css/bootstrap-responsive.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url();?>assets/css/matrix-style.css' /> <link rel='stylesheet' href='<?php echo base_url();?>assets/css/matrix-media.css' />");
-
-
-            mywindow.document.write('</head><body >');
-            mywindow.document.write(data);
-            mywindow.document.write('</body></html>');
-
-            mywindow.print();
-            mywindow.close();
-
-            return true;
-        }
-
-    });
-</script>

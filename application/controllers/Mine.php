@@ -86,8 +86,8 @@ class Mine extends CI_Controller {
         }
 
         $data['menuPainel'] = 'painel';
-		$data['compras'] = $this->Conecte_model->getLastCompras($this->session->userdata('id'));
-		$data['os'] = $this->Conecte_model->getLastOs($this->session->userdata('id'));
+		$data['compras'] = $this->Conecte_model->getLastCompras($this->session->userdata('cliente_id'));
+		$data['os'] = $this->Conecte_model->getLastOs($this->session->userdata('cliente_id'));
 		$data['output'] = 'conecte/painel';
 		$this->load->view('conecte/template',$data);
 
@@ -160,7 +160,7 @@ class Mine extends CI_Controller {
         
         
         $config['base_url'] = base_url().'index.php/mine/compras/';
-        $config['total_rows'] = $this->Conecte_model->count('vendas',$this->session->userdata('id'));
+        $config['total_rows'] = $this->Conecte_model->count('vendas',$this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
@@ -183,7 +183,7 @@ class Mine extends CI_Controller {
         	
         $this->pagination->initialize($config); 	
 
-		$data['results'] = $this->Conecte_model->getCompras('vendas','*','',$config['per_page'],$this->uri->segment(3),'','',$this->session->userdata('id'));
+		$data['results'] = $this->Conecte_model->getCompras('vendas','*','',$config['per_page'],$this->uri->segment(3),'','',$this->session->userdata('cliente_id'));
        
 	    $data['output'] = 'conecte/compras';
        	$this->load->view('conecte/template',$data);
@@ -245,10 +245,39 @@ class Mine extends CI_Controller {
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
+        if($data['result']->idClientes != $this->session->userdata('cliente_id')){
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
 
-	}
+    }
+    
+    public function imprimirOs($id = null){
+        
+        if(!session_id() || !$this->session->userdata('conectado')){
+            redirect('mine');
+        }
+
+        $data['menuOs'] = 'os';
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->load->model('os_model');
+        $data['result'] = $this->os_model->getById($this->uri->segment(3));
+        $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $data['emitente'] = $this->mapos_model->getEmitente();
+
+        if($data['result']->idClientes != $this->session->userdata('cliente_id')){
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
+        $this->load->view('conecte/imprimirOs', $data);
+
+    }
 
 	public function visualizarCompra($id = null){
 		
@@ -264,8 +293,37 @@ class Mine extends CI_Controller {
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
+        if($data['result']->clientes_id != $this->session->userdata('cliente_id')){
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
+
         $data['output'] = 'conecte/visualizar_compra';
         $this->load->view('conecte/template', $data);
+    }
+    
+    public function imprimirCompra($id = null){
+		
+		if(!session_id() || !$this->session->userdata('conectado') ){
+        	redirect('mine');
+        }
+
+        $data['menuVendas'] = 'vendas';
+		$data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->load->model('vendas_model');
+        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $data['emitente'] = $this->mapos_model->getEmitente();
+
+        if($data['result']->clientes_id != $this->session->userdata('cliente_id')){
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
+
+        $this->load->view('conecte/imprimirVenda', $data);
 	}
 
 
@@ -381,6 +439,12 @@ class Mine extends CI_Controller {
             $this->data['produtos'] = $this->os_model->getProdutos($id);
             $this->data['servicos'] = $this->os_model->getServicos($id);
             $this->data['anexos'] = $this->os_model->getAnexos($id);
+
+            if($this->data['result']->idClientes != $this->session->userdata('cliente_id')){
+                $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+                redirect('mine/painel');
+            }
+            
             $this->data['output'] = 'conecte/detalhes_os';
             $this->load->view('conecte/template', $this->data);
         }

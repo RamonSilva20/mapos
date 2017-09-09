@@ -246,7 +246,7 @@ class Financeiro extends CI_Controller {
 				'valor' => $valor,
 				'data_vencimento' => $vencimento,
 				'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-				'baixado' => $this->input->post('recebido'),
+				'baixado' => $this->input->post('recebido') ? : 0,
 				'cliente_fornecedor' => set_value('cliente'),
 				'forma_pgto' => $this->input->post('formaPgto'),
 				'tipo' => set_value('tipo')
@@ -312,7 +312,7 @@ class Financeiro extends CI_Controller {
 				'valor' => $valor,
 				'data_vencimento' => $vencimento,
 				'data_pagamento' => $pagamento != null ? $pagamento : date('Y-m-d'),
-				'baixado' => $this->input->post('pago'),
+				'baixado' => $this->input->post('pago') ? : 0,
 				'cliente_fornecedor' => set_value('fornecedor'),
 				'forma_pgto' => $this->input->post('formaPgto'),
 				'tipo' => set_value('tipo')
@@ -374,7 +374,7 @@ class Financeiro extends CI_Controller {
                 'valor' => $this->input->post('valor'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
-                'baixado' => $this->input->post('pago'),
+                'baixado' => $this->input->post('pago') ? : 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo')

@@ -9,7 +9,7 @@
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     
-                    <a id="imprimir" title="Imprimir" class="btn btn-mini btn-inverse" href=""><i class="icon-print icon-white"></i> Imprimir</a>
+                <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url()?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
