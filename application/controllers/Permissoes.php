@@ -240,24 +240,25 @@ class Permissoes extends CI_Controller {
 
     }
 	
-    function excluir(){
-
+    function desativar(){
         
         $id =  $this->input->post('id');
         if ($id == null){
-
-            $this->session->set_flashdata('error','Erro ao tentar excluir serviço.');            
-            redirect(base_url().'index.php/servicos/gerenciar/');
+            $this->session->set_flashdata('error','Erro ao tentar desativar permissão.');            
+            redirect(base_url().'index.php/permissoes/gerenciar/');
         }
-
-        $this->db->where('servicos_id', $id);
-        $this->db->delete('servicos_os');
-
-        $this->servicos_model->delete('servicos','idServicos',$id);             
+        $data = array(
+          'situacao' => false
+        );
+        if($this->permissoes_model->edit('permissoes',$data,'idPermissao',$id)){
+          $this->session->set_flashdata('success','Permissão desativada com sucesso!');  
+        }
+        else{
+          $this->session->set_flashdata('error','Erro ao desativar permissão!');  
+        }         
         
-
-        $this->session->set_flashdata('success','Serviço excluido com sucesso!');            
-        redirect(base_url().'index.php/servicos/gerenciar/');
+                  
+        redirect(base_url().'index.php/permissoes/gerenciar/');
     }
 }
 
