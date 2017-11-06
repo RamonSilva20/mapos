@@ -351,7 +351,7 @@ class Vendas extends CI_Controller {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
 
-
+	        $venda_id = $this->input->post('vendas_id');
             $vencimento = $this->input->post('vencimento');
             $recebimento = $this->input->post('recebimento');
 
@@ -370,6 +370,7 @@ class Vendas extends CI_Controller {
             }
 
             $data = array(
+	            'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
                 'clientes_id' => $this->input->post('clientes_id'),
