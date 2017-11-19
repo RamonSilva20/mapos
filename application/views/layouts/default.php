@@ -38,21 +38,28 @@
                 <ul class="nav side-menu">
                     
                     <li class="<?php if(isset($menu_dashboard)){ echo 'active'; } ?>">
-                      <a href="<?php echo base_url(); ?>">
+                      <a href="<?= base_url(); ?>">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                      </a>
+                    </li>
+
+                    <li class="">
+                      <a href="<?= site_url('persons'); ?>">
+                        <i class="fa fa-user"></i> <span>Pessoas</span>
                       </a>
                     </li>
 
                     <li><a><i class="fa fa-edit"></i> Cadastros <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu" style="">
-                        <li><a href="index.html">Dashboard</a></li>
-                        <li><a href="index2.html">Dashboard2</a></li>
-                        <li><a href="index3.html">Dashboard3</a></li>
+                        <li><a href="<?= site_url('brands'); ?>">Marcas</a></li>
+                        <li><a href="index2.html">Equipamentos</a></li>
+                        <li><a href="index3.html">Veículos</a></li>
+                        <li><a href="index3.html">Serviços</a></li>
+                        <li><a href="index3.html">Produtos</a></li>
                       </ul>
                     </li>
-                    <li class="active"><a><i class="fa fa-ticket"></i> Ordens de Serviço <span class="fa fa-chevron-down"></span></a>
-                      <ul class="nav child_menu" style="display: block;">
-                        <li><a href="form.html">General Form</a></li>
+                    <li><a><i class="fa fa-ticket"></i> Ordens de Serviço <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
                         <li><a href="form_advanced.html">Advanced Components</a></li>
                         <li><a href="form_validation.html">Form Validation</a></li>
                         <li><a href="form_wizards.html">Form Wizard</a></li>
@@ -64,13 +71,7 @@
                       <ul class="nav child_menu" style="display: none;">
                         <li><a href="general_elements.html">General Elements</a></li>
                         <li><a href="media_gallery.html">Media Gallery</a></li>
-                        <li class="current-page"><a href="typography.html">Typography</a></li>
-                        <li><a href="icons.html">Icons</a></li>
-                        <li><a href="glyphicons.html">Glyphicons</a></li>
-                        <li><a href="widgets.html">Widgets</a></li>
-                        <li><a href="invoice.html">Invoice</a></li>
-                        <li><a href="inbox.html">Inbox</a></li>
-                        <li><a href="calendar.html">Calendar</a></li>
+                       
                       </ul>
                     </li>
                     <li><a><i class="fa fa-dollar"></i> Financeiro <span class="fa fa-chevron-down"></span></a>
@@ -88,10 +89,10 @@
 
                     <li><a><i class="fa fa-cogs"></i> Configurações <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu" style="">
-                        <li><a href="chartjs.html">Usuários</a></li>
-                        <li><a href="chartjs2.html">Grupos</a></li>
-                        <li><a href="morisjs.html">E-mail</a></li>
-                        <li><a href="echarts.html">Sistema</a></li>
+                        <li><a href="<?= site_url('users') ?>">Usuários</a></li>
+                        <li><a href="<?= site_url('groups') ?>">Grupos</a></li>
+                        <li><a href="<?= site_url('config/email') ?>">E-mail</a></li>
+                        <li><a href="<?= site_url('config/syste,') ?>">Sistema</a></li>
                       </ul>
                     </li>
 
