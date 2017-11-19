@@ -1,10 +1,9 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
+$config['app_name'] = 'MapOS';
 
-date_default_timezone_set('America/Sao_Paulo');
-
-
-$config['app_version'] = '3.1.11'; 
+$config['app_version'] = '4.0';
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +27,7 @@ $config['app_version'] = '3.1.11';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = 'http://westcode.dev/mapos/';
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +80,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'portuguese';
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +140,9 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = TRUE;
+
+$config['composer_autoload'] = FCPATH.'application/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -329,7 +330,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '6f;~d5df;.s.d.fwe';
+$config['encryption_key'] = 'bBfvLKfPmLROd9uVq8puTVi7qSkQaekW';
 
 /*
 |--------------------------------------------------------------------------
@@ -383,7 +384,7 @@ $config['encryption_key'] = '6f;~d5df;.s.d.fwe';
 |
 */
 $config['sess_driver'] = 'database';
-$config['sess_cookie_name'] = 'app_session';
+$config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = 'ci_sessions';
 $config['sess_match_ip'] = FALSE;
@@ -526,3 +527,22 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+/*
+|--------------------------------------------------------------------------
+| Modular Extensions - HMVC
+|--------------------------------------------------------------------------
+|
+| Modular Extensions makes the CodeIgniter PHP framework modular. 
+| Modules are groups of independent components, typically model, 
+| controller and view, arranged in an application modules sub-directory 
+| that can be dropped into other CodeIgniter applications.
+| HMVC stands for Hierarchical Model View Controller.
+| Module Controllers can be used as normal Controllers or 
+| HMVC Controllers and they can be used as widgets to help you build view partials.
+*/
+
+$config['modules_locations'] = array(
+    APPPATH.'modules/' => '../modules/',
+);
