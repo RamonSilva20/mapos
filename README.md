@@ -9,18 +9,19 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 ___
 ## Colaboradores
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+We would like to extend our thanks to the following sponsors for helping fund on-going MapOS development. If you are interested in becoming a sponsor, please contact silva018-mg@yahoo.com.br:
 
-- **[Ramon Silva](silva018-mg@yahoo.com.br)**
-- **[Daniel] (https://github.com/drelldeveloper)**
+- **[Ramon Silva](https://github.com/ramonsilva20)**
+- **[Daniel](https://github.com/drelldeveloper)**
 
 ___
 ## Contribuindo
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Thank you for considering contributing to the MapOS.
 
 1. Clone o repositório
 2. Crie um banco de dados vazio e execute o arquivo banco.sql
+3. Selecione a branch novo_mapos (git)
 4. Execute os seguinte comando
    * composer install
 5. Acesse o sistema com as credencias: admin - password
@@ -31,3 +32,10 @@ ___
 O sistema MapOS é open source licensiado sobre a [MIT license](http://opensource.org/licenses/MIT).
 
 
+___
+## Prints
+
+(https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print1.png)
+___
+
+(https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print2.png)
