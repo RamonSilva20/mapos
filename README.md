@@ -35,7 +35,7 @@ O sistema MapOS é open source licensiado sobre a [MIT license](http://opensourc
 ___
 ## Prints
 
-(https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print1.png)
+![alt text](https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print1.png)
 ___
 
-(https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print2.png)
+![alt text](https://raw.githubusercontent.com/RamonSilva20/mapos/novo_mapos/docs/prints/print2.png)
