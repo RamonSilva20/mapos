@@ -54,7 +54,7 @@
                         <li><a href="<?= site_url('brands'); ?>">Marcas</a></li>
                         <li><a href="index2.html">Equipamentos</a></li>
                         <li><a href="index3.html">Veículos</a></li>
-                        <li><a href="index3.html">Serviços</a></li>
+                        <li><a href="<?= site_url('services') ?>">Serviços</a></li>
                         <li><a href="index3.html">Produtos</a></li>
                       </ul>
                     </li>
@@ -211,19 +211,7 @@
 
                 <section class="content-header">
                     <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url() ?>"> Painel de Controle</a></li>
-                        <?php if ($this->uri->segment(1) != null) { ?>
-                            <li class="active">
-                                <a href="<?php echo base_url() . 'index.php/' . $this->uri->segment(1) ?>" title="<?php echo ucfirst($this->uri->segment(1)); ?>"><?php echo ucfirst($this->uri->segment(1)); ?></a>
-                            </li>
-                            <?php if ($this->uri->segment(2) != null) { ?>
-                                <li>
-                                    <a href="<?php echo base_url() . 'index.php/' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3); ?>" title="<?php echo ucfirst($this->uri->segment(2)); ?>">
-                                        <?php echo ucfirst($this->uri->segment(2));
-                                    } ?>
-                                </a>
-                            </li>
-                        <?php } ?>
+                        <?= get_breadcrumb(); ?>
                     </ol>
                 </section>
               </div>
@@ -248,9 +236,9 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            @Ramon Silva - <?= $this->config->item('app_name')  ?> 2013 - <?php echo date('Y') ?> - Versão: <?= $this->config->item('app_version');  ?>
+            @Ramon Silva - <?= $this->config->item('app_name')  ?> [2013 - <?php echo date('Y') ?>] - <?= $this->lang->line('app_version') ?>: <?= $this->config->item('app_version');  ?>
           </div>
-          <div class="clearfix">Tempo de Carregamento: <?php echo $this->benchmark->elapsed_time();?> segundos</div>
+          <div class="clearfix"><?= $this->lang->line('app_load_time')  ?>: <?php echo $this->benchmark->elapsed_time();?> <?= $this->lang->line('app_seconds') ?></div>
         </footer>
         <!-- /footer content -->
       </div>

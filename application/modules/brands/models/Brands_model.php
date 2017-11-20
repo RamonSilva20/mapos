@@ -9,7 +9,6 @@ class Brands_model extends MY_Model
 
     var $order_column = array(null,'id','brand_name', null, 'created_at', 'updated_at',null);
     var $timestamps = True;
-    public $protected = array('id','created_at','updated_at');
 
     function __construct()
     {

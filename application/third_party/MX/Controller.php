@@ -52,6 +52,13 @@ class MX_Controller
 		
 		/* autoload module items */
 		$this->load->_autoloader($this->autoload);
+
+		// If not logged in
+		if (!$this->ion_auth->logged_in())
+		{
+			// redirect them to the login page
+			redirect('auth/login', 'refresh');
+		}
 	}
 	
 	public function __get($class) 

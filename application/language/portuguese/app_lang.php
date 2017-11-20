@@ -10,6 +10,15 @@ $lang['app_cancel'] = 'Cancelar';
 $lang['app_back'] = 'Voltar';
 $lang['app_reload'] = 'Atualizar';
 $lang['app_details'] = 'Detalhes';
+$lang['app_load_time'] = 'Tempo de Carregamento';
+$lang['app_seconds'] = 'segundos';
+$lang['app_version'] = 'Versão';
+$lang['app_yes'] = 'Sim';
+$lang['app_no'] = 'Não';
+$lang['app_created'] = 'Criado em';
+$lang['app_updated'] = 'Atualizado em';
+$lang['app_active'] = 'Ativo';
+$lang['app_dashboard'] = 'Dashboard';
 
 
 

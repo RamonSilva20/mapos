@@ -8,6 +8,10 @@ function format_currency()
 }
 
 // convert date dd/mm/yyyy to yyyy-mm-dd
+/**
+ * @param  string
+ * @return string
+ */
 function date_to_sql($date)
 {
 
@@ -20,10 +24,14 @@ function date_to_sql($date)
 
 	}
 	
-	return false;
+	return null;
 }
 
 // Convert date yyyy-mm-dd to dd/mm/yyyy
+/**
+ * @param  string
+ * @return string
+ */
 function date_from_sql($date)
 {
 
@@ -34,6 +42,26 @@ function date_from_sql($date)
 
     }
 
-    return false;
+    return null;
+    
+}
+
+
+// Convert datetime yyyy-mm-dd H:i:s to dd/mm/yyyy H:i:s
+/**
+ * @param  string
+ * @return string
+ */
+function datetime_from_sql($date)
+{
+
+	if (preg_match("/^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/",$date))
+    {
+    	$date = date('d/m/Y H:i:s', strtotime($date));
+        return $date;
+
+    }
+
+    return null;
     
 }
