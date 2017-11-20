@@ -5,12 +5,12 @@ class Services_model extends MY_Model
 
     var $table = 'services'; 
     var $primary_key = 'id'; 
-    var $select_column = array('id','service_name','price','active','created_at','updated_at',
-	 );
+    var $select_column = array('id','service_name','price','active','created_at','updated_at');
 
-    var $order_column = array(null,  null, null, null, null, null,
-	 );
-    var $timestamps = False;
+    var $order_column = array(null,  'id', 'service_name', 'price', null, 'created_at','updated_at');
+    var $timestamps = True;
+
+    public $protected = array('id','created_at','updated_at');
 
     function __construct()
     {
@@ -24,7 +24,7 @@ class Services_model extends MY_Model
         $this->db->from($this->table);  
         if(isset($_POST["search"]["value"]))  
         {  
-            $this->db->like("id", $_POST["search"]["value"]);  
+            $this->db->like("service_name", $_POST["search"]["value"]);  
         }  
         if(isset($_POST["order"]))  
         {  
@@ -59,75 +59,6 @@ class Services_model extends MY_Model
         return $this->db->count_all_results();  
     }
 
-
-    // get all
-    /*function get_all()
-    {
-        $this->db->order_by($this->id, $this->order);
-        return $this->db->get($this->table)->result();
-    }*/
-
-    // get data by id
-    /*function get_by_id($id)
-    {
-        $this->db->where($this->id, $id);
-        return $this->db->get($this->table)->row();
-    }*/
-    
-    // get total rows
-    function total_rows($q = NULL) {
-
-        if($q){
-
-        $this->db->like('id', $q);
-	$this->db->or_like('service_name', $q);
-	$this->db->or_like('price', $q);
-	$this->db->or_like('active', $q);
-	$this->db->or_like('created_at', $q);
-	$this->db->or_like('updated_at', $q);
-	 } 
-	 
-        $this->db->from($this->table);
-        return $this->db->count_all_results();
-    }
-
-    // get data with limit and search
-    function get_limit_data($limit, $start = 0, $q = NULL) {
-        $this->db->order_by($this->primary_key, $this->order);
-
-        if($q){
-
-        $this->db->like('id', $q);
-	$this->db->or_like('service_name', $q);
-	$this->db->or_like('price', $q);
-	$this->db->or_like('active', $q);
-	$this->db->or_like('created_at', $q);
-	$this->db->or_like('updated_at', $q);
-	 } 
-	 
-        $this->db->limit($limit, $start);
-        return $this->db->get($this->table)->result();
-    }
-
-    // insert data
-    /*function insert($data)
-    {
-        $this->db->insert($this->table, $data);
-    }*/
-
-    // update data
-    /*function update($id, $data)
-    {
-        $this->db->where($this->id, $id);
-        $this->db->update($this->table, $data);
-    }*/
-
-    // delete data
-    /*function delete($id)
-    {
-        $this->db->where($this->id, $id);
-        $this->db->delete($this->table);
-    }*/
 
     function delete_many($items)
     {

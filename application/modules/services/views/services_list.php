@@ -3,8 +3,8 @@
     <header class="panel-heading">
         <div class="row">
             <div class="col-md-8 col-xs-3"> 
-                <?php echo anchor(site_url('Services/create'),'<i class="fa fa-plus"></i> '.$this->lang->line('app_create'), 'class="btn btn-success"'); ?>    
-                <button class="btn btn-info" id="reload"><i class="fa fa-refresh"></i> <?php echo $this->lang->line('app_reload') ?></button>
+                <?= anchor(site_url('services/create'),'<i class="fa fa-plus"></i> '.$this->lang->line('app_create'), 'class="btn btn-success"'); ?>    
+                <button class="btn btn-info" id="reload"><i class="fa fa-refresh"></i> <?= $this->lang->line('app_reload') ?></button>
             </div>
         </div>
     </header>
@@ -20,14 +20,14 @@
                     
                     <thead>  
                         <tr>  
-                           <th><input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp <button class="btn btn-danger btn-sm hide" id="delete" title="<?php echo $this->lang->line('app_delete') ?>"><i class="fa fa-trash"></i></button></th>
+                           <th><input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp <button class="btn btn-danger btn-sm hide" id="delete" title="<?= $this->lang->line('app_delete') ?>"><i class="fa fa-trash"></i></button></th>
                            <th>#</th>
-		                        <th>Service Name</th>
-		                        <th>Price</th>
-		                        <th>Active</th>
-		                        <th>Created At</th>
-		                        <th>Updated At</th>
-		                        <th><?php echo $this->lang->line('app_actions') ?></th>  
+		                        <th><?= $this->lang->line('service_name') ?></th>
+		                        <th><?= $this->lang->line('service_price') ?></th>
+		                        <th><?= $this->lang->line('app_active') ?></th>
+		                        <th><?= $this->lang->line('app_created') ?></th>
+		                        <th><?= $this->lang->line('app_updated') ?></th>
+		                        <th><?= $this->lang->line('app_actions') ?></th>  
                         </tr>  
                     </thead>  
 
@@ -48,30 +48,30 @@
            "serverSide":true,  
            "order":[],  
            "ajax":{  
-                url:"<?php echo site_url('services/datatable'); ?>",  
+                url:"<?= site_url('services/datatable'); ?>",  
                 type:"POST"  
            },  
            "columnDefs":[  
                 {  
-                     "targets":[0, 2, 3],  
+                     "targets":[0, 4, 7],  
                      "orderable":false,  
                 },  
            ],
            "language": {
-                "search": "<?php echo $this->lang->line('app_search'); ?>",
-                "lengthMenu": "<?php echo $this->lang->line('app_per_page'); ?>",
-                "zeroRecords": "<?php echo $this->lang->line('app_zero_records'); ?>",
-                "info": "<?php echo $this->lang->line('app_showing'); ?>",
-                "infoEmpty": "<?php echo $this->lang->line('app_empty'); ?>",
-                "infoFiltered": "<?php echo $this->lang->line('app_filtered'); ?>",
+                "search": "<?= $this->lang->line('app_search'); ?>",
+                "lengthMenu": "<?= $this->lang->line('app_per_page'); ?>",
+                "zeroRecords": "<?= $this->lang->line('app_zero_records'); ?>",
+                "info": "<?= $this->lang->line('app_showing'); ?>",
+                "infoEmpty": "<?= $this->lang->line('app_empty'); ?>",
+                "infoFiltered": "<?= $this->lang->line('app_filtered'); ?>",
                 "oPaginate": {
-                    "sNext": "<?php echo $this->lang->line('app_next'); ?>",
-                    "sPrevious": "<?php echo $this->lang->line('app_previous'); ?>",
-                    "sFirst": "<?php echo $this->lang->line('app_first'); ?>",
-                    "sLast": "<?php echo $this->lang->line('app_last'); ?>"
+                    "sNext": "<?= $this->lang->line('app_next'); ?>",
+                    "sPrevious": "<?= $this->lang->line('app_previous'); ?>",
+                    "sFirst": "<?= $this->lang->line('app_first'); ?>",
+                    "sLast": "<?= $this->lang->line('app_last'); ?>"
                 },
-                "sLoadingRecords": "<?php echo $this->lang->line('app_loading'); ?>",
-                "sProcessing": "<?php echo $this->lang->line('app_processing'); ?>",
+                "sLoadingRecords": "<?= $this->lang->line('app_loading'); ?>",
+                "sProcessing": "<?= $this->lang->line('app_processing'); ?>",
             }  
       }); 
 
@@ -117,7 +117,7 @@
         $('#delete').addClass('hide');
         datatable.ajax.reload();
 
-        $.notify({ message: '<?php echo $this->lang->line('app_list_updated'); ?>' },{ type: 'info' });
+        $.notify({ message: '<?= $this->lang->line('app_list_updated'); ?>' },{ type: 'info' });
 
       });
 
@@ -141,7 +141,7 @@
         data = $(this).serialize();
 
         $.ajax({
-          url: '<?php echo site_url('services/delete_many'); ?>',
+          url: '<?= site_url('services/delete_many'); ?>',
           type: 'POST',
           dataType: 'json',
           data: data,
@@ -156,7 +156,7 @@
           }
         })
         .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-           $.notify({ message: '<?php echo $this->lang->line('app_error'); ?>' },{ type: 'danger' });
+           $.notify({ message: '<?= $this->lang->line('app_error'); ?>' },{ type: 'danger' });
         });
       });
 
@@ -167,7 +167,7 @@
          event.preventDefault();
          var url = $(this).attr('href');
          
-         var ask = confirm('<?php echo $this->lang->line('app_sure_delete'); ?>');
+         var ask = confirm('<?= $this->lang->line('app_sure_delete'); ?>');
 
          if(ask){
 
@@ -185,7 +185,7 @@
               }
            })
            .fail(function() {
-              $.notify({ message: '<?php echo $this->lang->line('app_error'); ?>' },{ type: 'danger' });
+              $.notify({ message: '<?= $this->lang->line('app_error'); ?>' },{ type: 'danger' });
            });
            
          }

@@ -13,6 +13,7 @@ class Services extends MX_Controller
         parent::__construct();
 
         $this->load->model('Services_model');
+        $this->load->language('service');
     }
 
     
@@ -41,14 +42,14 @@ class Services extends MX_Controller
 	        $line[] = $row->id;
 	        $line[] = $row->service_name;
 	        $line[] = $row->price;
-	        $line[] = $row->active;
-	        $line[] = $row->created_at;
-	        $line[] = $row->updated_at;
+	        $line[] = $row->active ? print_label($this->lang->line('app_yes'), 'success') : print_label($this->lang->line('app_no'), 'danger');
+	        $line[] = datetime_from_sql($row->created_at);
+	        $line[] = datetime_from_sql($row->updated_at);
 	 
 
-            $line[] = '<a href="'.site_url('Services/read/'.$row->id).'" class="btn btn-default" title="'.$this->lang->line('app_view').'"><i class="fa fa-eye"></i> </a> 
-                       <a href="'.site_url('Services/update/'.$row->id).'" class="btn btn-primary" title="'.$this->lang->line('app_edit').'"><i class="fa fa-edit"></i></a> 
-                       <a href="'.site_url('Services/delete/'.$row->id).'" class="btn btn-danger delete" title="'.$this->lang->line('app_delete').'"><i class="fa fa-remove"></i></a>';  
+            $line[] = '<a href="'.site_url('services/read/'.$row->id).'" class="btn btn-default" title="'.$this->lang->line('app_view').'"><i class="fa fa-eye"></i> </a> 
+                       <a href="'.site_url('services/update/'.$row->id).'" class="btn btn-primary" title="'.$this->lang->line('app_edit').'"><i class="fa fa-edit"></i></a> 
+                       <a href="'.site_url('services/delete/'.$row->id).'" class="btn btn-danger delete" title="'.$this->lang->line('app_delete').'"><i class="fa fa-remove"></i></a>';  
             $data[] = $line;  
         }  
 
@@ -83,8 +84,8 @@ class Services extends MX_Controller
 		        'service_name' => $row->service_name,
 		        'price' => $row->price,
 		        'active' => $row->active,
-		        'created_at' => $row->created_at,
-		        'updated_at' => $row->updated_at,
+                'created_at' => $row->created_at,
+                'updated_at' => $row->updated_at,
 	        );
 
             $this->template->build('services/services_read', $data);
@@ -107,9 +108,7 @@ class Services extends MX_Controller
 	        'id' => set_value('id'),
 	        'service_name' => set_value('service_name'),
 	        'price' => set_value('price'),
-	        'active' => set_value('active'),
-	        'created_at' => set_value('created_at'),
-	        'updated_at' => set_value('updated_at'),
+	        'active' => set_value('active')
 	    );
     
         $this->template->build('services/services_form', $data);
@@ -131,9 +130,7 @@ class Services extends MX_Controller
             $data = array(
 		        'service_name' => $this->input->post('service_name',TRUE),
 		        'price' => $this->input->post('price',TRUE),
-		        'active' => $this->input->post('active',TRUE),
-		        'created_at' => $this->input->post('created_at',TRUE),
-		        'updated_at' => $this->input->post('updated_at',TRUE),
+		        'active' => $this->input->post('active',TRUE)
 	        );
 
             $this->Services_model->insert($data);
@@ -163,9 +160,7 @@ class Services extends MX_Controller
 		        'id' => set_value('id', $row->id),
 		        'service_name' => set_value('service_name', $row->service_name),
 		        'price' => set_value('price', $row->price),
-		        'active' => set_value('active', $row->active),
-		        'created_at' => set_value('created_at', $row->created_at),
-		        'updated_at' => set_value('updated_at', $row->updated_at),
+		        'active' => set_value('active', $row->active)
 	        );
             $this->template->build('services/services_form', $data);
 
@@ -190,9 +185,7 @@ class Services extends MX_Controller
             $data = array(
 		        'service_name' => $this->input->post('service_name',TRUE),
 		        'price' => $this->input->post('price',TRUE),
-		        'active' => $this->input->post('active',TRUE),
-		        'created_at' => $this->input->post('created_at',TRUE),
-		        'updated_at' => $this->input->post('updated_at',TRUE),
+		        'active' => $this->input->post('active',TRUE)
 	        );
 
             $this->Services_model->update($data, $this->input->post('id', TRUE));
@@ -280,11 +273,9 @@ class Services extends MX_Controller
 
     public function _rules() 
     {
-	    $this->form_validation->set_rules('service_name', 'service name', 'trim|required');
-	    $this->form_validation->set_rules('price', 'price', 'trim|required|numeric');
-	    $this->form_validation->set_rules('active', 'active', 'trim|required');
-	    $this->form_validation->set_rules('created_at', 'created at', 'trim|required');
-	    $this->form_validation->set_rules('updated_at', 'updated at', 'trim|required');
+	    $this->form_validation->set_rules('service_name', $this->lang->line('service_name') , 'trim|required');
+	    $this->form_validation->set_rules('price', $this->lang->line('service_price'), 'trim|required|decimal');
+	    $this->form_validation->set_rules('active', $this->lang->line('app_active'), 'trim|required');
 
 	    $this->form_validation->set_rules('id', 'id', 'trim');
 	    $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');

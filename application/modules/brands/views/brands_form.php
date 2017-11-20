@@ -19,8 +19,11 @@
     	    <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tinyint"><?= $this->lang->line('app_active');  ?></label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="text" class="form-control" name="active" id="active" placeholder="<?= $this->lang->line('app_active');  ?>" value="<?php echo $active; ?>" />
-                    <?php echo form_error('active') ?>
+                    <select class="form-control" name="active" id="active">
+                    <option value="1" <?php echo $active ? 'selected' : ''; ?> ><?= $this->lang->line('app_yes') ?></option>
+                    <option value="0" <?php echo !$active ? 'selected' : '' ?>><?= $this->lang->line('app_no') ?></option>
+                </select>
+                <?php echo form_error('active') ?>
                 </div>
             </div>
     	 
@@ -34,3 +37,4 @@
     </div>
   </div>
 </div>
+
