@@ -8,12 +8,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Schema mapos
 -- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Schema mapos
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mapos` DEFAULT CHARACTER SET utf8 ;
-USE `mapos` ;
-
 
 
 CREATE TABLE IF NOT EXISTS `ci_sessions` (
@@ -26,11 +20,11 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`groups`
+-- Table `groups`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`groups` ;
+DROP TABLE IF EXISTS `groups` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(20) NOT NULL,
   `description` VARCHAR(100) NOT NULL,
@@ -42,11 +36,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`login_attempts`
+-- Table `login_attempts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`login_attempts` ;
+DROP TABLE IF EXISTS `login_attempts` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`login_attempts` (
+CREATE TABLE IF NOT EXISTS `login_attempts` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip_address` VARCHAR(45) NOT NULL,
   `login` VARCHAR(100) NOT NULL,
@@ -58,11 +52,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`persons`
+-- Table `persons`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`persons` ;
+DROP TABLE IF EXISTS `persons` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`persons` (
+CREATE TABLE IF NOT EXISTS `persons` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `company` TINYINT(1) NOT NULL DEFAULT 0,
   `name` VARCHAR(300) NOT NULL,
@@ -86,11 +80,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`users`
+-- Table `users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`users` ;
+DROP TABLE IF EXISTS `users` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip_address` VARCHAR(45) NOT NULL,
   `username` VARCHAR(100) NULL DEFAULT NULL,
@@ -114,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `mapos`.`users` (
   INDEX `fk_users_persons1_idx` (`person_id` ASC),
   CONSTRAINT `fk_users_persons1`
     FOREIGN KEY (`person_id`)
-    REFERENCES `mapos`.`persons` (`id`)
+    REFERENCES `persons` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -123,11 +117,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`users_groups`
+-- Table `users_groups`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`users_groups` ;
+DROP TABLE IF EXISTS `users_groups` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`users_groups` (
+CREATE TABLE IF NOT EXISTS `users_groups` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) UNSIGNED NOT NULL,
   `group_id` MEDIUMINT(8) UNSIGNED NOT NULL,
@@ -137,12 +131,12 @@ CREATE TABLE IF NOT EXISTS `mapos`.`users_groups` (
   INDEX `fk_users_groups_groups1_idx` (`group_id` ASC),
   CONSTRAINT `fk_users_groups_groups1`
     FOREIGN KEY (`group_id`)
-    REFERENCES `mapos`.`groups` (`id`)
+    REFERENCES `groups` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_groups_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mapos`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -151,11 +145,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`adresses`
+-- Table `adresses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`adresses` ;
+DROP TABLE IF EXISTS `adresses` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`adresses` (
+CREATE TABLE IF NOT EXISTS `adresses` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `street` VARCHAR(350) NOT NULL,
   `number` VARCHAR(10) NOT NULL,
@@ -172,18 +166,18 @@ CREATE TABLE IF NOT EXISTS `mapos`.`adresses` (
   INDEX `fk_adresses_persons1_idx` (`person_id` ASC),
   CONSTRAINT `fk_adresses_persons1`
     FOREIGN KEY (`person_id`)
-    REFERENCES `mapos`.`persons` (`id`)
+    REFERENCES `persons` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`departments`
+-- Table `departments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`departments` ;
+DROP TABLE IF EXISTS `departments` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`departments` (
+CREATE TABLE IF NOT EXISTS `departments` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `department_name` VARCHAR(80) NOT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT 1,
@@ -194,11 +188,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`employees`
+-- Table `employees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`employees` ;
+DROP TABLE IF EXISTS `employees` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`employees` (
+CREATE TABLE IF NOT EXISTS `employees` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `salary` DECIMAL(10,2) NULL,
   `hiring_date` DATE NULL,
@@ -212,23 +206,23 @@ CREATE TABLE IF NOT EXISTS `mapos`.`employees` (
   INDEX `fk_employees_departments1_idx` (`department_id` ASC),
   CONSTRAINT `fk_employees_persons1`
     FOREIGN KEY (`person_id`)
-    REFERENCES `mapos`.`persons` (`id`)
+    REFERENCES `persons` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_employees_departments1`
     FOREIGN KEY (`department_id`)
-    REFERENCES `mapos`.`departments` (`id`)
+    REFERENCES `departments` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`brands`
+-- Table `brands`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`brands` ;
+DROP TABLE IF EXISTS `brands` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`brands` (
+CREATE TABLE IF NOT EXISTS `brands` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `brand_name` VARCHAR(100) NOT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT 1,
@@ -239,11 +233,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mapos`.`services`
+-- Table `services`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mapos`.`services` ;
+DROP TABLE IF EXISTS `services` ;
 
-CREATE TABLE IF NOT EXISTS `mapos`.`services` (
+CREATE TABLE IF NOT EXISTS `services` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `service_name` VARCHAR(300) NOT NULL,
   `price` DECIMAL(10,2) NOT NULL,
