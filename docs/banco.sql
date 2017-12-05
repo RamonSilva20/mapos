@@ -5,19 +5,17 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema mapos
 -- -----------------------------------------------------
 
-
-
-CREATE TABLE IF NOT EXISTS `ci_sessions` (
-        `id` varchar(128) NOT NULL,
-        `ip_address` varchar(45) NOT NULL,
-        `timestamp` int(10) unsigned DEFAULT 0 NOT NULL,
-        `data` blob NOT NULL,
-        KEY `ci_sessions_timestamp` (`timestamp`)
-);
-
+-- -----------------------------------------------------
+-- Schema mapos
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mapos` DEFAULT CHARACTER SET utf8 ;
+USE `mapos` ;
 
 -- -----------------------------------------------------
 -- Table `groups`
@@ -70,9 +68,10 @@ CREATE TABLE IF NOT EXISTS `persons` (
   `obs` TEXT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT 1,
   `client` TINYINT(1) NULL DEFAULT 0,
-  `provider` TINYINT(1) NULL DEFAULT 0,
+  `supplier` TINYINT(1) NULL DEFAULT 0,
+  `employee` TINYINT(1) NULL DEFAULT 0,
   `shipping_company` TINYINT(1) NULL DEFAULT 0,
-  `created_at` DATETIME NULL DEFAULT now(),
+  `created_at` DATETIME NULL,
   `updated_at` DATETIME NULL DEFAULT now(),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `cpf_cnpj_UNIQUE` (`cpf_cnpj` ASC))
@@ -182,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `department_name` VARCHAR(80) NOT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT 1,
   `created_at` DATETIME NULL DEFAULT now(),
-  `updated_at` DATETIME NULL DEFAULT now(),
+  `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -193,17 +192,17 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `employees` ;
 
 CREATE TABLE IF NOT EXISTS `employees` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `person_id` INT NOT NULL,
   `salary` DECIMAL(10,2) NULL,
   `hiring_date` DATE NULL,
   `active` TINYINT(1) NULL DEFAULT 1,
   `created_at` DATETIME NULL,
-  `update_at` DATETIME NULL,
-  `person_id` INT NOT NULL,
+  `updated_at` DATETIME NULL,
   `department_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
   INDEX `fk_employees_persons1_idx` (`person_id` ASC),
   INDEX `fk_employees_departments1_idx` (`department_id` ASC),
+  PRIMARY KEY (`person_id`),
+  UNIQUE INDEX `person_id_UNIQUE` (`person_id` ASC),
   CONSTRAINT `fk_employees_persons1`
     FOREIGN KEY (`person_id`)
     REFERENCES `persons` (`id`)
@@ -248,14 +247,102 @@ CREATE TABLE IF NOT EXISTS `services` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `categories`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `categories` ;
 
-INSERT INTO `persons` (`id`, `company`, `name`, `company_name`, `cpf_cnpj`, `rg_ie`, `phone`, `celphone`, `email`, `image`, `obs`, `active`, `client`, `provider`, `shipping_company`, `created_at`, `updated_at`) VALUES (NULL, '0', 'Administrador', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '0', '0', '0', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `category_name` VARCHAR(80) NOT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
-INSERT INTO `groups` (`id`, `name`, `description`,`permissions`) VALUES (1,'admin','Administradores','{}'),(2,'members','Técnicos','{}');
+
+-- -----------------------------------------------------
+-- Table `products`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `products` ;
+
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_name` VARCHAR(150) NOT NULL,
+  `price` DECIMAL(10,2) NOT NULL,
+  `description` TEXT NULL,
+  `weight` VARCHAR(45) NULL,
+  `unity` VARCHAR(45) NULL,
+  `min_amount` DECIMAL(10,3) NULL,
+  `category_id` INT NOT NULL,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  `supplier_id` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_products_categories1_idx` (`category_id` ASC),
+  INDEX `fk_products_persons1_idx` (`supplier_id` ASC),
+  CONSTRAINT `fk_products_categories1`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `categories` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_products_persons1`
+    FOREIGN KEY (`supplier_id`)
+    REFERENCES `persons` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `warehouses`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `warehouses` ;
+
+CREATE TABLE IF NOT EXISTS `warehouses` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `warehouse_name` VARCHAR(45) NOT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `warehouses_products`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `warehouses_products` ;
+
+CREATE TABLE IF NOT EXISTS `warehouses_products` (
+  `warehouse_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `stock` DECIMAL(10,3) NOT NULL,
+  PRIMARY KEY (`warehouse_id`, `product_id`),
+  INDEX `fk_warehouses_has_products_products1_idx` (`product_id` ASC),
+  INDEX `fk_warehouses_has_products_warehouses1_idx` (`warehouse_id` ASC),
+  CONSTRAINT `fk_warehouses_has_products_warehouses1`
+    FOREIGN KEY (`warehouse_id`)
+    REFERENCES `warehouses` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_warehouses_has_products_products1`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `products` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+INSERT INTO `persons` (`id`, `company`, `name`, `company_name`, `cpf_cnpj`, `rg_ie`, `phone`, `celphone`, `email`, `image`, `obs`, `active`, `client`, `supplier`, `employee`, `shipping_company`, `created_at`, `updated_at`) VALUES ('1', '0', 'Administrador', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '0', '0', '1', '0', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO `groups` (`id`, `name`, `description`,`permissions`) VALUES
+     (1,'admin','Administradores','{}'),
+     (2,'members','Técnicos','{}');
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`,`group_id`,`person_id`) VALUES
      ('1','127.0.0.1','admin','$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36','','admin@admin.com','',NULL,'1268889823','1268889823','1', 'Admin','istrator','ADMIN','0',1,1);
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
