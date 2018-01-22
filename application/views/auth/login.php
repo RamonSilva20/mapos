@@ -1,108 +1,74 @@
+<!DOCTYPE html>
+<html>
 <head>
-  <title><?php echo lang('login_heading') ?></title>
-  <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    background-color: rgb(20, 20, 20);
-    color: rgb(150, 150, 150);
-    font-family: sans-serif;
-    line-height: 1.4;
-  }
-  .flexbox {
-    align-content: center;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-  }
-  form {
-    background-color: rgb(25, 25, 25);
-    border-radius: 02px;
-    height: 60%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    padding: 20px;
-    width: 300px;
-  }
-  form p {
-    margin-top: 10px;
-  }
-  input {
-    background-color: rgb(30, 30, 30);
-    border: 0;
-    border-radius: 02px;
-    color: inherit;
-    font-style: italic;
-    padding: 06px;
-    width: 100%;
-  }
-  input[type='submit'] {
-    background-color: rgb(20, 255, 20);
-    color: white;
-    padding: 10px;
-  }
-  input[type='checkbox'] {
-    background: red;
-  }
-  .Message {
-    height: auto;
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    padding: 10px;
-    width: 100%;
-  }
-  .Message p {
-    display: inline;
-    background-color: rgb(225, 20, 20);
-    color: white; 
-    border-radius: 02px;
-    margin-top: 02px;
-    padding: 10px;
-  }
-  .reset-login {
-    bottom: 10%;
-  }
-  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><?php echo $this->config->item('app_name'); ?></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/login.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
 </head>
-
-<div class="flexbox message" style="top:20px"><?php echo $message;?></div>
-<?php echo form_open("auth/login");?>
-<form class="flexbox">
-  <h1><?php echo lang('login_heading');?></h1>
-  <p><?php echo lang('login_subheading');?></p>
-
-  <p>
-    <?php echo lang('login_identity_label', 'identity');?>
-    <?php echo form_input($identity);?>
-  </p>
-
-  <p>
-    <?php echo lang('login_password_label', 'password');?>
-    <?php echo form_input($password);?>
-  </p>
-
-  <p>
-    <?php echo lang('login_remember_label', 'remember');?>
-    <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
-  </p>
-
-
-  <p><?php echo form_submit('submit', lang('login_submit_btn'));?></p>
-
-  <?php echo form_close();?>
-
-  <div class="flexbox message reset-login">
-    <p style="background: rgb(30, 30, 30)">
-      <a href="forgot_password"><?php echo lang('login_forgot_password');?></a>
-    </p>  
+<body class="hold-transition login-page" style="background-image: url(<?php echo base_url(); ?>assets/img/background.jpg)">
+<div class="login-box">
+  <div class="login-logo">
+    <img src="<?php echo base_url(); ?>assets/img/logo.png" class="img-responsive">
   </div>
-</form>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <h3 class="login-box-msg"><?php echo lang('login_heading');?></h3>
+    <p class="alert alert-info"><?php echo lang('login_subheading');?></p>
+    <hr>
+
+    <form action="<?php echo site_url('auth/login') ?>" method="post">
+      <?php if($message){ ?>
+        <div id="infoMessage" class="alert alert-danger"><?php echo $message;?></div>
+      <?php } ?>
+      <div class="form-group has-feedback">
+        <?php echo form_input($identity,'',array('class' => 'form-control', 'placeholder' => lang('login_identity_label'), 'type' => 'email'));?>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <?php echo form_input($password,'',array('class' => 'form-control', 'placeholder' => lang('login_password_label') ));?>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+            <label>
+              <input type="checkbox"> <?php echo lang('login_remember_label'); ?>
+            </label>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat"><?php echo lang('login_submit_btn'); ?></button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <a href="<?php echo site_url('auth/forgot_password') ?>"><?php echo lang('login_forgot_password');?></a><br>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 2.2.3 -->
+<script src="<?php echo base_url(); ?>assets/js/jquery-2.1.4.min.js"></script>
+
+</body>
+</html>
