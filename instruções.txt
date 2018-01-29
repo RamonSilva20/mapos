@@ -1,6 +1,12 @@
 ﻿Intruções de instalação e configuração
 ---------------------------------------
 
+* Requerimento
+
+    PHP >= 5.4.0 < 7.1
+    Extensão Mcrypt
+    MySQL
+
 ---------------------------------------
 O arquivo para criação do banco de dados é o banco.sql. 
 ---------------------------------------
