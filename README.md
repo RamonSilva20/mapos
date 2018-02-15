@@ -8,7 +8,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 
 ### Instalação
 
-1. Faça o download dos arquivos
+1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
 3. Configure sua URL no arquivo `config.php` alterando a base_url. 
 4. Crie o banco de dados e execute o arquivo `banco.sql` para criar as tabelas.
@@ -16,8 +16,8 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
 
 ### Atualização para versão 3.*
-1. Faça backup do banco de dados
-2. Remova a pasta system da instalação atual
+1. Faça backup do banco de dados.
+2. Remova a pasta system da instalação atual.
 3. Copie os novos arquivos e substitua.
 4. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
 5. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
