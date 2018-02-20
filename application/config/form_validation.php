@@ -140,7 +140,7 @@ $config = array('clientes' => array(array(
                                 array(
                                     'field'=>'email',
                                     'label'=>'Email',
-                                    'rules'=>'required|trim|valid_email'
+                                    'rules'=>'required|trim|valid_email|is_unique[usuarios.email]'
                                 ),
                                 array(
                                     'field'=>'senha',
