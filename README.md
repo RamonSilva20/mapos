@@ -31,7 +31,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
 
 ### Requerimento
-* PHP >= 5.4.0 < 7.1
+* PHP >= 5.4.0 < 7.0
 * Extensão Mcrypt
 * MySQL
 
