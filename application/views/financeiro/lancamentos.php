@@ -117,7 +117,8 @@ if(!$results){?>
             <th>#</th>
             <th>Tipo</th>
             <th>Cliente / Fornecedor</th>
-            <th>Vencimento</th>
+            <th>Descrição</th>
+	    <th>Vencimento</th>
             <th>Status</th>
             <th>Valor</th>
             <th></th>
@@ -130,12 +131,14 @@ if(!$results){?>
         $saldo = 0;
         foreach ($results as $r) {
             $vencimento = date(('d/m/Y'),strtotime($r->data_vencimento));
+	    $descricao = ($r->descricao);	
             if($r->baixado == 0){$status = 'Pendente';}else{ $status = 'Pago';};
             if($r->tipo == 'receita'){ $label = 'success'; $totalReceita += $r->valor;} else{$label = 'important'; $totalDespesa += $r->valor;}
             echo '<tr>'; 
             echo '<td>'.$r->idLancamentos.'</td>';
             echo '<td><span class="label label-'.$label.'">'.ucfirst($r->tipo).'</span></td>';
             echo '<td>'.$r->cliente_fornecedor.'</td>';
+	    echo '<td>'.$descricao.'</td>';	
             echo '<td>'.$vencimento.'</td>';   
             echo '<td>'.$status.'</td>';
             echo '<td> R$ '.number_format($r->valor,2,',','.').'</td>';
