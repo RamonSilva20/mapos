@@ -117,7 +117,8 @@ if(!$results){?>
             <th>#</th>
             <th>Tipo</th>
             <th>Cliente / Fornecedor</th>
-            <th>Vencimento</th>
+            <th>Descrição</th>
+	    <th>Vencimento</th>
             <th>Status</th>
             <th>Valor</th>
             <th></th>
@@ -136,6 +137,7 @@ if(!$results){?>
             echo '<td>'.$r->idLancamentos.'</td>';
             echo '<td><span class="label label-'.$label.'">'.ucfirst($r->tipo).'</span></td>';
             echo '<td>'.$r->cliente_fornecedor.'</td>';
+	    echo '<td>'.$r->descricao.'</td>';	
             echo '<td>'.$vencimento.'</td>';   
             echo '<td>'.$status.'</td>';
             echo '<td> R$ '.number_format($r->valor,2,',','.').'</td>';
