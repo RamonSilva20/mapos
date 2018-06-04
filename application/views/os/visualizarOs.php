@@ -46,8 +46,9 @@
                                             <li>
                                                 <span><h5>Cliente</h5>
                                                 <span><?php echo $result->nomeCliente?></span><br/>
-                                                <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span><br/>
-                                                <span><?php echo $result->cidade?> - <?php echo $result->estado?></span>
+                                                <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
+                                                <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
+                                                <span>Celular: <?php echo $result->celular?></span>
                                             </li>
                                         </ul>
                                     </td>
