@@ -20,6 +20,10 @@ class Relatorios extends CI_Controller{
 
     }
 
+    public function index() {
+        header('Location: ./');
+    }
+
     public function clientes(){
 
         if(!$this->permission->checkPermission($this->session->userdata('permissao'),'rCliente')){
