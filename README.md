@@ -32,7 +32,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 
 ### Requerimento
 * PHP >= 5.4.0 < 7.0
-* Extensão Mcrypt
+* Extensão OpenSSL
 * MySQL
 
 ### Créditos
