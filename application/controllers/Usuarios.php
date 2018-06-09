@@ -81,7 +81,7 @@ class Usuarios extends CI_Controller {
         {     
 
             $this->load->library('encryption');
-            $this->encryption->initialize(array('driver' => 'mcrypt'));
+            $this->encryption->initialize(array('driver' => 'openssl'));
 
             $data = array(
                     'nome' => set_value('nome'),
@@ -160,7 +160,7 @@ class Usuarios extends CI_Controller {
             if($senha != null){
 
                 $this->load->library('encryption');
-                $this->encryption->initialize(array('driver' => 'mcrypt'));
+                $this->encryption->initialize(array('driver' => 'openssl'));
 
                 $senha = $this->encryption->encrypt($senha);
 

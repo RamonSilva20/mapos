@@ -47,7 +47,7 @@ class Mapos extends CI_Controller {
         }
 
         $this->load->library('encryption');
-        $this->encryption->initialize(array('driver' => 'mcrypt'));
+        $this->encryption->initialize(array('driver' => 'openssl'));
         
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
@@ -114,7 +114,7 @@ class Mapos extends CI_Controller {
             if($user){
 
                 $this->load->library('encryption');
-                $this->encryption->initialize(array('driver' => 'mcrypt'));
+                $this->encryption->initialize(array('driver' => 'openssl'));
                 $password_stored =  $this->encryption->decrypt($user->senha);
 
                 if($password == $password_stored){
