@@ -46,9 +46,6 @@ class Mapos extends CI_Controller {
             redirect('mapos/login');
         }
 
-        $this->load->library('encryption');
-        $this->encryption->initialize(array('driver' => 'openssl'));
-        
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
         $result = $this->mapos_model->alterarSenha($senha,$oldSenha,$this->session->userdata('id'));
@@ -112,12 +109,7 @@ class Mapos extends CI_Controller {
             $user = $this->Mapos_model->check_credentials($email);
 
             if($user){
-
-                $this->load->library('encryption');
-                $this->encryption->initialize(array('driver' => 'openssl'));
-                $password_stored =  $this->encryption->decrypt($user->senha);
-
-                if($password == $password_stored){
+                if(password_verify($password, $user->senha)){
                     $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios,'permissao' => $user->permissoes_id , 'logado' => TRUE);
                     $this->session->set_userdata($session_data);
                     $json = array('result' => true);

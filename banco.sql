@@ -491,7 +491,7 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 
 
 INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`) VALUES
-(1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '1222b5fb2b16e33b48282b7b07030fb1e6c9ee756b430d5e7053fbbd8a32c5fa96a8a2c0a023382b8cf2c0aa5f5b5daa7c7b9be428116723b409f979f4288fe1uTe5t6rPo+Wujy3u4LD0rD0JLCctKMEzSY0vGX6Fddk=', '0000-0000', '', 1, '2013-11-22', 1);
+(1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '$2y$10$1mCFKeikJwoLXaTVsfZIxOUGOtw8gQhhD24NmEBTMkxoaL2GSzlnm', '0000-0000', '', 1, '2013-11-22', 1);
 
 
 
