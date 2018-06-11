@@ -116,8 +116,7 @@ class Mapos extends CI_Controller {
                     echo json_encode($json);
                 }
                 else{
-                    $teste = password_hash($password, PASSWORD_DEFAULT);
-                    $json = array('result' => false, 'message' => 'Os dados de acesso estão incorretos.' . $teste);
+                    $json = array('result' => false, 'message' => 'Os dados de acesso estão incorretos.');
                     echo json_encode($json);
                 }
             }
