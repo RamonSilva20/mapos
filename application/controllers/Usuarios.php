@@ -78,10 +78,7 @@ class Usuarios extends CI_Controller {
              $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">'.validation_errors().'</div>' : false);
 
         } else
-        {     
-
-            $this->load->library('encryption');
-            $this->encryption->initialize(array('driver' => 'openssl'));
+        {
 
             $data = array(
                     'nome' => set_value('nome'),
@@ -93,7 +90,7 @@ class Usuarios extends CI_Controller {
 					'cidade' => set_value('cidade'),
 					'estado' => set_value('estado'),
 					'email' => set_value('email'),
-					'senha' => $this->encryption->encrypt($this->input->post('senha')),
+					'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
 					'telefone' => set_value('telefone'),
 					'celular' => set_value('celular'),
 					'situacao' => set_value('situacao'),
@@ -159,10 +156,7 @@ class Usuarios extends CI_Controller {
             $senha = $this->input->post('senha'); 
             if($senha != null){
 
-                $this->load->library('encryption');
-                $this->encryption->initialize(array('driver' => 'openssl'));
-
-                $senha = $this->encryption->encrypt($senha);
+                $senha = password_hash($senha, PASSWORD_DEFAULT);
 
                 $data = array(
                         'nome' => $this->input->post('nome'),
