@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2017, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
  * @license	http://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 3.0.0
@@ -51,7 +51,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 	/**
 	 * phpRedis instance
 	 *
-	 * @var	resource
+	 * @var	Redis
 	 */
 	protected $_redis;
 
@@ -152,6 +152,8 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			$this->_redis = $redis;
 			return $this->_success;
 		}
+
+		$this->php5_validate_id();
 
 		return $this->_fail();
 	}
@@ -310,6 +312,22 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 		return $this->_success;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Validate ID
+	 *
+	 * Checks whether a session ID record exists server-side,
+	 * to enforce session.use_strict_mode.
+	 *
+	 * @param	string	$id
+	 * @return	bool
+	 */
+	public function validateId($id)
+	{
+		return (bool) $this->_redis->exists($this->_key_prefix.$id);
+	}
+
 	// ------------------------------------------------------------------------
 
 	/**
@@ -341,7 +359,11 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 				continue;
 			}
 
-			if ( ! $this->_redis->setex($lock_key, 300, time()))
+			$result = ($ttl === -2)
+				? $this->_redis->set($lock_key, time(), array('nx', 'ex' => 300))
+				: $this->_redis->setex($lock_key, 300, time());
+
+			if ( ! $result)
 			{
 				log_message('error', 'Session: Error while trying to obtain lock for '.$this->_key_prefix.$session_id);
 				return FALSE;
