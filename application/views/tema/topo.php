@@ -18,9 +18,11 @@
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
 	<!--[if lt IE 9]>
-    <script src="https:**oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https:**oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+		<script src="https:**oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https:**oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Jquery -->
+	<script src="<?= base_url('assets/js/lib/jquery/jquery.min.js'); ?>"></script>
 </head>
 
 <body class="fix-header fix-sidebar">
@@ -80,10 +82,10 @@
 												<a href="<?= site_url('os/adicionar') ?>" class="btn btn-primary col-12">Adicionar O.S</a>
 											</li>
 											<li>
-												<a href="" class="btn btn-primary col-12">Adicionar Cliente</a>
+												<a href="<?= site_url('clientes/adicionar') ?>" class="btn btn-primary col-12">Adicionar Cliente</a>
 											</li>
 											<li>
-												<a href="" class="btn btn-primary col-12">Adicionar Produto</a>
+												<a href="<?= site_url('produtos/adicionar') ?>" class="btn btn-primary col-12">Adicionar Produto</a>
 											</li>
 
 										</ul>
@@ -411,6 +413,28 @@
 							</ul>
 						</li>
 
+						<li>
+							<a class="has-arrow  " href="#" aria-expanded="false">
+								<i class="fa fa-cogs"></i>
+								<span class="hide-menu">Configurações</span>
+							</a>
+							<ul aria-expanded="false" class="collapse">
+								<li>
+									<a href="<?= site_url('usuarios'); ?>">Usuários</a>
+								</li>
+								<li>
+									<a href="<?= site_url('mapos/emitente'); ?>">Emitente</a>
+								</li>
+								<li>
+									<a href="<?= site_url('permissoes'); ?>">Permissões</a>
+								</li>
+								<li>
+									<a href="<?= site_url('mapos/backup'); ?>">Backup</a>
+								</li>
+			
+							</ul>
+						</li>
+
 					</ul>
 				</nav>
 				<!-- End Sidebar navigation -->
@@ -444,14 +468,14 @@
 						<?php if($this->session->flashdata('error') != null){?>
 								<div class="alert alert-danger">
 								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								<?php echo $this->session->flashdata('error');?>
+								<?= $this->session->flashdata('error');?>
 							</div>
 						<?php }?>
 
 						<?php if($this->session->flashdata('success') != null){?>
 								<div class="alert alert-success">
 								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								<?php echo $this->session->flashdata('success');?>
+								<?= $this->session->flashdata('success');?>
 							</div>
 						<?php }?>
 							
@@ -465,7 +489,7 @@
 			<!-- footer -->
 			<footer class="footer text-center fixed-bottom" style="margin: 0">
 				<a href="https://github.com/RamonSilva20/mapos" target="_blank">
-					<?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva </a>
+					<?= date('Y'); ?> &copy; MAP OS - Ramon Silva </a>
 			</footer>
 
 			<!-- End footer -->
@@ -473,19 +497,18 @@
 		<!-- End Page wrapper  -->
 	</div>
 	<!-- End Wrapper -->
-	<!-- All Jquery -->
-	<script src="<?= base_url(); ?>assets/js/lib/jquery/jquery.min.js"></script>
+	
 	<!-- Bootstrap tether Core JavaScript -->
-	<script src="<?= base_url(); ?>assets/<?= base_url(); ?>assets/js/lib/bootstrap/js/popper.min.js"></script>
-	<script src="<?= base_url(); ?>assets/js/lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="<?= base_url('assets/js/lib/bootstrap/js/popper.min.js'); ?>"></script>
+	<script src="<?= base_url('assets/js/lib/bootstrap/js/bootstrap.min.js'); ?>"></script>
 	<!-- slimscrollbar scrollbar JavaScript -->
-	<script src="<?= base_url(); ?>assets/js/jquery.slimscroll.js"></script>
+	<script src="<?= base_url('assets/js/jquery.slimscroll.js'); ?>"></script>
 	<!--Menu sidebar -->
-	<script src="<?= base_url(); ?>assets/js/sidebarmenu.js"></script>
+	<script src="<?= base_url('assets/js/sidebarmenu.js'); ?>"></script>
 	<!--stickey kit -->
-	<script src="<?= base_url(); ?>assets/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+	<script src="<?= base_url('assets/js/lib/sticky-kit-master/dist/sticky-kit.min.js'); ?>"></script>
 	<!--Custom JavaScript -->
-	<script src="<?= base_url(); ?>assets/js/scripts.js"></script>
+	<script src="<?= base_url('assets/js/scripts.js'); ?>"></script>
 
 </body>
 
