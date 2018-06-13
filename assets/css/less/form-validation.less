@@ -1,0 +1,19 @@
+@import "variable.less"; // Variable.less
+
+
+.is-invalid {
+    .form-control {
+        border-color: @danger;
+    }
+}
+
+.invalid-feedback {
+  color: #ef5350;
+  display: none;
+  margin-top: 0.25rem;
+}
+
+.is-invalid .invalid-feedback,
+ .is-invalid .invalid-tooltip {
+  display: block;
+}

@@ -1,0 +1,117 @@
+@import "variable.less"; // Variable.less
+
+.tdl-holder {
+    margin: 0 auto;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        background-color: transparent;
+        // border-bottom: 1px solid @border;
+        // color: @text-light;
+        list-style: outside none none;
+        margin: 0;
+        padding: 10px 0;
+
+        span {
+            margin-left: 30px;
+            font-family: @mol;
+            vertical-align: middle;
+            -webkit-transition: all 0.2s linear;
+            -moz-transition: all 0.2s linear;
+            -o-transition: all 0.2s linear;
+            transition: all 0.2s linear;
+        }
+    }
+
+    label {
+        cursor: pointer;
+        display: block;
+        line-height: 40px;
+        padding: 0 15px;
+        position: relative;
+        margin: 0 !important;
+
+        &:hover {
+            background-color: @white-light;
+            color: @text-light;
+
+            a {
+                display: block;
+            }
+        }
+
+        a {
+            //            background-color: @background_color_1;
+            border-radius: 50%;
+            color: @text-light;
+            display: none;
+            float: right;
+            font-weight: bold;
+            line-height: normal;
+            height: 16px;
+            margin-top: 15px;
+            text-align: center;
+            text-decoration: none;
+            width: 16px;
+            -webkit-transition: all 0.2s linear;
+            -moz-transition: all 0.2s linear;
+            -o-transition: all 0.2s linear;
+            transition: all 0.2s linear;
+
+            &:hover {
+                //                background-color: @background_color_4;
+                //                color: @color_4;
+            }
+        }
+    }
+
+    input[type="checkbox"] {
+        cursor: pointer;
+        opacity: 0;
+        position: absolute;
+
+        &+i {
+            background-color: @white;
+            // border: 1px solid @border;
+            display: block;
+            height: 18px;
+            position: absolute;
+            top: 15px;
+            width: 18px;
+            z-index: 1;
+        }
+
+        &:checked {
+            &+i {
+                &::after {
+                    //                    background-color: #777;
+                    //                    border-radius: 50%;
+                    content: "\e64c";
+                    font-family: 'themify';
+                    display: block; //                    height: 8px;
+                    left: 0;
+                    position: absolute;
+                    top: -17px; //                    width: 8px;
+                    z-index: 2;
+                }
+            }
+
+            &~span {
+                // color: @text-light;
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    input[type="text"] {
+        // background-color: @white-light;
+        height: 60px;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+}
