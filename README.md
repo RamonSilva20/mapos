@@ -1,6 +1,6 @@
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1.11_ | Nova versão em desenvolvimento - Sugestões no Issue #37
+#### _Versão 4.0_ | Versão em desenvolvimento
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
@@ -15,14 +15,20 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 5. Configure os dados de acesso ao banco de dados no arquivo `database.php`.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
 
-### Atualização para versão 3.*
-1. Faça backup do banco de dados.
-2. Remova a pasta system da instalação atual.
-3. Copie os novos arquivos e substitua.
-4. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
-5. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
-6. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
-
+### Roadmap de lançamento da versão 4.0
+ - ~~Atualizar framework~~ 
+ - Atualizar o tema para Bootstrap 4
+ - Refatorar código com melhor padronização
+ - Adicionar notificações por e-mail 
+ - Adicionar Rich Text Editor nos campos do tipo TEXTAREA
+ - Adicionar desconto e parcelamento na OS e Venda
+ - Adicionar quantidade em serviços no cadastro de OS
+ - Adicionar cadastro de equipamentos e opção de vincular à OS
+ - Adicionar layout de impressão para impressora não fiscal
+ - Adicionar layout de impressão em meia folha
+ - Adicionar cadastro de status da OS
+ - Gerar guia de recebimento
+ - Adicionar tarefas à OS
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
