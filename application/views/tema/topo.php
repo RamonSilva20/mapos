@@ -1,192 +1,492 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-<title>Map OS</title>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/matrix-style.css" />
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/matrix-media.css" />
-<link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/fullcalendar.css" /> 
-
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-<script type="text/javascript"  src="<?php echo base_url();?>assets/js/jquery-1.10.2.min.js"></script>
-
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Sistema de controle de Ordens de Serviço">
+	<meta name="author" content="Ramon">
+	<!-- Favicon icon -->
+	<link rel="icon" type="<?= base_url('assets/image/png'); ?>" sizes="16x16" href="images/favicon.png">
+	<title>MapOS</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="<?= base_url('assets/css/lib/bootstrap/bootstrap.min.css'); ?>" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link href="<?= base_url('assets/css/helper.css'); ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/css/style.css'); ?>" rel="stylesheet">
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
+	<!--[if lt IE 9]>
+    <script src="https:**oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https:**oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
-<body>
 
-<!--Header-part-->
-<div id="header">
-  <h1><a href="">Map OS</a></h1>
-</div>
-<!--close-Header-part--> 
-
-<!--top-Header-menu-->
-<div id="user-nav" class="navbar navbar-inverse">
-  <ul class="nav">
-   
-    <li class=""><a title="" href="<?php echo site_url();?>/mapos/minhaConta"><i class="icon icon-star"></i> <span class="text">Minha Conta</span></a></li>
-    <li class=""><a title="" href="<?php echo site_url();?>/mine"><i class="icon icon-eye-open"></i> <span class="text">Área do Cliente</span></a></li>
-    <li class="pull-right"><a href="https://github.com/RamonSilva20/mapos" target="_blank"><i class="icon icon-asterisk"></i> <span class="text">Versão: <?php echo $this->config->item('app_version'); ?></span></a></li>
-    <li class=""><a title="" href="<?php echo site_url();?>/mapos/sair"><i class="icon icon-share-alt"></i> <span class="text">Sair do Sistema</span></a></li>
-    
-  </ul>
-
-</div>
-
-<!--start-top-serch-->
-<div id="search">
-  <form action="<?php echo base_url()?>index.php/mapos/pesquisar">
-    <input type="text" name="termo" placeholder="Pesquisar..."/>
-    <button type="submit"  class="tip-bottom" title="Pesquisar"><i class="icon-search icon-white"></i></button>
-    
-  </form>
-</div>
-<!--close-top-serch--> 
-
-<!--sidebar-menu-->
-
-<div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-list"></i> Menu</a>
-  <ul>
-
-
-    <li class="<?php if(isset($menuPainel)){echo 'active';};?>"><a href="<?php echo base_url()?>"><i class="icon icon-home"></i> <span>Dashboard</span></a></li>
-    
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){ ?>
-        <li class="<?php if(isset($menuClientes)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/clientes"><i class="icon icon-group"></i> <span>Clientes</span></a></li>
-    <?php } ?>
-    
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){ ?>
-        <li class="<?php if(isset($menuProdutos)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/produtos"><i class="icon icon-barcode"></i> <span>Produtos</span></a></li>
-    <?php } ?>
-    
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vServico')){ ?>
-        <li class="<?php if(isset($menuServicos)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/servicos"><i class="icon icon-wrench"></i> <span>Serviços</span></a></li>
-    <?php } ?>
-
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){ ?>
-        <li class="<?php if(isset($menuOs)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/os"><i class="icon icon-tags"></i> <span>Ordens de Serviço</span></a></li>
-    <?php } ?>
-
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vVenda')){ ?>
-        <li class="<?php if(isset($menuVendas)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/vendas"><i class="icon icon-shopping-cart"></i> <span>Vendas</span></a></li>
-    <?php } ?>
-    
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vArquivo')){ ?>
-        <li class="<?php if(isset($menuArquivos)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/arquivos"><i class="icon icon-hdd"></i> <span>Arquivos</span></a></li>
-    <?php } ?>
-
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'vLancamento')){ ?>
-        <li class="submenu <?php if(isset($menuFinanceiro)){echo 'active open';};?>">
-          <a href="#"><i class="icon icon-money"></i> <span>Financeiro</span> <span class="label"><i class="icon-chevron-down"></i></span></a>
-          <ul>
-            <li><a href="<?php echo base_url()?>index.php/financeiro/lancamentos">Lançamentos</a></li>
-          </ul>
-        </li>
-    <?php } ?>
-
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'),'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'),'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'),'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'),'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'),'rVenda')){ ?>
-        
-        <li class="submenu <?php if(isset($menuRelatorios)){echo 'active open';};?>" >
-          <a href="#"><i class="icon icon-list-alt"></i> <span>Relatórios</span> <span class="label"><i class="icon-chevron-down"></i></span></a>
-          <ul>
-
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rCliente')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/relatorios/clientes">Clientes</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rProduto')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/relatorios/produtos">Produtos</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rServico')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/relatorios/servicos">Serviços</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rOs')){ ?>
-                 <li><a href="<?php echo base_url()?>index.php/relatorios/os">Ordens de Serviço</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rVenda')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/relatorios/vendas">Vendas</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'rFinanceiro')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/relatorios/financeiro">Financeiro</a></li>
-            <?php } ?>
-            
-          </ul>
-        </li>
-
-    <?php } ?>
-
-    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'cUsuario')  || $this->permission->checkPermission($this->session->userdata('permissao'),'cEmitente') || $this->permission->checkPermission($this->session->userdata('permissao'),'cPermissao') || $this->permission->checkPermission($this->session->userdata('permissao'),'cBackup')){ ?>
-        <li class="submenu <?php if(isset($menuConfiguracoes)){echo 'active open';};?>">
-          <a href="#"><i class="icon icon-cog"></i> <span>Configurações</span> <span class="label"><i class="icon-chevron-down"></i></span></a>
-          <ul>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'cUsuario')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/usuarios">Usuários</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'cEmitente')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/mapos/emitente">Emitente</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'cPermissao')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/permissoes">Permissões</a></li>
-            <?php } ?>
-            <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'cBackup')){ ?>
-                <li><a href="<?php echo base_url()?>index.php/mapos/backup">Backup</a></li>
-            <?php } ?>
- 
-          </ul>
-        </li>
-    <?php } ?>
-    
-    
-  </ul>
-</div>
-<div id="content">
-  <div id="content-header">
-    <div id="breadcrumb"> <a href="<?php echo base_url()?>" title="Dashboard" class="tip-bottom"><i class="icon-home"></i> Dashboard</a> <?php if($this->uri->segment(1) != null){?><a href="<?php echo base_url().'index.php/'.$this->uri->segment(1)?>" class="tip-bottom" title="<?php echo ucfirst($this->uri->segment(1));?>"><?php echo ucfirst($this->uri->segment(1));?></a> <?php if($this->uri->segment(2) != null){?><a href="<?php echo base_url().'index.php/'.$this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3) ?>" class="current tip-bottom" title="<?php echo ucfirst($this->uri->segment(2)); ?>"><?php echo ucfirst($this->uri->segment(2));} ?></a> <?php }?></div>
-  </div>
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="span12">
-          <?php if($this->session->flashdata('error') != null){?>
-                            <div class="alert alert-danger">
-                              <button type="button" class="close" data-dismiss="alert">&times;</button>
-                              <?php echo $this->session->flashdata('error');?>
-                           </div>
-                      <?php }?>
-
-                      <?php if($this->session->flashdata('success') != null){?>
-                            <div class="alert alert-success">
-                              <button type="button" class="close" data-dismiss="alert">&times;</button>
-                              <?php echo $this->session->flashdata('success');?>
-                           </div>
-                      <?php }?>
-                          
-                      <?php if(isset($view)){echo $this->load->view($view, null, true);}?>
+<body class="fix-header fix-sidebar">
+	<!-- Preloader - style you can find in spinners.css -->
+	<div class="preloader">
+		<svg class="circular" viewBox="25 25 50 50">
+			<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+	</div>
+	<!-- Main wrapper  -->
+	<div id="main-wrapper">
+		<!-- header header  -->
+		<div class="header">
+			<nav class="navbar top-navbar navbar-expand-md navbar-light">
+				<!-- Logo -->
+				<div class="navbar-header">
+					<a class="navbar-brand" href="<?= base_url() ?> ">
+						<!-- Logo icon -->
+						<b>
+							<img style="max-height: 24px;" src="<?= base_url('assets/images/logo.png'); ?>" class="dark-logo img-responsive" />
+						</b>
+						<!--End Logo icon -->
+						<!-- Logo text -->
+						<span>
+							<img style="max-height: 24px; max-width: 120px" src="<?= base_url('assets/images/logo-text.png'); ?>" alt="MapOS" class="dark-logo img-responsive"
+							/>
+						</span>
+					</a>
+				</div>
+				<!-- End Logo -->
+				<div class="navbar-collapse">
+					<!-- toggle and nav items -->
+					<ul class="navbar-nav mr-auto mt-md-0">
+						<!-- This is  -->
+						<li class="nav-item">
+							<a class="nav-link nav-toggler hidden-md-up text-muted  " href="javascript:void(0)">
+								<i class="mdi mdi-menu"></i>
+							</a>
+						</li>
+						<li class="nav-item m-l-10">
+							<a class="nav-link sidebartoggler hidden-sm-down text-muted  " href="javascript:void(0)">
+								<i class="ti-menu"></i>
+							</a>
+						</li>
+						<!-- Messages -->
+						<li class="nav-item dropdown mega-dropdown">
+							<a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-th-large"></i>
+							</a>
+							<div class="dropdown-menu animated zoomIn">
+								<ul class="mega-dropdown-menu row">
 
 
-      </div>
-    </div>
-  </div>
-</div>
-<!--Footer-part-->
-<div class="row-fluid">
-  <div id="footer" class="span12"> <a href="https://github.com/RamonSilva20/mapos" target="_blank"><?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva </a></div>
-</div>
-<!--end-Footer-part-->
+									<li class="col-lg-2 m-b-30">
+										<h4 class="m-b-20">ACESSO RÁPIDO</h4>
+										<ul>
+											<li>
+												<a href="<?= site_url('os/adicionar') ?>" class="btn btn-primary col-12">Adicionar O.S</a>
+											</li>
+											<li>
+												<a href="" class="btn btn-primary col-12">Adicionar Cliente</a>
+											</li>
+											<li>
+												<a href="" class="btn btn-primary col-12">Adicionar Produto</a>
+											</li>
 
+										</ul>
+									</li>
+									<li class="col-lg-3 col-xlg-3 m-b-30">
+										<h4 class="m-b-20">Ordens de Serviço</h4>
 
-<script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script> 
-<script src="<?php echo base_url();?>assets/js/matrix.js"></script> 
+										<form>
+											<div class="form-group">
+												<input type="text" class="form-control" id="" placeholder="Digite o nome do cliente ou o protocolo"> </div>
+											<button type="submit" class="btn btn-info">Pesquisar O.S.</button>
+										</form>
 
+									</li>
+									<li class="col-lg-3 col-xlg-3 m-b-30">
+										<h4 class="m-b-20">Clientes</h4>
+
+										<form>
+											<div class="form-group">
+												<input type="text" class="form-control" id="" placeholder="Digite o nome"> </div>
+											<button type="submit" class="btn btn-info">Pesquisar Cliente</button>
+										</form>
+									</li>
+									<li class="col-lg-3 col-xlg-3 m-b-30">
+										<h4 class="m-b-20">Produtos</h4>
+
+										<form>
+											<div class="form-group">
+												<input type="text" class="form-control" id="" placeholder="Digite o nome do produto"> </div>
+											<button type="submit" class="btn btn-info">Pesquisar Produto</button>
+										</form>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<!-- End Messages -->
+					</ul>
+					<!-- User profile and search -->
+					<ul class="navbar-nav my-lg-0">
+
+						<!-- Search -->
+						<li class="nav-item hidden-sm-down search-box">
+							<a class="nav-link hidden-sm-down text-muted  " href="javascript:void(0)">
+								<i class="ti-search"></i>
+							</a>
+							<form class="app-search">
+								<input type="text" class="form-control" placeholder="Search here">
+								<a class="srh-btn">
+									<i class="ti-close"></i>
+								</a>
+							</form>
+						</li>
+						<!-- Comment -->
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-muted text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-bell"></i>
+								<div class="notify">
+									<span class="heartbit"></span>
+									<span class="point"></span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn">
+								<ul>
+									<li>
+										<div class="drop-title">Notifications</div>
+									</li>
+									<li>
+										<div class="message-center">
+											<!-- Message -->
+											<a href="#">
+												<div class="btn btn-danger btn-circle m-r-10">
+													<i class="fa fa-link"></i>
+												</div>
+												<div class="mail-contnet">
+													<h5>This is title</h5>
+													<span class="mail-desc">Just see the my new admin!</span>
+													<span class="time">9:30 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="btn btn-success btn-circle m-r-10">
+													<i class="ti-calendar"></i>
+												</div>
+												<div class="mail-contnet">
+													<h5>This is another title</h5>
+													<span class="mail-desc">Just a reminder that you have event</span>
+													<span class="time">9:10 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="btn btn-info btn-circle m-r-10">
+													<i class="ti-settings"></i>
+												</div>
+												<div class="mail-contnet">
+													<h5>This is title</h5>
+													<span class="mail-desc">You can customize this template as you want</span>
+													<span class="time">9:08 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="btn btn-primary btn-circle m-r-10">
+													<i class="ti-user"></i>
+												</div>
+												<div class="mail-contnet">
+													<h5>This is another title</h5>
+													<span class="mail-desc">Just see the my admin!</span>
+													<span class="time">9:02 AM</span>
+												</div>
+											</a>
+										</div>
+									</li>
+									<li>
+										<a class="nav-link text-center" href="javascript:void(0);">
+											<strong>Check all notifications</strong>
+											<i class="fa fa-angle-right"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<!-- End Comment -->
+						<!-- Messages -->
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-muted  " href="#" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-envelope"></i>
+								<div class="notify">
+									<span class="heartbit"></span>
+									<span class="point"></span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn" aria-labelledby="2">
+								<ul>
+									<li>
+										<div class="drop-title">You have 4 new messages</div>
+									</li>
+									<li>
+										<div class="message-center">
+											<!-- Message -->
+											<a href="#">
+												<div class="user-img">
+													<img src="images/users/5.jpg" alt="user" class="img-circle">
+													<span class="profile-status online pull-right"></span>
+												</div>
+												<div class="mail-contnet">
+													<h5>Michael Qin</h5>
+													<span class="mail-desc">Just see the my admin!</span>
+													<span class="time">9:30 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="user-img">
+													<img src="images/users/2.jpg" alt="user" class="img-circle">
+													<span class="profile-status busy pull-right"></span>
+												</div>
+												<div class="mail-contnet">
+													<h5>John Doe</h5>
+													<span class="mail-desc">I've sung a song! See you at</span>
+													<span class="time">9:10 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="user-img">
+													<img src="images/users/3.jpg" alt="user" class="img-circle">
+													<span class="profile-status away pull-right"></span>
+												</div>
+												<div class="mail-contnet">
+													<h5>Mr. John</h5>
+													<span class="mail-desc">I am a singer!</span>
+													<span class="time">9:08 AM</span>
+												</div>
+											</a>
+											<!-- Message -->
+											<a href="#">
+												<div class="user-img">
+													<img src="images/users/4.jpg" alt="user" class="img-circle">
+													<span class="profile-status offline pull-right"></span>
+												</div>
+												<div class="mail-contnet">
+													<h5>Michael Qin</h5>
+													<span class="mail-desc">Just see the my admin!</span>
+													<span class="time">9:02 AM</span>
+												</div>
+											</a>
+										</div>
+									</li>
+									<li>
+										<a class="nav-link text-center" href="javascript:void(0);">
+											<strong>See all e-Mails</strong>
+											<i class="fa fa-angle-right"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<!-- End Messages -->
+						<!-- Profile -->
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<img src="images/users/5.jpg" alt="user" class="profile-pic" />
+							</a>
+							<div class="dropdown-menu dropdown-menu-right animated zoomIn">
+								<ul class="dropdown-user">
+									<li>
+										<a href="#">
+											<i class="ti-user"></i> Profile</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="ti-wallet"></i> Balance</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="ti-email"></i> Inbox</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="ti-settings"></i> Setting</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-power-off"></i> Logout</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<!-- End header header -->
+		<!-- Left Sidebar  -->
+		<div class="left-sidebar">
+			<!-- Sidebar scroll-->
+			<div class="scroll-sidebar">
+				<!-- Sidebar navigation-->
+				<nav class="sidebar-nav">
+					<ul id="sidebarnav">
+						<li class="nav-devider"></li>
+
+						<li class="nav-label">Menu</li>
+
+						<li>
+							<a href="<?= site_url() ?>" aria-expanded="false">
+								<i class="fa fa-dashboard"></i>
+								<span class="hide-menu">Painel</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('clientes') ?>" aria-expanded="false">
+								<i class="fa fa-users"></i>
+								<span class="hide-menu">Clientes</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('produtos') ?>" aria-expanded="false">
+								<i class="fa fa-barcode"></i>
+								<span class="hide-menu">Produtos</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('servicos') ?>" aria-expanded="false">
+								<i class="fa fa-wrench"></i>
+								<span class="hide-menu">Serviços</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('os') ?>" aria-expanded="false">
+								<i class="fa fa-tags"></i>
+								<span class="hide-menu">Ordens de Serviço</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('vendas') ?>" aria-expanded="false">
+								<i class="fa fa-shopping-cart"></i>
+								<span class="hide-menu">Vendas</span>
+							</a>
+						</li>
+						<li>
+							<a href="<?= site_url('arquivos') ?>" aria-expanded="false">
+								<i class="fa fa-file"></i>
+								<span class="hide-menu">Arquivos</span>
+							</a>
+						</li>
+
+						<li>
+							<a class="has-arrow  " href="#" aria-expanded="false">
+								<i class="fa fa-money"></i>
+								<span class="hide-menu">Financeiro</span>
+							</a>
+							<ul aria-expanded="false" class="collapse">
+								<li>
+									<a href="<?= site_url('financeiro/lancamentos'); ?>">Lançamentos</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a class="has-arrow  " href="#" aria-expanded="false">
+								<i class="fa fa-bar-chart"></i>
+								<span class="hide-menu">Relatórios</span>
+							</a>
+							<ul aria-expanded="false" class="collapse">
+								<li>
+									<a href="<?= site_url('relatorios/clientes'); ?>">Clientes</a>
+								</li>
+								<li>
+									<a href="<?= site_url('relatorios/produtos'); ?>">Produtos</a>
+								</li>
+								<li>
+									<a href="<?= site_url('relatorios/servicos'); ?>">Serviços</a>
+								</li>
+								<li>
+									<a href="<?= site_url('relatorios/os'); ?>">Ordens de Serviço</a>
+								</li>
+								<li>
+									<a href="<?= site_url('relatorios/vendas'); ?>">Vendas</a>
+								</li>
+								<li>
+									<a href="<?= site_url('relatorios/financeiro'); ?>">Financeiro</a>
+								</li>
+							</ul>
+						</li>
+
+					</ul>
+				</nav>
+				<!-- End Sidebar navigation -->
+			</div>
+			<!-- End Sidebar scroll-->
+		</div>
+		<!-- End Left Sidebar  -->
+		<!-- Page wrapper  -->
+		<div class="page-wrapper">
+			<!-- Bread crumb -->
+			<div class="row page-titles">
+				<div class="col-md-5 align-self-center">
+					<h3 class="text-primary">Dashboard</h3>
+				</div>
+				<div class="col-md-7 align-self-center">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a href="javascript:void(0)">Home</a>
+						</li>
+						<li class="breadcrumb-item active">Dashboard</li>
+					</ol>
+				</div>
+			</div>
+			<!-- End Bread crumb -->
+			<!-- Container fluid  -->
+			<div class="container-fluid">
+				<!-- Start Page Content -->
+				<div class="row">
+					<div class="col-12">
+
+						<?php if($this->session->flashdata('error') != null){?>
+								<div class="alert alert-danger">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<?php echo $this->session->flashdata('error');?>
+							</div>
+						<?php }?>
+
+						<?php if($this->session->flashdata('success') != null){?>
+								<div class="alert alert-success">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<?php echo $this->session->flashdata('success');?>
+							</div>
+						<?php }?>
+							
+						<?php if(isset($view)){echo $this->load->view($view, null, true);}?>
+
+					</div>
+				</div>
+				<!-- End PAge Content -->
+			</div>
+			<!-- End Container fluid  -->
+			<!-- footer -->
+			<footer class="footer text-center fixed-bottom" style="margin: 0">
+				<a href="https://github.com/RamonSilva20/mapos" target="_blank">
+					<?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva </a>
+			</footer>
+
+			<!-- End footer -->
+		</div>
+		<!-- End Page wrapper  -->
+	</div>
+	<!-- End Wrapper -->
+	<!-- All Jquery -->
+	<script src="<?= base_url(); ?>assets/js/lib/jquery/jquery.min.js"></script>
+	<!-- Bootstrap tether Core JavaScript -->
+	<script src="<?= base_url(); ?>assets/<?= base_url(); ?>assets/js/lib/bootstrap/js/popper.min.js"></script>
+	<script src="<?= base_url(); ?>assets/js/lib/bootstrap/js/bootstrap.min.js"></script>
+	<!-- slimscrollbar scrollbar JavaScript -->
+	<script src="<?= base_url(); ?>assets/js/jquery.slimscroll.js"></script>
+	<!--Menu sidebar -->
+	<script src="<?= base_url(); ?>assets/js/sidebarmenu.js"></script>
+	<!--stickey kit -->
+	<script src="<?= base_url(); ?>assets/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+	<!--Custom JavaScript -->
+	<script src="<?= base_url(); ?>assets/js/scripts.js"></script>
 
 </body>
+
 </html>
-
-
-
-
-
-
-
