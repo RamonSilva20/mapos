@@ -8,8 +8,8 @@
 	<meta name="description" content="Sistema de controle de Ordens de Serviço">
 	<meta name="author" content="Ramon">
 	<!-- Favicon icon -->
-	<link rel="icon" type="<?= base_url('assets/image/png'); ?>" sizes="16x16" href="images/favicon.png">
-	<title>MapOS</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/images/favicon.png'); ?>">
+	<title>MAPOS</title>
 	<!-- Bootstrap Core CSS -->
 	<link href="<?= base_url('assets/css/lib/bootstrap/bootstrap.min.css'); ?>" rel="stylesheet">
 	<!-- Custom CSS -->
