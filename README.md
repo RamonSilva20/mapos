@@ -1,6 +1,6 @@
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1.11_ | Nova versão em desenvolvimento - Sugestões no Issue #37
+#### _Versão 3.1.11_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
@@ -30,9 +30,17 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * [jquery/jquery](https://github.com/jquery/jquery) 
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
 
-### Requerimento
+### Requerimentos
 * PHP >= 5.4.0
 * MySQL
 
-### Créditos
-* Ramon Silva - silva018-mg@yahoo.com.br
+### Contribuidores
+* [Ramon Silva](https://github.com/RamonSilva20) - Criador
+* [Gianluca Bine](https://github.com/Pr3d4dor)
+* [Henrique Miranda](https://github.com/Henrique-Miranda)
+* [Mário Lucas](https://github.com/mariolucasdev)
+* [Helan Allysson](https://github.com/HelanAllysson)
+* [KansasMyers](https://github.com/KansasMyers)
+* [drelldeveloper](https://github.com/drelldeveloper) 
+* [Samuel Fontebasso](https://github.com/fontebasso)
+* [marllonferreira](https://github.com/marllonferreira)
