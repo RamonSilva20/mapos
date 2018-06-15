@@ -29,7 +29,7 @@ class Mapos extends CI_Controller {
       
     }
 
-    public function minhaConta() {
+    public function conta() {
         if( (!session_id()) || (!$this->session->userdata('logado'))){
             redirect('mapos/login');
         }

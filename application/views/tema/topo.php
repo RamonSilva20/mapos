@@ -15,6 +15,7 @@
 	<!-- Custom CSS -->
 	<link href="<?= base_url('assets/css/helper.css'); ?>" rel="stylesheet">
 	<link href="<?= base_url('assets/css/style.css'); ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/css/lib/toastr/toastr.min.css'); ?>" rel="stylesheet">
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
 	<!--[if lt IE 9]>
@@ -23,6 +24,7 @@
 	<![endif]-->
 	<!-- Jquery -->
 	<script src="<?= base_url('assets/js/lib/jquery/jquery.min.js'); ?>"></script>
+	<script src="<?= base_url('assets/js/lib/toastr/toastr.min.js'); ?>"></script>
 </head>
 
 <body class="fix-header fix-sidebar">
@@ -131,12 +133,19 @@
 							<a class="nav-link hidden-sm-down text-muted  " href="javascript:void(0)">
 								<i class="ti-search"></i>
 							</a>
-							<form class="app-search">
-								<input type="text" class="form-control" placeholder="Search here">
+							<form class="app-search" action="<?= site_url('mapos/pesquisar'); ?>" method="GET" >
+								<input type="text" name="termo" class="form-control" placeholder="Pesquise aqui">
 								<a class="srh-btn">
 									<i class="ti-close"></i>
 								</a>
 							</form>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-muted" href="<?= site_url('mine') ?>" target="_blank" id="2" aria-expanded="false">
+								<i class="fa fa-user"></i>
+								Área do Cliente
+							</a>
 						</li>
 						<!-- Comment -->
 						<li class="nav-item dropdown">
@@ -289,13 +298,13 @@
 						<!-- Profile -->
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<img src="images/users/5.jpg" alt="user" class="profile-pic" />
+								<img src="<?= base_url('assets/images/user.png'); ?>" alt="user" class="profile-pic" />
 							</a>
 							<div class="dropdown-menu dropdown-menu-right animated zoomIn">
 								<ul class="dropdown-user">
 									<li>
-										<a href="#">
-											<i class="ti-user"></i> Profile</a>
+										<a href="<?= site_url('mapos/conta'); ?>">
+											<i class="ti-user"></i> Perfil</a>
 									</li>
 									<li>
 										<a href="#">
@@ -310,8 +319,8 @@
 											<i class="ti-settings"></i> Setting</a>
 									</li>
 									<li>
-										<a href="#">
-											<i class="fa fa-power-off"></i> Logout</a>
+										<a href="<?= site_url('mapos/sair'); ?>">
+											<i class="fa fa-power-off"></i> Sair do Sistema</a>
 									</li>
 								</ul>
 							</div>
@@ -353,7 +362,7 @@
 						<li>
 							<a href="<?= site_url('servicos') ?>" aria-expanded="false">
 								<i class="fa fa-wrench"></i>
-								<span class="hide-menu">Serviços</span>
+								<span class="hide-menu"><?= ucfirst($this->lang->line('services')) ?></span>
 							</a>
 						</li>
 						<li>
@@ -399,7 +408,7 @@
 									<a href="<?= site_url('relatorios/produtos'); ?>">Produtos</a>
 								</li>
 								<li>
-									<a href="<?= site_url('relatorios/servicos'); ?>">Serviços</a>
+									<a href="<?= site_url('relatorios/servicos'); ?>"><?= ucfirst($this->lang->line('services')) ?></a>
 								</li>
 								<li>
 									<a href="<?= site_url('relatorios/os'); ?>">Ordens de Serviço</a>
@@ -463,24 +472,8 @@
 			<div class="container-fluid">
 				<!-- Start Page Content -->
 				<div class="row">
-					<div class="col-12">
-
-						<?php if($this->session->flashdata('error') != null){?>
-								<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								<?= $this->session->flashdata('error');?>
-							</div>
-						<?php }?>
-
-						<?php if($this->session->flashdata('success') != null){?>
-								<div class="alert alert-success">
-								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								<?= $this->session->flashdata('success');?>
-							</div>
-						<?php }?>
-							
+					<div class="col-12">					
 						<?php if(isset($view)){echo $this->load->view($view, null, true);}?>
-
 					</div>
 				</div>
 				<!-- End PAge Content -->
@@ -509,6 +502,38 @@
 	<script src="<?= base_url('assets/js/lib/sticky-kit-master/dist/sticky-kit.min.js'); ?>"></script>
 	<!--Custom JavaScript -->
 	<script src="<?= base_url('assets/js/scripts.js'); ?>"></script>
+
+	<script type="text/javascript">  
+		$(document).ready(function () {
+			
+			<?php if($this->session->flashdata('success') != null){?>
+		
+				toastr.success('<?= $this->session->flashdata('success');?>','Atenção',{
+					timeOut: 8000,
+					"closeButton": true,
+					"newestOnTop": true,
+					"progressBar": true,
+					"positionClass": "toast-top-right",
+					"onclick": null,
+				});
+
+			<?php }?>
+
+			<?php if($this->session->flashdata('error') != null){?>
+		
+				toastr.error('<?= $this->session->flashdata('error');?>','Atenção',{
+					timeOut: 8000,
+					"closeButton": true,
+					"newestOnTop": true,
+					"progressBar": true,
+					"positionClass": "toast-top-right",
+					"onclick": null,
+				});
+
+			<?php }?>
+
+		});  
+	</script>
 
 </body>
 

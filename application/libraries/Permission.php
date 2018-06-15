@@ -30,6 +30,11 @@ class Permission{
 
     }
 
+    // Aliasname 
+    public function check($idPermissao, $atividade){
+        return $this->checkPermission($idPermissao, $atividade);
+    }
+
     public function checkPermission($idPermissao = null,$atividade = null){
         if($idPermissao == null || $atividade == null){
             return false;
@@ -43,22 +48,17 @@ class Permission{
         }
 
         if(is_array($this->Permission[0])){
-
         
             if(array_key_exists($atividade, $this->Permission[0])){
                 // compara a atividade requisitada com a permissão.
                 if ($this->Permission[0][$atividade] == 1) {
                     return true;
                 } 
-                return false;
-
             }
-            return false;
         }
         return false;
-
-
     }
+
     private function loadPermission($id = null){
 
         if($id != null){
@@ -74,7 +74,6 @@ class Permission{
                 $this->Permission = array($array);
                 return true;
             }
-            return false;
             
         }
         return false;

@@ -228,7 +228,7 @@
                                             echo '<td>'.$o->nomeCliente.'</td>';
                                             echo '<td>';
                                             if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                                                echo '<a href="'.base_url().'index.php/os/visualizar/'.$o->idOs.'" class="btn"> <i class="icon-eye-open" ></i> </a> '; 
+                                                echo '<a href="'.site_url('os/visualizar/').$o->idOs.'" class="btn btn-dark"> <i class="fa fa-eye" ></i> </a> '; 
                                             }
                                             echo '</td>';
                                             echo '</tr>';

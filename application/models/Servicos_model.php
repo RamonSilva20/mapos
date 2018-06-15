@@ -1,74 +1,98 @@
-<?php
-class Servicos_model extends CI_Model {
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+class Servicos_model extends MY_Model {
 
-    /**
-     * author: Ramon Silva 
-     * email: silva018-mg@yahoo.com.br
-     * 
-     */
-    
-    function __construct() {
+    var $table = 'servicos'; 
+    var $primary_key = 'idServicos'; 
+    var $select_column = array('idServicos','nome','descricao','preco');
+
+    var $order_column = array(null,'idServicos','nome','descricao','preco');
+    var $timestamps = False;
+
+    public function __construct() {
         parent::__construct();
     }
 
-    
-    function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
-        
-        $this->db->select($fields);
-        $this->db->from($table);
-        $this->db->order_by('idServicos','desc');
-        $this->db->limit($perpage,$start);
-        if($where){
-            $this->db->where($where);
-        }
-        
-        $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
-        return $result;
-    }
+    public function get_query() {  
 
-    function getById($id){
-        $this->db->where('idServicos',$id);
-        $this->db->limit(1);
-        return $this->db->get('servicos')->row();
-    }
+        $this->db->select($this->select_column);  
+        $this->db->from($this->table);  
+        if(isset($_POST["search"]["value"])) {  
+            $this->db->like("idServicos", $_POST["search"]["value"]);  
+            $this->db->or_like("nome", $_POST["search"]["value"]);  
+        }  
+        if(isset($_POST["order"])) {  
+            $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);  
+        }  
+        else {  
+            $this->db->order_by('idServicos', 'DESC');  
+        }  
+    }  
     
-    function add($table,$data){
-        $this->db->insert($table, $data);         
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
-    }
-    
-    function edit($table,$data,$fieldID,$ID){
-        $this->db->where($fieldID,$ID);
-        $this->db->update($table, $data);
+    public function get_datatables(){  
+        $this->get_query();  
+        if($_POST["length"] != -1) {  
+            $this->db->limit($_POST['length'], $_POST['start']);  
+        }  
+        $query = $this->db->get();  
+        return $query->result();  
+    } 
 
-        if ($this->db->affected_rows() >= 0)
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
-    }
-    
-    function delete($table,$fieldID,$ID){
-        $this->db->where($fieldID,$ID);
-        $this->db->delete($table);
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;        
+    public function get_filtered_data(){  
+        $this->get_query();  
+        $query = $this->db->get();  
+        return $query->num_rows();  
     }   
-	
-	function count($table){
-		return $this->db->count_all($table);
-	}
+
+    public function get_all_data()  
+    {  
+        $this->db->select("*");  
+        $this->db->from($this->table);  
+        return $this->db->count_all_results();  
+    }
+
+
+    // get total rows
+    public function total_rows($q = NULL) {
+
+        if($q){
+            $this->db->like('idServicos', $q);
+            $this->db->or_like('nome', $q);
+            $this->db->or_like('descricao', $q);
+            $this->db->or_like('preco', $q);
+        } 
+	 
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
+    }
+
+    // get data with limit and search
+    public function get_limit_data($limit, $start = 0, $q = NULL) {
+        $this->db->order_by($this->primary_key, $this->order);
+
+        if($q){
+
+            $this->db->like('idServicos', $q);
+            $this->db->or_like('nome', $q);
+            $this->db->or_like('descricao', $q);
+            $this->db->or_like('preco', $q);
+        } 
+	 
+        $this->db->limit($limit, $start);
+        return $this->db->get($this->table)->result();
+    }
+
+    public function delete_many($items) {
+        $this->db->where_in($this->primary_key, $items);
+        return $this->db->delete($this->table);
+    }
+
+    public function delete_linked($id){
+        $this->db->where_in('servicos_id', $id);
+        return $this->db->delete('servicos_os');
+    }
+
 }
+
+/* End of file Servicos_model.php */
+/* Location: ./application/models/Servicos_model.php */
