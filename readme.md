@@ -1,8 +1,10 @@
-![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
+![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/mapos4/assets/images/logo-full.png)
 
 #### _Versão 4.0_ | Versão em desenvolvimento
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
+
+![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/mapos4/assets/images/mapos.png)
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
 ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.  
 
@@ -17,8 +19,21 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 
 ### Roadmap de lançamento da versão 4.0
  - ~~Atualizar framework~~ 
- - Atualizar o tema para Bootstrap 4
- - Refatorar código com melhor padronização
+ - Refatorar código e atualizar tema para Bootstrap 4
+   - ~~Refatorar painel~~ 
+   - ~~Refatorar tela de login~~ 
+   - ~~Refatorar cadastro de serviços~~
+   - Refatorar cadastro de clientes
+   - Refatorar cadastro de produtos
+   - Refatorar cadastro de OS
+   - Refatorar cadastro de vendas
+   - Refatorar cadastro de arquivos
+   - Refatorar cadastro de receitas e despesas
+   - Refatorar financeiro
+   - Refatorar cadastro de usuários
+   - Refatorar cadastro de permissões
+   - Refatorar relatórios 
+   - Refatorar área do cliente
  - Adicionar notificações por e-mail 
  - Adicionar Rich Text Editor nos campos do tipo TEXTAREA
  - Adicionar desconto e parcelamento na OS e Venda
@@ -40,5 +55,13 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * PHP >= 5.4.0
 * MySQL
 
-### Créditos
-* Ramon Silva - silva018-mg@yahoo.com.br
+### Contribuidores
+* [Ramon Silva](https://github.com/RamonSilva20) - Criador
+* [Gianluca Bine](https://github.com/Pr3d4dor)
+* [Henrique Miranda](https://github.com/Henrique-Miranda)
+* [Mário Lucas](https://github.com/mariolucasdev)
+* [Helan Allysson](https://github.com/HelanAllysson)
+* [KansasMyers](https://github.com/KansasMyers)
+* [drelldeveloper](https://github.com/drelldeveloper) 
+* [Samuel Fontebasso](https://github.com/fontebasso)
+* [marllonferreira](https://github.com/marllonferreira)

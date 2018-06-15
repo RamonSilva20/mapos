@@ -201,13 +201,17 @@ class Servicos extends CI_Controller {
             redirect('servicos');
         }
 
+        $ajax = $this->input->get('ajax');
+
         if(!$this->permission->check($this->session->userdata('permissao'),'dServico')){
            $this->session->set_flashdata('error',$this->lang->line('app_permission_delete').' '.$this->lang->line('services'));
+           if($ajax){
+            echo json_encode(array('result' => false, 'message' => $this->lang->line('app_permission_delete').' '.$this->lang->line('services') )); die();
+           }
            redirect(base_url());
         } 
 
         $row = $this->Servicos_model->get($idServicos);
-        $ajax = $this->input->get('ajax');
 
         if ($row) {
 
@@ -246,7 +250,7 @@ class Servicos extends CI_Controller {
         
         if(!$this->permission->check($this->session->userdata('permissao'),'dServico')){
            $this->session->set_flashdata('error',$this->lang->line('app_permission_delete').' '.$this->lang->line('services'));
-           redirect(base_url());
+           echo json_encode(array('result' => false, 'message' => $this->lang->line('app_permission_delete').' '.$this->lang->line('services') )); die();
         } 
 
         $items = $this->input->post('item_id[]');
