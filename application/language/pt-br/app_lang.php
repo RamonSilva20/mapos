@@ -11,6 +11,8 @@ $lang['app_back'] = 'Voltar';
 $lang['app_reload'] = 'Atualizar';
 $lang['app_details'] = 'Detalhes';
 $lang['app_attention'] = 'Atenção';
+$lang['app_yes'] = 'Sim';
+$lang['app_no'] = 'Não';
 
 
 // Datatables
@@ -53,3 +55,17 @@ $lang['services'] = 'serviços';
 $lang['service_name'] = 'nome';
 $lang['service_description'] = 'descrição';
 $lang['service_price'] = 'preço';
+
+
+// Product Labels
+$lang['product'] = 'produto';
+$lang['products'] = 'produtos';
+$lang['product_name'] = 'descrição';
+$lang['product_unity'] = 'unidade';
+$lang['product_buy_price'] = 'preço de compra';
+$lang['product_sell_price'] = 'preço de venda';
+$lang['product_stock'] = 'estoque';
+$lang['product_min_stock'] = 'estoque mínimo';
+$lang['product_mov_type'] = 'tipo de movimento';
+$lang['product_out'] = 'saída';
+$lang['product_in'] = 'entrada';

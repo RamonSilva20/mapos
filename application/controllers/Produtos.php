@@ -1,210 +1,328 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
-class Produtos extends CI_Controller {
-    
-    /**
-     * author: Ramon Silva 
-     * email: silva018-mg@yahoo.com.br
-     * 
-     */
-    
-    function __construct() {
+/**
+ * author: Ramon Silva
+ * email: silva018-mg@yahoo.com.br
+ *
+ */
+
+class Produtos extends CI_Controller
+{
+
+    public function __construct()
+    {
         parent::__construct();
-        if( (!session_id()) || (!$this->session->userdata('logado'))){
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
 
-        $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('produtos_model', '', TRUE);
-        $this->data['menuProdutos'] = 'Produtos';
-    }
-
-    function index(){
-	   $this->gerenciar();
-    }
-
-    function gerenciar(){
-        
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-           $this->session->set_flashdata('error','Você não tem permissão para visualizar produtos.');
-           redirect(base_url());
-        }
-
-        $this->load->library('table');
-        $this->load->library('pagination');
-        
-        
-        $config['base_url'] = base_url().'index.php/produtos/gerenciar/';
-        $config['total_rows'] = $this->produtos_model->count('produtos');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        
-        $this->pagination->initialize($config); 	
-
-	    $this->data['results'] = $this->produtos_model->get('produtos','idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo','',$config['per_page'],$this->uri->segment(3));
-       
-	    $this->data['view'] = 'produtos/produtos';
-       	$this->load->view('tema/topo',$this->data);
-       
-		
-    }
-	
-    function adicionar() {
-
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aProduto')){
-           $this->session->set_flashdata('error','Você não tem permissão para adicionar produtos.');
-           redirect(base_url());
-        }
-
+        $this->load->model('Produtos_model');
         $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+    }
 
-        if ($this->form_validation->run('produtos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $precoCompra = $this->input->post('precoCompra');
-            $precoCompra = str_replace(",","", $precoCompra);
-            $precoVenda = $this->input->post('precoVenda');
-            $precoVenda = str_replace(",", "", $precoVenda);
+    public function index()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $data['view'] = 'produtos/produtos_list';
+        $this->load->view('tema/topo', $data, false);
+    }
+
+    public function datatable()
+    {
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $this->load->model('Produtos_model');
+        $result_data = $this->Produtos_model->get_datatables();
+        $data = array();
+
+        foreach ($result_data as $row) {
+            $line = array();
+            $line[] = '<input type="checkbox" class="remove" name="item_id[]" value="' . $row->idProdutos . '">';
+
+            $line[] = $row->idProdutos;
+            $line[] = $row->descricao;
+            $line[] = $row->unidade;
+            $line[] = $row->precoCompra;
+            $line[] = $row->precoVenda;
+            $line[] = $row->estoque;
+            $line[] = $row->estoqueMinimo;
+
+            $line[] = '<a href="' . site_url('produtos/read/' . $row->idProdutos) . '" class="btn btn-dark" title="' . $this->lang->line('app_view') . '"><i class="fa fa-eye"></i> </a>
+                       <a href="' . site_url('produtos/update/' . $row->idProdutos) . '" class="btn btn-info" title="' . $this->lang->line('app_edit') . '"><i class="fa fa-edit"></i></a>
+                       <a href="' . site_url('produtos/delete/' . $row->idProdutos) . '" class="btn btn-danger delete" title="' . $this->lang->line('app_delete') . '"><i class="fa fa-remove"></i></a>';
+            $data[] = $line;
+        }
+
+        $output = array(
+            'draw' => intval($this->input->post('draw')),
+            'recordsTotal' => $this->Produtos_model->get_all_data(),
+            'recordsFiltered' => $this->Produtos_model->get_filtered_data(),
+            'data' => $data,
+        );
+        echo json_encode($output);
+    }
+
+    public function read($id)
+    {
+
+        if (!is_numeric($id)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('produtos');
+        }
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $row = $this->Produtos_model->get($id);
+        if ($row) {
             $data = array(
-                'descricao' => set_value('descricao'),
-                'unidade' => set_value('unidade'),
-                'precoCompra' => $precoCompra,
-                'precoVenda' => $precoVenda,
-                'estoque' => set_value('estoque'),
-                'estoqueMinimo' => set_value('estoqueMinimo'),
-                'saida' => set_value('saida'),
-                'entrada' => set_value('entrada'),
+                'idProdutos' => $row->idProdutos,
+                'descricao' => $row->descricao,
+                'unidade' => $row->unidade,
+                'precoCompra' => $row->precoCompra,
+                'precoVenda' => $row->precoVenda,
+                'estoque' => $row->estoque,
+                'estoqueMinimo' => $row->estoqueMinimo,
+                'saida' => $row->saida,
+                'entrada' => $row->entrada,
             );
 
-            if ($this->produtos_model->add('produtos', $data) == TRUE) {
-                $this->session->set_flashdata('success','Produto adicionado com sucesso!');
-                redirect(base_url() . 'index.php/produtos/adicionar/');
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
-            }
+            $data['view'] = 'produtos/produtos_read';
+            $this->load->view('tema/topo', $data, false);
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('produtos'));
         }
-        $this->data['view'] = 'produtos/adicionarProduto';
-        $this->load->view('tema/topo', $this->data);
-     
     }
 
-    function editar() {
-
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+    public function create()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'aProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
         }
 
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-           $this->session->set_flashdata('error','Você não tem permissão para editar produtos.');
-           redirect(base_url());
-        }
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+        $data = array(
+            'button' => '<i class="fa fa-plus"></i> ' . $this->lang->line('app_create'),
+            'action' => site_url('produtos/create_action'),
+            'idProdutos' => set_value('idProdutos'),
+            'descricao' => set_value('descricao'),
+            'unidade' => set_value('unidade'),
+            'precoCompra' => set_value('precoCompra'),
+            'precoVenda' => set_value('precoVenda'),
+            'estoque' => set_value('estoque'),
+            'estoqueMinimo' => set_value('estoqueMinimo'),
+            'saida' => set_value('saida'),
+            'entrada' => set_value('entrada'),
+        );
 
-        if ($this->form_validation->run('produtos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+        $data['view'] = 'produtos/produtos_form';
+        $this->load->view('tema/topo', $data, false);
+
+    }
+
+    public function create_action()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'aProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $this->_rules();
+
+        if ($this->form_validation->run() == false) {
+            $this->create();
         } else {
-            $precoCompra = $this->input->post('precoCompra');
-            $precoCompra = str_replace(",","", $precoCompra);
-            $precoVenda = $this->input->post('precoVenda');
-            $precoVenda = str_replace(",", "", $precoVenda);
             $data = array(
-                'descricao' => $this->input->post('descricao'),
-                'unidade' => $this->input->post('unidade'),
-                'precoCompra' => $precoCompra,
-                'precoVenda' => $precoVenda,
-                'estoque' => $this->input->post('estoque'),
-                'estoqueMinimo' => $this->input->post('estoqueMinimo'),
-                'saida' => set_value('saida'),
-                'entrada' => set_value('entrada'),                
+                'descricao' => $this->input->post('descricao', true),
+                'unidade' => $this->input->post('unidade', true),
+                'precoCompra' => $this->input->post('precoCompra', true),
+                'precoVenda' => $this->input->post('precoVenda', true),
+                'estoque' => $this->input->post('estoque', true),
+                'estoqueMinimo' => $this->input->post('estoqueMinimo', true),
+                'saida' => $this->input->post('saida', true) ? 1 : 0,
+                'entrada' => $this->input->post('entrada', true) ? 1 : 0,
             );
 
-            if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == TRUE) {
-                $this->session->set_flashdata('success','Produto editado com sucesso!');
-                redirect(base_url() . 'index.php/produtos/editar/'.$this->input->post('idProdutos'));
+            $this->Produtos_model->insert($data);
+            $this->session->set_flashdata('success', $this->lang->line('app_add_message'));
+            redirect(site_url('produtos'));
+        }
+    }
+
+    public function update($id)
+    {
+        if (!is_numeric($id)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('produtos');
+        }
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'eProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $row = $this->Produtos_model->get($id);
+
+        if ($row) {
+            $data = array(
+                'button' => '<i class="fa fa-edit"></i> ' . $this->lang->line('app_edit'),
+                'action' => site_url('produtos/update_action'),
+                'idProdutos' => set_value('idProdutos', $row->idProdutos),
+                'descricao' => set_value('descricao', $row->descricao),
+                'unidade' => set_value('unidade', $row->unidade),
+                'precoCompra' => set_value('precoCompra', $row->precoCompra),
+                'precoVenda' => set_value('precoVenda', $row->precoVenda),
+                'estoque' => set_value('estoque', $row->estoque),
+                'estoqueMinimo' => set_value('estoqueMinimo', $row->estoqueMinimo),
+                'saida' => set_value('saida', $row->saida),
+                'entrada' => set_value('entrada', $row->entrada),
+            );
+            $data['view'] = 'produtos/produtos_form';
+            $this->load->view('tema/topo', $data, false);
+
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('produtos'));
+        }
+    }
+
+    public function update_action()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'eProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $this->_rules();
+
+        if ($this->form_validation->run() == false) {
+            $this->update($this->input->post('idProdutos', true));
+        } else {
+            $data = array(
+                'descricao' => $this->input->post('descricao', true),
+                'unidade' => $this->input->post('unidade', true),
+                'precoCompra' => $this->input->post('precoCompra', true),
+                'precoVenda' => $this->input->post('precoVenda', true),
+                'estoque' => $this->input->post('estoque', true),
+                'estoqueMinimo' => $this->input->post('estoqueMinimo', true),
+                'saida' => $this->input->post('saida', true) ? 1 : 0,
+                'entrada' => $this->input->post('entrada', true) ? 1 : 0,
+            );
+
+            $this->Produtos_model->update($data, $this->input->post('idProdutos', true));
+            $this->session->set_flashdata('success', $this->lang->line('app_edit_message'));
+            redirect(site_url('produtos'));
+        }
+    }
+
+    public function delete($idProdutos)
+    {
+        if (!is_numeric($idProdutos)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('produtos');
+        }
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'dProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $row = $this->Produtos_model->get($idProdutos);
+        $ajax = $this->input->get('ajax');
+
+        if ($row) {
+
+            $this->Produtos_model->delete_linked($idProdutos);
+
+            if ($this->Produtos_model->delete($idProdutos)) {
+
+                if ($ajax) {
+                    echo json_encode(array('result' => true, 'message' => $this->lang->line('app_delete_message')));die();
+                }
+                $this->session->set_flashdata('success', $this->lang->line('app_delete_message'));
+                redirect(site_url('produtos'));
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
+
+                if ($ajax) {
+                    echo json_encode(array('result' => false, 'message' => $this->lang->line('app_error')));die();
+                }
+
+                $this->session->set_flashdata('error', $this->lang->line('app_error'));
+                redirect(site_url('produtos'));
+            }
+
+        } else {
+
+            if ($ajax) {
+                echo json_encode(array('result' => false, 'message' => $this->lang->line('app_not_found')));die();
+            }
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('produtos'));
+        }
+
+    }
+
+    public function delete_many()
+    {
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'dProduto')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('products'));
+            redirect(base_url());
+        }
+
+        $items = $this->input->post('item_id[]');
+
+        if ($items) {
+
+            $verify = implode('', $items);
+            if (is_numeric($verify)) {
+
+                $this->Produtos_model->delete_linked($items);
+
+                $result = $this->Produtos_model->delete_many($items);
+                if ($result) {
+                    echo json_encode(array('result' => true, 'message' => $this->lang->line('app_delete_message_many')));die();
+                } else {
+                    echo json_encode(array('result' => false, 'message' => $this->lang->line('app_error')));die();
+                }
+
+            } else {
+                echo json_encode(array('result' => false, 'message' => $this->lang->line('app_data_not_supported')));die();
             }
         }
 
-        $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
+        echo json_encode(array('result' => false, 'message' => $this->lang->line('app_empty_data')));die();
 
-        $this->data['view'] = 'produtos/editarProduto';
-        $this->load->view('tema/topo', $this->data);
-     
     }
 
+    public function _rules()
+    {
+        $this->form_validation->set_rules('descricao', '<b>' . $this->lang->line('product_name') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('unidade', '<b>' . $this->lang->line('product_unity') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('precoCompra', '<b>' . $this->lang->line('product_buy_price') . '</b>', 'trim|required|numeric');
+        $this->form_validation->set_rules('precoVenda', '<b>' . $this->lang->line('product_sell_price') . '</b>', 'trim|required|numeric');
+        $this->form_validation->set_rules('estoque', '<b>' . $this->lang->line('product_stock') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('estoqueMinimo', '<b>' . $this->lang->line('product_min_stock') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('saida', '<b>' . $this->lang->line('product_out') . '</b>', 'trim');
+        $this->form_validation->set_rules('entrada', '<b>' . $this->lang->line('product_in') . '</b>', 'trim');
 
-    function visualizar() {
-        
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-        
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-           $this->session->set_flashdata('error','Você não tem permissão para visualizar produtos.');
-           redirect(base_url());
-        }
-
-        $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
-
-        if($this->data['result'] == null){
-            $this->session->set_flashdata('error','Produto não encontrado.');
-            redirect(base_url() . 'index.php/produtos/editar/'.$this->input->post('idProdutos'));
-        }
-
-        $this->data['view'] = 'produtos/visualizarProduto';
-        $this->load->view('tema/topo', $this->data);
-     
+        $this->form_validation->set_rules('idProdutos', 'idProdutos', 'trim');
+        $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
-	
-    function excluir(){
 
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dProduto')){
-           $this->session->set_flashdata('error','Você não tem permissão para excluir produtos.');
-           redirect(base_url());
-        }
-
-        
-        $id =  $this->input->post('id');
-        if ($id == null){
-
-            $this->session->set_flashdata('error','Erro ao tentar excluir produto.');            
-            redirect(base_url().'index.php/produtos/gerenciar/');
-        }
-
-        $this->db->where('produtos_id', $id);
-        $this->db->delete('produtos_os');
-
-
-        $this->db->where('produtos_id', $id);
-        $this->db->delete('itens_de_vendas');
-        
-        $this->produtos_model->delete('produtos','idProdutos',$id);             
-        
-
-        $this->session->set_flashdata('success','Produto excluido com sucesso!');            
-        redirect(base_url().'index.php/produtos/gerenciar/');
-    }
 }
 
+/* End of file Produtos.php */
+/* Location: ./application/controllers/Produtos.php */

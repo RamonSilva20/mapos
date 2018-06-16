@@ -2,7 +2,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
 	<div class="card">
 		<div class="card-title">
-			<h4><?= $this->lang->line('app_view').' '.ucfirst($this->lang->line('service')); ?></h2> </h4>
+			<h4><i class="fa fa-eye"></i> <?= $this->lang->line('app_view').' '.ucfirst($this->lang->line('service')); ?></h2> </h4>
 
 		</div>
 		<div class="card-body">
@@ -32,7 +32,7 @@
 			<a href="<?= site_url('servicos/create') ?>" class="btn btn-success">
 				<i class="fa fa-plus"></i> <?= $this->lang->line('app_create'); ?>
 			</a>
-			<a href="<?= site_url('servicos/update/'.$idServicos) ?>" class="btn btn-primary">
+			<a href="<?= site_url('servicos/update/'.$idServicos) ?>" class="btn btn-info">
 				<i class="fa fa-edit"></i> <?= $this->lang->line('app_edit'); ?>
 			</a>
 			<a href="<?= site_url('servicos') ?>" class="btn btn-dark">

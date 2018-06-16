@@ -1,73 +1,71 @@
-<?php
-class Produtos_model extends CI_Model {
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-    /**
-     * author: Ramon Silva 
-     * email: silva018-mg@yahoo.com.br
-     * 
-     */
-    
-    function __construct() {
+class Produtos_model extends MY_Model
+{
+
+    public $table = 'produtos';
+    public $primary_key = 'idProdutos';
+    public $select_column = array('idProdutos', 'descricao', 'unidade', 'precoCompra', 'precoVenda', 'estoque', 'estoqueMinimo', 'saida', 'entrada');
+
+    public $order_column = array(null, 'idProdutos', 'descricao', 'unidade', 'precoCompra', 'precoVenda', 'estoque', 'estoqueMinimo');
+    public $timestamps = false;
+
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    
-    function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
-        
-        $this->db->select($fields);
-        $this->db->from($table);
-        $this->db->order_by('idProdutos','desc');
-        $this->db->limit($perpage,$start);
-        if($where){
-            $this->db->where($where);
+    public function get_query()
+    {
+        $this->db->select($this->select_column);
+        $this->db->from($this->table);
+        if (isset($_POST["search"]["value"])) {
+            $this->db->like("idProdutos", $_POST["search"]["value"]);
+            $this->db->or_like("descricao", $_POST["search"]["value"]);
         }
-        
+        if (isset($_POST["order"])) {
+            $this->db->order_by($this->order_column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else {
+            $this->db->order_by('idProdutos', 'DESC');
+        }
+    }
+
+    public function get_datatables()
+    {
+        $this->get_query();
+        if ($_POST["length"] != -1) {
+            $this->db->limit($_POST['length'], $_POST['start']);
+        }
         $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
-        return $result;
+        return $query->result();
     }
 
-    function getById($id){
-        $this->db->where('idProdutos',$id);
-        $this->db->limit(1);
-        return $this->db->get('produtos')->row();
+    public function get_filtered_data()
+    {
+        $this->get_query();
+        $query = $this->db->get();
+        return $query->num_rows();
     }
-    
-    function add($table,$data){
-        $this->db->insert($table, $data);         
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
-    }
-    
-    function edit($table,$data,$fieldID,$ID){
-        $this->db->where($fieldID,$ID);
-        $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0)
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
+    public function get_all_data()
+    {
+        $this->db->select("*");
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
     }
-    
-    function delete($table,$fieldID,$ID){
-        $this->db->where($fieldID,$ID);
-        $this->db->delete($table);
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;        
-    }   
-	
-	function count($table){
-		return $this->db->count_all($table);
-	}
+
+    public function delete_many($items)
+    {
+        $this->db->where_in($this->primary_key, $items);
+        return $this->db->delete($this->table);
+    }
+
+    public function delete_linked($id){
+        $this->db->where_in('produtos_id', $id);
+        return $this->db->delete('produtos_os');
+    }
+
 }
+
+/* End of file Produtos_model.php */
+/* Location: ./application/models/Produtos_model.php */

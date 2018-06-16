@@ -3,8 +3,7 @@
 
 * Requerimento
 
-    PHP >= 5.4.0 < 7.1
-    Extensão Mcrypt
+    PHP >= 5.4.0
     MySQL
 
 ---------------------------------------

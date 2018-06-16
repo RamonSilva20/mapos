@@ -11,7 +11,7 @@
 					</button>
 
 					<form id="form_delete" method="post">
-						<table id="table" class="table table-bordered" style="margin-bottom: 10px">
+						<table id="table" class="table table-bordered table-striped" style="margin-bottom: 10px">
 
 							<thead>
 								<tr>
@@ -96,14 +96,14 @@
 
 				$('table').find('.remove').each(function (index, val) {
 					$(val).prop('checked', true);
-					$(val).closest('tr').addClass('danger');
+					$(val).closest('tr').addClass('table-danger');
 					$('#delete').removeClass('hide');
 				});
 
 			} else {
 				$('table').find('.remove').each(function (index, val) {
 					$(val).prop('checked', false);
-					$(val).closest('tr').removeClass('danger');
+					$(val).closest('tr').removeClass('table-danger');
 					$('#delete').addClass('hide');
 
 				});
@@ -131,9 +131,9 @@
 
 			var checkbox = $(this);
 			if (checkbox[0].checked) {
-				checkbox.closest('tr').addClass('danger');
+				checkbox.closest('tr').addClass('table-danger');
 			} else {
-				checkbox.closest('tr').removeClass('danger');
+				checkbox.closest('tr').removeClass('table-danger');
 			}
 			check_delete_button();
 		});
@@ -173,7 +173,14 @@
 				}
 			})
 			.fail(function (XMLHttpRequest, textStatus, errorThrown) {
-				$.notify({ message: '<?= $this->lang->line('app_error'); ?>' }, { type: 'danger' });
+				toastr.error('<?= $this->lang->line('app_error'); ?>','<?= $this->lang->line('app_attention'); ?>',{
+					timeOut: 8000,
+					"closeButton": true,
+					"newestOnTop": true,
+					"progressBar": true,
+					"positionClass": "toast-top-right",
+					"onclick": null,
+				});
 			});
 		});
 

@@ -10,17 +10,17 @@
                     <form action="<?= $action; ?>" method="post">
                         <div class="form-group">
                             <label><?= ucfirst($this->lang->line('service_name')) ?></label>
-                            <input type="text" class="form-control" name="nome" id="nome" placeholder="<?= ucfirst($this->lang->line('service_name')) ?>" value="<?= $nome; ?>" />
+                            <input type="text" class="form-control" name="nome" id="nome" value="<?= $nome; ?>" />
                             <?= form_error('nome') ?>
                         </div>
                         <div class="form-group">
                             <label><?= ucfirst($this->lang->line('service_description')) ?></label>
-                            <input type="text" class="form-control" name="descricao" id="descricao" placeholder="<?= ucfirst($this->lang->line('service_description')) ?>" value="<?= $descricao; ?>" />
+                            <input type="text" class="form-control" name="descricao" id="descricao" value="<?= $descricao; ?>" />
                             <?= form_error('descricao') ?>
                         </div>
                         <div class="form-group">
                             <label><?= ucfirst($this->lang->line('service_price')) ?></label>
-                            <input type="text" class="form-control" name="preco" id="preco" placeholder="<?= ucfirst($this->lang->line('service_price')) ?>" value="<?= $preco; ?>" />
+                            <input type="text" class="form-control" name="preco" id="preco" value="<?= $preco; ?>" />
                             <?= form_error('preco') ?>
                         </div>
 

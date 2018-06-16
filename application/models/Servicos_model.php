@@ -52,36 +52,6 @@ class Servicos_model extends MY_Model {
     }
 
 
-    // get total rows
-    public function total_rows($q = NULL) {
-
-        if($q){
-            $this->db->like('idServicos', $q);
-            $this->db->or_like('nome', $q);
-            $this->db->or_like('descricao', $q);
-            $this->db->or_like('preco', $q);
-        } 
-	 
-        $this->db->from($this->table);
-        return $this->db->count_all_results();
-    }
-
-    // get data with limit and search
-    public function get_limit_data($limit, $start = 0, $q = NULL) {
-        $this->db->order_by($this->primary_key, $this->order);
-
-        if($q){
-
-            $this->db->like('idServicos', $q);
-            $this->db->or_like('nome', $q);
-            $this->db->or_like('descricao', $q);
-            $this->db->or_like('preco', $q);
-        } 
-	 
-        $this->db->limit($limit, $start);
-        return $this->db->get($this->table)->result();
-    }
-
     public function delete_many($items) {
         $this->db->where_in($this->primary_key, $items);
         return $this->db->delete($this->table);

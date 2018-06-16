@@ -12,7 +12,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>580</h2>
                         <p class="m-b-0">Clientes</p>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>3200</h2>
                         <p class="m-b-0">Produtos</p>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>41</h2>
                         <p class="m-b-0">Serviços</p>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>324</h2>
                         <p class="m-b-0">OS</p>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>57</h2>
                         <p class="m-b-0">Vendas</p>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                         </span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>5000</h2>
+                        <h2>14</h2>
                         <p class="m-b-0">Arquivos</p>
                     </div>
                 </div>
