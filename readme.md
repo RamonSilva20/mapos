@@ -1,10 +1,10 @@
-![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/mapos4/assets/images/logo-full.png)
 
-#### _Versão 4.0_ | Versão em desenvolvimento
+## MAPOS - _Versão 4.0_ | Versão em desenvolvimento
 
-MapOS é um sistema gratuito para de controle de ordens de serviço. 
+MAPOS é um sistema gratuito para de controle de ordens de serviço. 
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/mapos4/assets/images/mapos.png)
+
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
 ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.  
 
