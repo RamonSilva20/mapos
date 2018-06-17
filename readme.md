@@ -24,7 +24,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
    - ~~Refatorar tela de login~~ 
    - ~~Refatorar cadastro de serviços~~
    - Refatorar cadastro de clientes
-   - Refatorar cadastro de produtos
+   - ~~Refatorar cadastro de produtos~~
    - Refatorar cadastro de OS
    - Refatorar cadastro de vendas
    - Refatorar cadastro de arquivos
