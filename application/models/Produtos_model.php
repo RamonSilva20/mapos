@@ -61,6 +61,10 @@ class Produtos_model extends MY_Model
     }
 
     public function delete_linked($id){
+
+        $this->db->where_in('produtos_id', $id);
+        $this->db->delete('itens_de_vendas');
+
         $this->db->where_in('produtos_id', $id);
         return $this->db->delete('produtos_os');
     }

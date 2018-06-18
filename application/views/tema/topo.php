@@ -356,7 +356,7 @@
 						<li>
 							<a href="<?= site_url('produtos') ?>" aria-expanded="false">
 								<i class="fa fa-barcode"></i>
-								<span class="hide-menu">Produtos</span>
+								<span class="hide-menu"><?= ucfirst($this->lang->line('products')) ?></span>
 							</a>
 						</li>
 						<li>

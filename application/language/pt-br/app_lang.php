@@ -69,3 +69,22 @@ $lang['product_min_stock'] = 'estoque mínimo';
 $lang['product_mov_type'] = 'tipo de movimento';
 $lang['product_out'] = 'saída';
 $lang['product_in'] = 'entrada';
+
+// Client Labels
+$lang['client'] = 'cliente';
+$lang['clients'] = 'clientes';
+$lang['client_name'] = 'nome';
+$lang['client_sex'] = 'sexo';
+$lang['client_type'] = 'tipo de pessoa';
+$lang['client_doc'] = 'documento';
+$lang['client_phone'] = 'telefone';
+$lang['client_cel'] = 'celular';
+$lang['client_mail'] = 'e-mail';
+$lang['client_created'] = 'data de cadastro';
+$lang['client_street'] = 'rua';
+$lang['client_number'] = 'numero';
+$lang['client_district'] = 'bairro';
+$lang['client_city'] = 'cidade';
+$lang['client_state'] = 'estado';
+$lang['client_zip'] = 'CEP';
+$lang['client_obs'] = 'obs';

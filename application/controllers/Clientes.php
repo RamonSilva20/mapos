@@ -1,240 +1,367 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
-class Clientes extends CI_Controller {
-    
-    /**
-     * author: Ramon Silva 
-     * email: silva018-mg@yahoo.com.br
-     * 
-     */
-    
-    function __construct() {
+/**
+ * author: Ramon Silva
+ * email: silva018-mg@yahoo.com.br
+ *
+ */
+
+class Clientes extends CI_Controller
+{
+
+    public function __construct()
+    {
         parent::__construct();
-            if( (!session_id()) || (!$this->session->userdata('logado'))){
-                redirect('mapos/login');
-            }
-            $this->load->helper(array('codegen_helper'));
-            $this->load->model('clientes_model','',TRUE);
-            $this->data['menuClientes'] = 'clientes';
-	}	
-	
-	function index(){
-		$this->gerenciar();
-	}
 
-	function gerenciar(){
-
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-           $this->session->set_flashdata('error','Você não tem permissão para visualizar clientes.');
-           redirect(base_url());
-        }
-        $this->load->library('table');
-        $this->load->library('pagination');
-        
-   
-        $config['base_url'] = base_url().'index.php/clientes/gerenciar/';
-        $config['total_rows'] = $this->clientes_model->count('clientes');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        
-        $this->pagination->initialize($config); 	
-        
-	    $this->data['results'] = $this->clientes_model->get('clientes','idClientes,nomeCliente,documento,telefone,celular,email,rua,numero,bairro,cidade,estado,cep','',$config['per_page'],$this->uri->segment(3));
-       	
-       	$this->data['view'] = 'clientes/clientes';
-       	$this->load->view('tema/topo',$this->data);
-	  
-       
-		
-    }
-	
-    function adicionar() {
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'aCliente')){
-           $this->session->set_flashdata('error','Você não tem permissão para adicionar clientes.');
-           redirect(base_url());
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mapos/login');
         }
 
+        $this->load->model('Clientes_model');
         $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+    }
 
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
+    public function index()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $data['view'] = 'clientes/clientes_list';
+        $this->load->view('tema/topo', $data, false);
+    }
+
+    public function datatable()
+    {
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $this->load->model('Clientes_model');
+        $result_data = $this->Clientes_model->get_datatables();
+        $data = array();
+
+        foreach ($result_data as $row) {
+            $line = array();
+            $line[] = '<input type="checkbox" class="remove" name="item_id[]" value="'.$row->idClientes.'">';
+
+            $line[] = $row->idClientes;
+            $line[] = $row->nomeCliente;
+            $line[] = $row->documento;
+            $line[] = $row->celular;
+            $line[] = date('d/m/Y', strtotime($row->dataCadastro));
+
+            $line[] = '<a href="' . site_url('clientes/read/' . $row->idClientes) . '" class="btn btn-dark" title="' . $this->lang->line('app_view') . '"><i class="fa fa-eye"></i> </a>
+                       <a href="' . site_url('clientes/update/' . $row->idClientes) . '" class="btn btn-info" title="' . $this->lang->line('app_edit') . '"><i class="fa fa-edit"></i></a>
+                       <a href="' . site_url('clientes/delete/' . $row->idClientes) . '" class="btn btn-danger delete" title="' . $this->lang->line('app_delete') . '"><i class="fa fa-remove"></i></a>';
+            $data[] = $line;
+        }
+
+        $output = array(
+            'draw' => intval($this->input->post('draw')),
+            'recordsTotal' => $this->Clientes_model->get_all_data(),
+            'recordsFiltered' => $this->Clientes_model->get_filtered_data(),
+            'data' => $data,
+        );
+        echo json_encode($output);
+    }
+
+    public function read($id)
+    {
+        if (!is_numeric($id)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('clientes');
+        }
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $row = $this->Clientes_model->get($id);
+        if ($row) {
             $data = array(
-                'nomeCliente' => set_value('nomeCliente'),
-                'documento' => set_value('documento'),
-                'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
-                'email' => set_value('email'),
-                'rua' => set_value('rua'),
-                'numero' => set_value('numero'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'estado' => set_value('estado'),
-                'cep' => set_value('cep'),
-                'dataCadastro' => date('Y-m-d')
+                'idClientes' => $row->idClientes,
+                'nomeCliente' => $row->nomeCliente,
+                'sexo' => $row->sexo,
+                'pessoa_fisica' => $row->pessoa_fisica,
+                'documento' => $row->documento,
+                'telefone' => $row->telefone,
+                'celular' => $row->celular,
+                'email' => $row->email,
+                'dataCadastro' => $row->dataCadastro,
+                'rua' => $row->rua,
+                'numero' => $row->numero,
+                'bairro' => $row->bairro,
+                'cidade' => $row->cidade,
+                'estado' => $row->estado,
+                'cep' => $row->cep,
+                'obs' => $row->obs,
             );
 
-            if ($this->clientes_model->add('clientes', $data) == TRUE) {
-                $this->session->set_flashdata('success','Cliente adicionado com sucesso!');
-                redirect(base_url() . 'index.php/clientes/adicionar/');
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
+            $data['view'] = 'clientes/clientes_read';
+            $this->load->view('tema/topo', $data, false);
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('clientes'));
         }
-        $this->data['view'] = 'clientes/adicionarCliente';
-        $this->load->view('tema/topo', $this->data);
+    }
+
+    public function create()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'aCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $data = array(
+            'button' => '<i class="fa fa-plus"></i> ' . $this->lang->line('app_create'),
+            'action' => site_url('clientes/create_action'),
+            'idClientes' => set_value('idClientes'),
+            'nomeCliente' => set_value('nomeCliente'),
+            'sexo' => set_value('sexo'),
+            'pessoa_fisica' => set_value('pessoa_fisica'),
+            'documento' => set_value('documento'),
+            'telefone' => set_value('telefone'),
+            'celular' => set_value('celular'),
+            'email' => set_value('email'),
+            'rua' => set_value('rua'),
+            'numero' => set_value('numero'),
+            'bairro' => set_value('bairro'),
+            'cidade' => set_value('cidade'),
+            'estado' => set_value('estado'),
+            'cep' => set_value('cep'),
+            'obs' => set_value('obs'),
+        );
+
+        $data['view'] = 'clientes/clientes_form';
+        $this->load->view('tema/topo', $data, false);
 
     }
 
-    function editar() {
-
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+    public function create_action()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'aCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
         }
 
+        $this->_rules();
 
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-           $this->session->set_flashdata('error','Você não tem permissão para editar clientes.');
-           redirect(base_url());
-        }
-
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+        if ($this->form_validation->run() == false) {
+            $this->create();
         } else {
             $data = array(
-                'nomeCliente' => $this->input->post('nomeCliente'),
-                'documento' => $this->input->post('documento'),
-                'telefone' => $this->input->post('telefone'),
-                'celular' => $this->input->post('celular'),
-                'email' => $this->input->post('email'),
-                'rua' => $this->input->post('rua'),
-                'numero' => $this->input->post('numero'),
-                'bairro' => $this->input->post('bairro'),
-                'cidade' => $this->input->post('cidade'),
-                'estado' => $this->input->post('estado'),
-                'cep' => $this->input->post('cep')
+                'nomeCliente' => $this->input->post('nomeCliente', true),
+                // 'sexo' => $this->input->post('sexo', true),
+                'sexo' => '',
+                // 'pessoa_fisica' => $this->input->post('pessoa_fisica', true),
+                'pessoa_fisica' => 1,
+                'documento' => $this->input->post('documento', true),
+                'telefone' => $this->input->post('telefone', true),
+                'celular' => $this->input->post('celular', true),
+                'email' => $this->input->post('email', true),
+                'dataCadastro' => date('Y-m-d'),
+                'rua' => $this->input->post('rua', true),
+                'numero' => $this->input->post('numero', true),
+                'bairro' => $this->input->post('bairro', true),
+                'cidade' => $this->input->post('cidade', true),
+                'estado' => $this->input->post('estado', true),
+                'cep' => $this->input->post('cep', true),
+                'obs' => $this->input->post('obs', true),
             );
 
-            if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == TRUE) {
-                $this->session->set_flashdata('success','Cliente editado com sucesso!');
-                redirect(base_url() . 'index.php/clientes/editar/'.$this->input->post('idClientes'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-            }
+            $this->Clientes_model->insert($data);
+            $this->session->set_flashdata('success', $this->lang->line('app_add_message'));
+            redirect(site_url('clientes'));
         }
-
-
-        $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['view'] = 'clientes/editarCliente';
-        $this->load->view('tema/topo', $this->data);
-
     }
 
-    public function visualizar(){
-
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+    public function update($id)
+    {
+        if (!is_numeric($id)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('clientes');
         }
 
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-           $this->session->set_flashdata('error','Você não tem permissão para visualizar clientes.');
-           redirect(base_url());
+        if (!$this->permission->check($this->session->userdata('permissao'), 'eCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
         }
 
-        $this->data['custom_error'] = '';
-        $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
-        $this->data['view'] = 'clientes/visualizar';
-        $this->load->view('tema/topo', $this->data);
+        $row = $this->Clientes_model->get($id);
 
+        if ($row) {
+            $data = array(
+                'button' => '<i class="fa fa-edit"></i> ' . $this->lang->line('app_edit'),
+                'action' => site_url('clientes/update_action'),
+                'idClientes' => set_value('idClientes', $row->idClientes),
+                'nomeCliente' => set_value('nomeCliente', $row->nomeCliente),
+                'sexo' => set_value('sexo', $row->sexo),
+                'pessoa_fisica' => set_value('pessoa_fisica', $row->pessoa_fisica),
+                'documento' => set_value('documento', $row->documento),
+                'telefone' => set_value('telefone', $row->telefone),
+                'celular' => set_value('celular', $row->celular),
+                'email' => set_value('email', $row->email),
+                'rua' => set_value('rua', $row->rua),
+                'numero' => set_value('numero', $row->numero),
+                'bairro' => set_value('bairro', $row->bairro),
+                'cidade' => set_value('cidade', $row->cidade),
+                'estado' => set_value('estado', $row->estado),
+                'cep' => set_value('cep', $row->cep),
+                'obs' => set_value('obs', $row->obs),
+            );
+            $data['view'] = 'clientes/clientes_form';
+            $this->load->view('tema/topo', $data, false);
+
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('clientes'));
+        }
+    }
+
+    public function update_action()
+    {
+        if (!$this->permission->check($this->session->userdata('permissao'), 'eCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $this->_rules();
+
+        if ($this->form_validation->run() == false) {
+            $this->update($this->input->post('idClientes', true));
+        } else {
+            $data = array(
+                'nomeCliente' => $this->input->post('nomeCliente', true),
+                // 'sexo' => $this->input->post('sexo', true),
+                // 'pessoa_fisica' => $this->input->post('pessoa_fisica', true),
+                'documento' => $this->input->post('documento', true),
+                'telefone' => $this->input->post('telefone', true),
+                'celular' => $this->input->post('celular', true),
+                'email' => $this->input->post('email', true),
+                'rua' => $this->input->post('rua', true),
+                'numero' => $this->input->post('numero', true),
+                'bairro' => $this->input->post('bairro', true),
+                'cidade' => $this->input->post('cidade', true),
+                'estado' => $this->input->post('estado', true),
+                'cep' => $this->input->post('cep', true),
+                'obs' => $this->input->post('obs', true),
+            );
+
+            $this->Clientes_model->update($data, $this->input->post('idClientes', true));
+            $this->session->set_flashdata('success', $this->lang->line('app_edit_message'));
+            redirect(site_url('clientes'));
+        }
+    }
+
+    public function delete($idClientes)
+    {
+        if (!is_numeric($idClientes)) {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('clientes');
+        }
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'dCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $row = $this->Clientes_model->get($idClientes);
+        $ajax = $this->input->get('ajax');
         
-    }
-	
-    public function excluir(){
 
-            
-            if(!$this->permission->checkPermission($this->session->userdata('permissao'),'dCliente')){
-               $this->session->set_flashdata('error','Você não tem permissão para excluir clientes.');
-               redirect(base_url());
-            }
+        if ($row) {
 
-            
-            $id =  $this->input->post('id');
-            if ($id == null){
+            $this->Clientes_model->delete_linked($idClientes);
 
-                $this->session->set_flashdata('error','Erro ao tentar excluir cliente.');            
-                redirect(base_url().'index.php/clientes/gerenciar/');
-            }
+            if ($this->Clientes_model->delete($idClientes)) {
 
-            //$id = 2;
-            // excluindo OSs vinculadas ao cliente
-            $this->db->where('clientes_id', $id);
-            $os = $this->db->get('os')->result();
-
-            if($os != null){
-
-                foreach ($os as $o) {
-                    $this->db->where('os_id', $o->idOs);
-                    $this->db->delete('servicos_os');
-
-                    $this->db->where('os_id', $o->idOs);
-                    $this->db->delete('produtos_os');
-
-
-                    $this->db->where('idOs', $o->idOs);
-                    $this->db->delete('os');
+                if ($ajax) {
+                    echo json_encode(array('result' => true, 'message' => $this->lang->line('app_delete_message')));die();
                 }
-            }
+                $this->session->set_flashdata('success', $this->lang->line('app_delete_message'));
+                redirect(site_url('clientes'));
+            } else {
 
-            // excluindo Vendas vinculadas ao cliente
-            $this->db->where('clientes_id', $id);
-            $vendas = $this->db->get('vendas')->result();
-
-            if($vendas != null){
-
-                foreach ($vendas as $v) {
-                    $this->db->where('vendas_id', $v->idVendas);
-                    $this->db->delete('itens_de_vendas');
-
-
-                    $this->db->where('idVendas', $v->idVendas);
-                    $this->db->delete('vendas');
+                if ($ajax) {
+                    echo json_encode(array('result' => false, 'message' => $this->lang->line('app_error')));die();
                 }
+
+                $this->session->set_flashdata('error', $this->lang->line('app_error'));
+                redirect(site_url('clientes'));
             }
 
-            //excluindo receitas vinculadas ao cliente
-            $this->db->where('clientes_id', $id);
-            $this->db->delete('lancamentos');
+        } else {
 
+            if ($ajax) {
+                echo json_encode(array('result' => false, 'message' => $this->lang->line('app_not_found')));die();
+            }
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('clientes'));
+        }
 
-
-            $this->clientes_model->delete('clientes','idClientes',$id); 
-
-            $this->session->set_flashdata('success','Cliente excluido com sucesso!');            
-            redirect(base_url().'index.php/clientes/gerenciar/');
     }
+
+    public function delete_many()
+    {
+
+        if (!$this->permission->check($this->session->userdata('permissao'), 'dCliente')) {
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clientes'));
+            redirect(base_url());
+        }
+
+        $items = $this->input->post('item_id[]');
+
+        if ($items) {
+
+            $verify = implode('', $items);
+            if (is_numeric($verify)) {
+
+                $this->Clientes_model->delete_linked($items);
+
+                $result = $this->Clientes_model->delete_many($items);
+                if ($result) {
+                    echo json_encode(array('result' => true, 'message' => $this->lang->line('app_delete_message_many')));die();
+                } else {
+                    echo json_encode(array('result' => false, 'message' => $this->lang->line('app_error')));die();
+                }
+
+            } else {
+                echo json_encode(array('result' => false, 'message' => $this->lang->line('app_data_not_supported')));die();
+            }
+        }
+
+        echo json_encode(array('result' => false, 'message' => $this->lang->line('app_empty_data')));die();
+
+    }
+
+    public function _rules()
+    {
+        $this->form_validation->set_rules('nomeCliente', '<b>' . $this->lang->line('client_name') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('sexo', '<b>' . $this->lang->line('client_sex') . '</b>', 'trim');
+        $this->form_validation->set_rules('pessoa_fisica', '<b>' . $this->lang->line('client_type') . '</b>', 'trim');
+        $this->form_validation->set_rules('documento', '<b>' . $this->lang->line('client_doc') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('telefone', '<b>' . $this->lang->line('client_phone') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('celular', '<b>' . $this->lang->line('client_cel') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('email', '<b>' . $this->lang->line('client_mail') . '</b>', 'trim|required|valid_email');
+        $this->form_validation->set_rules('dataCadastro', '<b>' . $this->lang->line('client_created') . '</b>', 'trim');
+        $this->form_validation->set_rules('rua', '<b>' . $this->lang->line('client_street') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('numero', '<b>' . $this->lang->line('client_number') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('bairro', '<b>' . $this->lang->line('client_district') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('cidade', '<b>' . $this->lang->line('client_city') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('estado', '<b>' . $this->lang->line('client_state') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('cep', '<b>' . $this->lang->line('client_zip') . '</b>', 'trim|required');
+        $this->form_validation->set_rules('obs', '<b>' . $this->lang->line('client_obs') . '</b>', 'trim');
+
+        $this->form_validation->set_rules('idClientes', 'idClientes', 'trim');
+        $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
+    }
+
 }
 
+/* End of file Clientes.php */
+/* Location: ./application/controllers/Clientes.php */

@@ -1342,9 +1342,7 @@ ul.list-style-none li a:hover {
 .custom-select {
   background: url("../../assets/images/custom-select.png") right 0.75rem center no-repeat;
 }
-textarea {
-  resize: none;
-}
+
 .mailbox ul li .drop-title {
   font-weight: 500;
   padding: 11px 20px 15px;
@@ -4855,7 +4853,6 @@ footer p {
   margin-bottom: 20px;
 }
 .form-control {
-  height: 42px;
   border-radius: 0;
   box-shadow: none;
   border-color: #e7e7e7;
@@ -5457,6 +5454,7 @@ tbody tr td:last-child {
 .table td,
 .table th {
   padding: 0.55rem;
+  color: #495057 !important;
 }
 .table .round-img img {
   width: 38px;

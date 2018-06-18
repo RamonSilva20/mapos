@@ -4,43 +4,49 @@
 		<div class="card">
 			<div class="card-body">
 				<div class="card-content">
+					<?= anchor(site_url('clientes/create'),'<i class="fa fa-plus"></i> '.$this->lang->line('app_create'), 'class="btn btn-success"'); ?>
+						<button class="btn btn-info" id="reload">
+							<i class="fa fa-refresh"></i>
+							<?= $this->lang->line('app_reload') ?>
+						</button>
 
-					<?= anchor(site_url('servicos/create'),'<i class="fa fa-plus"></i> '.$this->lang->line('app_create'), 'class="btn btn-success"'); ?>
-					<button class="btn btn-info" id="reload">
-						<i class="fa fa-refresh"></i>
-						<?= $this->lang->line('app_reload'); ?>
-					</button>
+						<form id="form_delete" method="post">
+							<table id="table" class="table table-bordered" style="margin-bottom: 10px">
 
-					<form id="form_delete" method="post">
-						<table id="table" class="table table-bordered table-striped" style="margin-bottom: 10px">
+								<thead>
+									<tr>
+										<th>
+											<input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp
+											<button class="btn btn-danger btn-sm hide" id="delete" title="<?= $this->lang->line('app_delete') ?>">
+												<i class="fa fa-trash"></i>
+											</button>
+										</th>
+										<th>#</th>
+										<th>
+											<?= ucfirst($this->lang->line('client_name')) ?>
+										</th>
+										<th>
+											<?= ucfirst($this->lang->line('client_doc')) ?>
+										</th>
+										<th>
+											<?= ucfirst($this->lang->line('client_cel')) ?>
+										</th>
+										<th>
+											<?= ucfirst($this->lang->line('client_created')) ?>
+										</th>
+										<th>
+											<?= $this->lang->line('app_actions') ?>
+										</th>
+									</tr>
+								</thead>
 
-							<thead>
-								<tr>
-									<th>
-										<input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp
-										<button class="btn btn-danger btn-sm hide" id="delete" title="<?= $this->lang->line('app_delete') ?>">
-											<i class="fa fa-trash"></i>
-										</button>
-									</th>
-									<th>#</th>
-									<th><?= ucfirst($this->lang->line('service_name')) ?></th>
-									<th><?= ucfirst($this->lang->line('service_description')) ?></th>
-									<th><?= ucfirst($this->lang->line('service_price')) ?></th>
-									<th>
-										<?= $this->lang->line('app_actions') ?>
-									</th>
-								</tr>
-							</thead>
-
-						</table>
-					</form>
-
+							</table>
+						</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 
 <script src="<?= base_url('assets/js/lib/datatables/datatables.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/lib/sweetalert/sweetalert.min.js'); ?>"></script>
@@ -52,12 +58,12 @@
 			"serverSide": true,
 			"order": [],
 			"ajax": {
-				url: "<?= site_url('servicos/datatable'); ?>",
+				url: "<?= site_url('clientes/datatable'); ?>",
 				type: "POST"
 			},
 			"columnDefs": [
 				{
-					"targets": [0, 5],
+					"targets": [0, 6],
 					"orderable": false,
 				},
 			],
@@ -93,6 +99,7 @@
 
 		// mark all checkboxes
 		$(document).on('click', '#remove-all', function () {
+
 			var checkbox = $(this);
 			if (checkbox[0].checked) {
 
@@ -103,6 +110,7 @@
 				});
 
 			} else {
+
 				$('table').find('.remove').each(function (index, val) {
 					$(val).prop('checked', false);
 					$(val).closest('tr').removeClass('table-danger');
@@ -118,7 +126,7 @@
 			$('#delete').addClass('hide');
 			datatable.ajax.reload();
 
-			toastr.info('<?= $this->lang->line('app_list_updated'); ?>','<?= $this->lang->line('app_attention'); ?>',{
+			toastr.info('<?= $this->lang->line('app_list_updated'); ?>', '<?= $this->lang->line('app_attention'); ?>', {
 				timeOut: 8000,
 				"closeButton": true,
 				"newestOnTop": true,
@@ -126,6 +134,7 @@
 				"positionClass": "toast-top-right",
 				"onclick": null,
 			});
+
 		});
 
 		// check item and highlight row
@@ -137,14 +146,16 @@
 			} else {
 				checkbox.closest('tr').removeClass('table-danger');
 			}
+
 			check_delete_button();
+
 		});
 
 		// delete many items form
 		$('#form_delete').submit(function (event) {
 			event.preventDefault();
 			data = $(this).serialize();
-
+			
 			swal({
 				title: "<?= $this->lang->line('app_attention'); ?>",
 				text: "<?= $this->lang->line('app_sure_delete'); ?>",
@@ -159,7 +170,7 @@
 			function () {
 
                 $.ajax({
-					url: '<?= site_url('servicos/delete_many'); ?>',
+					url: '<?= site_url('clientes/delete_many'); ?>',
                     type: 'POST',
                     dataType: 'json',
                     data: data,
@@ -179,8 +190,7 @@
 				});
 
             });
-			
-			
+	
 		});
 
 		// remove single item
@@ -188,7 +198,7 @@
 
 			event.preventDefault();
 			var url = $(this).attr('href');
-			
+
 			swal({
 				title: "<?= $this->lang->line('app_attention'); ?>",
 				text: "<?= $this->lang->line('app_sure_delete'); ?>",
@@ -223,5 +233,6 @@
 			});
 
 		});
+
 	});  
 </script>
