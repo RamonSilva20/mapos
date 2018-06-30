@@ -4,7 +4,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 
-$config['app_version'] = '3.1.11'; 
+$config['app_version'] = '4.0'; 
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'pt-br';
 
 /*
 |--------------------------------------------------------------------------

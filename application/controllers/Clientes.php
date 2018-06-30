@@ -24,7 +24,7 @@ class Clientes extends CI_Controller
     public function index()
     {
         if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -36,7 +36,7 @@ class Clientes extends CI_Controller
     {
 
         if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -77,7 +77,7 @@ class Clientes extends CI_Controller
         }
 
         if (!$this->permission->check($this->session->userdata('permissao'), 'vCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -113,7 +113,7 @@ class Clientes extends CI_Controller
     public function create()
     {
         if (!$this->permission->check($this->session->userdata('permissao'), 'aCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -145,7 +145,7 @@ class Clientes extends CI_Controller
     public function create_action()
     {
         if (!$this->permission->check($this->session->userdata('permissao'), 'aCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_add') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -188,7 +188,7 @@ class Clientes extends CI_Controller
         }
 
         if (!$this->permission->check($this->session->userdata('permissao'), 'eCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -226,7 +226,7 @@ class Clientes extends CI_Controller
     public function update_action()
     {
         if (!$this->permission->check($this->session->userdata('permissao'), 'eCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_edit') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -266,7 +266,7 @@ class Clientes extends CI_Controller
         }
 
         if (!$this->permission->check($this->session->userdata('permissao'), 'dCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 
@@ -310,7 +310,7 @@ class Clientes extends CI_Controller
     {
 
         if (!$this->permission->check($this->session->userdata('permissao'), 'dCliente')) {
-            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clientes'));
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_delete') . ' ' . $this->lang->line('clients'));
             redirect(base_url());
         }
 

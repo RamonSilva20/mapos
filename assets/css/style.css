@@ -5390,9 +5390,7 @@ thead tr th {
   color: #455a64;
   font-weight: 500;
 }
-thead tr th:last-child {
-  text-align: right;
-}
+
 tbody tr th {
   color: #455a64;
   font-family: 'Poppins', sans-serif;
@@ -5402,9 +5400,7 @@ tbody tr td {
   font-family: 'Poppins', sans-serif;
   color: #99abb4;
 }
-tbody tr td:last-child {
-  text-align: right;
-}
+
 .table > tbody > tr > td,
 .table > tbody > tr > th,
 .table > tfoot > tr > td,

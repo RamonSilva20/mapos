@@ -13,6 +13,14 @@ $lang['app_details'] = 'Detalhes';
 $lang['app_attention'] = 'Atenção';
 $lang['app_yes'] = 'Sim';
 $lang['app_no'] = 'Não';
+$lang['app_active'] = 'Ativo';
+$lang['app_activate'] = 'Ativar';
+$lang['app_inactive'] = 'Inativo';
+$lang['app_disable'] = 'Desativar';
+$lang['app_check_all'] = 'Marcar Todos';
+$lang['app_backup'] = 'Backup';
+$lang['app_config'] = 'Configurar';
+$lang['app_configs'] = 'Configurações';
 
 
 // Datatables
@@ -44,6 +52,7 @@ $lang['app_permission_delete'] = 'Você não tem permissão para excluir';
 $lang['app_permission_view'] = 'Você não tem permissão para visualizar';
 $lang['app_error'] = 'Ocorreu um erro ao executar a ação, por favor tente novamente.';
 $lang['app_sure_delete'] = 'Você tem certeza que deseja excluir este registro?';
+$lang['app_sure_edit'] = 'Você tem certeza que deseja editar este registro?';
 $lang['app_list_updated'] = 'Listagem atualizada.';
 $lang['app_data_not_supported'] = 'O sistema não suporta o formato dos dados enviados.';
 $lang['app_empty_data'] = 'Lista de dados enviados está vazia.';
@@ -88,3 +97,61 @@ $lang['client_city'] = 'cidade';
 $lang['client_state'] = 'estado';
 $lang['client_zip'] = 'CEP';
 $lang['client_obs'] = 'obs';
+
+// Permissions labels
+$lang['perm'] = 'permissão';
+$lang['perms'] = 'permissões';
+$lang['perm_name'] = 'nome da permissão';
+$lang['perm_status'] = 'situação';
+$lang['perm_created'] = 'criado em';
+
+// Service Labels
+$lang['service'] = 'serviço';
+$lang['services'] = 'serviços';
+$lang[''] = '';
+
+// Product labels
+$lang['product'] = 'produto';
+$lang['products'] = 'produtos';
+$lang[''] = '';
+
+// OS Labels
+$lang['os'] = 'ordem de serviço';
+$lang['oss'] = 'ordens de serviço';
+$lang[''] = '';
+
+// Report Labels 
+$lang['report'] = 'relatório';
+$lang['reports'] = 'relatórios';
+$lang[''] = '';
+
+// Financial Labels
+$lang['payment'] = 'lançamento';
+$lang['payments'] = 'lançamentos';
+$lang['financial'] = 'financeiro';
+$lang[''] = '';
+$lang[''] = '';
+
+// File Labels
+$lang['file'] = 'arquivo';
+$lang['files'] = 'arquivos';
+$lang[''] = '';
+$lang[''] = '';
+
+// Sale Labels 
+$lang['sale'] = 'venda';
+$lang['sales'] = 'vendas';
+$lang[''] = '';
+$lang[''] = '';
+
+// User Labels
+$lang['user'] = 'usuário';
+$lang['users'] = 'usuários';
+$lang[''] = '';
+$lang[''] = '';
+
+
+// Company Labels
+$lang['company'] = 'dados da empresa';
+$lang[''] = '';
+$lang[''] = '';
