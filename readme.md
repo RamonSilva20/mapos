@@ -30,7 +30,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
    - Refatorar cadastro de arquivos
    - Refatorar cadastro de receitas e despesas
    - Refatorar financeiro
-   - Refatorar cadastro de usuários
+   - ~~Refatorar cadastro de usuários~~
    - ~~Refatorar cadastro de permissões~~
    - Refatorar relatórios 
    - Refatorar área do cliente
