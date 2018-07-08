@@ -147,8 +147,22 @@ $lang[''] = '';
 // User Labels
 $lang['user'] = 'usuário';
 $lang['users'] = 'usuários';
-$lang[''] = '';
-$lang[''] = '';
+$lang['user_name'] = 'Nome';
+$lang['user_rg'] = 'RG';
+$lang['user_cpf'] = 'CPF';
+$lang['user_street'] = 'Rua';
+$lang['user_number'] = 'Número';
+$lang['user_district'] = 'Bairro';
+$lang['user_city'] = 'Cidade';
+$lang['user_state'] = 'Estado';
+$lang['user_email'] = 'E-mail';
+$lang['user_password'] = 'Senha';
+$lang['user_phone'] = 'Telefone';
+$lang['user_cel'] = 'Celular';
+$lang['user_status'] = 'Status';
+$lang['user_created'] = 'Data de Cadastro';
+$lang['user_group'] = 'Permissão';
+$lang['user_change_password'] = 'Preencha caso queira alterar a senha';
 
 
 // Company Labels

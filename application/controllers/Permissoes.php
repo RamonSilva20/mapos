@@ -46,7 +46,6 @@ class Permissoes extends CI_Controller
 
         foreach ($result_data as $row) {
             $line = array();
-            $line[] = '<input type="checkbox" class="remove" name="item_id[]" value="' . $row->idPermissao . '">';
 
             $line[] = $row->idPermissao;
             $line[] = $row->nome;

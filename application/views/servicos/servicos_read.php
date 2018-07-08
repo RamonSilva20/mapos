@@ -2,7 +2,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
 	<div class="card">
 		<div class="card-title">
-			<h4><i class="fa fa-eye"></i> <?= $this->lang->line('app_view').' '.ucfirst($this->lang->line('service')); ?></h2> </h4>
+			<h4><i class="fa fa-eye"></i> <?= $this->lang->line('app_view').' '.ucfirst($this->lang->line('service')); ?></h4>
 
 		</div>
 		<div class="card-body">

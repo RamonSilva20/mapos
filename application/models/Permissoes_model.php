@@ -13,7 +13,7 @@ class Permissoes_model extends MY_Model
     public $primary_key = 'idPermissao';
     public $select_column = array('idPermissao', 'nome', 'permissoes', 'situacao', 'data');
 
-    public $order_column = array(null, 'idPermissao', 'nome', 'situacao', 'data');
+    public $order_column = array('idPermissao', 'nome', 'situacao', 'data');
     public $timestamps = false;
 
     public function __construct()

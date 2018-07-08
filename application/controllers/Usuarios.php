@@ -1,229 +1,340 @@
-<?php
-
-class Usuarios extends CI_Controller {
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
     
-
     /**
      * author: Ramon Silva 
      * email: silva018-mg@yahoo.com.br
      * 
      */
     
-    function __construct() {
-
+class Usuarios extends CI_Controller{
+    
+    public function __construct(){
         parent::__construct();
+
         if( (!session_id()) || (!$this->session->userdata('logado'))){
             redirect('mapos/login');
         }
-        if(!$this->permission->checkPermission($this->session->userdata('permissao'),'cUsuario')){
-          $this->session->set_flashdata('error','Você não tem permissão para configurar os usuários.');
-          redirect(base_url());
+
+        $this->load->model('Usuarios_model');
+        $this->load->library('form_validation');
+    }
+
+    
+    public function index(){
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error', $this->lang->line('app_permission_view').' '.$this->lang->line('users'));
+           redirect(base_url());
         }
 
-        $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('usuarios_model', '', TRUE);
-        $this->data['menuUsuarios'] = 'Usuários';
-        $this->data['menuConfiguracoes'] = 'Configurações';
+        $data['view'] = 'usuarios/usuarios_list';
+        $this->load->view('tema/topo', $data, FALSE);
     }
 
-    function index(){
-		$this->gerenciar();
-	}
+    public function datatable(){
 
-	function gerenciar(){
-        
-        $this->load->library('pagination');
-        
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+            $this->session->set_flashdata('error', $this->lang->line('app_permission_view').' '.$this->lang->line('users'));
+            redirect(base_url());
+         }
 
-        $config['base_url'] = base_url().'index.php/usuarios/gerenciar/';
-        $config['total_rows'] = $this->usuarios_model->count('usuarios');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';	
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        
-        $this->pagination->initialize($config); 	
+        $this->load->model('Usuarios_model');  
+        $result_data = $this->Usuarios_model->get_datatables();  
+        $data = array(); 
 
-		$this->data['results'] = $this->usuarios_model->get($config['per_page'],$this->uri->segment(3));
-       
-	    $this->data['view'] = 'usuarios/usuarios';
-       	$this->load->view('tema/topo',$this->data);
+        foreach($result_data as $row){  
+            $line = array(); 
+            
+	        $line[] = $row->idUsuarios;
+	        $line[] = $row->nome;
+	        $line[] = $row->celular;
+	        $line[] = $row->situacao ? $this->lang->line('app_active') : $this->lang->line('app_inactive');
+	        $line[] = date('d/m/Y', strtotime($row->dataCadastro));
+	        $line[] = $row->permissao;
+	 
+            $color = $row->situacao ? 'btn-danger' : 'btn-success';
+            $icon = $row->situacao ? 'fa fa-remove' : 'fa fa-check';
+            $title = $row->situacao ? $this->lang->line('app_disable') : $this->lang->line('app_activate');
 
-       
-		
+            $line[] = '<a href="'.site_url('usuarios/read/'.$row->idUsuarios).'" class="btn btn-dark" title="'.$this->lang->line('app_view').'"><i class="fa fa-eye"></i> </a> 
+                       <a href="'.site_url('usuarios/update/'.$row->idUsuarios).'" class="btn btn-info" title="'.$this->lang->line('app_edit').'"><i class="fa fa-edit"></i></a> 
+                       <a href="'.site_url('usuarios/status/' . $row->idUsuarios) . '" class="btn '.$color.' delete" title="' . $title . '"><i class="'.$icon.'"></i></a>';
+            $data[] = $line;  
+        }  
+
+        $output = array(  
+            'draw'                => intval($this->input->post('draw')),  
+            'recordsTotal'        => $this->Usuarios_model->get_all_data(),  
+            'recordsFiltered'     => $this->Usuarios_model->get_filtered_data(),  
+            'data'                => $data  
+        );  
+        echo json_encode($output);
     }
-	
-    function adicionar(){  
-          
-        $this->load->library('form_validation');    
-		$this->data['custom_error'] = '';
-		
-        if ($this->form_validation->run('usuarios') == false)
-        {
-             $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">'.validation_errors().'</div>' : false);
 
-        } else
-        {
+    public function read($id){
+
+        if(!is_numeric($id)){
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('usuarios');
+        }
+
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error', $this->lang->line('app_permission_view').' '.$this->lang->line('users'));
+           redirect(base_url());
+        }
+
+        $row = $this->Usuarios_model->with('permissao')->get($id);
+        if ($row){
+            $data = array(
+		        'idUsuarios' => $row->idUsuarios,
+		        'nome' => $row->nome,
+		        'rg' => $row->rg,
+		        'cpf' => $row->cpf,
+		        'rua' => $row->rua,
+		        'numero' => $row->numero,
+		        'bairro' => $row->bairro,
+		        'cidade' => $row->cidade,
+		        'estado' => $row->estado,
+		        'email' => $row->email,
+		        'telefone' => $row->telefone,
+		        'celular' => $row->celular,
+		        'situacao' => $row->situacao,
+		        'dataCadastro' => $row->dataCadastro,
+		        'permissoes_id' => $row->permissoes_id,
+		        'permissao' => $row->permissao->nome,
+	        );
+
+            $data['view'] = 'usuarios/usuarios_read';
+            $this->load->view('tema/topo', $data, FALSE);
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('usuarios'));
+        }
+    }
+
+    public function create(){
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error',$this->lang->line('app_permission_add').' '.$this->lang->line('users'));
+           redirect(base_url());
+        }
+
+        $this->load->model('Permissoes_model');
+        $permissoes = $this->Permissoes_model->where('situacao','1')->as_dropdown('nome')->get_all();
+
+        $data = array(
+            'button' => '<i class="fa fa-plus"></i> '.$this->lang->line('app_create'),
+            'action' => site_url('usuarios/create_action'),
+	        'idUsuarios' => set_value('idUsuarios'),
+	        'nome' => set_value('nome'),
+	        'rg' => set_value('rg'),
+	        'cpf' => set_value('cpf'),
+	        'rua' => set_value('rua'),
+	        'numero' => set_value('numero'),
+	        'bairro' => set_value('bairro'),
+	        'cidade' => set_value('cidade'),
+	        'estado' => set_value('estado'),
+	        'email' => set_value('email'),
+	        'senha' => set_value('senha'),
+	        'telefone' => set_value('telefone'),
+	        'celular' => set_value('celular'),
+	        'situacao' => set_value('situacao'),
+	        'dataCadastro' => set_value('dataCadastro'),
+            'permissoes_id' => set_value('permissoes_id'),
+            'permissoes' => $permissoes
+	    );
+    
+        $data['view'] = 'usuarios/usuarios_form';
+        $this->load->view('tema/topo', $data, FALSE);
+
+    }
+    
+    public function create_action() {
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error',$this->lang->line('app_permission_add').' '.$this->lang->line('users'));
+           redirect(base_url());
+        }
+
+        $this->_rules();
+        $this->form_validation->set_rules('senha', '<b>'.$this->lang->line('user_password').'</b>', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->create();
+        } else {
+            $data = array(
+		        'nome' => $this->input->post('nome',TRUE),
+		        'rg' => $this->input->post('rg',TRUE),
+		        'cpf' => $this->input->post('cpf',TRUE),
+		        'rua' => $this->input->post('rua',TRUE),
+		        'numero' => $this->input->post('numero',TRUE),
+		        'bairro' => $this->input->post('bairro',TRUE),
+		        'cidade' => $this->input->post('cidade',TRUE),
+		        'estado' => $this->input->post('estado',TRUE),
+		        'email' => $this->input->post('email',TRUE),
+		        'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
+		        'telefone' => $this->input->post('telefone',TRUE),
+		        'celular' => $this->input->post('celular',TRUE),
+		        'situacao' => $this->input->post('situacao',TRUE),
+		        'dataCadastro' => date('Y-m-d'),
+		        'permissoes_id' => $this->input->post('permissoes_id',TRUE),
+	        );
+
+            $this->Usuarios_model->insert($data);
+            $this->session->set_flashdata('success', $this->lang->line('app_add_message'));
+            redirect(site_url('usuarios'));
+        }
+    }
+    
+    public function update($id){
+        if(!is_numeric($id)){
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('usuarios');
+        }
+
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error',$this->lang->line('app_permission_edit').' '.$this->lang->line('users'));
+           redirect(base_url());
+        }
+
+        $row = $this->Usuarios_model->get($id);
+
+        if ($row) {
+
+            $this->load->model('Permissoes_model');
+            $permissoes = $this->Permissoes_model->where('situacao','1')->as_dropdown('nome')->get_all();
 
             $data = array(
-                    'nome' => set_value('nome'),
-					'rg' => set_value('rg'),
-					'cpf' => set_value('cpf'),
-					'rua' => set_value('rua'),
-					'numero' => set_value('numero'),
-					'bairro' => set_value('bairro'),
-					'cidade' => set_value('cidade'),
-					'estado' => set_value('estado'),
-					'email' => set_value('email'),
-					'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-					'telefone' => set_value('telefone'),
-					'celular' => set_value('celular'),
-					'situacao' => set_value('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id'),
-					'dataCadastro' => date('Y-m-d')
-            );
-           
-			if ($this->usuarios_model->add('usuarios',$data) == TRUE)
-			{
-                                $this->session->set_flashdata('success','Usuário cadastrado com sucesso!');
-				redirect(base_url().'index.php/usuarios/adicionar/');
-			}
-			else
-			{
-				$this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                'button' => '<i class="fa fa-edit"></i> '.$this->lang->line('app_edit'),
+                'action' => site_url('usuarios/update_action'),
+		        'idUsuarios' => set_value('idUsuarios', $row->idUsuarios),
+		        'nome' => set_value('nome', $row->nome),
+		        'rg' => set_value('rg', $row->rg),
+		        'cpf' => set_value('cpf', $row->cpf),
+		        'rua' => set_value('rua', $row->rua),
+		        'numero' => set_value('numero', $row->numero),
+		        'bairro' => set_value('bairro', $row->bairro),
+		        'cidade' => set_value('cidade', $row->cidade),
+		        'estado' => set_value('estado', $row->estado),
+		        'email' => set_value('email', $row->email),
+		        'senha' => '',
+		        'telefone' => set_value('telefone', $row->telefone),
+		        'celular' => set_value('celular', $row->celular),
+		        'situacao' => set_value('situacao', $row->situacao),
+                'permissoes_id' => set_value('permissoes_id', $row->permissoes_id),
+                'permissoes' => $permissoes
+	        );
+            $data['view'] = 'usuarios/usuarios_form';
+            $this->load->view('tema/topo', $data, FALSE);
 
-			}
-		}
-        
-        $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes','permissoes.idPermissao,permissoes.nome');   
-		$this->data['view'] = 'usuarios/adicionarUsuario';
-        $this->load->view('tema/topo',$this->data);
-   
-       
-    }	
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('usuarios'));
+        }
+    }
     
-    function editar(){  
-        
-        if(!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))){
-            $this->session->set_flashdata('error','Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+    public function update_action(){
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error',$this->lang->line('app_permission_edit').' '.$this->lang->line('users'));
+           redirect(base_url());
         }
 
-        $this->load->library('form_validation');    
-		$this->data['custom_error'] = '';
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        $this->form_validation->set_rules('rg', 'RG', 'trim|required');
-        $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
-        $this->form_validation->set_rules('rua', 'Rua', 'trim|required');
-        $this->form_validation->set_rules('numero', 'Número', 'trim|required');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required');
-        $this->form_validation->set_rules('estado', 'Estado', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required');
-        $this->form_validation->set_rules('situacao', 'Situação', 'trim|required');
-        $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
+        $this->_rules();
 
-        if ($this->form_validation->run() == false)
-        {
-             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+        if ($this->form_validation->run() == FALSE) {
+            $this->update($this->input->post('idUsuarios', TRUE));
+        } else {
+            $data = array(
+		        'nome' => $this->input->post('nome',TRUE),
+		        'rg' => $this->input->post('rg',TRUE),
+		        'cpf' => $this->input->post('cpf',TRUE),
+		        'rua' => $this->input->post('rua',TRUE),
+		        'numero' => $this->input->post('numero',TRUE),
+		        'bairro' => $this->input->post('bairro',TRUE),
+		        'cidade' => $this->input->post('cidade',TRUE),
+		        'estado' => $this->input->post('estado',TRUE),
+		        'email' => $this->input->post('email',TRUE),
+		        'telefone' => $this->input->post('telefone',TRUE),
+		        'celular' => $this->input->post('celular',TRUE),
+		        'situacao' => $this->input->post('situacao',TRUE),
+		        'permissoes_id' => $this->input->post('permissoes_id',TRUE),
+            );
+            
+            // Change password if not blank
+            if($this->input->post('senha')){
+                $senha = password_hash($this->input->post('senha'), PASSWORD_DEFAULT);
+                $data['senha'] = $senha;
+            } 
 
-        } else
-        { 
+            $this->Usuarios_model->update($data, $this->input->post('idUsuarios', TRUE));
+            $this->session->set_flashdata('success', $this->lang->line('app_edit_message'));
+            redirect(site_url('usuarios'));
+        }
+    }
+    
+    public function status($idUsuarios){
 
-            if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0)
-            {
-                $this->session->set_flashdata('error','O usuário super admin não pode ser desativado!');
-                redirect(base_url().'index.php/usuarios/editar/'.$this->input->post('idUsuarios'));
+        if(!is_numeric($idUsuarios)){
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect('usuarios');
+        }
+
+        if(!$this->permission->check($this->session->userdata('permissao'),'cUsuario')){
+           $this->session->set_flashdata('error',$this->lang->line('app_permission_edit').' '.$this->lang->line('users'));
+           redirect(base_url());
+        } 
+
+        $row = $this->Usuarios_model->get($idUsuarios);
+        $ajax = $this->input->get('ajax');
+
+        if ($row) {
+            if($this->Usuarios_model->update(array('situacao' => !$row->situacao), $idUsuarios)){
+
+                if($ajax){
+                    echo json_encode(array('result' => true, 'message' => $this->lang->line('app_delete_message'))); die();
+                }
+                $this->session->set_flashdata('success', $this->lang->line('app_delete_message'));
+                redirect(site_url('usuarios'));
+            }else{
+
+                if($ajax){
+                    echo json_encode(array('result' => false, 'message' => $this->lang->line('app_error'))); die();
+                }
+
+                $this->session->set_flashdata('error', $this->lang->line('app_error'));
+                redirect(site_url('usuarios'));
             }
 
-            $senha = $this->input->post('senha'); 
-            if($senha != null){
+        } else {
 
-                $senha = password_hash($senha, PASSWORD_DEFAULT);
+            if($ajax){
+                echo json_encode(array('result' => false, 'message' => $this->lang->line('app_not_found'))); die();
+            }
+            $this->session->set_flashdata('error', $this->lang->line('app_not_found'));
+            redirect(site_url('usuarios'));
+        }
 
-                $data = array(
-                        'nome' => $this->input->post('nome'),
-                        'rg' => $this->input->post('rg'),
-                        'cpf' => $this->input->post('cpf'),
-                        'rua' => $this->input->post('rua'),
-                        'numero' => $this->input->post('numero'),
-                        'bairro' => $this->input->post('bairro'),
-                        'cidade' => $this->input->post('cidade'),
-                        'estado' => $this->input->post('estado'),
-                        'email' => $this->input->post('email'),
-                        'senha' => $senha,
-                        'telefone' => $this->input->post('telefone'),
-                        'celular' => $this->input->post('celular'),
-                        'situacao' => $this->input->post('situacao'),
-                        'permissoes_id' => $this->input->post('permissoes_id')
-                );
-            }  
-
-            else{
-
-                $data = array(
-                        'nome' => $this->input->post('nome'),
-                        'rg' => $this->input->post('rg'),
-                        'cpf' => $this->input->post('cpf'),
-                        'rua' => $this->input->post('rua'),
-                        'numero' => $this->input->post('numero'),
-                        'bairro' => $this->input->post('bairro'),
-                        'cidade' => $this->input->post('cidade'),
-                        'estado' => $this->input->post('estado'),
-                        'email' => $this->input->post('email'),
-                        'telefone' => $this->input->post('telefone'),
-                        'celular' => $this->input->post('celular'),
-                        'situacao' => $this->input->post('situacao'),
-                        'permissoes_id' => $this->input->post('permissoes_id')
-                );
-
-            }  
-
-           
-			if ($this->usuarios_model->edit('usuarios',$data,'idUsuarios',$this->input->post('idUsuarios')) == TRUE)
-			{
-                $this->session->set_flashdata('success','Usuário editado com sucesso!');
-				redirect(base_url().'index.php/usuarios/editar/'.$this->input->post('idUsuarios'));
-			}
-			else
-			{
-				$this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-
-			}
-		}
-
-		$this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
-        $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes','permissoes.idPermissao,permissoes.nome'); 
-
-		$this->data['view'] = 'usuarios/editarUsuario';
-        $this->load->view('tema/topo',$this->data);
-			
-      
     }
-	
-    public function excluir(){
 
-            $ID =  $this->uri->segment(3);
-            $this->usuarios_model->delete('usuarios','idUsuarios',$ID);             
-            redirect(base_url().'index.php/usuarios/gerenciar/');
+    public function _rules() 
+    {
+	    $this->form_validation->set_rules('nome', '<b>'.$this->lang->line('user_name').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('rg', '<b>'.$this->lang->line('user_rg').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('cpf', '<b>'.$this->lang->line('user_cpf').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('rua', '<b>'.$this->lang->line('user_street').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('numero', '<b>'.$this->lang->line('user_number').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('bairro', '<b>'.$this->lang->line('user_district').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('cidade', '<b>'.$this->lang->line('user_city').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('estado', '<b>'.$this->lang->line('user_state').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('email', '<b>'.$this->lang->line('user_email').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('senha', '<b>'.$this->lang->line('user_password').'</b>', 'trim');
+	    $this->form_validation->set_rules('telefone', '<b>'.$this->lang->line('user_phone').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('celular', '<b>'.$this->lang->line('user_cel').'</b>', 'trim');
+	    $this->form_validation->set_rules('situacao', '<b>'.$this->lang->line('user_status').'</b>', 'trim|required');
+	    $this->form_validation->set_rules('permissoes_id', '<b>'.$this->lang->line(' user_group').'</b>', 'trim|required');
+
+	    $this->form_validation->set_rules('idUsuarios', 'idUsuarios', 'trim');
+	    $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
+
 }
 
+/* End of file Usuarios.php */
+/* Location: ./application/controllers/Usuarios.php */

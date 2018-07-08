@@ -43,7 +43,7 @@
 					<a class="navbar-brand" href="<?= base_url() ?> ">
 						<!-- Logo icon -->
 						<b>
-							<img style="max-height: 24px;" src="<?= base_url('assets/images/logo.png'); ?>" class="dark-logo img-responsive" />
+							<img style="max-height: 24px; max-width: 60px" src="<?= base_url('assets/images/logo.png'); ?>" class="dark-logo img-responsive" />
 						</b>
 						<!--End Logo icon -->
 						<!-- Logo text -->
