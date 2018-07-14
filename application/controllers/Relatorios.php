@@ -218,8 +218,8 @@ class Relatorios extends CI_Controller{
         $data['em_cnpj'] = $emitente[0]->cnpj;
         $data['em_logo'] = $emitente[0]->url_logo;
         $data['res_nome'] = $usuario;
-        $dataInicial == null ? $data['dataInicial'] = date('d-m-Y', strtotime($dataInicial)) : $data['dataInicial'] = 'indefinida';
-        $dataFinal == null ? $data['dataFinal'] = date('d-m-Y', strtotime($dataFinal)) : $data['dataFinal'] = 'indefinida';
+        $dataInicial != null ? $data['dataInicial'] = date('d-m-Y', strtotime($dataInicial)) : $data['dataInicial'] = 'indefinida';
+        $dataFinal != null ? $data['dataFinal'] = date('d-m-Y', strtotime($dataFinal)) : $data['dataFinal'] = 'indefinida';
 
         $data['topo'] = $this->load->view('relatorios/rel_os_topo', $data, true);
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
