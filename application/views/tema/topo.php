@@ -482,7 +482,7 @@
 			<!-- footer -->
 			<footer class="footer text-center fixed-bottom" style="margin: 0">
 				<a href="https://github.com/RamonSilva20/mapos" target="_blank">
-					<?= date('Y'); ?> &copy; MAP OS - Ramon Silva </a>
+				&copy; MAPOS - Versão: <?= $this->config->item('app_version'); ?></a>
 			</footer>
 
 			<!-- End footer -->

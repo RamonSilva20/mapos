@@ -27,13 +27,15 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
    - ~~Refatorar cadastro de produtos~~
    - Refatorar cadastro de OS
    - Refatorar cadastro de vendas
-   - Refatorar cadastro de arquivos
+   - ~~Refatorar cadastro de arquivos~~
    - Refatorar cadastro de receitas e despesas
    - Refatorar financeiro
    - ~~Refatorar cadastro de usuários~~
    - ~~Refatorar cadastro de permissões~~
    - Refatorar relatórios 
    - Refatorar área do cliente
+   - Adicionar validações em javascript
+   - Adicionar máscaras nos campos
  - Adicionar notificações por e-mail 
  - Adicionar Rich Text Editor nos campos do tipo TEXTAREA
  - Adicionar desconto e parcelamento na OS e Venda

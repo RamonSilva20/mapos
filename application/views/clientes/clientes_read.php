@@ -4,7 +4,6 @@
 			<h4>
 				<i class="fa fa-eye"></i>
 				<?= $this->lang->line('app_view').' '.ucfirst($this->lang->line('client')); ?>
-					</h2>
 			</h4>
 		</div>
 		<div class="card-body">

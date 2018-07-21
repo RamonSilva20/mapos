@@ -1,10 +1,61 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-
+/*
+ *------------------
+ * Timezone 
+ *------------------
+ */
 date_default_timezone_set('America/Sao_Paulo');
 
-
+/*
+ *------------------
+ * Current version
+ *------------------ 
+ */
 $config['app_version'] = '4.0'; 
+
+/*
+ *-------------------
+ * Date format
+ * ------------------
+ * Opções: Y-m-d, Y/m/d, d-m-Y, d/m/Y
+ */
+$config['date_format'] = 'd/m/Y';
+
+/*
+ *-------------------
+ * Currency
+ *-------------------
+ */
+$config['currency'] = 'R$';
+
+
+/*
+ *------------------- 
+ * Upload file extensions
+ *-------------------
+ * Ex: pdf|gif|jpg|png|doc|docx|xls|xlsx|csv|txt 
+ */
+$config['allowed_types'] = 'pdf|gif|jpg|png|doc|docx|xls|xlsx|csv|txt';
+
+/*
+ *-------------------
+ * Upload max size file (Default 2048 KB)
+ *-------------------  
+ */
+$config['max_size'] = 2048;
+
+/*
+|--------------------------------------------------------------------------
+| Default Language
+|--------------------------------------------------------------------------
+|
+| This determines which set of language files should be used. Make sure
+| there is an available translation if you intend to use something other
+| than english.
+|
+*/
+$config['language']	= 'pt-br';
 
 /*
 |--------------------------------------------------------------------------
@@ -70,18 +121,6 @@ $config['uri_protocol']	= 'REQUEST_URI';
 | https://codeigniter.com/user_guide/general/urls.html
 */
 $config['url_suffix'] = '';
-
-/*
-|--------------------------------------------------------------------------
-| Default Language
-|--------------------------------------------------------------------------
-|
-| This determines which set of language files should be used. Make sure
-| there is an available translation if you intend to use something other
-| than english.
-|
-*/
-$config['language']	= 'pt-br';
 
 /*
 |--------------------------------------------------------------------------
@@ -276,7 +315,7 @@ $config['log_file_permissions'] = 0644;
 | codes to set your own date formatting
 |
 */
-$config['log_date_format'] = 'Y-m-d H:i:s';
+$config['log_date_format'] = 'd-m-Y H:i:s';
 
 /*
 |--------------------------------------------------------------------------

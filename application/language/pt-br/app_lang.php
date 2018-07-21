@@ -135,8 +135,12 @@ $lang[''] = '';
 // File Labels
 $lang['file'] = 'arquivo';
 $lang['files'] = 'arquivos';
-$lang[''] = '';
-$lang[''] = '';
+$lang['file_name'] = 'nome';
+$lang['file_description'] = 'descrição';
+$lang['file_date'] = 'data';
+$lang['file_type'] = 'extensão';
+$lang['file_size'] = 'tamanho';
+$lang['file_download'] = 'download';
 
 // Sale Labels 
 $lang['sale'] = 'venda';
