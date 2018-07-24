@@ -1,9 +1,10 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
-function pdf_create($html, $filename, $stream = TRUE)
+function pdf_create($html, $filename, $stream = true)
 {
 
     require_once(APPPATH . 'helpers/mpdf/mpdf.php');
@@ -14,16 +15,11 @@ function pdf_create($html, $filename, $stream = TRUE)
 
     $mpdf->WriteHTML($html);
 
-    if ($stream)
-    {
+    if ($stream) {
         $mpdf->Output($filename . '.pdf', 'I');
-    }
-    else
-    {
+    } else {
         $mpdf->Output('./uploads/temp/' . $filename . '.pdf', 'F');
         
         return './uploads/temp/' . $filename . '.pdf';
     }
 }
-
-?>

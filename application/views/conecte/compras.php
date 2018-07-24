@@ -1,6 +1,6 @@
 <?php
 
-if(!$results){?>
+if (!$results) {?>
 	<div class="widget-box">
      <div class="widget-title">
         <span class="icon">
@@ -32,7 +32,7 @@ if(!$results){?>
 </table>
 </div>
 </div>
-<?php } else{?>
+<?php } else {?>
 
 
 <div class="widget-box">
@@ -59,8 +59,13 @@ if(!$results){?>
     </thead>
     <tbody>
         <?php foreach ($results as $r) {
-            $dataVenda = date(('d/m/Y'),strtotime($r->dataVenda));
-            if($r->faturado == 1){$faturado = 'Sim';} else{ $faturado = 'Não';}           
+            $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
+            if ($r->faturado == 1) {
+                $faturado = 'Sim';
+
+            } else {
+                $faturado = 'Não';
+            }
             echo '<tr>';
             echo '<td>'.$r->idVendas.'</td>';
             echo '<td>'.$dataVenda.'</td>';
@@ -72,7 +77,7 @@ if(!$results){?>
                       
                   </td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -81,7 +86,8 @@ if(!$results){?>
 </div>
 </div>
 	
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

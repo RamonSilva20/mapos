@@ -1,11 +1,15 @@
 <?php
-	$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-	if (!$msg) $msg = "Le site du spipu\r\nhttp://spipu.net/";
+    $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+if (!$msg) {
+    $msg = "Le site du spipu\r\nhttp://spipu.net/";
+}
 
-	$err = isset($_GET['err']) ? $_GET['err'] : '';
-	if (!in_array($err, array('L', 'M', 'Q', 'H'))) $err = 'L';
+    $err = isset($_GET['err']) ? $_GET['err'] : '';
+if (!in_array($err, array('L', 'M', 'Q', 'H'))) {
+    $err = 'L';
+}
 
-	require_once('qrcode.class.php');
+    require_once('qrcode.class.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -57,8 +61,8 @@ table.qr td.on
 			<hr>
 			Génération d'un tableau HTML :<br> 
 <?php
-	$qrcode = new QRcode(utf8_encode($msg), $err);
-	$qrcode->displayHTML();
+    $qrcode = new QRcode(utf8_encode($msg), $err);
+    $qrcode->displayHTML();
 ?>
 			<br>
 			Génération d'une image PNG : <br>

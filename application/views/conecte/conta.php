@@ -34,7 +34,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
-                                                    <td><?php echo date('d/m/Y',  strtotime($result->dataCadastro)) ?></td>
+                                                    <td><?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>

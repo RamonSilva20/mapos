@@ -125,6 +125,3 @@ $blwf = array (
 );
 $pstf = array (
 );
-
- 
-?>

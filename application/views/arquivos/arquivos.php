@@ -3,7 +3,7 @@
 
 <div class="span12" style="margin-left: 0">
     <form method="get" action="<?php echo current_url(); ?>">
-        <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aArquivo')){ ?>
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) { ?>
              <div class="span3">
                 <a href="<?php echo base_url();?>index.php/arquivos/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i> Adicionar Arquivo</a>
             </div>  
@@ -23,7 +23,7 @@
 </div>
 
 <?php
-if(!$results){?>
+if (!$results) {?>
 
 <div class="span12" style="margin-left: 0">
         <div class="widget-box">
@@ -57,7 +57,7 @@ if(!$results){?>
     </div>
 </div>
 
-<?php }else{ ?>
+<?php } else { ?>
 
 <div class="span12" style="margin-left: 0">
     <div class="widget-box">
@@ -88,25 +88,25 @@ if(!$results){?>
                 echo '<tr>';
                 echo '<td>'.$r->idDocumentos.'</td>';
                 echo '<td>'.$r->documento.'</td>';
-                echo '<td>'.date('d/m/Y',strtotime($r->cadastro)).'</td>';
+                echo '<td>'.date('d/m/Y', strtotime($r->cadastro)).'</td>';
                 echo '<td>'.$r->tamanho.' KB</td>';
                 echo '<td>'.$r->tipo.'</td>';
                 echo '<td>';
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'vArquivo')){
-                        echo '<a class="btn btn-inverse tip-top" style="margin-right: 1%" target="_blank" href="'.$r->url.'" class="btn tip-top" title="Imprimir"><i class="icon-print"></i></a>'; 
-                    }
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'vArquivo')){
-                        echo '<a href="'.base_url().'index.php/arquivos/download/'.$r->idDocumentos.'" class="btn tip-top" style="margin-right: 1%" title="Download"><i class="icon-download-alt"></i></a>'; 
-                    }
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'eArquivo')){ 
-                        echo  '<a href="'.base_url().'index.php/arquivos/editar/'.$r->idDocumentos.'" class="btn btn-info tip-top" style="margin-right: 1%" title="Editar"><i class="icon-pencil icon-white"></i></a>';
-                    }
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'dArquivo')){
-                         echo '<a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="'.$r->idDocumentos.'" class="btn btn-danger tip-top" title="Excluir Arquivo"><i class="icon-remove icon-white"></i></a>';
-                    }
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) {
+                    echo '<a class="btn btn-inverse tip-top" style="margin-right: 1%" target="_blank" href="'.$r->url.'" class="btn tip-top" title="Imprimir"><i class="icon-print"></i></a>';
+                }
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) {
+                    echo '<a href="'.base_url().'index.php/arquivos/download/'.$r->idDocumentos.'" class="btn tip-top" style="margin-right: 1%" title="Download"><i class="icon-download-alt"></i></a>';
+                }
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) {
+                    echo  '<a href="'.base_url().'index.php/arquivos/editar/'.$r->idDocumentos.'" class="btn btn-info tip-top" style="margin-right: 1%" title="Editar"><i class="icon-pencil icon-white"></i></a>';
+                }
+                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) {
+                     echo '<a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="'.$r->idDocumentos.'" class="btn btn-danger tip-top" title="Excluir Arquivo"><i class="icon-remove icon-white"></i></a>';
+                }
                 echo  '</td>';
                 echo '</tr>';
-            }?>
+}?>
             <tr>
                 
             </tr>
@@ -116,7 +116,8 @@ if(!$results){?>
     </div>
 
 </div>
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

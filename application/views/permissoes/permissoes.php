@@ -1,6 +1,6 @@
 <a href="<?php echo base_url();?>index.php/permissoes/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Permissão</a>
 <?php
-if(!$results){?>
+if (!$results) {?>
 
         <div class="widget-box">
         <div class="widget-title">
@@ -31,8 +31,8 @@ if(!$results){?>
         </div>
     </div>
 
-<?php }else{
-	
+<?php } else {
+    
 
 ?>
 <div class="widget-box">
@@ -59,18 +59,23 @@ if(!$results){?>
     </thead>
     <tbody>
         <?php foreach ($results as $r) {
-            if($r->situacao == 1){$situacao = 'Ativo';}else{$situacao = 'Inativo';}
+            if ($r->situacao == 1) {
+                $situacao = 'Ativo';
+
+            } else {
+                $situacao = 'Inativo';
+            }
             echo '<tr>';
             echo '<td>'.$r->idPermissao.'</td>';
             echo '<td>'.$r->nome.'</td>';
-            echo '<td>'.date('d/m/Y',strtotime($r->data)).'</td>';
+            echo '<td>'.date('d/m/Y', strtotime($r->data)).'</td>';
             echo '<td>'.$situacao.'</td>';
             echo '<td>
                       <a href="'.base_url().'index.php/permissoes/editar/'.$r->idPermissao.'" class="btn btn-info tip-top" title="Editar Permissão"><i class="icon-pencil icon-white"></i></a>
                       <a href="#modal-excluir" role="button" data-toggle="modal" permissao="'.$r->idPermissao.'" class="btn btn-danger tip-top" title="Desativar Permissão"><i class="icon-remove icon-white"></i></a>
                   </td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -78,7 +83,8 @@ if(!$results){?>
 </table>
 </div>
 </div>
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

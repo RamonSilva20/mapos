@@ -34,7 +34,7 @@
                     <div class="control-group">
                         <label for="descricao" class="control-label">Data</label>
                         <div class="controls">
-                            <input id="data" type="text" class="datepicker" name="data" value="<?php echo date('d/m/Y',strtotime($result->cadastro));?>" />
+                            <input id="data" type="text" class="datepicker" name="data" value="<?php echo date('d/m/Y', strtotime($result->cadastro));?>" />
                         </div>
                     </div>
 

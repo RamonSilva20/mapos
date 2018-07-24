@@ -37,7 +37,7 @@
                                     echo '<tr>';
                                     echo '<td><small>' . $c->nomeCliente . '</small></td>';
                                     echo '<td><small>' . $c->status . '</small></td>';
-                                    echo '<td><small>' . date('d/m/Y',  strtotime($c->dataInicial)) . '</small></td>';
+                                    echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
                                     echo '<td><small>' . $c->descricaoProduto. '</small></td>';
                                     echo '<td><small>R$ '. $c->valorTotal .'</small></td>';
                                     echo '</tr>';

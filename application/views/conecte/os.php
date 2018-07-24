@@ -76,16 +76,15 @@ if (!$results) {
                     <?php foreach ($results as $r) {
                         $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                         $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                        if($r->status == "Aberto"){
+                        if ($r->status == "Aberto") {
                             $status = '<span class="label label-success">Aberto</span>';
-                        }elseif($r->status == "Orçamento"){
+                        } elseif ($r->status == "Orçamento") {
                             $status = '<span class="label label-info">Orçamento</span>';
-                        }elseif($r->status == "Finalizado"){
+                        } elseif ($r->status == "Finalizado") {
                             $status = '<span class="label label-important">Finalizado</span>';
-                        }elseif($r->status == "Cancelado"){
+                        } elseif ($r->status == "Cancelado") {
                             $status = '<span class="label label-inverse">Cancelado</span>';
-                        }
-                        else{
+                        } else {
                             $status = '<span class="label">Em Andamento</span>';
                         }
                         echo '<tr>';
@@ -101,7 +100,7 @@ if (!$results) {
                                   <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="icon-list"></i></a>  
                               </td>';
                         echo '</tr>';
-                    } ?>
+} ?>
                     <tr>
 
                     </tr>
