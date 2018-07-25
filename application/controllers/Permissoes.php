@@ -1,35 +1,39 @@
 <?php
 
-class Permissoes extends CI_Controller {
+class Permissoes extends CI_Controller
+{
     
 
     /**
-     * author: Ramon Silva 
+     * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     * 
+     *
      */
     
-  function __construct() {
-      parent::__construct();
-      if( (!session_id()) || (!$this->session->userdata('logado'))){
-        redirect('mapos/login');
-      }
+    function __construct()
+    {
+        parent::__construct();
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mapos/login');
+        }
 
-      if(!$this->permission->checkPermission($this->session->userdata('permissao'),'cPermissao')){
-        $this->session->set_flashdata('error','Você não tem permissão para configurar as permissões no sistema.');
-        redirect(base_url());
-      }
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
+            redirect(base_url());
+        }
 
-      $this->load->helper(array('form', 'codegen_helper'));
-      $this->load->model('permissoes_model', '', TRUE);
-      $this->data['menuConfiguracoes'] = 'Permissões';
-  }
-	
-	function index(){
-		$this->gerenciar();
-	}
+        $this->load->helper(array('form', 'codegen_helper'));
+        $this->load->model('permissoes_model', '', true);
+        $this->data['menuConfiguracoes'] = 'Permissões';
+    }
+    
+    function index()
+    {
+        $this->gerenciar();
+    }
 
-	function gerenciar(){
+    function gerenciar()
+    {
         
         $this->load->library('pagination');
         
@@ -56,18 +60,19 @@ class Permissoes extends CI_Controller {
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->pagination->initialize($config); 	
+        $this->pagination->initialize($config);
 
-		  $this->data['results'] = $this->permissoes_model->get('permissoes','idPermissao,nome,data,situacao','',$config['per_page'],$this->uri->segment(3));
+          $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $config['per_page'], $this->uri->segment(3));
        
-	    $this->data['view'] = 'permissoes/permissoes';
-       	$this->load->view('tema/topo',$this->data);
+        $this->data['view'] = 'permissoes/permissoes';
+        $this->load->view('tema/topo', $this->data);
 
        
-		
+        
     }
-	
-    function adicionar() {
+    
+    function adicionar()
+    {
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
@@ -140,7 +145,7 @@ class Permissoes extends CI_Controller {
                 'situacao' => $situacao
             );
 
-            if ($this->permissoes_model->add('permissoes', $data) == TRUE) {
+            if ($this->permissoes_model->add('permissoes', $data) == true) {
 
                 $this->session->set_flashdata('success', 'Permissão adicionada com sucesso!');
                 redirect(base_url() . 'index.php/permissoes/adicionar/');
@@ -154,7 +159,8 @@ class Permissoes extends CI_Controller {
 
     }
 
-    function editar() {
+    function editar()
+    {
 
         
         $this->load->library('form_validation');
@@ -225,7 +231,7 @@ class Permissoes extends CI_Controller {
                 'situacao' => $situacao
             );
 
-            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == TRUE) {
+            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
                 $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
                 redirect(base_url() . 'index.php/permissoes/editar/'.$this->input->post('idPermissao'));
             } else {
@@ -239,23 +245,23 @@ class Permissoes extends CI_Controller {
         $this->load->view('tema/topo', $this->data);
 
     }
-	
-    function desativar(){
+    
+    function desativar()
+    {
         
         $id =  $this->input->post('id');
-        if ($id == null){
-            $this->session->set_flashdata('error','Erro ao tentar desativar permissão.');            
+        if ($id == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
             redirect(base_url().'index.php/permissoes/gerenciar/');
         }
         $data = array(
           'situacao' => false
         );
-        if($this->permissoes_model->edit('permissoes',$data,'idPermissao',$id)){
-          $this->session->set_flashdata('success','Permissão desativada com sucesso!');  
+        if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $id)) {
+            $this->session->set_flashdata('success', 'Permissão desativada com sucesso!');
+        } else {
+            $this->session->set_flashdata('error', 'Erro ao desativar permissão!');
         }
-        else{
-          $this->session->set_flashdata('error','Erro ao desativar permissão!');  
-        }         
         
                   
         redirect(base_url().'index.php/permissoes/gerenciar/');

@@ -15,12 +15,12 @@
     <body>
         <div id="loginbox">            
             <form  class="form-vertical" id="formLogin" method="post" action="<?php echo base_url()?>index.php/mapos/verificarLogin">
-                  <?php if($this->session->flashdata('error') != null){?>
+                    <?php if ($this->session->flashdata('error') != null) {?>
                         <div class="alert alert-danger">
                           <button type="button" class="close" data-dismiss="alert">&times;</button>
-                          <?php echo $this->session->flashdata('error');?>
+                            <?php echo $this->session->flashdata('error');?>
                        </div>
-                  <?php }?>
+                    <?php }?>
                 <div class="control-group normal_text"> <h3><img src="<?php echo base_url()?>assets/img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">

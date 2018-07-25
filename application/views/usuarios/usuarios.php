@@ -1,6 +1,6 @@
 <a href="<?php echo base_url()?>index.php/usuarios/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Usuário</a>
 <?php
-if(!$results){?>
+if (!$results) {?>
         <div class="widget-box">
      <div class="widget-title">
         <span class="icon">
@@ -34,7 +34,7 @@ if(!$results){?>
 </div>
 
 
-<?php } else{?>
+<?php } else {?>
 
 <div class="widget-box">
      <div class="widget-title">
@@ -72,7 +72,7 @@ if(!$results){?>
                       <a href="'.base_url().'index.php/usuarios/editar/'.$r->idUsuarios.'" class="btn btn-info tip-top" title="Editar Usuário"><i class="icon-pencil icon-white"></i></a>
                   </td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -82,4 +82,5 @@ if(!$results){?>
 </div>
 
 	
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>

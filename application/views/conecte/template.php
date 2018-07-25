@@ -41,10 +41,22 @@
 
     <div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-list"></i> Menu</a>
       <ul>
-        <li class="<?php if(isset($menuPainel)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/mine/painel"><i class="icon icon-home"></i> <span>Painel</span></a></li>
-        <li class="<?php if(isset($menuConta)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/mine/conta"><i class="icon icon-star"></i> <span>Minha Conta</span></a></li>
-        <li class="<?php if(isset($menuOs)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/mine/os"><i class="icon icon-tags"></i> <span>Ordens de Serviço</span></a></li>
-        <li class="<?php if(isset($menuVendas)){echo 'active';};?>"><a href="<?php echo base_url()?>index.php/mine/compras"><i class="icon icon-shopping-cart"></i> <span>Compras</span></a></li>
+        <li class="<?php if (isset($menuPainel)) {
+            echo 'active';
+
+};?>"><a href="<?php echo base_url()?>index.php/mine/painel"><i class="icon icon-home"></i> <span>Painel</span></a></li>
+        <li class="<?php if (isset($menuConta)) {
+            echo 'active';
+
+};?>"><a href="<?php echo base_url()?>index.php/mine/conta"><i class="icon icon-star"></i> <span>Minha Conta</span></a></li>
+        <li class="<?php if (isset($menuOs)) {
+            echo 'active';
+
+};?>"><a href="<?php echo base_url()?>index.php/mine/os"><i class="icon icon-tags"></i> <span>Ordens de Serviço</span></a></li>
+        <li class="<?php if (isset($menuVendas)) {
+            echo 'active';
+
+};?>"><a href="<?php echo base_url()?>index.php/mine/compras"><i class="icon icon-shopping-cart"></i> <span>Compras</span></a></li>
         <li class=""><a href="<?php echo base_url()?>index.php/mine/sair"><i class="icon icon-share-alt"></i> <span>Sair</span></a></li>
         
       </ul>
@@ -61,21 +73,23 @@
         <div class="row-fluid">
           
           <div class="span12">
-            <?php if($this->session->flashdata('error') != null){?>
+            <?php if ($this->session->flashdata('error') != null) {?>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <?php echo $this->session->flashdata('error');?>
               </div>
             <?php }?>
 
-            <?php if($this->session->flashdata('success') != null){?>
+            <?php if ($this->session->flashdata('success') != null) {?>
               <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <?php echo $this->session->flashdata('success');?>
               </div>
             <?php }?>
 
-              <?php if(isset($output)){ $this->load->view($output);} ?>            
+                <?php if (isset($output)) {
+                    $this->load->view($output);
+} ?>            
             
           </div>
         </div>

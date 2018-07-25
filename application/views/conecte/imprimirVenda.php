@@ -26,7 +26,7 @@
                 <table class="table">
                     <tbody>
 
-                        <?php if($emitente == null) {?>
+                        <?php if ($emitente == null) {?>
                                     
                         <tr>
                             <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<</td>
@@ -75,7 +75,7 @@
             <div style="margin-top: 0; padding-top: 0">
 
 
-                <?php if($produtos != null){?>
+                <?php if ($produtos != null) {?>
         
                 <table class="table table-bordered table-condensed" id="tblProdutos">
                             <thead>
@@ -95,13 +95,13 @@
                                     echo '<td>'.$p->descricao.'</td>';
                                     echo '<td>'.$p->quantidade.'</td>';
                                     
-                                    echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                    echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                     echo '</tr>';
                                 }?>
 
                                 <tr>
                                     <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                    <td><strong>R$ <?php echo number_format($totalProdutos,2,',','.');?></strong></td>
+                                    <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.');?></strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -110,7 +110,7 @@
         
                 <hr />
             
-                <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos,2,',','.');?></h4>
+                <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos, 2, ',', '.');?></h4>
 
             </div>
         </div>                               

@@ -36,17 +36,17 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php
-                          foreach ($produtos as $p) {
-                              echo '<tr>';
-                              echo '<td>' . $p->descricao. '</td>';
-                              echo '<td>' . $p->unidade . '</td>';
-                              echo '<td>' . $p->precoCompra . '</td>';
-                              echo '<td>' . $p->precoVenda . '</td>';
-                              echo '<td>' . $p->estoque. '</td>';
-                              echo '</tr>';
-                          }
-                          ?>
+                            <?php
+                            foreach ($produtos as $p) {
+                                echo '<tr>';
+                                echo '<td>' . $p->descricao. '</td>';
+                                echo '<td>' . $p->unidade . '</td>';
+                                echo '<td>' . $p->precoCompra . '</td>';
+                                echo '<td>' . $p->precoVenda . '</td>';
+                                echo '<td>' . $p->estoque. '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
                       </tbody>
                   </table>
 

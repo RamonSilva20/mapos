@@ -58,662 +58,662 @@ $GSUBScriptLang=array (
   'thai' => 'DFLT ',
 );
 $GSUBFeatures=array (
-  'DFLT' => 
+  'DFLT' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      ' RQD' => 
+      ' RQD' =>
       array (
         0 => 0,
       ),
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 22,
       ),
     ),
   ),
-  'arab' => 
+  'arab' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
       ),
-      'fina' => 
+      'fina' =>
       array (
         0 => 8,
       ),
-      'medi' => 
+      'medi' =>
       array (
         0 => 10,
       ),
-      'init' => 
+      'init' =>
       array (
         0 => 12,
       ),
-      'rlig' => 
+      'rlig' =>
       array (
         0 => 13,
         1 => 14,
         2 => 15,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 16,
         1 => 18,
       ),
     ),
-    'KUR ' => 
+    'KUR ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
       ),
-      'fina' => 
+      'fina' =>
       array (
         0 => 8,
       ),
-      'medi' => 
+      'medi' =>
       array (
         0 => 10,
       ),
-      'init' => 
+      'init' =>
       array (
         0 => 12,
       ),
-      'rlig' => 
+      'rlig' =>
       array (
         0 => 13,
         1 => 14,
         2 => 15,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 16,
         1 => 18,
       ),
     ),
-    'SND ' => 
+    'SND ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
       ),
-      'fina' => 
+      'fina' =>
       array (
         0 => 8,
       ),
-      'medi' => 
+      'medi' =>
       array (
         0 => 10,
       ),
-      'init' => 
+      'init' =>
       array (
         0 => 12,
       ),
-      'rlig' => 
+      'rlig' =>
       array (
         0 => 14,
         1 => 15,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 16,
         1 => 18,
       ),
     ),
-    'URD ' => 
+    'URD ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
       ),
-      'fina' => 
+      'fina' =>
       array (
         0 => 8,
       ),
-      'medi' => 
+      'medi' =>
       array (
         0 => 10,
       ),
-      'init' => 
+      'init' =>
       array (
         0 => 12,
       ),
-      'rlig' => 
+      'rlig' =>
       array (
         0 => 14,
         1 => 15,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 16,
         1 => 18,
       ),
     ),
   ),
-  'armn' => 
+  'armn' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 19,
       ),
     ),
   ),
-  'brai' => 
+  'brai' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'cans' => 
+  'cans' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'cher' => 
+  'cher' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'cyrl' => 
+  'cyrl' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
     ),
-    'MKD ' => 
+    'MKD ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 5,
       ),
     ),
-    'SRB ' => 
+    'SRB ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 5,
       ),
     ),
   ),
-  'geor' => 
+  'geor' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'grek' => 
+  'grek' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 25,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 26,
       ),
     ),
   ),
-  'hani' => 
+  'hani' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'hebr' => 
+  'hebr' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
         2 => 4,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 23,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 24,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 38,
       ),
     ),
   ),
-  'kana' => 
+  'kana' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'lao ' => 
+  'lao ' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'latn' => 
+  'latn' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'ISM ' => 
+    'ISM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'KSM ' => 
+    'KSM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'LSM ' => 
+    'LSM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'MOL ' => 
+    'MOL ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'NSM ' => 
+    'NSM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'ROM ' => 
+    'ROM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'SKS ' => 
+    'SKS ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
-    'SSM ' => 
+    'SSM ' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'locl' => 
+      'locl' =>
       array (
         0 => 6,
       ),
-      'liga' => 
+      'liga' =>
       array (
         0 => 17,
       ),
-      'dlig' => 
+      'dlig' =>
       array (
         0 => 20,
       ),
-      'hlig' => 
+      'hlig' =>
       array (
         0 => 21,
       ),
-      'salt' => 
+      'salt' =>
       array (
         0 => 27,
       ),
-      'aalt' => 
+      'aalt' =>
       array (
         0 => 28,
       ),
     ),
   ),
-  'math' => 
+  'math' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'nko ' => 
+  'nko ' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      ' RQD' => 
+      ' RQD' =>
       array (
         0 => 0,
       ),
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 1,
         1 => 3,
       ),
-      'fina' => 
+      'fina' =>
       array (
         0 => 7,
       ),
-      'medi' => 
+      'medi' =>
       array (
         0 => 9,
       ),
-      'init' => 
+      'init' =>
       array (
         0 => 11,
       ),
     ),
   ),
-  'ogam' => 
+  'ogam' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'runr' => 
+  'runr' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'tfng' => 
+  'tfng' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
     ),
   ),
-  'thai' => 
+  'thai' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'ccmp' => 
+      'ccmp' =>
       array (
         0 => 3,
       ),
@@ -721,45 +721,45 @@ $GSUBFeatures=array (
   ),
 );
 $GSUBLookups=array (
-  0 => 
+  0 =>
   array (
     'Type' => 6,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 42506,
     ),
     'MarkFilteringSet' => '',
   ),
-  1 => 
+  1 =>
   array (
     'Type' => 6,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 42630,
     ),
     'MarkFilteringSet' => '',
   ),
-  2 => 
+  2 =>
   array (
     'Type' => 6,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 42710,
     ),
     'MarkFilteringSet' => '',
   ),
-  3 => 
+  3 =>
   array (
     'Type' => 6,
     'Flag' => 0,
     'SubtableCount' => 10,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 43602,
       1 => 43690,
@@ -774,386 +774,386 @@ $GSUBLookups=array (
     ),
     'MarkFilteringSet' => '',
   ),
-  4 => 
+  4 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44390,
     ),
     'MarkFilteringSet' => '',
   ),
-  5 => 
+  5 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44428,
     ),
     'MarkFilteringSet' => '',
   ),
-  6 => 
+  6 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44440,
     ),
     'MarkFilteringSet' => '',
   ),
-  7 => 
+  7 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44452,
     ),
     'MarkFilteringSet' => '',
   ),
-  8 => 
+  8 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44528,
     ),
     'MarkFilteringSet' => '',
   ),
-  9 => 
+  9 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44786,
     ),
     'MarkFilteringSet' => '',
   ),
-  10 => 
+  10 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 44862,
     ),
     'MarkFilteringSet' => '',
   ),
-  11 => 
+  11 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45094,
     ),
     'MarkFilteringSet' => '',
   ),
-  12 => 
+  12 =>
   array (
     'Type' => 1,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45170,
     ),
     'MarkFilteringSet' => '',
   ),
-  13 => 
+  13 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45402,
     ),
     'MarkFilteringSet' => '',
   ),
-  14 => 
+  14 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45462,
     ),
     'MarkFilteringSet' => '',
   ),
-  15 => 
+  15 =>
   array (
     'Type' => 4,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45604,
     ),
     'MarkFilteringSet' => '',
   ),
-  16 => 
+  16 =>
   array (
     'Type' => 4,
     'Flag' => 9,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45642,
     ),
     'MarkFilteringSet' => '',
   ),
-  17 => 
+  17 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45712,
     ),
     'MarkFilteringSet' => '',
   ),
-  18 => 
+  18 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45772,
     ),
     'MarkFilteringSet' => '',
   ),
-  19 => 
+  19 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 45964,
     ),
     'MarkFilteringSet' => '',
   ),
-  20 => 
+  20 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46040,
     ),
     'MarkFilteringSet' => '',
   ),
-  21 => 
+  21 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46064,
     ),
     'MarkFilteringSet' => '',
   ),
-  22 => 
+  22 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46088,
     ),
     'MarkFilteringSet' => '',
   ),
-  23 => 
+  23 =>
   array (
     'Type' => 1,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46244,
     ),
     'MarkFilteringSet' => '',
   ),
-  24 => 
+  24 =>
   array (
     'Type' => 1,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46256,
     ),
     'MarkFilteringSet' => '',
   ),
-  25 => 
+  25 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46268,
     ),
     'MarkFilteringSet' => '',
   ),
-  26 => 
+  26 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46306,
     ),
     'MarkFilteringSet' => '',
   ),
-  27 => 
+  27 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46344,
     ),
     'MarkFilteringSet' => '',
   ),
-  28 => 
+  28 =>
   array (
     'Type' => 3,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46374,
     ),
     'MarkFilteringSet' => '',
   ),
-  29 => 
+  29 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46432,
     ),
     'MarkFilteringSet' => '',
   ),
-  30 => 
+  30 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46490,
     ),
     'MarkFilteringSet' => '',
   ),
-  31 => 
+  31 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46552,
     ),
     'MarkFilteringSet' => '',
   ),
-  32 => 
+  32 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46568,
     ),
     'MarkFilteringSet' => '',
   ),
-  33 => 
+  33 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46584,
     ),
     'MarkFilteringSet' => '',
   ),
-  34 => 
+  34 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46600,
     ),
     'MarkFilteringSet' => '',
   ),
-  35 => 
+  35 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46616,
     ),
     'MarkFilteringSet' => '',
   ),
-  36 => 
+  36 =>
   array (
     'Type' => 1,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46632,
     ),
     'MarkFilteringSet' => '',
   ),
-  37 => 
+  37 =>
   array (
     'Type' => 1,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46658,
     ),
     'MarkFilteringSet' => '',
   ),
-  38 => 
+  38 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 46670,
     ),
@@ -1183,26 +1183,26 @@ $GPOSScriptLang=array (
   'thai' => 'DFLT ',
 );
 $GPOSFeatures=array (
-  'DFLT' => 
+  'DFLT' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'arab' => 
+  'arab' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 0,
         1 => 1,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1210,19 +1210,19 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
-    'KUR ' => 
+    'KUR ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 0,
         1 => 1,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1230,19 +1230,19 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
-    'SND ' => 
+    'SND ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 0,
         1 => 1,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1250,19 +1250,19 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
-    'URD ' => 
+    'URD ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 0,
         1 => 1,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1270,147 +1270,147 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'armn' => 
+  'armn' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'brai' => 
+  'brai' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'cans' => 
+  'cans' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'cher' => 
+  'cher' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'cyrl' => 
+  'cyrl' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
-    'MKD ' => 
+    'MKD ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
-    'SRB ' => 
+    'SRB ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'geor' => 
+  'geor' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'grek' => 
+  'grek' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'hani' => 
+  'hani' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'hebr' => 
+  'hebr' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1418,213 +1418,213 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'kana' => 
+  'kana' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'lao ' => 
+  'lao ' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 2,
         1 => 3,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 10,
         1 => 11,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'latn' => 
+  'latn' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'ISM ' => 
+    'ISM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'KSM ' => 
+    'KSM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'LSM ' => 
+    'LSM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'MOL ' => 
+    'MOL ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'NSM ' => 
+    'NSM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'ROM ' => 
+    'ROM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'SKS ' => 
+    'SKS ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
-    'SSM ' => 
+    'SSM ' =>
     array (
-      'mkmk' => 
+      'mkmk' =>
       array (
         0 => 4,
       ),
-      'mark' => 
+      'mark' =>
       array (
         0 => 12,
         1 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 14,
         1 => 15,
       ),
     ),
   ),
-  'math' => 
+  'math' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'nko ' => 
+  'nko ' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mark' => 
+      'mark' =>
       array (
         0 => 5,
         1 => 6,
@@ -1632,51 +1632,51 @@ $GPOSFeatures=array (
         3 => 8,
         4 => 9,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'ogam' => 
+  'ogam' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'runr' => 
+  'runr' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'tfng' => 
+  'tfng' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'mark' => 
+      'mark' =>
       array (
         0 => 13,
       ),
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
     ),
   ),
-  'thai' => 
+  'thai' =>
   array (
-    'DFLT' => 
+    'DFLT' =>
     array (
-      'kern' => 
+      'kern' =>
       array (
         0 => 15,
       ),
@@ -1684,156 +1684,156 @@ $GPOSFeatures=array (
   ),
 );
 $GPOSLookups=array (
-  0 => 
+  0 =>
   array (
     'Type' => 6,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 1782,
     ),
     'MarkFilteringSet' => '',
   ),
-  1 => 
+  1 =>
   array (
     'Type' => 6,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 1872,
     ),
     'MarkFilteringSet' => '',
   ),
-  2 => 
+  2 =>
   array (
     'Type' => 6,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 2336,
     ),
     'MarkFilteringSet' => '',
   ),
-  3 => 
+  3 =>
   array (
     'Type' => 6,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 2394,
     ),
     'MarkFilteringSet' => '',
   ),
-  4 => 
+  4 =>
   array (
     'Type' => 6,
     'Flag' => 4,
     'SubtableCount' => 2,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 2544,
       1 => 3280,
     ),
     'MarkFilteringSet' => '',
   ),
-  5 => 
+  5 =>
   array (
     'Type' => 5,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 4496,
     ),
     'MarkFilteringSet' => '',
   ),
-  6 => 
+  6 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 4866,
     ),
     'MarkFilteringSet' => '',
   ),
-  7 => 
+  7 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 10096,
     ),
     'MarkFilteringSet' => '',
   ),
-  8 => 
+  8 =>
   array (
     'Type' => 5,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 10358,
     ),
     'MarkFilteringSet' => '',
   ),
-  9 => 
+  9 =>
   array (
     'Type' => 4,
     'Flag' => 1,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 10812,
     ),
     'MarkFilteringSet' => '',
   ),
-  10 => 
+  10 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 16006,
     ),
     'MarkFilteringSet' => '',
   ),
-  11 => 
+  11 =>
   array (
     'Type' => 4,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 16310,
     ),
     'MarkFilteringSet' => '',
   ),
-  12 => 
+  12 =>
   array (
     'Type' => 5,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 16750,
     ),
     'MarkFilteringSet' => '',
   ),
-  13 => 
+  13 =>
   array (
     'Type' => 4,
     'Flag' => 4,
     'SubtableCount' => 6,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 17192,
       1 => 18642,
@@ -1844,23 +1844,23 @@ $GPOSLookups=array (
     ),
     'MarkFilteringSet' => '',
   ),
-  14 => 
+  14 =>
   array (
     'Type' => 2,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 30914,
     ),
     'MarkFilteringSet' => '',
   ),
-  15 => 
+  15 =>
   array (
     'Type' => 2,
     'Flag' => 0,
     'SubtableCount' => 1,
-    'Subtables' => 
+    'Subtables' =>
     array (
       0 => 41080,
     ),
@@ -1868,7 +1868,7 @@ $GPOSLookups=array (
   ),
 );
 $kerninfo=array (
-  45 => 
+  45 =>
   array (
     65 => -21,
     66 => -35,
@@ -1909,7 +1909,7 @@ $kerninfo=array (
     356 => -91,
     376 => -118,
   ),
-  65 => 
+  65 =>
   array (
     45 => -21,
     46 => -17,
@@ -2017,7 +2017,7 @@ $kerninfo=array (
     8221 => -123,
     8222 => 22,
   ),
-  66 => 
+  66 =>
   array (
     67 => -17,
     71 => -17,
@@ -2065,7 +2065,7 @@ $kerninfo=array (
     8221 => -54,
     8222 => -40,
   ),
-  67 => 
+  67 =>
   array (
     89 => -17,
     171 => -17,
@@ -2077,7 +2077,7 @@ $kerninfo=array (
     7922 => -17,
     8221 => 18,
   ),
-  68 => 
+  68 =>
   array (
     65 => -17,
     86 => -17,
@@ -2101,7 +2101,7 @@ $kerninfo=array (
     8221 => -26,
     8222 => -91,
   ),
-  70 => 
+  70 =>
   array (
     46 => -160,
     58 => -77,
@@ -2184,7 +2184,7 @@ $kerninfo=array (
     8220 => -21,
     8222 => -183,
   ),
-  71 => 
+  71 =>
   array (
     84 => -35,
     89 => -49,
@@ -2197,14 +2197,14 @@ $kerninfo=array (
     8221 => -21,
     8222 => -26,
   ),
-  72 => 
+  72 =>
   array (
     46 => -17,
     8220 => -35,
     8221 => -30,
     8222 => -35,
   ),
-  74 => 
+  74 =>
   array (
     45 => -35,
     65 => -17,
@@ -2219,7 +2219,7 @@ $kerninfo=array (
     8221 => -30,
     8222 => -54,
   ),
-  75 => 
+  75 =>
   array (
     45 => -104,
     65 => -17,
@@ -2282,7 +2282,7 @@ $kerninfo=array (
     8220 => -30,
     8221 => -30,
   ),
-  76 => 
+  76 =>
   array (
     45 => -17,
     65 => 22,
@@ -2334,7 +2334,7 @@ $kerninfo=array (
     8220 => -202,
     8221 => -262,
   ),
-  79 => 
+  79 =>
   array (
     45 => 27,
     46 => -40,
@@ -2355,7 +2355,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  80 => 
+  80 =>
   array (
     45 => -21,
     46 => -155,
@@ -2408,14 +2408,14 @@ $kerninfo=array (
     8221 => 18,
     8222 => -160,
   ),
-  81 => 
+  81 =>
   array (
     45 => 27,
     8220 => -21,
     8221 => -17,
     8222 => -63,
   ),
-  82 => 
+  82 =>
   array (
     45 => -40,
     46 => -35,
@@ -2471,7 +2471,7 @@ $kerninfo=array (
     8221 => -63,
     8222 => -17,
   ),
-  83 => 
+  83 =>
   array (
     65 => 18,
     192 => 18,
@@ -2480,7 +2480,7 @@ $kerninfo=array (
     195 => 18,
     196 => 18,
   ),
-  84 => 
+  84 =>
   array (
     45 => -91,
     46 => -118,
@@ -2542,12 +2542,12 @@ $kerninfo=array (
     8221 => -21,
     8222 => -128,
   ),
-  85 => 
+  85 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  86 => 
+  86 =>
   array (
     45 => -58,
     46 => -128,
@@ -2597,7 +2597,7 @@ $kerninfo=array (
     367 => -67,
     8222 => -137,
   ),
-  87 => 
+  87 =>
   array (
     45 => -40,
     46 => -114,
@@ -2645,7 +2645,7 @@ $kerninfo=array (
     8220 => -17,
     8222 => -128,
   ),
-  88 => 
+  88 =>
   array (
     45 => -49,
     67 => -72,
@@ -2671,7 +2671,7 @@ $kerninfo=array (
     8221 => -40,
     8222 => -21,
   ),
-  89 => 
+  89 =>
   array (
     45 => -118,
     46 => -202,
@@ -2724,18 +2724,18 @@ $kerninfo=array (
     8221 => -17,
     8222 => -128,
   ),
-  90 => 
+  90 =>
   array (
     45 => -17,
     8220 => -17,
     8221 => -17,
     8222 => -17,
   ),
-  101 => 
+  101 =>
   array (
     120 => -17,
   ),
-  102 => 
+  102 =>
   array (
     45 => -54,
     46 => -72,
@@ -2751,7 +2751,7 @@ $kerninfo=array (
     8220 => 31,
     8222 => -114,
   ),
-  107 => 
+  107 =>
   array (
     97 => -17,
     101 => -35,
@@ -2782,13 +2782,13 @@ $kerninfo=array (
     283 => -35,
     367 => -30,
   ),
-  110 => 
+  110 =>
   array (
     8220 => -72,
     8221 => -54,
     8222 => -44,
   ),
-  111 => 
+  111 =>
   array (
     45 => 18,
     46 => -17,
@@ -2797,7 +2797,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  114 => 
+  114 =>
   array (
     45 => -63,
     46 => -91,
@@ -2836,7 +2836,7 @@ $kerninfo=array (
     8221 => 41,
     8222 => -151,
   ),
-  118 => 
+  118 =>
   array (
     45 => -26,
     46 => -77,
@@ -2846,7 +2846,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -132,
   ),
-  119 => 
+  119 =>
   array (
     46 => -91,
     58 => -54,
@@ -2854,7 +2854,7 @@ $kerninfo=array (
     187 => -17,
     8222 => -104,
   ),
-  120 => 
+  120 =>
   array (
     99 => -17,
     101 => -30,
@@ -2873,7 +2873,7 @@ $kerninfo=array (
     269 => -17,
     283 => -30,
   ),
-  121 => 
+  121 =>
   array (
     45 => -17,
     46 => -142,
@@ -2882,7 +2882,7 @@ $kerninfo=array (
     187 => -17,
     8222 => -146,
   ),
-  171 => 
+  171 =>
   array (
     66 => -17,
     67 => -17,
@@ -2908,7 +2908,7 @@ $kerninfo=array (
     356 => -54,
     376 => -72,
   ),
-  187 => 
+  187 =>
   array (
     65 => -35,
     66 => -35,
@@ -2944,7 +2944,7 @@ $kerninfo=array (
     356 => -91,
     376 => -109,
   ),
-  192 => 
+  192 =>
   array (
     45 => -21,
     46 => -17,
@@ -3039,103 +3039,7 @@ $kerninfo=array (
     8221 => -123,
     8222 => 22,
   ),
-  193 => 
-  array (
-    45 => -21,
-    46 => -17,
-    58 => -17,
-    65 => 27,
-    67 => -17,
-    71 => -17,
-    79 => -17,
-    81 => -17,
-    84 => -77,
-    86 => -63,
-    87 => -54,
-    89 => -77,
-    99 => -17,
-    100 => -17,
-    101 => -17,
-    102 => -35,
-    111 => -17,
-    113 => -17,
-    116 => -17,
-    118 => -58,
-    119 => -40,
-    121 => -67,
-    171 => -35,
-    192 => 27,
-    193 => 27,
-    194 => 27,
-    195 => 27,
-    196 => 27,
-    199 => -17,
-    210 => -17,
-    211 => -17,
-    212 => -17,
-    213 => -17,
-    214 => -17,
-    221 => -77,
-    231 => -17,
-    232 => -17,
-    233 => -17,
-    234 => -17,
-    235 => -17,
-    242 => -17,
-    243 => -17,
-    244 => -17,
-    245 => -17,
-    246 => -17,
-    253 => -67,
-    255 => -67,
-    256 => 27,
-    258 => 27,
-    260 => 27,
-    262 => -17,
-    263 => -17,
-    264 => -17,
-    266 => -17,
-    267 => -17,
-    268 => -17,
-    269 => -17,
-    271 => -17,
-    275 => -17,
-    277 => -17,
-    279 => -17,
-    281 => -17,
-    283 => -17,
-    284 => -17,
-    286 => -17,
-    288 => -17,
-    332 => -17,
-    333 => -17,
-    334 => -17,
-    335 => -17,
-    336 => -17,
-    337 => -17,
-    354 => -77,
-    355 => -17,
-    356 => -77,
-    357 => -17,
-    372 => -54,
-    373 => -40,
-    374 => -77,
-    375 => -67,
-    376 => -77,
-    558 => -17,
-    559 => -17,
-    7808 => -54,
-    7810 => -54,
-    7811 => -40,
-    7812 => -54,
-    7813 => -40,
-    7922 => -77,
-    7923 => -67,
-    8220 => -128,
-    8221 => -123,
-    8222 => 22,
-  ),
-  194 => 
+  193 =>
   array (
     45 => -21,
     46 => -17,
@@ -3231,102 +3135,7 @@ $kerninfo=array (
     8221 => -123,
     8222 => 22,
   ),
-  195 => 
-  array (
-    45 => -21,
-    46 => -17,
-    58 => -17,
-    65 => 27,
-    67 => -17,
-    71 => -17,
-    79 => -17,
-    81 => -17,
-    84 => -77,
-    86 => -63,
-    87 => -54,
-    89 => -77,
-    99 => -17,
-    100 => -17,
-    101 => -17,
-    102 => -35,
-    111 => -17,
-    113 => -17,
-    116 => -17,
-    118 => -58,
-    119 => -40,
-    121 => -67,
-    171 => -35,
-    192 => 27,
-    193 => 27,
-    194 => 27,
-    195 => 27,
-    196 => 27,
-    199 => -17,
-    210 => -17,
-    211 => -17,
-    212 => -17,
-    213 => -17,
-    214 => -17,
-    221 => -77,
-    231 => -17,
-    232 => -17,
-    233 => -17,
-    234 => -17,
-    235 => -17,
-    242 => -17,
-    243 => -17,
-    244 => -17,
-    245 => -17,
-    246 => -17,
-    253 => -67,
-    255 => -67,
-    256 => 27,
-    258 => 27,
-    260 => 27,
-    262 => -17,
-    263 => -17,
-    264 => -17,
-    266 => -17,
-    267 => -17,
-    268 => -17,
-    269 => -17,
-    271 => -17,
-    275 => -17,
-    277 => -17,
-    279 => -17,
-    281 => -17,
-    283 => -17,
-    284 => -17,
-    286 => -17,
-    288 => -17,
-    332 => -17,
-    333 => -17,
-    334 => -17,
-    335 => -17,
-    336 => -17,
-    337 => -17,
-    354 => -77,
-    355 => -17,
-    356 => -77,
-    357 => -17,
-    372 => -54,
-    373 => -40,
-    374 => -77,
-    375 => -67,
-    376 => -77,
-    558 => -17,
-    7808 => -54,
-    7810 => -54,
-    7811 => -40,
-    7812 => -54,
-    7813 => -40,
-    7922 => -77,
-    7923 => -67,
-    8220 => -128,
-    8221 => -123,
-    8222 => 22,
-  ),
-  196 => 
+  194 =>
   array (
     45 => -21,
     46 => -17,
@@ -3422,13 +3231,204 @@ $kerninfo=array (
     8221 => -123,
     8222 => 22,
   ),
-  198 => 
+  195 =>
+  array (
+    45 => -21,
+    46 => -17,
+    58 => -17,
+    65 => 27,
+    67 => -17,
+    71 => -17,
+    79 => -17,
+    81 => -17,
+    84 => -77,
+    86 => -63,
+    87 => -54,
+    89 => -77,
+    99 => -17,
+    100 => -17,
+    101 => -17,
+    102 => -35,
+    111 => -17,
+    113 => -17,
+    116 => -17,
+    118 => -58,
+    119 => -40,
+    121 => -67,
+    171 => -35,
+    192 => 27,
+    193 => 27,
+    194 => 27,
+    195 => 27,
+    196 => 27,
+    199 => -17,
+    210 => -17,
+    211 => -17,
+    212 => -17,
+    213 => -17,
+    214 => -17,
+    221 => -77,
+    231 => -17,
+    232 => -17,
+    233 => -17,
+    234 => -17,
+    235 => -17,
+    242 => -17,
+    243 => -17,
+    244 => -17,
+    245 => -17,
+    246 => -17,
+    253 => -67,
+    255 => -67,
+    256 => 27,
+    258 => 27,
+    260 => 27,
+    262 => -17,
+    263 => -17,
+    264 => -17,
+    266 => -17,
+    267 => -17,
+    268 => -17,
+    269 => -17,
+    271 => -17,
+    275 => -17,
+    277 => -17,
+    279 => -17,
+    281 => -17,
+    283 => -17,
+    284 => -17,
+    286 => -17,
+    288 => -17,
+    332 => -17,
+    333 => -17,
+    334 => -17,
+    335 => -17,
+    336 => -17,
+    337 => -17,
+    354 => -77,
+    355 => -17,
+    356 => -77,
+    357 => -17,
+    372 => -54,
+    373 => -40,
+    374 => -77,
+    375 => -67,
+    376 => -77,
+    558 => -17,
+    7808 => -54,
+    7810 => -54,
+    7811 => -40,
+    7812 => -54,
+    7813 => -40,
+    7922 => -77,
+    7923 => -67,
+    8220 => -128,
+    8221 => -123,
+    8222 => 22,
+  ),
+  196 =>
+  array (
+    45 => -21,
+    46 => -17,
+    58 => -17,
+    65 => 27,
+    67 => -17,
+    71 => -17,
+    79 => -17,
+    81 => -17,
+    84 => -77,
+    86 => -63,
+    87 => -54,
+    89 => -77,
+    99 => -17,
+    100 => -17,
+    101 => -17,
+    102 => -35,
+    111 => -17,
+    113 => -17,
+    116 => -17,
+    118 => -58,
+    119 => -40,
+    121 => -67,
+    171 => -35,
+    192 => 27,
+    193 => 27,
+    194 => 27,
+    195 => 27,
+    196 => 27,
+    199 => -17,
+    210 => -17,
+    211 => -17,
+    212 => -17,
+    213 => -17,
+    214 => -17,
+    221 => -77,
+    231 => -17,
+    232 => -17,
+    233 => -17,
+    234 => -17,
+    235 => -17,
+    242 => -17,
+    243 => -17,
+    244 => -17,
+    245 => -17,
+    246 => -17,
+    253 => -67,
+    255 => -67,
+    256 => 27,
+    258 => 27,
+    260 => 27,
+    262 => -17,
+    263 => -17,
+    264 => -17,
+    266 => -17,
+    267 => -17,
+    268 => -17,
+    269 => -17,
+    271 => -17,
+    275 => -17,
+    277 => -17,
+    279 => -17,
+    281 => -17,
+    283 => -17,
+    284 => -17,
+    286 => -17,
+    288 => -17,
+    332 => -17,
+    333 => -17,
+    334 => -17,
+    335 => -17,
+    336 => -17,
+    337 => -17,
+    354 => -77,
+    355 => -17,
+    356 => -77,
+    357 => -17,
+    372 => -54,
+    373 => -40,
+    374 => -77,
+    375 => -67,
+    376 => -77,
+    558 => -17,
+    559 => -17,
+    7808 => -54,
+    7810 => -54,
+    7811 => -40,
+    7812 => -54,
+    7813 => -40,
+    7922 => -77,
+    7923 => -67,
+    8220 => -128,
+    8221 => -123,
+    8222 => 22,
+  ),
+  198 =>
   array (
     8220 => -40,
     8221 => -44,
     8222 => -54,
   ),
-  199 => 
+  199 =>
   array (
     89 => -17,
     171 => -17,
@@ -3437,7 +3437,7 @@ $kerninfo=array (
     376 => -17,
     8221 => 18,
   ),
-  208 => 
+  208 =>
   array (
     65 => -17,
     86 => -17,
@@ -3461,7 +3461,7 @@ $kerninfo=array (
     8221 => -26,
     8222 => -91,
   ),
-  210 => 
+  210 =>
   array (
     45 => 27,
     46 => -40,
@@ -3482,7 +3482,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  211 => 
+  211 =>
   array (
     45 => 27,
     46 => -40,
@@ -3503,7 +3503,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  212 => 
+  212 =>
   array (
     45 => 27,
     46 => -40,
@@ -3524,7 +3524,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  213 => 
+  213 =>
   array (
     45 => 27,
     46 => -40,
@@ -3545,7 +3545,7 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  214 => 
+  214 =>
   array (
     45 => 27,
     46 => -40,
@@ -3566,27 +3566,27 @@ $kerninfo=array (
     8221 => -17,
     8222 => -91,
   ),
-  217 => 
+  217 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  218 => 
+  218 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  219 => 
+  219 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  220 => 
+  220 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  221 => 
+  221 =>
   array (
     45 => -118,
     46 => -202,
@@ -3639,49 +3639,49 @@ $kerninfo=array (
     8221 => -17,
     8222 => -128,
   ),
-  222 => 
+  222 =>
   array (
     46 => -72,
     58 => -35,
     8220 => -17,
     8222 => -91,
   ),
-  223 => 
+  223 =>
   array (
     45 => 18,
     8220 => -54,
     8221 => -54,
     8222 => -40,
   ),
-  232 => 
+  232 =>
   array (
     120 => -17,
   ),
-  233 => 
+  233 =>
   array (
     120 => -17,
   ),
-  234 => 
+  234 =>
   array (
     120 => -17,
   ),
-  235 => 
+  235 =>
   array (
     120 => -17,
   ),
-  240 => 
+  240 =>
   array (
     8220 => -44,
     8221 => -54,
     8222 => -35,
   ),
-  241 => 
+  241 =>
   array (
     8220 => -72,
     8221 => -54,
     8222 => -44,
   ),
-  242 => 
+  242 =>
   array (
     45 => 18,
     46 => -17,
@@ -3690,7 +3690,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  243 => 
+  243 =>
   array (
     45 => 18,
     46 => -17,
@@ -3699,7 +3699,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  244 => 
+  244 =>
   array (
     45 => 18,
     46 => -17,
@@ -3708,7 +3708,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  245 => 
+  245 =>
   array (
     45 => 18,
     46 => -17,
@@ -3717,7 +3717,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  246 => 
+  246 =>
   array (
     45 => 18,
     46 => -17,
@@ -3726,7 +3726,7 @@ $kerninfo=array (
     8221 => -35,
     8222 => -63,
   ),
-  253 => 
+  253 =>
   array (
     45 => -17,
     46 => -142,
@@ -3735,7 +3735,7 @@ $kerninfo=array (
     187 => -17,
     8222 => -146,
   ),
-  255 => 
+  255 =>
   array (
     45 => -17,
     46 => -142,
@@ -3744,7 +3744,7 @@ $kerninfo=array (
     187 => -17,
     8222 => -146,
   ),
-  256 => 
+  256 =>
   array (
     45 => -21,
     46 => -17,
@@ -3837,7 +3837,7 @@ $kerninfo=array (
     8221 => -124,
     8222 => 22,
   ),
-  258 => 
+  258 =>
   array (
     45 => -21,
     46 => -17,
@@ -3930,7 +3930,7 @@ $kerninfo=array (
     8221 => -124,
     8222 => 22,
   ),
-  260 => 
+  260 =>
   array (
     45 => -21,
     46 => -17,
@@ -4017,7 +4017,7 @@ $kerninfo=array (
     8221 => -124,
     8222 => 22,
   ),
-  262 => 
+  262 =>
   array (
     89 => -17,
     171 => -17,
@@ -4026,7 +4026,7 @@ $kerninfo=array (
     376 => -17,
     8221 => 18,
   ),
-  268 => 
+  268 =>
   array (
     89 => -17,
     171 => -17,
@@ -4035,7 +4035,7 @@ $kerninfo=array (
     376 => -17,
     8221 => 18,
   ),
-  270 => 
+  270 =>
   array (
     65 => -17,
     86 => -17,
@@ -4059,7 +4059,7 @@ $kerninfo=array (
     8221 => -26,
     8222 => -91,
   ),
-  272 => 
+  272 =>
   array (
     65 => -17,
     86 => -17,
@@ -4077,11 +4077,11 @@ $kerninfo=array (
     8221 => -26,
     8222 => -91,
   ),
-  283 => 
+  283 =>
   array (
     120 => -17,
   ),
-  286 => 
+  286 =>
   array (
     84 => -35,
     89 => -49,
@@ -4094,7 +4094,7 @@ $kerninfo=array (
     8221 => -21,
     8222 => -26,
   ),
-  313 => 
+  313 =>
   array (
     45 => -17,
     65 => 22,
@@ -4146,7 +4146,7 @@ $kerninfo=array (
     8220 => -202,
     8221 => -262,
   ),
-  317 => 
+  317 =>
   array (
     45 => -17,
     65 => 22,
@@ -4198,17 +4198,17 @@ $kerninfo=array (
     8220 => -202,
     8221 => -262,
   ),
-  320 => 
+  320 =>
   array (
     108 => -94,
   ),
-  328 => 
+  328 =>
   array (
     8220 => -72,
     8221 => -54,
     8222 => -44,
   ),
-  340 => 
+  340 =>
   array (
     45 => -40,
     46 => -35,
@@ -4264,7 +4264,7 @@ $kerninfo=array (
     8221 => -63,
     8222 => -17,
   ),
-  341 => 
+  341 =>
   array (
     45 => -63,
     46 => -91,
@@ -4303,7 +4303,7 @@ $kerninfo=array (
     8221 => 41,
     8222 => -151,
   ),
-  344 => 
+  344 =>
   array (
     45 => -40,
     46 => -35,
@@ -4359,7 +4359,7 @@ $kerninfo=array (
     8221 => -63,
     8222 => -17,
   ),
-  345 => 
+  345 =>
   array (
     45 => -63,
     46 => -91,
@@ -4398,7 +4398,7 @@ $kerninfo=array (
     8221 => 41,
     8222 => -151,
   ),
-  350 => 
+  350 =>
   array (
     65 => 18,
     192 => 18,
@@ -4407,7 +4407,7 @@ $kerninfo=array (
     195 => 18,
     196 => 18,
   ),
-  352 => 
+  352 =>
   array (
     65 => 18,
     192 => 18,
@@ -4416,7 +4416,7 @@ $kerninfo=array (
     195 => 18,
     196 => 18,
   ),
-  356 => 
+  356 =>
   array (
     45 => -91,
     46 => -118,
@@ -4478,12 +4478,12 @@ $kerninfo=array (
     8221 => -21,
     8222 => -128,
   ),
-  366 => 
+  366 =>
   array (
     90 => -17,
     381 => -17,
   ),
-  376 => 
+  376 =>
   array (
     45 => -118,
     46 => -202,
@@ -4536,14 +4536,14 @@ $kerninfo=array (
     8221 => -17,
     8222 => -128,
   ),
-  381 => 
+  381 =>
   array (
     45 => -17,
     8220 => -17,
     8221 => -17,
     8222 => -17,
   ),
-  8208 => 
+  8208 =>
   array (
     65 => -21,
     66 => -35,
@@ -4581,7 +4581,7 @@ $kerninfo=array (
     356 => -91,
     376 => -118,
   ),
-  8220 => 
+  8220 =>
   array (
     65 => -128,
     66 => -30,
@@ -4643,7 +4643,7 @@ $kerninfo=array (
     381 => -17,
     42816 => -30,
   ),
-  8222 => 
+  8222 =>
   array (
     65 => 18,
     66 => -35,
@@ -4710,7 +4710,7 @@ $kerninfo=array (
     376 => -183,
     42816 => -35,
   ),
-  42788 => 
+  42788 =>
   array (
     45 => -91,
     46 => -118,
@@ -4772,7 +4772,7 @@ $kerninfo=array (
     8221 => -21,
     8222 => -128,
   ),
-  42816 => 
+  42816 =>
   array (
     45 => -104,
     65 => -17,
@@ -4835,7 +4835,7 @@ $kerninfo=array (
     8220 => -30,
     8221 => -30,
   ),
-  42817 => 
+  42817 =>
   array (
     97 => -17,
     101 => -35,
@@ -4866,85 +4866,84 @@ $kerninfo=array (
     283 => -35,
     367 => -30,
   ),
-  61185 => 
+  61185 =>
   array (
     61209 => -19,
   ),
-  61186 => 
+  61186 =>
   array (
     61209 => -38,
   ),
-  61187 => 
+  61187 =>
   array (
     61209 => -45,
   ),
-  61188 => 
+  61188 =>
   array (
     61209 => -48,
   ),
-  61189 => 
+  61189 =>
   array (
     61209 => -19,
   ),
-  61191 => 
+  61191 =>
   array (
     61209 => -19,
   ),
-  61192 => 
+  61192 =>
   array (
     61209 => -38,
   ),
-  61193 => 
+  61193 =>
   array (
     61209 => -45,
   ),
-  61194 => 
+  61194 =>
   array (
     61209 => -38,
   ),
-  61195 => 
+  61195 =>
   array (
     61209 => -19,
   ),
-  61197 => 
+  61197 =>
   array (
     61209 => -19,
   ),
-  61198 => 
+  61198 =>
   array (
     61209 => -38,
   ),
-  61199 => 
+  61199 =>
   array (
     61209 => -45,
   ),
-  61200 => 
+  61200 =>
   array (
     61209 => -38,
   ),
-  61201 => 
+  61201 =>
   array (
     61209 => -19,
   ),
-  61203 => 
+  61203 =>
   array (
     61209 => -19,
   ),
-  61204 => 
+  61204 =>
   array (
     61209 => -48,
   ),
-  61205 => 
+  61205 =>
   array (
     61209 => -45,
   ),
-  61206 => 
+  61206 =>
   array (
     61209 => -38,
   ),
-  61207 => 
+  61207 =>
   array (
     61209 => -19,
   ),
 );
-?>

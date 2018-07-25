@@ -1,5 +1,5 @@
 
-<?php if(!isset($dados) || $dados == null) {?>
+<?php if (!isset($dados) || $dados == null) {?>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">

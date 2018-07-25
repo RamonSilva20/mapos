@@ -34,17 +34,17 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php
-                          foreach ($servicos as $s) {
+                            <?php
+                            foreach ($servicos as $s) {
  
-                              echo '<tr>';
-                              echo '<td>' . $s->nome. '</td>';
-                              echo '<td>' . $s->descricao . '</td>';
-                              echo '<td>' . $s->preco. '</td>';
+                                echo '<tr>';
+                                echo '<td>' . $s->nome. '</td>';
+                                echo '<td>' . $s->descricao . '</td>';
+                                echo '<td>' . $s->preco. '</td>';
      
-                              echo '</tr>';
-                          }
-                          ?>
+                                echo '</tr>';
+                            }
+                            ?>
                       </tbody>
                   </table>
 

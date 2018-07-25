@@ -1,4 +1,5 @@
-<?php $totalServico = 0; $totalProdutos = 0;?>
+<?php $totalServico = 0;
+$totalProdutos = 0;?>
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
@@ -8,9 +9,9 @@
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
-                    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/os/editar/'.$result->idOs.'"><i class="icon-pencil icon-white"></i> Editar</a>'; 
-                    } ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/os/editar/'.$result->idOs.'"><i class="icon-pencil icon-white"></i> Editar</a>';
+} ?>
                     
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url()?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                 </div>
@@ -21,7 +22,7 @@
 
                         <table class="table">
                             <tbody>
-                                <?php if($emitente == null) {?>
+                                <?php if ($emitente == null) {?>
                                             
                                 <tr>
                                     <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<</td>
@@ -70,7 +71,7 @@
 
                     <div style="margin-top: 0; padding-top: 0">
 
-                    <?php if($result->descricaoProduto != null){?>
+                    <?php if ($result->descricaoProduto != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Descrição</h5>
                     <p>
@@ -79,21 +80,21 @@
                     </p>
                     <?php }?>
 
-                    <?php if($result->defeito != null){?>
+                    <?php if ($result->defeito != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Defeito</h5>
                     <p>
                         <?php echo $result->defeito?>
                     </p>
                     <?php }?>
-                    <?php if($result->laudoTecnico != null){?>
+                    <?php if ($result->laudoTecnico != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Laudo Técnico</h5>
                     <p>
                         <?php echo $result->laudoTecnico?>
                     </p>
                     <?php }?>
-                    <?php if($result->observacoes != null){?>
+                    <?php if ($result->observacoes != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Observações</h5>
                     <p>
@@ -101,7 +102,7 @@
                     </p>
                     <?php }?>
 
-                        <?php if($produtos != null){?>
+                        <?php if ($produtos != null) {?>
                         <br />
                         <table class="table table-bordered" id="tblProdutos">
                                     <thead>
@@ -121,19 +122,19 @@
                                             echo '<td>'.$p->descricao.'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
                                             
-                                            echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
                                             <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?php echo number_format($totalProdutos,2,',','.');?></strong></td>
+                                            <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.');?></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
-                               <?php }?>
+                                <?php }?>
                         
-                        <?php if($servicos != null){?>
+                        <?php if ($servicos != null) {?>
                         <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -143,15 +144,15 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                        setlocale(LC_MONETARY, 'en_US');
-                                        foreach ($servicos as $s) {
-                                            $preco = $s->preco;
-                                            $totalServico = $totalServico + $preco;
-                                            echo '<tr>';
-                                            echo '<td>'.$s->nome.'</td>';
-                                            echo '<td>R$ '.number_format($s->preco, 2, ',', '.').'</td>';
-                                            echo '</tr>';
-                                        }?>
+                                            setlocale(LC_MONETARY, 'en_US');
+                                            foreach ($servicos as $s) {
+                                                $preco = $s->preco;
+                                                $totalServico = $totalServico + $preco;
+                                                echo '<tr>';
+                                                echo '<td>'.$s->nome.'</td>';
+                                                echo '<td>R$ '.number_format($s->preco, 2, ',', '.').'</td>';
+                                                echo '</tr>';
+                                            }?>
 
                                         <tr>
                                             <td colspan="1" style="text-align: right"><strong>Total:</strong></td>
@@ -162,7 +163,7 @@
                         <?php }?>
                         <hr />
                     
-                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico,2,',','.');?></h4>
+                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
 
                     </div>
             

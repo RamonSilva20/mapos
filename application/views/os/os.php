@@ -3,7 +3,7 @@
 
 <div class="span12" style="margin-left: 0">
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
-        <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')){ ?>
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
                 <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i> Adicionar OS</a>
             </div>
@@ -37,7 +37,7 @@
 
 <?php
 
-if(!$results){?>
+if (!$results) {?>
     <div class="widget-box">
      <div class="widget-title">
         <span class="icon">
@@ -70,7 +70,7 @@ if(!$results){?>
 </table>
 </div>
 </div>
-<?php } else{?>
+<?php } else {?>
 
 
 <div class="widget-box">
@@ -98,8 +98,8 @@ if(!$results){?>
     </thead>  
     <tbody>
         <?php foreach ($results as $r) {
-            $dataInicial = date(('d/m/Y'),strtotime($r->dataInicial));
-            $dataFinal = date(('d/m/Y'),strtotime($r->dataFinal));
+            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
 
             switch ($r->status) {
                 case 'Aberto':
@@ -131,24 +131,24 @@ if(!$results){?>
             echo '<td>'.$r->nome.'</td>';
             echo '<td>'.$dataInicial.'</td>';
             echo '<td>'.$dataFinal.'</td>';
-            echo '<td><span class="badge" style="background-color: '.$cor.'; border-color: '.$cor.'">'.$r->status.'</span> </td>';   
+            echo '<td><span class="badge" style="background-color: '.$cor.'; border-color: '.$cor.'">'.$r->status.'</span> </td>';
             
             echo '<td>';
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/visualizar/'.$r->idOs.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/imprimir/'.$r->idOs.'" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/visualizar/'.$r->idOs.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/imprimir/'.$r->idOs.'" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/editar/'.$r->idOs.'" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/os/editar/'.$r->idOs.'" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'dOs')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="'.$r->idOs.'" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  '; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="'.$r->idOs.'" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
             }
                                
                       
             echo  '</td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -157,7 +157,8 @@ if(!$results){?>
 </div>
 </div>
     
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 <!-- Modal -->

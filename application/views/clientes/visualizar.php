@@ -4,9 +4,9 @@
             <li class="active"><a data-toggle="tab" href="#tab1">Dados do Cliente</a></li>
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
             <div class="buttons">
-                    <?php if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/clientes/editar/'.$result->idClientes.'"><i class="icon-pencil icon-white"></i> Editar</a>'; 
-                    } ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/clientes/editar/'.$result->idClientes.'"><i class="icon-pencil icon-white"></i> Editar</a>';
+} ?>
                     
             </div>
         </ul>
@@ -37,7 +37,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
-                                                    <td><?php echo date('d/m/Y',  strtotime($result->dataCadastro)) ?></td>
+                                                    <td><?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -159,27 +159,27 @@
                             </thead>
                             <tbody>
 <?php
-                foreach ($results as $r) {
-                    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                    echo '<tr>';
-                    echo '<td>' . $r->idOs . '</td>';
-                    echo '<td>' . $dataInicial . '</td>';
-                    echo '<td>' . $dataFinal . '</td>';
-                    echo '<td>' . $r->descricaoProduto . '</td>';
-                    echo '<td>' . $r->defeito . '</td>';
+foreach ($results as $r) {
+    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+    echo '<tr>';
+    echo '<td>' . $r->idOs . '</td>';
+    echo '<td>' . $dataInicial . '</td>';
+    echo '<td>' . $dataFinal . '</td>';
+    echo '<td>' . $r->descricaoProduto . '</td>';
+    echo '<td>' . $r->defeito . '</td>';
 
-                    echo '<td>';
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                        echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                    }
-                    if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                        echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
-                    }
+    echo '<td>';
+    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+        echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+    }
+    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+        echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
+    }
                     
-                    echo  '</td>';
-                    echo '</tr>';
-                } ?>
+    echo  '</td>';
+    echo '</tr>';
+} ?>
                             <tr>
 
                             </tr>

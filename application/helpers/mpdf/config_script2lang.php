@@ -85,7 +85,7 @@ UCDN::SCRIPT_THAANA => 'dv',
 UCDN::SCRIPT_BRAHMI => 'und-Brah',
 UCDN::SCRIPT_KAITHI => 'und-Kthi',
 UCDN::SCRIPT_KHAROSHTHI => 'und-Khar',
-UCDN::SCRIPT_MEETEI_MAYEK => 'und-Mtei',	/* or omp-Mtei */
+UCDN::SCRIPT_MEETEI_MAYEK => 'und-Mtei',    /* or omp-Mtei */
 UCDN::SCRIPT_SHARADA => 'und-Shrd',
 UCDN::SCRIPT_SORA_SOMPENG => 'und-Sora',
 
@@ -119,13 +119,13 @@ UCDN::SCRIPT_TAGBANWA => 'tbw',
 
 
 /* East Asian */
-UCDN::SCRIPT_HAN => 'und-Hans',	// und-Hans (simplified) or und-Hant (Traditional)
+UCDN::SCRIPT_HAN => 'und-Hans',     // und-Hans (simplified) or und-Hant (Traditional)
 UCDN::SCRIPT_HANGUL => 'ko',
 UCDN::SCRIPT_HIRAGANA => 'ja',
 UCDN::SCRIPT_KATAKANA => 'ja',
 UCDN::SCRIPT_LISU => 'lis',
 
-UCDN::SCRIPT_BOPOMOFO => 'und-Bopo',	// zh-CN, zh-TW, zh-HK
+UCDN::SCRIPT_BOPOMOFO => 'und-Bopo',    // zh-CN, zh-TW, zh-HK
 UCDN::SCRIPT_MIAO => 'und-Plrd',
 UCDN::SCRIPT_YI => 'und-Yiii',
 
@@ -151,8 +151,5 @@ $this->viet = "\x{01A0}\x{01A1}\x{01AF}\x{01B0}\x{1EA0}-\x{1EF1}";
 // PASHTO, SINDHI, URDU, ARABIC, PERSIAN
 $this->persian = "\x{067E}\x{0686}\x{0698}\x{06AF}";
 $this->urdu = "\x{0679}\x{0688}\x{0691}\x{06BA}\x{06BE}\x{06C1}\x{06D2}";
-$this->pashto = "\x{067C}\x{0681}\x{0685}\x{0689}\x{0693}\x{0696}\x{069A}\x{06BC}\x{06D0}";	// ? and U+06AB, U+06CD
+$this->pashto = "\x{067C}\x{0681}\x{0685}\x{0689}\x{0693}\x{0696}\x{069A}\x{06BC}\x{06D0}";     // ? and U+06AB, U+06CD
 $this->sindhi = "\x{067A}\x{067B}\x{067D}\x{067F}\x{0680}\x{0684}\x{068D}\x{068A}\x{068F}\x{068C}\x{0687}\x{0683}\x{0699}\x{06AA}\x{06A6}\x{06BB}\x{06B1}\x{06B3}";
-
-
-?>

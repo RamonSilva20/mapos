@@ -2,8 +2,8 @@
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <?php $situacao = $this->input->get('situacao');
-	  $periodo = $this->input->get('periodo');	
- ?>
+      $periodo = $this->input->get('periodo');
+    ?>
 
 <style type="text/css">
 	
@@ -22,7 +22,7 @@
 </style>
 
 
-<?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aLancamento')){ ?>
+<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
   <div class="span5" style="margin-left: 0">
       <a href="#modalReceita" data-toggle="modal" role="button" class="btn btn-success tip-bottom" title="Cadastrar nova receita"><i class="icon-plus icon-white"></i> Nova Receita</a>  
       <a href="#modalDespesa" data-toggle="modal" role="button" class="btn btn-danger tip-bottom" title="Cadastrar nova despesa"><i class="icon-plus icon-white"></i> Nova Despesa</a>
@@ -35,20 +35,36 @@
 			<label>Período <i class="icon-info-sign tip-top" title="Lançamentos com vencimento no período."></i></label>
 			<select name="periodo" class="span12">
 				<option value="dia">Dia</option>
-				<option value="semana" <?php if($periodo == 'semana'){ echo 'selected';} ?>>Semana</option>
-				<option value="mes" <?php if($periodo == 'mes'){ echo 'selected';} ?>>Mês</option>
-				<option value="ano" <?php if($periodo == 'ano'){ echo 'selected';} ?>>Ano</option>
-        <option value="todos" <?php if($periodo == 'todos'){ echo 'selected';} ?>>Todos</option>
+				<option value="semana" <?php if ($periodo == 'semana') {
+                    echo 'selected';
+} ?>>Semana</option>
+				<option value="mes" <?php if ($periodo == 'mes') {
+                    echo 'selected';
+} ?>>Mês</option>
+				<option value="ano" <?php if ($periodo == 'ano') {
+                    echo 'selected';
+} ?>>Ano</option>
+        <option value="todos" <?php if ($periodo == 'todos') {
+            echo 'selected';
+} ?>>Todos</option>
 			</select>
 		</div>
 		<div class="span4">
 			<label>Situação <i class="icon-info-sign tip-top" title="Lançamentos com situação específica ou todos."></i></label>
 			<select name="situacao" class="span12">
 				<option value="todos">Todos</option>
-				<option value="previsto" <?php if($situacao == 'previsto'){ echo 'selected';} ?>>Previsto</option>
-				<option value="atrasado" <?php if($situacao == 'atrasado'){ echo 'selected';} ?>>Atrasado</option>
-				<option value="realizado" <?php if($situacao == 'realizado'){ echo 'selected';} ?>>Realizado</option>
-        <option value="pendente" <?php if($situacao == 'pendente'){ echo 'selected';} ?>>Pendente</option>
+				<option value="previsto" <?php if ($situacao == 'previsto') {
+                    echo 'selected';
+} ?>>Previsto</option>
+				<option value="atrasado" <?php if ($situacao == 'atrasado') {
+                    echo 'selected';
+} ?>>Atrasado</option>
+				<option value="realizado" <?php if ($situacao == 'realizado') {
+                    echo 'selected';
+} ?>>Realizado</option>
+        <option value="pendente" <?php if ($situacao == 'pendente') {
+            echo 'selected';
+} ?>>Pendente</option>
 			</select>
 		</div>
 		<div class="span4" >
@@ -63,7 +79,7 @@
 
 <?php
 
-if(!$results){?>
+if (!$results) {?>
 	<div class="widget-box">
      <div class="widget-title">
         <span class="icon">
@@ -96,7 +112,7 @@ if(!$results){?>
 </table>
 </div>
 </div>
-<?php } else{?>
+<?php } else {?>
 
 
 <div class="widget-box">
@@ -125,29 +141,42 @@ if(!$results){?>
         </tr>
     </thead>
     <tbody>
-        <?php 
+        <?php
         $totalReceita = 0;
         $totalDespesa = 0;
         $saldo = 0;
         foreach ($results as $r) {
-            $vencimento = date(('d/m/Y'),strtotime($r->data_vencimento));
-            if($r->baixado == 0){$status = 'Pendente';}else{ $status = 'Pago';};
-            if($r->tipo == 'receita'){ $label = 'success'; $totalReceita += $r->valor;} else{$label = 'important'; $totalDespesa += $r->valor;}
-            echo '<tr>'; 
+            $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
+            if ($r->baixado == 0) {
+                $status = 'Pendente';
+
+            } else {
+                $status = 'Pago';
+
+            };
+            if ($r->tipo == 'receita') {
+                $label = 'success';
+                $totalReceita += $r->valor;
+
+            } else {
+                $label = 'important';
+                $totalDespesa += $r->valor;
+            }
+            echo '<tr>';
             echo '<td>'.$r->idLancamentos.'</td>';
             echo '<td><span class="label label-'.$label.'">'.ucfirst($r->tipo).'</span></td>';
             echo '<td>'.$r->cliente_fornecedor.'</td>';
-	    echo '<td>'.$r->descricao.'</td>';	
-            echo '<td>'.$vencimento.'</td>';   
+            echo '<td>'.$r->descricao.'</td>';
+            echo '<td>'.$vencimento.'</td>';
             echo '<td>'.$status.'</td>';
-            echo '<td> R$ '.number_format($r->valor,2,',','.').'</td>';
+            echo '<td> R$ '.number_format($r->valor, 2, ',', '.').'</td>';
             
             echo '<td>';
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'eLancamento')){
-                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="'.$r->idLancamentos.'" descricao="'.$r->descricao.'" valor="'.$r->valor.'" vencimento="'.date('d/m/Y',strtotime($r->data_vencimento)).'" pagamento="'.date('d/m/Y', strtotime($r->data_pagamento)).'" baixado="'.$r->baixado.'" cliente="'.$r->cliente_fornecedor.'" formaPgto="'.$r->forma_pgto.'" tipo="'.$r->tipo.'" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="icon-pencil icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="'.$r->idLancamentos.'" descricao="'.$r->descricao.'" valor="'.$r->valor.'" vencimento="'.date('d/m/Y', strtotime($r->data_vencimento)).'" pagamento="'.date('d/m/Y', strtotime($r->data_pagamento)).'" baixado="'.$r->baixado.'" cliente="'.$r->cliente_fornecedor.'" formaPgto="'.$r->forma_pgto.'" tipo="'.$r->tipo.'" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="icon-pencil icon-white"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'dLancamento')){
-                echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="'.$r->idLancamentos.'" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="icon-remove icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="'.$r->idLancamentos.'" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="icon-remove icon-white"></i></a>';
             }
                      
             echo '</td>';
@@ -160,15 +189,15 @@ if(!$results){?>
     <tfoot>
     	<tr>
     		<td colspan="5" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
-    		<td colspan="2" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totalReceita,2,',','.') ?></strong></td>
+    		<td colspan="2" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totalReceita, 2, ',', '.') ?></strong></td>
     	</tr>
     	<tr>
     		<td colspan="5" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
-    		<td colspan="2" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totalDespesa,2,',','.') ?></strong></td>
+    		<td colspan="2" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totalDespesa, 2, ',', '.') ?></strong></td>
     	</tr>
     	<tr>
     		<td colspan="5" style="text-align: right"> <strong>Saldo:</strong></td>
-    		<td colspan="2" style="text-align: left;"><strong>R$ <?php echo number_format($totalReceita - $totalDespesa,2,',','.') ?></strong></td>
+    		<td colspan="2" style="text-align: left;"><strong>R$ <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?></strong></td>
     	</tr>
     </tfoot>
 </table>
@@ -177,7 +206,8 @@ if(!$results){?>
 
 </div>
 	
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

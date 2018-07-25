@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        if($produtos == null){
+                        if ($produtos == null) {
                             echo '<tr><td colspan="4">Nenhum produto foi encontrado.</td></tr>';
                         }
                         foreach ($produtos as $r) {
@@ -45,12 +45,12 @@
                             echo '<td>' . $r->precoVenda . '</td>';
 
                             echo '<td>';
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
                             }
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                                echo '<a href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+                                echo '<a href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             
                             echo '</td>';
                             echo '</tr>';
@@ -90,7 +90,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        if($clientes == null){
+                        if ($clientes == null) {
                             echo '<tr><td colspan="4">Nenhum cliente foi encontrado.</td></tr>';
                         }
                         foreach ($clientes as $r) {
@@ -100,12 +100,12 @@
                             echo '<td>' . $r->documento . '</td>';
                             echo '<td>';
 
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                            } 
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                            }
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+                                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             
                             
                             echo '</td>';
@@ -148,7 +148,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        if($servicos == null){
+                        if ($servicos == null) {
                             echo '<tr><td colspan="4">Nenhum serviço foi encontrado.</td></tr>';
                         }
                         foreach ($servicos as $r) {
@@ -157,9 +157,9 @@
                             echo '<td>' . $r->nome . '</td>';
                             echo '<td>' . $r->preco . '</td>';
                             echo '<td>';
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'eServico')){
-                                echo '<a href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>'; 
-                            } 
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
+                                echo '<a href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="icon-pencil icon-white"></i></a>';
+                            }
                                 
                             echo '</td>';
                             echo '</tr>';
@@ -200,7 +200,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        if($os == null){
+                        if ($os == null) {
                             echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
                         }
                         foreach ($os as $r) {
@@ -212,12 +212,12 @@
                             echo '<td>' . $r->defeito . '</td>';
 
                             echo '<td>';
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'vOs')){
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                            } 
-                            if($this->permission->checkPermission($this->session->userdata('permissao'),'eOs')){
-                                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>'; 
-                            }  
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                            }
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }

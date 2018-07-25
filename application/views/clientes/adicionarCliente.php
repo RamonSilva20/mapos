@@ -10,7 +10,7 @@
             <div class="widget-content nopadding">
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                } ?>
+} ?>
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" >
                     <div class="control-group">
                         <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>

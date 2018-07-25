@@ -36,18 +36,18 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php
-                          foreach ($clientes as $c) {
-                              $dataCadastro = date('d/m/Y', strtotime($c->dataCadastro));
-                              echo '<tr>';
-                              echo '<td>' . $c->nomeCliente . '</td>';
-                              echo '<td>' . $c->documento . '</td>';
-                              echo '<td>' . $c->telefone . '</td>';
-                              echo '<td>' . $c->email . '</td>';
-                              echo '<td>' . $dataCadastro . '</td>';
-                              echo '</tr>';
-                          }
-                          ?>
+                            <?php
+                            foreach ($clientes as $c) {
+                                $dataCadastro = date('d/m/Y', strtotime($c->dataCadastro));
+                                echo '<tr>';
+                                echo '<td>' . $c->nomeCliente . '</td>';
+                                echo '<td>' . $c->documento . '</td>';
+                                echo '<td>' . $c->telefone . '</td>';
+                                echo '<td>' . $c->email . '</td>';
+                                echo '<td>' . $dataCadastro . '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
                       </tbody>
                   </table>
                   

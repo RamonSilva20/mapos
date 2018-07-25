@@ -10,7 +10,7 @@
             <div class="widget-content nopadding">
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">'.$custom_error.'</div>';
-                } ?>
+} ?>
                 <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal" >
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
@@ -110,9 +110,9 @@
                         <label  class="control-label">Permissões<span class="required">*</span></label>
                         <div class="controls">
                             <select name="permissoes_id" id="permissoes_id">
-                                  <?php foreach ($permissoes as $p) {
-                                      echo '<option value="'.$p->idPermissao.'">'.$p->nome.'</option>';
-                                  } ?>
+                                    <?php foreach ($permissoes as $p) {
+                                        echo '<option value="'.$p->idPermissao.'">'.$p->nome.'</option>';
+} ?>
                             </select>
                         </div>
                     </div>

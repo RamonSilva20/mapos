@@ -10,7 +10,7 @@
                                           <div class="widget-content nopadding">
                                                 <?php echo $custom_error; ?>
                                                 <form action="<?php echo current_url(); ?>" id="formServico" method="post" class="form-horizontal" >
-                                                    <?php echo form_hidden('idServicos',$result->idServicos) ?>
+                                                    <?php echo form_hidden('idServicos', $result->idServicos) ?>
                                                     <div class="control-group">
                                                             <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                                                             <div class="controls">
