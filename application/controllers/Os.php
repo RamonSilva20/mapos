@@ -639,6 +639,7 @@ class Os extends CI_Controller
 
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
 
