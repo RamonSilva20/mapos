@@ -1,41 +1,19 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP
+ * An open source application development framework for PHP 5.1.6 or newer
  *
- * This content is released under the MIT License (MIT)
- *
- * Copyright (c) 2014 - 2017, British Columbia Institute of Technology
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 1.0.0
+ * @package		CodeIgniter
+ * @author		ExpressionEngine Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @license		http://codeigniter.com/user_guide/license.html
+ * @link		http://codeigniter.com
+ * @since		Version 1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+// --------------------------------------------------------------------
 
 /**
  * MySQL Result Class
@@ -43,36 +21,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * This class extends the parent result class: CI_DB_result
  *
  * @category	Database
- * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/database/
+ * @author		ExpressionEngine Dev Team
+ * @link		http://codeigniter.com/user_guide/database/
  */
 class CI_DB_mysql_result extends CI_DB_result {
 
 	/**
-	 * Class constructor
-	 *
-	 * @param	object	&$driver_object
-	 * @return	void
-	 */
-	public function __construct(&$driver_object)
-	{
-		parent::__construct($driver_object);
-
-		// Required, due to mysql_data_seek() causing nightmares
-		// with empty result sets
-		$this->num_rows = mysql_num_rows($this->result_id);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Number of rows in the result set
 	 *
-	 * @return	int
+	 * @access	public
+	 * @return	integer
 	 */
-	public function num_rows()
+	function num_rows()
 	{
-		return $this->num_rows;
+		return @mysql_num_rows($this->result_id);
 	}
 
 	// --------------------------------------------------------------------
@@ -80,11 +42,12 @@ class CI_DB_mysql_result extends CI_DB_result {
 	/**
 	 * Number of fields in the result set
 	 *
-	 * @return	int
+	 * @access	public
+	 * @return	integer
 	 */
-	public function num_fields()
+	function num_fields()
 	{
-		return mysql_num_fields($this->result_id);
+		return @mysql_num_fields($this->result_id);
 	}
 
 	// --------------------------------------------------------------------
@@ -94,12 +57,12 @@ class CI_DB_mysql_result extends CI_DB_result {
 	 *
 	 * Generates an array of column names
 	 *
+	 * @access	public
 	 * @return	array
 	 */
-	public function list_fields()
+	function list_fields()
 	{
 		$field_names = array();
-		mysql_field_seek($this->result_id, 0);
 		while ($field = mysql_fetch_field($this->result_id))
 		{
 			$field_names[] = $field->name;
@@ -115,18 +78,27 @@ class CI_DB_mysql_result extends CI_DB_result {
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
+	 * @access	public
 	 * @return	array
 	 */
-	public function field_data()
+	function field_data()
 	{
 		$retval = array();
-		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
+		while ($field = mysql_fetch_object($this->result_id))
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= mysql_field_name($this->result_id, $i);
-			$retval[$i]->type		= mysql_field_type($this->result_id, $i);
-			$retval[$i]->max_length		= mysql_field_len($this->result_id, $i);
-			$retval[$i]->primary_key	= (int) (strpos(mysql_field_flags($this->result_id, $i), 'primary_key') !== FALSE);
+			preg_match('/([a-zA-Z]+)(\(\d+\))?/', $field->Type, $matches);
+
+			$type = (array_key_exists(1, $matches)) ? $matches[1] : NULL;
+			$length = (array_key_exists(2, $matches)) ? preg_replace('/[^\d]/', '', $matches[2]) : NULL;
+
+			$F				= new stdClass();
+			$F->name		= $field->Field;
+			$F->type		= $type;
+			$F->default		= $field->Default;
+			$F->max_length	= $length;
+			$F->primary_key = ( $field->Key == 'PRI' ? 1 : 0 );
+
+			$retval[] = $F;
 		}
 
 		return $retval;
@@ -137,9 +109,9 @@ class CI_DB_mysql_result extends CI_DB_result {
 	/**
 	 * Free the result
 	 *
-	 * @return	void
+	 * @return	null
 	 */
-	public function free_result()
+	function free_result()
 	{
 		if (is_resource($this->result_id))
 		{
@@ -153,18 +125,16 @@ class CI_DB_mysql_result extends CI_DB_result {
 	/**
 	 * Data Seek
 	 *
-	 * Moves the internal pointer to the desired offset. We call
+	 * Moves the internal pointer to the desired offset.  We call
 	 * this internally before fetching results to make sure the
-	 * result set starts at zero.
+	 * result set starts at zero
 	 *
-	 * @param	int	$n
-	 * @return	bool
+	 * @access	private
+	 * @return	array
 	 */
-	public function data_seek($n = 0)
+	function _data_seek($n = 0)
 	{
-		return $this->num_rows
-			? mysql_data_seek($this->result_id, $n)
-			: FALSE;
+		return mysql_data_seek($this->result_id, $n);
 	}
 
 	// --------------------------------------------------------------------
@@ -174,9 +144,10 @@ class CI_DB_mysql_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an array
 	 *
+	 * @access	private
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	function _fetch_assoc()
 	{
 		return mysql_fetch_assoc($this->result_id);
 	}
@@ -188,12 +159,16 @@ class CI_DB_mysql_result extends CI_DB_result {
 	 *
 	 * Returns the result set as an object
 	 *
-	 * @param	string	$class_name
+	 * @access	private
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	function _fetch_object()
 	{
-		return mysql_fetch_object($this->result_id, $class_name);
+		return mysql_fetch_object($this->result_id);
 	}
 
 }
+
+
+/* End of file mysql_result.php */
+/* Location: ./system/database/drivers/mysql/mysql_result.php */

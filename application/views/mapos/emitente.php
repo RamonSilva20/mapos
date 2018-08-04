@@ -84,6 +84,18 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label for="descricao" class="control-label"><span>Celular</span></label>
+                        <div class="controls">
+                            <input type="text" name="celular" value=""  />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="descricao" class="control-label"><span>WhatsApp</span></label>
+                        <div class="controls">
+                            <input type="text" name="whatsapp" value=""  />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
                         <div class="controls">
                             <input type="text" name="email" value="" />
@@ -91,7 +103,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
+                        <label for="logo" class="control-label"><span class="required">Logomarca*</span></label>
                         <div class="controls">
                             <input type="file" name="userfile" value="" />
                         </div>
@@ -123,7 +135,7 @@
                     <tbody>
                         <tr>
                             <td style="width: 25%"><img src=" <?php echo $dados[0]->url_logo; ?> "></td>
-                            <td> <span style="font-size: 20px; "> <?php echo $dados[0]->nome; ?> </span> </br><span><?php echo $dados[0]->cnpj; ?> </br> <?php echo $dados[0]->rua.', nº:'.$dados[0]->numero.', '.$dados[0]->bairro.' - '.$dados[0]->cidade.' - '.$dados[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $dados[0]->email.' - Fone: '.$dados[0]->telefone; ?></span></td>
+                            <td> <span style="font-size: 20px; "> <?php echo $dados[0]->nome; ?> </span> </br><span><?php echo $dados[0]->cnpj; ?> </br> <?php echo $dados[0]->rua.', '.$dados[0]->numero.', '.$dados[0]->bairro.' - '.$dados[0]->cidade.' - '.$dados[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $dados[0]->email.' - Fone: '.$dados[0]->telefone.' - Celular: '.$dados[0]->celular.' - WhatsApp: '.$dados[0]->whatsapp; ?></span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -203,6 +215,18 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label for="descricao" class="control-label"><span>Celular</span></label>
+                        <div class="controls">
+                            <input type="text" name="celular" value="<?php echo $dados[0]->celular; ?>"  />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="descricao" class="control-label"><span>WhatsApp</span></label>
+                        <div class="controls">
+                            <input type="text" name="whatsapp" value="<?php echo $dados[0]->whatsapp; ?>"  />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
                         <div class="controls">
                             <input type="text" name="email" value="<?php echo $dados[0]->email; ?>" />
@@ -225,12 +249,12 @@
   <form action="<?php echo base_url(); ?>index.php/mapos/editarLogo" id="formLogo" enctype="multipart/form-data" method="post" class="form-horizontal" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="">MapOS - Alterar Logotipo</h3>
+    <h3 id="">MapOS - Alterar Logomarca</h3>
   </div>
   <div class="modal-body">
-         <div class="span12 alert alert-info">Selecione uma nova imagem da logotipo. Tamanho indicado (130 X 130).</div>          
+         <div class="span12 alert alert-info">Selecione uma nova imagem da logomarca. Tamanho indicado (130 X 130).</div>          
          <div class="control-group">
-            <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
+            <label for="logo" class="control-label"><span class="required">Logomarca*</span></label>
             <div class="controls">
                 <input type="file" name="userfile" value="" />
                 <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"  />
@@ -250,7 +274,7 @@
 <?php } ?>
 
 
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery.validate.js"></script>
 <script type="text/javascript">
     
 $(document).ready(function(){

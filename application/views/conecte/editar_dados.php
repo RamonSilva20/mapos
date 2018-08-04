@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label">CPF<span class="required">*</span></label>
+                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
                             <input id="documento" type="text" name="documento" value="<?php echo $result->documento; ?>"  />
                         </div>
@@ -92,7 +92,7 @@
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <a href="<?php echo base_url() ?>index.php/conecte/conta" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
 
 
 
-<script src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url()?>js/jquery.validate.js"></script>
 <script type="text/javascript">
       $(document).ready(function(){
            $('#formCliente').validate({

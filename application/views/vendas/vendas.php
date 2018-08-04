@@ -74,7 +74,6 @@ if(!$results){?>
             echo '<td>';
             if($this->permission->checkPermission($this->session->userdata('permissao'),'vVenda')){
                 echo '<a style="margin-right: 1%" href="'.base_url().'index.php/vendas/visualizar/'.$r->idVendas.'" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/vendas/imprimir/'.$r->idVendas.'" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>'; 
             }
             if($this->permission->checkPermission($this->session->userdata('permissao'),'eVenda')){
                 echo '<a style="margin-right: 1%" href="'.base_url().'index.php/vendas/editar/'.$r->idVendas.'" class="btn btn-info tip-top" title="Editar venda"><i class="icon-pencil icon-white"></i></a>'; 

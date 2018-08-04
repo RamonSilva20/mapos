@@ -33,11 +33,11 @@
 (function($) {
 	$.fn.maskMoney = function(settings) {
 		settings = $.extend({
-			symbol:'R$',
+			symbol:'US$',
 			decimal:'.',
 			precision:2,
-			thousands:'',
-			allowZero:true,
+			thousands:',',
+			allowZero:false,
 			showSymbol:false
 		}, settings);
 

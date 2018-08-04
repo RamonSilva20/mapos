@@ -168,6 +168,39 @@
 
                                     <td>
                                         <label>
+                                            <input name="vCompra" class="marcar" type="checkbox" checked="checked" value="1" />
+                                            <span class="lbl"> Visualizar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="aCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="eCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="dCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Compra</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
+                                
+                                <tr><td colspan="4"></td></tr>
+                                <tr>
+
+                                    <td>
+                                        <label>
                                             <input name="vVenda" class="marcar" type="checkbox" checked="checked" value="1" />
                                             <span class="lbl"> Visualizar Venda</span>
                                         </label>
@@ -302,6 +335,13 @@
 
                                     <td>
                                         <label>
+                                            <input name="rCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Relatório Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
                                             <input name="rVenda" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Relatório Venda</span>
                                         </label>
@@ -313,7 +353,7 @@
                                             <span class="lbl"> Relatório Financeiro</span>
                                         </label>
                                     </td>
-                                    <td colspan="2"></td>
+                                    <td></td>
                                  
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
@@ -381,9 +421,23 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-    $("#marcarTodos").change(function () {
-        $("input:checkbox").prop('checked', $(this).prop("checked"));
-    });
+        $(document).on('click', '#marcarTodos', function(event) {
+            if($(this).prop('checked')){
+
+              $('.marcar').each(
+                 function(){
+                    $(this).attr("checked", true);
+                 }
+              );
+           }else{
+
+              $('.marcar').each(
+                 function(){
+                    $(this).attr("checked", false);
+                 }
+              );
+           }
+        });
        
 
  

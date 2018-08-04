@@ -4,7 +4,7 @@
             <li class="active"><a data-toggle="tab" href="#tab1">Meus Dados</a></li>
             
             <div class="buttons">
-                    <a title="Icon Title" class="btn btn-mini btn-info" href="<?php echo base_url()?>index.php/mine/editarDados/<?php echo $result->idClientes?>"><i class="icon-pencil icon-white"></i> Editar</a>
+                    <a title="Icon Title" class="btn btn-mini btn-info" href="<?php echo base_url()?>index.php/conecte/editarDados/<?php echo $result->idClientes?>"><i class="icon-pencil icon-white"></i> Editar</a>
                 </div>
         </ul>
     </div>

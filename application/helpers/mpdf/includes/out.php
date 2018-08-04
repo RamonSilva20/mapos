@@ -1,10 +1,9 @@
 <?php
 
-$path = '../tmp/';
 
 $tempfilename = $_REQUEST['filename'].'.pdf';
-if (strstr($tempfilename,'/') || strstr($tempfilename,'\\')) { die("Filename should not contain \ or / "); }
 $opname = $_REQUEST['opname'];
+$path = urldecode($_REQUEST['path']);
 $dest = $_REQUEST['dest'];
 	if ($tempfilename && file_exists($path.$tempfilename)) {
 		// mPDF 5.3.17
@@ -39,7 +38,7 @@ $dest = $_REQUEST['dest'];
 			// don't use length if server using compression
 			header('Content-Length: '.$filesize);
 		}
-		$fd=fopen($path.$tempfilename,'rb');
+		$fd=fopen($path.$tempfilename,'rb');	// mPDF 5.3.85
 		fpassthru($fd);
 		fclose($fd);
 		unlink($path.$tempfilename);

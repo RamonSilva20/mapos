@@ -3,14 +3,13 @@
 <html lang="pt-br">
     
 <head>
-        <title>MAP OS</title><meta charset="UTF-8" />
+        <title>MapOS</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
-        <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
         <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
     </head>
     <body>
         <div id="loginbox">            
@@ -21,7 +20,7 @@
                           <?php echo $this->session->flashdata('error');?>
                        </div>
                   <?php }?>
-                <div class="control-group normal_text"> <h3><img src="<?php echo base_url()?>assets/img/logo.png" alt="Logo" /></h3></div>
+                <div class="control-group normal_text"> <h3><img src="<?php echo base_url()?>assets/img/logo-login.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
@@ -32,13 +31,12 @@
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
-                            <span class="add-on bg_lb"><i class="icon-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
+                            <span class="add-on bg_ly"><i class="icon-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
                         </div>
                     </div>
                 </div>
                 <div class="form-actions" style="text-align: center">
-                    <div id="progress-acessar" class='hide progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>
-                    <button id="btn-acessar" class="btn btn-success btn-large"/> Acessar</button>
+                    <button class="btn btn-info btn-large"/> Logar</button>
                 </div>
             </form>
        
@@ -67,8 +65,7 @@
                     },
                    submitHandler: function( form ){       
                          var dados = $( form ).serialize();
-                         $('#btn-acessar').addClass('disabled');
-                         $('#progress-acessar').removeClass('hide');
+                         
                     
                         $.ajax({
                           type: "POST",
@@ -78,14 +75,12 @@
                           success: function(data)
                           {
                             if(data.result == true){
+                              if($('#email').val() == "cliente@computadorpc.com"){
+                                window.location.href = "<?php echo base_url();?>index.php/clientes/adicionar";
+                              } else {
                                 window.location.href = "<?php echo base_url();?>index.php/mapos";
-                            }
-                            else{
-
-
-                                $('#btn-acessar').removeClass('disabled');
-                                $('#progress-acessar').addClass('hide');
-                                
+                              }
+                            } else {
                                 $('#call-modal').trigger('click');
                             }
                           }

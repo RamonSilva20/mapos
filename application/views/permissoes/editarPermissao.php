@@ -181,6 +181,40 @@
 
                                     <td>
                                         <label>
+                                            <input <?php if(isset($permissoes['vCompra'])){ if($permissoes['vCompra'] == '1'){echo 'checked';}}?> name="vCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if(isset($permissoes['aCompra'])){ if($permissoes['aCompra'] == '1'){echo 'checked';}}?> name="aCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if(isset($permissoes['eCompra'])){ if($permissoes['eCompra'] == '1'){echo 'checked';}}?> name="eCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if(isset($permissoes['dCompra'])){ if($permissoes['dCompra'] == '1'){echo 'checked';}}?> name="dCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Compra</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
+                                
+                                <tr><td colspan="4"></td></tr>
+
+                                <tr>
+
+                                    <td>
+                                        <label>
                                             <input <?php if(isset($permissoes['vVenda'])){ if($permissoes['vVenda'] == '1'){echo 'checked';}}?> name="vVenda" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Visualizar Venda</span>
                                         </label>
@@ -315,6 +349,13 @@
 
                                     <td>
                                         <label>
+                                            <input <?php if(isset($permissoes['rCompra'])){ if($permissoes['rCompra'] == '1'){echo 'checked';}}?> name="rCompra" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Relatório Compra</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
                                             <input <?php if(isset($permissoes['rVenda'])){ if($permissoes['rVenda'] == '1'){echo 'checked';}}?> name="rVenda" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Relatório Venda</span>
                                         </label>
@@ -394,9 +435,25 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-    $("#marcarTodos").change(function () {
-        $("input:checkbox").prop('checked', $(this).prop("checked"));
-    });   
+
+        $("#marcarTodos").click(function(){
+
+            if ($(this).attr("checked")){
+              $('.marcar').each(
+                 function(){
+                    $(this).attr("checked", true);
+                 }
+              );
+           }else{
+              $('.marcar').each(
+                 function(){
+                    $(this).attr("checked", false);
+                 }
+              );
+           }
+
+        });   
+
 
  
     $("#formPermissao").validate({

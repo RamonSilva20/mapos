@@ -1,27 +1,22 @@
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1.11_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
+#### CUSTOM_Versão 2.6.4_
+
+Este código contém customizações realizadas por Rafael Marques ( [rafaelmarques](https://github.com/rafaelmarques)) utilizando como base o sistema MapOS. 
+
+####
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
-ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.  
 
 ### Instalação
 
-1. Faça o download dos arquivos.
+1. Faça o download dos arquivos
 2. Extraia o pacote e copie para seu webserver.
 3. Configure sua URL no arquivo `config.php` alterando a base_url. 
 4. Crie o banco de dados e execute o arquivo `banco.sql` para criar as tabelas.
 5. Configure os dados de acesso ao banco de dados no arquivo `database.php`.
 6. Acesse sua URL e coloque os dados de acesso: `admin@admin.com` e `123456`.
-
-### Atualização para versão 3.*
-1. Faça backup do banco de dados.
-2. Remova a pasta system da instalação atual.
-3. Copie os novos arquivos e substitua.
-4. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
-5. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
-6. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
 
 
 ### Frameworks/Bibliotecas
@@ -30,17 +25,10 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * [jquery/jquery](https://github.com/jquery/jquery) 
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
 
-### Requerimentos
-* PHP >= 5.4.0
+### Requerimento
+* PHP >= 5.4.0 <= 5.6
 * MySQL
 
-### Contribuidores
-* [Ramon Silva](https://github.com/RamonSilva20) - Criador
-* [Gianluca Bine](https://github.com/Pr3d4dor)
-* [Henrique Miranda](https://github.com/Henrique-Miranda)
-* [Mário Lucas](https://github.com/mariolucasdev)
-* [Helan Allysson](https://github.com/HelanAllysson)
-* [KansasMyers](https://github.com/KansasMyers)
-* [drelldeveloper](https://github.com/drelldeveloper) 
-* [Samuel Fontebasso](https://github.com/fontebasso)
-* [marllonferreira](https://github.com/marllonferreira)
+### Créditos
+* Ramon Silva - silva018-mg@yahoo.com.br
+* Rafael Marques - hafael@gmail.com
