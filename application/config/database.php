@@ -9,8 +9,8 @@ $db['default'] = array(
     'dsn'   => '',
     'hostname' => 'localhost',
     'username' => 'root',
-    'password' => 'kolina',
-    'database' => 'mapos',
+    'password' => '',
+    'database' => 'banco',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,
@@ -26,3 +26,4 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true
 );
+
