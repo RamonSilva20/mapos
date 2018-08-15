@@ -7,11 +7,9 @@ if (!defined('BASEPATH')) {
 function pdf_create($html, $filename, $stream = true)
 {
 
-    require_once(APPPATH . 'helpers/mpdf/mpdf.php');
+    require_once APPPATH . 'helpers/mpdf/mpdf.php';
 
-    $mpdf = new mPDF();
-
-    //$mpdf->SetAutoFont();
+    $mpdf = new mPDF('c', 'A4');
 
     $mpdf->WriteHTML($html);
 
@@ -19,7 +17,7 @@ function pdf_create($html, $filename, $stream = true)
         $mpdf->Output($filename . '.pdf', 'I');
     } else {
         $mpdf->Output('./uploads/temp/' . $filename . '.pdf', 'F');
-        
+
         return './uploads/temp/' . $filename . '.pdf';
     }
 }

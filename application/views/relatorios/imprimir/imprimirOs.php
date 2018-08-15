@@ -15,13 +15,12 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?=$topo?>
+                    <?= isset($topo) ? $topo : '' ?>
                     <div class="widget-title">
-                        <h4 style="text-align: center"><?=strtoupper($title)?></h4>
+                        <h4 style="text-align: center"><?= ucfirst($title)?></h4>
                     </div>
                     <div class="widget-content nopadding">
-                        <p style="text-align: right">Data do Relatório: <?php echo date('d/m/Y');?></p>
-                        <table class="table table-triped">
+                        <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th style="padding: 5px;">CLIENTE</th>

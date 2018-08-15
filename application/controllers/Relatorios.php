@@ -98,7 +98,6 @@ class Relatorios extends CI_Controller
         $data['produtos'] = $this->Relatorios_model->produtosRapid();
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirProdutos', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
         pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
@@ -161,7 +160,6 @@ class Relatorios extends CI_Controller
         $precoFinal = $this->input->get('precoFinal');
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirServicos', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
         pdf_create($html, 'relatorio_servicos' . date('d/m/y'), true);
     }
@@ -176,7 +174,6 @@ class Relatorios extends CI_Controller
         $data['servicos'] = $this->Relatorios_model->servicosRapid();
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirServicos', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
         pdf_create($html, 'relatorio_servicos' . date('d/m/y'), true);
     }
@@ -199,9 +196,9 @@ class Relatorios extends CI_Controller
         }
 
         $data['os'] = $this->Relatorios_model->osRapid();
+        $data['title'] = 'Relatório de OS';
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirOs', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
     }
@@ -221,25 +218,27 @@ class Relatorios extends CI_Controller
 
         $this->load->helper('mpdf');
         
-        $status == null ? $title = 'Todas' : $title = $status;
-        $responsavel == null ? $user = 'Não foi selecionado' : $user = $this->Usuarios_model->get(1, intval($responsavel) - 1);
-        $dataInicial == null ? $dataInicial = null : $dataInicial = $dataInicial;
-        $dataFinal == null ? $dataFinal = null : $dataFinal = $dataFinal;
+        $title = $status == null ? 'Todas' : $status;
+        $user =  $responsavel == null ? 'Não foi selecionado' : $this->Usuarios_model->get(1, intval($responsavel) - 1);
         
         $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status);
         $emitente = $this->Mapos_model->getEmitente();
-        is_array($user) ? $usuario = $user[0]->nome : $usuario = $user;
+        $usuario = is_array($user) ? $user[0]->nome : $user;
 
         $data['title'] = 'Relatório de OS - '.$title;
         $data['os'] = $os;
-        $data['em_nome'] = $emitente[0]->nome;
-        $data['em_cnpj'] = $emitente[0]->cnpj;
-        $data['em_logo'] = $emitente[0]->url_logo;
         $data['res_nome'] = $usuario;
-        $dataInicial != null ? $data['dataInicial'] = date('d-m-Y', strtotime($dataInicial)) : $data['dataInicial'] = 'indefinida';
-        $dataFinal != null ? $data['dataFinal'] = date('d-m-Y', strtotime($dataFinal)) : $data['dataFinal'] = 'indefinida';
 
-        $data['topo'] = $this->load->view('relatorios/rel_os_topo', $data, true);
+        $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
+        $data['dataFinal'] = $dataFinal != null ?  date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
+
+        if($emitente){
+            $data['em_nome'] = $emitente[0]->nome;
+            $data['em_cnpj'] = $emitente[0]->cnpj;
+            $data['em_logo'] = $emitente[0]->url_logo;
+            $data['topo'] = $this->load->view('relatorios/rel_os_topo', $data, true);
+        }
+
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
     }
@@ -269,7 +268,6 @@ class Relatorios extends CI_Controller
         $data['lancamentos'] = $this->Relatorios_model->financeiroRapid();
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirFinanceiro', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
     }
@@ -289,7 +287,6 @@ class Relatorios extends CI_Controller
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirFinanceiro', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
         pdf_create($html, 'relatorio_financeiro' . date('d/m/y'), true);
     }
@@ -316,7 +313,6 @@ class Relatorios extends CI_Controller
         $data['vendas'] = $this->Relatorios_model->vendasRapid();
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirOs', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
         pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
     }
@@ -334,7 +330,6 @@ class Relatorios extends CI_Controller
 
         $data['vendas'] = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel);
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirOs', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
         pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
     }

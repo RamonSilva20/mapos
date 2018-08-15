@@ -4,10 +4,10 @@
         <img style="width: 150px" src="<?=$em_logo?>" alt=""><br><br>
     </div>
     <div style="float: right">
-        <b>EMPRESA: </b> <?=$em_nome?> <b>CNPJ: </b> <?=$em_cnpj?><br>
-        <b>RELATÓRIO: </b> <?=$title?> <br>
-        <b>RESPONSÁVEL: </b> <?=$res_nome?><br>
-        <b>DATA INICIAL: </b> <?=$dataInicial?> <b>DATA FINAL: </b> <?=$dataFinal?>
+        <b>Empresa: </b> <?=$em_nome?> <br>
+        <b>CNPJ: </b> <?=$em_cnpj?><br>
+        <b>Responsável: </b> <?=$res_nome?><br>
+        <b>Data Inicial: </b> <?=$dataInicial?> <b>Data Final: </b> <?=$dataFinal?>
     </div>
 </div>
 
