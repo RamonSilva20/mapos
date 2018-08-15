@@ -200,7 +200,7 @@ class Relatorios extends CI_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
-        pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
+        pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
     public function osCustom()
@@ -240,7 +240,7 @@ class Relatorios extends CI_Controller
         }
 
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
-        pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
+        pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
 

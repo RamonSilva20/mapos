@@ -437,10 +437,10 @@ class Os extends CI_Controller
     public function adicionarServico()
     {
 
-        
         $data = array(
             'servicos_id'=> $this->input->post('idServico'),
             'os_id'=> $this->input->post('idOsServico'),
+            'subTotal'=> $this->input->post('precoServico')
         );
 
         if ($this->os_model->add('servicos_os', $data) == true) {

@@ -27,7 +27,9 @@
                                     <th style="padding: 5px;">STATUS</th>
                                     <th style="padding: 5px;">DATA</th>
                                     <th style="padding: 5px;">DESCRIÇÃO</th>
-                                    <th style="padding: 5px;">VALOR</th>
+                                    <th style="padding: 5px;">TOTAL PRODUTOS</th>
+                                    <th style="padding: 5px;">TOTAL SERVIÇOS</th>
+                                    <th style="padding: 5px;">TOTAL</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,7 +40,9 @@
                                     echo '<td><small>' . $c->status . '</small></td>';
                                     echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
                                     echo '<td><small>' . $c->descricaoProduto. '</small></td>';
-                                    echo '<td><small>R$ '. $c->valorTotal .'</small></td>';
+                                    echo '<td><small>R$ '. number_format($c->total_produto,2,',','.') .'</small></td>';
+                                    echo '<td><small>R$ '. number_format($c->total_servico,2,',','.') .'</small></td>';
+                                    echo '<td><small>R$ '. number_format($c->total_produto + $c->total_servico, 2, ',', '.') .'</small></td>';
                                     echo '</tr>';
                                 }
                                 ?>

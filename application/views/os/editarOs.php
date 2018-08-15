@@ -48,24 +48,12 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-} ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-} ?> value="Aberto">Aberto</option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-} ?> value="Faturado">Faturado</option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-} ?> value="Em Andamento">Em Andamento</option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-} ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-} ?> value="Cancelado">Cancelado</option>
+                                                <option <?php if ($result->status == 'Orçamento') {  echo 'selected'; } ?> value="Orçamento">Orçamento</option>
+                                                <option <?php if ($result->status == 'Aberto') { echo 'selected'; } ?> value="Aberto">Aberto</option>
+                                                <option <?php if ($result->status == 'Faturado') { echo 'selected'; } ?> value="Faturado">Faturado</option>
+                                                <option <?php if ($result->status == 'Em Andamento') { echo 'selected'; } ?> value="Em Andamento">Em Andamento</option>
+                                                <option <?php if ($result->status == 'Finalizado') { echo 'selected'; } ?> value="Finalizado">Finalizado</option>
+                                                <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>
                                             </select>
                                         </div>
                                         <div class="span3">

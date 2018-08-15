@@ -4,12 +4,16 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-function pdf_create($html, $filename, $stream = true)
+function pdf_create($html, $filename, $stream = true, $landscape = false)
 {
 
     require_once APPPATH . 'helpers/mpdf/mpdf.php';
 
-    $mpdf = new mPDF('c', 'A4');
+    if($landscape){
+        $mpdf = new mPDF('c', 'A4-L');
+    }else{
+        $mpdf = new mPDF('c', 'A4');
+    }
 
     $mpdf->WriteHTML($html);
 
