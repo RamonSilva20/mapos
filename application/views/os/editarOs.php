@@ -27,7 +27,7 @@
                             <div class="span12" id="divCadastrarOs">
                                 
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-                                    <?php echo form_hidden('idOs',$result->idOs) ?>
+                                    <?php echo form_hidden('idOs', $result->idOs) ?>
                                     
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>#Protocolo: <?php echo $result->idOs ?></h3>
@@ -48,12 +48,12 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option <?php if($result->status == 'Orçamento'){echo 'selected';} ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if($result->status == 'Aberto'){echo 'selected';} ?> value="Aberto">Aberto</option>
-                                                <option <?php if($result->status == 'Faturado'){echo 'selected';} ?> value="Faturado">Faturado</option>
-                                                <option <?php if($result->status == 'Em Andamento'){echo 'selected';} ?> value="Em Andamento">Em Andamento</option>
-                                                <option <?php if($result->status == 'Finalizado'){echo 'selected';} ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if($result->status == 'Cancelado'){echo 'selected';} ?> value="Cancelado">Cancelado</option>
+                                                <option <?php if ($result->status == 'Orçamento') {  echo 'selected'; } ?> value="Orçamento">Orçamento</option>
+                                                <option <?php if ($result->status == 'Aberto') { echo 'selected'; } ?> value="Aberto">Aberto</option>
+                                                <option <?php if ($result->status == 'Faturado') { echo 'selected'; } ?> value="Faturado">Faturado</option>
+                                                <option <?php if ($result->status == 'Em Andamento') { echo 'selected'; } ?> value="Em Andamento">Em Andamento</option>
+                                                <option <?php if ($result->status == 'Finalizado') { echo 'selected'; } ?> value="Finalizado">Finalizado</option>
+                                                <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
-                                            <?php if($result->faturado == 0){ ?>
+                                            <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
@@ -152,13 +152,13 @@
                                             echo '<td>'.$p->descricao.'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
                                             echo '<td><a href="" idAcao="'.$p->idProdutos_os.'" prodAcao="'.$p->idProdutos.'" quantAcao="'.$p->quantidade.'" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-                                            echo '<td>R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                            echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
                                        
                                         <tr>
                                             <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?php echo number_format($total,2,',','.');?><input type="hidden" id="total-venda" value="<?php echo number_format($total,2); ?>"></strong></td>
+                                            <td><strong>R$ <?php echo number_format($total, 2, ',', '.');?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -195,20 +195,20 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                        $total = 0;
-                                        foreach ($servicos as $s) {
-                                            $preco = $s->preco;
-                                            $total = $total + $preco;
-                                            echo '<tr>';
-                                            echo '<td>'.$s->nome.'</td>';
-                                            echo '<td><span idAcao="'.$s->idServicos_os.'" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
-                                            echo '<td>R$ '.number_format($s->preco,2,',','.').'</td>';
-                                            echo '</tr>';
-                                        }?>
+                                            $total = 0;
+                                            foreach ($servicos as $s) {
+                                                $preco = $s->preco;
+                                                $total = $total + $preco;
+                                                echo '<tr>';
+                                                echo '<td>'.$s->nome.'</td>';
+                                                echo '<td><span idAcao="'.$s->idServicos_os.'" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
+                                                echo '<td>R$ '.number_format($s->preco, 2, ',', '.').'</td>';
+                                                echo '</tr>';
+                                            }?>
 
                                         <tr>
                                             <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                            <td><strong>R$ <?php echo number_format($total,2,',','.');?><input type="hidden" id="total-servico" value="<?php echo number_format($total,2); ?>"></strong></td>
+                                            <td><strong>R$ <?php echo number_format($total, 2, ',', '.');?><input type="hidden" id="total-servico" value="<?php echo number_format($total, 2); ?>"></strong></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -237,26 +237,24 @@
                                 </div>
                 
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
-                                    <?php 
+                                    <?php
                                     $cont = 1;
                                     $flag = 5;
                                     foreach ($anexos as $a) {
 
-                                        if($a->thumb == null){
+                                        if ($a->thumb == null) {
                                             $thumb = base_url().'assets/img/icon-file.png';
                                             $link = base_url().'assets/img/icon-file.png';
-                                        }
-                                        else{
+                                        } else {
                                             $thumb = base_url().'assets/anexos/thumbs/'.$a->thumb;
                                             $link = $a->url.$a->anexo;
                                         }
 
-                                        if($cont == $flag){
-                                           echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>'; 
-                                           $flag += 4;
-                                        }
-                                        else{
-                                           echo '<div class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>'; 
+                                        if ($cont == $flag) {
+                                            echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""></a></div>';
+                                            $flag += 4;
+                                        } else {
+                                            echo '<div class="span3"><a href="#modal-anexo" imagem="'.$a->idAnexos.'" link="'.$link.'" role="button" class="btn anexo" data-toggle="modal"><img src="'.$thumb.'" alt=""><p align="center">'. $a->anexo .'</p></a></div>';
                                         }
                                         $cont ++;
                                     } ?>
@@ -335,7 +333,7 @@
       <div class="span4" style="margin-left: 0">  
         <label for="valor">Valor*</label>
         <input type="hidden" id="tipo" name="tipo" value="receita" /> 
-        <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total,2); ?> "  />
+        <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> "  />
       </div>
       <div class="span4" >
         <label for="vencimento">Data Vencimento*</label>

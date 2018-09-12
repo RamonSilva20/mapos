@@ -21,7 +21,7 @@
                         <div class="tab-pane active" id="tab1">
 
                             <div class="span12" id="divCadastrarOs">
-                                <?php if($custom_error == true){ ?>
+                                <?php if ($custom_error == true) { ?>
                                 <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">

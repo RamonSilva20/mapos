@@ -10,10 +10,10 @@
             <div class="widget-content nopadding">
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                } ?>
+} ?>
                 <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal" >
                     <div class="control-group">
-                        <?php echo form_hidden('idUsuarios',$result->idUsuarios) ?>
+                        <?php echo form_hidden('idUsuarios', $result->idUsuarios) ?>
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
                             <input id="nome" type="text" name="nome" value="<?php echo $result->nome; ?>"  />
@@ -102,7 +102,14 @@
                         <label  class="control-label">Situação*</label>
                         <div class="controls">
                             <select name="situacao" id="situacao">
-                                <?php if($result->situacao == 1){$ativo = 'selected'; $inativo = '';} else{$ativo = ''; $inativo = 'selected';} ?>
+                                <?php if ($result->situacao == 1) {
+                                    $ativo = 'selected';
+                                    $inativo = '';
+
+} else {
+    $ativo = '';
+    $inativo = 'selected';
+} ?>
                                 <option value="1" <?php echo $ativo; ?>>Ativo</option>
                                 <option value="0" <?php echo $inativo; ?>>Inativo</option>
                             </select>
@@ -114,10 +121,15 @@
                         <label  class="control-label">Permissões<span class="required">*</span></label>
                         <div class="controls">
                             <select name="permissoes_id" id="permissoes_id">
-                                  <?php foreach ($permissoes as $p) {
-                                     if($p->idPermissao == $result->permissoes_id){ $selected = 'selected';}else{$selected = '';}
-                                      echo '<option value="'.$p->idPermissao.'"'.$selected.'>'.$p->nome.'</option>';
-                                  } ?>
+                                    <?php foreach ($permissoes as $p) {
+                                        if ($p->idPermissao == $result->permissoes_id) {
+                                            $selected = 'selected';
+
+                                        } else {
+                                            $selected = '';
+                                        }
+                                        echo '<option value="'.$p->idPermissao.'"'.$selected.'>'.$p->nome.'</option>';
+} ?>
                             </select>
                         </div>
                     </div>

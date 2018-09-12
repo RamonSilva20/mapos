@@ -1,10 +1,10 @@
-<?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aProduto')){ ?>
+<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
     <a href="<?php echo base_url();?>index.php/produtos/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Produto</a>
 <?php } ?>
 
 <?php
 
-if(!$results){?>
+if (!$results) {?>
 	<div class="widget-box">
      <div class="widget-title">
         <span class="icon">
@@ -37,7 +37,7 @@ if(!$results){?>
 </div>
 </div>
 
-<?php } else{?>
+<?php } else {?>
 
 <div class="widget-box">
      <div class="widget-title">
@@ -67,22 +67,22 @@ if(!$results){?>
             echo '<td>'.$r->idProdutos.'</td>';
             echo '<td>'.$r->descricao.'</td>';
             echo '<td>'.$r->estoque.'</td>';
-            echo '<td>'.number_format($r->precoVenda,2,',','.').'</td>';
+            echo '<td>'.number_format($r->precoVenda, 2, ',', '.').'</td>';
             
             echo '<td>';
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'vProduto')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/visualizar/'.$r->idProdutos.'" class="btn tip-top" title="Visualizar Produto"><i class="icon-eye-open"></i></a>  '; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/visualizar/'.$r->idProdutos.'" class="btn tip-top" title="Visualizar Produto"><i class="icon-eye-open"></i></a>  ';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'eProduto')){
-                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/editar/'.$r->idProdutos.'" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+                echo '<a style="margin-right: 1%" href="'.base_url().'index.php/produtos/editar/'.$r->idProdutos.'" class="btn btn-info tip-top" title="Editar Produto"><i class="icon-pencil icon-white"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'dProduto')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="'.$r->idProdutos.'" class="btn btn-danger tip-top" title="Excluir Produto"><i class="icon-remove icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="'.$r->idProdutos.'" class="btn btn-danger tip-top" title="Excluir Produto"><i class="icon-remove icon-white"></i></a>';
             }
                      
             echo '</td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -91,7 +91,8 @@ if(!$results){?>
 </div>
 </div>
 	
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

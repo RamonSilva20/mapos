@@ -35,17 +35,17 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <?php
-                          foreach ($vendas as $c) {
+                            <?php
+                            foreach ($vendas as $c) {
 
-                              echo '<tr>';
-                              echo '<td>' . $c->nomeCliente . '</td>';
-                              echo '<td>' . $c->valorTotal. '</td>';
-                              echo '<td>' . date('d/m/Y',  strtotime($c->dataVenda)) . '</td>';
-                              echo '<td>' . $c->nome. '</td>';
-                              echo '</tr>';
-                          }
-                          ?>
+                                echo '<tr>';
+                                echo '<td>' . $c->nomeCliente . '</td>';
+                                echo '<td>' . $c->valorTotal. '</td>';
+                                echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
+                                echo '<td>' . $c->nome. '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
                       </tbody>
                   </table>
 

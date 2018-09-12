@@ -42,7 +42,7 @@
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal" >
                      <div class="control-group">
-                        <?php echo form_hidden('idProdutos',$result->idProdutos) ?>
+                        <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>"  />

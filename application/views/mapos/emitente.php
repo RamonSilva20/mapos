@@ -1,5 +1,5 @@
 
-<?php if(!isset($dados) || $dados == null) {?>
+<?php if (!isset($dados) || $dados == null) {?>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="logo" class="control-label"><span class="required">Logomarca*</span></label>
+                        <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
                         <div class="controls">
                             <input type="file" name="userfile" value="" />
                         </div>
@@ -225,12 +225,12 @@
   <form action="<?php echo base_url(); ?>index.php/mapos/editarLogo" id="formLogo" enctype="multipart/form-data" method="post" class="form-horizontal" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="">MapOS - Alterar Logomarca</h3>
+    <h3 id="">MapOS - Alterar Logotipo</h3>
   </div>
   <div class="modal-body">
-         <div class="span12 alert alert-info">Selecione uma nova imagem da logomarca. Tamanho indicado (130 X 130).</div>          
+         <div class="span12 alert alert-info">Selecione uma nova imagem da logotipo. Tamanho indicado (130 X 130).</div>          
          <div class="control-group">
-            <label for="logo" class="control-label"><span class="required">Logomarca*</span></label>
+            <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
             <div class="controls">
                 <input type="file" name="userfile" value="" />
                 <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"  />

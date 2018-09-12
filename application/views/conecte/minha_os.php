@@ -28,7 +28,8 @@
 
             <div class="span12">
 
-                <?php $totalServico = 0; $totalProdutos = 0;?>
+                <?php $totalServico = 0;
+                $totalProdutos = 0;?>
                 <div class="row-fluid" style="margin-top: 0">
                     <div class="span12">
                         <div class="widget-box">
@@ -48,7 +49,7 @@
 
                                         <table class="table table-condensed">
                                             <tbody>
-                                            <?php if($emitente == null) {?>
+                                            <?php if ($emitente == null) {?>
 
                                                 <tr>
                                                     <td colspan="3" class="alert">Os dados do emitente não foram configurados.</td>
@@ -96,11 +97,11 @@
 
                                     <div style="margin-top: 0; padding-top: 0">
 
-                                    <?php if($result->descricaoProduto != null || $result->defeito != null || $result->laudoTecnico != null || $result->observacoes){ ?>
+                                    <?php if ($result->descricaoProduto != null || $result->defeito != null || $result->laudoTecnico != null || $result->observacoes) { ?>
 
                                         <table class="table table-condensed">
                                             <tbody>
-                                                <?php if($result->descricaoProduto != null){?>
+                                                <?php if ($result->descricaoProduto != null) {?>
                                                     <tr>
                                                         <td>
                                                             <strong>Descrição</strong><br> 
@@ -110,7 +111,7 @@
                                                 
                                                 <?php }?>
 
-                                                <?php if($result->defeito != null){?>
+                                                <?php if ($result->defeito != null) {?>
                                                     <tr>
                                                         <td>
                                                             <strong>Defeito</strong><br> 
@@ -119,7 +120,7 @@
                                                     </tr>
                                                 <?php }?>
 
-                                                <?php if($result->laudoTecnico != null){?>
+                                                <?php if ($result->laudoTecnico != null) {?>
                                                         <tr>
                                                             <td>
                                                                 <strong>Laudo Técnico</strong> <br>
@@ -128,7 +129,7 @@
                                                         </tr>
                                                 <?php }?>
 
-                                                <?php if($result->observacoes != null){?>
+                                                <?php if ($result->observacoes != null) {?>
                                                     <tr>
                                                         <td>
                                                             <strong>Observações</strong> <br>
@@ -142,7 +143,7 @@
                     
                                     <?php } ?>
 
-                                    <?php if($produtos != null || $servicos != null){?>
+                                    <?php if ($produtos != null || $servicos != null) {?>
                                         <br />
                                         <table class="table table-condensed" id="tblProdutos">
                                                     <thead>
@@ -162,7 +163,7 @@
                                                             echo '<td style="text-align: center">'.$p->descricao.'</td>';
                                                             echo '<td style="text-align: center">'.$p->quantidade.'</td>';
                                                             
-                                                            echo '<td style="text-align: center">R$ '.number_format($p->subTotal,2,',','.').'</td>';
+                                                            echo '<td style="text-align: center">R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                                             echo '</tr>';
                                                         }?>
 
@@ -182,11 +183,11 @@
 
                                                         <tr>
                                                             <td colspan="2" style="text-align: right"></td>
-                                                            <td style="text-align: center"><strong>Total: R$ <?php  echo number_format($totalProdutos + $totalServico,2,',','.');?></strong></td>
+                                                            <td style="text-align: center"><strong>Total: R$ <?php  echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></strong></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                               <?php }?>
+                                                <?php }?>
 
                                     </div>
 

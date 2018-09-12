@@ -1,9 +1,9 @@
-<?php if($this->permission->checkPermission($this->session->userdata('permissao'),'aCliente')){ ?>
+<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
     <a href="<?php echo base_url();?>index.php/clientes/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Cliente</a>    
 <?php } ?>
 
 <?php
-if(!$results){?>
+if (!$results) {?>
 
         <div class="widget-box">
         <div class="widget-title">
@@ -34,8 +34,8 @@ if(!$results){?>
         </div>
     </div>
 
-<?php }else{
-	
+<?php } else {
+    
 
 ?>
 <div class="widget-box">
@@ -68,20 +68,20 @@ if(!$results){?>
             echo '<td>'.$r->documento.'</td>';
             echo '<td>'.$r->telefone.'</td>';
             echo '<td>';
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'vCliente')){
-                echo '<a href="'.base_url().'index.php/clientes/visualizar/'.$r->idClientes.'" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
+                echo '<a href="'.base_url().'index.php/clientes/visualizar/'.$r->idClientes.'" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'eCliente')){
-                echo '<a href="'.base_url().'index.php/clientes/editar/'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+                echo '<a href="'.base_url().'index.php/clientes/editar/'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-info tip-top" title="Editar Cliente"><i class="icon-pencil icon-white"></i></a>';
             }
-            if($this->permission->checkPermission($this->session->userdata('permissao'),'dCliente')){
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" cliente="'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-danger tip-top" title="Excluir Cliente"><i class="icon-remove icon-white"></i></a>'; 
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" cliente="'.$r->idClientes.'" style="margin-right: 1%" class="btn btn-danger tip-top" title="Excluir Cliente"><i class="icon-remove icon-white"></i></a>';
             }
 
               
             echo '</td>';
             echo '</tr>';
-        }?>
+}?>
         <tr>
             
         </tr>
@@ -89,7 +89,8 @@ if(!$results){?>
 </table>
 </div>
 </div>
-<?php echo $this->pagination->create_links();}?>
+<?php echo $this->pagination->create_links();
+}?>
 
 
 

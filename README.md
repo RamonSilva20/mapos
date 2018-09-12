@@ -1,6 +1,13 @@
+
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-#### _Versão 3.1.11_ | Nova versão em desenvolvimento - Sugestões no Issue #37
+![version](https://img.shields.io/badge/version-3.1.11-blue.svg?longCache=true&style=flat-square)
+![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
+![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
+![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
+![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
+
+#### _Versão 3.1.12_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
@@ -29,11 +36,21 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * [twbs/bootstrap](https://github.com/twbs/bootstrap) 
 * [jquery/jquery](https://github.com/jquery/jquery) 
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
+* [mpdf/mpdf](https://github.com/mpdf/mpdf) 
+* [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
-### Requerimento
-* PHP >= 5.4.0 < 7.0
-* Extensão Mcrypt
+### Requerimentos
+* PHP >= 5.4.0
 * MySQL
 
-### Créditos
-* Ramon Silva - silva018-mg@yahoo.com.br
+### Contribuidores
+* [Ramon Silva](https://github.com/RamonSilva20) - Criador
+* [Gianluca Bine](https://github.com/Pr3d4dor)
+* [Henrique Miranda](https://github.com/Henrique-Miranda)
+* [Mário Lucas](https://github.com/mariolucasdev)
+* [Helan Allysson](https://github.com/HelanAllysson)
+* [KansasMyers](https://github.com/KansasMyers)
+* [Daniel Bastos](https://github.com/daniellbastos)
+* [drelldeveloper](https://github.com/drelldeveloper) 
+* [Samuel Fontebasso](https://github.com/fontebasso)
+* [marllonferreira](https://github.com/marllonferreira)
