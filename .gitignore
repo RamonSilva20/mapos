@@ -1,5 +1,16 @@
-.env
-/bootstrap/*
-/public/*
-/storage/*
-/vendor/*
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# production
+/install/files
+
+# misc
+.DS_Store
+.vscode
+
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+!blank/.gitkeep
+desktop.ini
