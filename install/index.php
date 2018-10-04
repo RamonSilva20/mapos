@@ -1,6 +1,6 @@
 <?php
 
-$settings_file = __DIR__ . '\settings.json';
+$settings_file = __DIR__.DIRECTORY_SEPARATOR.'settings.json';
 
 if (!file_exists($settings_file)) {
   die("Arquivo de configuração não encontrado!");
@@ -26,7 +26,7 @@ if (ini_get('allow_url_fopen')) {
   $allow_url_fopen_success = true;
 }
 
-//check allow_url_fopen
+//check date.timezone
 $timezone_settings = ini_get('date.timezone');
 if ($timezone_settings) {
   $timezone_success = true;

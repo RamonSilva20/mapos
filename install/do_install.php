@@ -2,7 +2,7 @@
 
 ini_set('max_execution_time', 300); //300 seconds
 
-$settings_file = __DIR__ . '\settings.json';
+$settings_file = __DIR__.DIRECTORY_SEPARATOR.'settings.json';
 
 if (!file_exists($settings_file)) {
   die("Arquivo de configuração não encontrado!");

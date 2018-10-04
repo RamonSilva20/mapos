@@ -7,7 +7,7 @@
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
-#### _Versão 3.1.12_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
+#### _Versão 3.1.13_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
 Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
@@ -17,7 +17,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
-3. Acesse sua URL e inicie a instalação é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
+3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
 
 ### Atualização para versão 3.*
 1. Faça backup do banco de dados.
