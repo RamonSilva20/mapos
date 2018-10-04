@@ -81,13 +81,13 @@
 										<h4 class="m-b-20">ACESSO RÁPIDO</h4>
 										<ul>
 											<li>
-												<a href="<?= site_url('os/adicionar') ?>" class="btn btn-primary col-12">Adicionar O.S</a>
+												<a href="<?= site_url('os/create') ?>" class="btn btn-primary col-12">Adicionar O.S</a>
 											</li>
 											<li>
-												<a href="<?= site_url('clientes/adicionar') ?>" class="btn btn-primary col-12">Adicionar Cliente</a>
+												<a href="<?= site_url('clientes/create') ?>" class="btn btn-primary col-12">Adicionar Cliente</a>
 											</li>
 											<li>
-												<a href="<?= site_url('produtos/adicionar') ?>" class="btn btn-primary col-12">Adicionar Produto</a>
+												<a href="<?= site_url('produtos/create') ?>" class="btn btn-primary col-12">Adicionar Produto</a>
 											</li>
 
 										</ul>
@@ -506,7 +506,7 @@
 	<script type="text/javascript">  
 		$(document).ready(function () {
 			
-			<?php if($this->session->flashdata('success') != null){?>
+			<?php if($this->session->flashdata('success') != null){ ?>
 		
 				toastr.success('<?= $this->session->flashdata('success');?>','Atenção',{
 					timeOut: 8000,
@@ -517,7 +517,7 @@
 					"onclick": null,
 				});
 
-			<?php }?>
+			<?php } ?>
 
 			<?php if($this->session->flashdata('error') != null){?>
 		
@@ -530,7 +530,7 @@
 					"onclick": null,
 				});
 
-			<?php }?>
+			<?php } ?>
 
 		});  
 	</script>

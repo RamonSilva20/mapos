@@ -140,11 +140,12 @@
 			check_delete_button();
 
 		});
+		
+		// remove single item
+		$(document).on('click', '.delete', function (event) {
 
-		// delete many items form
-		$('#form_delete').submit(function (event) {
 			event.preventDefault();
-			data = $(this).serialize();
+			var url = $(this).attr('href');
 
 			swal({
 				title: "<?= $this->lang->line('app_attention'); ?>",
@@ -157,50 +158,6 @@
 				showLoaderOnConfirm: true,
 				closeOnConfirm: false
 			},
-				function () {
-
-					$.ajax({
-						url: '<?= site_url('arquivos/delete_many'); ?>',
-                        type: 'POST',
-						dataType: 'json',
-						data: data,
-					})
-						.done(function (response) {
-							if (response.result == true) {
-								$('#reload').trigger('click');
-								swal("<?= $this->lang->line('app_attention'); ?>", response.message, "success");
-
-							} else {
-								swal("<?= $this->lang->line('app_attention'); ?>", response.message, "error");
-							}
-						})
-						.fail(function () {
-							swal("<?= $this->lang->line('app_attention'); ?>", "<?= $this->lang->line('app_error'); ?>", "error");
-
-						});
-				});
-
-		});
-
-	});
-
-	// remove single item
-	$(document).on('click', '.delete', function (event) {
-
-		event.preventDefault();
-		var url = $(this).attr('href');
-
-		swal({
-			title: "<?= $this->lang->line('app_attention'); ?>",
-			text: "<?= $this->lang->line('app_sure_delete'); ?>",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "<?= $this->lang->line('app_delete'); ?>",
-			cancelButtonText: "<?= $this->lang->line('app_cancel'); ?>",
-			showLoaderOnConfirm: true,
-			closeOnConfirm: false
-		},
 			function () {
 
 				$.ajax({
@@ -223,5 +180,6 @@
 					});
 			});
 
-	});  
+		});
+	});
 </script>
