@@ -53,7 +53,25 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	// define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+
+//set the environment to production after installation
+define('ENVIRONMENT', 'pre_installation');
+
+// we don't want to access the main project before installation. redirect to installation page
+if (ENVIRONMENT === 'pre_installation') {
+    $domain = $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+
+    $domain = preg_replace('/index.php.*/', '', $domain); //remove everything after index.php
+    if (!empty($_SERVER['HTTPS'])) {
+        $domain = 'https://' . $domain;
+    } else {
+        $domain = 'http://' . $domain;
+    }
+
+    header("Location: $domain./install/index.php");
+    exit;
+}
 
 /*
  *---------------------------------------------------------------

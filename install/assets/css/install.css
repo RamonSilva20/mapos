@@ -1,0 +1,138 @@
+body {
+  background-color: #BCBDBD;
+  color: #4e5e6a;
+}
+
+.install-box {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  padding:5px 0;
+}
+
+.section {
+  padding: 15px;
+  background-color: #fff;
+  margin-bottom: 15px;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+hr {
+  margin: 10px 0 0;
+}
+
+.status {
+  font-size: 20px;
+}
+
+.status {
+  font-size: 20px;
+}
+
+.status.fa-check-circle-o {
+  color: #00b393;
+}
+
+.status.fa-times-circle-o {
+  color: #d73b3b;
+}
+
+.tab-title {
+  background: #f2f3f4;
+  padding:15px;
+  border-bottom: none;
+}
+
+.tab-title.active {
+  background: #00b393;
+  color: #fff;
+}
+
+.form-group {
+  margin-top: 15px;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+.btn {
+  border-radius: 0;
+}
+.panel {
+  border-radius: 0;
+  border: 0;
+}
+
+.panel-heading h2 {
+  margin: 20px 0;
+}
+
+.panel-install > .panel-heading {
+  background-color: #1d2632;
+  color: #93a4c3;
+  border-bottom: none;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.btn-info {
+  background-color: #00b393;
+  border: none;
+  width: 100%;
+  padding: 15px;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+  background-color: #00b3a2 !important;
+  border: none !important;
+}
+
+.btn-info[disabled] {
+  background-color: #24BFA4 !important;
+  border: none !important;
+}
+
+label {
+  font-weight: normal;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+.loader {
+  background: url('../images/loader2.gif') no-repeat;
+  height: 16px;
+  display: inline-block;
+  padding-left: 20px;
+}
+
+.panel-footer {
+  border-top: none;
+}
+
+.go-to-login-page,
+.go-to-login-page:active,
+.go-to-login-page:focus {
+  color: #00b3a2;
+  text-decoration: none;
+}
+
+.go-to-login-page:hover {
+  color: #13B195;
+  text-decoration: none;
+}

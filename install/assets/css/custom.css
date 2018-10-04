@@ -1,0 +1,20 @@
+body {
+  overflow-y: scroll;
+  background-color: #f1f1f1;
+}
+
+#logo {
+  margin-top: 12px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+.footer {
+  text-align: center;
+}
+
+.panel-install>.panel-heading{
+  background-color: #fff;
+  color: #93a4c3;
+  border-bottom: none;
+}
