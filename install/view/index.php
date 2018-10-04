@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Codeigniter Install">
+  <meta name="description" content="<?php echo($settings['title']); ?>">
   <meta name="author" content="Rodrigo Ribeiro - me@rodrigo3d.com">
   <link rel="shortcut icon" href="<?php echo $dashboard_url; ?>install/assets/images/favicon.ico" type="image/x-icon" />
 
@@ -84,21 +84,6 @@
       $("#finished-tab").addClass('active');
     <?php endif; ?>
 
-    $("#host").val("localhost");
-    $("#dbuser").val("root");
-    $("#dbpassword").val("");
-    $("#dbname").val("teste_install");
-
-    $("#full_name").val("Rodrigo Ribeiro");
-    $("#email").val("demo@rodrigo3d.com");
-    $("#password").val("230284");
-    $("#base_url").val("http://localhost:8081/mapos");
-
-    // Código de instalação Rise
-    // var code1 = "2392ae97-e166-4f3d-8f95-262b1b932143";
-    // Código de instalação Rodrigo3d
-    var code2 = "bWVAcm9kcmlnbzNkLmNvbQ==";
-    $("#purchase_code").val(code2);
 </script>
 <script src="assets/js/main.js"></script>
 
