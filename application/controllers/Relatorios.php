@@ -60,11 +60,17 @@ class Relatorios extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de clientes.');
             redirect(base_url());
         }
-
+        
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
+        
+        $data['title'] = 'Relatório de Clientes Costumizado';
+        $data['dataInicial'] = $dataFinal;
+        $data['dataFinal'] = $dataFinal;
 
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         //$this->load->view('relatorios/imprimir/imprimirClientes', $data);
@@ -80,10 +86,13 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
 
+        $data['title'] = 'Relatório de Clientes';
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirClientes', $data);
+
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
         pdf_create($html, 'relatorio_clientes' . date('d/m/y'), true);
     }

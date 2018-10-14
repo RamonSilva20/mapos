@@ -1,5 +1,5 @@
   <head>
-    <title>MAPOS</title>
+    <title>MAPOS - <?=$title?></title>
     <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
@@ -11,19 +11,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
  
   <body style="background-color: transparent">
-
-
-
       <div class="container-fluid">
     
           <div class="row-fluid">
               <div class="span12">
 
-                  <div class="widget-box">
-                      <div class="widget-title">
-                          <h4 style="text-align: center">Clientes</h4>
-                      </div>
-                      <div class="widget-content nopadding">
+                    <div class="widget-box">
+                        <?=$topo?>
+                        <div class="widget-title">
+                            <h4 style="text-align: center"><?=$title?></h4><br>
+                        </div>
+                    <div class="widget-content nopadding">
 
                   <table class="table table-bordered">
                       <thead>
@@ -36,18 +34,16 @@
                           </tr>
                       </thead>
                       <tbody>
-                            <?php
-                            foreach ($clientes as $c) {
-                                $dataCadastro = date('d/m/Y', strtotime($c->dataCadastro));
-                                echo '<tr>';
-                                echo '<td>' . $c->nomeCliente . '</td>';
-                                echo '<td>' . $c->documento . '</td>';
-                                echo '<td>' . $c->telefone . '</td>';
-                                echo '<td>' . $c->email . '</td>';
-                                echo '<td>' . $dataCadastro . '</td>';
-                                echo '</tr>';
-                            }
-                            ?>
+                        <?php foreach($clientes as $c) :?>
+                            <?php $dataCadastro = date('d/m/Y', strtotime($c->dataCadastro))?>
+                            <tr>
+                                <td><?=$c->nomeCliente?></td>
+                                <td><?=$c->documento?></td>
+                                <td><?=$c->telefone?></td>
+                                <td><?=$c->email?></td>
+                                <td><?=$dataCadastro?></td>
+                            </tr>
+                        <?php endforeach ?>
                       </tbody>
                   </table>
                   
