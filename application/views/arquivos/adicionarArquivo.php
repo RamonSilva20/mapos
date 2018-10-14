@@ -1,5 +1,9 @@
-<link rel="stylesheet" href="<?php echo base_url();?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<link
+    rel="stylesheet"
+    href="<?=base_url();?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script
+    type="text/javascript"
+    src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -11,8 +15,14 @@
                 <h5>Cadastro de Arquivo</h5>
             </div>
             <div class="widget-content nopadding">
-                <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formArquivo" enctype="multipart/form-data" method="post" class="form-horizontal" >
+                <?=$custom_error?>
+                
+                <form
+                    action="<?+current_url()?>"
+                    id="formArquivo"
+                    enctype="multipart/form-data"
+                    method="post"
+                    class="form-horizontal" >
                     
                     <div class="control-group">
                         <label for="preco" class="control-label"><span class="required">Arquivo*</span></label>
@@ -46,7 +56,7 @@
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/arquivos" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <a href="<?=base_url() ?>index.php/arquivos" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -56,11 +66,10 @@
     </div>
 </div>
 
-<script src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
-      $(document).ready(function(){
-         
-           $('#formArquivo').validate({
+    $(document).ready(function(){
+        $('#formArquivo').validate({
             rules :{
                   nome:{ required: true},
                   userfile:{ required: true}
@@ -81,13 +90,6 @@
                 $(element).parents('.control-group').addClass('success');
             }
            }); 
-
-
-           $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
-      });
+        $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    });
 </script>
-
-
-
-
-                                    
