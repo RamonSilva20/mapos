@@ -65,8 +65,8 @@ class Relatorios extends CI_Controller
         $dataFinal = $this->input->get('dataFinal');
         
         $data['title'] = 'Relatório de Clientes Costumizado';
-        $data['dataInicial'] = $dataFinal;
-        $data['dataFinal'] = $dataFinal;
+        $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
+        $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
