@@ -7,10 +7,10 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'maposdev',
+    'hostname' => 'enter_hostname',
+    'username' => 'enter_db_username',
+    'password' => 'enter_db_password',
+    'database' => 'enter_database_name',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,
