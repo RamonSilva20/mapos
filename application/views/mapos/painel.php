@@ -1,50 +1,65 @@
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/dist/excanvas.min.js"></script><![endif]-->
 
-<script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/js/dist/jquery.jqplot.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/js/dist/jquery.jqplot.min.css" />
-
-<script type="text/javascript" src="<?php echo base_url();?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+<script
+    language="javascript"
+    type="text/javascript"
+    src="<?=base_url();?>assets/js/dist/jquery.jqplot.min.js"></script>
+<script
+    type="text/javascript"
+    src="<?=base_url();?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
+<script
+    type="text/javascript"
+    src="<?=base_url();?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="<?=base_url();?>assets/js/dist/jquery.jqplot.min.css" />
 
 <!--Action boxes-->
-  <div class="container-fluid">
+<div class="container-fluid">
     <div class="quick-actions_homepage">
-      <ul class="quick-actions">
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
-            <li class="bg_lb"> <a href="<?php echo base_url()?>index.php/clientes"> <i class="icon-group"></i> Clientes</a> </li>
-        <?php } ?>
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
-            <li class="bg_lg"> <a href="<?php echo base_url()?>index.php/produtos"> <i class="icon-barcode"></i> Produtos</a> </li>
-        <?php } ?>
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
-            <li class="bg_ly"> <a href="<?php echo base_url()?>index.php/servicos"> <i class="icon-wrench"></i> Serviços</a> </li>
-        <?php } ?>
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
-            <li class="bg_lo"> <a href="<?php echo base_url()?>index.php/os"> <i class="icon-tags"></i> OS</a> </li>
-        <?php } ?>
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
-            <li class="bg_ls"> <a href="<?php echo base_url()?>index.php/vendas"><i class="icon-shopping-cart"></i> Vendas</a></li>
-        <?php } ?>
+        <ul class="quick-actions">
+            <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')):?>
+                <li class="bg_lb">
+                    <a href="<?=base_url()?>index.php/clientes"> <i class="icon-group"></i> Clientes</a>
+                </li>
+            <?php endif ?>
 
-        
-        
-        
-        
-        
+            <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')):?>
+                <li class="bg_lg">
+                    <a href="<?=base_url()?>index.php/produtos"> <i class="icon-barcode"></i> Produtos</a>
+                </li>
+            <?php endif ?>
 
-      </ul>
+            <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) :?>
+                <li class="bg_ly">
+                    <a href="<?=base_url()?>index.php/servicos"> <i class="icon-wrench"></i> Serviços</a>
+                </li>
+            <?php endif ?>
+
+            <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) :?>
+                <li class="bg_lo">
+                    <a href="<?=base_url()?>index.php/os"> <i class="icon-tags"></i> OS</a>
+                </li>
+            <?php endif ?>
+
+            <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) :?>
+                <li class="bg_ls">
+                    <a href="<?=base_url()?>index.php/vendas"><i class="icon-shopping-cart"></i> Vendas</a>
+                </li>
+            <?php endif ?>
+        </ul>
     </div>
-  </div>  
+</div>  
 <!--End-Action boxes-->  
 
-
-
 <div class="row-fluid" style="margin-top: 0">
-    
     <div class="span12">
-        
         <div class="widget-box">
-            <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Produtos Com Estoque Mínimo</h5></div>
+            <div class="widget-title">
+                <span class="icon"><i class="icon-signal"></i></span>
+                <h5>Produtos Com Estoque Mínimo</h5>
+            </div>
             <div class="widget-content">
                 <table class="table table-bordered">
                     <thead>
@@ -58,27 +73,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if ($produtos != null) {
-                            foreach ($produtos as $p) {
-                                echo '<tr>';
-                                echo '<td>'.$p->idProdutos.'</td>';
-                                echo '<td>'.$p->descricao.'</td>';
-                                echo '<td>R$ '.$p->precoVenda.'</td>';
-                                echo '<td>'.$p->estoque.'</td>';
-                                echo '<td>'.$p->estoqueMinimo.'</td>';
-                                echo '<td>';
-                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                                    echo '<a href="'.base_url().'index.php/produtos/editar/'.$p->idProdutos.'" class="btn btn-info"> <i class="icon-pencil" ></i> </a>  ';
-                                }
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="3">Nenhum produto com estoque baixo.</td></tr>';
-                        }
-
-                        ?>
+                        <?php if($produtos != null):?>
+                            <?php foreach ($produtos as $p): ?>
+                                <tr>
+                                    <td><?=$p->idProdutos?></td>
+                                    <td><?=$p->descricao?></td>
+                                    <td>R$ <?=$p->precoVenda?></td>
+                                    <td><?=$p->estoque?></td>
+                                    <td><?=$p->estoqueMinimo?></td>
+                                    <td>
+                                    <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')):?>
+                                        <a
+                                            href="<?=base_url()?>index.php/produtos/editar/<?=$p->idProdutos?>"
+                                            class="btn btn-info">
+                                            <i class="icon-pencil" ></i>
+                                        </a>  
+                                    <?php endif?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php else: ?> 
+                            <tr><td colspan="3">Nenhum produto com estoque baixo.</td></tr>
+                        <?php endif ?>
                     </tbody>
                 </table>
             </div>
@@ -86,9 +102,11 @@
     </div>
 
     <div class="span12" style="margin-left: 0">
-        
         <div class="widget-box">
-            <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span><h5>Ordens de Serviço Em Aberto</h5></div>
+            <div class="widget-title">
+                <span class="icon"><i class="icon-signal"></i></span>
+                <h5>Ordens de Serviço Em Aberto</h5>
+            </div>
             <div class="widget-content">
                 <table class="table table-bordered">
                     <thead>
@@ -101,32 +119,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if ($ordens != null) {
-                            foreach ($ordens as $o) {
-                                echo '<tr>';
-                                echo '<td>'.$o->idOs.'</td>';
-                                echo '<td>'.date('d/m/Y', strtotime($o->dataInicial)).'</td>';
-                                echo '<td>'.date('d/m/Y', strtotime($o->dataFinal)).'</td>';
-                                echo '<td>'.$o->nomeCliente.'</td>';
-                                echo '<td>';
-                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                    echo '<a href="'.base_url().'index.php/os/visualizar/'.$o->idOs.'" class="btn"> <i class="icon-eye-open" ></i> </a> ';
-                                }
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="3">Nenhuma OS em aberto.</td></tr>';
-                        }
-
-                        ?>
+                        <?php if ($ordens != null):?>
+                            <?php foreach ($ordens as $o): ?>
+                                <tr>
+                                    <td><?=$o->idOs?></td>
+                                    <td><?=date('d/m/Y', strtotime($o->dataInicial))?></td>
+                                    <td><?=date('d/m/Y', strtotime($o->dataFinal))?></td>
+                                    <td><?=$o->nomeCliente?></td>
+                                    <td>
+                                    <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')):?>
+                                        <a
+                                            href="<?=base_url()?>index.php/os/visualizar/<?=$o->idOs?>"
+                                            class="btn">
+                                            <i class="icon-eye-open" ></i> </a>
+                                    <?php endif ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php else:?>
+                            <tr>
+                                <td colspan="3">Nenhuma OS em aberto.</td>
+                            </tr>
+                        <?php endif?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
 </div>
 
 
@@ -216,10 +235,10 @@
                 <div class="row-fluid">           
                     <div class="span12">
                         <ul class="site-stats">
-                            <li class="bg_lh"><i class="icon-group"></i> <strong><?php echo $this->db->count_all('clientes');?></strong> <small>Clientes</small></li>
-                            <li class="bg_lh"><i class="icon-barcode"></i> <strong><?php echo $this->db->count_all('produtos');?></strong> <small>Produtos </small></li>
-                            <li class="bg_lh"><i class="icon-tags"></i> <strong><?php echo $this->db->count_all('os');?></strong> <small>Ordens de Serviço</small></li>
-                            <li class="bg_lh"><i class="icon-wrench"></i> <strong><?php echo $this->db->count_all('servicos');?></strong> <small>Serviços</small></li>
+                            <li class="bg_lh"><i class="icon-group"></i> <strong><?=$this->db->count_all('clientes');?></strong> <small>Clientes</small></li>
+                            <li class="bg_lh"><i class="icon-barcode"></i> <strong><?=$this->db->count_all('produtos');?></strong> <small>Produtos </small></li>
+                            <li class="bg_lh"><i class="icon-tags"></i> <strong><?=$this->db->count_all('os');?></strong> <small>Ordens de Serviço</small></li>
+                            <li class="bg_lh"><i class="icon-wrench"></i> <strong><?=$this->db->count_all('servicos');?></strong> <small>Serviços</small></li>
                             
                         </ul>
                  
