@@ -32,6 +32,7 @@ $lang['app_empty'] = 'Nenhum registro foi cadastrado.';
 $lang['app_filtered'] = '(filtrado de _MAX_ registros)';
 $lang['app_showing'] = 'Mostrando página _PAGE_ de _PAGES_';
 $lang['app_search'] = 'Pesquisar';
+$lang['app_input_search'] = 'Digite o termo a pesquisar';
 $lang['app_next'] = 'Próxima';
 $lang['app_previous'] = 'Anterior';
 $lang['app_first'] = 'Primeira';
@@ -118,7 +119,9 @@ $lang[''] = '';
 // OS Labels
 $lang['os'] = 'ordem de serviço';
 $lang['oss'] = 'ordens de serviço';
-$lang[''] = '';
+$lang['os_initial_date'] = 'Data Inicial';
+$lang['os_end_date'] = 'Data Final';
+$lang['os_defect'] = 'Defeito';
 
 // Report Labels 
 $lang['report'] = 'relatório';
