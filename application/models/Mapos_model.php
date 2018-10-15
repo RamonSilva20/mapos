@@ -7,12 +7,12 @@ class Mapos_model extends CI_Model {
      * 
      */
     
-    function __construct() {
+    public function __construct() {
         parent::__construct();
     }
 
     
-    function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
+    public function get($table,$fields,$where='',$perpage=0,$start=0,$one=false,$array='array'){
         
         $this->db->select($fields);
         $this->db->from($table);
@@ -27,7 +27,7 @@ class Mapos_model extends CI_Model {
         return $result;
     }
 
-    function getById($id){
+    public function getById($id){
         $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
         $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
@@ -54,7 +54,7 @@ class Mapos_model extends CI_Model {
         
     }
 
-    function pesquisar($termo){
+    public function pesquisar($termo){
          $data = array();
          // buscando clientes
          $this->db->like('nomeCliente',$termo);
@@ -82,44 +82,44 @@ class Mapos_model extends CI_Model {
     }
 
     
-    function add($table,$data){
+    public function add($table,$data){
         $this->db->insert($table, $data);         
         if ($this->db->affected_rows() == '1')
 		{
-			return TRUE;
+			return true;
 		}
 		
-		return FALSE;       
+		return false;       
     }
     
-    function edit($table,$data,$fieldID,$ID){
+    public function edit($table,$data,$fieldID,$ID){
         $this->db->where($fieldID,$ID);
         $this->db->update($table, $data);
 
         if ($this->db->affected_rows() >= 0)
 		{
-			return TRUE;
+			return true;
 		}
 		
-		return FALSE;       
+		return false;       
     }
     
-    function delete($table,$fieldID,$ID){
+    public function delete($table,$fieldID,$ID){
         $this->db->where($fieldID,$ID);
         $this->db->delete($table);
         if ($this->db->affected_rows() == '1')
 		{
-			return TRUE;
+			return true;
 		}
 		
-		return FALSE;        
+		return false;        
     }   
 	
-	function count($table){
+	public function count($table){
 		return $this->db->count_all($table);
 	}
 
-    function getOsAbertas(){
+    public function getOsAbertas(){
         $this->db->select('os.*, clientes.nomeCliente');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
@@ -128,16 +128,27 @@ class Mapos_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    function getProdutosMinimo(){
+    public function getProdutosMinimo(){
 
         $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo LIMIT 10"; 
         return $this->db->query($sql)->result();
 
     }
 
-    function getOsEstatisticas(){
+    public function getOsEstatisticas(){
         $sql = "SELECT status, COUNT(status) as total FROM os GROUP BY status ORDER BY status";
         return $this->db->query($sql)->result();
+    }
+
+    public function getTotalItems(){
+        $sql = "SELECT
+                    TABLE_NAME,TABLE_ROWS
+                FROM
+                    `information_schema`.`tables`
+                WHERE
+                    `table_schema` = '".$this->db->database."'";
+        return $this->db->query($sql)->result();
+
     }
 
     public function getEstatisticasFinanceiro(){
