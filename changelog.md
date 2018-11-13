@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.14] - 2018-11-13
+### Added
+- Modelo de impressão de OS otimizando espaços [@RamonSilva20](https://github.com/RamonSilva20).
+- Refatoração de views [@mariolucasdev](https://github.com/mariolucasdev).
 
 ## [3.1.13] - 2018-10-04
 ### Added
