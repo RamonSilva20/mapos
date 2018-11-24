@@ -102,39 +102,15 @@ $totalProdutos = 0;?>
                             </tr>
                             <?php }?>
 
-
-                            <?php if($result->equipamentos_id != null){?>
+                            <?php if($result->descricaoProduto != null){?>
                             <tr>
                                 <td colspan="3">
-                                    
-                                    <b>EQUIPAMENTO:</b> <?php echo $result->equipamento?>
-                                    
-                                    <br>
-                                    
-                                    <b>FABRICANTE:</b> <?php echo $result->marcas_id?>
-                                    
-                                    <br>
-                                    
-                                    <b>MODELO:</b> <?php echo $result->modelo?>
-                                    
-                                    <br>
-                                    
-                                    <b>NÚMERO DE SÉRIE:</b> <?php echo $result->num_serie?>
-                                    
-                                    <br>
-                                    
-                                    <b>DATA DE FABRICAÇÃO</b>:</b> <?php echo (! is_null($result->data_fabricacao) AND $result->data_fabricacao != '1970-01-01' ) ? date('d/m/Y', strtotime($result->data_fabricacao)) : '' ?>
-                                    
-                                    <br>
-                                    
-                                    <b>VOLTAGEM</b>:</b> <?php echo $result->voltagem?>
-
-                                    <br> <br>
-
+                                <b>DESCRIÇÃO: </b>
+                                <?php echo $result->descricaoProduto ?>
                                 </td>
                             </tr>
                             <?php }?>
-
+            
                             <?php if($result->defeito != null){?>
                             <tr>
                                 <td colspan="3">
