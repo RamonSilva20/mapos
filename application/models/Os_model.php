@@ -93,7 +93,7 @@ class Os_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->select('os.*, clientes.*, usuarios.telefone, usuarios.email,usuarios.nome');
+        $this->db->select('os.*, clientes.*, usuarios.telefone, usuarios.email as email_responsavel,usuarios.nome');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');

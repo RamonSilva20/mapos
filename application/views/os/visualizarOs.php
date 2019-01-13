@@ -49,6 +49,7 @@ $totalProdutos = 0;?>
                                             <span><?php echo $result->nomeCliente?></span><br/>
                                             <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
                                             <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
+                                            <span>E-mail: <?php echo $result->email?></span><br>
                                             <span>Celular: <?php echo $result->celular?></span>
                                         </li>
                                     </ul>
@@ -59,7 +60,7 @@ $totalProdutos = 0;?>
                                             <span><h5><b>RESPONSÁVEL</b></h5></span>
                                             <span><?php echo $result->nome?></span> <br/>
                                             <span>Telefone: <?php echo $result->telefone?></span><br/>
-                                            <span>Email: <?php echo $result->email?></span>
+                                            <span>Email: <?php echo $result->email_responsavel ?></span>
                                         </li>
                                     </ul>
                                 </td>
