@@ -18,7 +18,7 @@
                 <?=$custom_error?>
                 
                 <form
-                    action="<?+current_url()?>"
+                    action="<?= current_url()?>"
                     id="formArquivo"
                     enctype="multipart/form-data"
                     method="post"
