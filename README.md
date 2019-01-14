@@ -1,17 +1,15 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-3.1.13-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-3.1.16-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
-#### _Versão 3.1.15_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
+#### _Versão 3.1.16_ | [Nova versão em desenvolvimento](https://github.com/RamonSilva20/mapos/tree/mapos4)
 
 MapOS é um sistema gratuito para de controle de ordens de serviço. 
-Para mais informações visite __[sistemamapos.esy.es](https://www.sistemamapos.esy.es)__ 
-ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.  
 
 ### Instalação
 
@@ -37,7 +35,7 @@ ou acesse a __[demo](https://www.sistemamapos.esy.es/mapos)__.
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
 ### Requerimentos
-* PHP >= 5.4.0
+* PHP >= 5.5.0
 * MySQL
 
 ### Contribuidores

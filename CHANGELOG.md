@@ -4,6 +4,22 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.16] - 2019-01-14
+### Added
+- Adicionando e-mail do cliente na impressão da OS. [@RamonSilva20](https://github.com/RamonSilva20).
+
+### Fixed
+- Corrigindo alteração de senha na tela minha conta [@RamonSilva20](https://github.com/RamonSilva20).
+- Corrigindo link no formulário de adicionar arquivo. [@RamonSilva20](https://github.com/RamonSilva20).
+
+## [3.1.15] - 2018-11-24
+### Fixed
+- Corrigindo campo descrição na impressão e visualização de OS [@RamonSilva20](https://github.com/RamonSilva20).
+
+## [3.1.14] - 2018-11-13
+### Added
+- Modelo de impressão de OS otimizando espaços [@RamonSilva20](https://github.com/RamonSilva20).
+- Refatoração de views [@mariolucasdev](https://github.com/mariolucasdev).
 
 ## [3.1.13] - 2018-10-04
 ### Added

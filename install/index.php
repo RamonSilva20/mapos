@@ -13,7 +13,7 @@ $php_version_success = false;
 $allow_url_fopen_success = false;
 $timezone_success=false;
 
-$php_version_required = "5.3.0";
+$php_version_required = "5.5.0";
 $current_php_version = PHP_VERSION;
 
 //check required php version
