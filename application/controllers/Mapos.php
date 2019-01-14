@@ -1,22 +1,21 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Mapos extends CI_Controller
 {
 
-
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
      *
      */
-    
+
     public function __construct()
     {
         parent::__construct();
         $this->load->model('mapos_model', '', true);
-        
+
     }
 
     public function index()
@@ -32,7 +31,7 @@ class Mapos extends CI_Controller
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         $this->load->view('tema/topo', $this->data);
-      
+
     }
 
     public function minhaConta()
@@ -44,7 +43,7 @@ class Mapos extends CI_Controller
         $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
         $this->data['view'] = 'mapos/minhaConta';
         $this->load->view('tema/topo', $this->data);
-     
+
     }
 
     public function alterarSenha()
@@ -53,17 +52,31 @@ class Mapos extends CI_Controller
             redirect('mapos/login');
         }
 
+        $current_user = $this->mapos_model->getById($this->session->userdata('id'));
+
+        if (!$current_user) {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao pesquisar usuário!');
+            redirect(base_url() . 'index.php/mapos/minhaConta');
+        }
+
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
-        $result = $this->mapos_model->alterarSenha($senha, $oldSenha, $this->session->userdata('id'));
-        if ($result) {
-            $this->session->set_flashdata('success', 'Senha Alterada com sucesso!');
+
+        if (!password_verify($oldSenha, $current_user->senha)) {
+            $this->session->set_flashdata('error', 'A senha atual não corresponde com a senha informada.');
             redirect(base_url() . 'index.php/mapos/minhaConta');
-        } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
-            
         }
+
+        $result = $this->mapos_model->alterarSenha($senha);
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Senha alterada com sucesso!');
+            redirect(base_url() . 'index.php/mapos/minhaConta');
+        } 
+        
+        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
+        redirect(base_url() . 'index.php/mapos/minhaConta');
+
     }
 
     public function pesquisar()
@@ -71,7 +84,7 @@ class Mapos extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
-        
+
         $termo = $this->input->get('termo');
 
         $data['results'] = $this->mapos_model->pesquisar($termo);
@@ -81,14 +94,14 @@ class Mapos extends CI_Controller
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mapos/pesquisa';
         $this->load->view('tema/topo', $this->data);
-      
+
     }
 
     public function login()
     {
-        
+
         $this->load->view('mapos/login');
-        
+
     }
     public function sair()
     {
@@ -96,15 +109,14 @@ class Mapos extends CI_Controller
         redirect('mapos/login');
     }
 
-
     public function verificarLogin()
     {
-        
-        header('Access-Control-Allow-Origin: '.base_url());
+
+        header('Access-Control-Allow-Origin: ' . base_url());
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Max-Age: 1000');
         header('Access-Control-Allow-Headers: Content-Type');
-        
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
@@ -119,7 +131,7 @@ class Mapos extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios,'permissao' => $user->permissoes_id , 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     $json = array('result' => true);
                     echo json_encode($json);
@@ -135,7 +147,6 @@ class Mapos extends CI_Controller
         die();
     }
 
-
     public function backup()
     {
 
@@ -148,24 +159,21 @@ class Mapos extends CI_Controller
             redirect(base_url());
         }
 
-        
-        
         $this->load->dbutil();
         $prefs = array(
-                'format'      => 'zip',
-                'foreign_key_checks' => false,
-                'filename'    => 'backup'.date('d-m-Y').'.sql'
-              );
+            'format' => 'zip',
+            'foreign_key_checks' => false,
+            'filename' => 'backup' . date('d-m-Y') . '.sql',
+        );
 
         $backup = $this->dbutil->backup($prefs);
 
         $this->load->helper('file');
-        write_file(base_url().'backup/backup.zip', $backup);
+        write_file(base_url() . 'backup/backup.zip', $backup);
 
         $this->load->helper('download');
-        force_download('backup'.date('d-m-Y H:m:s').'.zip', $backup);
+        force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
     }
-
 
     public function emitente()
     {
@@ -186,7 +194,7 @@ class Mapos extends CI_Controller
         $this->load->view('tema/rodape');
     }
 
-    function do_upload()
+    public function do_upload()
     {
 
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
@@ -207,11 +215,11 @@ class Mapos extends CI_Controller
         }
 
         $this->upload_config = array(
-            'upload_path'   => $image_upload_folder,
+            'upload_path' => $image_upload_folder,
             'allowed_types' => 'png|jpg|jpeg|bmp',
-            'max_size'      => 2048,
-            'remove_space'  => true,
-            'encrypt_name'  => true,
+            'max_size' => 2048,
+            'remove_space' => true,
+            'encrypt_name' => true,
         );
 
         $this->upload->initialize($this->upload_config);
@@ -226,7 +234,6 @@ class Mapos extends CI_Controller
         }
 
     }
-
 
     public function cadastrarEmitente()
     {
@@ -252,14 +259,11 @@ class Mapos extends CI_Controller
         $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
         $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
 
-
-        
-
         if ($this->form_validation->run() == false) {
-            
+
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url().'index.php/mapos/emitente');
-            
+            redirect(base_url() . 'index.php/mapos/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -273,22 +277,20 @@ class Mapos extends CI_Controller
             $telefone = $this->input->post('telefone');
             $email = $this->input->post('email');
             $image = $this->do_upload();
-            $logo = base_url().'assets/uploads/'.$image;
-
+            $logo = base_url() . 'assets/uploads/' . $image;
 
             $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
-                redirect(base_url().'index.php/mapos/emitente');
+                redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-                redirect(base_url().'index.php/mapos/emitente');
+                redirect(base_url() . 'index.php/mapos/emitente');
             }
-            
+
         }
     }
-
 
     public function editarEmitente()
     {
@@ -314,14 +316,11 @@ class Mapos extends CI_Controller
         $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
         $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
 
-
-        
-
         if ($this->form_validation->run() == false) {
-            
+
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url().'index.php/mapos/emitente');
-            
+            redirect(base_url() . 'index.php/mapos/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -336,24 +335,22 @@ class Mapos extends CI_Controller
             $email = $this->input->post('email');
             $id = $this->input->post('id');
 
-
             $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-                redirect(base_url().'index.php/mapos/emitente');
+                redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-                redirect(base_url().'index.php/mapos/emitente');
+                redirect(base_url() . 'index.php/mapos/emitente');
             }
-            
+
         }
     }
 
-
     public function editarLogo()
     {
-        
+
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
@@ -366,22 +363,22 @@ class Mapos extends CI_Controller
         $id = $this->input->post('id');
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(base_url().'index.php/mapos/emitente');
+            redirect(base_url() . 'index.php/mapos/emitente');
         }
         $this->load->helper('file');
-        delete_files(FCPATH .'assets/uploads/');
+        delete_files(FCPATH . 'assets/uploads/');
 
         $image = $this->do_upload();
-        $logo = base_url().'assets/uploads/'.$image;
+        $logo = base_url() . 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
 
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            redirect(base_url().'index.php/mapos/emitente');
+            redirect(base_url() . 'index.php/mapos/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-            redirect(base_url().'index.php/mapos/emitente');
+            redirect(base_url() . 'index.php/mapos/emitente');
         }
 
     }

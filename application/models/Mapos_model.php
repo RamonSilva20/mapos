@@ -40,22 +40,16 @@ class Mapos_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    public function alterarSenha($newSenha, $oldSenha, $id)
+    public function alterarSenha($senha)
     {
+        $this->db->set('senha', password_hash($senha, PASSWORD_DEFAULT));
+        $this->db->where('idUsuarios',  $this->session->userdata('id'));
+        $this->db->update('usuarios');
 
-        $this->db->where('idUsuarios', $id);
-        $this->db->limit(1);
-        $usuario = $this->db->get('usuarios')->row();
-
-        if (password_verify($oldSenha, $usuario->senha)) {
-            return false;
-        } else {
-            $this->db->set('senha', password_hash($newSenha, PASSWORD_DEFAULT));
-            $this->db->where('idUsuarios', $id);
-            return $this->db->update('usuarios');
+        if ($this->db->affected_rows() >= 0) {
+            return true;
         }
-
-        
+        return false;
     }
 
     function pesquisar($termo)
