@@ -4,6 +4,9 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.16] - 2019-01-14
+### Added
+- Adicionando e-mail do cliente na impressão da OS. [@RamonSilva20](https://github.com/RamonSilva20).
 
 ## [3.1.15] - 2018-11-24
 ### Added
