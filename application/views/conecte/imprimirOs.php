@@ -80,7 +80,7 @@ $totalProdutos = 0;?>
                     <hr style="margin-top: 0">
                     <h5>Descrição</h5>
                     <p>
-                        <?php echo $result->descricaoProduto?>
+                        <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                         
                     </p>
                     <?php }?>
@@ -89,21 +89,21 @@ $totalProdutos = 0;?>
                     <hr style="margin-top: 0">
                     <h5>Defeito</h5>
                     <p>
-                        <?php echo $result->defeito?>
+                        <?php echo htmlspecialchars_decode($result->defeito) ?>
                     </p>
                     <?php }?>
                     <?php if ($result->laudoTecnico != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Laudo Técnico</h5>
                     <p>
-                        <?php echo $result->laudoTecnico?>
+                        <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                     </p>
                     <?php }?>
                     <?php if ($result->observacoes != null) {?>
                     <hr style="margin-top: 0">
                     <h5>Observações</h5>
                     <p>
-                        <?php echo $result->observacoes?>
+                        <?php echo htmlspecialchars_decode($result->observacoes) ?>
                     </p>
                     <?php }?>
 

@@ -1,6 +1,21 @@
 <link rel="stylesheet" href="<?php echo base_url();?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
+
+<link rel="stylesheet" href="<?php echo base_url()?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
+
+<style>
+    .ui-datepicker{
+        z-index: 9999 !important;
+    }
+    .trumbowyg-box {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+</style>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -36,7 +51,7 @@
 
                                         <div class="span12">
                                             <label for="descricaoProduto">Descrição Produto/Serviço*</label>
-                                            <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
+                                            <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
                                         </div>
                                     </div>
 
@@ -44,14 +59,14 @@
 
                                         <div class="span12">
                                             <label for="defeito">Defeito</label>
-                                            <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"></textarea>
+                                            <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
                                         </div>
 
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span12">
                                             <label for="observacoes">Observações</label>
-                                            <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
+                                            <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                         </div>
 
                                     </div>
@@ -105,7 +120,10 @@ $(document).ready(function(){
        });
 
     $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
-   
+
+    $('.editor').trumbowyg({
+        lang: 'pt_br'
+    });
 });
 
 </script>
