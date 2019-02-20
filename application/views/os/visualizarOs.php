@@ -100,7 +100,7 @@ $totalProdutos = 0;?>
                             <tr>
                                 <td colspan="3">
                                 <b>DESCRIÇÃO: </b>
-                                <?php echo $result->descricaoProduto ?>
+                                <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                 </td>
                             </tr>
                             <?php }?>
@@ -110,7 +110,7 @@ $totalProdutos = 0;?>
                             <tr>
                                 <td colspan="3">
                                 <b>DEFEITO APRESENTADO: </b>
-                                <?php echo $result->defeito?>
+                                <?php echo htmlspecialchars_decode($result->defeito) ?>
                                 </td>
                             </tr>
                             <?php }?>
@@ -119,7 +119,7 @@ $totalProdutos = 0;?>
                             <tr>
                                 <td colspan="3">
                                 <b>OBSERVAÇÕES: </b>
-                                <?php echo $result->observacoes?>
+                                <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                 </td>
                             </tr>
                             <?php }?>
@@ -128,7 +128,7 @@ $totalProdutos = 0;?>
                             <tr>
                                 <td colspan="3">
                                 <b>LAUDO TÉCNICO: </b>
-                                <?php echo $result->laudoTecnico?>
+                                <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                 </td>
                             </tr>
                             <?php }?>
