@@ -42,28 +42,23 @@
                         <div class="login-content card">
                             <div class="login-form">
                                 <h4>
-                                   <img class="img-responsive" src="<?= base_url('tema/assets/images/teste-3.png') ?>" alt="LOGIN" />
-                                   <!--<a href="#">LOGIN</a>-->
+                                    <img class="img-responsive" src="<?= base_url('tema/assets/images/teste-3.png') ?>" alt="LOGIN" />
                                 </h4>
                                 <form id="form-login" method="post" action="<?= site_url('tema/mapos/verificarLogin') ?>">
                                     <div class="form-group" id="progress-acessar" style="display: none">
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
-                                                aria-valuemax="100" style="width: 100%"></div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <!--<label>Email</label>--><br>
+                                        <br>
                                         <input id="email" name="email" class="form-control" type="text" placeholder="Email" />
                                     </div>
                                     <div class="form-group">
-                                      <!--  <label>Senha</label>--><br>
+                                        <br>
                                         <input name="senha" class="form-control" type="password" placeholder="Senha" />
                                     </div>
-                                    <!--<input type="button" value="Home" class="btn btn-info btn-flat m-b-30 m-t-30" onclick="javascript: location.href='https://www.emedicsystem.com.br';" />-->
                                     <button type="submit" id="btn-acessar" class="btn btn-info btn-flat m-b-30 m-t-30">Acessar</button>
-                                    
-                                    
                                 </form>
                             </div>
                         </div>
@@ -71,10 +66,8 @@
                 </div>
             </div>
         </div>
-
     </div>
     <!-- End Wrapper -->
-
     <script src="<?= base_url('tema/assets/js/lib/jquery/jquery.min.js'); ?>"></script>
     <script src="<?= base_url('tema/assets/js/lib/form-validation/jquery.validate.min.js') ?>"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
@@ -89,21 +82,31 @@
     <script src="<?= base_url('tema/assets/js/lib/sweetalert/sweetalert.min.js'); ?>"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             $('#email').focus();
             $("#form-login").validate({
                 rules: {
-                    email: { required: true, email: true },
-                    senha: { required: true }
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    senha: {
+                        required: true
+                    }
                 },
                 messages: {
-                    email: { required: 'Insira o e-mail.', email: 'Insira um email válido' },
-                    senha: { required: 'Insira sua senha.' }
+                    email: {
+                        required: 'Insira o e-mail.',
+                        email: 'Insira um email válido'
+                    },
+                    senha: {
+                        required: 'Insira sua senha.'
+                    }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     var dados = $(form).serialize();
-                    
+
                     $('#progress-acessar').show();
 
                     $.ajax({
@@ -111,17 +114,16 @@
                         url: "<?= site_url('mapos/verificarLogin?ajax=true'); ?>",
                         data: dados,
                         dataType: 'json',
-                        success: function (data) {
+                        success: function(data) {
                             if (data.result == true) {
                                 window.location.href = "<?= site_url('mapos'); ?>";
-                            }
-                            else {
+                            } else {
 
                                 $('#progress-acessar').hide();
                                 sweetAlert("Oops...", "Dados de acesso são inválidos! Tente novamente.", "error");
                             }
                         },
-                        fail: function () {
+                        fail: function() {
                             sweetAlert("Oops...", "Ocorreu um problema ao tentar efetuar o login! Tente novamente.", "error");
                         }
                     });
@@ -131,19 +133,16 @@
 
                 errorClass: "help-inline",
                 errorElement: "span",
-                highlight: function (element, errorClass, validClass) {
+                highlight: function(element, errorClass, validClass) {
                     $(element).addClass('error');
                 },
-                unhighlight: function (element, errorClass, validClass) {
+                unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass('error');
                 }
             });
 
         });
-
     </script>
-
-
 </body>
 
-</html>
+</html> 

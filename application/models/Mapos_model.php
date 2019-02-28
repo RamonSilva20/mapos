@@ -137,6 +137,7 @@ class Mapos_model extends CI_Model
         $this->db->where('os.status', 'Aguardando Peças');
         $this->db->limit(10);
         return $this->db->get()->result();
+    }
         
     function getProdutosMinimo()
     {
