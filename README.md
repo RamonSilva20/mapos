@@ -8,7 +8,7 @@
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
 #### _Versão 3.3_ | 
-#### Midificações
+#### Modificações
 -- MASCARAS 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG --
 
 mapos/assets/js/funcoes.js -->
