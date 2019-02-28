@@ -9,13 +9,12 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/osRapid"><i class="icon-tags"></i> <small>Todas as OS</small></a></li>
-                    
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/osRapid"><i class="icon-tags"></i> <small>Todas as OS</small></a></li>
+
                 </ul>
             </div>
         </div>
     </div>
-
     <div class="span8">
         <div class="widget-box">
             <div class="widget-title">
@@ -26,7 +25,6 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-
                     <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/osCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
@@ -35,19 +33,18 @@
                             </div>
                             <div class="span6">
                                 <label for="">até:</label>
-                                <input type="date"  name="dataFinal" class="span12" />
+                                <input type="date" name="dataFinal" class="span12" />
                             </div>
                         </div>
                         <div class="span12 well" style="margin-left: 0">
                             <div class="span6">
                                 <label for="">Cliente:</label>
-                                <input type="text"  id="cliente" class="span12" />
+                                <input type="text" id="cliente" class="span12" />
                                 <input type="hidden" name="cliente" id="clienteHide" />
-
                             </div>
                             <div class="span6">
                                 <label for="">Responsável:</label>
-                                <input type="text" id="tecnico"   class="span12" />
+                                <input type="text" id="tecnico" class="span12" />
                                 <input type="hidden" name="responsavel" id="responsavelHide" />
                             </div>
                         </div>
@@ -63,11 +60,8 @@
                                     <option value="Cancelado">Cancelado</option>
                                     <option value="Aguardando Peças">Aguardando Peças</option>
                                 </select>
-
                             </div>
-
                         </div>
-
                         <div class="span12" style="margin-left: 0; text-align: center">
                             <input type="reset" class="btn" value="Limpar" />
                             <button class="btn btn-inverse"><i class="icon-print icon-white"></i> Imprimir</button>
@@ -79,35 +73,25 @@
         </div>
     </div>
 </div>
-
-<link rel="stylesheet" href="<?php echo base_url();?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url();?>assets/js/maskmoney.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".money").maskMoney();
-        
         $("#cliente").autocomplete({
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
             minLength: 2,
-            select: function( event, ui ) {
-
-                 $("#clienteHide").val(ui.item.id);
-
-
+            select: function(event, ui) {
+                $("#clienteHide").val(ui.item.id);
             }
-      });
-
-      $("#tecnico").autocomplete({
+        });
+        $("#tecnico").autocomplete({
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
             minLength: 2,
-            select: function( event, ui ) {
-
-                 $("#responsavelHide").val(ui.item.id);
-
-
+            select: function(event, ui) {
+                $("#responsavelHide").val(ui.item.id);
             }
-      });
-
+        });
     });
-</script>
+</script> 
