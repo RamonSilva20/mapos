@@ -1,0 +1,119 @@
+.pagination {
+    > li {
+        &:first-child {
+            > a {
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+
+            > span {
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+        }
+
+        &:last-child {
+            > a {
+                border-bottom-right-radius: 4px;
+                border-top-right-radius: 4px;
+            }
+
+            > span {
+                border-bottom-right-radius: 4px;
+                border-top-right-radius: 4px;
+            }
+        }
+
+        > a {
+            color: #263238;
+
+            &:focus {
+                background-color: #f2f4f8;
+            }
+
+            &:hover {
+                background-color: #f2f4f8;
+            }
+        }
+
+        > span {
+            color: #263238;
+
+            &:focus {
+                background-color: #f2f4f8;
+            }
+
+            &:hover {
+                background-color: #f2f4f8;
+            }
+        }
+    }
+
+    > .active {
+        > a {
+            background-color: #1976d2;
+            border-color: #1976d2;
+
+            &:focus {
+                background-color: #1976d2;
+                border-color: #1976d2;
+            }
+
+            &:hover {
+                background-color: #1976d2;
+                border-color: #1976d2;
+            }
+        }
+
+        > span {
+            background-color: #1976d2;
+            border-color: #1976d2;
+
+            &:focus {
+                background-color: #1976d2;
+                border-color: #1976d2;
+            }
+
+            &:hover {
+                background-color: #1976d2;
+                border-color: #1976d2;
+            }
+        }
+    }
+}
+
+.pagination-split {
+    li {
+        margin-left: 5px;
+        display: inline-block;
+        float: left;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        a {
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+        }
+    }
+}
+
+.pager {
+    li {
+        > a {
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            color: #263238;
+        }
+
+        > span {
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            color: #263238;
+        }
+    }
+}

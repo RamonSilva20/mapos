@@ -1,0 +1,79 @@
+@import "variable.less"; // Variable.less
+
+.progress-bar {
+    background-color: @primary;
+}
+
+.progress-bar-primary {
+    background-color: @primary;
+}
+
+.progress-bar-success {
+    background-color: @success;
+}
+
+.progress-bar-info {
+    background-color: @info;
+}
+
+.progress-bar-danger {
+    background-color: @danger;
+}
+
+.progress-bar-warning {
+    background-color: @warning;
+}
+
+.progress-bar-pink {
+    background-color: @pink;
+}
+
+.progress {
+    height: 6px;
+}
+
+.progress-bar.active,
+.progress.active .progress-bar {
+    animation: 2s linear 0s normal none infinite running progress-bar-stripes;
+}
+
+.progress-vertical {
+    display: inline-block;
+    height: 250px;
+    margin-bottom: 0;
+    margin-right: 20px;
+    min-height: 250px;
+    position: relative;
+}
+
+.progress-vertical-bottom {
+    display: inline-block;
+    height: 250px;
+    margin-bottom: 0;
+    margin-right: 20px;
+    min-height: 250px;
+    position: relative;
+    transform: rotate(180deg);
+}
+
+.progress-animated {
+    animation-duration: 5s;
+    animation-name: myanimation;
+    transition: all 5s ease 0s;
+}
+@keyframes myanimation {
+    0% {
+        width: 0;
+    }
+}
+@keyframes myanimation {
+    0% {
+        width: 0;
+    }
+}
+
+.browser {
+    .progress {
+        height: 8px;
+    }
+}

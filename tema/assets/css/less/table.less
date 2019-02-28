@@ -1,0 +1,116 @@
+@import "variable.less"; // Variable.less
+
+thead {
+    tr {
+        th {
+            color: @text; //            font-weight: normal;
+            //            font-family: @mol;
+            //            text-transform: uppercase;
+            font-weight: 500;
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+}
+
+tbody {
+    tr {
+        th {
+            color: @text;
+            font-family: @mol;
+            font-weight: normal;
+        }
+
+        td {
+            font-family: @mol;
+            color: @text-light;
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+    //    border-top: 1px solid @border;
+    //    padding: 8px;
+    line-height: 32px;
+    vertical-align: top;
+}
+
+.table > thead > tr > th {
+    border-bottom: 1px solid @border;
+    font-weight: 600;
+    // border-top: 0;
+}
+
+.table {
+    margin-bottom: 0;
+
+    .badge {
+        text-transform: uppercase;
+    }
+}
+
+.student-data-table {
+    label {
+        margin-right: 7px;
+    }
+
+    td {
+        span {
+            a {
+                padding: 3px;
+            }
+        }
+    }
+}
+
+.search-action {
+    bottom: 0;
+    display: inline-block;
+    position: absolute;
+    right: 92px;
+    text-align: right;
+}
+
+.search-type {
+    .form-control {
+        height: 30px;
+    }
+}
+@media (max-width: 1199px) {
+    .search-action {
+        text-align: center;
+        position: relative;
+        right: 0;
+    }
+
+    .search-type {
+        .form-control {
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+    }
+}
+
+.table td,
+.table th {
+    padding: 0.55rem;
+}
+
+.table {
+    .round-img {
+        img {
+            width: 38px;
+        }
+    }
+}

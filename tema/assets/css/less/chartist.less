@@ -1,0 +1,78 @@
+@import "variable.less"; // Variable.less
+// .ct-chart {
+//     height: 265px;
+// }
+//
+// .ct-pie-chart {
+//     height: 328px;
+// }
+//
+// .ct-svg-chart {
+//     height: 270px;
+// }
+//
+// .ct-bar-chart {
+//     height: 250px;
+// }
+
+.ct-label {
+    color: rgba(0, 0, 0, 0.8);
+    fill: rgba(0, 0, 0, 0.8);
+    font-size: 10px;
+    //    font-weight: 700;
+}
+
+.ct-chart-pie {
+    .ct-label {
+        color: rgba(0, 0, 0, 0.8);
+        fill: rgba(0, 0, 0, 0.8);
+        font-size: 12px;
+        //    font-weight: 700;
+    }
+}
+
+.ct-series-a .ct-bar,
+.ct-series-a .ct-line,
+.ct-series-a .ct-point,
+.ct-series-a .ct-slice-donut {
+    stroke: @success;
+}
+
+.ct-series-b .ct-bar,
+.ct-series-b .ct-line,
+.ct-series-b .ct-point,
+.ct-series-b .ct-slice-donut {
+    stroke: @primary;
+}
+
+.ct-series-c .ct-bar,
+.ct-series-c .ct-line,
+.ct-series-c .ct-point,
+.ct-series-c .ct-slice-donut {
+    stroke: @danger;
+}
+
+.ct-series-d .ct-bar,
+.ct-series-d .ct-line,
+.ct-series-d .ct-point,
+.ct-series-d .ct-slice-donut {
+    stroke: @warning;
+}
+
+.ct-series-a .ct-area,
+.ct-series-a .ct-slice-donut-solid,
+.ct-series-a .ct-slice-pie {
+    fill: @success;
+}
+
+.ct-series-b .ct-area,
+.ct-series-b .ct-slice-donut-solid,
+.ct-series-b .ct-slice-pie {
+    fill: @primary;
+}
+
+.ct-series-c .ct-area,
+.ct-series-c .ct-slice-donut-solid,
+.ct-series-c .ct-slice-pie {
+    fill: @danger;
+}
