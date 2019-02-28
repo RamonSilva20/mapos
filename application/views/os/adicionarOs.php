@@ -62,6 +62,7 @@
                                                 <option value="Em Andamento">Em Andamento</option>
                                                 <option value="Finalizado">Finalizado</option>
                                                 <option value="Cancelado">Cancelado</option>
+                                                <option value="Aguardando Peças">Aguardando Peças</option>
                                             </select>
                                         </div>
                                         <div class="span3">

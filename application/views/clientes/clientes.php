@@ -20,8 +20,9 @@ if (!$results) {?>
                     <tr>
                         <th>#</th>
                         <th>Nome</th>
-                        <th>CPF/CNPJ</th>
+                        <th>CNPJ</th>
                         <th>Telefone</th>
+                        <th>Email</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -55,8 +56,9 @@ if (!$results) {?>
         <tr>
             <th>#</th>
             <th>Nome</th>
-            <th>CPF/CNPJ</th>
+            <th>CNPJ</th>
             <th>Telefone</th>
+            <th>Email</th>
             <th></th>
         </tr>
     </thead>
@@ -67,6 +69,7 @@ if (!$results) {?>
             echo '<td>'.$r->nomeCliente.'</td>';
             echo '<td>'.$r->documento.'</td>';
             echo '<td>'.$r->telefone.'</td>';
+            echo '<td>' .$r->email. '</td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
                 echo '<a href="'.base_url().'index.php/clientes/visualizar/'.$r->idClientes.'" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';

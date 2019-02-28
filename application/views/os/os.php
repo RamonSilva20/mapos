@@ -21,6 +21,7 @@
                 <option value="Orçamento">Orçamento</option>
                 <option value="Finalizado">Finalizado</option>
                 <option value="Cancelado">Cancelado</option>
+                <option value="Aguardando Peças">Aguardando Peças</option>
             </select>
 
         </div>
@@ -53,10 +54,11 @@ if (!$results) {?>
 <table class="table table-bordered ">
     <thead>
         <tr style="backgroud-color: #2D335B">
-            <th>#</th>
+            <th>N° OS</th>
             <th>Cliente</th>
             <th>Data Inicial</th>
             <th>Data Final</th>
+            <th>Valor Total</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -87,11 +89,12 @@ if (!$results) {?>
 <table class="table table-bordered ">
     <thead>
         <tr style="backgroud-color: #2D335B">
-            <th>#</th>
+            <th>N° OS</th>
             <th>Cliente</th>
             <th>Responsável</th>
             <th>Data Inicial</th>
             <th>Data Final</th>
+            <th>Valor Total</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -103,10 +106,10 @@ if (!$results) {?>
 
             switch ($r->status) {
                 case 'Aberto':
-                    $cor = '#8A9B0F';
+                    $cor = '#00cd00';
                     break;
                 case 'Em Andamento':
-                    $cor = '#A7DBD8';
+                    $cor = '#436eee';
                     break;
                 case 'Orçamento':
                     $cor = '#CDB380';
@@ -120,6 +123,9 @@ if (!$results) {?>
                 case 'Faturado':
                     $cor = '#B266FF';
                     break;
+                case 'Aguardando Peças':
+                    $cor = '#E0E4CC';
+                    break;
                 default:
                     $cor = '#E0E4CC';
                     break;
@@ -131,6 +137,7 @@ if (!$results) {?>
             echo '<td>'.$r->nome.'</td>';
             echo '<td>'.$dataInicial.'</td>';
             echo '<td>'.$dataFinal.'</td>';
+            echo '<td>R$ ' .number_format($r->valorTotal, 2, ',', '.'). '</td>';
             echo '<td><span class="badge" style="background-color: '.$cor.'; border-color: '.$cor.'">'.$r->status.'</span> </td>';
             
             echo '<td>';
@@ -144,8 +151,6 @@ if (!$results) {?>
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
                 echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="'.$r->idOs.'" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
             }
-                               
-                      
             echo  '</td>';
             echo '</tr>';
 }?>
@@ -206,15 +211,9 @@ $(document).ready(function(){
            }else{
               alert('Ocorreu um problema ao tentar exlcuir notificação.');
            }   
-
-
        });
        
-
    });
-
    $(".datepicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
-
 });
-
 </script>

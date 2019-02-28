@@ -61,7 +61,7 @@ class Os extends CI_Controller
         
         $config['base_url'] = base_url().'index.php/os/gerenciar/';
         $config['total_rows'] = $this->os_model->count('os');
-        $config['per_page'] = 10;
+        $config['per_page'] = 30;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
         $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
@@ -83,7 +83,7 @@ class Os extends CI_Controller
             
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico', $where_array, $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
        
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);

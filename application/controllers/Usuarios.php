@@ -96,6 +96,7 @@ class Usuarios extends CI_Controller
                     'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
                     'telefone' => set_value('telefone'),
                     'celular' => set_value('celular'),
+                    'valida' => set_value('valida'),
                     'situacao' => set_value('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id'),
                     'dataCadastro' => date('Y-m-d')
@@ -169,6 +170,7 @@ class Usuarios extends CI_Controller
                         'senha' => $senha,
                         'telefone' => $this->input->post('telefone'),
                         'celular' => $this->input->post('celular'),
+                        'valida' => set_value('valida'),
                         'situacao' => $this->input->post('situacao'),
                         'permissoes_id' => $this->input->post('permissoes_id')
                 );
@@ -186,6 +188,7 @@ class Usuarios extends CI_Controller
                         'email' => $this->input->post('email'),
                         'telefone' => $this->input->post('telefone'),
                         'celular' => $this->input->post('celular'),
+                        'valida' => set_value('valida'),
                         'situacao' => $this->input->post('situacao'),
                         'permissoes_id' => $this->input->post('permissoes_id')
                 );

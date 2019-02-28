@@ -1,3 +1,19 @@
+<script src="<?php echo base_url()?>assets/js/jquery-3.3.1.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/funcoes.js"></script>		
+       <!-- Script webeddy.com.br -->
+        <script>
+            function formatar(mascara, documento){
+            var i = documento.value.length;
+            var saida = mascara.substring(0,1);
+            var texto = mascara.substring(i)
+  
+            if (texto.substring(0,1) != saida){
+            documento.value += texto.substring(0,1);
+            }
+  
+            }
+        </script>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -10,10 +26,10 @@
             <div class="widget-content nopadding">
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                } ?>
                 <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal" >
                     <div class="control-group">
-                        <?php echo form_hidden('idUsuarios', $result->idUsuarios) ?>
+                        <?php echo form_hidden('idUsuarios',$result->idUsuarios) ?>
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
                             <input id="nome" type="text" name="nome" value="<?php echo $result->nome; ?>"  />
@@ -97,19 +113,20 @@
                             <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>"  />
                         </div>
                     </div>
+                    <!--teste-->
+                    <div class="control-group">
+                        <label for="valida" class="control-label">Expira em<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="valida" type="date" name="valida" value="<?php echo $result->valida; ?>"  />
+                        </div>
+                    </div>
+                    
 
                     <div class="control-group">
                         <label  class="control-label">Situação*</label>
                         <div class="controls">
                             <select name="situacao" id="situacao">
-                                <?php if ($result->situacao == 1) {
-                                    $ativo = 'selected';
-                                    $inativo = '';
-
-} else {
-    $ativo = '';
-    $inativo = 'selected';
-} ?>
+                                <?php if($result->situacao == 1){$ativo = 'selected'; $inativo = '';} else{$ativo = ''; $inativo = 'selected';} ?>
                                 <option value="1" <?php echo $ativo; ?>>Ativo</option>
                                 <option value="0" <?php echo $inativo; ?>>Inativo</option>
                             </select>
@@ -121,15 +138,10 @@
                         <label  class="control-label">Permissões<span class="required">*</span></label>
                         <div class="controls">
                             <select name="permissoes_id" id="permissoes_id">
-                                    <?php foreach ($permissoes as $p) {
-                                        if ($p->idPermissao == $result->permissoes_id) {
-                                            $selected = 'selected';
-
-                                        } else {
-                                            $selected = '';
-                                        }
-                                        echo '<option value="'.$p->idPermissao.'"'.$selected.'>'.$p->nome.'</option>';
-} ?>
+                                  <?php foreach ($permissoes as $p) {
+                                     if($p->idPermissao == $result->permissoes_id){ $selected = 'selected';}else{$selected = '';}
+                                      echo '<option value="'.$p->idPermissao.'"'.$selected.'>'.$p->nome.'</option>';
+                                  } ?>
                             </select>
                         </div>
                     </div>
@@ -160,7 +172,7 @@
            $('#formUsuario').validate({
             rules : {
                   nome:{ required: true},
-                  rg:{ required: true},
+                  valida:{ required: true},
                   cpf:{ required: true},
                   telefone:{ required: true},
                   email:{ required: true},
@@ -173,7 +185,7 @@
             },
             messages: {
                   nome :{ required: 'Campo Requerido.'},
-                  rg:{ required: 'Campo Requerido.'},
+                  valida:{ required: 'Campo Requerido.'},
                   cpf:{ required: 'Campo Requerido.'},
                   telefone:{ required: 'Campo Requerido.'},
                   email:{ required: 'Campo Requerido.'},
@@ -199,5 +211,6 @@
 
       });
 </script>
+
 
 

@@ -18,11 +18,20 @@ class Mapos extends CI_Controller
 
     }
 
-    public function index()
-    {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+     public function index() {
+
+     
+     if( $this->session->userdata('expirado') ){
+         $this->session->sess_destroy();
+         redirect('https://www.emedicsystem.com.br/app/mapos/alerta/alerta.html ');
+        }
+   
+
+      
+        if( (!session_id()) || (!$this->session->userdata('logado'))){
             redirect('mapos/login');
         }
+
 
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
@@ -131,7 +140,7 @@ class Mapos extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios,'expirado'=>$this->chk_date($user->valida), 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     $json = array('result' => true);
                     echo json_encode($json);
@@ -145,6 +154,18 @@ class Mapos extends CI_Controller
             }
         }
         die();
+    }
+    
+    private function chk_date($data_banco)
+    {
+    
+        $data_banco = new DateTime($data_banco);
+        $data_hoje  = new DateTime("now");
+        
+        return $data_banco < $data_hoje;
+
+      
+    
     }
 
     public function backup()

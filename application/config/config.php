@@ -28,7 +28,7 @@ $config['app_version'] = '3.1.16';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'enter_baseurl';
+$config['base_url'] = 'https://www.emedicsystem.com.br/app/mapos';
 
 /*
 |--------------------------------------------------------------------------
@@ -329,7 +329,8 @@ $config['cache_query_string'] = false;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'enter_encryption_key';
+/*$config['encryption_key'] = 'enter_encryption_key';*/
+$config['encryption_key'] = '6f;~d5df;.s.d.fwe';
 
 /*
 |--------------------------------------------------------------------------

@@ -44,7 +44,7 @@
                                     <?php echo form_hidden('idOs', $result->idOs) ?>
                                     
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>#Protocolo: <?php echo $result->idOs ?></h3>
+                                        <h3>N° OS: <?php echo $result->idOs ?></h3>
                                         
                                         <div class="span6" style="margin-left: 0">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
@@ -68,6 +68,7 @@
                                                 <option <?php if ($result->status == 'Em Andamento') { echo 'selected'; } ?> value="Em Andamento">Em Andamento</option>
                                                 <option <?php if ($result->status == 'Finalizado') { echo 'selected'; } ?> value="Finalizado">Finalizado</option>
                                                 <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>
+                                                <option <?php if ($result->status == 'Aguardando Peças') { echo 'selected'; } ?> value="Aguardando Peças">Aguardando Peças</option>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -167,7 +168,6 @@
                                             echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
-                                       
                                         <tr>
                                             <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?php echo number_format($total, 2, ',', '.');?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></td>
@@ -175,9 +175,7 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
-
                         <!--Serviços-->
                         <div class="tab-pane" id="tab3">
                             <div class="span12" style="padding: 1%; margin-left: 0">

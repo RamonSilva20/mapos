@@ -64,7 +64,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Cod. Item</th>
                             <th>Produto</th>
                             <th>Preço de Venda</th>
                             <th>Estoque</th>
@@ -111,7 +111,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>N° OS</th>
                             <th>Data Inicial</th>
                             <th>Data Final</th>
                             <th>Cliente</th>
@@ -146,7 +146,50 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"><i class="icon-signal"></i></span>
+                <h5>Ordens de Serviço Aguardando Peças</h5>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N° OS</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Cliente</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($ordens1 != null):?>
+                            <?php foreach ($ordens1 as $o): ?>
+                                <tr>
+                                    <td><?=$o->idOs?></td>
+                                    <td><?=date('d/m/Y', strtotime($o->dataInicial))?></td>
+                                    <td><?=date('d/m/Y', strtotime($o->dataFinal))?></td>
+                                    <td><?=$o->nomeCliente?></td>
+                                    <td>
+                                    <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')):?>
+                                        <a
+                                            href="<?=base_url()?>index.php/os/visualizar/<?=$o->idOs?>"
+                                            class="btn">
+                                            <i class="icon-eye-open" ></i> </a>
+                                    <?php endif ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php else:?>
+                            <tr>
+                                <td colspan="3">Nenhuma OS Aguardando Peças.</td>
+                            </tr>
+                        <?php endif?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 

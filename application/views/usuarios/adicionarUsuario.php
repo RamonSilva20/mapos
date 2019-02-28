@@ -1,3 +1,19 @@
+<script src="<?php echo base_url()?>assets/js/jquery-3.3.1.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
+        <!-- Script webeddy.com.br -->
+        <script>
+            function formatar(mascara, documento){
+            var i = documento.value.length;
+            var saida = mascara.substring(0,1);
+            var texto = mascara.substring(i)
+  
+            if (texto.substring(0,1) != saida){
+            documento.value += texto.substring(0,1);
+            }
+  
+            }
+        </script>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -95,6 +111,13 @@
                             <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>"  />
                         </div>
                     </div>
+                    <!-- Campo para inserir a data de validade de acesso do usuário-->
+                                  <div class="control-group">
+                                     <label for="valida" class="control-label">Expira em <span class="required">*</span></label>
+                                    <div class="controls">
+                                        <input id="valida" type="date" name="valida" value="<?php echo set_value('valida'); ?>"  />
+                                    </div>
+                                </div>
 
                     <div class="control-group">
                         <label  class="control-label">Situação*</label>

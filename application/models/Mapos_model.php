@@ -128,7 +128,16 @@ class Mapos_model extends CI_Model
         $this->db->limit(10);
         return $this->db->get()->result();
     }
-
+    
+    function getOsAguardandoPecas()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Aguardando Peças');
+        $this->db->limit(10);
+        return $this->db->get()->result();
+        
     function getProdutosMinimo()
     {
 
