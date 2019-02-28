@@ -16,7 +16,6 @@
     <!-- Custom CSS -->
     <link href="<?= base_url('tema/assets/css/helper.css'); ?>" rel="stylesheet">
     <link href="<?= base_url('tema/assets/css/style.css'); ?>" rel="stylesheet">
-
     <link href="<?= base_url('tema/assets/css/lib/sweetalert/sweetalert.css'); ?>" rel="stylesheet">
     <style>
         .error {
@@ -24,7 +23,6 @@
         }
     </style>
 </head>
-
 
 <body class="fix-header fix-sidebar">
     <!-- Preloader - style you can find in spinners.css -->
@@ -34,7 +32,6 @@
     </div>
     <!-- Main wrapper  -->
     <div id="main-wrapper">
-
         <div class="unix-login">
             <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -78,12 +75,9 @@
     <script src="<?= base_url('tema/assets/js/lib/sticky-kit-master/dist/sticky-kit.min.js'); ?>"></script>
     <!--Custom JavaScript -->
     <script src="<?= base_url('tema/assets/js/scripts.js'); ?>"></script>
-
     <script src="<?= base_url('tema/assets/js/lib/sweetalert/sweetalert.min.js'); ?>"></script>
-
     <script type="text/javascript">
         $(document).ready(function() {
-
             $('#email').focus();
             $("#form-login").validate({
                 rules: {
@@ -106,9 +100,7 @@
                 },
                 submitHandler: function(form) {
                     var dados = $(form).serialize();
-
                     $('#progress-acessar').show();
-
                     $.ajax({
                         type: "POST",
                         url: "<?= site_url('mapos/verificarLogin?ajax=true'); ?>",
@@ -118,7 +110,6 @@
                             if (data.result == true) {
                                 window.location.href = "<?= site_url('mapos'); ?>";
                             } else {
-
                                 $('#progress-acessar').hide();
                                 sweetAlert("Oops...", "Dados de acesso são inválidos! Tente novamente.", "error");
                             }
@@ -127,10 +118,8 @@
                             sweetAlert("Oops...", "Ocorreu um problema ao tentar efetuar o login! Tente novamente.", "error");
                         }
                     });
-
                     return false;
                 },
-
                 errorClass: "help-inline",
                 errorElement: "span",
                 highlight: function(element, errorClass, validClass) {
@@ -140,7 +129,6 @@
                     $(element).removeClass('error');
                 }
             });
-
         });
     </script>
 </body>
