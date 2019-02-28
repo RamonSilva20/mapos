@@ -4,6 +4,74 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2019-02-28
+### Added
+Por: Thomas Henrique Lage Macedo [lage.thomas@gmail.com]
+-- MASCARAS 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG --
+mapos/assets/js/funcoes.js -->
+mapos/assets/js/jquery-3.3.1.min.js -->
+mapos/assets/jquery.mask.min.js -->
+#Aplicar as IDs nos campos correspondentes para que a mascara funcione#
+-- CONTROLLER --
+mapos/index.php --> (59)define('ENVIRONMENT', 'production');
+mapos/application/controller/mapos.php --> (21 - 33)
+mapos/application/controller/mapos.php --> (143)'expirado'=>$this->chk_date($user->valida)
+mapos/application/controller/mapos.php --> (159- 166)
+mapos/application/controller/usuarios.php --> (99)'valida' => set_value('valida'),
+mapos/application/controller/usuarios.php --> (173) 'valida' => $this->input->post('valida'),
+mapos/application/controller/usuarios.php --> (191) 'valida' => $this->input->post('valida'),
+-- VIEWER --
+.:: USUARIOS - ADICIONAR ::.
+mapos/application/viewer/usuarios/adicionarUsuario.php --> (1 - 15)
+mapos/application/viewer/usuarios/adicionarUsuario.php --> (114)
+.:: USUARIOS - EDITAR ::.
+mapos/application/viewer/usuarios/editarUsuario.php --> (1-16)
+mapos/application/viewer/usuarios/editarUsuario.php --> (116)
+mapos/application/viewer/usuarios/editarUsuario.php --> (186-199)
+.:: USUARIOS - LISTAR ::.
+mapos/application/views/usuarios/usuarios.php --> (24) <th> Validade </th>
+mapos/application/views/usuarios/usuarios.php --> (60) <th> Validade </th>
+mapos/application/views/usuarios/usuarios.php --> (73) echo '<td>'.$r->valida.'</td>';
+.:: CLIENTES - ADICIONAR ::.
+mapos/application/views/clientes/adicionarCliente.php --> (1-16) 
+.:: CLIENTES - EDITAR ::.
+mapos/application/views/clientes/editarCliente.php --> (1-17)
+.:: CLIENTES ::.
+mapos/application/views/clientes/clientes.php --> (25-61-72)
+.:: CONECTE ::.
+mapos/application/views/conecte/login.php --> (14-16; 18-29)
+.:: MAPOS ::.
+mapos/application/views/mapos/login.php
+.:: OS ::.
+mapos/application/views/os/imprimirOs.php --> (151)
+mapos/application/views/os/imprimirOs.php --> (164)
+mapos/application/views/os/visualizarOs.php --> (145; 158)
+
+Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
+.:: Controllers ::.
+mapos/application/controllers/Os.php
+Linha 86
+Adicionado o campo valorTotal dentro do $this->data['results']
+.:: Moddels ::.
+mapos/application/models/Mapos_model.php 
+Linha 132
+Aidicionado a Funcao para incluir na os a opcao "Aguardando Pecas"
+.:: Views ::.
+mapos/application/os/views/os.php
+Linha 24
+Adicionado ao option "Aguardando Pecas"
+Linhas 61 e 97
+Adicionado o campo Valor Total para aparecer o valor total da os quando estiver fechado
+Linha 140
+Formatado o campo Valor total com 2 casas decimais e R$ (cifrao)
+mapos/application/os/editarOs.php
+Linha 71
+Adicionado a option "Aguardando Pecas"
+mapos/application/mapos/painel.php
+Linhas 149 a 192
+Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os
+
+
 ## [3.2] - 2019-02-18
 ### Added
 - Implementado editor WYSIWYG [Trumbowyg](https://github.com/Alex-D/Trumbowyg) nos campos (Ordem de Serviço)
