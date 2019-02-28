@@ -4,7 +4,7 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.2.1] - 2019-02-28
+## [3.3] - 2019-02-28
 ### Added
 Por: Thomas Henrique Lage Macedo [lage.thomas@gmail.com]
 -- MASCARAS 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG --
