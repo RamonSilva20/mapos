@@ -1,16 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 $active_group = 'default';
 $query_builder = true;
-
 $db['default'] = array(
     'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'emedicbr_mapos',
-    'password' => '1115121423^^',
-    'database' => 'emedicbr_mapos',
+    'hostname' => 'enter_hostname',
+    'username' => 'enter_db_username',
+    'password' => 'enter_db_password',
+    'database' => 'enter_database_name',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,
@@ -26,4 +23,3 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true
 );
-
