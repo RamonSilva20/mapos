@@ -11,7 +11,6 @@
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
                         echo '<a title="Icon Title" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '"><i class="icon-pencil icon-white"></i> Editar</a>';
                     } ?>
-
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                 </div>
             </div>
@@ -62,7 +61,9 @@
                                                         <?php echo $result->bairro ?></span><br />
                                                     <span>
                                                         <?php echo $result->cidade ?> -
-                                                        <?php echo $result->estado ?></span>
+                                                        <?php echo $result->estado ?> -
+                                                        <span>Email:
+                                                            <?php echo $result->email ?></span>
                                             </li>
                                         </ul>
                                     </td>
