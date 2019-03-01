@@ -151,7 +151,7 @@
             <table class="table table-bordered ">
                 <thead>
                     <tr style="backgroud-color: #2D335B">
-                        <th>#</th>
+                        <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Descricao</th>
@@ -176,7 +176,7 @@
             <table class="table table-bordered ">
                 <thead>
                     <tr style="backgroud-color: #2D335B">
-                        <th>#</th>
+                        <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Descricao</th>

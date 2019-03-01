@@ -19,7 +19,7 @@ if (!$results) { ?>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Cod.</th>
                     <th>Nome</th>
                     <th>CPF/CNPJ</th>
                     <th>Telefone</th>
@@ -56,7 +56,7 @@ if (!$results) { ?>
         <table class="table table-bordered ">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Cod.</th>
                     <th>Nome</th>
                     <th>CPF/CNPJ</th>
                     <th>Telefone</th>
