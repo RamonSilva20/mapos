@@ -71,7 +71,7 @@ if (!$results) { ?>
                     echo '<td>' . $r->cpf . '</td>';
                     echo '<td>' . $r->telefone . '</td>';
                     echo '<td>' . $r->permissao . '</td>';
-                    echo '<td>' . $r->valida . '</td>';
+                    echo '<td>' . $r->dataExpiracao . '</td>';
                     echo '<td>
                       <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn btn-info tip-top" title="Editar Usuário"><i class="icon-pencil icon-white"></i></a>
                   </td>';
