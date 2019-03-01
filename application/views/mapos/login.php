@@ -39,7 +39,7 @@
                         <div class="login-content card">
                             <div class="login-form">
                                 <h4>
-                                    <img class="img-responsive" src="<?= base_url('tema/assets/images/teste-3.png') ?>" alt="LOGIN" />
+                                    <img class="img-responsive" src="<?= base_url('tema/assets/images/logo.png') ?>" alt="LOGIN" />
                                 </h4>
                                 <form id="form-login" method="post" action="<?= site_url('tema/mapos/verificarLogin') ?>">
                                     <div class="form-group" id="progress-acessar" style="display: none">
