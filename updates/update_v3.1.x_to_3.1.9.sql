@@ -6,4 +6,7 @@ ALTER TABLE `lancamentos` CHANGE `baixado` `baixado` TINYINT(1) NULL DEFAULT '0'
 
 ALTER TABLE `lancamentos` ADD `vendas_id` INT(11) NULL DEFAULT NULL;
 
+-- Alterando tabela usuario
+ALTER TABLE `usuarios` ADD `dataExpiracao` DATE NOT NULL ;
+
 
