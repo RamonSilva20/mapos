@@ -19,10 +19,8 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divEditarVenda">
-
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <?php echo form_hidden('idVendas', $result->idVendas) ?>
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>#Venda:
                                             <?php echo $result->idVendas ?>
@@ -42,25 +40,20 @@
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
-
                                     </div>
-
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
                                             <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php 
-                                          } ?>
+                                        } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
                                             <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
-
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
-
                                     <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span8">
                                             <input type="hidden" name="idProduto" id="idProduto" />
@@ -94,13 +87,13 @@
                                             <?php
                                             $total = 0;
                                             foreach ($produtos as $p) {
-                                              $total = $total + $p->subTotal;
-                                              echo '<tr>';
-                                              echo '<td>' . $p->descricao . '</td>';
-                                              echo '<td>' . $p->quantidade . '</td>';
-                                              echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-                                              echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                              echo '</tr>';
+                                                $total = $total + $p->subTotal;
+                                                echo '<tr>';
+                                                echo '<td>' . $p->descricao . '</td>';
+                                                echo '<td>' . $p->quantidade . '</td>';
+                                                echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                                echo '</tr>';
                                             } ?>
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
