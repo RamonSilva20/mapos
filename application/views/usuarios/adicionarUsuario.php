@@ -1,17 +1,7 @@
 <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-<!-- Script webeddy.com.br -->
-<script>
-    function formatar(mascara, documento){
-            var i = documento.value.length;
-            var saida = mascara.substring(0,1);
-            var texto = mascara.substring(i)
-            if (texto.substring(0,1) != saida){
-            documento.value += texto.substring(0,1);
-        }
-    }
-        </script>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -43,7 +33,7 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cpf" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
+                            <input class="cpfcnpj" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
                         </div>
                     </div>
 
@@ -111,9 +101,9 @@
                     </div>
                     <!-- Campo para inserir a data de validade de acesso do usuário-->
                     <div class="control-group">
-                        <label for="valida" class="control-label">Expira em <span class="required">*</span></label>
+                        <label for="dataExpiracao" class="control-label">Expira em <span class="required">*</span></label>
                         <div class="controls">
-                            <input id="valida" type="date" name="valida" value="<?php echo set_value('valida'); ?>" />
+                            <input id="dataExpiracao" type="date" name="dataExpiracao" value="<?php echo set_value('dataExpiracao'); ?>" />
                         </div>
                     </div>
 
@@ -164,7 +154,7 @@
                 nome: {
                     required: true
                 },
-                rg: {
+                dataExpiracao: {
                     required: true
                 },
                 cpf: {
@@ -202,7 +192,7 @@
                 nome: {
                     required: 'Campo Requerido.'
                 },
-                rg: {
+                dataExpiracao: {
                     required: 'Campo Requerido.'
                 },
                 cpf: {
@@ -235,9 +225,7 @@
                 cep: {
                     required: 'Campo Requerido.'
                 }
-
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight: function(element, errorClass, validClass) {
@@ -248,6 +236,5 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-
     });
 </script> 
