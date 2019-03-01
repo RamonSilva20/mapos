@@ -22,8 +22,8 @@
             var texto = mascara.substring(i)
             if (texto.substring(0,1) != saida){
             documento.value += texto.substring(0,1);
-        }
-    }
+            }
+            }
         </script>
 </head>
 
@@ -50,7 +50,7 @@
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
-                        <span class="add-on bg_ly"><i class="icon-star"></i></span><input id="cnpj" maxlength="18" size="18" class="cnpj" name="documento" type="text" placeholder="CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" />
+                        <span class="add-on bg_ly"><i class="icon-star"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" />
                     </div>
                 </div>
             </div>
