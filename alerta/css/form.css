@@ -1,8 +1,8 @@
 form {
-    /* Apenas para centralizar o form na página */
+    /* Apenas para centralizar o form na pï¿½gina */
     margin: 0 auto;
     width: 400px;
-    /* Para ver as bordas do formulário */
+    /* Para ver as bordas do formulï¿½rio */
     padding: 1em;
     border: 1px solid #CCC;
     border-radius: 1em;
@@ -11,13 +11,13 @@ form div + div {
     margin-top: 1em;
 }
 label {
-    /*Para ter certeza que todas as labels tem o mesmo tamanho e estão propriamente alinhadas */
+    /*Para ter certeza que todas as labels tem o mesmo tamanho e estï¿½o propriamente alinhadas */
     display: inline-block;
     width: 90px;
     text-align: right;
 }
 input, textarea {
-    /* Para certificar-se que todos os campos de texto têm as mesmas configurações de fonte. Por padrão, textareas ter uma fonte monospace*/
+    /* Para certificar-se que todos os campos de texto tï¿½m as mesmas configuraï¿½ï¿½es de fonte. Por padrï¿½o, textareas ter uma fonte monospace*/
     font: 1em sans-serif;
 
     /* Para dar o mesmo tamanho a todos os campo de texto */
@@ -33,20 +33,20 @@ input:focus, textarea:focus {
     border-color: #000;
 }
 textarea {
-    /* Para alinhar corretamente os campos de texto de várias linhas com sua label*/
+    /* Para alinhar corretamente os campos de texto de vï¿½rias linhas com sua label*/
     vertical-align: top;
 
-    /* Para dar espaço suficiente para digitar algum texto */
+    /* Para dar espaï¿½o suficiente para digitar algum texto */
     height: 5em;
 
-    /* Para permitir aos usuários redimensionarem qualquer textarea verticalmente. Ele não funciona em todos os browsers */
+    /* Para permitir aos usuï¿½rios redimensionarem qualquer textarea verticalmente. Ele nï¿½o funciona em todos os browsers */
     resize: vertical;
 }
 .button {
-    /* Para posicionar os botões para a mesma posição dos campos de texto */
+    /* Para posicionar os botï¿½es para a mesma posiï¿½ï¿½o dos campos de texto */
     padding-left: 90px; /* mesmo tamanho que os elementos do tipo label */
 }
 button {
-    /* Esta margem extra representa aproximadamente o mesmo espaço que o espaço entre as labels e os seus campos de texto*/
+    /* Esta margem extra representa aproximadamente o mesmo espaï¿½o que o espaï¿½o entre as labels e os seus campos de texto*/
     margin-left: .5em;
 }
