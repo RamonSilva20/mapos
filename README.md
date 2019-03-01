@@ -7,6 +7,7 @@
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
+<<<<<<< HEAD
 #### _Versão 3.3 | 
 #### Modificações
 -- MASCARAS 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG --
