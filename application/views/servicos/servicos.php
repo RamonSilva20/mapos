@@ -15,7 +15,7 @@ if (!$results) { ?>
         <table class="table table-bordered ">
             <thead>
                 <tr style="backgroud-color: #2D335B">
-                    <th>#</th>
+                    <th>Cod. Serviço</th>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>
@@ -43,7 +43,7 @@ if (!$results) { ?>
         <table class="table table-bordered ">
             <thead>
                 <tr style="backgroud-color: #2D335B">
-                    <th>#</th>
+                    <th>Cod. Serviço</th>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>

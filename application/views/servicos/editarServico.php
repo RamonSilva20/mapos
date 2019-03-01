@@ -29,7 +29,6 @@
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao ?>" />
                         </div>
                     </div>
-
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
