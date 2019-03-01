@@ -1,19 +1,7 @@
-<script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery-3.3.1.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
 
-<!-- Script webeddy.com.br -->
-<script>
-    function formatar(mascara, documento){
-            var i = documento.value.length;
-            var saida = mascara.substring(0,1);
-            var texto = mascara.substring(i)
-            if (texto.substring(0,1) != saida){
-            documento.value += texto.substring(0,1);
-            }
-
-        }
-</script>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -38,7 +26,7 @@
                     <div class="control-group">
                         <label for="documento" class="control-label">CNPJ<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                            <input class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>"  />
                         </div>
                     </div>
                     <div class="control-group">

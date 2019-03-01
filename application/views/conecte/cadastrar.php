@@ -22,17 +22,7 @@
     <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-    <!-- Script webeddy.com.br -->
-    <script>
-        function formatar(mascara, documento){
-            var i = documento.value.length;
-            var saida = mascara.substring(0,1);
-            var texto = mascara.substring(i)
-            if (texto.substring(0,1) != saida){
-            documento.value += texto.substring(0,1);
-            }
-        }
-        </script>
+    
 </head>
 
 <body>
@@ -56,11 +46,11 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="documento" class="control-label">CNPJ<span class="required">*</span></label>
-                            <div class="controls">
-                                <input id="cnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
-                            </div>
-                        </div>
+                                <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                                    <div class="controls">                                        
+                                        <input class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
+                                    </div>
+                                </div>
                         <div class="control-group">
                             <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                             <div class="controls">
