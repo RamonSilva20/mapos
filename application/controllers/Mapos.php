@@ -23,7 +23,7 @@ class Mapos extends CI_Controller
 
         if ($this->session->userdata('expirado')) {
             $this->session->sess_destroy();
-            redirect('./mapos/alerta/alerta.html ');
+            redirect('../alerta/alerta.html ');
         }
 
 
@@ -34,9 +34,9 @@ class Mapos extends CI_Controller
 
 
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
+		$this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-        $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
-        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
+		$this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
@@ -136,7 +136,7 @@ class Mapos extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'expirado' => $this->chk_date($user->valida), 'permissao' => $user->permissoes_id, 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'expirado' => $this->chk_date($user->dataExpiracao), 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     $json = array('result' => true);
                     echo json_encode($json);
