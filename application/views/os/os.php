@@ -100,31 +100,31 @@ if (!$results) { ?>
                     $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                     $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
                     switch ($r->status) {
-                        case 'Aberto':
-                            $cor = '#00cd00';
-                            break;
-                        case 'Em Andamento':
-                            $cor = '#436eee';
-                            break;
-                        case 'Orçamento':
-                            $cor = '#CDB380';
-                            break;
-                        case 'Cancelado':
-                            $cor = '#E97F02';
-                            break;
-                        case 'Finalizado':
-                            $cor = '#0B486B';
-                            break;
-                        case 'Faturado':
-                            $cor = '#B266FF';
-                            break;
-                        case 'Aguardando Peças':
-                            $cor = '#E0E4CC';
-                            break;
-                        default:
-                            $cor = '#E0E4CC';
-                            break;
-                    }
+                case 'Aberto':
+                    $cor = '#00cd00';
+                    break;
+                case 'Em Andamento':
+                    $cor = '#436eee';
+                    break;
+                case 'Orçamento':
+                    $cor = '#CDB380';
+                    break;
+                case 'Cancelado':
+                    $cor = '#CD0000';
+                    break;
+                case 'Finalizado':
+                    $cor = '#00CD00';
+                    break;
+                case 'Faturado':
+                    $cor = '#B266FF';
+                    break;
+                case 'Aguardando Peças':
+                    $cor = '#FF7F00';
+                    break;
+                default:
+                    $cor = '#E0E4CC';
+                    break;
+            }
                     echo '<tr>';
                     echo '<td>' . $r->idOs . '</td>';
                     echo '<td>' . $r->nomeCliente . '</td>';
