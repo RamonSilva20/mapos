@@ -8,32 +8,13 @@
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
-        <link href="<?= base_url('assets/css/particula.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
         <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
-        <script src="<?php echo base_url()?>assets/js/jquery-3.3.1.min.js"></script>
-        <script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
-        <script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
-        <!-- Script webeddy.com.br -->
-        <script>
-            function formatar(mascara, documento){
-            var i = documento.value.length;
-            var saida = mascara.substring(0,1);
-            var texto = mascara.substring(i)
-  
-            if (texto.substring(0,1) != saida){
-            documento.value += texto.substring(0,1);
-            }
-  
-            }
-        </script>
     </head>
-     <!-- particles.js container -->
-<div id="particles-js"><canvas class="particles-js-canvas-el" width="842" height="913" style="width: 100%; height: 100%;"></canvas></div>
     <body>
         <div id="loginbox">            
-            <form  class="form-vertical" id="formLogin" method="post" action="<?php echo site_url()?>/mine/login">
+            <form  class="form-vertical" id="formLogin" method="post" action="<?php echo base_url()?>index.php/mapos/verificarLogin">
                     <?php if ($this->session->flashdata('error') != null) {?>
                         <div class="alert alert-danger">
                           <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -51,43 +32,28 @@
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
-                            <span class="add-on bg_ly"><i class="icon-star"></i></span><input class="cpfcnpj" maxlength="18" size="18"  name="documento" type="text" placeholder="CPF/CNPJ"  OnKeyPress="formatar('000.000.000/0000-00', this)" />    
+                            <span class="add-on bg_lb"><i class="icon-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
                         </div>
                     </div>
                 </div>
                 <div class="form-actions" style="text-align: center">
-                    <button class="btn btn-info btn-large"/> Acessar</button>
-                    <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
+                    <div id="progress-acessar" class='hide progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>
+                    <button id="btn-acessar" class="btn btn-success btn-large"/> Acessar</button>
                 </div>
             </form>
        
         </div>
         
-        <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+        
+        
+        <script src="<?php echo base_url()?>assets/js/bootstrap.min.js"></script>
+        <script src="<?php echo base_url()?>assets/js/validate.js"></script>
 
-        <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 id="myModalLabel">.:: MAP OS ::.</h4>
-          </div>
-          <div class="modal-body">
-            <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-
-          </div>
-        </div>
-
-      
-      <script src="<?php echo base_url()?>assets/js/bootstrap.min.js"></script>
-      <script src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
 
 
 
         <script type="text/javascript">
             $(document).ready(function(){
-
 
                 $('#email').focus();
                 $("#formLogin").validate({
@@ -101,19 +67,25 @@
                     },
                    submitHandler: function( form ){       
                          var dados = $( form ).serialize();
-                         
+                         $('#btn-acessar').addClass('disabled');
+                         $('#progress-acessar').removeClass('hide');
                     
                         $.ajax({
                           type: "POST",
-                          url: "<?php echo base_url();?>index.php/mine/login?ajax=true",
+                          url: "<?php echo base_url();?>index.php/mapos/verificarLogin?ajax=true",
                           data: dados,
                           dataType: 'json',
                           success: function(data)
                           {
                             if(data.result == true){
-                                window.location.href = "<?php echo base_url();?>index.php/mine/painel";
+                                window.location.href = "<?php echo base_url();?>index.php/mapos";
                             }
                             else{
+
+
+                                $('#btn-acessar').removeClass('disabled');
+                                $('#progress-acessar').addClass('hide');
+                                
                                 $('#call-modal').trigger('click');
                             }
                           }
@@ -136,13 +108,29 @@
             });
 
         </script>
-<!-- scripts -->
-   <script src="<?php echo base_url()?>assets/js/particles.min.js"></script>
-   <script src="<?php echo base_url()?>assets/js/app.js"></script>
+
+
+
+        <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+
+        <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel">MapOS</h4>
+          </div>
+          <div class="modal-body">
+            <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+
+          </div>
+        </div>
+
+
     </body>
 
 </html>
-
 
 
 
