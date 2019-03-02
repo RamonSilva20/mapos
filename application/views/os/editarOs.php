@@ -7,7 +7,7 @@
 
 <style>
     .ui-datepicker{
-        z-index: 9999 !important;
+        z-index: 99999 !important;
     }
     .trumbowyg-box {
         margin-top: 0;
@@ -150,6 +150,7 @@
                                         <tr>
                                             <th>Produto</th>
                                             <th>Quantidade</th>
+                                            <th>Preço unit.</th>
                                             <th>Ações</th>
                                             <th>Sub-total</th>
                                         </tr>
@@ -162,6 +163,7 @@
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td>' . $p->quantidade . '</td>';
+                                            echo '<td>' . $p->precoVenda . '</td>';
                                             echo '<td><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
