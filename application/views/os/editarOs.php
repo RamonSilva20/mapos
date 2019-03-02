@@ -81,11 +81,11 @@
                                         </div>
                                         <div class="span3">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
                                         </div>
                                         <div class="span3">
                                             <label for="dataFinal">Data Final</label>
-                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
@@ -265,14 +265,11 @@
                         </div>
                     </div>
                 </div>
+                &nbsp 
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 
 <!-- Modal visualizar anexo -->
 <div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -294,10 +291,6 @@
     </div>
 </div>
 
-
-
-
-
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
@@ -306,12 +299,10 @@
             <h3 id="myModalLabel">Faturar Venda</h3>
         </div>
         <div class="modal-body">
-
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
                 <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
-
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -320,8 +311,6 @@
                     <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
                     <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
                 </div>
-
-
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
@@ -333,9 +322,7 @@
                     <label for="vencimento">Data Vencimento*</label>
                     <input class="span12 datepicker" id="vencimento" type="text" name="vencimento" />
                 </div>
-
             </div>
-
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="recebido">Recebido?</label>
@@ -357,10 +344,7 @@
                             <option value="Débito">Débito</option>
                         </select>
                     </div>
-
                 </div>
-
-
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
@@ -456,13 +440,10 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteProduto",
             minLength: 2,
             select: function(event, ui) {
-
                 $("#idProduto").val(ui.item.id);
                 $("#estoque").val(ui.item.estoque);
                 $("#preco").val(ui.item.preco);
                 $("#quantidade").focus();
-
-
             }
         });
 
@@ -470,11 +451,8 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteServico",
             minLength: 2,
             select: function(event, ui) {
-
                 $("#idServico").val(ui.item.id);
                 $("#precoServico").val(ui.item.preco);
-
-
             }
         });
 
@@ -483,10 +461,7 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
-
                 $("#clientes_id").val(ui.item.id);
-
-
             }
         });
 
@@ -494,15 +469,9 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
-
                 $("#usuarios_id").val(ui.item.id);
-
-
             }
         });
-
-
-
 
         $("#formOs").validate({
             rules: {
@@ -527,7 +496,6 @@
                     required: 'Campo Requerido.'
                 }
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight: function(element, errorClass, validClass) {
@@ -538,9 +506,6 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-
-
-
 
         $("#formProdutos").validate({
             rules: {
@@ -576,12 +541,9 @@
                             }
                         }
                     });
-
                     return false;
                 }
-
             }
-
         });
 
         $("#formServicos").validate({
@@ -613,15 +575,11 @@
                         }
                     }
                 });
-
                 return false;
             }
-
         });
 
-
         $("#formAnexos").validate({
-
             submitHandler: function(form) {
                 //var dados = $( form ).serialize();
                 var dados = new FormData(form);
@@ -648,13 +606,10 @@
                     error: function() {
                         $("#divAnexos").html('<div class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> Ocorreu um erro. Verifique se você anexou o(s) arquivo(s).</div>');
                     }
-
                 });
-
                 $("#form-anexos").show('1000');
                 return false;
             }
-
         });
 
         $(document).on('click', 'a', function(event) {
@@ -682,8 +637,6 @@
 
         });
 
-
-
         $(document).on('click', 'span', function(event) {
             var idServico = $(this).attr('idAcao');
             if ((idServico % 1) == 0) {
@@ -704,9 +657,7 @@
                 });
                 return false;
             }
-
         });
-
 
         $(document).on('click', '.anexo', function(event) {
             event.preventDefault();
