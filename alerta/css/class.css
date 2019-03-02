@@ -1,0 +1,37 @@
+.tbls {
+	text-shadow: left;
+		
+}
+.alert{
+	font-size:20px;
+}
+.btn{
+	width: 100px;
+	margin: 50 auto 50px auto;
+}
+.btn:hover{
+	background-color:#000000;
+	color: #fff000;
+	width: 100px;
+	margin: 50 auto 50px auto;
+}
+.tab{
+	table-layout: fixed;
+	border: 1px solid;
+	background-color:#FFFFFF;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 500px;
+	text-align:center;
+	border-radius: 10px;
+	margin: 50px auto;
+	    box-shadow: 3px 4px 5px rgba(70, 70, 70, 0.77);
+}
+.img_logo{
+	width:100px;
+	margin-top: 30px;
+}
+.img {
+	background-color:red;
+	
+}

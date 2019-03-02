@@ -1,0 +1,45 @@
+@import "variable.less"; // Variable.less
+.recent-comment {
+    .media {
+        border-bottom: 1px solid @border;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .media-left {
+        padding-right: 25px;
+        img {
+            border-radius: 100px;
+            width: 40px;
+        }
+    }
+    .media-body {
+        position: relative;
+        h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 10px;
+            line-height: 16px;
+            color: @text-light;
+        }
+    }
+    .comment-date {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: @text;
+        font-family: @mol;
+        font-size: 12px;
+    }
+}
+.comment-action {
+    float: left;
+    .badge {
+        text-transform: uppercase;
+        font-family: @mol;
+    }
+    i {
+        padding: 0 5px;
+    }
+}

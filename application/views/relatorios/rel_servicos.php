@@ -9,12 +9,11 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/servicosRapid"><i class="icon-wrench"></i> <small>Todos os Serviços</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/servicosRapid"><i class="icon-wrench"></i> <small>Todos os Serviços</small></a></li>
                 </ul>
             </div>
         </div>
     </div>
-
     <div class="span8">
         <div class="widget-box">
             <div class="widget-title">
@@ -25,7 +24,6 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    
                     <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/servicosCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
@@ -34,10 +32,9 @@
                             </div>
                             <div class="span6">
                                 <label for="">até:</label>
-                                <input type="text"  name="precoFinal" class="span12 money" />
+                                <input type="text" name="precoFinal" class="span12 money" />
                             </div>
                         </div>
- 
                         <div class="span12" style="margin-left: 0; text-align: center">
                             <input type="reset" class="btn" value="Limpar" />
                             <button class="btn btn-inverse"><i class="icon-print icon-white"></i> Imprimir</button>
@@ -49,13 +46,9 @@
         </div>
     </div>
 </div>
-
-
-<script src="<?php echo base_url();?>assets/js/maskmoney.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".money").maskMoney();
-
-
     });
-</script>
+</script> 

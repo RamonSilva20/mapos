@@ -2,7 +2,7 @@
 
 ini_set('max_execution_time', 300); //300 seconds
 
-$settings_file = __DIR__.DIRECTORY_SEPARATOR.'settings.json';
+$settings_file = __DIR__ . DIRECTORY_SEPARATOR . 'settings.json';
 
 if (!file_exists($settings_file)) {
   die("Arquivo de configuração não encontrado!");
@@ -73,8 +73,7 @@ if (!empty($_POST)) {
 
   //create tables in datbase
   $mysqli->multi_query($sql);
-  do {
-  } while (mysqli_more_results($mysqli) && mysqli_next_result($mysqli));
+  do { } while (mysqli_more_results($mysqli) && mysqli_next_result($mysqli));
   $mysqli->close();
   // database created
 

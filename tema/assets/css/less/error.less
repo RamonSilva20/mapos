@@ -1,0 +1,28 @@
+@import "variable.less"; // Variable.less
+
+.error-box {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}
+
+.error-box .footer {
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.error-body {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.error-body h1 {
+    font-size: 150px;
+    font-weight: 900;
+    line-height: 210px;
+    color: @dark;
+}

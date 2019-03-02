@@ -4,7 +4,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 
-$config['app_version'] = '3.1.16';
+$config['app_version'] = '3.3';
 
 /*
 |--------------------------------------------------------------------------
@@ -329,7 +329,8 @@ $config['cache_query_string'] = false;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'enter_encryption_key';
+/*$config['encryption_key'] = 'enter_encryption_key';*/
+$config['encryption_key'] = '6f;~d5df;.s.d.fwe';
 
 /*
 |--------------------------------------------------------------------------
