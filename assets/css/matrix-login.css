@@ -43,7 +43,7 @@ body { background-image:url(/app/mapos/tema/img/background.jpg);   background-si
 #logo, #loginbox {    width: 32%;    margin-left: auto;    margin-right: auto;    position: relative;}
 #logo img {  margin: 0 auto;    display: block;}
 #loginbox { overflow: hidden !important;    text-align: left;    position: relative; }
-#loginbox form{ width:100%; background:#ffffff; position:relative; top:0; left:0;border-radius:20px; }
+#loginbox form{ margin-top:200px; width:100%; background:#ffffff; position:relative; top:0; left:0;border-radius:20px; }
 #loginbox .form-actions { padding: 14px 20px 15px;border-radius:15px}
 #loginbox .form-actions .pull-left { margin-top:0px;}
 #loginbox form#loginform { z-index: 200; display:block;}
