@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="span3">
                                             <label for="dataFinal">Data Final</label>
-                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                            <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="<?php if($result->dataFinal != null){ echo date('d/m/Y', strtotime($result->dataFinal));}else{echo "";} ?>" />
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
