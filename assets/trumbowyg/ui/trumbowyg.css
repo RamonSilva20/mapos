@@ -80,6 +80,7 @@
 
 .trumbowyg-textarea {
   position: relative;
+  background-color: white;
   display: block;
   overflow: auto;
   border: none;
