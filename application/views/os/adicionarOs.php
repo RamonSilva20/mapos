@@ -68,7 +68,7 @@
                                             <input id="dataInicial" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final</label>
+                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
                                             <input id="dataFinal" class="span12 datepicker" type="text" name="dataFinal" value="" />
                                         </div>
                                         <div class="span3">
@@ -134,6 +134,9 @@
                 },
                 dataInicial: {
                     required: true
+                },
+                dataFinal: {
+                    required: true
                 }
             },
             messages: {
@@ -144,6 +147,9 @@
                     required: 'Campo Requerido.'
                 },
                 dataInicial: {
+                    required: 'Campo Requerido.'
+                },
+                dataFinal: {
                     required: 'Campo Requerido.'
                 }
             },
