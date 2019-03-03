@@ -129,7 +129,7 @@
                                 <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
                             </td>
                             <td>
-                                <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
+                            <td><?php if($o->dataFinal != null){echo date('d/m/Y', strtotime($o->dataFinal));}else{echo "";}?></td>
                             </td>
                             <td>
                                 <?= $o->nomeCliente ?>
