@@ -11,6 +11,9 @@ Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
     - Adicionar OS
     - Editar OS
 
+### Changed 
+- Modificado a cor de fundo para brando do box de texto do trumbowyg
+
 ### Fixed
 - Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
 
