@@ -92,20 +92,20 @@
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
                                         </div>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="descricaoProduto">Descrição Produto/Serviço</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="defeito">Defeito</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="defeito"><h4>Defeito</h4></label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes">Observações</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes"><h4>Observações</h4></label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="laudoTecnico">Laudo Técnico</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
