@@ -46,7 +46,7 @@
                                             <?php if ($result->faturado == 0) { ?>
                                             <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
                                             <?php 
-                                        } ?>
+                                          } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
                                             <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
@@ -87,13 +87,13 @@
                                             <?php
                                             $total = 0;
                                             foreach ($produtos as $p) {
-                                                $total = $total + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td>' . $p->quantidade . '</td>';
-                                                echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
+                                              $total = $total + $p->subTotal;
+                                              echo '<tr>';
+                                              echo '<td>' . $p->descricao . '</td>';
+                                              echo '<td>' . $p->quantidade . '</td>';
+                                              echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+                                              echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                              echo '</tr>';
                                             } ?>
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
