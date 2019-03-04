@@ -126,5 +126,5 @@ Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os
 ### Changed 
 - Atualização de biblioteca mPDF para versão 6.1 [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Fixed
+### Fixed 
 - Correção de erro ao gerar relatório sem emitente estar configurado [@RamonSilva20](https://github.com/RamonSilva20).
