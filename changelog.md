@@ -12,7 +12,8 @@ Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
     - Editar OS
 
 ### Changed 
-- Modificado a cor de fundo para brando do box de texto do trumbowyg
+- Modificado a cor de fundo para branco do box de texto do trumbowyg
+- Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
 
 ### Fixed
 - Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
@@ -125,5 +126,5 @@ Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os
 ### Changed 
 - Atualização de biblioteca mPDF para versão 6.1 [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Fixed 
+### Fixed
 - Correção de erro ao gerar relatório sem emitente estar configurado [@RamonSilva20](https://github.com/RamonSilva20).
