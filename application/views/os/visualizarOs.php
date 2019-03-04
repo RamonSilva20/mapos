@@ -1,3 +1,4 @@
+<link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
 <?php $totalServico = 0;
 $totalProdutos = 0;?>
 <div class="row-fluid" style="margin-top: 0">
@@ -50,7 +51,7 @@ $totalProdutos = 0;?>
                                             <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
                                             <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
                                             <span>E-mail: <?php echo $result->email?></span><br>
-                                            <span>Celular: <?php echo $result->celular?></span>
+                                            <span>Contato: <?php echo $result->telefone ?></span>
                                         </li>
                                     </ul>
                                 </td>
@@ -59,7 +60,7 @@ $totalProdutos = 0;?>
                                         <li>
                                             <span><h5><b>RESPONSÁVEL</b></h5></span>
                                             <span><?php echo $result->nome?></span> <br/>
-                                            <span>Telefone: <?php echo $result->telefone?></span><br/>
+                                            <span>Contato: <?php echo $result->celular?></span><br/>
                                             <span>Email: <?php echo $result->email_responsavel ?></span>
                                         </li>
                                     </ul>
@@ -196,7 +197,7 @@ $totalProdutos = 0;?>
                                     </tbody>
                                 </table>
                         <?php }?>
-                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
+                        <h4 style="text-align: right" id="valores">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
 
                     </div>
                 </div>
