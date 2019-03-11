@@ -14,6 +14,7 @@ Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
 ### Changed 
 - Modificado a cor de fundo para branco do box de texto do trumbowyg
 - Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
+- Reestilizado a tela de login para uma tela transparente e fundo dinamico
 
 ### Fixed
 - Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
