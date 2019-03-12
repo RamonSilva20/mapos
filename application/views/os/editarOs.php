@@ -84,7 +84,7 @@
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final</label>
+                                            <label for="dataFinal">Data Prevista<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
                                         </div>
                                         <div class="span3">
@@ -92,20 +92,20 @@
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
                                         </div>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="descricaoProduto">Descrição Produto/Serviço</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="defeito">Defeito</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="defeito"><h4>Defeito</h4></label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes">Observações</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes"><h4>Observações</h4></label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="laudoTecnico">Laudo Técnico</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
@@ -115,7 +115,8 @@
                                             <?php 
                                         } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar OS</a>
+                                            <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-secondary"><i class="icon-eye-open"></i> Visualizar OS</a>
+                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url()?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
                                             <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
                                     </div>
@@ -485,7 +486,10 @@
                 },
                 dataInicial: {
                     required: true
-                }
+                },
+                 dataFinal: {
+                    required: true
+                }    
             },
             messages: {
                 cliente: {
@@ -495,6 +499,9 @@
                     required: 'Campo Requerido.'
                 },
                 dataInicial: {
+                    required: 'Campo Requerido.'
+                },
+                dataFinal: {
                     required: 'Campo Requerido.'
                 }
             },

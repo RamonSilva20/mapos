@@ -1,5 +1,5 @@
 <style>
-    /* Hiding the checkbox, but allowing it to be focused */
+/* Hiding the checkbox, but allowing it to be focused */
 .badgebox
 {
     opacity: 0;
@@ -41,7 +41,7 @@
             <div class="widget-content nopadding">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                    <div class="control-group">
+                     <div class="control-group">
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo set_value('descricao'); ?>" />
@@ -50,11 +50,11 @@
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
+                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada 
                                 <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
                                 <span class="badge">&check;</span>
                             </label>
-                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
+                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída 
                                 <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
                                 <span class="badge">&check;</span>
                             </label>
@@ -73,17 +73,17 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
-                            <select id="unidade" name="unidade">
-                                <option value="UN">Unidade</option>
-                                <option value="KG">Kilograma</option>
-                                <option value="LT">Litro</option>
-                                <option value="CX">Caixa</option>
-                            </select>
-                        </div>
+                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                    <div class="controls">
+                        <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
+                        <select id="unidade" name="unidade">
+                            <option value="UN">Unidade</option>
+                            <option value="KG">Kilograma</option>
+                            <option value="LT">Litro</option>
+                            <option value="CX">Caixa</option>
+                        </select>
                     </div>
+                    </div>                     
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
                         <div class="controls">
@@ -106,8 +106,8 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
+         </div>
+     </div>
 </div>
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
@@ -160,4 +160,4 @@
             }
         });
     });
-</script> 
+</script>

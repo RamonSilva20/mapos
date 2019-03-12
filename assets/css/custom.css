@@ -1,0 +1,26 @@
+/* Personalização da DIV com os campos de usuário e senha na área de login */
+
+.div-login {background-color: rgba( 242,242,242,0.1 );}
+
+.div-form {background-color: rgba( 242,242,242,0.1 ); border-radius: 15px;}
+
+.botao-enviar {background-color: rgba( 127,127,127,0.5); border-radius: 15px; color: #cccccc;}
+
+.campo-digita {background-color: rgba( 255,255,255,0.7); border-radius: 15px; border: none;}
+
+.campo-digita:active {background-color: rgba( 255,255,255,0);}
+
+.campo-digita:focus {border:1px solid; border-color: #1E22F4;}
+
+.botao-enviar:hover {background-color: #666666; border:none;}
+
+.erro {color:#FFFFFF !important;}
+
+/* FIM DA PERSONALIZAÇÃO DA DIV LOGIN */
+
+/* Personalização da calsse visualizar OS */
+
+#valores{color:green;}
+
+/* FIM DA PERSONALZIAÇÃODA CLASSE VISUALIZAR OS */
+

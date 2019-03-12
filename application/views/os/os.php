@@ -98,7 +98,11 @@ if (!$results) { ?>
             <tbody>
                 <?php foreach ($results as $r) {
                     $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                    if($r->dataFinal != null){ 
+                        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                    }else{
+                        $dataFinal = "";
+                    }
                     switch ($r->status) {
                 case 'Aberto':
                     $cor = '#00cd00';

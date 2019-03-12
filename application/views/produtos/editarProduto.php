@@ -1,5 +1,5 @@
 <style>
-    /* Hiding the checkbox, but allowing it to be focused */
+/* Hiding the checkbox, but allowing it to be focused */
 .badgebox
 {
     opacity: 0;
@@ -41,7 +41,7 @@
             <div class="widget-content nopadding">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                    <div class="control-group">
+                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
@@ -52,7 +52,7 @@
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
+                        <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
                                 <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" <?= ($result->entrada == 1) ? 'checked' : '' ?>>
                                 <span class="badge">&check;</span>
                             </label>
@@ -78,16 +78,16 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <select id="unidade" name="unidade">
-                                <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
+                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                    <div class="controls">
+                        <select id="unidade" name="unidade">
+                        <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
                                 <option value="KG" <?= ($result->unidade == 'KG') ? 'selected' : '' ?>>Kilograma</option>
                                 <option value="LT" <?= ($result->unidade == 'LT') ? 'selected' : '' ?>>Litro</option>
                                 <option value="CX" <?= ($result->unidade == 'CX') ? 'selected' : '' ?>>Caixa</option>
-                            </select>
-                        </div>
+                        </select>                        
                     </div>
+                    </div>                    
 
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
@@ -116,8 +116,8 @@
                 </form>
             </div>
 
-        </div>
-    </div>
+         </div>
+     </div>
 </div>
 
 
@@ -126,7 +126,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".money").maskMoney();
-
+        
         $('#formProduto').validate({
             rules: {
                 descricao: {
