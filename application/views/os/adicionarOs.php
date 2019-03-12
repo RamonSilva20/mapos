@@ -68,7 +68,7 @@
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final</label>
+                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="" />
                                         </div>
                                         <div class="span3">
@@ -76,20 +76,20 @@
                                             <input id="garantia" type="text" class="span12" name="garantia" value="" />
                                         </div>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="descricaoProduto">Descrição Produto/Serviço</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="defeito">Defeito</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="defeito"><h4>Defeito</h4></label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes">Observações</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes"><h4>Observações</h4></label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="laudoTecnico">Laudo Técnico</label>
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
@@ -134,6 +134,9 @@
                 },
                 dataInicial: {
                     required: true
+                },
+                dataFinal: {
+                    required: true
                 }
             },
             messages: {
@@ -144,6 +147,9 @@
                     required: 'Campo Requerido.'
                 },
                 dataInicial: {
+                    required: 'Campo Requerido.'
+                },
+                dataFinal: {
                     required: 'Campo Requerido.'
                 }
             },

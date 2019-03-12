@@ -1,7 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
-    
+
 <head>
         <title>MAP OS</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,15 +42,8 @@
             </form>
        
         </div>
-        
-        
-        
         <script src="<?php echo base_url()?>assets/js/bootstrap.min.js"></script>
         <script src="<?php echo base_url()?>assets/js/validate.js"></script>
-
-
-
-
         <script type="text/javascript">
             $(document).ready(function(){
 
@@ -99,12 +91,40 @@
                     highlight:function(element, errorClass, validClass) {
                         $(element).parents('.control-group').addClass('error');
                     },
-                    unhighlight: function(element, errorClass, validClass) {
-                        $(element).parents('.control-group').removeClass('error');
-                        $(element).parents('.control-group').addClass('success');
+                    senha: {
+                        required: 'Insira sua senha.'
                     }
-                });
-
+                },
+                submitHandler: function(form) {
+                    var dados = $(form).serialize();
+                    $('#progress-acessar').show();
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= site_url('mapos/verificarLogin?ajax=true'); ?>",
+                        data: dados,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.href = "<?= site_url('mapos'); ?>";
+                            } else {
+                                $('#progress-acessar').hide();
+                                sweetAlert("Oops...", "Dados de acesso são inválidos! Tente novamente.", "error");
+                            }
+                        },
+                        fail: function() {
+                            sweetAlert("Oops...", "Ocorreu um problema ao tentar efetuar o login! Tente novamente.", "error");
+                        }
+                    });
+                    return false;
+                },
+                errorClass: "help-inline erro",
+                errorElement: "span",
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('error');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('error');
+                }
             });
 
         </script>

@@ -9,7 +9,7 @@ $totalProdutos = 0;?>
 <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<?php echo base_url();?>assets/css/matrix-style.css" />
 <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-
+<link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 <style>
     .table {
@@ -203,7 +203,7 @@ $totalProdutos = 0;?>
                                     </tbody>
                                 </table>
                         <?php }?>
-                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
+                        <h4 style="text-align: right" id="valorTotal">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
 
                         <table class="table table-bordered table-condensed">                                      
                             <tbody>

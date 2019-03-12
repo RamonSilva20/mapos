@@ -4,6 +4,20 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.3.1] - 2019-03-03
+Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
+
+### Changed 
+- Modificado a cor de fundo para branco do box de texto do trumbowyg
+- Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
+- Reestilizado a tela de login para uma tela transparente e fundo dinamico
+- Obrigatoriedade de data final na OS
+    - Adicionar OS
+    - Editar OS
+
+### Fixed
+- Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
 ## [3.3] - 2019-02-28
 ### Added
 

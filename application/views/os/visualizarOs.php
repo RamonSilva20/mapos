@@ -1,3 +1,4 @@
+<link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
 <?php $totalServico = 0;
 $totalProdutos = 0;?>
 <div class="row-fluid" style="margin-top: 0">
@@ -38,34 +39,34 @@ $totalProdutos = 0;?>
                         </table>
 
             
-                        <table class="table table-condensend">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 50%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span><h5><b>CLIENTE</b></h5>
-                                                <span><?php echo $result->nomeCliente?></span><br/>
-                                                <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
-                                                <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
-                                                <span>E-mail: <?php echo $result->email?></span><br>
-                                                <span>Celular: <?php echo $result->celular?></span>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td style="width: 50%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span><h5><b>RESPONSÁVEL</b></h5></span>
-                                                <span><?php echo $result->nome?></span> <br/>
-                                                <span>Telefone: <?php echo $result->telefone?></span><br/>
-                                                <span>Email: <?php echo $result->email_responsavel ?></span>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> 
+                    <table class="table table-condensend">
+                        <tbody>
+                            <tr>
+                                <td style="width: 50%; padding-left: 0">
+                                    <ul>
+                                        <li>
+                                            <span><h5><b>CLIENTE</b></h5>
+                                            <span><?php echo $result->nomeCliente?></span><br/>
+                                            <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
+                                            <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
+                                            <span>E-mail: <?php echo $result->email?></span><br>
+                                            <span>Contato: <?php echo $result->telefone ?></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td style="width: 50%; padding-left: 0">
+                                    <ul>
+                                        <li>
+                                            <span><h5><b>RESPONSÁVEL</b></h5></span>
+                                            <span><?php echo $result->nome?></span> <br/>
+                                            <span>Contato: <?php echo $result->celular?></span><br/>
+                                            <span>Email: <?php echo $result->email_responsavel ?></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> 
     
                     </div>
 
