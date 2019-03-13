@@ -7,8 +7,6 @@
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
-
-#### _Versão 3.3.1 | 
 ### Instalação
 
 1. Faça o download dos arquivos.
