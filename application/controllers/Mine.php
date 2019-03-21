@@ -1,24 +1,22 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Mine extends CI_Controller
 {
 
-    
+
     public function __construct()
     {
 
         parent::__construct();
         $this->load->model('Conecte_model');
-
     }
 
     public function index()
     {
 
         $this->load->view('conecte/login');
-        
     }
 
     public function sair()
@@ -35,7 +33,7 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('documento', 'Documento', 'required|trim');
         $ajax = $this->input->get('ajax');
         if ($this->form_validation->run() == false) {
-            
+
             if ($ajax == true) {
                 $json = array('result' => false);
                 echo json_encode($json);
@@ -55,35 +53,33 @@ class Mine extends CI_Controller
             $cliente = $this->db->get('clientes')->row();
 
             if (count($cliente) > 0) {
-                $dados = array('nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes,'conectado' => true);
+                $dados = array('nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true);
                 $this->session->set_userdata($dados);
 
                 if ($ajax == true) {
                     $json = array('result' => true);
                     echo json_encode($json);
                 } else {
-                    redirect(site_url().'/mine');
+                    redirect(site_url() . '/mine');
                 }
             } else {
-                
-                
+
+
                 if ($ajax == true) {
                     $json = array('result' => false);
                     echo json_encode($json);
                 } else {
                     $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
-                    redirect(site_url().'/mine');
+                    redirect(site_url() . '/mine');
                 }
             }
-            
         }
-        
     }
 
     public function painel()
     {
-        
-        
+
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -93,19 +89,18 @@ class Mine extends CI_Controller
         $data['os'] = $this->Conecte_model->getLastOs($this->session->userdata('cliente_id'));
         $data['output'] = 'conecte/painel';
         $this->load->view('conecte/template', $data);
-
     }
 
     public function conta()
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
         $data['menuConta'] = 'conta';
         $data['result'] = $this->Conecte_model->getDados();
-       
+
         $data['output'] = 'conecte/conta';
         $this->load->view('conecte/template', $data);
     }
@@ -143,29 +138,27 @@ class Mine extends CI_Controller
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
                 redirect(base_url() . 'index.php/mine/conta');
-            } else {
-                
-            }
+            } else { }
         }
 
         $data['result'] = $this->Conecte_model->getDados();
-       
+
         $data['output'] = 'conecte/editar_dados';
         $this->load->view('conecte/template', $data);
     }
 
     public function compras()
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
         $data['menuVendas'] = 'vendas';
         $this->load->library('pagination');
-        
-        
-        $config['base_url'] = base_url().'index.php/mine/compras/';
+
+
+        $config['base_url'] = base_url() . 'index.php/mine/compras/';
         $config['total_rows'] = $this->Conecte_model->count('vendas', $this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -186,28 +179,27 @@ class Mine extends CI_Controller
         $config['first_tag_close'] = '</li>';
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
-            
+
         $this->pagination->initialize($config);
 
         $data['results'] = $this->Conecte_model->getCompras('vendas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-       
+
         $data['output'] = 'conecte/compras';
         $this->load->view('conecte/template', $data);
-
     }
 
     public function os()
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
         $data['menuOs'] = 'os';
         $this->load->library('pagination');
-        
-        
-        $config['base_url'] = base_url().'index.php/mine/os/';
+
+
+        $config['base_url'] = base_url() . 'index.php/mine/os/';
         $config['total_rows'] = $this->Conecte_model->count('os', $this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -228,18 +220,18 @@ class Mine extends CI_Controller
         $config['first_tag_close'] = '</li>';
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
-            
+
         $this->pagination->initialize($config);
 
         $data['results'] = $this->Conecte_model->getOs('os', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-       
+
         $data['output'] = 'conecte/os';
         $this->load->view('conecte/template', $data);
     }
 
     public function visualizarOs($id = null)
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -260,12 +252,11 @@ class Mine extends CI_Controller
 
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
-
     }
-    
+
     public function imprimirOs($id = null)
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -285,12 +276,11 @@ class Mine extends CI_Controller
         }
 
         $this->load->view('conecte/imprimirOs', $data);
-
     }
 
     public function visualizarCompra($id = null)
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -312,10 +302,10 @@ class Mine extends CI_Controller
         $data['output'] = 'conecte/visualizar_compra';
         $this->load->view('conecte/template', $data);
     }
-    
+
     public function imprimirCompra($id = null)
     {
-        
+
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -341,7 +331,7 @@ class Mine extends CI_Controller
     public function minha_ordem_de_servico($y = null, $when = null)
     {
 
-        if (($y != null) && (is_numeric($y) )) {
+        if (($y != null) && (is_numeric($y))) {
 
             // Do not forget this number -> 44023
             // function sending => y = (7653 * ID) + 44023
@@ -369,15 +359,11 @@ class Mine extends CI_Controller
                 $data['emitente'] = $this->mapos_model->getEmitente();
 
                 $this->load->view('conecte/minha_os', $data);
-
             }
-
-
         } else {
             // Resposta em caso de não encontrar a ordem de serviço
             //$this->load->view('conecte/');
         }
-
     }
 
 
@@ -427,8 +413,7 @@ class Mine extends CI_Controller
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
-                redirect('mine/detalhesOs/'.$id);
-
+                redirect('mine/detalhesOs/' . $id);
             } else {
 
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
@@ -455,7 +440,7 @@ class Mine extends CI_Controller
                 $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
                 redirect('mine/painel');
             }
-            
+
             $this->data['output'] = 'conecte/detalhes_os';
             $this->load->view('conecte/template', $this->data);
         } else {

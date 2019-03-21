@@ -1,0 +1,231 @@
+@import "variable.less";
+
+.inbox-leftbar {
+    width: 240px;
+    float: left;
+    padding: 0 20px 20px 10px;
+}
+
+.inbox-rightbar {
+    margin-left: 250px;
+}
+
+.message-list {
+    display: block;
+    padding-left: 0;
+
+    li {
+        position: relative;
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        cursor: default;
+        transition-duration: 0.3s;
+
+        a {
+            color: #797979;
+        }
+
+        &:hover {
+            background: rgba(152, 166, 173, 0.15);
+            transition-duration: 0.05s;
+        }
+
+        .col-mail {
+            float: left;
+            position: relative;
+        }
+
+        .col-mail-1 {
+            width: 320px;
+
+            .star-toggle {
+                display: block;
+                float: left;
+                margin-top: 18px;
+                font-size: 16px;
+                margin-left: 5px;
+            }
+
+            .checkbox-wrapper-mail {
+                display: block;
+                float: left;
+                margin: 15px 10px 0 20px;
+            }
+
+            .dot {
+                display: block;
+                float: left;
+                border: 4px solid transparent;
+                border-radius: 100px;
+                margin: 22px 26px 0;
+                height: 0;
+                width: 0;
+                line-height: 0;
+                font-size: 0;
+            }
+
+            .title {
+                position: absolute;
+                // top: 15px;
+                left: 110px;
+                right: 0;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+
+        .col-mail-2 {
+            position: absolute;
+            top: 0;
+            left: 320px;
+            right: 0;
+            bottom: 0;
+
+            .subject {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 200px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .date {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 170px;
+                padding-left: 80px;
+            }
+        }
+    }
+
+    li.active {
+        background: rgba(152, 166, 173, 0.15);
+        transition-duration: 0.05s;
+        box-shadow: inset 3px 0 0 #3c86d8;
+
+        &:hover {
+            box-shadow: inset 3px 0 0 #3c86d8;
+        }
+    }
+
+    li.selected {
+        background: rgba(152, 166, 173, 0.15);
+        transition-duration: 0.05s;
+    }
+
+    li.unread {
+        a {
+            font-weight: 600;
+            color: #272e37 !important;
+        }
+    }
+
+    li.blue-dot {
+        .col-mail-1 {
+            .dot {
+                border-color: #5d6dc3;
+            }
+        }
+    }
+
+    li.orange-dot {
+        .col-mail-1 {
+            .dot {
+                border-color: #f9bc0b;
+            }
+        }
+    }
+
+    li.green-dot {
+        .col-mail-1 {
+            .dot {
+                border-color: #3ec396;
+            }
+        }
+    }
+
+    .checkbox-wrapper-mail {
+        cursor: pointer;
+        height: 20px;
+        width: 20px;
+        position: relative;
+        display: inline-block;
+        box-shadow: inset 0 0 0 1px #98a6ad;
+        border-radius: 1px;
+
+        input {
+            opacity: 0;
+            cursor: pointer;
+
+            &:checked {
+                label {
+                    opacity: 1;
+                }
+            }
+        }
+
+        label {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
+            cursor: pointer;
+            background: #98a6ad;
+            opacity: 0;
+            margin-bottom: 0 !important;
+            transition-duration: 0.05s;
+
+            &:active {
+                background: #87949b;
+            }
+        }
+    }
+}
+
+.mail-list {
+    a {
+        font-family: "Roboto", sans-serif;
+        vertical-align: middle;
+        color: #797979;
+        padding: 10px 15px;
+        display: block;
+    }
+}
+@media (max-width: 648px) {
+    .inbox-leftbar {
+        width: 100%;
+    }
+
+    .inbox-rightbar {
+        margin-left: 0;
+    }
+}
+@media (max-width: 520px) {
+    .message-list {
+        li {
+            .col-mail-1 {
+                width: 150px;
+
+                .title {
+                    left: 80px;
+                }
+            }
+
+            .col-mail-2 {
+                left: 160px;
+
+                .date {
+                    text-align: right;
+                    padding-right: 10px;
+                    padding-left: 20px;
+                }
+            }
+        }
+    }
+}

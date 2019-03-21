@@ -4,9 +4,37 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.3.1] - 2019-03-03
+Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
+
+### Changed 
+- Modificado a cor de fundo para branco do box de texto do trumbowyg
+- Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
+- Reestilizado a tela de login para uma tela transparente e fundo dinamico
+- Obrigatoriedade de data final na OS
+    - Adicionar OS
+    - Editar OS
+
+### Fixed
+- Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
+## [3.3] - 2019-02-28
+### Added
+
+- Adicionando máscaras 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
+- Adicionando data de expiração de acesso. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
+Adicionado o campo valorTotal dentro do $this->data['results']. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+- Adicionado a Funcao para incluir na os a opcao "Aguardando Pecas". [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+- Adicionado o campo Valor Total para aparecer o valor total da os quando estiver fechado. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+- Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+
+### Changed 
+- Alterando layout da tela de login de clientes. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
+- Formatado o campo Valor total com 2 casas decimais e R$ (cifrao) - [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+
 ## [3.2] - 2019-02-18
 ### Added
-- Implementado editor WYSIWYG [Trumbowyg](https://github.com/Alex-D/Trumbowyg) nos campos (Ordem de Serviço)
+- Implementado editor WYSIWYG [Trumbowyg](https://github.com/Alex-D/Trumbowyg) nos campos (Ordem de Serviço). [@Pr3d4dor](https://github.com/Pr3d4dor).
     - Descrição Produto/Serviço
     - Defeito
     - Observações

@@ -1,0 +1,84 @@
+@import "variable.less"; // Variable.less
+.profile-widget-one {
+    .profile-one-bg {
+        position: relative;
+    }
+    .profile-one-user-photo {
+        position: relative;
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .user-photo {
+            bottom: 0;
+            height: 100%;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            width: 100%;
+            img {
+                border-radius: 100px;
+                height: 100px;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100px;
+            }
+        }
+    }
+    .profile-one-user-content {
+        ul {
+            li {
+                background: @white;
+                border-right: 1px solid @border;
+                border-bottom: 1px solid @border;
+                display: block;
+                float: left;
+                padding: 10px 0;
+                text-align: center;
+                width: 32%;
+                &:last-child {
+                    border-right: 0px;
+                }
+            }
+        }
+        h4 {
+            line-height: 30px;
+            font-size: 14px;
+            margin: 0px;
+        }
+        .earning-amount,
+        .sold-amount {
+            color: @success;
+//            font-family: @mont;
+            font-size: 24px;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+        .sold-amount {
+            color: @primary;
+//            font-family: @mont;
+            font-size: 24px;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+    }
+    .profile-one-user-button {
+        text-align: center;
+        padding: 26px 0px;
+    }
+    .profile-btn-one {
+        font-size: 18px;
+        text-transform: uppercase;
+        padding: 8px 15px;
+        font-weight: 400;
+        color: @primary;
+    }
+}
+
+
+

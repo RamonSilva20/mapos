@@ -40,27 +40,25 @@
             </div>
             <div class="widget-content nopadding">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal" >
+                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                      <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>"  />
+                            <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada 
-                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" 
-                                    <?=($result->entrada == 1)?'checked':''?>>
-                                <span class="badge" >&check;</span>
+                        <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
+                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" <?= ($result->entrada == 1) ? 'checked' : '' ?>>
+                                <span class="badge">&check;</span>
                             </label>
-                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída 
-                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1"
-                                    <?=($result->saida == 1)?'checked':''?>>
-                                <span class="badge" >&check;</span>
+                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
+                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" <?= ($result->saida == 1) ? 'checked' : '' ?>>
+                                <span class="badge">&check;</span>
                             </label>
                         </div>
                     </div>
@@ -68,14 +66,14 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>"  />
+                            <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="precoVenda" class="control-label">Preço de Venda<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoVenda" class="money" type="text" name="precoVenda" value="<?php echo $result->precoVenda; ?>"  />
+                            <input id="precoVenda" class="money" type="text" name="precoVenda" value="<?php echo $result->precoVenda; ?>" />
                         </div>
                     </div>
 
@@ -83,10 +81,10 @@
                     <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                     <div class="controls">
                         <select id="unidade" name="unidade">
-                            <option value="UN" <?=($result->unidade == 'UN')?'selected':''?>>Unidade</option>
-                            <option value="KG" <?=($result->unidade == 'KG')?'selected':''?>>Kilograma</option>
-                            <option value="LT" <?=($result->unidade == 'LT')?'selected':''?>>Litro</option>
-                            <option value="CX" <?=($result->unidade == 'CX')?'selected':''?>>Caixa</option>
+                        <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
+                                <option value="KG" <?= ($result->unidade == 'KG') ? 'selected' : '' ?>>Kilograma</option>
+                                <option value="LT" <?= ($result->unidade == 'LT') ? 'selected' : '' ?>>Litro</option>
+                                <option value="CX" <?= ($result->unidade == 'CX') ? 'selected' : '' ?>>Caixa</option>
                         </select>                        
                     </div>
                     </div>                    
@@ -94,14 +92,14 @@
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="estoque" type="text" name="estoque" value="<?php echo $result->estoque; ?>"  />
+                            <input id="estoque" type="text" name="estoque" value="<?php echo $result->estoque; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
                         <div class="controls">
-                            <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo $result->estoqueMinimo; ?>"  />
+                            <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo $result->estoqueMinimo; ?>" />
                         </div>
                     </div>
 
@@ -123,41 +121,57 @@
 </div>
 
 
-<script src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url();?>assets/js/maskmoney.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".money").maskMoney();
-
+        
         $('#formProduto').validate({
-            rules :{
-                  descricao: { required: true},
-                  unidade: { required: true},
-                  precoCompra: { required: true},
-                  precoVenda: { required: true},
-                  estoque: { required: true}
+            rules: {
+                descricao: {
+                    required: true
+                },
+                unidade: {
+                    required: true
+                },
+                precoCompra: {
+                    required: true
+                },
+                precoVenda: {
+                    required: true
+                },
+                estoque: {
+                    required: true
+                }
             },
-            messages:{
-                  descricao: { required: 'Campo Requerido.'},
-                  unidade: {required: 'Campo Requerido.'},
-                  precoCompra: { required: 'Campo Requerido.'},
-                  precoVenda: { required: 'Campo Requerido.'},
-                  estoque: { required: 'Campo Requerido.'}
+            messages: {
+                descricao: {
+                    required: 'Campo Requerido.'
+                },
+                unidade: {
+                    required: 'Campo Requerido.'
+                },
+                precoCompra: {
+                    required: 'Campo Requerido.'
+                },
+                precoVenda: {
+                    required: 'Campo Requerido.'
+                },
+                estoque: {
+                    required: 'Campo Requerido.'
+                }
             },
 
             errorClass: "help-inline",
             errorElement: "span",
-            highlight:function(element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').addClass('error');
             },
             unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
             }
-           });
+        });
     });
-</script>
-
-
-
-
+</script> 

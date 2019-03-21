@@ -1,0 +1,26 @@
+f {
+	font-size: 15px;
+}
+#sub {
+	
+	display: block;
+	margin-top: -15px;
+	margin-bottom: 10px;
+	color: red;
+	font-size: 15px;
+	
+}
+#passos {
+	margin-top: 20px;
+	text-align: left;
+	font-size: 17px;
+    
+}
+#td1 {
+
+	border-top: 1px solid;
+	border-top-color: #E6E6E6;
+}
+#back{
+	text-align: right;
+}

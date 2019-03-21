@@ -1,0 +1,27 @@
+body {
+	background-image: url("../img/fundo.jpg");
+}
+p {
+	display: block;
+	margin-top: 2em;
+	color: red;
+	font-size: 30px;
+}
+#by {
+	
+	font-family: "Times New Roman", Times, serif;;
+	font-size: 10px;
+}
+
+#by:hover {
+	font-family: "Times New Roman", Times, serif;;
+	font-size: 10px;
+	color: red;
+}
+a:link {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+	color:red;
+}
