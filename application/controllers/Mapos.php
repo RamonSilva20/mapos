@@ -15,32 +15,23 @@ class Mapos extends CI_Controller
     {
         parent::__construct();
         $this->load->model('mapos_model', '', true);
+
     }
 
     public function index()
     {
-
-
-        if ($this->session->userdata('expirado')) {
-            $this->session->sess_destroy();
-            redirect('../alerta/alerta.html ');
-        }
-
-
-
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
 
-
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-		$this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-		$this->data['os'] = $this->mapos_model->getOsEstatisticas();
+        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         $this->load->view('tema/topo', $this->data);
+
     }
 
     public function minhaConta()
@@ -52,6 +43,7 @@ class Mapos extends CI_Controller
         $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
         $this->data['view'] = 'mapos/minhaConta';
         $this->load->view('tema/topo', $this->data);
+
     }
 
     public function alterarSenha()
@@ -80,10 +72,11 @@ class Mapos extends CI_Controller
         if ($result) {
             $this->session->set_flashdata('success', 'Senha alterada com sucesso!');
             redirect(base_url() . 'index.php/mapos/minhaConta');
-        }
-
+        } 
+        
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
         redirect(base_url() . 'index.php/mapos/minhaConta');
+
     }
 
     public function pesquisar()
@@ -101,12 +94,14 @@ class Mapos extends CI_Controller
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mapos/pesquisa';
         $this->load->view('tema/topo', $this->data);
+
     }
 
     public function login()
     {
 
         $this->load->view('mapos/login');
+
     }
     public function sair()
     {
@@ -136,7 +131,7 @@ class Mapos extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'expirado' => $this->chk_date($user->dataExpiracao), 'permissao' => $user->permissoes_id, 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     $json = array('result' => true);
                     echo json_encode($json);
@@ -150,15 +145,6 @@ class Mapos extends CI_Controller
             }
         }
         die();
-    }
-
-    private function chk_date($data_banco)
-    {
-
-        $data_banco = new DateTime($data_banco);
-        $data_hoje  = new DateTime("now");
-
-        return $data_banco < $data_hoje;
     }
 
     public function backup()
@@ -246,6 +232,7 @@ class Mapos extends CI_Controller
             $file_info = array($this->upload->data());
             return $file_info[0]['file_name'];
         }
+
     }
 
     public function cadastrarEmitente()
@@ -276,6 +263,7 @@ class Mapos extends CI_Controller
 
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
             redirect(base_url() . 'index.php/mapos/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -300,6 +288,7 @@ class Mapos extends CI_Controller
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
                 redirect(base_url() . 'index.php/mapos/emitente');
             }
+
         }
     }
 
@@ -331,6 +320,7 @@ class Mapos extends CI_Controller
 
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
             redirect(base_url() . 'index.php/mapos/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -354,6 +344,7 @@ class Mapos extends CI_Controller
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
                 redirect(base_url() . 'index.php/mapos/emitente');
             }
+
         }
     }
 
@@ -389,5 +380,6 @@ class Mapos extends CI_Controller
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
             redirect(base_url() . 'index.php/mapos/emitente');
         }
+
     }
 }

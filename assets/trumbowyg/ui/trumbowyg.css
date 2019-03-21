@@ -51,7 +51,6 @@
 .trumbowyg-editor,
 .trumbowyg-textarea {
   position: relative;
-  background-color: white;
   box-sizing: border-box;
   padding: 20px;
   min-height: 300px;
@@ -80,7 +79,6 @@
 
 .trumbowyg-textarea {
   position: relative;
-  background-color: white;
   display: block;
   overflow: auto;
   border: none;

@@ -1,6 +1,6 @@
 <?php
 
-$settings_file = __DIR__ . DIRECTORY_SEPARATOR . 'settings.json';
+$settings_file = __DIR__.DIRECTORY_SEPARATOR.'settings.json';
 
 if (!file_exists($settings_file)) {
   die("Arquivo de configuração não encontrado!");
@@ -11,7 +11,7 @@ if (!file_exists($settings_file)) {
 
 $php_version_success = false;
 $allow_url_fopen_success = false;
-$timezone_success = false;
+$timezone_success=false;
 
 $php_version_required = "5.5.0";
 $current_php_version = PHP_VERSION;
@@ -73,3 +73,4 @@ if (!$is_installed) {
 }
 
 include "view/index.php";
+?>

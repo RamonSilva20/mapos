@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+
 $active_group = 'default';
 $query_builder = true;
+
 $db['default'] = array(
     'dsn'   => '',
     'hostname' => 'enter_hostname',
@@ -23,3 +26,4 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true
 );
+

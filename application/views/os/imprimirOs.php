@@ -9,7 +9,7 @@ $totalProdutos = 0;?>
 <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<?php echo base_url();?>assets/css/matrix-style.css" />
 <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
+
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 <style>
     .table {
@@ -38,7 +38,7 @@ $totalProdutos = 0;?>
                             <tr>
                                 <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> " style="max-height: 100px"></td>
                                 <td> <span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br><span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua.', '.$emitente[0]->numero.' - '.$emitente[0]->bairro.' - '.$emitente[0]->cidade.' - '.$emitente[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente[0]->email.' - Fone: '.$emitente[0]->telefone; ?></span></td>
-                                <td style="width: 18%; text-align: center"><b>N° OS:</b> <span ><?php echo $result->idOs?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y')?></span></td>
+                                <td style="width: 18%; text-align: center"><b>#PROTOCOLO:</b> <span ><?php echo $result->idOs?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y')?></span></td>
                             </tr>
 
                             <?php } ?>
@@ -148,7 +148,6 @@ $totalProdutos = 0;?>
                                         <tr>
                                             <th>Produto</th>
                                             <th>Quantidade</th>
-                                            <th>Preço unit.</th>
                                             <th>Sub-total</th>
                                         </tr>
                                     </thead>
@@ -161,14 +160,12 @@ $totalProdutos = 0;?>
                                             echo '<tr>';
                                             echo '<td>'.$p->descricao.'</td>';
                                             echo '<td>'.$p->quantidade.'</td>';
-                                            echo '<td>'.$p->precoVenda. '</td>';
                                             
                                             echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
                                             echo '</tr>';
                                         }?>
 
                                         <tr>
-                                            <td></td>
                                             <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.');?></strong></td>
                                         </tr>
@@ -203,7 +200,7 @@ $totalProdutos = 0;?>
                                     </tbody>
                                 </table>
                         <?php }?>
-                        <h4 style="text-align: right" id="valorTotal">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
+                        <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
 
                         <table class="table table-bordered table-condensed">                                      
                             <tbody>

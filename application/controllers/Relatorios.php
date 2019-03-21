@@ -11,19 +11,20 @@ class Relatorios extends CI_Controller
      * email: silva018-mg@yahoo.com.br
      *
      */
-
+    
     public function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
-
+        
         $this->load->model('Relatorios_model', '', true);
         $this->load->model('Usuarios_model', '', true);
         $this->load->model('Mapos_model', '', true);
 
         $this->data['menuRelatorios'] = 'Relatórios';
+
     }
 
     public function index()
@@ -50,6 +51,7 @@ class Relatorios extends CI_Controller
         }
         $this->data['view'] = 'relatorios/rel_produtos';
         $this->load->view('tema/topo', $this->data);
+
     }
 
     public function clientesCustom()
@@ -58,10 +60,10 @@ class Relatorios extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de clientes.');
             redirect(base_url());
         }
-
+        
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
-
+        
         $data['title'] = 'Relatório de Clientes Costumizado';
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
@@ -74,6 +76,7 @@ class Relatorios extends CI_Controller
         //$this->load->view('relatorios/imprimir/imprimirClientes', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
         pdf_create($html, 'relatorio_clientes' . date('d/m/y'), true);
+    
     }
 
     public function clientesRapid()
@@ -120,6 +123,7 @@ class Relatorios extends CI_Controller
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
         pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
+        
     }
 
     public function produtosCustom()
@@ -150,6 +154,7 @@ class Relatorios extends CI_Controller
         }
         $this->data['view'] = 'relatorios/rel_servicos';
         $this->load->view('tema/topo', $this->data);
+
     }
 
     public function servicosCustom()
@@ -213,7 +218,7 @@ class Relatorios extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de OS.');
             redirect(base_url());
         }
-
+        
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
         $cliente = $this->input->get('cliente');
@@ -221,22 +226,22 @@ class Relatorios extends CI_Controller
         $status = $this->input->get('status');
 
         $this->load->helper('mpdf');
-
+        
         $title = $status == null ? 'Todas' : $status;
         $user =  $responsavel == null ? 'Não foi selecionado' : $this->Usuarios_model->get(1, intval($responsavel) - 1);
-
+        
         $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status);
         $emitente = $this->Mapos_model->getEmitente();
         $usuario = is_array($user) ? $user[0]->nome : $user;
 
-        $data['title'] = 'Relatório de OS - ' . $title;
+        $data['title'] = 'Relatório de OS - '.$title;
         $data['os'] = $os;
         $data['res_nome'] = $usuario;
 
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
         $data['dataFinal'] = $dataFinal != null ?  date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
 
-        if ($emitente) {
+        if($emitente){
             $data['em_nome'] = $emitente[0]->nome;
             $data['em_cnpj'] = $emitente[0]->cnpj;
             $data['em_logo'] = $emitente[0]->url_logo;
@@ -258,6 +263,7 @@ class Relatorios extends CI_Controller
 
         $this->data['view'] = 'relatorios/rel_financeiro';
         $this->load->view('tema/topo', $this->data);
+    
     }
 
 

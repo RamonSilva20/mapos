@@ -9,12 +9,14 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapid"><i class="icon-barcode"></i> <small>Todos os Produtos</small></a></li>
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapidMin"><i class="icon-barcode"></i> <small>Com Estoque Mínimo</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/produtosRapid"><i class="icon-barcode"></i> <small>Todos os Produtos</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url()?>index.php/relatorios/produtosRapidMin"><i class="icon-barcode"></i> <small>Com Estoque Mínimo</small></a></li>
+                    
                 </ul>
             </div>
         </div>
     </div>
+
     <div class="span8">
         <div class="widget-box">
             <div class="widget-title">
@@ -34,7 +36,7 @@
                             </div>
                             <div class="span6">
                                 <label for="">até:</label>
-                                <input type="text" name="precoFinal" class="span12 money" />
+                                <input type="text"  name="precoFinal" class="span12 money" />
                             </div>
                         </div>
                         <div class="span12 well" style="margin-left: 0">
@@ -58,9 +60,13 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+
+
+<script src="<?php echo base_url();?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function(){
         $(".money").maskMoney();
+
+      
     });
-</script> 
+</script>

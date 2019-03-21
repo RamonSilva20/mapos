@@ -166,7 +166,7 @@ $config = array('clientes' => array(array(
                                 array(
                                     'field'=>'dataFinal',
                                     'label'=>'DataFinal',
-                                    'rules'=>'trim|required'
+                                    'rules'=>'trim'
                                 ),
                                 array(
                                     'field'=>'garantia',
