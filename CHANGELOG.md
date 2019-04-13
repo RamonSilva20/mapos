@@ -4,6 +4,9 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.2] - 2019-04-13
+### Fixed
+- Corrigido exibição da label de status faturado em painel de visualização de cliente [@Pr3d4dor](https://github.com/Pr3d4dor).
 
 ## [3.3.1] - 2019-03-03
 Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
