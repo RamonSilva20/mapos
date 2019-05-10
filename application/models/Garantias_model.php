@@ -6,8 +6,8 @@ class Garantias_model extends CI_Model
 {
 
     /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
+     * author: Wilmerson Felipe
+     * email: will.phelipe@gmail.com.br
      *
      */
 

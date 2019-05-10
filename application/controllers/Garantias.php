@@ -5,8 +5,8 @@ class Garantias extends CI_Controller
 
 
     /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
+     * author: Wilmerson Felipe
+     * email: will.phelipe@gmail.com.br
      *
      */
 
