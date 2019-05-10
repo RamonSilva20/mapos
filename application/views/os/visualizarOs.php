@@ -208,12 +208,40 @@ $totalProdutos = 0;?>
                                     </table>
                             <?php }?>
                             <?php
-                            if($result->status == "Finalizado"){
+                            if($result->status == "Finalizado" || $result->status == "Orçamento"){
                                 echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
                             }
                             
                         ?>
-                                                  
+                                                <br />
+                        <?php
+                            if($result->status == "Finalizado"){
+                                ?>
+                                <table class="table table-bordered table-condensed ">
+                                   
+                                   <tbody>
+                                      
+                                       <tr>
+                                       <th><h4 class="text-vertical text-center">TERMO DE GARANTIA</h4></th>
+                                           <td>
+                                               <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
+
+                                           </td>
+                                          
+                                       </tr>
+
+                                   </tbody>
+
+                            <table class="table table-bordered table-condensed">                                      
+                                <tbody>
+                                        <tr> 
+                                            <td>Data <hr></td>
+                                            <td>Assinatura do Cliente <hr></td>
+                                            <td>Assinatura do Técnico Responsável <hr></td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                    <?php } ?>  
                         </div>
                     </div>
                 </div>

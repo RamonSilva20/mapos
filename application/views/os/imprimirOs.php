@@ -209,7 +209,7 @@ $totalProdutos = 0;?>
                                 </table>
                         <?php }?>
                         <?php
-                            if($result->status == "Finalizado"){
+                            if($result->status == "Finalizado" || $result->status == "Orçamento"){
                                 echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
                             }
                             
@@ -226,7 +226,7 @@ $totalProdutos = 0;?>
                         </table>
                         <br />
                         <?php
-                            if($result->status == "Finalizado"){
+                            if($result->status == "Finalizado" || $result->status == "Orçamento"){
                                 ?>
                                 <table class="table table-bordered table-condensed ">
                                    
