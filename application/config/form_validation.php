@@ -174,6 +174,11 @@ $config = array('clientes' => array(array(
                                     'rules'=>'trim'
                                 ),
                                 array(
+                                    'field'=>'termoGarantia',
+                                    'label'=>'Termo Garantia',
+                                    'rules'=>'required|trim'
+                                ),
+                                array(
                                     'field'=>'descricaoProduto',
                                     'label'=>'DescricaoProduto',
                                     'rules'=>'trim'
@@ -272,6 +277,27 @@ $config = array('clientes' => array(array(
                                 array(
                                     'field'=>'tipo',
                                     'label'=>'Tipo',
+                                    'rules'=>'required|trim'
+                                ))
+                ,
+				'garantias' => array(array(
+                                    'field'=>'dataGarantia',
+                                    'label'=>'dataGarantia',
+                                    'rules'=>'trim'
+                                ),
+                                array(
+                                    'field'=>'usuarios_id',
+                                    'label'=>'usuarios_id',
+                                    'rules'=>'trim'
+                                ),
+                                array(
+                                    'field'=>'refGarantia',
+                                    'label'=>'refGarantia',
+                                    'rules'=>'trim'
+                                ),
+                                array(
+                                    'field'=>'textoGarantia',
+                                    'label'=>'textoGarantia',
                                     'rules'=>'required|trim'
                                 ))
                 ,

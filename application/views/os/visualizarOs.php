@@ -76,8 +76,14 @@ $totalProdutos = 0;?>
                         <table class="table table-condensed">
                             <tbody>
                                 
+                                
                                 <?php if($result->dataInicial != null){?>
                                 <tr>
+                                    <td>
+                                    <b>STATUS OS: </b>
+                                    <?php echo $result->status?>
+                                    </td>
+
                                     <td>
                                     <b>DATA INICIAL: </b>
                                     <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
@@ -93,12 +99,17 @@ $totalProdutos = 0;?>
                                     <?php echo $result->garantia; ?>
                                     </td>
 
+                                    <td>
+                                    <b>TERMO GARANTIA: </b>
+                                    <?php echo $result->refGarantia; ?>
+                                    </td>
+
                                 </tr>
                                 <?php }?>
 
                                 <?php if($result->descricaoProduto != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>DESCRIÇÃO: </b>
                                     <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                     </td>
@@ -108,7 +119,7 @@ $totalProdutos = 0;?>
 
                                 <?php if($result->defeito != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>DEFEITO APRESENTADO: </b>
                                     <?php echo htmlspecialchars_decode($result->defeito) ?>
                                     </td>
@@ -117,7 +128,7 @@ $totalProdutos = 0;?>
                                 
                                 <?php if($result->observacoes != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>OBSERVAÇÕES: </b>
                                     <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                     </td>
@@ -126,7 +137,7 @@ $totalProdutos = 0;?>
 
                                 <?php if($result->laudoTecnico != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>LAUDO TÉCNICO: </b>
                                     <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                     </td>
@@ -196,7 +207,12 @@ $totalProdutos = 0;?>
                                         </tbody>
                                     </table>
                             <?php }?>
-                            <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
+                            <?php
+                            if($result->status == "Finalizado"){
+                                echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
+                            }
+                            
+                        ?>
                                                   
                         </div>
                     </div>

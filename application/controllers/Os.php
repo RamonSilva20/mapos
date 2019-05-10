@@ -83,7 +83,7 @@ class Os extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);
@@ -130,6 +130,7 @@ class Os extends CI_Controller
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
+                'garantias_id' => $this->input->post('garantias_id'),
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => set_value('defeito'),
                 'status' => set_value('status'),
@@ -166,6 +167,7 @@ class Os extends CI_Controller
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
                 'dataFinal' => set_value('dataFinal'),
                 'garantia' => set_value('garantia'),
+                'garantias_id' => $this->input->post('garantias_id'),
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => set_value('defeito'),
                 'status' => set_value('status'),
@@ -221,6 +223,7 @@ class Os extends CI_Controller
                 'dataInicial' => $dataInicial,
                 'dataFinal' => $dataFinal,
                 'garantia' => $this->input->post('garantia'),
+                'garantias_id' => $this->input->post('garantias_id'),
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
                 'status' => $this->input->post('status'),
@@ -359,6 +362,16 @@ class Os extends CI_Controller
             $this->os_model->autoCompleteUsuario($q);
         }
     }
+
+    public function autoCompleteTermoGarantia()
+    {
+
+        if (isset($_GET['term'])) {
+            $q = strtoupper($_GET['term']);
+            $this->os_model->autoCompleteTermoGarantia($q);
+        }
+    }
+
 
     public function autoCompleteServico()
     {

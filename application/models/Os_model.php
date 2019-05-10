@@ -52,10 +52,11 @@ class Os_model extends CI_Model
             }
         }
 
-        $this->db->select($fields.',clientes.nomeCliente, usuarios.nome');
+        $this->db->select($fields.',clientes.nomeCliente, usuarios.nome, garantias.*');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id', 'left');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id');
 
         // condicionais da pesquisa
 
@@ -93,10 +94,11 @@ class Os_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->select('os.*, clientes.*, usuarios.celular, usuarios.email as email_responsavel,usuarios.nome');
+        $this->db->select('os.*, clientes.*, garantias.*, usuarios.celular, usuarios.email as email_responsavel,usuarios.nome');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
         return $this->db->get()->row();
@@ -221,6 +223,21 @@ class Os_model extends CI_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
                 $row_set[] = array('label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']);
+            }
+            echo json_encode($row_set);
+        }
+    }
+
+    public function autoCompleteTermoGarantia($q)
+    {
+
+        $this->db->select('*');
+        $this->db->limit(5);
+        $this->db->like('refGarantia', $q);
+        $query = $this->db->get('garantias');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = array('label'=>$row['refGarantia'],'id'=>$row['idGarantias']);
             }
             echo json_encode($row_set);
         }

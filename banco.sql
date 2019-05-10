@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `cep` VARCHAR(20) NULL DEFAULT NULL,
   PRIMARY KEY (`idClientes`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -154,9 +154,30 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
+-- --------------------------------------------------------
+-- Estrutura da tabela `garantias`
+-- --------------------------------------------------------
+
+CREATE TABLE `garantias` (
+  `idGarantias` int(11) NOT NULL AUTO_INCREMENT,
+  `dataGarantia` date NOT NULL,
+  `refGarantia` varchar(15) NOT NULL,
+  `textoGarantia` varchar(2000) NOT NULL,
+  `usuarios_id` int(11) NOT NULL,
+  PRIMARY KEY (`idGarantias`),
+  INDEX `fk_garantias_usuarios1` (`usuarios_id` ASC),
+  CONSTRAINT `fk_garantias_usuarios1`
+    FOREIGN KEY (`usuarios_id`)
+    REFERENCES `usuarios` (`idUsuarios`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE=InnoDB 
+DEFAULT CHARSET=utf8 
+COLLATE=utf8_bin
+AUTO_INCREMENT = 1;
 
 -- -----------------------------------------------------
 -- Table `os`
@@ -176,10 +197,12 @@ CREATE TABLE IF NOT EXISTS `os` (
   `usuarios_id` INT(11) NOT NULL,
   `lancamento` INT(11) NULL DEFAULT NULL,
   `faturado` TINYINT(1) NOT NULL,
+  `garantias_id` int(11) NOT NULL,
   PRIMARY KEY (`idOs`),
   INDEX `fk_os_clientes1` (`clientes_id` ASC),
   INDEX `fk_os_usuarios1` (`usuarios_id` ASC),
   INDEX `fk_os_lancamentos1` (`lancamento` ASC),
+  INDEX `fk_os_garantias1` (`garantias_id` ASC),
   CONSTRAINT `fk_os_clientes1`
     FOREIGN KEY (`clientes_id`)
     REFERENCES `clientes` (`idClientes`)
@@ -194,9 +217,14 @@ CREATE TABLE IF NOT EXISTS `os` (
     FOREIGN KEY (`usuarios_id`)
     REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_os_garantias1`
+    FOREIGN KEY (`garantias_id`)
+    REFERENCES `garantias` (`idGarantias`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -317,6 +345,24 @@ CREATE TABLE IF NOT EXISTS `vendas` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `Garantia`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `garantias` (
+  `idGarantias` INT NOT NULL AUTO_INCREMENT,
+  `dataGarantia` DATE NULL,
+  `refGarantia` VARCHAR(15) NULL,
+  `textoGarantia` VARCHAR(2000) NULL,
+  `usuarios_id` INT(11) NULL,
+  PRIMARY KEY (`idGarantias`),
+  INDEX `fk_garantias_usuarios1` (`usuarios_id` ASC),
+  CONSTRAINT `fk_garantias_usuarios1`
+    FOREIGN KEY (`usuarios_id`)
+    REFERENCES `usuarios` (`idUsuarios`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `itens_de_vendas`
@@ -487,7 +533,7 @@ ENGINE = InnoDB;
 
 
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES
-(1, 'Administrador', 'a:38:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
+(1, 'Administrador', 'a:42:{s:8:\"aCliente\";s:1:\"1\";s:8:\"eCliente\";s:1:\"1\";s:8:\"dCliente\";s:1:\"1\";s:8:\"vCliente\";s:1:\"1\";s:8:\"aProduto\";s:1:\"1\";s:8:\"eProduto\";s:1:\"1\";s:8:\"dProduto\";s:1:\"1\";s:8:\"vProduto\";s:1:\"1\";s:8:\"aServico\";s:1:\"1\";s:8:\"eServico\";s:1:\"1\";s:8:\"dServico\";s:1:\"1\";s:8:\"vServico\";s:1:\"1\";s:3:\"aOs\";s:1:\"1\";s:3:\"eOs\";s:1:\"1\";s:3:\"dOs\";s:1:\"1\";s:3:\"vOs\";s:1:\"1\";s:6:\"aVenda\";s:1:\"1\";s:6:\"eVenda\";s:1:\"1\";s:6:\"dVenda\";s:1:\"1\";s:6:\"vVenda\";s:1:\"1\";s:9:\"aGarantia\";s:1:\"1\";s:9:\"eGarantia\";s:1:\"1\";s:9:\"dGarantia\";s:1:\"1\";s:9:\"vGarantia\";s:1:\"1\";s:8:\"aArquivo\";s:1:\"1\";s:8:\"eArquivo\";s:1:\"1\";s:8:\"dArquivo\";s:1:\"1\";s:8:\"vArquivo\";s:1:\"1\";s:11:\"aLancamento\";s:1:\"1\";s:11:\"eLancamento\";s:1:\"1\";s:11:\"dLancamento\";s:1:\"1\";s:11:\"vLancamento\";s:1:\"1\";s:8:\"cUsuario\";s:1:\"1\";s:9:\"cEmitente\";s:1:\"1\";s:10:\"cPermissao\";s:1:\"1\";s:7:\"cBackup\";s:1:\"1\";s:8:\"rCliente\";s:1:\"1\";s:8:\"rProduto\";s:1:\"1\";s:8:\"rServico\";s:1:\"1\";s:3:\"rOs\";s:1:\"1\";s:6:\"rVenda\";s:1:\"1\";s:11:\"rFinanceiro\";s:1:\"1\";}', 1, '2014-09-03');
 
 INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`,`dataExpiracao`) VALUES
 (1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '$2y$10$lAW0AXb0JLZxR0yDdfcBcu3BN9c2AXKKjKTdug7Or0pr6cSGtgyGO', '0000-0000', '', 1, '2013-11-22', 1, '3000-01-01');

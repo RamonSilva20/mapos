@@ -57,7 +57,7 @@ if (!$results) { ?>
                     <th>Data Final</th>
                     <th>Valor Total</th>
                     <th>Status</th>
-                    <th>Ações</th>
+                    <th>T. Garantia</th>
                     <th></th>
                 </tr>
             </thead>
@@ -91,7 +91,7 @@ if (!$results) { ?>
                     <th>Data Final</th>
                     <th>Valor Total</th>
                     <th>Status</th>
-                    <th>Ações</th>
+                    <th>T. Garantia</th>
                     <th></th>
                 </tr>
             </thead>
@@ -137,6 +137,7 @@ if (!$results) { ?>
                     echo '<td>' . $dataFinal . '</td>';
                     echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                     echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                    echo '<td>' . $r->refGarantia . '</td>';
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                         echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';

@@ -90,6 +90,10 @@
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
+
+                                            <label for="termoGarantia">Termo Garantia<span class="required">*</span></label>
+                                            <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
+                                            <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
                                         </div>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
@@ -473,6 +477,14 @@
             minLength: 2,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
+            }
+        });
+
+        $("#termoGarantia").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/os/autoCompleteTermoGarantia",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#garantias_id").val(ui.item.id);
             }
         });
 

@@ -1,0 +1,213 @@
+/* ======================================*/
+/*  Thomas Lage - lage.thomas@gmail.com  */
+/*=======================================*/
+
+/* ===========================> FOCUS <=========================== */
+
+/* INPUT DE BUSCA NA PÁGINA */
+#search input:focus[type=text]{
+    border: 1px solid;
+    border-top:none;
+    border-bottom: none;
+    border-color: red;
+    background-color: #FFFFFF;
+    color:#000000;
+}
+
+/* ===========================> ACTIVE <=========================== */
+
+/* SUBMENU FINANCEIRO E OUTROS*/
+#sidebar > ul li ul li.active a{
+    background-color: #7BCAE1;
+    font-size:15px;
+}
+
+/* MENUS LATERAIS*/
+#sidebar > ul > li.active{
+    background-color: rgba(79, 176, 241, 0.548);
+    font-size: 16px;
+}
+
+/* ITENS ATIVOS */
+#sidebar > ul > li.active a{
+    color:black;
+}  
+
+/* ===========================> HOVERS <=========================== */
+
+/*MENUS LATERAIS*/
+#sidebar > ul > li > a:hover{
+    background-color: #27a9e3;
+    color: #fff;
+    font-size: 15px;
+}
+
+/* ICONES DE VISUALIZAR */
+.visualizar:hover{
+    background-color: #548B54;
+}
+
+/* INPUT DE BUSCA NA PÁGINA */
+#search input:hover[type=text]{
+    border: 1px solid;
+    border-top:none;
+    border-bottom: none;
+    border-color: red;
+    color:#000000;
+}
+
+/* LINHA */
+li:hover{
+    color:#666;
+}
+
+/* SUBMENU FINANCEIRO E OUTROS*/
+#sidebar > ul li ul li a:hover{
+    background-color: #7BCAE1;
+    font-size:15px;
+}
+
+/* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/
+#user-nav > ul > li > a:hover{
+    background-color: #7BCAE1;
+}
+
+/* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul > li > a > .label:hover{
+    background-color: #ffffff;
+}
+
+/*ITENS DO DASHBOARD - ICONES*/
+.quick-actions li a:hover {
+    border-radius: 5px;
+}
+
+/* ===========================> CSS NORMAL <=========================== */
+
+/* BORDAR REDONDA EM TODOS OS INPUTS */
+input {
+    border-radius: 7px !important;
+}
+
+/* BACKGROUND DO SISTEMA */
+body{
+    background-color: white;
+}
+
+/* REMOVER BORDAS ENTRE OS ITENS */
+#sidebar > ul > li{
+    border:none !important;
+}
+
+/* COR DOS CAMPOS DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul > li > ul{
+    background-color:#E0E0E0;
+}
+/* COR DOS TEXTOS DENTRO DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul li ul li a{color:black;}
+
+/* BORDA NOS MENUS LATERAIS */
+#sidebar > ul{
+    border:none;
+}
+
+/* ICONES DOS ITENS DO MENU LATERAL E OUTROS */
+#user-nav > ul > li > a > i, #sidebar li a i{
+    opacity: .99;
+}
+
+/* CORES DOS  TEXTOS DO MENI LATERAL */
+#sidebar > ul > li > a{
+    color:#000000;
+}
+
+/* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul > li > a > .label{
+    background-color: #ffffff;
+}
+
+/* COR DOS ICONES MENU LATERAL E MENU SUPERIOR */
+#user-nav > ul > li > a > i, #sidebar li a i{
+    color:#000000;
+}
+
+/*ITENS DO DASHBOARD - ICONES*/
+.bg_lr {border-radius: 5px;}
+.bg_ls {border-radius: 5px;}
+.bg_lo {border-radius: 5px;}
+.bg_ly {border-radius: 5px;}
+.bg_lg {border-radius: 5px;}
+.bg_lb {border-radius: 5px;}
+
+/* TEMPO DECARGA DA TELA */
+.tempo-carga{
+    color: #787878;
+    margin: 10px 0 0 20px;
+}
+
+/* ICONE RELÓGIO */
+.icon-time{
+    color:#000000 !important;
+}
+
+/* ESTATISTICAS DO SISTEMA*/
+.bg_lh{
+    border-radius: 5px;
+}
+
+/*CABEÇALHO E BARCUMB*/
+#header{background-color: #ffffff}
+#breadcrumb{background-color: #D0D0D0}
+#breadcrumb a{color: #000000}
+
+/* RELOGIO */
+.textoHora{
+    color: #000000; 
+}
+
+/* BORDA ENTRE OS ITENS DO MENU SUPERIOR */
+#user-nav > ul > li{
+    border-top:none;
+    border-bottom: none;
+    border-left: 1px solid;
+    border-right: none;
+    border-color: #E8E8E8;
+}
+
+/* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
+#user-nav > ul{
+    border-left:none;
+    border-right: 1px solid;
+    border-color: #E8E8E8;
+}
+
+/* TEXTOS DO MENU SUPERIOR */
+.navbar-inverse .brand, .navbar-inverse .nav>li>a{
+    color: #000000;
+    text-shadow:none;
+}
+
+/* PESQUISA */
+#search input[type=text]{
+    color:#000000;
+    background-color: #ffffff;
+}
+#search button{
+    border-radius:5px;
+    background-color: #ffffff;
+}
+#search button i{
+    color:black;
+}
+
+/* ICONES*/
+.btn{border-radius:5px;}
+.btn [class^="icon-"], .nav [class^="icon-"]{
+    color:#FFFFFF
+}
+
+/* ICONES DE VISUALIZAR */
+.visualizar{
+    background-color: #7CCD7C;
+}
+

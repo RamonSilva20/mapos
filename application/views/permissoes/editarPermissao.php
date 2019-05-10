@@ -295,6 +295,56 @@
                                     </td>
                                  
                                 </tr>
+
+                                <tr><td colspan="4"></td></tr>
+                                
+                                <tr>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['vGarantia'])) {
+                                                if ($permissoes['vGarantia'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="vGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aGarantia'])) {
+                                                if ($permissoes['aGarantia'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="aGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['eGarantia'])) {
+                                                if ($permissoes['eGarantia'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="eGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dGarantia'])) {
+                                                if ($permissoes['dGarantia'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="dGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Garantia</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
                                 
                                 <tr><td colspan="4"></td></tr>
 

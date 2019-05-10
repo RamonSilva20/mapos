@@ -20,7 +20,7 @@ if (!$results) { ?>
                     <th>Data da Venda</th>
                     <th>Cliente</th>
                     <th>Faturado</th>
-                    <th>Ações</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@ if (!$results) { ?>
                     <th>Data da Venda</th>
                     <th>Cliente</th>
                     <th>Faturado</th>
-                    <th>Ações</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

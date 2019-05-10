@@ -86,6 +86,11 @@ $totalProdutos = 0;?>
                             <?php if($result->dataInicial != null){?>
                             <tr>
                                 <td>
+                                <b>STATUS OS: </b>
+                                <?php echo $result->status?>
+                                </td>
+
+                                <td>
                                 <b>DATA INICIAL: </b>
                                 <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
                                 </td>
@@ -105,7 +110,7 @@ $totalProdutos = 0;?>
 
                             <?php if($result->descricaoProduto != null){?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="5">
                                 <b>DESCRIÇÃO: </b>
                                 <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                 </td>
@@ -114,7 +119,7 @@ $totalProdutos = 0;?>
             
                             <?php if($result->defeito != null){?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="5">
                                 <b>DEFEITO APRESENTADO: </b>
                                 <?php echo htmlspecialchars_decode($result->defeito) ?>
                                 </td>
@@ -123,7 +128,7 @@ $totalProdutos = 0;?>
                             
                             <?php if($result->observacoes != null){?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="5">
                                 <b>OBSERVAÇÕES: </b>
                                 <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                 </td>
@@ -132,7 +137,7 @@ $totalProdutos = 0;?>
 
                             <?php if($result->laudoTecnico != null){?>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="5">
                                 <b>LAUDO TÉCNICO: </b>
                                 <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                 </td>
@@ -203,17 +208,51 @@ $totalProdutos = 0;?>
                                     </tbody>
                                 </table>
                         <?php }?>
-                        <h4 style="text-align: right" id="valorTotal">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
+                        <?php
+                            if($result->status == "Finalizado"){
+                                echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
+                            }
+                            
+                        ?>
 
                         <table class="table table-bordered table-condensed">                                      
                             <tbody>
                                     <tr> 
                                         <td>Data <hr></td>
                                         <td>Assinatura do Cliente <hr></td>
-                                        <td>Assinatura do Responsável <hr></td>
+                                        <td>Assinatura do Técnico Responsável <hr></td>
                                     </tr>
                             </tbody>
                         </table>
+                        <br />
+                        <?php
+                            if($result->status == "Finalizado"){
+                                ?>
+                                <table class="table table-bordered table-condensed ">
+                                   
+                                   <tbody>
+                                      
+                                       <tr>
+                                       <th><h4 class="text-vertical text-center">TERMO DE GARANTIA</h4></th>
+                                           <td>
+                                               <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
+
+                                           </td>
+                                          
+                                       </tr>
+
+                                   </tbody>
+
+                            <table class="table table-bordered table-condensed">                                      
+                                <tbody>
+                                        <tr> 
+                                            <td>Data <hr></td>
+                                            <td>Assinatura do Cliente <hr></td>
+                                            <td>Assinatura do Técnico Responsável <hr></td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                    <?php } ?>
 
                 </div>
             </div>                
