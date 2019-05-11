@@ -157,16 +157,16 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
--- --------------------------------------------------------
--- Estrutura da tabela `garantias`
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `Garantia`
+-- -----------------------------------------------------
 
-CREATE TABLE `garantias` (
-  `idGarantias` int(11) NOT NULL AUTO_INCREMENT,
-  `dataGarantia` date NOT NULL,
-  `refGarantia` varchar(15) NOT NULL,
-  `textoGarantia` varchar(2000) NOT NULL,
-  `usuarios_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `garantias` (
+  `idGarantias` INT NOT NULL AUTO_INCREMENT,
+  `dataGarantia` DATE NULL,
+  `refGarantia` VARCHAR(15) NULL,
+  `textoGarantia` VARCHAR(2000) NULL,
+  `usuarios_id` INT(11) NULL,
   PRIMARY KEY (`idGarantias`),
   INDEX `fk_garantias_usuarios1` (`usuarios_id` ASC),
   CONSTRAINT `fk_garantias_usuarios1`
@@ -174,10 +174,7 @@ CREATE TABLE `garantias` (
     REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE=InnoDB 
-DEFAULT CHARSET=utf8 
-COLLATE=utf8_bin
-AUTO_INCREMENT = 1;
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `os`
@@ -243,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `entrada`	TINYINT(1) NULL DEFAULT NULL,
   PRIMARY KEY (`idProdutos`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -283,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `servicos` (
   `preco` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`idServicos`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -341,25 +338,6 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   CONSTRAINT `fk_vendas_lancamentos1`
     FOREIGN KEY (`lancamentos_id`)
     REFERENCES `lancamentos` (`idLancamentos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `Garantia`
--- -----------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `garantias` (
-  `idGarantias` INT NOT NULL AUTO_INCREMENT,
-  `dataGarantia` DATE NULL,
-  `refGarantia` VARCHAR(15) NULL,
-  `textoGarantia` VARCHAR(2000) NULL,
-  `usuarios_id` INT(11) NULL,
-  PRIMARY KEY (`idGarantias`),
-  INDEX `fk_garantias_usuarios1` (`usuarios_id` ASC),
-  CONSTRAINT `fk_garantias_usuarios1`
-    FOREIGN KEY (`usuarios_id`)
-    REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
