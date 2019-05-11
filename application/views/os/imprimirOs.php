@@ -57,7 +57,7 @@ $totalProdutos = 0;?>
                                             <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
                                             <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
                                             <span>E-mail: <?php echo $result->email?></span><br>
-                                            <span>Celular: <?php echo $result->celular?></span>
+                                            <span>Celular: <?php echo $result->celular_cliente?></span>
                                         </li>
                                     </ul>
                                 </td>
@@ -226,7 +226,7 @@ $totalProdutos = 0;?>
                         </table>
                         <br />
                         <?php
-                            if($result->status == "Finalizado" || $result->status == "Orçamento"){
+                            if($result->status == "Finalizado"){
                                 ?>
                                 <table class="table table-bordered table-condensed ">
                                    

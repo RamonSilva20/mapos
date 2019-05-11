@@ -67,7 +67,7 @@
                             <th>Data</th>
                             <th>Tamanho</th>
                             <th>Extensão</th>
-                            <th></th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +97,7 @@
                         <th>Data</th>
                         <th>Tamanho</th>
                         <th>Extensão</th>
-                        <th></th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
