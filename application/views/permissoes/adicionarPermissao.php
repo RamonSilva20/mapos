@@ -195,6 +195,40 @@
                                     </td>
                                  
                                 </tr>
+
+                                <tr><td colspan="4"></td></tr>
+                                
+                                <tr>
+
+                                    <td>
+                                        <label>
+                                            <input name="vGarantia" class="marcar" type="checkbox" checked="checked" value="1" />
+                                            <span class="lbl"> Visualizar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="aGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="eGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Garantia</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input name="dGarantia" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Garantia</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
                                 
                                 <tr><td colspan="4"></td></tr>
 

@@ -19,7 +19,7 @@ if (!$results) { ?>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +47,7 @@ if (!$results) { ?>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>

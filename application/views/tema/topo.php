@@ -75,6 +75,12 @@
                         }; ?>"><a href="<?php echo base_url() ?>index.php/vendas"><i class="icon icon-shopping-cart"></i> <span>Vendas</span></a></li>
             <?php 
           } ?>
+          <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) { ?>
+            <li class="<?php if (isset($menuGarantia)) {
+                          echo 'active';
+                        }; ?>"><a href="<?php echo base_url() ?>index.php/garantias"><i class="icon icon-list-alt"></i> <span>Termos de Garantias</span></a></li>
+            <?php 
+          } ?>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
             <li class="<?php if (isset($menuArquivos)) {
                           echo 'active';
@@ -116,6 +122,10 @@
                   } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                     <li><a href="<?php echo base_url() ?>index.php/relatorios/vendas">Vendas</a></li>
+                    <?php 
+                  } ?>
+                  <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rGarantia')) { ?>
+                    <li><a href="<?php echo base_url() ?>index.php/relatorios/Garantias">Termo Garantia</a></li>
                     <?php 
                   } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) { ?>

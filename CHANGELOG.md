@@ -4,6 +4,21 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2019-05-10
+Por: Wilmerson Felipe[will.phelipe@gmail.com][https://github.com/willph]
+
+### Fixed
+- Corrigido exibição do Telefone em VizualizarOS e ImprimirOS
+
+### Changed
+- Padronização das Páginas para que todas tenha a palavra "Ações" referente aos botões vizualizar, adicionar, editar, excluir.
+- Adicionado campo Termo garantia em adicionarOS, editarOS referenciando ao termo garantia cadastrado.
+- Alterado Telefone para Celular do Cliente.
+
+### Added
+- Termo de Garantia referente ao request feature #253
+
+
 ## [3.3.2] - 2019-04-13
 ### Fixed
 - Corrigido exibição da label de status faturado em painel de visualização de cliente [@Pr3d4dor](https://github.com/Pr3d4dor).

@@ -14,6 +14,7 @@ $totalProdutos = 0;?>
                         echo '<a title="Icon Title" class="btn btn-mini btn-info" href="'.base_url().'index.php/os/editar/'.$result->idOs.'"><i class="icon-pencil icon-white"></i> Editar</a>';} ?>
                     
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url()?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
+                    <?php if($result->garantias_id){ ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url()?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="icon-text-width icon-white"></i> Imprimir Termo de Garantia</a> <?php  } ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -37,7 +38,6 @@ $totalProdutos = 0;?>
                                 <?php } ?>
                             </tbody>
                         </table>
-
             
                     <table class="table table-condensend">
                         <tbody>
@@ -50,7 +50,7 @@ $totalProdutos = 0;?>
                                             <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
                                             <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
                                             <span>E-mail: <?php echo $result->email?></span><br>
-                                            <span>Contato: <?php echo $result->telefone ?></span>
+                                            <span>Contato: <?php echo $result->celular_cliente ?></span>
                                         </li>
                                     </ul>
                                 </td>
@@ -59,7 +59,7 @@ $totalProdutos = 0;?>
                                         <li>
                                             <span><h5><b>RESPONSÁVEL</b></h5></span>
                                             <span><?php echo $result->nome?></span> <br/>
-                                            <span>Contato: <?php echo $result->celular?></span><br/>
+                                            <span>Contato: <?php echo $result->telefone?></span><br/>
                                             <span>Email: <?php echo $result->email_responsavel ?></span>
                                         </li>
                                     </ul>
@@ -72,12 +72,15 @@ $totalProdutos = 0;?>
 
                     <div style="margin-top: 0; padding-top: 0">
                         
-
                         <table class="table table-condensed">
                             <tbody>
-                                
                                 <?php if($result->dataInicial != null){?>
                                 <tr>
+                                    <td>
+                                    <b>STATUS OS: </b>
+                                    <?php echo $result->status?>
+                                    </td>
+
                                     <td>
                                     <b>DATA INICIAL: </b>
                                     <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
@@ -93,22 +96,25 @@ $totalProdutos = 0;?>
                                     <?php echo $result->garantia; ?>
                                     </td>
 
+                                    <td>
+                                    <b>TERMO GARANTIA: </b>
+                                    <?php echo $result->refGarantia; ?>
+                                    </td>
                                 </tr>
                                 <?php }?>
 
                                 <?php if($result->descricaoProduto != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>DESCRIÇÃO: </b>
                                     <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                     </td>
                                 </tr>
                                 <?php }?>
                                 
-
                                 <?php if($result->defeito != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>DEFEITO APRESENTADO: </b>
                                     <?php echo htmlspecialchars_decode($result->defeito) ?>
                                     </td>
@@ -117,7 +123,7 @@ $totalProdutos = 0;?>
                                 
                                 <?php if($result->observacoes != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>OBSERVAÇÕES: </b>
                                     <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                     </td>
@@ -126,7 +132,7 @@ $totalProdutos = 0;?>
 
                                 <?php if($result->laudoTecnico != null){?>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                     <b>LAUDO TÉCNICO: </b>
                                     <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                     </td>
@@ -196,8 +202,11 @@ $totalProdutos = 0;?>
                                         </tbody>
                                     </table>
                             <?php }?>
-                            <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
-                                                  
+                            <?php
+                            if($result->status == "Finalizado"){
+                                echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
+                            }
+                        ?>
                         </div>
                     </div>
                 </div>

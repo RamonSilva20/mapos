@@ -22,7 +22,7 @@ if (!$results) { ?>
                     <th>Telefone</th>
                     <th>Nível</th>
                     <th>Validade</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@ if (!$results) { ?>
                     <th>Telefone</th>
                     <th>Nível</th>
                     <th>Validade</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>

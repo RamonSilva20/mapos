@@ -35,7 +35,7 @@
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
                                 <?php if ($custom_error == true) { ?>
-                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
+                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente, responsável e garantia.<br />Ou se tem um cliente e um termo de garantia cadastrado.</div>
                                 <?php 
                             } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
@@ -74,6 +74,10 @@
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
                                             <input id="garantia" type="text" class="span12" name="garantia" value="" />
+                                            
+                                            <label for="termoGarantia">Termo Garantia</label>
+                                            <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="" />
+                                            <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="" />
                                         </div>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
@@ -124,6 +128,14 @@
                 $("#usuarios_id").val(ui.item.id);
             }
         });
+        $("#termoGarantia").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/os/autoCompleteTermoGarantia",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#garantias_id").val(ui.item.id);
+            }
+        });
+
         $("#formOs").validate({
             rules: {
                 cliente: {
@@ -138,6 +150,7 @@
                 dataFinal: {
                     required: true
                 }
+
             },
             messages: {
                 cliente: {
@@ -170,4 +183,5 @@
             lang: 'pt_br'
         });
     });
-</script> 
+</script>
+

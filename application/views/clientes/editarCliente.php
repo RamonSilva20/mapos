@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label">CNPJ<span class="required">*</span></label>
+                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
                             <input class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>"  />
                         </div>

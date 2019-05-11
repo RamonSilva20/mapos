@@ -38,6 +38,12 @@
                 <a href="<?= base_url() ?>index.php/vendas"><i class="icon-shopping-cart"></i> Vendas</a>
             </li>
             <?php endif ?>
+
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vTermoGarantia')) : ?>
+            <li class="bg_ls">
+                <a href="<?= base_url() ?>index.php/termoGarantias"><i class="icon-shopping-cart"></i> Termo Garantia</a>
+            </li>
+            <?php endif ?>
         </ul>
     </div>
 </div>
