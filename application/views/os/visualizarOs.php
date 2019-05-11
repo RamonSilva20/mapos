@@ -50,7 +50,7 @@ $totalProdutos = 0;?>
                                             <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
                                             <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
                                             <span>E-mail: <?php echo $result->email?></span><br>
-                                            <span>Contato: <?php echo $result->telefone ?></span>
+                                            <span>Contato: <?php echo $result->celular_cliente ?></span>
                                         </li>
                                     </ul>
                                 </td>
@@ -59,7 +59,7 @@ $totalProdutos = 0;?>
                                         <li>
                                             <span><h5><b>RESPONSÁVEL</b></h5></span>
                                             <span><?php echo $result->nome?></span> <br/>
-                                            <span>Contato: <?php echo $result->celular?></span><br/>
+                                            <span>Contato: <?php echo $result->telefone?></span><br/>
                                             <span>Email: <?php echo $result->email_responsavel ?></span>
                                         </li>
                                     </ul>
@@ -208,40 +208,12 @@ $totalProdutos = 0;?>
                                     </table>
                             <?php }?>
                             <?php
-                            if($result->status == "Finalizado" || $result->status == "Orçamento"){
+                            if($result->status == "Finalizado"){
                                 echo "<h4 style='text-align: right'>Valor Total: R$". number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
                             }
                             
                         ?>
-                                                <br />
-                        <?php
-                            if($result->status == "Finalizado"){
-                                ?>
-                                <table class="table table-bordered table-condensed ">
-                                   
-                                   <tbody>
-                                      
-                                       <tr>
-                                       <th><h4 class="text-vertical text-center">TERMO DE GARANTIA</h4></th>
-                                           <td>
-                                               <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
-
-                                           </td>
-                                          
-                                       </tr>
-
-                                   </tbody>
-
-                            <table class="table table-bordered table-condensed">                                      
-                                <tbody>
-                                        <tr> 
-                                            <td>Data <hr></td>
-                                            <td>Assinatura do Cliente <hr></td>
-                                            <td>Assinatura do Técnico Responsável <hr></td>
-                                        </tr>
-                                </tbody>
-                            </table>
-                    <?php } ?>  
+                                                  
                         </div>
                     </div>
                 </div>

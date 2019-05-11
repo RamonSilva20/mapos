@@ -21,7 +21,7 @@ if (!$results) { ?>
                     <th>Ref. Garantia</th>
                     <th>Termo de Garantia</th>
                     <th>Usuario</th>
-					<th></th>
+					<th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@ if (!$results) { ?>
                     <th>Ref. Garantia</th>
                     <th>Termo de Garantia</th>
                     <th>Usuario</th>
-					<th></th>
+					<th>Ações</th>
                 </tr>
             </thead>
             <tbody>

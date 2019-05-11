@@ -17,7 +17,7 @@ class Os_model extends CI_Model
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         
-        $this->db->select($fields.',clientes.nomeCliente, clientes.telefone as telefone_cliente');
+        $this->db->select($fields.',clientes.nomeCliente, clientes.celular as celular_cliente');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->limit($perpage, $start);
@@ -94,7 +94,7 @@ class Os_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->select('os.*, clientes.*, garantias.*, usuarios.celular, usuarios.email as email_responsavel,usuarios.nome');
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.*, usuarios.celular, usuarios.email as email_responsavel,usuarios.nome');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');

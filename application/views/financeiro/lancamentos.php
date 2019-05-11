@@ -100,7 +100,7 @@ if (!$results) {?>
             <th>Data Final</th>
             <th>Status</th>
             <th>Defeito</th>
-            <th></th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -137,7 +137,7 @@ if (!$results) {?>
 	    <th>Vencimento</th>
             <th>Status</th>
             <th>Valor</th>
-            <th></th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>

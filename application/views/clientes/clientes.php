@@ -24,7 +24,7 @@ if (!$results) { ?>
                     <th>CPF/CNPJ</th>
                     <th>Telefone</th>
                     <th>Email</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@ if (!$results) { ?>
                     <th>CPF/CNPJ</th>
                     <th>Telefone</th>
                     <th>Email</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>

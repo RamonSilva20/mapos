@@ -58,7 +58,7 @@ if (!$results) { ?>
                     <th>Valor Total</th>
                     <th>Status</th>
                     <th>T. Garantia</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,7 +92,7 @@ if (!$results) { ?>
                     <th>Valor Total</th>
                     <th>Status</th>
                     <th>T. Garantia</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>

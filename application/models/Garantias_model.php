@@ -7,7 +7,7 @@ class Garantias_model extends CI_Model
 
     /**
      * author: Wilmerson Felipe
-     * email: will.phelipe@gmail.com.br
+     * email: will.phelipe@gmail.com
      *
      */
 
