@@ -15,56 +15,43 @@
                 </span>
                 <h5>Editar Termo de Garantia</h5>
             </div>
-            <div class="widget-content nopadding">
-                <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
-                    <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Garantia</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab1">
-                            <div class="span12" id="divCadastrarOs">
-                                <?php if ($custom_error == true) { ?>
-                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
-                                <?php 
-                            } ?>
-                                <form action="<?php echo current_url(); ?>" method="post" id="formGarantia">
-                                    <?php echo form_hidden('idGarantias', $result->idGarantias) ?>
-                                    
-                                    <div class="span12" style="padding: 1%">
+            <div class="widget-content">
+                
+                <?php if ($custom_error) { ?>
+                    <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
+                <?php  } ?>
 
-                                        <div class="span2">
-                                                <label for="dataGarantia">Data</label>
-                                                <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y', strtotime($result->dataGarantia)); ?>" disabled />
-                                            </div>
-                                            <div class="span5">
-                                                <label for="usuarios_id">Responsável</label>
-                                                <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $result->nome ?>" disabled />
-                                                <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
-                                                
-                                            </div>
-                                            <div class="span5">
-                                                <label for="refGarantia">Ref. Garantia</label> 
-                                                <input id="refGarantia" class="span8" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>" disabled/>
-                                            </div>
-                                            <div class="span11" style="padding: 1%; margin-left: 0">
-                                                <label for="textoGarantia"><h4 class="text-center">Termo de Garantia</h4></label>
-                                                <textarea class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo $result->textoGarantia ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-actions">
-                                        <div class="span12">
-                                            <div class="span6 offset5">
-                                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                                <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
-                                            </div>
-                                        </div>
-                                
-                                    </div>
-                                </form>
-                            </div>
+                <form action="<?php echo current_url(); ?>" method="post" id="formGarantia">
+                   
+                    <div class="span12">
+                        <div class="span2">
+                            <label for="dataGarantia">Data</label>
+                            <?php echo form_hidden('idGarantias', $result->idGarantias) ?>
+                            <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y', strtotime($result->dataGarantia)); ?>" disabled />
+                        </div>
+                        <div class="span5">
+                            <label for="usuarios_id">Responsável</label>
+                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $result->nome ?>" disabled />
+                            
+                        </div>
+                        <div class="span5">
+                            <label for="refGarantia">Ref. Garantia</label> 
+                            <input id="refGarantia" class="span8" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>"/>
+                        </div>
+                        <div class="span12" style="margin-left: 0">
+                            <label for="textoGarantia"><h4 class="text-center">Termo de Garantia</h4></label>
+                            <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo $result->textoGarantia ?></textarea>
                         </div>
                     </div>
-                </div>
+                    
+                    <div class="span12" style="padding: 1%; margin-left: 0">
+                        <div class="span6 offset5">
+                            <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
+                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                        </div>
+                    </div>
+                </form>
+                .
             </div>
         </div>
     </div>

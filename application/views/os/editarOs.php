@@ -91,7 +91,7 @@
                                             <label for="garantia">Garantia</label>
                                             <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
 
-                                            <label for="termoGarantia">Termo Garantia<span class="required">*</span></label>
+                                            <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
                                             <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
                                         </div>
@@ -121,6 +121,7 @@
                                             <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
                                             <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-secondary"><i class="icon-eye-open"></i> Visualizar OS</a>
                                             <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url()?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
+                                            <?php if($result->garantias_id){ ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url()?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="icon-text-width icon-white"></i> Imprimir Termo de Garantia</a> <?php  } ?>
                                             <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
                                         </div>
                                     </div>

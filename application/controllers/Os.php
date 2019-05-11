@@ -9,7 +9,7 @@ class Os extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -22,12 +22,12 @@ class Os extends CI_Controller
         $this->data['menuOs'] = 'OS';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         $this->load->library('pagination');
@@ -89,9 +89,8 @@ class Os extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
-
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar O.S.');
@@ -136,7 +135,7 @@ class Os extends CI_Controller
                 'status' => set_value('status'),
                 'observacoes' => set_value('observacoes'),
                 'laudoTecnico' => set_value('laudoTecnico'),
-                'faturado' => 0
+                'faturado' => 0,
             );
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
@@ -172,7 +171,7 @@ class Os extends CI_Controller
                 'defeito' => set_value('defeito'),
                 'status' => set_value('status'),
                 'observacoes' => set_value('observacoes'),
-                'laudoTecnico' => set_value('laudoTecnico')
+                'laudoTecnico' => set_value('laudoTecnico'),
             );
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
@@ -185,7 +184,7 @@ class Os extends CI_Controller
         }
     }
 
-    function editar()
+    public function editar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -230,7 +229,7 @@ class Os extends CI_Controller
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id')
+                'clientes_id' => $this->input->post('clientes_id'),
             );
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
@@ -242,6 +241,7 @@ class Os extends CI_Controller
         }
 
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
@@ -296,7 +296,7 @@ class Os extends CI_Controller
         $this->load->view('os/imprimirOs', $this->data);
     }
 
-    function excluir()
+    public function excluir()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
@@ -304,7 +304,7 @@ class Os extends CI_Controller
             redirect(base_url());
         }
 
-        $id =  $this->input->post('id');
+        $id = $this->input->post('id');
         if ($id == null) {
 
             $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
@@ -321,7 +321,6 @@ class Os extends CI_Controller
         $this->db->delete('anexos');
 
         $this->os_model->delete('os', 'idOs', $id);
-
 
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
         redirect(base_url() . 'index.php/os/gerenciar/');
@@ -372,7 +371,6 @@ class Os extends CI_Controller
         }
     }
 
-
     public function autoCompleteServico()
     {
 
@@ -384,7 +382,6 @@ class Os extends CI_Controller
 
     public function adicionarProduto()
     {
-
 
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
@@ -407,7 +404,7 @@ class Os extends CI_Controller
         }
     }
 
-    function excluirProduto()
+    public function excluirProduto()
     {
 
         $ID = $this->input->post('idProduto');
@@ -415,7 +412,6 @@ class Os extends CI_Controller
 
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
-
 
             $sql = "UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?";
 
@@ -433,7 +429,7 @@ class Os extends CI_Controller
         $data = array(
             'servicos_id' => $this->input->post('idServico'),
             'os_id' => $this->input->post('idOsServico'),
-            'subTotal' => $this->input->post('precoServico')
+            'subTotal' => $this->input->post('precoServico'),
         );
 
         if ($this->os_model->add('servicos_os', $data) == true) {
@@ -444,7 +440,7 @@ class Os extends CI_Controller
         }
     }
 
-    function excluirServico()
+    public function excluirServico()
     {
         $ID = $this->input->post('idServico');
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
@@ -455,7 +451,6 @@ class Os extends CI_Controller
         }
     }
 
-
     public function anexar()
     {
 
@@ -463,9 +458,9 @@ class Os extends CI_Controller
         $this->load->library('image_lib');
 
         $upload_conf = array(
-            'upload_path'   => realpath('./assets/anexos'),
+            'upload_path' => realpath('./assets/anexos'),
             'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
-            'max_size'      => 0,
+            'max_size' => 0,
         );
 
         $this->upload->initialize($upload_conf);
@@ -479,7 +474,6 @@ class Os extends CI_Controller
             }
         }
         unset($_FILES['userfile']);
-
 
         $error = array();
         $success = array();
@@ -496,10 +490,10 @@ class Os extends CI_Controller
                     // set the resize config
                     $resize_conf = array(
 
-                        'source_image'  => $upload_data['full_path'],
-                        'new_image'     => $upload_data['file_path'] . 'thumbs/thumb_' . $upload_data['file_name'],
-                        'width'         => 200,
-                        'height'        => 125
+                        'source_image' => $upload_data['full_path'],
+                        'new_image' => $upload_data['file_path'] . 'thumbs/thumb_' . $upload_data['file_name'],
+                        'width' => 200,
+                        'height' => 125,
                     );
 
                     $this->image_lib->initialize($resize_conf);
@@ -522,14 +516,12 @@ class Os extends CI_Controller
             }
         }
 
-
         if (count($error) > 0) {
             echo json_encode(array('result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.'));
         } else {
             echo json_encode(array('result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .'));
         }
     }
-
 
     public function excluirAnexo($id = null)
     {
@@ -555,7 +547,6 @@ class Os extends CI_Controller
         }
     }
 
-
     public function downloadanexo($id = null)
     {
 
@@ -574,18 +565,15 @@ class Os extends CI_Controller
         }
     }
 
-
     public function faturar()
     {
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
 
             $vencimento = $this->input->post('vencimento');
             $recebimento = $this->input->post('recebimento');
@@ -612,7 +600,7 @@ class Os extends CI_Controller
                 'baixado' => $this->input->post('recebido') ?: 0,
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo')
+                'tipo' => $this->input->post('tipo'),
             );
 
             if ($this->os_model->add('lancamentos', $data) == true) {
@@ -626,19 +614,19 @@ class Os extends CI_Controller
                 $this->db->update('os');
 
                 $this->session->set_flashdata('success', 'OS faturada com sucesso!');
-                $json = array('result' =>  true);
+                $json = array('result' => true);
                 echo json_encode($json);
                 die();
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
-                $json = array('result' =>  false);
+                $json = array('result' => false);
                 echo json_encode($json);
                 die();
             }
         }
 
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
-        $json = array('result' =>  false);
+        $json = array('result' => false);
         echo json_encode($json);
     }
 }

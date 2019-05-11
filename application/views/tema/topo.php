@@ -78,7 +78,7 @@
           <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) { ?>
             <li class="<?php if (isset($menuGarantia)) {
                           echo 'active';
-                        }; ?>"><a href="<?php echo base_url() ?>index.php/garantias"><i class="icon icon-list-alt"></i> <span>Termo Garantia</span></a></li>
+                        }; ?>"><a href="<?php echo base_url() ?>index.php/garantias"><i class="icon icon-list-alt"></i> <span>Termos de Garantias</span></a></li>
             <?php 
           } ?>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
