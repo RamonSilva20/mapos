@@ -20,8 +20,7 @@
                             <div class="span12" id="divCadastrarOs">
                                 <?php if ($custom_error == true) { ?>
                                 <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
-                                <?php 
-                            } ?>
+                                <?php } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span2">
@@ -50,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                &nbsp
             </div>
         </div>
     </div>

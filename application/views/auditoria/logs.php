@@ -5,7 +5,7 @@
         <span class="icon">
             <i class="icon-time"></i>
         </span>
-        <h5>Atividades</h5>
+        <h5>Logs</h5>
     </div>
     <div class="widget-content nopadding">
         <table class="table table-bordered ">

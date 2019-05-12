@@ -17,7 +17,7 @@ class Auditoria extends CI_Controller
 
         $this->load->model('Audit_model');
         $this->data['menuConfiguracoes'] = 'Auditoria';
-        
+
     }
 
     public function index()
@@ -56,11 +56,14 @@ class Auditoria extends CI_Controller
 
     }
 
-    public function clean(){
-        
-        if($this->Audit_model->clean()){
+    public function clean()
+    {
+
+        if ($this->Audit_model->clean()) {
             log_info('Efetuou limpeza de logs');
             $this->session->set_flashdata('success', 'Limpeza de logs realizada com sucesso.');
+        } else {
+            $this->session->set_flashdata('error', 'Nenhum log com mais de 30 dias encontrado.');
         }
         redirect(site_url('auditoria'));
     }
