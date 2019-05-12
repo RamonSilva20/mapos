@@ -137,27 +137,25 @@
             <?php 
           } ?>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')  || $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') || $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-            <li class="submenu <?php if (isset($menuConfiguracoes)) {
-                                  echo 'active open';
-                                }; ?>">
+            <li class="submenu <?php if (isset($menuConfiguracoes)) { echo 'active open'; }; ?>">
                 <a href="#"><i class="icon icon-cog"></i> <span>Configurações</span> <span class="label"><i class="icon-chevron-down"></i></span></a>
                 <ul>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
-                    <li><a href="<?php echo base_url() ?>index.php/usuarios">Usuários</a></li>
-                    <?php 
-                  } ?>
+                    <li><a href="<?php echo site_url('usuarios') ?>">Usuários</a></li>
+                    <?php } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
-                    <li><a href="<?php echo base_url() ?>index.php/mapos/emitente">Emitente</a></li>
-                    <?php 
-                  } ?>
+                    <li><a href="<?php echo site_url('mapos/emitente') ?>">Emitente</a></li>
+                    <?php } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                    <li><a href="<?php echo base_url() ?>index.php/permissoes">Permissões</a></li>
-                    <?php 
-                  } ?>
+                      <li><a href="<?php echo site_url('permissoes') ?>">Permissões</a></li>
+                    <?php } ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cAuditoria')) { ?>
+                      <li><a href="<?php echo site_url('auditoria') ?>">Auditoria</a></li>
+                    <?php } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-                    <li><a href="<?php echo base_url() ?>index.php/mapos/backup">Backup</a></li>
-                    <?php 
-                  } ?>
+                      <li><a href="<?php echo site_url('mapos_backup') ?>">Backup</a></li>
+                    <?php } ?>
+
                 </ul>
             </li>
             <?php 

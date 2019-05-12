@@ -129,6 +129,7 @@ class Permissoes extends CI_Controller
                 'cEmitente' => $this->input->post('cEmitente'),
                 'cPermissao' => $this->input->post('cPermissao'),
                 'cBackup' => $this->input->post('cBackup'),
+                'cAuditoria' => $this->input->post('cAuditoria'),
 
                 'rCliente' => $this->input->post('rCliente'),
                 'rProduto' => $this->input->post('rProduto'),
@@ -220,6 +221,7 @@ class Permissoes extends CI_Controller
                 'cEmitente' => $this->input->post('cEmitente'),
                 'cPermissao' => $this->input->post('cPermissao'),
                 'cBackup' => $this->input->post('cBackup'),
+                'cAuditoria' => $this->input->post('cAuditoria'),
 
                 'rCliente' => $this->input->post('rCliente'),
                 'rProduto' => $this->input->post('rProduto'),

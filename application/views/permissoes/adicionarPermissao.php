@@ -1,8 +1,8 @@
 <div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url();?>index.php/permissoes/adicionar" id="formPermissao" method="post">
+    <form action="<?php echo base_url(); ?>index.php/permissoes/adicionar" id="formPermissao" method="post">
 
     <div class="span12" style="margin-left: 0">
-        
+
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
@@ -11,7 +11,7 @@
                 <h5>Cadastro de Permissão</h5>
             </div>
             <div class="widget-content">
-                
+
                 <div class="span6">
                     <label>Nome da Permissão</label>
                     <input name="nome" type="text" id="nome" class="span12" />
@@ -61,7 +61,7 @@
                                             <span class="lbl"> Excluir Cliente</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
@@ -94,10 +94,10 @@
                                             <span class="lbl"> Excluir Produto</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -127,9 +127,9 @@
                                             <span class="lbl"> Excluir Serviço</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
-                                
+
                                 <tr><td colspan="4"></td></tr>
                                 <tr>
 
@@ -160,10 +160,10 @@
                                             <span class="lbl"> Excluir OS</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -193,11 +193,11 @@
                                             <span class="lbl"> Excluir Venda</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -227,9 +227,9 @@
                                             <span class="lbl"> Excluir Garantia</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
-                                
+
                                 <tr><td colspan="4"></td></tr>
 
                                 <tr>
@@ -261,9 +261,9 @@
                                             <span class="lbl"> Excluir Arquivo</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
-                                
+
                                 <tr><td colspan="4"></td></tr>
 
                                 <tr>
@@ -295,7 +295,7 @@
                                             <span class="lbl"> Excluir Lançamento</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
@@ -329,7 +329,7 @@
                                             <span class="lbl"> Relatório Produto</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr>
@@ -348,7 +348,7 @@
                                         </label>
                                     </td>
                                     <td colspan="2"></td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
 
@@ -381,7 +381,19 @@
                                             <span class="lbl"> Backup</span>
                                         </label>
                                     </td>
-                                 
+
+                                </tr>
+
+                                <tr><td colspan="4"></td></tr>
+
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input name="cAuditoria" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Auditoria</span>
+                                        </label>
+                                    </td>
+                                    <td colspan="3"></td>
                                 </tr>
 
                             </tbody>
@@ -389,8 +401,8 @@
                     </div>
                 </div>
 
-              
-    
+
+
             <div class="form-actions">
                 <div class="span12">
                     <div class="span6 offset3">
@@ -399,11 +411,11 @@
                     </div>
                 </div>
             </div>
-           
+
             </div>
         </div>
 
-                   
+
     </div>
 
 </form>
@@ -411,16 +423,16 @@
 </div>
 
 
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
 
     $("#marcarTodos").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
     });
-       
 
- 
+
+
     $("#formPermissao").validate({
         rules :{
             nome: {required: true}
@@ -428,9 +440,9 @@
         messages:{
             nome: {required: 'Campo obrigatório'}
         }
-    });     
+    });
 
-        
+
 
     });
 </script>

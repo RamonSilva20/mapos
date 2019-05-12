@@ -561,15 +561,21 @@
 
                                     <td>
                                         <label>
-                                            <input <?php if (isset($permissoes['cBackup'])) {
-                                                if ($permissoes['cBackup'] == '1') {
-                                                    echo 'checked';
-                                                }
-}?> name="cBackup" class="marcar" type="checkbox" value="1" />
+                                            <input <?php if (isset($permissoes['cBackup'])) { if ($permissoes['cBackup'] == '1') { echo 'checked'; } }?> name="cBackup" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Backup</span>
                                         </label>
                                     </td>
                                  
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input <?php echo (isset($permissoes['cAuditoria']) && $permissoes['cAuditoria'] == 1 ) ? 'checked' : ''; ?> name="cAuditoria" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Auditoria</span>
+                                        </label>
+                                    </td>
+                                    <td colspan="3"></td>
                                 </tr>
 
                             </tbody>
