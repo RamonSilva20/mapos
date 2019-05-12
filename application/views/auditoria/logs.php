@@ -30,7 +30,7 @@
                 } ?>
                 <?php if(!$results) { ?>
                     <tr>
-                        <td>Nenhum registro encontrado.</td>
+                        <td colspan="5">Nenhum registro encontrado.</td>
                     </tr>
                 <?php } ?>
             </tbody>

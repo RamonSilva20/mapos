@@ -90,6 +90,7 @@ class Garantias extends CI_Controller
             );
 
             if (is_numeric($id = $this->garantias_model->add('garantias', $data, true))) {
+                log_info('Adicionou uma garantia');
                 $this->session->set_flashdata('success', 'Termo de Garantia adicionado com sucesso.');
                 redirect('garantias/editar/' . $id);
             } else {
@@ -129,6 +130,7 @@ class Garantias extends CI_Controller
 
             if ($this->garantias_model->edit('garantias', $data, 'idGarantias', $this->input->post('idGarantias')) == true) {
                 $this->session->set_flashdata('success', 'Termo de garantia editada com sucesso!');
+                log_info('Alterou uma garantia. ID: ' . $this->input->post('idGarantias'));
                 redirect(base_url() . 'index.php/garantias/editar/' . $this->input->post('idGarantias'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -202,6 +204,7 @@ class Garantias extends CI_Controller
 
             $this->garantias_model->delete('garantias', 'idGarantias', $ID);
             $this->session->set_flashdata('success', 'Termo de garantia excluída com sucesso!');
+            log_info('Removeu uma garantia. ID: '.$ID);
 
         } else {
 

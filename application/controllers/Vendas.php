@@ -103,6 +103,7 @@ class Vendas extends CI_Controller
 
             if (is_numeric($id = $this->vendas_model->add('vendas', $data, true))) {
                 $this->session->set_flashdata('success', 'Venda iniciada com sucesso, adicione os produtos.');
+                log_info('Adicionou uma venda.');
                 redirect('vendas/editar/' . $id);
             } else {
 
@@ -154,6 +155,7 @@ class Vendas extends CI_Controller
 
             if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas')) == true) {
                 $this->session->set_flashdata('success', 'Venda editada com sucesso!');
+                log_info('Alterou uma venda. ID: ' . $this->input->post('idVendas'));
                 redirect(base_url() . 'index.php/vendas/editar/' . $this->input->post('idVendas'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -232,6 +234,8 @@ class Vendas extends CI_Controller
         $this->db->where('idVendas', $id);
         $this->db->delete('vendas');
 
+        log_info('Removeu uma venda. ID: ' . $id);
+
         $this->session->set_flashdata('success', 'Venda excluída com sucesso!');
         redirect(base_url() . 'index.php/vendas/gerenciar/');
     }
@@ -297,6 +301,8 @@ class Vendas extends CI_Controller
                 $sql = "UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?";
                 $this->db->query($sql, array($quantidade, $produto));
 
+                log_info('Adicionou produto a uma venda.');
+
                 echo json_encode(array('result' => true));
             } else {
                 echo json_encode(array('result' => false));
@@ -323,6 +329,7 @@ class Vendas extends CI_Controller
 
             $this->db->query($sql, array($quantidade, $produto));
 
+            log_info('Removeu produto de uma venda.');
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -385,6 +392,8 @@ class Vendas extends CI_Controller
                 $this->db->set('valorTotal', $this->input->post('valor'));
                 $this->db->where('idVendas', $venda);
                 $this->db->update('vendas');
+
+                log_info('Faturou uma venda.');
 
                 $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
                 $json = array('result' =>  true);

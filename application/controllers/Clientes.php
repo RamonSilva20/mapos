@@ -96,6 +96,7 @@ class Clientes extends CI_Controller
 
             if ($this->clientes_model->add('clientes', $data) == true) {
                 $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
+                log_info('Adicionou um cliente.');
                 redirect(base_url() . 'index.php/clientes/adicionar/');
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
@@ -141,6 +142,7 @@ class Clientes extends CI_Controller
 
             if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
+                log_info('Alterou um cliente. ID'. $this->input->post('idClientes'));
                 redirect(base_url() . 'index.php/clientes/editar/' . $this->input->post('idClientes'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -233,7 +235,7 @@ class Clientes extends CI_Controller
 
 
         $this->clientes_model->delete('clientes', 'idClientes', $id);
-
+        log_info('Removeu um cliente. ID'. $id);
         $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
         redirect(base_url() . 'index.php/clientes/gerenciar/');
     }

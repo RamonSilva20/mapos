@@ -234,6 +234,7 @@ class Financeiro extends CI_Controller
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Receita adicionada com sucesso!');
+                log_info('Adicionou uma receita');
                 redirect($urlAtual);
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
@@ -299,6 +300,7 @@ class Financeiro extends CI_Controller
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Despesa adicionada com sucesso!');
+                log_info('Adicionou uma despesa');
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar despesa!');
@@ -359,6 +361,7 @@ class Financeiro extends CI_Controller
 
             if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
+                log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar editar lançamento!');
@@ -399,6 +402,7 @@ class Financeiro extends CI_Controller
 
             $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
             if ($result) {
+                log_info('Removeu um lançamento. ID: '. $id );
                 $json = array('result' =>  true);
                 echo json_encode($json);
             } else {

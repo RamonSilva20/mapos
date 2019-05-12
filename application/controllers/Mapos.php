@@ -186,6 +186,8 @@ class Mapos extends CI_Controller
         $this->load->helper('file');
         write_file(base_url() . 'backup/backup.zip', $backup);
 
+        log_info('Efetuou backup do banco de dados.');
+
         $this->load->helper('download');
         force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
     }
@@ -296,6 +298,7 @@ class Mapos extends CI_Controller
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
+                log_info('Adicionou informações de emitente.');
                 redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
@@ -350,6 +353,7 @@ class Mapos extends CI_Controller
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
+                log_info('Alterou informações de emitente.');
                 redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
@@ -385,6 +389,7 @@ class Mapos extends CI_Controller
         if ($retorno) {
 
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
+            log_info('Alterou a logomarca do emitente.');
             redirect(base_url() . 'index.php/mapos/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');

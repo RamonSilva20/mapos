@@ -28,7 +28,7 @@ class Relatorios extends CI_Controller
 
     public function index()
     {
-        header('Location: ./');
+        redirect(base_url());
     }
 
     public function clientes()

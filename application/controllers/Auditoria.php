@@ -9,6 +9,12 @@ class Auditoria extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cAuditoria')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar logs do sistema.');
+            redirect(base_url());
+        }
+
         $this->load->model('Audit_model');
         $this->data['menuConfiguracoes'] = 'Auditoria';
         
@@ -16,11 +22,6 @@ class Auditoria extends CI_Controller
 
     public function index()
     {
-
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cAuditoria')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar logs do sistema.');
-            redirect(base_url());
-        }
 
         $this->load->library('pagination');
 
@@ -57,6 +58,11 @@ class Auditoria extends CI_Controller
 
     public function clean(){
         
+        if($this->Audit_model->clean()){
+            log_info('Efetuou limpeza de logs');
+            $this->session->set_flashdata('success', 'Limpeza de logs realizada com sucesso.');
+        }
+        redirect(site_url('auditoria'));
     }
 
 }

@@ -41,6 +41,15 @@ class Audit_model extends CI_Model
     public function clean()
     {
         
+        $this->db->where('data <', date('Y-m-d', strtotime('- 30 days')));
+        $this->db->delete('logs');
+
+        if ($this->db->affected_rows()) {
+            return true;
+        }
+
+        return false;
+        
     }
 }
 

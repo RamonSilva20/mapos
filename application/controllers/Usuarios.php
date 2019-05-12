@@ -100,6 +100,7 @@ class Usuarios extends CI_Controller
 
             if ($this->usuarios_model->add('usuarios', $data) == true) {
                 $this->session->set_flashdata('success', 'Usuário cadastrado com sucesso!');
+                log_info('Adicionou um usuário.');
                 redirect(base_url() . 'index.php/usuarios/adicionar/');
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
@@ -189,6 +190,7 @@ class Usuarios extends CI_Controller
 
             if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
                 $this->session->set_flashdata('success', 'Usuário editado com sucesso!');
+                log_info('Alterou um usuário. ID: ' . $this->input->post('idUsuarios'));
                 redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -208,6 +210,9 @@ class Usuarios extends CI_Controller
 
         $ID =  $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $ID);
+
+        log_info('Removeu um usuário. ID: ' . $ID);
+
         redirect(base_url() . 'index.php/usuarios/gerenciar/');
     }
 }
