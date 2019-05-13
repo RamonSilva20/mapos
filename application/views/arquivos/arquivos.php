@@ -116,16 +116,16 @@
                                         class="btn tip-top"
                                         title="Imprimir">
                                         <i class="icon-print"></i>
-                                    </a>';
+                                    </a>
                                 <?php endif ?>
 
                                 <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')): ?>
-                                    <a  href="<?=base_url()?>index.php/arquivos/download/<?=$r->idDocumentos?>"
+                                    <a  href="<?=base_url()?>index.php/arquivos/download/<?= $r->idDocumentos; ?>"
                                         class="btn tip-top"
                                         style="margin-right: 1%"
                                         title="Download">
                                         <i class="icon-download-alt"></i>
-                                    </a>';
+                                    </a>
                                 <?php endif ?>
 
                                 <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
@@ -134,7 +134,7 @@
                                         style="margin-right: 1%"
                                         title="Editar">
                                         <i class="icon-pencil icon-white"></i>
-                                    </a>';
+                                    </a>
                                 <?php endif?>
 
                                 <?php if($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) :?>
@@ -146,7 +146,7 @@
                                         class="btn btn-danger tip-top"
                                         title="Excluir Arquivo">
                                         <i class="icon-remove icon-white"></i>
-                                    </a>';
+                                    </a>
                                 <?php endif ?>
                             </td>
                         </tr>

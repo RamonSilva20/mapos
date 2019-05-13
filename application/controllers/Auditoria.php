@@ -25,9 +25,9 @@ class Auditoria extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url('auditoria');
+        $config['base_url'] = site_url('auditoria/index/');
         $config['total_rows'] = $this->Audit_model->count('logs');
-        $config['per_page'] = 10;
+        $config['per_page'] = 20;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
         $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
