@@ -140,6 +140,7 @@ class Os extends CI_Controller
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
+                log_info('Adicionou uma OS');
                 redirect('os/editar/' . $id);
             } else {
 
@@ -234,6 +235,7 @@ class Os extends CI_Controller
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
+                log_info('Alterou uma OS. ID: ' . $this->input->post('idGarantias'));
                 redirect(base_url() . 'index.php/os/editar/' . $this->input->post('idOs'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -322,6 +324,7 @@ class Os extends CI_Controller
 
         $this->os_model->delete('os', 'idOs', $id);
 
+        log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
         redirect(base_url() . 'index.php/os/gerenciar/');
     }
@@ -397,7 +400,7 @@ class Os extends CI_Controller
         if ($this->os_model->add('produtos_os', $data) == true) {
             $sql = "UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?";
             $this->db->query($sql, array($quantidade, $produto));
-
+            log_info('Adicionou produto a uma OS.');
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -417,6 +420,8 @@ class Os extends CI_Controller
 
             $this->db->query($sql, array($quantidade, $produto));
 
+            log_info('Removeu produto de uma OS.');
+
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -434,6 +439,7 @@ class Os extends CI_Controller
 
         if ($this->os_model->add('servicos_os', $data) == true) {
 
+            log_info('Adicionou serviço a uma OS.');
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -445,6 +451,7 @@ class Os extends CI_Controller
         $ID = $this->input->post('idServico');
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
 
+            log_info('Removeu serviço de uma OS.');
             echo json_encode(array('result' => true));
         } else {
             echo json_encode(array('result' => false));
@@ -519,6 +526,8 @@ class Os extends CI_Controller
         if (count($error) > 0) {
             echo json_encode(array('result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.'));
         } else {
+
+            log_info('Adicionou anexo(s) a uma OS.');
             echo json_encode(array('result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .'));
         }
     }
@@ -540,6 +549,7 @@ class Os extends CI_Controller
 
             if ($this->os_model->delete('anexos', 'idAnexos', $id) == true) {
 
+                log_info('Removeu anexo de uma OS.');
                 echo json_encode(array('result' => true, 'mensagem' => 'Anexo excluído com sucesso.'));
             } else {
                 echo json_encode(array('result' => false, 'mensagem' => 'Erro ao tentar excluir anexo.'));
@@ -612,6 +622,8 @@ class Os extends CI_Controller
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
+
+                log_info('Faturou uma OS. ID: '. $os);
 
                 $this->session->set_flashdata('success', 'OS faturada com sucesso!');
                 $json = array('result' => true);
