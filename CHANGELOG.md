@@ -8,7 +8,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [3.5.1] - 2019-05-13
 
 ### Fixed
-- Removendo obrigatoriedade do campo de garantias na tabela de OS para evitar erro ao não preenchimento no cadastro. [@RamonSilva20](https://github.com/RamonSilva20).
+- Removendo obrigatoriedade do campo de garantias na tabela de OS para evitar erro ao não preencher no cadastro. [@RamonSilva20](https://github.com/RamonSilva20).
 
 ### Changed
 - Alterando insert de usuário com permissão para o módulo de auditoria no arquivo sql. [@RamonSilva20](https://github.com/RamonSilva20)
