@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2019-05-12
+
+### Added
+- Adicionando modulo de auditoria para monitoramento de atividades no sistema. [@RamonSilva20](https://github.com/RamonSilva20).
+
 ## [3.4.0] - 2019-05-10
 Por: Wilmerson Felipe[will.phelipe@gmail.com][https://github.com/willph]
 
