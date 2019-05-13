@@ -1,6 +1,4 @@
-<?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Financeiro extends CI_Controller
 {
@@ -62,7 +60,6 @@ class Financeiro extends CI_Controller
                 $where = 'data_vencimento = "' . date('Y-m-d' . '"');
             } // fim lançamentos dia
 
-
             else {
 
                 // busca lançamentos da semana
@@ -91,7 +88,6 @@ class Financeiro extends CI_Controller
                 else {
 
                     // busca lançamento do mês
-
 
                     if ($periodo == 'mes') {
 
@@ -142,8 +138,6 @@ class Financeiro extends CI_Controller
             }
         }
 
-
-
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . '/financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
@@ -177,9 +171,7 @@ class Financeiro extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-
-
-    function adicionarReceita()
+    public function adicionarReceita()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
@@ -193,7 +185,6 @@ class Financeiro extends CI_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
 
             $vencimento = $this->input->post('vencimento');
             $recebimento = $this->input->post('recebimento');
@@ -229,7 +220,7 @@ class Financeiro extends CI_Controller
                 'baixado' => $this->input->post('recebido') ?: 0,
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => set_value('tipo')
+                'tipo' => set_value('tipo'),
             );
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
@@ -245,8 +236,7 @@ class Financeiro extends CI_Controller
         redirect($urlAtual);
     }
 
-
-    function adicionarDespesa()
+    public function adicionarDespesa()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
@@ -295,7 +285,7 @@ class Financeiro extends CI_Controller
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => set_value('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => set_value('tipo')
+                'tipo' => set_value('tipo'),
             );
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
@@ -311,7 +301,6 @@ class Financeiro extends CI_Controller
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar despesa.');
         redirect($urlAtual);
     }
-
 
     public function editar()
     {
@@ -356,7 +345,7 @@ class Financeiro extends CI_Controller
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo')
+                'tipo' => $this->input->post('tipo'),
             );
 
             if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
@@ -380,7 +369,7 @@ class Financeiro extends CI_Controller
             'baixado' => $this->input->post('pago'),
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
-            'tipo' => $this->input->post('tipo')
+            'tipo' => $this->input->post('tipo'),
         );
         print_r($data);
     }
@@ -396,24 +385,21 @@ class Financeiro extends CI_Controller
         $id = $this->input->post('id');
 
         if ($id == null || !is_numeric($id)) {
-            $json = array('result' =>  false);
+            $json = array('result' => false);
             echo json_encode($json);
         } else {
 
             $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
             if ($result) {
-                log_info('Removeu um lançamento. ID: '. $id );
-                $json = array('result' =>  true);
+                log_info('Removeu um lançamento. ID: ' . $id);
+                $json = array('result' => true);
                 echo json_encode($json);
             } else {
-                $json = array('result' =>  false);
+                $json = array('result' => false);
                 echo json_encode($json);
             }
         }
     }
-
-
-
 
     protected function getThisYear()
     {

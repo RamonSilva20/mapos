@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Os extends CI_Controller
 {
@@ -623,7 +623,7 @@ class Os extends CI_Controller
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
 
-                log_info('Faturou uma OS. ID: '. $os);
+                log_info('Faturou uma OS. ID: ' . $os);
 
                 $this->session->set_flashdata('success', 'OS faturada com sucesso!');
                 $json = array('result' => true);

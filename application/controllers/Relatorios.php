@@ -1,10 +1,7 @@
-<?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Relatorios extends CI_Controller
 {
-
 
     /**
      * author: Ramon Silva
@@ -223,7 +220,7 @@ class Relatorios extends CI_Controller
         $this->load->helper('mpdf');
 
         $title = $status == null ? 'Todas' : $status;
-        $user =  $responsavel == null ? 'Não foi selecionado' : $this->Usuarios_model->get(1, intval($responsavel) - 1);
+        $user = $responsavel == null ? 'Não foi selecionado' : $this->Usuarios_model->get(1, intval($responsavel) - 1);
 
         $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status);
         $emitente = $this->Mapos_model->getEmitente();
@@ -234,7 +231,7 @@ class Relatorios extends CI_Controller
         $data['res_nome'] = $usuario;
 
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
-        $data['dataFinal'] = $dataFinal != null ?  date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
+        $data['dataFinal'] = $dataFinal != null ? date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
 
         if ($emitente) {
             $data['em_nome'] = $emitente[0]->nome;
@@ -247,7 +244,6 @@ class Relatorios extends CI_Controller
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
-
     public function financeiro()
     {
 
@@ -259,7 +255,6 @@ class Relatorios extends CI_Controller
         $this->data['view'] = 'relatorios/rel_financeiro';
         $this->load->view('tema/topo', $this->data);
     }
-
 
     public function financeiroRapid()
     {
@@ -293,8 +288,6 @@ class Relatorios extends CI_Controller
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
         pdf_create($html, 'relatorio_financeiro' . date('d/m/y'), true);
     }
-
-
 
     public function vendas()
     {

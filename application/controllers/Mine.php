@@ -1,10 +1,7 @@
-<?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Mine extends CI_Controller
 {
-
 
     public function __construct()
     {
@@ -46,7 +43,6 @@ class Mine extends CI_Controller
             $email = $this->input->post('email');
             $documento = $this->input->post('documento');
 
-
             $this->db->where('email', $email);
             $this->db->where('documento', $documento);
             $this->db->limit(1);
@@ -64,7 +60,6 @@ class Mine extends CI_Controller
                 }
             } else {
 
-
                 if ($ajax == true) {
                     $json = array('result' => false);
                     echo json_encode($json);
@@ -78,7 +73,6 @@ class Mine extends CI_Controller
 
     public function painel()
     {
-
 
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
@@ -104,7 +98,6 @@ class Mine extends CI_Controller
         $data['output'] = 'conecte/conta';
         $this->load->view('conecte/template', $data);
     }
-
 
     public function editarDados($id = null)
     {
@@ -132,13 +125,13 @@ class Mine extends CI_Controller
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
-                'cep' => $this->input->post('cep')
+                'cep' => $this->input->post('cep'),
             );
 
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
                 redirect(base_url() . 'index.php/mine/conta');
-            } else { }
+            } else {}
         }
 
         $data['result'] = $this->Conecte_model->getDados();
@@ -156,7 +149,6 @@ class Mine extends CI_Controller
 
         $data['menuVendas'] = 'vendas';
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/mine/compras/';
         $config['total_rows'] = $this->Conecte_model->count('vendas', $this->session->userdata('cliente_id'));
@@ -197,7 +189,6 @@ class Mine extends CI_Controller
 
         $data['menuOs'] = 'os';
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/mine/os/';
         $config['total_rows'] = $this->Conecte_model->count('os', $this->session->userdata('cliente_id'));
@@ -298,7 +289,6 @@ class Mine extends CI_Controller
             redirect('mine/painel');
         }
 
-
         $data['output'] = 'conecte/visualizar_compra';
         $this->load->view('conecte/template', $data);
     }
@@ -323,10 +313,8 @@ class Mine extends CI_Controller
             redirect('mine/painel');
         }
 
-
         $this->load->view('conecte/imprimirVenda', $data);
     }
-
 
     public function minha_ordem_de_servico($y = null, $when = null)
     {
@@ -341,7 +329,6 @@ class Mine extends CI_Controller
 
             $y = intval($y);
             $id = ($y - 44023) / 7653;
-
 
             $data['menuOs'] = 'os';
             $this->data['custom_error'] = '';
@@ -366,7 +353,6 @@ class Mine extends CI_Controller
         }
     }
 
-
     // Cadastro de OS pelo cliente
     public function adicionarOs()
     {
@@ -376,7 +362,6 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('descricaoProduto', 'Descrição', 'required');
         $this->form_validation->set_rules('defeito', 'Defeito');
         $this->form_validation->set_rules('observacoes', 'Observações');
-
 
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
@@ -408,7 +393,7 @@ class Mine extends CI_Controller
                 'defeito' => $this->input->post('defeito'),
                 'status' => 'Aberto',
                 'observacoes' => set_value('observacoes'),
-                'faturado' => 0
+                'faturado' => 0,
             );
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
@@ -471,7 +456,7 @@ class Mine extends CI_Controller
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
-                'dataCadastro' => date('Y-m-d')
+                'dataCadastro' => date('Y-m-d'),
             );
 
             if ($this->clientes_model->add('clientes', $data) == true) {

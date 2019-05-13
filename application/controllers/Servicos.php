@@ -1,8 +1,7 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Servicos extends CI_Controller
 {
-
 
     /**
      * author: Ramon Silva
@@ -10,7 +9,7 @@ class Servicos extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
@@ -22,12 +21,12 @@ class Servicos extends CI_Controller
         $this->data['menuServicos'] = 'Serviços';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) {
@@ -36,7 +35,6 @@ class Servicos extends CI_Controller
         }
 
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/servicos/gerenciar/';
         $config['total_rows'] = $this->servicos_model->count('servicos');
@@ -68,7 +66,7 @@ class Servicos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar serviços.');
@@ -87,7 +85,7 @@ class Servicos extends CI_Controller
             $data = array(
                 'nome' => set_value('nome'),
                 'descricao' => set_value('descricao'),
-                'preco' => $preco
+                'preco' => $preco,
             );
 
             if ($this->servicos_model->add('servicos', $data) == true) {
@@ -102,7 +100,7 @@ class Servicos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function editar()
+    public function editar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar serviços.');
@@ -119,7 +117,7 @@ class Servicos extends CI_Controller
             $data = array(
                 'nome' => $this->input->post('nome'),
                 'descricao' => $this->input->post('descricao'),
-                'preco' => $preco
+                'preco' => $preco,
             );
 
             if ($this->servicos_model->edit('servicos', $data, 'idServicos', $this->input->post('idServicos')) == true) {
@@ -137,7 +135,7 @@ class Servicos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function excluir()
+    public function excluir()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
@@ -145,8 +143,7 @@ class Servicos extends CI_Controller
             redirect(base_url());
         }
 
-
-        $id =  $this->input->post('id');
+        $id = $this->input->post('id');
         if ($id == null) {
 
             $this->session->set_flashdata('error', 'Erro ao tentar excluir serviço.');

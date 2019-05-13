@@ -1,8 +1,7 @@
-<?php
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
 class Vendas extends CI_Controller
 {
-
 
     /**
      * author: Ramon Silva
@@ -10,7 +9,7 @@ class Vendas extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -23,12 +22,12 @@ class Vendas extends CI_Controller
         $this->data['menuVendas'] = 'Vendas';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
@@ -37,7 +36,6 @@ class Vendas extends CI_Controller
         }
 
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/vendas/gerenciar/';
         $config['total_rows'] = $this->vendas_model->count('vendas');
@@ -69,7 +67,7 @@ class Vendas extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aVenda')) {
@@ -98,7 +96,7 @@ class Vendas extends CI_Controller
                 'dataVenda' => $dataVenda,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
-                'faturado' => 0
+                'faturado' => 0,
             );
 
             if (is_numeric($id = $this->vendas_model->add('vendas', $data, true))) {
@@ -115,9 +113,7 @@ class Vendas extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-
-
-    function editar()
+    public function editar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -150,7 +146,7 @@ class Vendas extends CI_Controller
             $data = array(
                 'dataVenda' => $dataVenda,
                 'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id')
+                'clientes_id' => $this->input->post('clientes_id'),
             );
 
             if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas')) == true) {
@@ -221,7 +217,7 @@ class Vendas extends CI_Controller
             redirect(base_url());
         }
 
-        $id =  $this->input->post('id');
+        $id = $this->input->post('id');
         if ($id == null) {
 
             $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
@@ -267,8 +263,6 @@ class Vendas extends CI_Controller
         }
     }
 
-
-
     public function adicionarProduto()
     {
 
@@ -310,7 +304,7 @@ class Vendas extends CI_Controller
         }
     }
 
-    function excluirProduto()
+    public function excluirProduto()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
@@ -324,7 +318,6 @@ class Vendas extends CI_Controller
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
 
-
             $sql = "UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?";
 
             $this->db->query($sql, array($quantidade, $produto));
@@ -336,8 +329,6 @@ class Vendas extends CI_Controller
         }
     }
 
-
-
     public function faturar()
     {
 
@@ -348,7 +339,6 @@ class Vendas extends CI_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-
 
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -381,7 +371,7 @@ class Vendas extends CI_Controller
                 'baixado' => $this->input->post('recebido'),
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo')
+                'tipo' => $this->input->post('tipo'),
             );
 
             if ($this->vendas_model->add('lancamentos', $data) == true) {
@@ -396,19 +386,19 @@ class Vendas extends CI_Controller
                 log_info('Faturou uma venda.');
 
                 $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
-                $json = array('result' =>  true);
+                $json = array('result' => true);
                 echo json_encode($json);
                 die();
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
-                $json = array('result' =>  false);
+                $json = array('result' => false);
                 echo json_encode($json);
                 die();
             }
         }
 
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
-        $json = array('result' =>  false);
+        $json = array('result' => false);
         echo json_encode($json);
     }
 }

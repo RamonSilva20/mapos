@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Garantias extends CI_Controller
 {
@@ -204,7 +204,7 @@ class Garantias extends CI_Controller
 
             $this->garantias_model->delete('garantias', 'idGarantias', $ID);
             $this->session->set_flashdata('success', 'Termo de garantia excluída com sucesso!');
-            log_info('Removeu uma garantia. ID: '.$ID);
+            log_info('Removeu uma garantia. ID: ' . $ID);
 
         } else {
 

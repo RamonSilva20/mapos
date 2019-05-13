@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Produtos extends CI_Controller
 {
@@ -9,7 +9,7 @@ class Produtos extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
@@ -21,12 +21,12 @@ class Produtos extends CI_Controller
         $this->data['menuProdutos'] = 'Produtos';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
@@ -36,7 +36,6 @@ class Produtos extends CI_Controller
 
         $this->load->library('table');
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/produtos/gerenciar/';
         $config['total_rows'] = $this->produtos_model->count('produtos');
@@ -68,7 +67,7 @@ class Produtos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
@@ -109,7 +108,7 @@ class Produtos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function editar()
+    public function editar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -144,7 +143,7 @@ class Produtos extends CI_Controller
 
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
-                log_info('Alterou um produto. ID: '. $this->input->post('idProdutos'));
+                log_info('Alterou um produto. ID: ' . $this->input->post('idProdutos'));
                 redirect(base_url() . 'index.php/produtos/editar/' . $this->input->post('idProdutos'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
@@ -157,8 +156,7 @@ class Produtos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-
-    function visualizar()
+    public function visualizar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -182,7 +180,7 @@ class Produtos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function excluir()
+    public function excluir()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
@@ -190,8 +188,7 @@ class Produtos extends CI_Controller
             redirect(base_url());
         }
 
-
-        $id =  $this->input->post('id');
+        $id = $this->input->post('id');
         if ($id == null) {
 
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
@@ -201,13 +198,12 @@ class Produtos extends CI_Controller
         $this->db->where('produtos_id', $id);
         $this->db->delete('produtos_os');
 
-
         $this->db->where('produtos_id', $id);
         $this->db->delete('itens_de_vendas');
 
         $this->produtos_model->delete('produtos', 'idProdutos', $id);
 
-        log_info('Removeu um produto. ID: '. $id);
+        log_info('Removeu um produto. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Produto excluido com sucesso!');
         redirect(base_url() . 'index.php/produtos/gerenciar/');

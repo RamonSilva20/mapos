@@ -1,6 +1,4 @@
-<?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Mapos extends CI_Controller
 {
@@ -20,23 +18,19 @@ class Mapos extends CI_Controller
     public function index()
     {
 
-
         if ($this->session->userdata('expirado')) {
             $this->session->sess_destroy();
             redirect('../alerta/alerta.html ');
         }
 
-
-
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
 
-
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-		$this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
+        $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-		$this->data['os'] = $this->mapos_model->getOsEstatisticas();
+        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
@@ -157,7 +151,7 @@ class Mapos extends CI_Controller
     {
 
         $data_banco = new DateTime($data_banco);
-        $data_hoje  = new DateTime("now");
+        $data_hoje = new DateTime("now");
 
         return $data_banco < $data_hoje;
     }

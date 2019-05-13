@@ -1,6 +1,4 @@
-<?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
 
 class Arquivos extends CI_Controller
 {
@@ -43,8 +41,6 @@ class Arquivos extends CI_Controller
         $ate = $this->input->get('data2');
 
         if ($pesquisa == null && $de == null && $ate == null) {
-
-
 
             $config['base_url'] = base_url() . 'index.php/arquivos/gerenciar';
             $config['total_rows'] = $this->arquivos_model->count('documentos');
@@ -93,7 +89,6 @@ class Arquivos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-
     public function adicionar()
     {
 
@@ -106,7 +101,6 @@ class Arquivos extends CI_Controller
         $this->data['custom_error'] = '';
 
         $this->form_validation->set_rules('nome', '', 'trim|required');
-
 
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -137,7 +131,7 @@ class Arquivos extends CI_Controller
                 'url' => $url,
                 'cadastro' => $data,
                 'tamanho' => $tamanho,
-                'tipo' => $tipo
+                'tipo' => $tipo,
             );
 
             if ($this->arquivos_model->add('documentos', $data) == true) {
@@ -199,12 +193,10 @@ class Arquivos extends CI_Controller
             }
         }
 
-
         $this->data['result'] = $this->arquivos_model->getById($this->uri->segment(3));
         $this->data['view'] = 'arquivos/editarArquivo';
         $this->load->view('tema/topo', $this->data);
     }
-
 
     public function download($id = null)
     {
@@ -230,7 +222,6 @@ class Arquivos extends CI_Controller
         $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 
-
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) {
@@ -255,7 +246,7 @@ class Arquivos extends CI_Controller
 
             $this->session->set_flashdata('success', 'Arquivo excluido com sucesso!');
 
-            log_info('Removeu um arquivo. ID: '. $id);
+            log_info('Removeu um arquivo. ID: ' . $id);
             redirect(base_url() . 'index.php/arquivos/');
         } else {
 
@@ -276,11 +267,10 @@ class Arquivos extends CI_Controller
 
         $config['upload_path'] = './assets/arquivos/' . $date;
         $config['allowed_types'] = 'txt|jpg|jpeg|gif|png|pdf|PDF|JPG|JPEG|GIF|PNG';
-        $config['max_size']     = 0;
-        $config['max_width']  = '3000';
-        $config['max_height']  = '2000';
+        $config['max_size'] = 0;
+        $config['max_width'] = '3000';
+        $config['max_height'] = '2000';
         $config['encrypt_name'] = true;
-
 
         if (!is_dir('./assets/arquivos/' . $date)) {
 
