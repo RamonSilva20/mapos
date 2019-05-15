@@ -12,7 +12,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigindo erro no cadastro de garantias ao buscar nome do usuário logado. [@RamonSilva20](https://github.com/RamonSilva20).
 
 ### Changed
-- Removendo textos desnecessários [will.phelipe@gmail.com][https://github.com/willph]
+- Removendo textos desnecessários [will.phelipe@gmail.com](https://github.com/willph)
 
 ## [3.5.1] - 2019-05-13
 
@@ -28,7 +28,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adicionando modulo de auditoria para monitoramento de atividades no sistema. [@RamonSilva20](https://github.com/RamonSilva20).
 
 ## [3.4.0] - 2019-05-10
-Por: Wilmerson Felipe[will.phelipe@gmail.com][https://github.com/willph]
+Por: Wilmerson Felipe[will.phelipe@gmail.com](https://github.com/willph)
 
 ### Fixed
 - Corrigido exibição do Telefone em VizualizarOS e ImprimirOS
@@ -47,7 +47,7 @@ Por: Wilmerson Felipe[will.phelipe@gmail.com][https://github.com/willph]
 - Corrigido exibição da label de status faturado em painel de visualização de cliente [@Pr3d4dor](https://github.com/Pr3d4dor).
 
 ## [3.3.1] - 2019-03-03
-Por: Fábio Barbosa[fabiobarbosa@gmx.com][https://github.com/aportetecnologia]
+Por: Fábio Barbosa[fabiobarbosa@gmx.com](https://github.com/aportetecnologia)
 
 ### Changed 
 - Modificado a cor de fundo para branco do box de texto do trumbowyg
