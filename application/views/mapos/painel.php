@@ -65,7 +65,7 @@
                             <th>Preço de Venda</th>
                             <th>Estoque</th>
                             <th>Estoque Mínimo</th>
-                            <th></th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,7 +121,7 @@
                             <th>Data Inicial</th>
                             <th>Data Final</th>
                             <th>Cliente</th>
-                            <th></th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,9 +134,9 @@
                             <td>
                                 <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
                             </td>
-                            <td>
+                            
                             <td><?php if($o->dataFinal != null){echo date('d/m/Y', strtotime($o->dataFinal));}else{echo "";}?></td>
-                            </td>
+                            
                             <td>
                                 <?= $o->nomeCliente ?>
                             </td>
@@ -171,7 +171,7 @@
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Cliente</th>
-                        <th></th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
