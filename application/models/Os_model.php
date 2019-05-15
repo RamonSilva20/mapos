@@ -229,7 +229,7 @@ class Os_model extends CI_Model
 
         $this->db->select('*');
         $this->db->limit(5);
-        $this->db->like('refGarantia', $q);
+        $this->db->like('LOWER(refGarantia)', $q);
         $query = $this->db->get('garantias');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {

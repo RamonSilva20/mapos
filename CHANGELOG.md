@@ -5,6 +5,15 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.5.2] - 2019-05-14
+
+### Fixed
+- Corrigindo pesquisa de termos de garantia. [@RamonSilva20](https://github.com/RamonSilva20).
+- Corrigindo erro no cadastro de garantias ao buscar nome do usuário logado. [@RamonSilva20](https://github.com/RamonSilva20).
+
+### Changed
+- Removendo textos desnecessários [will.phelipe@gmail.com][https://github.com/willph]
+
 ## [3.5.1] - 2019-05-13
 
 ### Fixed

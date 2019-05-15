@@ -369,7 +369,7 @@ class Os extends CI_Controller
     {
 
         if (isset($_GET['term'])) {
-            $q = strtoupper($_GET['term']);
+            $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteTermoGarantia($q);
         }
     }
