@@ -122,7 +122,7 @@ class Os extends CI_Controller
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
 					? $this->input->post('garantias_id')
-					: $termoGarantiaId = null;
+					: null;
 
 
             } catch (Exception $e) {
@@ -226,7 +226,7 @@ class Os extends CI_Controller
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
 					? $this->input->post('garantias_id')
-					: $termoGarantiaId = null;
+					: null;
 
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
