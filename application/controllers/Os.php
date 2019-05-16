@@ -120,13 +120,9 @@ class Os extends CI_Controller
                     $dataFinal = date('Y/m/d');
                 }
 
-                if (!$termoGarantiaId == null || !$termoGarantiaId == '') {
-                    
-                    $termoGarantiaId = $this->input->post('garantias_id');
-
-                }else{
-                    $termoGarantiaId = null;
-                }
+                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
+					? $this->input->post('garantias_id')
+					: $termoGarantiaId = null;
 
 
             } catch (Exception $e) {
@@ -228,13 +224,9 @@ class Os extends CI_Controller
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
 
-                if (!$termoGarantiaId == null || !$termoGarantiaId == '') {
-                    
-                    $termoGarantiaId = $this->input->post('garantias_id');
-
-                }else{
-                    $termoGarantiaId = null;
-                }
+                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
+					? $this->input->post('garantias_id')
+					: $termoGarantiaId = null;
 
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
