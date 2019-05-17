@@ -154,13 +154,12 @@ $(document).ready(function(){
 			$('body').append(lightbox);
 			$('#lightbox').slideDown(500);
 		}
-		
-	});
-	
 
-	$('#lightbox').live('click', function() { 
-		$('#lightbox').hide(200);
-	});
+		$('#lightbox').live('click', function() { 
+			$('#lightbox').hide(200);
+		});
 	
+	});
+
 });
 
