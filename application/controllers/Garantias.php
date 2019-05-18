@@ -208,7 +208,7 @@ class Garantias extends CI_Controller
 
         } else {
 
-            $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia.<br />Verifique se tem alguma OS vinculada a esse termo e remova antes tentar excluir novamente.');
+            $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia.<br />Verifique se tem alguma OS vinculada a esse termo e remova antes de tentar excluir novamente.');
 
         }
 

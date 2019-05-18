@@ -106,6 +106,7 @@ class Os extends CI_Controller
 
             $dataInicial = $this->input->post('dataInicial');
             $dataFinal = $this->input->post('dataFinal');
+            $termoGarantiaId = $this->input->post('termoGarantia');
 
             try {
 
@@ -118,6 +119,12 @@ class Os extends CI_Controller
                 } else {
                     $dataFinal = date('Y/m/d');
                 }
+
+                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
+					? $this->input->post('garantias_id')
+					: null;
+
+
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -129,7 +136,7 @@ class Os extends CI_Controller
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
-                'garantias_id' => $this->input->post('garantias_id'),
+                'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => set_value('defeito'),
                 'status' => set_value('status'),
@@ -207,6 +214,7 @@ class Os extends CI_Controller
 
             $dataInicial = $this->input->post('dataInicial');
             $dataFinal = $this->input->post('dataFinal');
+            $termoGarantiaId = $this->input->post('termoGarantia');
 
             try {
 
@@ -215,6 +223,11 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
+
+                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
+					? $this->input->post('garantias_id')
+					: null;
+
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -223,7 +236,7 @@ class Os extends CI_Controller
                 'dataInicial' => $dataInicial,
                 'dataFinal' => $dataFinal,
                 'garantia' => $this->input->post('garantia'),
-                'garantias_id' => $this->input->post('garantias_id'),
+                'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
                 'status' => $this->input->post('status'),

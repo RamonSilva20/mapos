@@ -174,6 +174,11 @@ $config = array('clientes' => array(array(
                                     'rules'=>'trim'
                                 ),
                                 array(
+                                    'field'=>'termoGarantia',
+                                    'label'=>'Termo Garantia',
+                                    'rules'=>'trim'
+                                ),
+                                array(
                                     'field'=>'descricaoProduto',
                                     'label'=>'DescricaoProduto',
                                     'rules'=>'trim'
