@@ -214,11 +214,6 @@ CREATE TABLE IF NOT EXISTS `os` (
     FOREIGN KEY (`usuarios_id`)
     REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_os_garantias1`
-    FOREIGN KEY (`garantias_id`)
-    REFERENCES `garantias` (`idGarantias`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
