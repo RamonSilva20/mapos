@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
 class Os extends CI_Controller
 {
@@ -120,10 +120,9 @@ class Os extends CI_Controller
                     $dataFinal = date('Y/m/d');
                 }
 
-                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
-					? $this->input->post('garantias_id')
-					: null;
-
+                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
+                ? $this->input->post('garantias_id')
+                : null;
 
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
@@ -214,7 +213,7 @@ class Os extends CI_Controller
 
             $dataInicial = $this->input->post('dataInicial');
             $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('termoGarantia');
+            $termoGarantiaId = $this->input->post('garantias_id')  ?: null;
 
             try {
 
@@ -223,10 +222,6 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-
-                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '') 
-					? $this->input->post('garantias_id')
-					: null;
 
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');

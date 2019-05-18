@@ -5,6 +5,15 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.5.3] - 2019-05-18
+
+### Fixed
+- Corrigindo remoção de garantias ao editar OS. [@RamonSilva20](https://github.com/RamonSilva20) e [@willph](https://github.com/willph)
+- Corrigindo erro no arquivo matrix.js e funcoes.js. [will.phelipe@gmail.com](https://github.com/willph).
+
+### Changed
+- Alterando exibição de mensagem para esconder depois de 2.5 segundos. [will.phelipe@gmail.com](https://github.com/willph)
+
 ## [3.5.2] - 2019-05-14
 
 ### Fixed
