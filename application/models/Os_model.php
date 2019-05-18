@@ -54,7 +54,7 @@ class Os_model extends CI_Model
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
-        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id','left');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
 
         // condicionais da pesquisa
 
@@ -236,7 +236,7 @@ class Os_model extends CI_Model
                 $row_set[] = array('label' => $row['refGarantia'], 'id' => $row['idGarantias']);
             }
             echo json_encode($row_set);
-        }
+        } 
     }
 
     public function autoCompleteServico($q)

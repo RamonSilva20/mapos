@@ -485,7 +485,16 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteTermoGarantia",
             minLength: 1,
             select: function(event, ui) {
-                $("#garantias_id").val(ui.item.id);
+                if(ui.item.id){
+                    $("#garantias_id").val(ui.item.id);
+                }
+            }
+        });
+
+        $('#termoGarantia').on('change', function(){
+            if(!$(this).val() && $("#garantias_id").val()){
+                $("#garantias_id").val(''); 
+                alert('Termo de garantia removido');
             }
         });
 
