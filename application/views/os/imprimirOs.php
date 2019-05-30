@@ -224,36 +224,6 @@ $totalProdutos = 0;?>
                                     </tr>
                             </tbody>
                         </table>
-                        <br />
-                        <?php
-                            if($result->status == "Finalizado"){
-                                ?>
-                                <table class="table table-bordered table-condensed ">
-                                   
-                                   <tbody>
-                                      
-                                       <tr>
-                                       <th><h4 class="text-vertical text-center">TERMO DE GARANTIA</h4></th>
-                                           <td>
-                                               <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
-
-                                           </td>
-                                          
-                                       </tr>
-
-                                   </tbody>
-
-                            <table class="table table-bordered table-condensed">                                      
-                                <tbody>
-                                        <tr> 
-                                            <td>Data <hr></td>
-                                            <td>Assinatura do Cliente <hr></td>
-                                            <td>Assinatura do Técnico Responsável <hr></td>
-                                        </tr>
-                                </tbody>
-                            </table>
-                    <?php } ?>
-
                 </div>
             </div>                
       </div>
