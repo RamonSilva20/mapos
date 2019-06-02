@@ -59,7 +59,7 @@ $totalProdutos = 0;?>
                                         <li>
                                             <span><h5><b>RESPONSÁVEL</b></h5></span>
                                             <span><?php echo $result->nome?></span> <br/>
-                                            <span>Contato: <?php echo $result->telefone?></span><br/>
+                                            <span>Contato: <?php echo $result->telefone_usuario?></span><br/>
                                             <span>Email: <?php echo $result->email_responsavel ?></span>
                                         </li>
                                     </ul>
