@@ -50,6 +50,7 @@
 <!--End-Action boxes-->
 
 <div class="row-fluid" style="margin-top: 0">
+
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
@@ -207,12 +208,14 @@
             </table>
         </div>
     </div>
-</div>
 
+</div>
 
 
 <?php if ($estatisticas_financeiro != null) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+
+<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
 <div class="row-fluid" style="margin-top: 0">
 
     <div class="span4">
@@ -268,32 +271,31 @@
     </div>
 
 </div>
-<?php 
-}
-} ?>
+<?php endif ?>
 
-<?php if ($os != null) { ?>
-<div class="row-fluid" style="margin-top: 0">
+<?php  } } ?>
 
-    <div class="span12">
+<?php if ($os != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
+    <div class="row-fluid" style="margin-top: 0">
 
-        <div class="widget-box">
-            <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span>
-                <h5>Estatísticas de OS</h5>
-            </div>
-            <div class="widget-content">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div id="chart-os" style=""></div>
+        <div class="span12">
+
+            <div class="widget-box">
+                <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Estatísticas de OS</h5>
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div id="chart-os" style=""></div>
+                        </div>
+
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-</div>
-<?php 
-} ?>
+<?php } ?>
 
 
 <div class="row-fluid" style="margin-top: 0">
@@ -331,8 +333,7 @@
 
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 
-
-<?php if ($os != null) { ?>
+<?php if ($os != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
 <script type="text/javascript">
     $(document).ready(function() {
         var data = [
@@ -365,7 +366,7 @@
 
 
 
-<?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null) {
+<?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {
         ?>
 <script type="text/javascript">
