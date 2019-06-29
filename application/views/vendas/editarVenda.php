@@ -148,7 +148,7 @@
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" id="vencimento" type="text" name="vencimento" />
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -159,7 +159,7 @@
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" id="recebimento" type="text" name="recebimento" />
+                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>

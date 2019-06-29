@@ -245,6 +245,8 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `produtos_os` (
   `idProdutos_os` INT(11) NOT NULL AUTO_INCREMENT,
   `quantidade` INT(11) NOT NULL,
+  `descricao` VARCHAR(80) NULL,
+  `preco` VARCHAR(15) NULL,
   `os_id` INT(11) NOT NULL,
   `produtos_id` INT(11) NOT NULL,
   `subTotal` VARCHAR(15) NULL DEFAULT NULL,
@@ -284,6 +286,9 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `servicos_os` (
   `idServicos_os` INT(11) NOT NULL AUTO_INCREMENT,
+  `servico` VARCHAR(80) NULL,
+  `quantidade` DOUBLE NULL,
+  `preco` VARCHAR(15) NULL,
   `os_id` INT(11) NOT NULL,
   `servicos_id` INT(11) NOT NULL,
   `subTotal` VARCHAR(15) NULL DEFAULT NULL,
@@ -344,6 +349,7 @@ CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
   `idItens` INT NOT NULL AUTO_INCREMENT,
   `subTotal` VARCHAR(45) NULL,
   `quantidade` INT(11) NULL,
+  `preco` VARCHAR(15) NULL,
   `vendas_id` INT NOT NULL,
   `produtos_id` INT(11) NOT NULL,
   PRIMARY KEY (`idItens`),
