@@ -132,13 +132,16 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <input type="hidden" name="idProduto" id="idProduto" />
                                         <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?php echo $result->idOs ?>" />
                                         <input type="hidden" name="estoque" id="estoque" value="" />
-                                        <input type="hidden" name="preco" id="preco" value="" />
                                         <label for="">Produto</label>
                                         <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Preço</label>
+                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
                                     </div>
                                     <div class="span2">
                                         <label for="">Quantidade</label>
@@ -169,13 +172,13 @@
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>' . $p->precoVenda . '</td>';
+                                            echo '<td>' . ($p->preco ?: $p->precoVenda)  . '</td>';
                                             echo '<td><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                             echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
                                         } ?>
                                         <tr>
-                                            <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td><strong>R$
                                                     <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></td>
                                         </tr>
@@ -188,13 +191,20 @@
                             <div class="span12" style="padding: 1%; margin-left: 0">
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
                                     <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico" method="post">
-                                        <div class="span10">
+                                        <div class="span6">
                                             <input type="hidden" name="idServico" id="idServico" />
                                             <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs ?>" />
-                                            <input type="hidden" name="precoServico" id="precoServico" value="" />
                                             <label for="">Serviço</label>
                                             <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
                                         </div>
+                                        <div class="span2">
+                                        <label for="">Preço</label>
+                                        <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Quantidade</label>
+                                        <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" />
+                                    </div>
                                         <div class="span2">
                                             <label for="">.</label>
                                             <button class="btn btn-success span12"><i class="icon-white icon-plus"></i> Adicionar</button>
@@ -206,6 +216,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Serviço</th>
+                                                <th>Quantidade</th>
+                                                <th>Preço</th>
                                                 <th>Ações</th>
                                                 <th>Sub-total</th>
                                             </tr>
@@ -214,16 +226,19 @@
                                             <?php
                                             $total = 0;
                                             foreach ($servicos as $s) {
-                                                $preco = $s->preco;
-                                                $total = $total + $preco;
+                                                $preco = $s->preco ?: $s->precoVenda;
+                                                $subtotal = $preco * ($s->quantidade ?: 1);
+                                                $total = $total + $subtotal;
                                                 echo '<tr>';
                                                 echo '<td>' . $s->nome . '</td>';
+                                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                                echo '<td>' . $preco  . '</td>';
                                                 echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
-                                                echo '<td>R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
+                                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
                                             <tr>
-                                                <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td><strong>R$
                                                         <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="<?php echo number_format($total, 2); ?>"></strong></td>
                                             </tr>
@@ -328,7 +343,7 @@
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" id="vencimento" type="text" name="vencimento" />
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -339,7 +354,7 @@
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" id="recebimento" type="text" name="recebimento" />
+                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
@@ -460,7 +475,8 @@
             minLength: 2,
             select: function(event, ui) {
                 $("#idServico").val(ui.item.id);
-                $("#precoServico").val(ui.item.preco);
+                $("#preco_servico").val(ui.item.preco);
+                $("#quantidade_servico").focus();
             }
         });
 
@@ -566,6 +582,7 @@
                             if (data.result == true) {
                                 $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                                 $("#quantidade").val('');
+                                $("#preco").val('');
                                 $("#produto").val('').focus();
                             } else {
                                 alert('Ocorreu um erro ao tentar adicionar produto.');
@@ -600,6 +617,8 @@
                     success: function(data) {
                         if (data.result == true) {
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                            $("#quantidade_servico").val('');
+                            $("#preco_servico").val('');
                             $("#servico").val('').focus();
                         } else {
                             alert('Ocorreu um erro ao tentar adicionar serviço.');

@@ -402,6 +402,7 @@ class Os extends CI_Controller
             'quantidade' => $quantidade,
             'subTotal' => $subtotal,
             'produtos_id' => $produto,
+            'preco' => $preco,
             'os_id' => $this->input->post('idOsProduto'),
         );
 
@@ -441,8 +442,10 @@ class Os extends CI_Controller
 
         $data = array(
             'servicos_id' => $this->input->post('idServico'),
+            'quantidade' => $this->input->post('quantidade'),
+            'preco' => $this->input->post('preco'),
             'os_id' => $this->input->post('idOsServico'),
-            'subTotal' => $this->input->post('precoServico'),
+            'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
         );
 
         if ($this->os_model->add('servicos_os', $data) == true) {
