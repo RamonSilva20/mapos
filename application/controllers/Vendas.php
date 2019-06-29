@@ -288,6 +288,7 @@ class Vendas extends CI_Controller
                 'quantidade' => $quantidade,
                 'subTotal' => $subtotal,
                 'produtos_id' => $produto,
+                'preco' => $preco,
                 'vendas_id' => $this->input->post('idVendasProduto'),
             );
 

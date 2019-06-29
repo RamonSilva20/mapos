@@ -55,13 +55,16 @@
                                 </form>
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
                                     <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
-                                        <div class="span8">
+                                        <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
                                             <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
                                             <input type="hidden" name="estoque" id="estoque" value="" />
-                                            <input type="hidden" name="preco" id="preco" value="" />
                                             <label for="">Produto</label>
                                             <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">Preço</label>
+                                            <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
                                         </div>
                                         <div class="span2">
                                             <label for="">Quantidade</label>
@@ -79,6 +82,7 @@
                                             <tr>
                                                 <th>Produto</th>
                                                 <th>Quantidade</th>
+                                                <th>Preço</th>
                                                 <th>Ações</th>
                                                 <th>Sub-total</th>
                                             </tr>
@@ -87,16 +91,18 @@
                                             <?php
                                             $total = 0;
                                             foreach ($produtos as $p) {
+                                              $preco = $p->preco ?: $p->precoVenda;
                                               $total = $total + $p->subTotal;
                                               echo '<tr>';
                                               echo '<td>' . $p->descricao . '</td>';
                                               echo '<td>' . $p->quantidade . '</td>';
+                                              echo '<td>' . $preco . '</td>';
                                               echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
                                               echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                               echo '</tr>';
                                             } ?>
                                             <tr>
-                                                <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
+                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td><strong>R$
                                                         <?php echo number_format($total, 2, ',', '.'); ?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></td>
                                             </tr>
@@ -328,6 +334,7 @@
                             if (data.result == true) {
                                 $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                                 $("#quantidade").val('');
+                                $("#preco").val('');
                                 $("#produto").val('').focus();
                             } else {
                                 alert('Ocorreu um erro ao tentar adicionar produto.');
