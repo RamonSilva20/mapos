@@ -26,7 +26,7 @@ Instalando com o assistente de instalação
 Instalando o sistema manualmente
 
     - Crie o banco de dados no MySQL e um usuário dedicado ao banco
-    - Remova as linhas 493 e 494 do arquivo banco.sql e adicione o comando abaixo
+    - Remova as linhas 517 e 518 do arquivo banco.sql e adicione o comando abaixo
 
         INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`) VALUES
             (1, 'Admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '$2y$10$lAW0AXb0JLZxR0yDdfcBcu3BN9c2AXKKjKTdug7Or0pr6cSGtgyGO', '0000-0000', '', 1, '2018-09-09', 1);
