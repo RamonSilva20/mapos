@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.7.0] - 2019-07-08
+
+### Added
+- Adicionada funcionalidade de envio de OS por email. [@RamonSilva20](https://github.com/RamonSilva20) 
 
 ## [3.6.0] - 2019-06-29
 

@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-3.6.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-3.7.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -14,6 +14,12 @@
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
 3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
+4. Configure o email de envio no arquivo email.php
+5. Configurar cron job para envio de e-mail 
+    Enviar emails pendentes a cada 2 minutos.
+        */2 * * * * php /var/www/index.php email/process
+    Enviar emails com falha a cada 5 minutos.
+        */5 * * * * php /var/www/index.php email/retry
 
 ### Atualização para versão 3.*
 1. Faça backup do banco de dados.

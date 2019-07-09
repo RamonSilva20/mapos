@@ -575,7 +575,13 @@
                                             <span class="lbl"> Auditoria</span>
                                         </label>
                                     </td>
-                                    <td colspan="3"></td>
+                                    <td>
+                                        <label>
+                                            <input <?php echo (isset($permissoes['cEmail']) && $permissoes['cEmail'] == 1 ) ? 'checked' : ''; ?> name="cEmail" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Emails</span>
+                                        </label>
+                                    </td>
+                                    <td colspan="2"></td>
                                 </tr>
 
                             </tbody>

@@ -213,7 +213,7 @@ class Os extends CI_Controller
 
             $dataInicial = $this->input->post('dataInicial');
             $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('garantias_id')  ?: null;
+            $termoGarantiaId = $this->input->post('garantias_id') ?: null;
 
             try {
 
@@ -304,6 +304,58 @@ class Os extends CI_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->load->view('os/imprimirOs', $this->data);
+    }
+
+    public function enviar_email()
+    {
+
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para enviar O.S. por e-mail.');
+            redirect(base_url());
+        }
+
+        $this->load->model('mapos_model');
+        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        if (!isset($this->data['result']->email)) {
+            $this->session->set_flashdata('error', 'O cliente não tem e-mail cadastrado.');
+            redirect(site_url('os'));
+        }
+
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        if (!isset($this->data['emitente'][0]->email)) {
+            $this->session->set_flashdata('error', 'Efetue o cadastro dos dados de emitente');
+            redirect(site_url('os'));
+        }
+
+        $html = $this->load->view('os/emails/os', $this->data, true);
+
+        $this->load->model('email_model');
+        $headers = array('From' => $this->data['emitente'][0]->email, 'Subject' => 'Ordem de Serviço');
+        $email = array(
+            'to' => $this->data['result']->email,
+            'message' => $html,
+            'status' => 'pending',
+            'date' => date('Y-m-d H:i:s'),
+            'headers' => serialize($headers),
+        );
+
+        if ($this->email_model->add('email_queue', $email)) {
+            $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
+            log_info('Enviou e-mail para o cliente: '.$this->data['result']->nomeCliente. '. E-mail: '. $this->data['result']->email);
+            redirect(site_url('os'));
+        } else {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
+            redirect(site_url('os'));
+        }
+
     }
 
     public function excluir()
