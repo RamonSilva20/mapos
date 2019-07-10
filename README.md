@@ -20,7 +20,9 @@
     - */2 * * * * php /var/www/index.php email/process
     ##### Enviar emails com falha a cada 5 minutos.
     - */5 * * * * php /var/www/index.php email/retry
-
+    
+    ##### Obs: O path até o index.php (/var/www/) deve ser configurado conforme o seu ambiente
+    
 ### Atualização para versão 3.*
 1. Faça backup do banco de dados.
 2. Remova a pasta system da instalação atual.
