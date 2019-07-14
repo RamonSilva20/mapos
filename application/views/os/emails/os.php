@@ -96,7 +96,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= base_url().$emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 OS #: <?= $result->idOs?><br>
