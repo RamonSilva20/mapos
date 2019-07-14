@@ -25,7 +25,27 @@ $config['app_version'] = '3.7.0';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'enter_baseurl';
+// $config['base_url'] = 'http://mapos.test';
+$dominios_permitidos = array('mapos.test', 'mapos.bulfaitelo.dyndns.info:5555');
+$dominio_padrao  = 'mapos.test';
+
+if (in_array($_SERVER['HTTP_HOST'], $dominios_permitidos, TRUE))
+{
+        $dominio = $_SERVER['HTTP_HOST'];
+}
+else
+{
+        $dominio = $dominio_padrao;
+}
+
+if ( ! empty($_SERVER['HTTPS']))
+{
+        $config['base_url'] = 'https://'.$dominio;
+}
+else
+{
+        $config['base_url'] = 'http://'.$dominio;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -326,7 +346,7 @@ $config['cache_query_string'] = false;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'enter_encryption_key';
+$config['encryption_key'] = '39cd90cb4206688';
 
 /*
 |--------------------------------------------------------------------------
