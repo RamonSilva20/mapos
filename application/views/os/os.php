@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+
+
 
 <div class="span12" style="margin-left: 0">
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
@@ -47,26 +50,28 @@ if (!$results) { ?>
         </span>
         <h5>Ordens de Serviço</h5>
     </div>
-    <div class="widget-content nopadding">
-        <table class="table table-bordered ">
-            <thead>
-                <tr style="backgroud-color: #2D335B">
-                    <th>N° OS</th>
-                    <th>Cliente</th>
-                    <th>Data Inicial</th>
-                    <th>Data Final</th>
-                    <th>Valor Total</th>
-                    <th>Status</th>
-                    <th>T. Garantia</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="6">Nenhuma OS Cadastrada</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="widget-content nopadding">            
+        <div class="table-responsive">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr style="backgroud-color: #2D335B">
+                        <th>N° OS</th>
+                        <th>Cliente</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Valor Total</th>
+                        <th>Status</th>
+                        <th>T. Garantia</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="6">Nenhuma OS Cadastrada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <?php 
@@ -81,83 +86,85 @@ if (!$results) { ?>
         <h5>Ordens de Serviço</h5>
     </div>
     <div class="widget-content nopadding">
-        <table class="table table-bordered ">
-            <thead>
-                <tr style="backgroud-color: #2D335B">
-                    <th>N° OS</th>
-                    <th>Cliente</th>
-                    <th>Responsável</th>
-                    <th>Data Inicial</th>
-                    <th>Data Final</th>
-                    <th>Valor Total</th>
-                    <th>Status</th>
-                    <th>T. Garantia</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($results as $r) {
-                    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                    if($r->dataFinal != null){ 
-                        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                    }else{
-                        $dataFinal = "";
-                    }
-                    switch ($r->status) {
-                case 'Aberto':
-                    $cor = '#00cd00';
-                    break;
-                case 'Em Andamento':
-                    $cor = '#436eee';
-                    break;
-                case 'Orçamento':
-                    $cor = '#CDB380';
-                    break;
-                case 'Cancelado':
-                    $cor = '#CD0000';
-                    break;
-                case 'Finalizado':
-                    $cor = '#00CD00';
-                    break;
-                case 'Faturado':
-                    $cor = '#B266FF';
-                    break;
-                case 'Aguardando Peças':
-                    $cor = '#FF7F00';
-                    break;
-                default:
-                    $cor = '#E0E4CC';
-                    break;
-            }
-                    echo '<tr>';
-                    echo '<td>' . $r->idOs . '</td>';
-                    echo '<td>' . $r->nomeCliente . '</td>';
-                    echo '<td>' . $r->nome . '</td>';
-                    echo '<td>' . $dataInicial . '</td>';
-                    echo '<td>' . $dataFinal . '</td>';
-                    echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                    echo '<td>' . $r->refGarantia . '</td>';
-                    echo '<td>';
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>';
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="icon-envelope"></i></a>';
-                    }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
-                    }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                        echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
-                    }
-                    echo  '</td>';
-                    echo '</tr>';
-                } ?>
-                <tr>
+        <div class="table-responsive">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr style="backgroud-color: #2D335B">
+                        <th>N° OS</th>
+                        <th>Cliente</th>
+                        <th>Responsável</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Valor Total</th>
+                        <th>Status</th>
+                        <th>T. Garantia</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($results as $r) {
+                        $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                        if($r->dataFinal != null){ 
+                            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                        }else{
+                            $dataFinal = "";
+                        }
+                        switch ($r->status) {
+                    case 'Aberto':
+                        $cor = '#00cd00';
+                        break;
+                    case 'Em Andamento':
+                        $cor = '#436eee';
+                        break;
+                    case 'Orçamento':
+                        $cor = '#CDB380';
+                        break;
+                    case 'Cancelado':
+                        $cor = '#CD0000';
+                        break;
+                    case 'Finalizado':
+                        $cor = '#00CD00';
+                        break;
+                    case 'Faturado':
+                        $cor = '#B266FF';
+                        break;
+                    case 'Aguardando Peças':
+                        $cor = '#FF7F00';
+                        break;
+                    default:
+                        $cor = '#E0E4CC';
+                        break;
+                }
+                        echo '<tr>';
+                        echo '<td>' . $r->idOs . '</td>';
+                        echo '<td>' . $r->nomeCliente . '</td>';
+                        echo '<td>' . $r->nome . '</td>';
+                        echo '<td>' . $dataInicial . '</td>';
+                        echo '<td>' . $dataFinal . '</td>';
+                        echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
+                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                        echo '<td>' . $r->refGarantia . '</td>';
+                        echo '<td>';
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="icon-envelope"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
+                        }
+                        echo  '</td>';
+                        echo '</tr>';
+                    } ?>
+                    <tr>
 
-                </tr>
-            </tbody>
-        </table>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
