@@ -4,11 +4,15 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.8.0] - 2019-07-20
+## [3.8.0] - 2019-07-25
 
 ### Added
 - Adicionada pesquisa por múltiplos status em OS. [@RamonSilva20](https://github.com/RamonSilva20) 
 - Ao adicionar OS e Vendas usuário logado preenchido por padrão como responsável. [@RamonSilva20](https://github.com/RamonSilva20) 
+
+### Fixed
+- Correção tabela e botões OS. [@bulfaitelo](https://github.com/bulfaitelo)
+- Corrigido a tabela para torna-la responsiva, e os botões que não funcionavam em dispositivos móveis. [@bulfaitelo](https://github.com/bulfaitelo)
 
 ## [3.7.0] - 2019-07-08
 
