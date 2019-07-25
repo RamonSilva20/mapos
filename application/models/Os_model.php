@@ -60,7 +60,7 @@ class Os_model extends CI_Model
 
         // condicional de status
         if (array_key_exists('status', $where)) {
-            $this->db->where('status', $where['status']);
+            $this->db->where_in('status', $where['status']);
         }
 
         // condicional de clientes

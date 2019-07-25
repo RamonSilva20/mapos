@@ -17,7 +17,7 @@
             <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
         </div>
         <div class="span2">
-            <select name="status" id="status" class="span12">
+            <select name="status[]" id="status" class="span12" multiple>
                 <option value="">Selecione status</option>
                 <option value="Aberto">Aberto</option>
                 <option value="Faturado">Faturado</option>
@@ -123,7 +123,7 @@ if (!$results) { ?>
                         $cor = '#CD0000';
                         break;
                     case 'Finalizado':
-                        $cor = '#00CD00';
+                        $cor = '#256';
                         break;
                     case 'Faturado':
                         $cor = '#B266FF';
