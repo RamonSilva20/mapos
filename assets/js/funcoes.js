@@ -1,30 +1,20 @@
 $(function () {
 
-	$("#rg").mask("00.000.000-0")
 	$("#celular").mask("(00)00000-0000")
 	$("#telefone").mask("(00)0000-0000")
 	$("#cep").mask("00000-000")
 });
-$(function formatar(mascara, documento) {
-	if (typeof documento !== 'undefined') {
-		var i = documento.value.length;
-		var saida = mascara.substring(0, 1);
-		var texto = mascara.substring(i)
-		if (texto.substring(0, 1) != saida) {
-			documento.value += texto.substring(0, 1);
-		}
-	}
-});
 
 $(function () {
-	var options = {
-		onKeyPress: function (cpfcnpj, e, field, options) {
-			var masks = ['000.000.000-000', '000.000.000/0000-00'];
-			var mask = (cpfcnpj.length > 14) ? masks[1] : masks[0];
-			$('.cpfcnpj').mask(mask, options);
-		}
-	};
-
-	$('.cpfcnpj').mask('000.000.000-000', options);
-
+	// INICIO FUNÇÃO DE MASCARA CPF/CNPJ
+	var cpfMascara = function (val) {
+		return val.replace(/\D/g, '').length > 11 ? '00.000.000/0000-00' : '000.000.000-009';
+	 },
+	 cpfOptions = {
+		onKeyPress: function(val, e, field, options) {
+		   field.mask(cpfMascara.apply({}, arguments), options);
+		}	
+	 };
+	 $('.cpfcnpj').mask(cpfMascara, cpfOptions);
+	 // FIM FUNÇÃO DE MASCARA CPF/CNPJ
 });
