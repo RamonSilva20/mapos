@@ -143,13 +143,17 @@ class Os extends CI_Controller
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
                 $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
 
                 $idOs = $id;
                 $os = $this->os_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente()[0];
+                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+
                 $remetentes = [
                     $os->email,
                     $emitente->email,
+                    $tecnico->email,
                 ];
                 $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
 
@@ -248,13 +252,18 @@ class Os extends CI_Controller
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
 
                 $idOs = $this->input->post('idOs');
+
                 $os = $this->os_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente()[0];
+                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+
                 $remetentes = [
                     $os->email,
                     $emitente->email,
+                    $tecnico->email,
                 ];
                 $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
 
@@ -725,6 +734,7 @@ class Os extends CI_Controller
 
         $this->load->model('email_model');
 
+        $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
             $headers = array('From' => $emitente, 'Subject' => $assunto);
             $email = array(
