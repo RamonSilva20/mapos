@@ -712,7 +712,8 @@ class Os extends CI_Controller
         echo json_encode($json);
     }
 
-    private function enviarOsPorEmail($idOs, $remetentes, $assunto) {
+    private function enviarOsPorEmail($idOs, $remetentes, $assunto)
+    {
         $dados = [];
 
         $this->load->model('mapos_model');
