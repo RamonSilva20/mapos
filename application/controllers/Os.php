@@ -719,7 +719,7 @@ class Os extends CI_Controller
         $this->load->model('mapos_model');
         $dados['result'] = $this->os_model->getById($idOs);
         if (!isset($dados['result']->email)) {
-            return;
+            return false;
         }
 
         $dados['produtos'] = $this->os_model->getProdutos($idOs);
@@ -728,7 +728,7 @@ class Os extends CI_Controller
 
         $emitente = $dados['emitente'][0]->email;
         if (!isset($emitente)) {
-            return;
+            return false;
         }
 
         $html = $this->load->view('os/emails/os', $dados, true);
