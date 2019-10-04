@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
@@ -450,7 +451,11 @@
 
                             window.location.reload(true);
                         } else {
-                            alert('Ocorreu um erro ao tentar faturar OS.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar faturar OS."
+                            });
                             $('#progress-fatura').hide();
                         }
                     }
@@ -511,7 +516,11 @@
         $('#termoGarantia').on('change', function(){
             if(!$(this).val() && $("#garantias_id").val()){
                 $("#garantias_id").val(''); 
-                alert('Termo de garantia removido');
+                Swal.fire({
+                  type: "success",
+                  title: "Sucesso",
+                  text: "Termo de garantia removido"
+                });
             }
         });
 
@@ -570,7 +579,11 @@
                 var quantidade = parseInt($("#quantidade").val());
                 var estoque = parseInt($("#estoque").val());
                 if (estoque < quantidade) {
-                    alert('Você não possui estoque suficiente.');
+                    Swal.fire({
+                      type: "error",
+                      title: "Atenção",
+                      text: "Você não possui estoque suficiente."
+                    });
                 } else {
                     var dados = $(form).serialize();
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -586,7 +599,11 @@
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
                             } else {
-                                alert('Ocorreu um erro ao tentar adicionar produto.');
+                                Swal.fire({
+                                  type: "error",
+                                  title: "Atenção",
+                                  text: "Ocorreu um erro ao tentar adicionar produto."
+                                });
                             }
                         }
                     });
@@ -622,7 +639,11 @@
                             $("#preco_servico").val('');
                             $("#servico").val('').focus();
                         } else {
-                            alert('Ocorreu um erro ao tentar adicionar serviço.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar adicionar serviço."
+                            });
                         }
                     }
                 });
@@ -679,7 +700,11 @@
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
 
                         } else {
-                            alert('Ocorreu um erro ao tentar excluir produto.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar excluir produto."
+                            });
                         }
                     }
                 });
@@ -702,7 +727,11 @@
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
 
                         } else {
-                            alert('Ocorreu um erro ao tentar excluir serviço.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar excluir serviço."
+                            });
                         }
                     }
                 });
@@ -737,7 +766,11 @@
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
-                        alert(data.mensagem);
+                        Swal.fire({
+                          type: "error",
+                          title: "Atenção",
+                          text: data.mensagem
+                        });
                     }
                 }
             });

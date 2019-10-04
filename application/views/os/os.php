@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 
 
 
@@ -204,10 +205,18 @@ if (!$results) { ?>
                 })
                 .done(function(data) {
                     if (data.result == true) {
-                        alert('Notificação excluída com sucesso');
+                        Swal.fire({
+                          type: "success",
+                          title: "Sucesso",
+                          text: "Notificação excluída com sucesso."
+                        });
                         location.reload();
                     } else {
-                        alert('Ocorreu um problema ao tentar exlcuir notificação.');
+                        Swal.fire({
+                          type: "success",
+                          title: "Sucesso",
+                          text: "Ocorreu um problema ao tentar exlcuir notificação."
+                        });
                     }
                 });
         });

@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?php echo base_url();?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 
 <?php $situacao = $this->input->get('situacao');
       $periodo = $this->input->get('periodo');
@@ -573,7 +574,11 @@ if (!$results) {?>
             }
             else{
                 $("#btnCancelExcluir").trigger('click');
-                alert('Ocorreu um erro ao tentar excluir produto.');
+                Swal.fire({
+                  type: "error",
+                  title: "Atenção",
+                  text: "Ocorreu um erro ao tentar excluir produto."
+                });
             }
           }
         });
