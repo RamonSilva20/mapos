@@ -2,7 +2,6 @@
 
 class Os extends CI_Controller
 {
-
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
@@ -29,7 +28,6 @@ class Os extends CI_Controller
 
     public function gerenciar()
     {
-
         $this->load->library('pagination');
 
         $where_array = array();
@@ -91,7 +89,6 @@ class Os extends CI_Controller
 
     public function adicionar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar O.S.');
             redirect(base_url());
@@ -145,11 +142,25 @@ class Os extends CI_Controller
             );
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
+                $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
+
+                $idOs = $id;
+                $os = $this->os_model->getById($idOs);
+                $emitente = $this->mapos_model->getEmitente()[0];
+                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+
+                $remetentes = [
+                    $os->email,
+                    $emitente->email,
+                    $tecnico->email,
+                ];
+                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
+
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
                 log_info('Adicionou uma OS');
                 redirect('os/editar/' . $id);
             } else {
-
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
         }
@@ -160,7 +171,6 @@ class Os extends CI_Controller
 
     public function adicionarAjax()
     {
-
         $this->load->library('form_validation');
 
         if ($this->form_validation->run('os') == false) {
@@ -193,7 +203,6 @@ class Os extends CI_Controller
 
     public function editar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -242,6 +251,22 @@ class Os extends CI_Controller
             );
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
+                $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
+
+                $idOs = $this->input->post('idOs');
+
+                $os = $this->os_model->getById($idOs);
+                $emitente = $this->mapos_model->getEmitente()[0];
+                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+
+                $remetentes = [
+                    $os->email,
+                    $emitente->email,
+                    $tecnico->email,
+                ];
+                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
                 log_info('Alterou uma OS. ID: ' . $this->input->post('idGarantias'));
                 redirect(base_url() . 'index.php/os/editar/' . $this->input->post('idOs'));
@@ -261,7 +286,6 @@ class Os extends CI_Controller
 
     public function visualizar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -285,7 +309,6 @@ class Os extends CI_Controller
 
     public function imprimir()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -308,7 +331,6 @@ class Os extends CI_Controller
 
     public function enviar_email()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -335,19 +357,13 @@ class Os extends CI_Controller
             redirect(site_url('os'));
         }
 
-        $html = $this->load->view('os/emails/os', $this->data, true);
+        $idOs = $this->uri->segment(3);
+        $remetentes = [
+            $this->data['result']->email,
+        ];
+        $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
-        $this->load->model('email_model');
-        $headers = array('From' => $this->data['emitente'][0]->email, 'Subject' => 'Ordem de Serviço');
-        $email = array(
-            'to' => $this->data['result']->email,
-            'message' => $html,
-            'status' => 'pending',
-            'date' => date('Y-m-d H:i:s'),
-            'headers' => serialize($headers),
-        );
-
-        if ($this->email_model->add('email_queue', $email)) {
+        if ($enviouEmail) {
             $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
             log_info('Enviou e-mail para o cliente: '.$this->data['result']->nomeCliente. '. E-mail: '. $this->data['result']->email);
             redirect(site_url('os'));
@@ -360,7 +376,6 @@ class Os extends CI_Controller
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir O.S.');
             redirect(base_url());
@@ -391,7 +406,6 @@ class Os extends CI_Controller
 
     public function autoCompleteProduto()
     {
-
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteProduto($q);
@@ -400,7 +414,6 @@ class Os extends CI_Controller
 
     public function autoCompleteProdutoSaida()
     {
-
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteProdutoSaida($q);
@@ -418,7 +431,6 @@ class Os extends CI_Controller
 
     public function autoCompleteUsuario()
     {
-
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteUsuario($q);
@@ -436,7 +448,6 @@ class Os extends CI_Controller
 
     public function autoCompleteServico()
     {
-
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteServico($q);
@@ -445,7 +456,6 @@ class Os extends CI_Controller
 
     public function adicionarProduto()
     {
-
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
         $subtotal = $preco * $quantidade;
@@ -470,7 +480,6 @@ class Os extends CI_Controller
 
     public function excluirProduto()
     {
-
         $ID = $this->input->post('idProduto');
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $ID) == true) {
 
@@ -523,7 +532,6 @@ class Os extends CI_Controller
 
     public function anexar()
     {
-
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -622,7 +630,6 @@ class Os extends CI_Controller
 
     public function downloadanexo($id = null)
     {
-
         if ($id != null && is_numeric($id)) {
 
             $this->db->where('idAnexos', $id);
@@ -703,5 +710,44 @@ class Os extends CI_Controller
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
         $json = array('result' => false);
         echo json_encode($json);
+    }
+
+    private function enviarOsPorEmail($idOs, $remetentes, $assunto)
+    {
+        $dados = [];
+
+        $this->load->model('mapos_model');
+        $dados['result'] = $this->os_model->getById($idOs);
+        if (!isset($dados['result']->email)) {
+            return false;
+        }
+
+        $dados['produtos'] = $this->os_model->getProdutos($idOs);
+        $dados['servicos'] = $this->os_model->getServicos($idOs);
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+
+        $emitente = $dados['emitente'][0]->email;
+        if (!isset($emitente)) {
+            return false;
+        }
+
+        $html = $this->load->view('os/emails/os', $dados, true);
+
+        $this->load->model('email_model');
+
+        $remetentes = array_unique($remetentes);
+        foreach ($remetentes as $remetente) {
+            $headers = array('From' => $emitente, 'Subject' => $assunto);
+            $email = array(
+                'to' => $remetente,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            );
+            $this->email_model->add('email_queue', $email);
+        }
+
+        return true;
     }
 }
