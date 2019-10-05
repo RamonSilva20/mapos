@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 
 
 <div class="row-fluid" style="margin-top:0">
@@ -241,7 +242,11 @@
                         if (data.result == true) {
                             window.location.reload(true);
                         } else {
-                            alert('Ocorreu um erro ao tentar faturar venda.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar faturar venda."
+                            });
                             $('#progress-fatura').hide();
                         }
                     }
@@ -321,7 +326,11 @@
                 var quantidade = parseInt($("#quantidade").val());
                 var estoque = parseInt($("#estoque").val());
                 if (estoque < quantidade) {
-                    alert('Você não possui estoque suficiente.');
+                    Swal.fire({
+                      type: "warning",
+                      title: "Atenção",
+                      text: "Você não possui estoque suficiente."
+                    });
                 } else {
                     var dados = $(form).serialize();
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -337,7 +346,11 @@
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
                             } else {
-                                alert('Ocorreu um erro ao tentar adicionar produto.');
+                                Swal.fire({
+                                  type: "error",
+                                  title: "Atenção",
+                                  text: "Ocorreu um erro ao tentar adicionar produto."
+                                });
                             }
                         }
                     });
@@ -360,7 +373,11 @@
                         if (data.result == true) {
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                         } else {
-                            alert('Ocorreu um erro ao tentar excluir produto.');
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar excluir produto."
+                            });
                         }
                     }
                 });
