@@ -4,9 +4,18 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.9.0] - 2019-09-17
-- Adequação para enviar email de OS automaticamente na criação e edição (email é enviado para o cliente da OS,  para o emitente e para o técnico da OS). [@Pr3d4dor](https://github.com/Pr3d4dor)
+## [3.9.0] - 2019-10-05
+
+### Added
+- Adicionando envio de email de OS automaticamente na criação e edição (email é enviado para o cliente da OS,  para o emitente e para o técnico da OS). [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Adicionado novas opções (M² e Outros) no select de unidade na criação e edição de produto. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed 
+- Alterando alert padrão para sweet alert. [@David Vilaça](https://github.com/davidpvilaca)
+
+### Fixed
+- Corrigindo bug de máscara CPF/CNPJ. [will.phelipe@gmail.com](https://github.com/willph).
+- Corrigindo arquivo de update de data de expiração com data futura. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [3.8.0] - 2019-07-25
 
