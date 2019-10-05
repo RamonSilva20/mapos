@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-3.8.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-3.9.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -15,14 +15,14 @@
 2. Extraia o pacote e copie para seu webserver.
 3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
 4. Configure o email de envio no arquivo email.php
-5. Configurar cron jobs para envio de e-mail 
+5. Configurar cron jobs para envio de e-mail
     ##### Enviar emails pendentes a cada 2 minutos.
     - */2 * * * * php /var/www/index.php email/process
     ##### Enviar emails com falha a cada 5 minutos.
     - */5 * * * * php /var/www/index.php email/retry
-    
+
     ##### Obs: O path até o index.php (/var/www/) deve ser configurado conforme o seu ambiente
-    
+
 ### Atualização para versão 3.*
 1. Faça backup do banco de dados.
 2. Remova a pasta system da instalação atual.
@@ -34,10 +34,10 @@
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
-* [twbs/bootstrap](https://github.com/twbs/bootstrap) 
-* [jquery/jquery](https://github.com/jquery/jquery) 
-* [jquery/jquery-ui](https://github.com/jquery/jquery-ui) 
-* [mpdf/mpdf](https://github.com/mpdf/mpdf) 
+* [twbs/bootstrap](https://github.com/twbs/bootstrap)
+* [jquery/jquery](https://github.com/jquery/jquery)
+* [jquery/jquery-ui](https://github.com/jquery/jquery-ui)
+* [mpdf/mpdf](https://github.com/mpdf/mpdf)
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
 ### Requerimentos
@@ -48,7 +48,7 @@
 | [<img src="https://avatars.githubusercontent.com/Pr3d4dor?s=115"><br><sub>Gianluca Bine</sub>](https://github.com/Pr3d4dor) | [<img src="https://avatars.githubusercontent.com/Henrique-Miranda?s=115"><br><sub>Henrique Miranda</sub>](https://github.com/Henrique-Miranda) | [<img src="https://avatars.githubusercontent.com/mariolucasdev?s=115"><br><sub>Mário Lucas</sub>](https://github.com/mariolucasdev) | [<img src="https://avatars.githubusercontent.com/HelanAllysson?s=115"><br><sub>Helan Allysson</sub>](https://github.com/HelanAllysson) | [<img src="https://avatars.githubusercontent.com/KansasMyers?s=115"><br><sub>KansasMyers</sub>](https://github.com/KansasMyers)
 |:-:|:-:|:-:|:-:|:-:|
 | [<img src="https://avatars.githubusercontent.com/daniellbastos?s=115"><br><sub>Daniel Bastos</sub>](https://github.com/daniellbastos) | [<img src="https://avatars.githubusercontent.com/github?s=115"><br><sub>drelldeveloper</sub>](https://github.com/drelldeveloper) | [<img src="https://avatars.githubusercontent.com/fontebasso?s=115"><br><sub>Samuel Fontebasso</sub>](https://github.com/fontebasso) | [<img src="https://avatars.githubusercontent.com/marllonferreira?s=115"><br><sub>marllonferreira</sub>](https://github.com/marllonferreira) | [<img src="https://avatars.githubusercontent.com/rodrigo3d?s=115"><br><sub>Rodrigo Ribeiro</sub>](https://github.com/rodrigo3d)
-| [<img src="https://avatars.githubusercontent.com/willph?s=115"><br><sub>Wilmerson</sub>](https://github.com/willph) | [<img src="https://avatars.githubusercontent.com/bulfaitelo?s=115"><br><sub>Thiago Rodrigues</sub>](https://github.com/bulfaitelo) 
+| [<img src="https://avatars.githubusercontent.com/willph?s=115"><br><sub>Wilmerson</sub>](https://github.com/willph) | [<img src="https://avatars.githubusercontent.com/bulfaitelo?s=115"><br><sub>Thiago Rodrigues</sub>](https://github.com/bulfaitelo)
 
 
 ## Autor

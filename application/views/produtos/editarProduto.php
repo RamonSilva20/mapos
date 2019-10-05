@@ -17,7 +17,7 @@
 {
     /* Set something to make the badge looks focused */
     /* This really depends on the application, in my case it was: */
-    
+
     /* Adding a light border */
     box-shadow: inset 0px 0px 5px;
     /* Taking the difference out of the padding */
@@ -85,9 +85,11 @@
                                 <option value="KG" <?= ($result->unidade == 'KG') ? 'selected' : '' ?>>Kilograma</option>
                                 <option value="LT" <?= ($result->unidade == 'LT') ? 'selected' : '' ?>>Litro</option>
                                 <option value="CX" <?= ($result->unidade == 'CX') ? 'selected' : '' ?>>Caixa</option>
-                        </select>                        
+                                <option value="M2" <?= ($result->unidade == 'M2') ? 'selected' : '' ?>>M²</option>
+                                <option value="OT" <?= ($result->unidade == 'OT') ? 'selected' : '' ?>>Outro</option>
+                        </select>
                     </div>
-                    </div>                    
+                    </div>
 
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
@@ -126,7 +128,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".money").maskMoney();
-        
+
         $('#formProduto').validate({
             rules: {
                 descricao: {
@@ -174,4 +176,4 @@
             }
         });
     });
-</script> 
+</script>

@@ -17,7 +17,7 @@
 {
     /* Set something to make the badge looks focused */
     /* This really depends on the application, in my case it was: */
-    
+
     /* Adding a light border */
     box-shadow: inset 0px 0px 5px;
     /* Taking the difference out of the padding */
@@ -50,11 +50,11 @@
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada 
+                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
                                 <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
                                 <span class="badge">&check;</span>
                             </label>
-                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída 
+                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
                                 <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
                                 <span class="badge">&check;</span>
                             </label>
@@ -81,9 +81,11 @@
                             <option value="KG">Kilograma</option>
                             <option value="LT">Litro</option>
                             <option value="CX">Caixa</option>
+                            <option value="M2">M²</option>
+                            <option value="OT">Outro</option>
                         </select>
                     </div>
-                    </div>                     
+                    </div>
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
                         <div class="controls">
