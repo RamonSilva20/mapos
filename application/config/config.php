@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$config['app_version'] = '3.9.0';
+$config['app_version'] = '3.10.0';
 
 /*
 |--------------------------------------------------------------------------

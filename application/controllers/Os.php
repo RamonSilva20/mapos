@@ -280,6 +280,7 @@ class Os extends CI_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
         $this->data['view'] = 'os/editarOs';
         $this->load->view('tema/topo', $this->data);
     }
@@ -365,7 +366,7 @@ class Os extends CI_Controller
 
         if ($enviouEmail) {
             $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
-            log_info('Enviou e-mail para o cliente: '.$this->data['result']->nomeCliente. '. E-mail: '. $this->data['result']->email);
+            log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
             redirect(site_url('os'));
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
@@ -749,5 +750,39 @@ class Os extends CI_Controller
         }
 
         return true;
+    }
+
+    public function adicionarAnotacao()
+    {
+        $this->load->library('form_validation');
+        if ($this->form_validation->run('anotacoes_os') == false) {
+            echo json_encode(validation_errors());
+        } else {
+            $data = array(
+                'anotacao' => $this->input->post('anotacao'),
+                'data_hora' => date('Y-m-d H:i:s'),
+                'os_id' => $this->input->post('os_id'),
+            );
+
+            if ($this->os_model->add('anotacoes_os', $data) == true) {
+
+                log_info('Adicionou anotação a uma OS.');
+                echo json_encode(array('result' => true));
+            } else {
+                echo json_encode(array('result' => false));
+            }
+        }
+    }
+
+    public function excluirAnotacao()
+    {
+        $id = $this->input->post('idAnotacao');
+        if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $id) == true) {
+
+            log_info('Removeu anotação de uma OS.');
+            echo json_encode(array('result' => true));
+        } else {
+            echo json_encode(array('result' => false));
+        }
     }
 }

@@ -31,6 +31,7 @@
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
+                        <li id="tabAnotacoes"><a href="#tab5" data-toggle="tab">Anotações</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -235,7 +236,7 @@
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                                 echo '<td>' . $preco  . '</td>';
-                                                echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger"><i class="icon-remove icon-white"></i></span></td>';
+                                                echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger servico"><i class="icon-remove icon-white"></i></span></td>';
                                                 echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
@@ -288,6 +289,44 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!--Anotações-->
+                        <div class="tab-pane" id="tab5">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+                                
+                                <div class="span12" id="divAnotacoes" style="margin-left: 0">
+                                    
+                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Adicionar anotação</a>
+                                    <hr>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Anotação</th>
+                                                <th>Data/Hora</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                                foreach ($anotacoes as $a) {
+                                                    echo '<tr>';
+                                                    echo '<td>' . $a->anotacao . '</td>';
+                                                    echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
+                                                    echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn btn-danger anotacao"><i class="icon-remove icon-white"></i></span></td>';
+                                                    echo '</tr>';
+                                                } 
+                                                if(!$anotacoes){
+                                                    echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                                }
+                                            
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- Fim tab anotações -->
                     </div>
                 </div>
                 &nbsp 
@@ -314,6 +353,28 @@
         <a href="" id-imagem="" class="btn btn-inverse" id="download">Download</a>
         <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
     </div>
+</div>
+
+<!-- Modal cadastro anotações -->
+<div id="modal-anotacao" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="#" method="POST" id="formAnotacao">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Adicionar Anotação</h3>
+    </div>
+    <div class="modal-body">
+        <div class="span12" id="divFormAnotacoes" style="margin-left: 0"></div>                                                
+        <div class="span12" style="margin-left: 0">
+            <label for="anotacao">Anotação</label>
+            <textarea class="span12" name="anotacao" id="anotacao" cols="30" rows="3"></textarea>
+            <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
+        <button class="btn btn-primary">Adicionar</button>
+    </div>
+    </form>
 </div>
 
 <!-- Modal Faturar-->
@@ -377,7 +438,6 @@
             </div>
     </form>
 </div>
-
 
 
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
@@ -651,6 +711,45 @@
             }
         });
 
+        $("#formAnotacao").validate({
+            rules: {
+                anotacao: {
+                    required: true
+                }
+            },
+            messages: {
+                anotacao: {
+                    required: 'Insira a anotação'
+                }
+            },
+            submitHandler: function(form) {
+                var dados = $(form).serialize();
+                $("#divFormAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/adicionarAnotacao",
+                    data: dados,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result == true) {
+                            $("#divAnotacoes").load("<?php echo current_url(); ?> #divAnotacoes");
+                            $("#anotacao").val('');
+                            $('#btn-close-anotacao').trigger('click');
+                            $("#divFormAnotacoes").html('');
+                        } else {
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar adicionar anotação."
+                            });
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+
         $("#formAnexos").validate({
             submitHandler: function(form) {
                 //var dados = $( form ).serialize();
@@ -713,7 +812,7 @@
 
         });
 
-        $(document).on('click', 'span', function(event) {
+        $(document).on('click', '.servico', function(event) {
             var idServico = $(this).attr('idAcao');
             if ((idServico % 1) == 0) {
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -774,6 +873,32 @@
                     }
                 }
             });
+        });
+        
+        $(document).on('click', '.anotacao', function(event) {
+            var idAnotacao = $(this).attr('idAcao');
+            if ((idAnotacao % 1) == 0) {
+                $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/excluirAnotacao",
+                    data: "idAnotacao=" + idAnotacao,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result == true) {
+                            $("#divAnotacoes").load("<?php echo current_url(); ?> #divAnotacoes");
+
+                        } else {
+                            Swal.fire({
+                              type: "error",
+                              title: "Atenção",
+                              text: "Ocorreu um erro ao tentar excluir serviço."
+                            });
+                        }
+                    }
+                });
+                return false;
+            }
         });
 
         $(".datepicker").datepicker({
