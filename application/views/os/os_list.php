@@ -75,15 +75,15 @@
                                         </thead>
 
                                         <tbody>
-                                                <?php foreach($results as $o): ?>
-                                                    <tr>
-                                                        <td><?=$o->idOs?></td>
-                                                        <td><?=$o->nomeCliente?></td>
-                                                        <td><?=$o->dataInicial?></td>
-                                                        <td><?=$o->dataFinal?></td>
-                                                        <td><?=$o->status?></td>
-                                                    </tr>
-                                                <?php endforeach ?>
+                                            <?php foreach($results as $o): ?>
+                                                <tr>
+                                                    <td><?=$o->idOs?></td>
+                                                    <td><?=$o->nomeCliente?></td>
+                                                    <td><?=$o->dataInicial?></td>
+                                                    <td><?=$o->dataFinal?></td>
+                                                    <td><?=$o->status?></td>
+                                                </tr>
+                                            <?php endforeach ?>
                                         </tbody>
 
                                     </table>
@@ -103,11 +103,32 @@
 	</div>
 </div>
 
+<script src="<?= base_url('assets/js/lib/datatables/datatables.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/lib/sweetalert/sweetalert.min.js'); ?>"></script>
 <script>
     $(document).ready(function(){
         $("#abrirFiltro").click(function(e){
             $("#camposFiltro").toggle("slow");
             e.preventDefault();
         })
+
+        $("#table").DataTable({
+            "language": {
+				"search": "<?= $this->lang->line('app_search'); ?>",
+				"lengthMenu": "<?= $this->lang->line('app_per_page'); ?>",
+				"zeroRecords": "<?= $this->lang->line('app_zero_records'); ?>",
+				"info": "<?= $this->lang->line('app_showing'); ?>",
+				"infoEmpty": "<?= $this->lang->line('app_empty'); ?>",
+				"infoFiltered": "<?= $this->lang->line('app_filtered'); ?>",
+				"oPaginate": {
+					"sNext": "<?= $this->lang->line('app_next'); ?>",
+					"sPrevious": "<?= $this->lang->line('app_previous'); ?>",
+					"sFirst": "<?= $this->lang->line('app_first'); ?>",
+					"sLast": "<?= $this->lang->line('app_last'); ?>"
+				},
+				"sLoadingRecords": "<?= $this->lang->line('app_loading'); ?>",
+				"sProcessing": "<?= $this->lang->line('app_processing'); ?>",
+			}
+        });
     })
 </script>
