@@ -79,7 +79,7 @@ $config['language']	= 'pt-br';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://127.0.0.1/mapos/';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
