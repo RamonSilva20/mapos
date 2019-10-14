@@ -1,5 +1,6 @@
 <script src="<?php echo base_url()?>assets/js/jquery-3.3.1.min.js"></script>
 <script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
@@ -241,14 +242,22 @@
                         else {
                             //CEP pesquisado não foi encontrado.
                             limpa_formulario_cep();
-                            alert("CEP não encontrado.");
+                            Swal.fire({
+                              type: "warning",
+                              title: "Atenção",
+                              text: "CEP não encontrado."
+                            });
                         }
                     });
                 } //end if.
                 else {
                     //cep é inválido.
                     limpa_formulario_cep();
-                    alert("Formato de CEP inválido.");
+                    Swal.fire({
+                      type: "error",
+                      title: "Atenção",
+                      text: "Formato de CEP inválido."
+                    });
                 }
             } //end if.
             else {

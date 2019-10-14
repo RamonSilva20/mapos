@@ -508,7 +508,9 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-
+-- -----------------------------------------------------
+-- Table `email_queue`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `email_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `to` varchar(255) NOT NULL,
@@ -519,6 +521,17 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
   `date` datetime DEFAULT NULL,
   `headers` text,
   PRIMARY KEY (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `anotacaoes_os`
+-- -----------------------------------------------------
+CREATE TABLE `anotacoes_os` ( 
+    `idAnotacoes` INT(11) NOT NULL AUTO_INCREMENT, 
+    `anotacao` VARCHAR(255) NOT NULL , 
+    `data_hora` DATETIME NOT NULL , 
+    `os_id` INT(11) NOT NULL , 
+    PRIMARY KEY (`idAnotacoes`)
 );
 
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES

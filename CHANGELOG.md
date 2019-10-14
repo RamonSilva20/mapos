@@ -4,11 +4,29 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.10.0] - 2019-10-08
+
+### Added
+- Adicionando anotações na OS. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [3.9.0] - 2019-10-05
+
+### Added
+- Adicionando envio de email de OS automaticamente na criação e edição (email é enviado para o cliente da OS,  para o emitente e para o técnico da OS). [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado novas opções (M² e Outros) no select de unidade na criação e edição de produto. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed 
+- Alterando alert padrão para sweet alert. [@David Vilaça](https://github.com/davidpvilaca)
+
+### Fixed
+- Corrigindo bug de máscara CPF/CNPJ. [will.phelipe@gmail.com](https://github.com/willph).
+- Corrigindo arquivo de update de data de expiração com data futura. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [3.8.0] - 2019-07-25
 
 ### Added
-- Adicionada pesquisa por múltiplos status em OS. [@RamonSilva20](https://github.com/RamonSilva20) 
-- Ao adicionar OS e Vendas usuário logado preenchido por padrão como responsável. [@RamonSilva20](https://github.com/RamonSilva20) 
+- Adicionada pesquisa por múltiplos status em OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Ao adicionar OS e Vendas usuário logado preenchido por padrão como responsável. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed
 - Correção tabela e botões OS. [@bulfaitelo](https://github.com/bulfaitelo)
@@ -17,15 +35,15 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [3.7.0] - 2019-07-08
 
 ### Added
-- Adicionada funcionalidade de envio de OS por email. [@RamonSilva20](https://github.com/RamonSilva20) 
+- Adicionada funcionalidade de envio de OS por email. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [3.6.0] - 2019-06-29
 
 ### Added
-- Adicionada verificação de permissão para exibição de estatísticas no painel. [@RamonSilva20](https://github.com/RamonSilva20) 
-- Adicionada possibilidade de alteração de preços de produtos e serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20) 
-- Adicionada possibilidade de adicionar quantidade de serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20) 
-- Adicionada possibilidade de alterar preços de produtos em Vendas. [@RamonSilva20](https://github.com/RamonSilva20) 
+- Adicionada verificação de permissão para exibição de estatísticas no painel. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionada possibilidade de alteração de preços de produtos e serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionada possibilidade de adicionar quantidade de serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionada possibilidade de alterar preços de produtos em Vendas. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
 - Modificados alguns elementos de estilização. [@RamonSilva20](https://github.com/RamonSilva20)
@@ -83,7 +101,7 @@ Por: Wilmerson Felipe[will.phelipe@gmail.com](https://github.com/willph)
 ## [3.3.1] - 2019-03-03
 Por: Fábio Barbosa[fabiobarbosa@gmx.com](https://github.com/aportetecnologia)
 
-### Changed 
+### Changed
 - Modificado a cor de fundo para branco do box de texto do trumbowyg
 - Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
 - Reestilizado a tela de login para uma tela transparente e fundo dinamico
@@ -103,7 +121,7 @@ Adicionado o campo valorTotal dentro do $this->data['results']. [Fábio Barbosa]
 - Adicionado o campo Valor Total para aparecer o valor total da os quando estiver fechado. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 - Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 
-### Changed 
+### Changed
 - Alterando layout da tela de login de clientes. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
 - Formatado o campo Valor total com 2 casas decimais e R$ (cifrao) - [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 
@@ -144,8 +162,8 @@ Adicionado o campo valorTotal dentro do $this->data['results']. [Fábio Barbosa]
 - Status alterado automaticamente para faturado [@Pr3d4dor](https://github.com/Pr3d4dor).
 - Exibir o nome do anexo na embaixo do thumbnail em anexos de OS [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Changed 
+### Changed
 - Atualização de biblioteca mPDF para versão 6.1 [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Fixed 
+### Fixed
 - Correção de erro ao gerar relatório sem emitente estar configurado [@RamonSilva20](https://github.com/RamonSilva20).
