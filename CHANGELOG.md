@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.11.0] - 2019-10-14
+
+### Added
+- Adicionando alerta de cadastro com sucesso de cliente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [3.10.0] - 2019-10-08
 
 ### Added
@@ -15,7 +20,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adicionando envio de email de OS automaticamente na criação e edição (email é enviado para o cliente da OS,  para o emitente e para o técnico da OS). [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Adicionado novas opções (M² e Outros) no select de unidade na criação e edição de produto. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-### Changed 
+### Changed
 - Alterando alert padrão para sweet alert. [@David Vilaça](https://github.com/davidpvilaca)
 
 ### Fixed
