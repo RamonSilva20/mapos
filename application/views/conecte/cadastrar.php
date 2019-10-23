@@ -22,7 +22,6 @@
     <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-    
 </head>
 
 <body>
@@ -47,7 +46,7 @@
                         </div>
                         <div class="control-group">
                                 <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
-                                    <div class="controls">                                        
+                                    <div class="controls">
                                         <input class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
                                     </div>
                                 </div>
@@ -226,8 +225,6 @@
     ================================================== -->
 
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-
-
 </body>
 
-</html> 
+</html>

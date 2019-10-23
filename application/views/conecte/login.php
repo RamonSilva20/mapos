@@ -40,6 +40,12 @@
                             <?php echo $this->session->flashdata('error'); ?>
                        </div>
                     <?php }?>
+                    <?php if ($this->session->flashdata('success') != null) {?>
+                        <div class="alert alert-success">
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <?php echo $this->session->flashdata('success'); ?>
+                       </div>
+                    <?php }?>
                 <div class="control-group normal_text"> <h3><img src="<?php echo base_url() ?>assets/img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">
@@ -140,12 +146,3 @@
     </body>
 
 </html>
-
-
-
-
-
-
-
-
-
