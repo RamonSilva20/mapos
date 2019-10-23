@@ -15,7 +15,7 @@ class Os extends CI_Controller {
             redirect('mapos/login');
         }
 		
-		$this->load->helper(array('form','codegen_helper'));
+		$this->load->helper(array('form'));
 		$this->load->model('os_model','',TRUE);
 		$this->data['menuOs'] = 'OS';
 	}	
@@ -81,7 +81,7 @@ class Os extends CI_Controller {
 
 		$this->data['results'] = $this->os_model->getOs('os','idOs,dataInicial,dataFinal,garantia,descricaoProduto,defeito,status,observacoes,laudoTecnico',$where_array,$config['per_page'],$this->uri->segment(3));
        
-	    $this->data['view'] = 'os/os';
+	    $this->data['view'] = 'os/os_list';
        	$this->load->view('tema/topo',$this->data);
       
 		

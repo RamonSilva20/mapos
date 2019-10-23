@@ -12,27 +12,29 @@
 					</button>
 
 					<form id="form_delete" method="post">
-						<table id="table" class="table table-bordered table-striped" style="margin-bottom: 10px">
+						<div class="table-responsive">
+							<table id="table" class="table table-bordered table-striped" style="margin-bottom: 10px">
 
-							<thead>
-								<tr>
-									<th>
-										<input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp
-										<button class="btn btn-danger btn-sm hide" id="delete" title="<?= $this->lang->line('app_delete') ?>">
-											<i class="fa fa-trash"></i>
-										</button>
-									</th>
-									<th>#</th>
-									<th><?= ucfirst($this->lang->line('service_name')) ?></th>
-									<th><?= ucfirst($this->lang->line('service_description')) ?></th>
-									<th><?= ucfirst($this->lang->line('service_price')) ?></th>
-									<th>
-										<?= $this->lang->line('app_actions') ?>
-									</th>
-								</tr>
-							</thead>
+								<thead>
+									<tr>
+										<th>
+											<input type="checkbox" id="remove-all"> &nbsp &nbsp &nbsp
+											<button class="btn btn-danger btn-sm hide" id="delete" title="<?= $this->lang->line('app_delete') ?>">
+												<i class="fa fa-trash"></i>
+											</button>
+										</th>
+										<th>#</th>
+										<th><?= ucfirst($this->lang->line('service_name')) ?></th>
+										<th><?= ucfirst($this->lang->line('service_description')) ?></th>
+										<th><?= ucfirst($this->lang->line('service_price')) ?></th>
+										<th>
+											<?= $this->lang->line('app_actions') ?>
+										</th>
+									</tr>
+								</thead>
 
-						</table>
+							</table>
+						</div>
 					</form>
 
 				</div>
