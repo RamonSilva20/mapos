@@ -45,6 +45,13 @@
                     </div>
 
                     <div class="control-group" class="control-label">
+                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group" class="control-label">
                         <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
                             <input id="rua" type="text" name="rua" value="<?php echo $result->rua; ?>" />
@@ -78,14 +85,6 @@
                             <input id="estado" type="text" name="estado" value="<?php echo $result->estado; ?>" />
                         </div>
                     </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
-                        </div>
-                    </div>
-
 
 
                     <div class="form-actions">
