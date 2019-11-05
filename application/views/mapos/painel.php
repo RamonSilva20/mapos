@@ -329,10 +329,6 @@
     </div>
 </div>
 
-
-
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-
 <?php if ($os != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
 <script type="text/javascript">
     $(document).ready(function() {
