@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.12.0] - 2019-11-06
+
+### Changed
+- Organização do Menu. [@willph](https://github.com/willph)
+- Remoção de arquivo desnecessário. [@willph](https://github.com/willph)
+
 ## [3.11.0] - 2019-10-22
 
 ### Added
