@@ -18,8 +18,8 @@
 
 
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
+    <script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 </head>
@@ -72,6 +72,14 @@
                         </div>
 
                         <div class="control-group" class="control-label">
+                            <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
+                            </div>
+                        </div>
+
+
+                        <div class="control-group" class="control-label">
                             <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                             <div class="controls">
                                 <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
@@ -105,14 +113,6 @@
                                 <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>" />
                             </div>
                         </div>
-
-                        <div class="control-group" class="control-label">
-                            <label for="cep" class="control-label">CEP<span class="required">*</span></label>
-                            <div class="controls">
-                                <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
-                            </div>
-                        </div>
-
 
 
                         <div class="form-actions">

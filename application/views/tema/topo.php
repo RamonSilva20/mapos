@@ -12,11 +12,11 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/funcoesGlobal.js"></script>
 </head>
 
-<body>
+<body onLoad="initTimer();">
     <!--Header-part-->
     <div id="header">
         <h1><a href=""> Map OS </a></h1>
@@ -25,12 +25,27 @@
     <!--top-Header-menu-->
     <div id="user-nav" class="navbar navbar-inverse">
         <ul class="nav">
-            <li class=""><a title="" href="<?php echo site_url(); ?>/mapos/minhaConta"><i class="icon icon-star"></i> <span class="text">Minha Conta</span></a></li>
             <li class=""><a title="" href="<?php echo site_url(); ?>/mine"><i class="icon icon-eye-open"></i> <span class="text">Área do Cliente</span></a></li>
             <li class="pull-right"><a href="https://github.com/RamonSilva20/mapos" target="_blank"><i class="icon icon-asterisk"></i> <span class="text">Versão:
                         <?php echo $this->config->item('app_version'); ?></span></a></li>
-            <li class=""><a title="" href="<?php echo site_url(); ?>/mapos/sair"><i class="icon icon-share-alt"></i> <span class="text">Sair do Sistema</span></a></li>
-        </ul>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon icon-user"></i> <?php echo $this->session->userdata('nome') ?> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li class=""><a title="Meu Perfil" href="<?php echo site_url(); ?>/mapos/minhaConta"><i class="icon icon-star"></i> <span class="text">Meu Perfil</span></a></li>
+              <li class="divider"></li>
+              <li class=""><a title="Sair do Sistema" href="<?php echo site_url(); ?>/mapos/sair"><i class="icon icon-share-alt"></i> <span class="text">Sair do Sistema</span></a></li>
+            </ul>
+          </li>
+          <li style="margin-left: 100px;margin-top: 10px;"><span class="text" style="font-size:13px;color: #fff;"><i class="icon-calendar"></i>
+
+            <?php
+                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                date_default_timezone_set('America/Sao_Paulo');
+                $uppercaseMonth = ucfirst(gmstrftime('%B'));
+                echo ucfirst(strftime('%A, %d de '.$uppercaseMonth.' de %Y', strtotime('today')));
+            ?>
+          <i class="icon-time"></i> <span id="timer"></span></span></li>
+          </ul>
     </div>
     <!--start-top-serch-->
     <div id="search">

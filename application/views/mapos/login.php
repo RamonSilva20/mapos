@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="<?php echo base_url()?>assets/css/matrix-login.css" />
         <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        <script src="<?php echo base_url()?>assets/js/jquery-1.10.2.min.js"></script>
+        <script src="<?php echo base_url()?>assets/js/jquery-1.12.4.min.js"></script>
     </head>
     <body>
         <div id="loginbox">            

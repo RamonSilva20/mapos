@@ -18,7 +18,7 @@
                                 <?php echo $usuario->email ?></strong></li>
                         <li class="bg_lo span12" style="margin-left: 0"><strong>Nível:
                                 <?php echo $usuario->permissao; ?></strong></li>
-                        <li class="bg_yl span12" style="margin-left: 0"><strong>Acesso expira em:
+                        <li class="bg_lh span12" style="margin-left: 0"><strong>Acesso expira em:
                                 <?php echo date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
                     </ul>
                 </div>
