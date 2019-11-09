@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Produtos extends CI_Controller
 {
@@ -61,7 +63,7 @@ class Produtos extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,codDeBarra,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', $config['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'produtos/produtos';
         $this->load->view('tema/topo', $this->data);
@@ -86,6 +88,7 @@ class Produtos extends CI_Controller
             $precoVenda = $this->input->post('precoVenda');
             $precoVenda = str_replace(",", "", $precoVenda);
             $data = array(
+                'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => set_value('descricao'),
                 'unidade' => set_value('unidade'),
                 'precoCompra' => $precoCompra,
@@ -131,6 +134,7 @@ class Produtos extends CI_Controller
             $precoVenda = $this->input->post('precoVenda');
             $precoVenda = str_replace(",", "", $precoVenda);
             $data = array(
+                'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => $this->input->post('descricao'),
                 'unidade' => $this->input->post('unidade'),
                 'precoCompra' => $precoCompra,

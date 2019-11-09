@@ -2,14 +2,15 @@
     <title>MAPOS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/main.css" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/blue.css" class="skin-color" />
-    <script type="text/javascript"  src="<?php echo base_url();?>assets/js/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/blue.css" class="skin-color" />
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
+
 <body style="background-color: transparent">
     <div class="container-fluid">
         <div class="row-fluid">
@@ -17,7 +18,7 @@
                 <div class="widget-box">
                     <?= isset($topo) ? $topo : '' ?>
                     <div class="widget-title">
-                        <h4 style="text-align: center"><?= ucfirst($title)?></h4>
+                        <h4 style="text-align: center"><?= ucfirst($title) ?></h4>
                     </div>
                     <div class="widget-content nopadding">
                         <table class="table table-striped table-bordered">
@@ -39,10 +40,10 @@
                                     echo '<td><small>' . $c->nomeCliente . '</small></td>';
                                     echo '<td><small>' . $c->status . '</small></td>';
                                     echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
-                                    echo '<td><small>' . $c->descricaoProduto. '</small></td>';
-                                    echo '<td><small>R$ '. number_format($c->total_produto,2,',','.') .'</small></td>';
-                                    echo '<td><small>R$ '. number_format($c->total_servico,2,',','.') .'</small></td>';
-                                    echo '<td><small>R$ '. number_format($c->total_produto + $c->total_servico, 2, ',', '.') .'</small></td>';
+                                    echo '<td><small>' . $c->descricaoProduto . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                     echo '</tr>';
                                 }
                                 ?>
@@ -50,16 +51,10 @@
                         </table>
                     </div>
                 </div>
-                <p style="text-align: right">Data do Relatório: <?php echo date('d/m/Y');?></p>
+                <p style="text-align: right">Data do Relatório: <?php echo date('d/m/Y'); ?></p>
             </div>
         </div>
     </div>
 </body>
+
 </html>
-
-
-
-
-
-
-

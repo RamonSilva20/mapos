@@ -9,9 +9,9 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
 
     require_once APPPATH . 'helpers/mpdf/mpdf.php';
 
-    if($landscape){
+    if ($landscape) {
         $mpdf = new mPDF('c', 'A4-L');
-    }else{
+    } else {
         $mpdf = new mPDF('c', 'A4');
     }
 

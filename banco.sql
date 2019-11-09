@@ -225,6 +225,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `produtos` (
   `idProdutos` INT(11) NOT NULL AUTO_INCREMENT,
+  `codDeBarra` VARCHAR(70) NOT NULL,
   `descricao` VARCHAR(80) NOT NULL,
   `unidade` VARCHAR(10) NULL DEFAULT NULL,
   `precoCompra` DECIMAL(10,2) NULL DEFAULT NULL,
