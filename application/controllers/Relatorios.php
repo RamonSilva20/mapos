@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Relatorios extends CI_Controller
 {
@@ -138,21 +140,22 @@ class Relatorios extends CI_Controller
         pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
-    public function produtosEtiquetas(){
+    public function produtosEtiquetas()
+    {
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
-		
-		
-			if($de <= $ate){
-		        $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
-		        $this->load->helper('mpdf');
-		        $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
-		        pdf_create($html, 'etiquetas_'.$de.'_'.$ate, TRUE);
-		    }else{
-				$this->session->set_flashdata('error','O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
-                redirect('produtos');
-            }
+
+
+        if ($de <= $ate) {
+            $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
+            $this->load->helper('mpdf');
+            $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
+            pdf_create($html, 'etiquetas_' . $de . '_' . $ate, TRUE);
+        } else {
+            $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
+            redirect('produtos');
         }
+    }
 
     public function servicos()
     {
