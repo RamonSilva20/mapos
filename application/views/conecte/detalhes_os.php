@@ -3,9 +3,10 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <style>
-    .ui-datepicker{
+    .ui-datepicker {
         z-index: 9999 !important;
     }
+
     .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
@@ -17,7 +18,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Detalhes OS</h5>
             </div>
@@ -177,22 +178,22 @@
                             <div class="span12" style="padding: 1%; margin-left: 0">
 
                                 <?php if ($this->session->userdata('cliente_anexa')) { ?>
-                                <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
-                                    <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8" s method="post">
-                                        <div class="span10">
+                                    <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
+                                        <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8" s method="post">
+                                            <div class="span10">
 
-                                            <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs ?>" />
-                                            <label for="">Anexo</label>
-                                            <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">.</label>
-                                            <button class="btn btn-success span12"><i class="icon-white icon-plus"></i> Anexar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <?php 
-                            } ?>
+                                                <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs ?>" />
+                                                <label for="">Anexo</label>
+                                                <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
+                                            </div>
+                                            <div class="span2">
+                                                <label for="">.</label>
+                                                <button class="btn btn-success span12"><i class="fas fa-paperclip"></i> Anexar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                <?php
+                                } ?>
 
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
                                     <?php
@@ -346,4 +347,4 @@
             lang: 'pt_br'
         });
     });
-</script> 
+</script>

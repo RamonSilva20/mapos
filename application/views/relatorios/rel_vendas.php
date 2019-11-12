@@ -3,13 +3,13 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-list-alt"></i>
+                    <i class="fas fa-cash-register"></i>
                 </span>
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/vendasRapid"><i class="icon-tags"></i> <small>Todas as Vendas</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/vendasRapid"><i class="fas fa-cash-register"></i> <small>Todas as Vendas</small></a></li>
                 </ul>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-list-alt"></i>
+                    <i class="fas fa-cash-register"></i>
                 </span>
                 <h5>Relatórios Customizáveis</h5>
             </div>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="span12" style="margin-left: 0; text-align: center">
                             <input type="reset" class="btn" value="Limpar" />
-                            <button class="btn btn-inverse"><i class="icon-print icon-white"></i> Imprimir</button>
+                            <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>
                         </div>
                     </form>
                 </div>
@@ -79,4 +79,4 @@
             }
         });
     });
-</script> 
+</script>

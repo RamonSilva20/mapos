@@ -1,7 +1,7 @@
 <div class="widget-box">
     <div class="widget-title">
         <span class="icon">
-            <i class="icon-envelope"></i>
+            <i class="fas fa-envelope"></i>
         </span>
         <h5>Lista de envio de e-mails</h5>
     </div>
@@ -17,29 +17,30 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if(!$results) { ?>
+                <?php if (!$results) { ?>
                     <tr>
                         <td colspan="5">Nenhum e-mail na fila</td>
                     </tr>
                 <?php } ?>
 
                 <?php foreach ($results as $r) {
-                    $status = array('pending' => '<span class="badge badge-default">Pendente</span>',
-                                    'sending' => '<span class="badge badge-info">Enviando</span>',
-                                    'sent' => '<span class="badge badge-success">Enviado</span>',
-                                    'failed' => '<span class="badge badge-warning">Falhou</span>',
-                                );
+                    $status = array(
+                        'pending' => '<span class="badge badge-default">Pendente</span>',
+                        'sending' => '<span class="badge badge-info">Enviando</span>',
+                        'sent' => '<span class="badge badge-success">Enviado</span>',
+                        'failed' => '<span class="badge badge-warning">Falhou</span>',
+                    );
                     echo '<tr>';
                     echo '<td>' . $r->id . '</td>';
                     echo '<td>' . $r->to . '</td>';
                     echo '<td>' . $status[$r->status] . '</td>';
                     echo '<td>' . date('d/m/Y H:i:s', strtotime($r->date)) . '</td>';
                     echo '<td>';
-                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . $r->id . '" class="btn btn-danger tip-top" title="Excluir Item"><i class="icon-remove icon-white"></i></a>  ';
+                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . $r->id . '" class="btn btn-danger tip-top" title="Excluir Item"><i class="fas fa-trash-alt"></i></a>  ';
                     echo '</td>';
                     echo '</tr>';
                 } ?>
-              
+
             </tbody>
         </table>
     </div>
@@ -69,4 +70,4 @@
             $('#idEmail').val(email);
         });
     });
-</script> 
+</script>

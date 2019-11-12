@@ -2,7 +2,7 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-th-list"></i>
+                <i class="fas fa-user"></i>
             </span>
             <h5>Minha Conta</h5>
         </div>
@@ -32,7 +32,7 @@
     <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
-                <i class="icon-th-list"></i>
+                <i class="fas fa-lock"></i>
             </span>
             <h5>Alterar Minha Senha</h5>
         </div>
@@ -104,4 +104,4 @@
             }
         });
     });
-</script> 
+</script>
