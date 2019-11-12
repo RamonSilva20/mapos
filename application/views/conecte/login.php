@@ -10,9 +10,8 @@
         <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
         <link href="<?=base_url('assets/css/particula.css');?>" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.min.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
-        <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
         <!-- Script webeddy.com.br -->

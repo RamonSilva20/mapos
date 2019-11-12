@@ -102,14 +102,14 @@ hr{ border-top-color:#dadada;}
 #user-nav > ul {
 	margin: 0;
 	padding: 0;
-	list-style: none; border-right: 1px solid #2e363f;border-left: 1px solid #000;
+	list-style: none; border-right: 0px solid #2e363f;border-left: 0px solid #000;
 }
 #user-nav > ul > li {
 	float: left;
 	list-style-type: none;
 	margin: 0;
 	position: relative;
-	padding: 0; border-left: 1px solid #2e363f; border-right: 1px solid #000;
+	padding: 0; border-left: 0px solid #2e363f; border-right: 0px solid #000;
 }
 #user-nav > ul > li > a {
 	padding:9px 10px;
