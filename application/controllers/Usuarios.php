@@ -10,7 +10,7 @@ class Usuarios extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
 
         parent::__construct();
@@ -28,12 +28,12 @@ class Usuarios extends CI_Controller
         $this->data['menuConfiguracoes'] = 'Configurações';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         $this->load->library('pagination');
@@ -69,7 +69,7 @@ class Usuarios extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
 
         $this->load->library('form_validation');
@@ -113,7 +113,7 @@ class Usuarios extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function editar()
+    public function editar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
