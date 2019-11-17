@@ -1,7 +1,10 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
+application/config/config.php 
 ./application/config/config.php 
 ./application/config/database.php 
+application/config/database.php 
 ./index.php
+index.php
 
 # production
 /install/files
