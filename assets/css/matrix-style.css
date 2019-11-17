@@ -161,6 +161,9 @@ hr{ border-top-color:#dadada;}
 	display: block;
 	color: #939da8;
 }
+#sidebar > ul > li > a.text-white {
+	color: #FFFFFF;
+}
 #sidebar > ul > li > a > i {
 	margin-right: 10px;
 }

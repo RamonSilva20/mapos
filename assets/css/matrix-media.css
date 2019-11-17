@@ -27,6 +27,9 @@ body {
 #sidebar > ul > li > a:hover {
 	background-color: #27a9e3; color:#fff;
 }
+#sidebar > ul > li > a.text-white:hover {
+	background-color: #F66; color:#fff;
+}
 #sidebar > ul li ul {
 	background-color: #1e242b;
 }

@@ -179,6 +179,9 @@
             </li>
             <?php 
           } ?>
+          <li class="bg_ly"> 
+            <a class="text-white" href="<?php echo site_url('mapos/sair'); ?>"><i class="icon icon-share-alt"></i> <span>Sair</span></a>
+          </li>
         </ul>
     </div>
     <div id="content">
