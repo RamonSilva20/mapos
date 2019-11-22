@@ -5,12 +5,12 @@ $totalProdutos = 0; ?>
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
 
-                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
+                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -21,25 +21,25 @@ $totalProdutos = 0; ?>
                             <tbody>
                                 <?php if ($emitente == null) { ?>
 
-                                <tr>
-                                    <td colspan="3" class="alert">Os dados do emitente não foram configurados.</td>
-                                </tr>
-                                <?php 
-                            } else { ?>
-                                <tr>
-                                    <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                    <td> <span style="font-size: 20px; ">
-                                            <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                            <?php echo $emitente[0]->cnpj; ?> </br>
-                                            <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
-                                            <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
-                                    <td style="width: 18%; text-align: center">#Protocolo: <span>
-                                            <?php echo $result->idOs ?></span></br> </br> <span>Emissão:
-                                            <?php echo date('d/m/Y') ?></span></td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="3" class="alert">Os dados do emitente não foram configurados.</td>
+                                    </tr>
+                                <?php
+                                } else { ?>
+                                    <tr>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
+                                        <td> <span style="font-size: 20px; ">
+                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
+                                                <?php echo $emitente[0]->cnpj; ?> </br>
+                                                <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
+                                                <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                        <td style="width: 18%; text-align: center">#Protocolo: <span>
+                                                <?php echo $result->idOs ?></span></br> </br> <span>Emissão:
+                                                <?php echo date('d/m/Y') ?></span></td>
+                                    </tr>
 
-                                <?php 
-                            } ?>
+                                <?php
+                                } ?>
                             </tbody>
                         </table>
 
@@ -89,103 +89,103 @@ $totalProdutos = 0; ?>
 
                         <?php if ($result->descricaoProduto != null || $result->defeito != null || $result->laudoTecnico != null || $result->observacoes) { ?>
 
-                        <table class="table table-condensed">
-                            <tbody>
-                                <?php if ($result->descricaoProduto != null) { ?>
-                                <tr>
-                                    <td>
-                                        <strong>Descrição</strong><br>
-                                        <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
-                                    </td>
-                                </tr>
+                            <table class="table table-condensed">
+                                <tbody>
+                                    <?php if ($result->descricaoProduto != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>Descrição</strong><br>
+                                                <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                            </td>
+                                        </tr>
 
-                                <?php 
-                            } ?>
+                                    <?php
+                                        } ?>
 
-                                <?php if ($result->defeito != null) { ?>
-                                <tr>
-                                    <td>
-                                        <strong>Defeito</strong><br>
-                                        <?php echo htmlspecialchars_decode($result->defeito) ?>
-                                    </td>
-                                </tr>
-                                <?php 
-                            } ?>
+                                    <?php if ($result->defeito != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>Defeito</strong><br>
+                                                <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                        } ?>
 
-                                <?php if ($result->laudoTecnico != null) { ?>
-                                <tr>
-                                    <td>
-                                        <strong>Laudo Técnico</strong> <br>
-                                        <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
-                                    </td>
-                                </tr>
-                                <?php 
-                            } ?>
+                                    <?php if ($result->laudoTecnico != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>Laudo Técnico</strong> <br>
+                                                <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                        } ?>
 
-                                <?php if ($result->observacoes != null) { ?>
-                                <tr>
-                                    <td>
-                                        <strong>Observações</strong> <br>
-                                        <?php echo htmlspecialchars_decode($result->observacoes) ?>
-                                    </td>
-                                </tr>
-                                <?php 
-                            } ?>
+                                    <?php if ($result->observacoes != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>Observações</strong> <br>
+                                                <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                        } ?>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                        <?php 
-                    } ?>
+                        <?php
+                        } ?>
 
 
                         <?php if ($produtos != null || $servicos != null) { ?>
-                        <br />
-                        <table class="table table-condensed" id="tblProdutos">
-                            <thead>
-                                <tr>
-                                    <th style="font-size: large">Item</th>
-                                    <th style="font-size: large">Quantidade</th>
-                                    <th style="font-size: large">Sub-total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                            <br />
+                            <table class="table table-condensed" id="tblProdutos">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: large">Item</th>
+                                        <th style="font-size: large">Quantidade</th>
+                                        <th style="font-size: large">Sub-total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                                foreach ($produtos as $p) {
+                                        foreach ($produtos as $p) {
 
-                                    $totalProdutos = $totalProdutos + $p->subTotal;
-                                    echo '<tr>';
-                                    echo '<td style="text-align: center">' . $p->descricao . '</td>';
-                                    echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                            $totalProdutos = $totalProdutos + $p->subTotal;
+                                            echo '<tr>';
+                                            echo '<td style="text-align: center">' . $p->descricao . '</td>';
+                                            echo '<td style="text-align: center">' . $p->quantidade . '</td>';
 
-                                    echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                    echo '</tr>';
-                                } ?>
+                                            echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                            echo '</tr>';
+                                        } ?>
 
 
-                                <?php
-                                setlocale(LC_MONETARY, 'en_US');
-                                foreach ($servicos as $s) {
-                                    $preco = $s->preco;
-                                    $totalServico = $totalServico + $preco;
-                                    echo '<tr>';
-                                    echo '<td style="text-align: center">' . $s->nome . '</td>';
-                                    echo '<td></td>';
-                                    echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                    echo '</tr>';
-                                }
-                                ?>
+                                    <?php
+                                        setlocale(LC_MONETARY, 'en_US');
+                                        foreach ($servicos as $s) {
+                                            $preco = $s->preco;
+                                            $totalServico = $totalServico + $preco;
+                                            echo '<tr>';
+                                            echo '<td style="text-align: center">' . $s->nome . '</td>';
+                                            echo '<td></td>';
+                                            echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
+                                            echo '</tr>';
+                                        }
+                                        ?>
 
-                                <tr>
-                                    <td colspan="2" style="text-align: right"></td>
-                                    <td style="text-align: center"><strong>Total: R$
-                                            <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <?php 
-                    } ?>
+                                    <tr>
+                                        <td colspan="2" style="text-align: right"></td>
+                                        <td style="text-align: center"><strong>Total: R$
+                                                <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <?php
+                        } ?>
                     </div>
 
 
@@ -239,4 +239,4 @@ $totalProdutos = 0; ?>
         }
 
     });
-</script> 
+</script>

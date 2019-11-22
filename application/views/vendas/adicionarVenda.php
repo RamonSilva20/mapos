@@ -6,7 +6,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-cash-register"></i>
                 </span>
                 <h5>Cadastro de venda</h5>
             </div>
@@ -19,7 +19,7 @@
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
                                 <?php if ($custom_error == true) { ?>
-                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
+                                    <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
@@ -40,8 +40,8 @@
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
-                                            <button class="btn btn-success" id="btnContinuar"><i class="icon-share-alt icon-white"></i> Continuar</button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                            <button class="btn btn-success" id="btnContinuar"><i class="fas fa-share"></i> Continuar</button>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
@@ -107,4 +107,4 @@
             dateFormat: 'dd/mm/yy'
         });
     });
-</script> 
+</script>

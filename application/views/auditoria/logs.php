@@ -1,9 +1,9 @@
-<a href="#modal-excluir" role="button" data-toggle="modal" class="btn btn-danger tip-top" title="Excluir Logs"><i class="icon-remove icon-white"></i> Remover Logs - 30 dias ou mais</a>
+<a href="#modal-excluir" role="button" data-toggle="modal" class="btn btn-danger tip-top" title="Excluir Logs"><i class="fas fa-trash-alt"></i> Remover Logs - 30 dias ou mais</a>
 
 <div class="widget-box">
     <div class="widget-title">
         <span class="icon">
-            <i class="icon-time"></i>
+            <i class="fas fa-clock"></i>
         </span>
         <h5>Logs</h5>
     </div>
@@ -21,14 +21,14 @@
             <tbody>
                 <?php foreach ($results as $r) {
                     echo '<tr>';
-                        echo '<td>' . $r->usuario . '</td>';
-                        echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
-                        echo '<td>' . $r->hora . '</td>';
-                        echo '<td>' . $r->ip . '</td>';
-                        echo '<td>' . $r->tarefa . '</td>';
+                    echo '<td>' . $r->usuario . '</td>';
+                    echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
+                    echo '<td>' . $r->hora . '</td>';
+                    echo '<td>' . $r->ip . '</td>';
+                    echo '<td>' . $r->tarefa . '</td>';
                     echo '</tr>';
                 } ?>
-                <?php if(!$results) { ?>
+                <?php if (!$results) { ?>
                     <tr>
                         <td colspan="5">Nenhum registro encontrado.</td>
                     </tr>

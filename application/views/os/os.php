@@ -1,18 +1,18 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 
 
 
 <div class="span12" style="margin-left: 0">
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
-        <div class="span3">
-            <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i> Adicionar OS</a>
-        </div>
-        <?php 
-    } ?>
+            <div class="span3">
+                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
+            </div>
+        <?php
+        } ?>
 
         <div class="span3">
             <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
@@ -44,130 +44,133 @@
 <?php
 
 if (!$results) { ?>
-<div class="widget-box">
-    <div class="widget-title">
-        <span class="icon">
-            <i class="icon-tags"></i>
-        </span>
-        <h5>Ordens de Serviço</h5>
-    </div>
-    <div class="widget-content nopadding">            
-        <div class="table-responsive">
-            <table class="table table-bordered ">
-                <thead>
-                    <tr style="backgroud-color: #2D335B">
-                        <th>N° OS</th>
-                        <th>Cliente</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Valor Total</th>
-                        <th>Status</th>
-                        <th>T. Garantia</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="6">Nenhuma OS Cadastrada</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="fas fa-diagnoses"></i>
+            </span>
+            <h5>Ordens de Serviço</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <div class="table-responsive">
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr style="backgroud-color: #2D335B">
+                            <th>N° OS</th>
+                            <th>Cliente</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                            <th>T. Garantia</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6">Nenhuma OS Cadastrada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<?php 
+<?php
 } else { ?>
 
 
-<div class="widget-box">
-    <div class="widget-title">
-        <span class="icon">
-            <i class="icon-tags"></i>
-        </span>
-        <h5>Ordens de Serviço</h5>
-    </div>
-    <div class="widget-content nopadding">
-        <div class="table-responsive">
-            <table class="table table-bordered ">
-                <thead>
-                    <tr style="backgroud-color: #2D335B">
-                        <th>N° OS</th>
-                        <th>Cliente</th>
-                        <th>Responsável</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Valor Total</th>
-                        <th>Status</th>
-                        <th>T. Garantia</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($results as $r) {
-                        $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                        if($r->dataFinal != null){ 
-                            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                        }else{
-                            $dataFinal = "";
-                        }
-                        switch ($r->status) {
-                    case 'Aberto':
-                        $cor = '#00cd00';
-                        break;
-                    case 'Em Andamento':
-                        $cor = '#436eee';
-                        break;
-                    case 'Orçamento':
-                        $cor = '#CDB380';
-                        break;
-                    case 'Cancelado':
-                        $cor = '#CD0000';
-                        break;
-                    case 'Finalizado':
-                        $cor = '#256';
-                        break;
-                    case 'Faturado':
-                        $cor = '#B266FF';
-                        break;
-                    case 'Aguardando Peças':
-                        $cor = '#FF7F00';
-                        break;
-                    default:
-                        $cor = '#E0E4CC';
-                        break;
-                }
-                        echo '<tr>';
-                        echo '<td>' . $r->idOs . '</td>';
-                        echo '<td>' . $r->nomeCliente . '</td>';
-                        echo '<td>' . $r->nome . '</td>';
-                        echo '<td>' . $dataInicial . '</td>';
-                        echo '<td>' . $dataFinal . '</td>';
-                        echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                        echo '<td>' . $r->refGarantia . '</td>';
-                        echo '<td>';
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="icon-print"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="icon-envelope"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="icon-remove icon-white"></i></a>  ';
-                        }
-                        echo  '</td>';
-                        echo '</tr>';
-                    } ?>
-                    <tr>
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="fas fa-diagnoses"></i>
+            </span>
+            <h5>Ordens de Serviço</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <div class="table-responsive">
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr style="backgroud-color: #2D335B">
+                            <th>N° OS</th>
+                            <th>Cliente</th>
+                            <th>Responsável</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                            <th>T. Garantia</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($results as $r) {
+                                $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                                if ($r->dataFinal != null) {
+                                    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                                } else {
+                                    $dataFinal = "";
+                                }
+                                switch ($r->status) {
+                                    case 'Aberto':
+                                        $cor = '#00cd00';
+                                        break;
+                                    case 'Em Andamento':
+                                        $cor = '#436eee';
+                                        break;
+                                    case 'Orçamento':
+                                        $cor = '#CDB380';
+                                        break;
+                                    case 'Cancelado':
+                                        $cor = '#CD0000';
+                                        break;
+                                    case 'Finalizado':
+                                        $cor = '#256';
+                                        break;
+                                    case 'Faturado':
+                                        $cor = '#B266FF';
+                                        break;
+                                    case 'Aguardando Peças':
+                                        $cor = '#FF7F00';
+                                        break;
+                                    default:
+                                        $cor = '#E0E4CC';
+                                        break;
+                                }
+                                echo '<tr>';
+                                echo '<td>' . $r->idOs . '</td>';
+                                echo '<td>' . $r->nomeCliente . '</td>';
+                                echo '<td>' . $r->nome . '</td>';
+                                echo '<td>' . $dataInicial . '</td>';
+                                echo '<td>' . $dataFinal . '</td>';
+                                echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
+                                echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                                echo '<td>' . $r->refGarantia . '</td>';
+                                echo '<td>';
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>';
 
-                    </tr>
-                </tbody>
-            </table>
+                                    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular);
+                                    echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . $result->descricaoProduto . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . $emitente[0]->nome . '%20' . $emitente[0]->telefone . '_"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
+                                }
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                                }
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                                }
+                                echo  '</td>';
+                                echo '</tr>';
+                            } ?>
+                            <tr>
+
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 <?php echo $this->pagination->create_links();
 } ?>
@@ -206,16 +209,16 @@ if (!$results) { ?>
                 .done(function(data) {
                     if (data.result == true) {
                         Swal.fire({
-                          type: "success",
-                          title: "Sucesso",
-                          text: "Notificação excluída com sucesso."
+                            type: "success",
+                            title: "Sucesso",
+                            text: "Notificação excluída com sucesso."
                         });
                         location.reload();
                     } else {
                         Swal.fire({
-                          type: "success",
-                          title: "Sucesso",
-                          text: "Ocorreu um problema ao tentar exlcuir notificação."
+                            type: "success",
+                            title: "Sucesso",
+                            text: "Ocorreu um problema ao tentar exlcuir notificação."
                         });
                     }
                 });
@@ -224,4 +227,4 @@ if (!$results) { ?>
             dateFormat: 'dd/mm/yy'
         });
     });
-</script> 
+</script>

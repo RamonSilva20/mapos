@@ -1,5 +1,5 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
@@ -7,7 +7,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-user"></i>
+                    <i class="fas fa-user"></i>
                 </span>
                 <h5>Editar Usuário</h5>
             </div>
@@ -34,7 +34,7 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfcnpj" type="text" name="cpf" value="<?php echo $result->cpf; ?>"  />
+                            <input class="cpfcnpj" type="text" name="cpf" value="<?php echo $result->cpf; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -112,7 +112,7 @@
                     <div class="control-group">
                         <label for="dataExpiracao" class="control-label">Expira em<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="dataExpiracao" type="date" name="dataExpiracao" value="<?php echo $result->dataExpiracao; ?>"  />
+                            <input id="dataExpiracao" type="date" name="dataExpiracao" value="<?php echo $result->dataExpiracao; ?>" />
                         </div>
                     </div>
 
@@ -154,8 +154,8 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -259,4 +259,4 @@
         });
 
     });
-</script> 
+</script>
