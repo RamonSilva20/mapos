@@ -51,7 +51,7 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
                 <li class="bg_ls">
-                    <a href="<?= base_url() ?>index.php/termoGarantias"><i class="fas fa-book" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/garantias"><i class="fas fa-book" style="font-size:36px"></i>
                         <div>Termo Garantia <span class="badge badge-light">F7</span></div>
                     </a>
                 </li>
