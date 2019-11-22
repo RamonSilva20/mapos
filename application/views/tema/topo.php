@@ -213,6 +213,10 @@
         </li>
       <?php
       } ?>
+      <li> 
+        <a class="text-white" href="<?php echo site_url('mapos/sair'); ?>"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></a>
+      </li>
+
     </ul>
   </div>
   <div id="content">
