@@ -46,7 +46,6 @@ class Os_model extends CI_Model
                 foreach ($clientes as $c) {
                     array_push($lista_clientes, $c->idClientes);
                 }
-
             }
         }
 
@@ -236,7 +235,7 @@ class Os_model extends CI_Model
                 $row_set[] = array('label' => $row['refGarantia'], 'id' => $row['idGarantias']);
             }
             echo json_encode($row_set);
-        } 
+        }
     }
 
     public function autoCompleteServico($q)

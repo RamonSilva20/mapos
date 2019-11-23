@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Os extends CI_Controller
 {
@@ -118,9 +120,8 @@ class Os extends CI_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                ? $this->input->post('garantias_id')
-                : null;
-
+                    ? $this->input->post('garantias_id')
+                    : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -231,7 +232,6 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -372,7 +372,6 @@ class Os extends CI_Controller
             $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
             redirect(site_url('os'));
         }
-
     }
 
     public function excluir()
