@@ -50,7 +50,7 @@ class Os_model extends CI_Model
             }
         }
 
-        $this->db->select($fields . ',clientes.nomeCliente, usuarios.nome, garantias.*');
+        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
