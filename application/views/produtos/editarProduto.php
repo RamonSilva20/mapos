@@ -1,48 +1,50 @@
 <style>
-/* Hiding the checkbox, but allowing it to be focused */
-.badgebox
-{
-    opacity: 0;
-}
+    /* Hiding the checkbox, but allowing it to be focused */
+    .badgebox {
+        opacity: 0;
+    }
 
-.badgebox + .badge
-{
-    /* Move the check mark away when unchecked */
-    text-indent: -999999px;
-    /* Makes the badge's width stay the same checked and unchecked */
-	width: 27px;
-}
+    .badgebox+.badge {
+        /* Move the check mark away when unchecked */
+        text-indent: -999999px;
+        /* Makes the badge's width stay the same checked and unchecked */
+        width: 27px;
+    }
 
-.badgebox:focus + .badge
-{
-    /* Set something to make the badge looks focused */
-    /* This really depends on the application, in my case it was: */
+    .badgebox:focus+.badge {
+        /* Set something to make the badge looks focused */
+        /* This really depends on the application, in my case it was: */
 
-    /* Adding a light border */
-    box-shadow: inset 0px 0px 5px;
-    /* Taking the difference out of the padding */
-}
+        /* Adding a light border */
+        box-shadow: inset 0px 0px 5px;
+        /* Taking the difference out of the padding */
+    }
 
-.badgebox:checked + .badge
-{
-    /* Move the check mark back when checked */
-	text-indent: 0;
-}
+    .badgebox:checked+.badge {
+        /* Move the check mark back when checked */
+        text-indent: 0;
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-align-justify"></i>
+                    <i class="fas fa-shopping-bag"></i>
                 </span>
                 <h5>Editar Produto</h5>
             </div>
             <div class="widget-content nopadding">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                     <div class="control-group">
+                    <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
+                        <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
+                        <div class="controls">
+                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo $result->codDeBarra; ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>" />
@@ -52,7 +54,7 @@
                     <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
-                        <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
+                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
                                 <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" <?= ($result->entrada == 1) ? 'checked' : '' ?>>
                                 <span class="badge">&check;</span>
                             </label>
@@ -78,17 +80,17 @@
                     </div>
 
                     <div class="control-group">
-                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                    <div class="controls">
-                        <select id="unidade" name="unidade">
-                        <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
+                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                        <div class="controls">
+                            <select id="unidade" name="unidade">
+                                <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
                                 <option value="KG" <?= ($result->unidade == 'KG') ? 'selected' : '' ?>>Kilograma</option>
                                 <option value="LT" <?= ($result->unidade == 'LT') ? 'selected' : '' ?>>Litro</option>
                                 <option value="CX" <?= ($result->unidade == 'CX') ? 'selected' : '' ?>>Caixa</option>
                                 <option value="M2" <?= ($result->unidade == 'M2') ? 'selected' : '' ?>>M²</option>
                                 <option value="OT" <?= ($result->unidade == 'OT') ? 'selected' : '' ?>>Outro</option>
-                        </select>
-                    </div>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="control-group">
@@ -108,8 +110,8 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -118,8 +120,8 @@
                 </form>
             </div>
 
-         </div>
-     </div>
+        </div>
+    </div>
 </div>
 
 

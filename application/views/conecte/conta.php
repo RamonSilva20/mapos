@@ -4,7 +4,7 @@
             <li class="active"><a data-toggle="tab" href="#tab1">Meus Dados</a></li>
 
             <div class="buttons">
-                <a title="Icon Title" class="btn btn-mini btn-info" href="<?php echo base_url() ?>index.php/mine/editarDados/<?php echo $result->idClientes ?>"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a title="Editar" class="btn btn-mini btn-info" href="<?php echo base_url() ?>index.php/mine/editarDados/<?php echo $result->idClientes ?>"><i class="fas fa-edit"></i> Editar</a>
             </div>
         </ul>
     </div>
@@ -16,7 +16,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-user"></i></span>
                                 <h5>Dados Pessoais</h5>
                             </a>
                         </div>
@@ -52,7 +52,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-phone-alt"></i></span>
                                 <h5>Contatos</h5>
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                                 <h5>Endereço</h5>
                             </a>
                         </div>
@@ -136,4 +136,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

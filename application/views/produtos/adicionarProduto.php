@@ -1,47 +1,49 @@
 <style>
-/* Hiding the checkbox, but allowing it to be focused */
-.badgebox
-{
-    opacity: 0;
-}
+    /* Hiding the checkbox, but allowing it to be focused */
+    .badgebox {
+        opacity: 0;
+    }
 
-.badgebox + .badge
-{
-    /* Move the check mark away when unchecked */
-    text-indent: -999999px;
-    /* Makes the badge's width stay the same checked and unchecked */
-	width: 27px;
-}
+    .badgebox+.badge {
+        /* Move the check mark away when unchecked */
+        text-indent: -999999px;
+        /* Makes the badge's width stay the same checked and unchecked */
+        width: 27px;
+    }
 
-.badgebox:focus + .badge
-{
-    /* Set something to make the badge looks focused */
-    /* This really depends on the application, in my case it was: */
+    .badgebox:focus+.badge {
+        /* Set something to make the badge looks focused */
+        /* This really depends on the application, in my case it was: */
 
-    /* Adding a light border */
-    box-shadow: inset 0px 0px 5px;
-    /* Taking the difference out of the padding */
-}
+        /* Adding a light border */
+        box-shadow: inset 0px 0px 5px;
+        /* Taking the difference out of the padding */
+    }
 
-.badgebox:checked + .badge
-{
-    /* Move the check mark back when checked */
-	text-indent: 0;
-}
+    .badgebox:checked+.badge {
+        /* Move the check mark back when checked */
+        text-indent: 0;
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-align-justify"></i>
+                    <i class="fas fa-shopping-bag"></i>
                 </span>
                 <h5>Cadastro de Produto</h5>
             </div>
             <div class="widget-content nopadding">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                     <div class="control-group">
+                    <div class="control-group">
+                        <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
+                        <div class="controls">
+                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo set_value('codDeBarra'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo set_value('descricao'); ?>" />
@@ -73,18 +75,18 @@
                         </div>
                     </div>
                     <div class="control-group">
-                    <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                    <div class="controls">
-                        <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
-                        <select id="unidade" name="unidade">
-                            <option value="UN">Unidade</option>
-                            <option value="KG">Kilograma</option>
-                            <option value="LT">Litro</option>
-                            <option value="CX">Caixa</option>
-                            <option value="M2">M²</option>
-                            <option value="OT">Outro</option>
-                        </select>
-                    </div>
+                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                        <div class="controls">
+                            <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
+                            <select id="unidade" name="unidade">
+                                <option value="UN">Unidade</option>
+                                <option value="KG">Kilograma</option>
+                                <option value="LT">Litro</option>
+                                <option value="CX">Caixa</option>
+                                <option value="M2">M²</option>
+                                <option value="OT">Outro</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
@@ -101,15 +103,15 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
+                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-         </div>
-     </div>
+        </div>
+    </div>
 </div>
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>

@@ -4,14 +4,14 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-book"></i>
                 </span>
                 <h5>Termo de Garantia</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
-                        echo '<a title="Icon Title" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/garantias/editar/' . $result->idGarantias . '"><i class="icon-pencil icon-white"></i> Editar</a>';
+                        echo '<a title="Editar Termo de Garantia" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/garantias/editar/' . $result->idGarantias . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
-                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
+                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>"><i class="fas fa-print"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -70,7 +70,7 @@
                                                     <h5>Data</h5>
                                                 </span>
                                                 <span> <?php echo date('d/m/Y', strtotime($result->dataGarantia)); ?></span> <br />
-                                                
+
                                             </li>
                                         </ul>
                                     </td>
@@ -95,7 +95,9 @@
                                         <ul>
                                             <li>
 
-                                                <span><h5>Texto da Garantia</h5></span><br />
+                                                <span>
+                                                    <h5>Texto da Garantia</h5>
+                                                </span><br />
                                                 <span><?php echo htmlspecialchars_decode($result->textoGarantia) ?></span><br />
                                             </li>
                                         </ul>
@@ -103,12 +105,9 @@
                                 </tr>
                             </tbody>
                         </table>
-
-                        
                     </div>
-                    
                 </div>
             </div>
         </div>
     </div>
-</div> 
+</div>

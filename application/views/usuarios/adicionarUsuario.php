@@ -1,5 +1,5 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
@@ -7,7 +7,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-user"></i>
+                    <i class="fas fa-user"></i>
                 </span>
                 <h5>Cadastro de Usuário</h5>
             </div>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
 
-                   
+
                     <!-- Campo para inserir a data de validade de acesso do usuário-->
                     <div class="control-group">
                         <label for="dataExpiracao" class="control-label">Expira em <span class="required">*</span></label>
@@ -141,8 +141,8 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar</button>
+                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -247,4 +247,4 @@
             }
         });
     });
-</script> 
+</script>

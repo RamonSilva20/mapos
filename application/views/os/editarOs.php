@@ -1,15 +1,16 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <style>
-    .ui-datepicker{
+    .ui-datepicker {
         z-index: 99999 !important;
     }
+
     .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
@@ -20,7 +21,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Editar OS</h5>
             </div>
@@ -99,33 +100,41 @@
                                         </div>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
+                                        <label for="descricaoProduto">
+                                            <h4>Descrição Produto/Serviço</h4>
+                                        </label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="defeito"><h4>Defeito</h4></label>
+                                        <label for="defeito">
+                                            <h4>Defeito</h4>
+                                        </label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes"><h4>Observações</h4></label>
+                                        <label for="observacoes">
+                                            <h4>Observações</h4>
+                                        </label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
+                                        <label for="laudoTecnico">
+                                            <h4>Laudo Técnico</h4>
+                                        </label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
-                                            <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
-                                            <?php 
-                                        } ?>
-                                            <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-secondary"><i class="icon-eye-open"></i> Visualizar OS</a>
-                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url()?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="icon-print icon-white"></i> Imprimir</a>
-                                            <a title="Enviar por E-mail" class="btn btn-warning" href="<?php echo site_url()?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="icon-envelope icon-white"></i> Enviar por E-mail</a>
-                                            <?php if($result->garantias_id){ ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url()?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="icon-text-width icon-white"></i> Imprimir Termo de Garantia</a> <?php  } ?>
-                                            <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
+                                            <?php
+                                            } ?>
+                                            <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                            <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-secondary"><i class="fas fa-eye"></i> Visualizar OS</a>
+                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
+                                            <a title="Enviar por E-mail" class="btn btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
+                                            <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php  } ?>
+                                            <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
@@ -152,7 +161,7 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">.</label>
-                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="icon-white icon-plus"></i> Adicionar</button>
+                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
                                 </form>
                             </div>
@@ -176,7 +185,7 @@
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td>' . $p->quantidade . '</td>';
                                             echo '<td>' . ($p->preco ?: $p->precoVenda)  . '</td>';
-                                            echo '<td><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+                                            echo '<td><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
                                             echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
                                         } ?>
@@ -201,16 +210,16 @@
                                             <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
                                         </div>
                                         <div class="span2">
-                                        <label for="">Preço</label>
-                                        <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" />
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">Quantidade</label>
-                                        <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" />
-                                    </div>
+                                            <label for="">Preço</label>
+                                            <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">Quantidade</label>
+                                            <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" />
+                                        </div>
                                         <div class="span2">
                                             <label for="">.</label>
-                                            <button class="btn btn-success span12"><i class="icon-white icon-plus"></i> Adicionar</button>
+                                            <button class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -236,7 +245,7 @@
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                                 echo '<td>' . $preco  . '</td>';
-                                                echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger servico"><i class="icon-remove icon-white"></i></span></td>';
+                                                echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger servico"><i class="fas fa-trash-alt"></i></span></td>';
                                                 echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
@@ -262,7 +271,7 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">.</label>
-                                            <button class="btn btn-success span12"><i class="icon-white icon-plus"></i> Anexar</button>
+                                            <button class="btn btn-success span12"><i class="fas fa-paperclip"></i> Anexar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -293,10 +302,10 @@
                         <!--Anotações-->
                         <div class="tab-pane" id="tab5">
                             <div class="span12" style="padding: 1%; margin-left: 0">
-                                
+
                                 <div class="span12" id="divAnotacoes" style="margin-left: 0">
-                                    
-                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Adicionar anotação</a>
+
+                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar anotação</a>
                                     <hr>
                                     <table class="table table-bordered">
                                         <thead>
@@ -308,28 +317,28 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                                foreach ($anotacoes as $a) {
-                                                    echo '<tr>';
-                                                    echo '<td>' . $a->anotacao . '</td>';
-                                                    echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
-                                                    echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn btn-danger anotacao"><i class="icon-remove icon-white"></i></span></td>';
-                                                    echo '</tr>';
-                                                } 
-                                                if(!$anotacoes){
-                                                    echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
-                                                }
-                                            
+                                            foreach ($anotacoes as $a) {
+                                                echo '<tr>';
+                                                echo '<td>' . $a->anotacao . '</td>';
+                                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
+                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn btn-danger anotacao"><i class="fas fa-trash-alt"></i></span></td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$anotacoes) {
+                                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                            }
+
                                             ?>
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
                     </div>
                 </div>
-                &nbsp 
+                &nbsp
             </div>
         </div>
     </div>
@@ -358,22 +367,22 @@
 <!-- Modal cadastro anotações -->
 <div id="modal-anotacao" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="#" method="POST" id="formAnotacao">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Adicionar Anotação</h3>
-    </div>
-    <div class="modal-body">
-        <div class="span12" id="divFormAnotacoes" style="margin-left: 0"></div>                                                
-        <div class="span12" style="margin-left: 0">
-            <label for="anotacao">Anotação</label>
-            <textarea class="span12" name="anotacao" id="anotacao" cols="30" rows="3"></textarea>
-            <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Adicionar Anotação</h3>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
-        <button class="btn btn-primary">Adicionar</button>
-    </div>
+        <div class="modal-body">
+            <div class="span12" id="divFormAnotacoes" style="margin-left: 0"></div>
+            <div class="span12" style="margin-left: 0">
+                <label for="anotacao">Anotação</label>
+                <textarea class="span12" name="anotacao" id="anotacao" cols="30" rows="3"></textarea>
+                <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
+            <button class="btn btn-primary">Adicionar</button>
+        </div>
     </form>
 </div>
 
@@ -512,9 +521,9 @@
                             window.location.reload(true);
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar faturar OS."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar faturar OS."
                             });
                             $('#progress-fatura').hide();
                         }
@@ -567,19 +576,19 @@
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteTermoGarantia",
             minLength: 1,
             select: function(event, ui) {
-                if(ui.item.id){
+                if (ui.item.id) {
                     $("#garantias_id").val(ui.item.id);
                 }
             }
         });
 
-        $('#termoGarantia').on('change', function(){
-            if(!$(this).val() && $("#garantias_id").val()){
-                $("#garantias_id").val(''); 
+        $('#termoGarantia').on('change', function() {
+            if (!$(this).val() && $("#garantias_id").val()) {
+                $("#garantias_id").val('');
                 Swal.fire({
-                  type: "success",
-                  title: "Sucesso",
-                  text: "Termo de garantia removido"
+                    type: "success",
+                    title: "Sucesso",
+                    text: "Termo de garantia removido"
                 });
             }
         });
@@ -595,9 +604,9 @@
                 dataInicial: {
                     required: true
                 },
-                 dataFinal: {
+                dataFinal: {
                     required: true
-                }    
+                }
             },
             messages: {
                 cliente: {
@@ -640,9 +649,9 @@
                 var estoque = parseInt($("#estoque").val());
                 if (estoque < quantidade) {
                     Swal.fire({
-                      type: "error",
-                      title: "Atenção",
-                      text: "Você não possui estoque suficiente."
+                        type: "error",
+                        title: "Atenção",
+                        text: "Você não possui estoque suficiente."
                     });
                 } else {
                     var dados = $(form).serialize();
@@ -660,9 +669,9 @@
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
-                                  type: "error",
-                                  title: "Atenção",
-                                  text: "Ocorreu um erro ao tentar adicionar produto."
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar adicionar produto."
                                 });
                             }
                         }
@@ -700,9 +709,9 @@
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar adicionar serviço."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar adicionar serviço."
                             });
                         }
                     }
@@ -739,9 +748,9 @@
                             $("#divFormAnotacoes").html('');
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar adicionar anotação."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar adicionar anotação."
                             });
                         }
                     }
@@ -800,9 +809,9 @@
 
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar excluir produto."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar excluir produto."
                             });
                         }
                     }
@@ -827,9 +836,9 @@
 
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar excluir serviço."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar excluir serviço."
                             });
                         }
                     }
@@ -866,15 +875,15 @@
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
                         Swal.fire({
-                          type: "error",
-                          title: "Atenção",
-                          text: data.mensagem
+                            type: "error",
+                            title: "Atenção",
+                            text: data.mensagem
                         });
                     }
                 }
             });
         });
-        
+
         $(document).on('click', '.anotacao', function(event) {
             var idAnotacao = $(this).attr('idAcao');
             if ((idAnotacao % 1) == 0) {
@@ -890,9 +899,9 @@
 
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar excluir serviço."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar excluir serviço."
                             });
                         }
                     }
@@ -910,4 +919,3 @@
         });
     });
 </script>
-

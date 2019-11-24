@@ -3,7 +3,7 @@
         <div class="accordion-heading">
             <div class="widget-title">
                 <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                    <span class="icon"><i class="icon-list"></i></span>
+                    <span class="icon"><i class="fas fa-shopping-bag"></i></span>
                     <h5>Dados do Produto</h5>
                 </a>
             </div>
@@ -13,41 +13,47 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
+                            <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>
+                            <td>
+                                <?php echo $result->codDeBarra ?>
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="text-align: right; width: 30%"><strong>Descrição</strong></td>
                             <td>
-                            <?php echo $result->descricao ?>
+                                <?php echo $result->descricao ?>
                             </td>
-                            </tr>
+                        </tr>
                         <tr>
                             <td style="text-align: right"><strong>Unidade</strong></td>
                             <td>
-                            <?php echo $result->unidade ?>
+                                <?php echo $result->unidade ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Compra</strong></td>
                             <td>R$
-                            <?php echo $result->precoCompra; ?>
+                                <?php echo $result->precoCompra; ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Venda</strong></td>
                             <td>R$
-                            <?php echo $result->precoVenda; ?>
+                                <?php echo $result->precoVenda; ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque</strong></td>
                             <td>
-                            <?php echo $result->estoque; ?>
+                                <?php echo $result->estoque; ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque Mínimo</strong></td>
                             <td>
-                            <?php echo $result->estoqueMinimo; ?>
+                                <?php echo $result->estoqueMinimo; ?>
                             </td>
-                        </tr>              
+                        </tr>
                     </tbody>
                 </table>
             </div>

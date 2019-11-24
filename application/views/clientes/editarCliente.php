@@ -1,13 +1,13 @@
-<script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-user"></i>
+                    <i class="fas fa-user"></i>
                 </span>
                 <h5>Editar Cliente</h5>
             </div>
@@ -26,7 +26,7 @@
                     <div class="control-group">
                         <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>"  />
+                            <input class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -95,8 +95,8 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/clientes" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                <a href="<?php echo base_url() ?>index.php/clientes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>

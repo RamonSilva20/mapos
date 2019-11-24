@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 
 
 <div class="row-fluid" style="margin-top:0">
@@ -8,7 +8,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-cash-register"></i>
                 </span>
                 <h5>Editar Venda</h5>
             </div>
@@ -45,12 +45,12 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
-                                            <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="icon-file"></i> Faturar</a>
-                                            <?php 
-                                          } ?>
-                                            <button class="btn btn-primary" id="btnContinuar"><i class="icon-white icon-ok"></i> Alterar</button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="icon-eye-open"></i> Visualizar Venda</a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
+                                            <?php
+                                            } ?>
+                                            <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="fas fa-eye"></i> Visualizar Venda</a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp</label>
-                                            <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="icon-white icon-plus"></i> Adicionar</button>
+                                            <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -92,15 +92,15 @@
                                             <?php
                                             $total = 0;
                                             foreach ($produtos as $p) {
-                                              $preco = $p->preco ?: $p->precoVenda;
-                                              $total = $total + $p->subTotal;
-                                              echo '<tr>';
-                                              echo '<td>' . $p->descricao . '</td>';
-                                              echo '<td>' . $p->quantidade . '</td>';
-                                              echo '<td>' . $preco . '</td>';
-                                              echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-                                              echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                              echo '</tr>';
+                                                $preco = $p->preco ?: $p->precoVenda;
+                                                $total = $total + $p->subTotal;
+                                                echo '<tr>';
+                                                echo '<td>' . $p->descricao . '</td>';
+                                                echo '<td>' . $p->quantidade . '</td>';
+                                                echo '<td>' . $preco . '</td>';
+                                                echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                                echo '</tr>';
                                             } ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
@@ -243,9 +243,9 @@
                             window.location.reload(true);
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar faturar venda."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar faturar venda."
                             });
                             $('#progress-fatura').hide();
                         }
@@ -327,9 +327,9 @@
                 var estoque = parseInt($("#estoque").val());
                 if (estoque < quantidade) {
                     Swal.fire({
-                      type: "warning",
-                      title: "Atenção",
-                      text: "Você não possui estoque suficiente."
+                        type: "warning",
+                        title: "Atenção",
+                        text: "Você não possui estoque suficiente."
                     });
                 } else {
                     var dados = $(form).serialize();
@@ -347,9 +347,9 @@
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
-                                  type: "error",
-                                  title: "Atenção",
-                                  text: "Ocorreu um erro ao tentar adicionar produto."
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar adicionar produto."
                                 });
                             }
                         }
@@ -374,9 +374,9 @@
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                         } else {
                             Swal.fire({
-                              type: "error",
-                              title: "Atenção",
-                              text: "Ocorreu um erro ao tentar excluir produto."
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar excluir produto."
                             });
                         }
                     }
@@ -388,4 +388,4 @@
             dateFormat: 'dd/mm/yy'
         });
     });
-</script> 
+</script>
