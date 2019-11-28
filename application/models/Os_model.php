@@ -54,6 +54,9 @@ class Os_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
+        $emitente = $this->db->get('emitente')->result();
+        return $emitente;
+
 
         // condicionais da pesquisa
 

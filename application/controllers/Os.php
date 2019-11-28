@@ -83,8 +83,7 @@ class Os extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
-
+        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal,emitente.nome as emitente_nome, emitente.telefone as emitente_telefone', $where_array, $config['per_page'], $this->uri->segment(3));
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);
     }
