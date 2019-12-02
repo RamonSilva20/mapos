@@ -32,7 +32,6 @@ class Os extends CI_Controller
     {
         $this->load->library('pagination');
         $this->load->model('mapos_model');
-        
 
         $where_array = array();
 
@@ -122,8 +121,8 @@ class Os extends CI_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                    ? $this->input->post('garantias_id')
-                    : null;
+                ? $this->input->post('garantias_id')
+                : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
