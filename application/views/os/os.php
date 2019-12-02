@@ -36,7 +36,7 @@
             <input type="text" name="data2" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
         </div>
         <div class="span1">
-            <button class="span12 btn"> <i class="icon-search"></i> </button>
+            <button class="span12 btn"> <i class="fas fa-search"></i> </button>
         </div>
     </form>
 </div>
