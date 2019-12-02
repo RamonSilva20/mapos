@@ -4,10 +4,20 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.14.1] - 2019-12-02
+
+### Fixed
+- Corrigido erro ao exibir logo na visualização de OS. [@willph](https://github.com/willph)
+- Corrigido icon de pesquisar na tela de OS. [@willph](https://github.com/willph)
+- Corrigido problema ao imprimir etiquetas. [@willph](https://github.com/willph)
+- Corrigido problema de return-path ao utilizar SMTP. [@RamonSilva20](https://github.com/RamonSilva20)
+- Corrigido erro no link de WhatsApp ao não ter cadastro de emitente. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [3.14.0] - 2019-11-22
 
 ### Changed
-- Adicionado impressão de etiquetas nos padrões: EAN13, UPCA, CODE 93, CODE 128, CODABAR, QR-CODE. [@willph](https://github.com/willph)
+- Adicionado impressão de etiquetas nos padrões: EAN13, UPCA, CODE 93, CODE 128, CODABAR, QR-CODE. [@willph](https://github.com/willph) e [@Marco](https://github.com/marcotuliomtb)
 - Adicionado campo de cadastro de código de barra. [@willph](https://github.com/willph)
 - Adicionado teclas de atalho. [@willph](https://github.com/willph)
 - Adicionado botão de logout no menu lateral. [@mvnp](https://github.com/mvnp)
