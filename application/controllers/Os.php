@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Os extends CI_Controller
 {
@@ -29,6 +31,8 @@ class Os extends CI_Controller
     public function gerenciar()
     {
         $this->load->library('pagination');
+        $this->load->model('mapos_model');
+        
 
         $where_array = array();
 
@@ -82,7 +86,7 @@ class Os extends CI_Controller
         $this->pagination->initialize($config);
 
         $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
-
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);
     }
@@ -118,9 +122,8 @@ class Os extends CI_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                ? $this->input->post('garantias_id')
-                : null;
-
+                    ? $this->input->post('garantias_id')
+                    : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -231,7 +234,6 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -372,7 +374,6 @@ class Os extends CI_Controller
             $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
             redirect(site_url('os'));
         }
-
     }
 
     public function excluir()
