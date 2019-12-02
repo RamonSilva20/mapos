@@ -739,7 +739,7 @@ class Os extends CI_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = array('From' => $emitente, 'Subject' => $assunto);
+            $headers = array('From' => $emitente, 'Subject' => $assunto, 'Return-Path' => '');
             $email = array(
                 'to' => $remetente,
                 'message' => $html,
