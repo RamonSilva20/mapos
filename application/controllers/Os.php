@@ -233,6 +233,7 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
+                
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -282,6 +283,10 @@ class Os extends CI_Controller
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        
         $this->data['view'] = 'os/editarOs';
         $this->load->view('tema/topo', $this->data);
     }
