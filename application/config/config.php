@@ -309,3 +309,5 @@ $config['cache_path'] = '';
 |	TRUE       = Enabled, take all query parameters into account.
 |	             Please be aware that this may result in numerous cache
 |	             files generated for the same page over and over again
+|
+*/
