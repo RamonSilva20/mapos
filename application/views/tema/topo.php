@@ -74,7 +74,7 @@
           setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
           date_default_timezone_set('America/Sao_Paulo');
           $uppercaseMonth = ucfirst(gmstrftime('%B'));
-          echo ucfirst(strftime('%A, %d de ' . $uppercaseMonth . ' de %Y', strtotime('today')));
+          echo utf8_encode(ucfirst(strftime( '%A, %d de ' .$uppercaseMonth. ' de %Y', strtotime('today'))));
           ?>
           <i class="far fa-clock"></i></i> <span id="timer"></span></span></li>
     </ul>
