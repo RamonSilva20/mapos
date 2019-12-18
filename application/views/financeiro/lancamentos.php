@@ -76,44 +76,6 @@ $periodo = $this->input->get('periodo');
 
 <div class="span12" style="margin-left: 0;">
 
-  <?php
-
-  if (!$results) { ?>
-    <div class="widget-box">
-      <div class="widget-title">
-        <span class="icon">
-          <i class="fas fa-hand-holding-usd"></i>
-        </span>
-        <h5>Lançamentos Financeiros</h5>
-
-      </div>
-
-      <div class="widget-content nopadding">
-
-
-        <table class="table table-bordered ">
-          <thead>
-            <tr style="backgroud-color: #2D335B">
-              <th>#</th>
-              <th>Data Inicial</th>
-              <th>Data Final</th>
-              <th>Status</th>
-              <th>Defeito</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <tr>
-              <td colspan="6">Nenhuma lançamento encontrado</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  <?php } else { ?>
-
-
     <div class="widget-box">
       <div class="widget-title">
         <span class="icon">
@@ -141,6 +103,13 @@ $periodo = $this->input->get('periodo');
           </thead>
           <tbody>
             <?php
+
+              if(!$results){
+                echo '<tr>
+                        <td colspan="8" >Nenhum lançamento encontrado</td>
+                      </tr>';
+
+              }
               $totalReceita = 0;
               $totalDespesa = 0;
               $saldo = 0;
@@ -184,16 +153,16 @@ $periodo = $this->input->get('periodo');
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="5" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
-              <td colspan="2" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totalReceita, 2, ',', '.') ?></strong></td>
+              <td colspan="6" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
+              <td colspan="3" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totalReceita, 2, ',', '.') ?></strong></td>
             </tr>
             <tr>
-              <td colspan="5" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
-              <td colspan="2" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totalDespesa, 2, ',', '.') ?></strong></td>
+              <td colspan="6" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
+              <td colspan="3" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totalDespesa, 2, ',', '.') ?></strong></td>
             </tr>
             <tr>
-              <td colspan="5" style="text-align: right"> <strong>Saldo:</strong></td>
-              <td colspan="2" style="text-align: left;"><strong>R$ <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?></strong></td>
+              <td colspan="6" style="text-align: right"> <strong>Saldo:</strong></td>
+              <td colspan="3" style="text-align: left;"><strong>R$ <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?></strong></td>
             </tr>
           </tfoot>
         </table>
@@ -202,9 +171,7 @@ $periodo = $this->input->get('periodo');
 
 </div>
 
-<?php echo $this->pagination->create_links();
-} ?>
-
+<?php echo $this->pagination->create_links();  ?>
 
 
 <!-- Modal nova receita -->
@@ -274,9 +241,6 @@ $periodo = $this->input->get('periodo');
     </div>
   </form>
 </div>
-
-
-
 
 <!-- Modal nova despesa -->
 <div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
