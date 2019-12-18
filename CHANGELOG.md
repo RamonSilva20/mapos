@@ -5,6 +5,17 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.14.2] - 2019-12-18
+
+### Fixed
+- Corrigido data por extenso no topo do tema. [@ZanzouShio](https://github.com/ZanzouShio)
+- Corrigido icons que não apareciam. [@willph](https://github.com/willph)
+- Corrigido erro no botão de envio por WhatsApp. [@willph](https://github.com/willph)
+- Corrigido erro de comentário no arquivo config. [@willph](https://github.com/willph)
+
+### Changed
+- Refatoramento de listagens de cadastros. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [3.14.1] - 2019-12-02
 
 ### Fixed
