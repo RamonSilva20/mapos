@@ -3,87 +3,60 @@
     <a href="#modal-etiquetas" role="button" data-toggle="modal" class="btn btn-success span2" style="float: right;">
         <i class="fas fa-barcode"></i> Gerar Etiquetas</a>
 
-<?php
-} ?>
-<?php
-if (!$results) { ?>
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon">
-                <i class="fas fa-shopping-bag"></i>
-            </span>
-            <h5>Produtos</h5>
-        </div>
-        <div class="widget-content nopadding">
-            <table class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>Cod. Produto</th>
-                        <th>Código de Barra</th>
-                        <th>Nome</th>
-                        <th>Estoque</th>
-                        <th>Preço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5">Nenhum Produto Cadastrado</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<?php } ?>
+
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon">
+            <i class="fas fa-shopping-bag"></i>
+        </span>
+        <h5>Produtos</h5>
     </div>
-<?php
-} else { ?>
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon">
-                <i class="fas fa-shopping-bag"></i>
-            </span>
-            <h5>Produtos</h5>
-        </div>
-        <div class="widget-content nopadding">
-            <table class="table table-bordered ">
-                <thead>
-                    <tr style="backgroud-color: #2D335B">
-                        <th>Cod. Produto</th>
-                        <th>Código de Barra</th>
-                        <th>Nome</th>
-                        <th>Estoque</th>
-                        <th>Preço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($results as $r) {
-                            echo '<tr>';
-                            echo '<td>' . $r->idProdutos . '</td>';
-                            echo '<td>' . $r->codDeBarra . '</td>';
-                            echo '<td>' . $r->descricao . '</td>';
-                            echo '<td>' . $r->estoque . '</td>';
-                            echo '<td>' . number_format($r->precoVenda, 2, ',', '.') . '</td>';
-                            echo '<td>';
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idProdutos . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';
-                            }
-                            echo '</td>';
-                            echo '</tr>';
-                        } ?>
-                    <tr>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="widget-content nopadding">
+        <table class="table table-bordered ">
+            <thead>
+                <tr style="backgroud-color: #2D335B">
+                    <th>Cod. Produto</th>
+                    <th>Código de Barra</th>
+                    <th>Nome</th>
+                    <th>Estoque</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+
+                    if (!$results) {
+                        echo '<tr>
+                                <td colspan="5">Nenhum Produto Cadastrado</td>
+                                </tr>';
+                    }
+                    foreach ($results as $r) {
+                        echo '<tr>';
+                        echo '<td>' . $r->idProdutos . '</td>';
+                        echo '<td>' . $r->codDeBarra . '</td>';
+                        echo '<td>' . $r->descricao . '</td>';
+                        echo '<td>' . $r->estoque . '</td>';
+                        echo '<td>' . number_format($r->precoVenda, 2, ',', '.') . '</td>';
+                        echo '<td>';
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn tip-top" title="Visualizar Produto"><i class="fas fa-eye"></i></a>  ';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn btn-info tip-top" title="Editar Produto"><i class="fas fa-edit"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idProdutos . '" class="btn btn-danger tip-top" title="Excluir Produto"><i class="fas fa-trash-alt"></i></a>';
+                        }
+                        echo '</td>';
+                        echo '</tr>';
+                    } ?>
+            </tbody>
+        </table>
     </div>
-<?php echo $this->pagination->create_links();
-} ?>
+</div>
+<?php echo $this->pagination->create_links(); ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
