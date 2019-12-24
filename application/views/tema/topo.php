@@ -72,7 +72,6 @@
           <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class="fas fa-sign-out-alt"></i> <span class="text">Sair do Sistema</span></a></li>
         </ul>
       </li>
-
     </ul>
   </div>
   <!--start-top-serch-->
