@@ -3,6 +3,10 @@
 
 $config['app_version'] = '3.14.2';
 
+$config['app_name'] = 'MAP OS';
+
+$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -25,7 +29,7 @@ $config['app_version'] = '3.14.2';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'enter_baseurl';
+$config['base_url'] = 'http://mapos.test:8080/';
 
 /*
 |--------------------------------------------------------------------------

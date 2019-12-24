@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-    <title>Map OS</title>
+    <title><?php echo $this->config->item('app_name') ?></title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-media.css"/>
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css"/>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/shortcut.js"></script>
@@ -56,7 +59,7 @@
 <body onLoad="initTimer();">
 <!--Header-part-->
 <div id="header">
-    <h1><a href=""> Map OS </a></h1>
+    <h1><a href=""> <?php echo $this->config->item('app_name') ?> </a></h1>
 </div>
 <!--close-Header-part-->
 <!--top-Header-menu-->
@@ -270,7 +273,7 @@
 <!--Footer-part-->
 <div class="row-fluid">
     <div id="footer" class="span12"><a href="https://github.com/RamonSilva20/mapos" target="_blank">
-            <?php echo date('Y'); ?> &copy; MAP OS - Ramon Silva </a></div>
+            <?php echo date('Y'); ?> &copy; <?php echo $this->config->item('app_name') ?> - Ramon Silva </a></div>
 </div>
 <!--end-Footer-part-->
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>

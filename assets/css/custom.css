@@ -52,11 +52,11 @@
 /* PERSONALIZAR DATA E HORA NO TOP DA PÁGINA */
 
 .date-time-top {
-    margin-left: 5px;
-    margin-top: 9px;
+    margin-left: 5px!important;
+    margin-top: 9px!important;
 }
 
 .date-time-top-text {
-    font-size: 11px;
-    color: #888;
+    font-size: 11px!important;
+    color: #888!important;
 }

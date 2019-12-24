@@ -2,9 +2,11 @@
 <html lang="pt-br">
 
 <head>
-    <title>MAP OS</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?php echo $this->config->item('app_name') ?></title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png"/>
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
@@ -76,7 +78,7 @@
     <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 id="myModalLabel">.:: MAP OS ::.</h4>
+            <h4 id="myModalLabel">.:: <?php echo $this->config->item('app_name') ?> ::.</h4>
         </div>
         <div class="modal-body">
             <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
