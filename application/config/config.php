@@ -29,7 +29,7 @@ $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://mapos.test:8080/';
+$config['base_url'] = 'enter_baseurl';
 
 /*
 |--------------------------------------------------------------------------
