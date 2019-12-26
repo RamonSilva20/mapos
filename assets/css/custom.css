@@ -60,3 +60,7 @@
     font-size: 11px!important;
     color: #888!important;
 }
+
+.modal-body .control-group .help-inline {
+    margin-bottom: 8px!important;
+}
