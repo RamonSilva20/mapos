@@ -88,9 +88,9 @@
         </div>
         <div class="modal-body">
             <div class="control-group">
-                <label for="estoque-atual" class="control-label">Estoque Atual</label>
+                <label for="estoqueAtual" class="control-label">Estoque Atual</label>
                 <div class="controls">
-                    <input id="estoque-atual" type="text" name="estoque-atual" value="" readonly />
+                    <input id="estoqueAtual" type="text" name="estoqueAtual" value="" readonly />
                 </div>
             </div>
 
@@ -165,7 +165,7 @@
             var produto = $(this).attr('produto');
             var estoque = $(this).attr('estoque');
             $('.idProduto').val(produto);
-            $('#estoque-atual').val(estoque);
+            $('#estoqueAtual').val(estoque);
         });
 
         $('#formEstoque').validate({

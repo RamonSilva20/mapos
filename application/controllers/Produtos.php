@@ -222,7 +222,7 @@ class Produtos extends CI_Controller
 
         $idProduto = $this->input->post('id');
         $novoEstoque = $this->input->post('estoque');
-        $estoqueAtual = $this->input->post('estoque-atual');
+        $estoqueAtual = $this->input->post('estoqueAtual');
 
         $estoque = $estoqueAtual + $novoEstoque;
 
