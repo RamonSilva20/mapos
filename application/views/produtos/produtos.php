@@ -79,7 +79,7 @@
     </form>
 </div>
 
-<!-- Modal -->
+<!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
@@ -88,7 +88,14 @@
         </div>
         <div class="modal-body">
             <div class="control-group">
-                <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
+                <label for="estoque-atual" class="control-label">Estoque Atual</label>
+                <div class="controls">
+                    <input id="estoque-atual" type="text" name="estoque-atual" value="" readonly />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="estoque" class="control-label">Adicionar Produtos<span class="required">*</span></label>
                 <div class="controls">
                     <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
                     <input id="estoque" type="text" name="estoque" value=""/>
@@ -158,7 +165,7 @@
             var produto = $(this).attr('produto');
             var estoque = $(this).attr('estoque');
             $('.idProduto').val(produto);
-            $('#estoque').val(estoque);
+            $('#estoque-atual').val(estoque);
         });
 
         $('#formEstoque').validate({
