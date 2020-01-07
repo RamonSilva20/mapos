@@ -1,8 +1,7 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
 class Usuarios extends CI_Controller
 {
-
 
     /**
      * author: Ramon Silva
@@ -10,7 +9,7 @@ class Usuarios extends CI_Controller
      *
      */
 
-    function __construct()
+    public function __construct()
     {
 
         parent::__construct();
@@ -28,16 +27,15 @@ class Usuarios extends CI_Controller
         $this->data['menuConfiguracoes'] = 'Configurações';
     }
 
-    function index()
+    public function index()
     {
         $this->gerenciar();
     }
 
-    function gerenciar()
+    public function gerenciar()
     {
 
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
         $config['total_rows'] = $this->usuarios_model->count('usuarios');
@@ -69,7 +67,7 @@ class Usuarios extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function adicionar()
+    public function adicionar()
     {
 
         $this->load->library('form_validation');
@@ -95,7 +93,7 @@ class Usuarios extends CI_Controller
                 'dataExpiracao' => set_value('dataExpiracao'),
                 'situacao' => set_value('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id'),
-                'dataCadastro' => date('Y-m-d')
+                'dataCadastro' => date('Y-m-d'),
             );
 
             if ($this->usuarios_model->add('usuarios', $data) == true) {
@@ -113,7 +111,7 @@ class Usuarios extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    function editar()
+    public function editar()
     {
 
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -165,7 +163,7 @@ class Usuarios extends CI_Controller
                     'celular' => $this->input->post('celular'),
                     'dataExpiracao' => set_value('dataExpiracao'),
                     'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id')
+                    'permissoes_id' => $this->input->post('permissoes_id'),
                 );
             } else {
 
@@ -183,10 +181,9 @@ class Usuarios extends CI_Controller
                     'celular' => $this->input->post('celular'),
                     'dataExpiracao' => set_value('dataExpiracao'),
                     'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id')
+                    'permissoes_id' => $this->input->post('permissoes_id'),
                 );
             }
-
 
             if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
                 $this->session->set_flashdata('success', 'Usuário editado com sucesso!');
@@ -208,7 +205,7 @@ class Usuarios extends CI_Controller
     public function excluir()
     {
 
-        $ID =  $this->uri->segment(3);
+        $ID = $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $ID);
 
         log_info('Removeu um usuário. ID: ' . $ID);

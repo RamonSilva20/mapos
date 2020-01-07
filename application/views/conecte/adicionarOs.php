@@ -7,9 +7,10 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <style>
-    .ui-datepicker{
+    .ui-datepicker {
         z-index: 9999 !important;
     }
+
     .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
@@ -21,7 +22,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Cadastro de OS</h5>
             </div>
@@ -72,8 +73,8 @@
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
-                                            <button class="btn btn-success" id="btnContinuar"><i class="icon-share-alt icon-white"></i> Cadastrar</button>
-                                            <a href="<?php echo base_url() ?>index.php/mine/os" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                            <button class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Cadastrar</button>
+                                            <a href="<?php echo base_url() ?>index.php/mine/os" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
@@ -131,4 +132,4 @@
             lang: 'pt_br'
         });
     });
-</script> 
+</script>

@@ -5,7 +5,7 @@
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
             <div class="buttons">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                    echo '<a title="Icon Title" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '"><i class="icon-pencil icon-white"></i> Editar</a>';
+                    echo '<a title="Icon Title" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '"><i class="fas fa-edit"></i> Editar</a>';
                 } ?>
 
             </div>
@@ -19,7 +19,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-user"></i></span>
                                 <h5>Dados Pessoais</h5>
                             </a>
                         </div>
@@ -55,7 +55,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-phone-alt"></i></span>
                                 <h5>Contatos</h5>
                             </a>
                         </div>
@@ -91,7 +91,7 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
-                                <span class="icon"><i class="icon-list"></i></span>
+                                <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                                 <h5>Endereço</h5>
                             </a>
                         </div>
@@ -148,75 +148,75 @@
         <div id="tab2" class="tab-pane" style="min-height: 300px">
             <?php if (!$results) { ?>
 
-            <table class="table table-bordered ">
-                <thead>
-                    <tr style="backgroud-color: #2D335B">
-                        <th>N° OS</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Descricao</th>
-                        <th>Defeito</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr style="backgroud-color: #2D335B">
+                            <th>N° OS</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Descricao</th>
+                            <th>Defeito</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <tr>
-                        <td colspan="6">Nenhuma OS Cadastrada</td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr>
+                            <td colspan="6">Nenhuma OS Cadastrada</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <?php 
-        } else { ?>
-
-
+            <?php
+            } else { ?>
 
 
-            <table class="table table-bordered ">
-                <thead>
-                    <tr style="backgroud-color: #2D335B">
-                        <th>N° OS</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Descricao</th>
-                        <th>Defeito</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($results as $r) {
-                        $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                        echo '<tr>';
-                        echo '<td>' . $r->idOs . '</td>';
-                        echo '<td>' . $dataInicial . '</td>';
-                        echo '<td>' . $dataFinal . '</td>';
-                        echo '<td>' . $r->descricaoProduto . '</td>';
-                        echo '<td>' . $r->defeito . '</td>';
-
-                        echo '<td>';
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="icon-eye-open"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                            echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="icon-pencil icon-white"></i></a>';
-                        }
-
-                        echo  '</td>';
-                        echo '</tr>';
-                    } ?>
-                    <tr>
-
-                    </tr>
-                </tbody>
-            </table>
 
 
-            <?php 
-        } ?>
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr style="backgroud-color: #2D335B">
+                            <th>N° OS</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Descricao</th>
+                            <th>Defeito</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach ($results as $r) {
+                                $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                                echo '<tr>';
+                                echo '<td>' . $r->idOs . '</td>';
+                                echo '<td>' . $dataInicial . '</td>';
+                                echo '<td>' . $dataFinal . '</td>';
+                                echo '<td>' . $r->descricaoProduto . '</td>';
+                                echo '<td>' . $r->defeito . '</td>';
+
+                                echo '<td>';
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                                    echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                                }
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                                    echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                                }
+
+                                echo  '</td>';
+                                echo '</tr>';
+                            } ?>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            <?php
+            } ?>
 
         </div>
     </div>
-</div> 
+</div>

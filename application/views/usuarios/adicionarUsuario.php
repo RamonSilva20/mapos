@@ -1,5 +1,5 @@
-<script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
@@ -7,7 +7,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-user"></i>
+                    <i class="fas fa-user"></i>
                 </span>
                 <h5>Cadastro de Usuário</h5>
             </div>
@@ -34,6 +34,42 @@
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
                             <input class="cpfcnpj" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="celular" class="control-label">Celular</label>
+                        <div class="controls">
+                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>" />
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label for="email" class="control-label">Email<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group" class="control-label">
+                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
                         </div>
                     </div>
 
@@ -72,33 +108,7 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="email" class="control-label">Email<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
-                        </div>
-                    </div>
 
-                    <div class="control-group">
-                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="celular" class="control-label">Celular</label>
-                        <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>" />
-                        </div>
-                    </div>
                     <!-- Campo para inserir a data de validade de acesso do usuário-->
                     <div class="control-group">
                         <label for="dataExpiracao" class="control-label">Expira em <span class="required">*</span></label>
@@ -131,8 +141,8 @@
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar</button>
+                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -237,4 +247,4 @@
             }
         });
     });
-</script> 
+</script>

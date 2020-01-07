@@ -11,43 +11,45 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-book"></i>
                 </span>
                 <h5>Cadastro Termo de Garantia</h5>
             </div>
             <div class="widget-content">
-                
+
                 <?php if ($custom_error == true) { ?>
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco.</div>
-                    <?php 
+                <?php
                 } ?>
                 <form action="<?php echo current_url(); ?>" method="post" id="formGarantia">
                     <div class="span12">
                         <div class="span2">
                             <label for="dataGarantia">Data<span class="required">*</span></label>
-                            <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y'); ?>" disabled/>
+                            <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y'); ?>" disabled />
                         </div>
                         <div class="span3">
                             <label for="usuarios_id">Responsável<span class="required">*</span></label>
                             <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $this->session->userdata('nome') ?>" disabled />
                         </div>
                         <div class="span7">
-                            <label for="refGarantia">Ref Garantia<span class="required">*</span></label> 
+                            <label for="refGarantia">Ref Garantia<span class="required">*</span></label>
                             <input type="text" class="span12" name="refGarantia" required placeholder="Informe uma referência: Exemplos: TV, Notebook, Celular">
                         </div>
                         <div class="span12" style="margin-left: 0">
-                            <label for="textoGarantia"><h4 class="text-center">Termo de Garantia<span class="required">*</span></h4></label>
+                            <label for="textoGarantia">
+                                <h4 class="text-center">Termo de Garantia<span class="required">*</span></h4>
+                            </label>
                             <textarea required class="span12 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"></textarea></textarea>
                         </div>
                     </div>
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset3" style="text-align: center">
-                            <button class="btn btn-success" id="btnContinuar"><i class="icon-plus icon-white"></i> Adicionar</button>
-                            <a href="<?php echo base_url() ?>index.php/garantias" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                            <button class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Adicionar</button>
+                            <a href="<?php echo base_url() ?>index.php/garantias" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                         </div>
                     </div>
                 </form>
-                .                
+                .
             </div>
         </div>
     </div>
@@ -82,7 +84,7 @@
                 textoGarantia: {
                     required: true
                 }
-               
+
             },
             messages: {
                 dataGarantia: {
@@ -97,7 +99,7 @@
                 textoGarantia: {
                     required: 'Preencha com o termo de garantia'
                 }
-               
+
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -116,4 +118,4 @@
             lang: 'pt_br'
         });
     });
-</script> 
+</script>

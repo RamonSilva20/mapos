@@ -3,7 +3,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-user"></i>
+                    <i class="fas fa-user"></i>
                 </span>
                 <h5>Editar Meus Dados</h5>
             </div>
@@ -45,6 +45,13 @@
                     </div>
 
                     <div class="control-group" class="control-label">
+                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group" class="control-label">
                         <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
                             <input id="rua" type="text" name="rua" value="<?php echo $result->rua; ?>" />
@@ -79,20 +86,12 @@
                         </div>
                     </div>
 
-                    <div class="control-group" class="control-label">
-                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
-                        </div>
-                    </div>
-
-
 
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>
@@ -185,4 +184,4 @@
             }
         });
     });
-</script> 
+</script>

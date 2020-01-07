@@ -46,11 +46,10 @@ class Os_model extends CI_Model
                 foreach ($clientes as $c) {
                     array_push($lista_clientes, $c->idClientes);
                 }
-
             }
         }
 
-        $this->db->select($fields . ',clientes.nomeCliente, usuarios.nome, garantias.*');
+        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
@@ -236,7 +235,7 @@ class Os_model extends CI_Model
                 $row_set[] = array('label' => $row['refGarantia'], 'id' => $row['idGarantias']);
             }
             echo json_encode($row_set);
-        } 
+        }
     }
 
     public function autoCompleteServico($q)
@@ -271,5 +270,12 @@ class Os_model extends CI_Model
 
         $this->db->where('os_id', $os);
         return $this->db->get('anexos')->result();
+    }
+
+    public function getAnotacoes($os)
+    {
+        $this->db->where('os_id', $os);
+        $this->db->order_by('idAnotacoes', 'desc');
+        return $this->db->get('anotacoes_os')->result();
     }
 }

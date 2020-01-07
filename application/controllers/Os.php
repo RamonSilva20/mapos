@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Os extends CI_Controller
 {
@@ -29,6 +31,7 @@ class Os extends CI_Controller
     public function gerenciar()
     {
         $this->load->library('pagination');
+        $this->load->model('mapos_model');
 
         $where_array = array();
 
@@ -82,7 +85,7 @@ class Os extends CI_Controller
         $this->pagination->initialize($config);
 
         $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
-
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);
     }
@@ -120,7 +123,6 @@ class Os extends CI_Controller
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
                 ? $this->input->post('garantias_id')
                 : null;
-
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -231,7 +233,7 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-
+                
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -280,6 +282,11 @@ class Os extends CI_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        
         $this->data['view'] = 'os/editarOs';
         $this->load->view('tema/topo', $this->data);
     }
@@ -365,13 +372,12 @@ class Os extends CI_Controller
 
         if ($enviouEmail) {
             $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
-            log_info('Enviou e-mail para o cliente: '.$this->data['result']->nomeCliente. '. E-mail: '. $this->data['result']->email);
+            log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
             redirect(site_url('os'));
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
             redirect(site_url('os'));
         }
-
     }
 
     public function excluir()
@@ -737,7 +743,7 @@ class Os extends CI_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = array('From' => $emitente, 'Subject' => $assunto);
+            $headers = array('From' => $emitente, 'Subject' => $assunto, 'Return-Path' => '');
             $email = array(
                 'to' => $remetente,
                 'message' => $html,
@@ -749,5 +755,39 @@ class Os extends CI_Controller
         }
 
         return true;
+    }
+
+    public function adicionarAnotacao()
+    {
+        $this->load->library('form_validation');
+        if ($this->form_validation->run('anotacoes_os') == false) {
+            echo json_encode(validation_errors());
+        } else {
+            $data = array(
+                'anotacao' => $this->input->post('anotacao'),
+                'data_hora' => date('Y-m-d H:i:s'),
+                'os_id' => $this->input->post('os_id'),
+            );
+
+            if ($this->os_model->add('anotacoes_os', $data) == true) {
+
+                log_info('Adicionou anotação a uma OS.');
+                echo json_encode(array('result' => true));
+            } else {
+                echo json_encode(array('result' => false));
+            }
+        }
+    }
+
+    public function excluirAnotacao()
+    {
+        $id = $this->input->post('idAnotacao');
+        if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $id) == true) {
+
+            log_info('Removeu anotação de uma OS.');
+            echo json_encode(array('result' => true));
+        } else {
+            echo json_encode(array('result' => false));
+        }
     }
 }

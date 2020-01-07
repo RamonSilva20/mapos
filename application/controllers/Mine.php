@@ -460,10 +460,10 @@ class Mine extends CI_Controller
             );
 
             if ($this->clientes_model->add('clientes', $data) == true) {
-                $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
+                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso!');
                 redirect(base_url() . 'index.php/mine');
             } else {
-                $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
+                $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
             }
         }
         $data = '';

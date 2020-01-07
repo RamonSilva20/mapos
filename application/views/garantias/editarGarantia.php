@@ -11,18 +11,18 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-tags"></i>
+                    <i class="fas fa-book"></i>
                 </span>
                 <h5>Editar Termo de Garantia</h5>
             </div>
             <div class="widget-content">
-                
+
                 <?php if ($custom_error) { ?>
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                 <?php  } ?>
 
                 <form action="<?php echo current_url(); ?>" method="post" id="formGarantia">
-                   
+
                     <div class="span12">
                         <div class="span2">
                             <label for="dataGarantia">Data</label>
@@ -32,22 +32,24 @@
                         <div class="span5">
                             <label for="usuarios_id">Responsável</label>
                             <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $result->nome ?>" disabled />
-                            
+
                         </div>
                         <div class="span5">
-                            <label for="refGarantia">Ref. Garantia</label> 
-                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>"/>
+                            <label for="refGarantia">Ref. Garantia</label>
+                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>" />
                         </div>
                         <div class="span12" style="margin-left: 0">
-                            <label for="textoGarantia"><h4 class="text-center">Termo de Garantia</h4></label>
+                            <label for="textoGarantia">
+                                <h4 class="text-center">Termo de Garantia</h4>
+                            </label>
                             <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo $result->textoGarantia ?></textarea>
                         </div>
                     </div>
-                    
+
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset5">
-                            <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                         </div>
                     </div>
                 </form>
@@ -112,4 +114,4 @@
             lang: 'pt_br'
         });
     });
-</script> 
+</script>

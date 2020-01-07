@@ -225,6 +225,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `produtos` (
   `idProdutos` INT(11) NOT NULL AUTO_INCREMENT,
+  `codDeBarra` VARCHAR(70) NOT NULL,
   `descricao` VARCHAR(80) NOT NULL,
   `unidade` VARCHAR(10) NULL DEFAULT NULL,
   `precoCompra` DECIMAL(10,2) NULL DEFAULT NULL,
@@ -508,7 +509,9 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-
+-- -----------------------------------------------------
+-- Table `email_queue`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `email_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `to` varchar(255) NOT NULL,
@@ -519,6 +522,17 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
   `date` datetime DEFAULT NULL,
   `headers` text,
   PRIMARY KEY (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `anotacaoes_os`
+-- -----------------------------------------------------
+CREATE TABLE `anotacoes_os` ( 
+    `idAnotacoes` INT(11) NOT NULL AUTO_INCREMENT, 
+    `anotacao` VARCHAR(255) NOT NULL , 
+    `data_hora` DATETIME NOT NULL , 
+    `os_id` INT(11) NOT NULL , 
+    PRIMARY KEY (`idAnotacoes`)
 );
 
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES

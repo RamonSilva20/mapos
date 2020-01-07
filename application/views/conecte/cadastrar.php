@@ -18,11 +18,10 @@
 
 
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-    
 </head>
 
 <body>
@@ -32,7 +31,7 @@
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon">
-                        <i class="icon-user"></i>
+                        <i class="fas fa-user"></i>
                     </span>
                     <h5>Cadastre-se no sistema</h5>
                 </div>
@@ -46,11 +45,11 @@
                             </div>
                         </div>
                         <div class="control-group">
-                                <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
-                                    <div class="controls">                                        
-                                        <input class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
-                                    </div>
-                                </div>
+                            <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                            <div class="controls">
+                                <input class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
+                            </div>
+                        </div>
                         <div class="control-group">
                             <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                             <div class="controls">
@@ -71,6 +70,14 @@
                                 <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
                             </div>
                         </div>
+
+                        <div class="control-group" class="control-label">
+                            <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
+                            </div>
+                        </div>
+
 
                         <div class="control-group" class="control-label">
                             <label for="rua" class="control-label">Rua<span class="required">*</span></label>
@@ -107,20 +114,12 @@
                             </div>
                         </div>
 
-                        <div class="control-group" class="control-label">
-                            <label for="cep" class="control-label">CEP<span class="required">*</span></label>
-                            <div class="controls">
-                                <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
-                            </div>
-                        </div>
-
-
 
                         <div class="form-actions">
                             <div class="span12">
                                 <div class="span6 offset3">
-                                    <button type="submit" class="btn btn-success btn-large"><i class="icon-plus icon-white"></i> Cadastrar</button>
-                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="btn btn-large"><i class="icon-lock"></i> Acessar</a>
+                                    <button type="submit" class="btn btn-success btn-large"><i class="fas fa-plus"></i> Cadastrar</button>
+                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="btn btn-large"><i class="fas fa-lock"></i> Acessar</a>
                                 </div>
                             </div>
                         </div>
@@ -226,8 +225,6 @@
     ================================================== -->
 
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-
-
 </body>
 
-</html> 
+</html>

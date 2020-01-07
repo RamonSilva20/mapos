@@ -7,7 +7,7 @@
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="icon-lock"></i>
+                    <i class="fas fa-lock"></i>
                 </span>
                 <h5>Editar Permissão</h5>
             </div>
@@ -594,8 +594,8 @@
             <div class="form-actions">
                 <div class="span12">
                     <div class="span6 offset3">
-                        <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                        <a href="<?php echo base_url() ?>index.php/permissoes" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                        <a href="<?php echo base_url() ?>index.php/permissoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                     </div>
                 </div>
             </div>
