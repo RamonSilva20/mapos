@@ -105,7 +105,8 @@
                                             <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn btn-info">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                        <?php endif ?>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos?>" estoque="<?=$p->estoque?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
@@ -467,3 +468,69 @@
 <?php
     }
 } ?>
+
+<!-- Modal Estoque -->
+<div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="estoqueAtual" class="control-label">Estoque Atual</label>
+                <div class="controls">
+                    <input id="estoqueAtual" type="text" name="estoqueAtual" value="" readonly />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="estoque" class="control-label">Adicionar Produtos<span class="required">*</span></label>
+                <div class="controls">
+                    <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
+                    <input id="estoque" type="text" name="estoque" value=""/>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-primary">Atualizar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal Estoque-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('click', 'a', function (event) {
+            var produto = $(this).attr('produto');
+            var estoque = $(this).attr('estoque');
+            $('.idProduto').val(produto);
+            $('#estoqueAtual').val(estoque);
+        });
+
+        $('#formEstoque').validate({
+            rules: {
+                estoque: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                estoque: {
+                    required: 'Campo Requerido.',
+                    number: 'Informe um número válido.'
+                }
+            },
+            errorClass: "help-inline",
+            errorElement: "span",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.control-group').addClass('error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.control-group').removeClass('error');
+                $(element).parents('.control-group').addClass('success');
+            }
+        });
+    });
+</script>
