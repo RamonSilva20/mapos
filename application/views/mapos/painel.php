@@ -499,6 +499,7 @@
     </form>
 </div>
 
+<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <!-- Modal Estoque-->
 <script type="text/javascript">
     $(document).ready(function () {
