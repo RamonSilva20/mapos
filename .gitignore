@@ -7,7 +7,7 @@
 .DS_Store
 .vscode
 
-.vendor
+/vendor/
 
 .env.local
 .env.development.local
