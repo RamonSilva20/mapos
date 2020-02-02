@@ -25,103 +25,76 @@
     </form>
 </div>
 
-<?php if (!$results) : ?>
+<div class="span12" style="margin-left: 0">
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="fas fa-hdd"></i>
+            </span>
+            <h5>Arquivos</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Documento</th>
+                        <th>Data</th>
+                        <th>Tamanho</th>
+                        <th>Extensão</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    
+                    if(!$results){
 
-    <div class="span12" style="margin-left: 0">
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-hdd"></i>
-                </span>
-                <h5>Arquivos</h5>
-            </div>
+                        echo '<tr>
+                                <td colspan="5">Nenhum Arquivo Encontrado</td>
+                              </tr>';
+                    }
+                    foreach ($results as $r) : ?>
+                        <tr>
+                            <td><?= $r->idDocumentos ?></td>
+                            <td><?= $r->documento ?></td>
+                            <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
+                            <td><?= $r->tamanho ?> KB</td>
+                            <td><?= $r->tipo ?></td>
+                            <td>
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
+                                    <a class="btn btn-inverse tip-top" style="margin-right: 1%" target="_blank" href="<?= $r->url ?>" class="btn tip-top" title="Imprimir">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                <?php endif ?>
 
-            <div class="widget-content nopadding">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Documento</th>
-                            <th>Data</th>
-                            <th>Tamanho</th>
-                            <th>Extensão</th>
-                            <th>Ações</th>
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
+                                    <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn tip-top" style="margin-right: 1%" title="Download">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                <?php endif ?>
+
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
+                                    <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn btn-info tip-top" style="margin-right: 1%" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                <?php endif ?>
+
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
+                                    <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn btn-danger tip-top" title="Excluir Arquivo">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                <?php endif ?>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5">Nenhum Arquivo Encontrado</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
         </div>
     </div>
-<?php else : ?>
-    <div class="span12" style="margin-left: 0">
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-hdd"></i>
-                </span>
-                <h5>Arquivos</h5>
-            </div>
-            <div class="widget-content nopadding">
-                <table class="table table-bordered ">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Documento</th>
-                            <th>Data</th>
-                            <th>Tamanho</th>
-                            <th>Extensão</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($results as $r) : ?>
-                            <tr>
-                                <td><?= $r->idDocumentos ?></td>
-                                <td><?= $r->documento ?></td>
-                                <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
-                                <td><?= $r->tamanho ?> KB</td>
-                                <td><?= $r->tipo ?></td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                        <a class="btn btn-inverse tip-top" style="margin-right: 1%" target="_blank" href="<?= $r->url ?>" class="btn tip-top" title="Imprimir">
-                                            <i class="fas fa-print"></i>
-                                        </a>
-                                    <?php endif ?>
+</div>
 
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                        <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn tip-top" style="margin-right: 1%" title="Download">
-                                            <i class="fas fa-download"></i>
-                                        </a>
-                                    <?php endif ?>
-
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                        <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn btn-info tip-top" style="margin-right: 1%" title="Editar">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    <?php endif ?>
-
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
-                                        <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn btn-danger tip-top" title="Excluir Arquivo">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                        <tr></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <?= $this->pagination->create_links() ?>
-<?php endif ?>
+<?= $this->pagination->create_links() ?>
 
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?= base_url() ?>index.php/arquivos/excluir" method="post">

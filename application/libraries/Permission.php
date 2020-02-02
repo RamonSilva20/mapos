@@ -55,13 +55,11 @@ class Permission
                 if ($this->Permission[0][$atividade] == 1) {
                     return true;
                 }
-                return false;
 
             }
-            return false;
         }
-        return false;
 
+        return false;
 
     }
     private function loadPermission($id = null)
@@ -80,11 +78,9 @@ class Permission
                 $this->Permission = array($array);
                 return true;
             }
-            return false;
             
         }
         return false;
-
 
     }
 }

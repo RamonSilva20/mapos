@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$config['app_version'] = '3.14.0';
+$config['app_version'] = '3.14.2';
 
 /*
 |--------------------------------------------------------------------------
@@ -329,6 +329,12 @@ $config['cache_path'] = '';
 |	TRUE       = Enabled, take all query parameters into account.
 |	             Please be aware that this may result in numerous cache
 |	             files generated for the same page over and over again
+|
+|	array('q') = Enabled, but only take into account the specified list
+|	             of query parameters.
+|
+*/
+$config['cache_query_string'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
