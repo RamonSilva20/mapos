@@ -304,6 +304,32 @@ array('clientes' => array(array(
             'rules' => 'required|trim',
         ))
     ,
+    'pagamentos' => array(array(
+        'field' => 'Nome',
+        'label' => 'nomePag',
+        'rules' => 'trim',
+    ),
+        array(
+            'field' => 'clientId',
+            'label' => 'clientId',
+            'rules' => 'trim',
+        ),
+        array(
+            'field' => 'clientSecret',
+            'label' => 'clientSecret',
+            'rules' => 'trim',
+        ),
+        array(
+            'field' => 'publicKey',
+            'label' => 'publicKey',
+            'rules' => 'trim',
+        ),
+        array(
+            'field' => 'accessToken',
+            'label' => 'accessToken',
+            'rules' => 'trim',
+        ))
+    ,
     'vendas' => array(array(
 
         'field' => 'dataVenda',

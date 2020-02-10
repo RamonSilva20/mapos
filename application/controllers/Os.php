@@ -287,9 +287,11 @@ class Os extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
+        $this->load->model('pagamentos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->data['view'] = 'os/visualizarOs';

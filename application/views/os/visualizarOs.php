@@ -29,7 +29,7 @@ $totalProdutos = 0; ?>
                 <div class="invoice-content">
                     <div class="invoice-head" style="margin-bottom: 0">
 
-                        <table class="table table-condensed" style="">
+                        <table class="table table-condensed">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
 
@@ -102,19 +102,40 @@ $totalProdutos = 0; ?>
 
                                         <td>
                                             <b>GARANTIA: </b>
-                                            <?php echo $result->garantia; ?>
+                                            <?php echo $result->garantia . ' dias'; ?>
                                         </td>
 
                                         <td>
-                                            <b>TERMO GARANTIA: </b>
-                                            <?php echo $result->refGarantia; ?>
+                                            <b>
+                                                <?php if ($result->status == 'Finalizado') { ?>
+                                                    VENC. DA GARANTIA:
+                                            </b>
+                                            <?php
+                                                    $data = date('d/m/Y', strtotime($result->dataFinal));
+
+                                                    // Criar o objeto representando a data
+                                                    $obj_data = DateTime::createFromFormat('d/m/Y', $data);
+                                                    $obj_data->setTime(0, 0, 0);
+
+                                                    // Realizar a soma de dias
+                                                    $intervalo = new DateInterval('P' . $result->garantia . 'D');
+                                                    $obj_data->add($intervalo);
+
+                                                    // Formatar a data obtida
+                                                    echo $obj_data->format('d/m/Y'); ?><?php } ?>
                                         </td>
+                                        <?php if ($result->refGarantia != '') { ?>
+                                            <td>
+                                                <b>TERMO GARANTIA: </b>
+                                                <?php echo $result->refGarantia; ?>
+                                            </td>
+                                        <?php } ?>
                                     </tr>
                                 <?php } ?>
 
                                 <?php if ($result->descricaoProduto != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>DESCRIÇÃO: </b>
                                             <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                         </td>
@@ -123,7 +144,7 @@ $totalProdutos = 0; ?>
 
                                 <?php if ($result->defeito != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>DEFEITO APRESENTADO: </b>
                                             <?php echo htmlspecialchars_decode($result->defeito) ?>
                                         </td>
@@ -132,7 +153,7 @@ $totalProdutos = 0; ?>
 
                                 <?php if ($result->observacoes != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>OBSERVAÇÕES: </b>
                                             <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                         </td>
@@ -164,16 +185,16 @@ $totalProdutos = 0; ?>
                                 <tbody>
                                     <?php
 
-                                        foreach ($produtos as $p) {
+                                    foreach ($produtos as $p) {
 
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
                                     <tr>
                                         <td></td>
@@ -196,18 +217,18 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        setlocale(LC_MONETARY, 'en_US');
-                                        foreach ($servicos as $s) {
-                                            $preco = $s->preco ?: $s->precoVenda;
-                                            $subtotal = $preco * ($s->quantidade ?: 1);
-                                            $totalServico = $totalServico + $subtotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $s->nome . '</td>';
-                                            echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                            echo '<td>' . $preco . '</td>';
-                                            echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                    setlocale(LC_MONETARY, 'en_US');
+                                    foreach ($servicos as $s) {
+                                        $preco = $s->preco ?: $s->precoVenda;
+                                        $subtotal = $preco * ($s->quantidade ?: 1);
+                                        $totalServico = $totalServico + $subtotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $s->nome . '</td>';
+                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                        echo '<td>' . $preco . '</td>';
+                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -226,6 +247,44 @@ $totalProdutos = 0; ?>
             </div>
 
         </div>
+        
+        <?php
+        // SDK de Mercado Pago
+        
+        // Configura credenciais
+        MercadoPago\SDK::setAccessToken($pagamento->access_token);
+
+        # Criar um objeto preferência
+        $preference = new MercadoPago\Preference();
+        # Cria itens na preferência
+        $item = new MercadoPago\Item();
+        $item->id = $result->idOs;
+        $item->title = "Pagamento da OS " . $result->idOs;
+        $item->quantity = 1;
+        $item->unit_price = $totalProdutos + $totalServico;
+
+        $preference->items = array($item);
+
+        #exclui metodo de pagamento boleto
+        $preference->payment_methods = array(
+            "excluded_payment_types" => array(
+                array("id" => "ticket")
+            ),
+            "installments" => 12
+        );
+
+        # Salvar e postar a preferência
+        $preference->save();
+
+        ?>
+        
+        <?php if ($totalProdutos != 0 || $totalServico != 0) { ?>
+            <form action="<?php site_url() ?>" method="POST">
+                <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="<?php echo $preference->id; ?>" data-button-label="Gerar Pagamento">
+                </script>
+            </form>
+        <?php } ?>
+
     </div>
 </div>
 </div>

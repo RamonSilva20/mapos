@@ -50,12 +50,13 @@
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr style="background-color: #2D335B">
                         <th>N° OS</th>
                         <th>Cliente</th>
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
+                        <th>Venc. Da Garantia</th>
                         <th>Valor Total</th>
                         <th>Status</th>
                         <th>T. Garantia</th>
@@ -67,7 +68,7 @@
                         
                         if(!$results){
                             echo '<tr>
-                                    <td colspan="6">Nenhuma OS Cadastrada</td>
+                                    <td colspan="9">Nenhuma OS Cadastrada</td>
                                   </tr>';
                         }
                         foreach ($results as $r) {
@@ -103,12 +104,25 @@
                                     $cor = '#E0E4CC';
                                     break;
                             }
+                            
+                            // Criar o objeto representando a data
+                            $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
+                            $obj_data->setTime(0, 0, 0);
+
+                            // Realizar a soma de dias
+                            $intervalo = new DateInterval('P' . $r->garantia . 'D');
+                            $obj_data->add($intervalo);
+
+                            // Formatar a data obtida
+                            $vencGarantia = $obj_data->format('d/m/Y');
+                    
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $r->nomeCliente . '</td>';
                             echo '<td>' . $r->nome . '</td>';
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $dataFinal . '</td>';
+                            echo '<td>' .$vencGarantia . '</td>';
                             echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                             echo '<td>' . $r->refGarantia . '</td>';
