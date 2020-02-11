@@ -249,36 +249,8 @@ $totalProdutos = 0; ?>
         </div>
         
         <?php
-        // SDK de Mercado Pago
-        
-        // Configura credenciais
-        MercadoPago\SDK::setAccessToken($pagamento->access_token);
-
-        # Criar um objeto preferência
-        $preference = new MercadoPago\Preference();
-        # Cria itens na preferência
-        $item = new MercadoPago\Item();
-        $item->id = $result->idOs;
-        $item->title = "Pagamento da OS " . $result->idOs;
-        $item->quantity = 1;
-        $item->unit_price = $totalProdutos + $totalServico;
-
-        $preference->items = array($item);
-
-        #exclui metodo de pagamento boleto
-        $preference->payment_methods = array(
-            "excluded_payment_types" => array(
-                array("id" => "ticket")
-            ),
-            "installments" => 12
-        );
-
-        # Salvar e postar a preferência
-        $preference->save();
-
-        ?>
-        
-        <?php if ($totalProdutos != 0 || $totalServico != 0) { ?>
+         $preference = $this->ident_pagamento->IdPagamento($pagamento->nome, $pagamento->access_token, $result->idOs, $totalProdutos, $totalServico);
+         if ($totalProdutos != 0 || $totalServico != 0) { ?>
             <form action="<?php site_url() ?>" method="POST">
                 <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="<?php echo $preference->id; ?>" data-button-label="Gerar Pagamento">
                 </script>
