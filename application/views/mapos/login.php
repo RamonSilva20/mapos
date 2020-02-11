@@ -90,7 +90,8 @@
 
                                 $('#btn-acessar').removeClass('disabled');
                                 $('#progress-acessar').addClass('hide');
-
+                                
+                                $('#message').text(data.message || 'Os dados de acesso estão incorretos, por favor tente novamente!');
                                 $('#call-modal').trigger('click');
                             }
                         }
@@ -120,7 +121,7 @@
             <h4 id="myModalLabel">MapOS</h4>
         </div>
         <div class="modal-body">
-            <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+            <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>

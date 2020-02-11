@@ -17,12 +17,6 @@ class Mapos extends CI_Controller
 
     public function index()
     {
-
-        if ($this->session->userdata('expirado')) {
-            $this->session->sess_destroy();
-            redirect('../alerta/alerta.html ');
-        }
-
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mapos/login');
         }
@@ -129,8 +123,16 @@ class Mapos extends CI_Controller
             $user = $this->Mapos_model->check_credentials($email);
 
             if ($user) {
+                // Verificar se acesso está expirado
+                if($this->chk_date($user->dataExpiracao)){
+                    $json = array('result' => false, 'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.');
+                    echo json_encode($json);
+                    die();
+                }
+
+                // Verificar credenciais do usuário
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'expirado' => $this->chk_date($user->dataExpiracao), 'permissao' => $user->permissoes_id, 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     log_info('Efetuou login no sistema');
                     $json = array('result' => true);
