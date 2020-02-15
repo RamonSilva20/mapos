@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-3.14.2-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-3.15.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -23,14 +23,14 @@
 
     ##### Obs: O path até o index.php (/var/www/) deve ser configurado conforme o seu ambiente
 
-### Atualização para versão 3.*
-1. Faça backup do banco de dados.
-2. Remova a pasta system da instalação atual.
-3. Copie os novos arquivos e substitua.
-4. Execute o script update_v2_to_v3 para atualizar o banco de dados (Nenhuma informação será perdida).
-5. Acesse o sistema com o usuário administrador utilizando a senha `123456`.
-6. Será preciso alterar as senhas dos usuários pois o sistema na versão 3 utiliza um novo padrão de criptografia.
 
+### Atualização
+
+1. Faça o backup dos arquivos e do banco de dados
+2. Substitua os arquivos pelos da nova versão
+3. Verifique se é necessário executar algum arquivo de update do banco de dados
+4. Volte as configurações nos arquivos database.php e config.php
+5. Pronto, sua atualização está concluída
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
@@ -41,7 +41,7 @@
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
 ### Requerimentos
-* PHP >= 5.5.0
+* PHP >= 5.6
 * MySQL
 
 ### Contribuidores

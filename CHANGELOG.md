@@ -5,6 +5,25 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.15.0] - 2020-02-15
+
+### Added
+- Adicionado opções de configuração do sistema. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionado status faturado no filtro de relatório de OS. [@ZanzouShio](https://github.com/ZanzouShio)
+- Adicionando opção de atualização de estoque pelo listagem e dashboard. [@TiagoOliveira](https://github.com/trollfalgar)
+
+### Fixed
+- Corrigido arquivo de configurações. [@RamonSilva20](https://github.com/RamonSilva20)
+- Correção de bug na área do cliente ao efetuar login. [@GiovanneOliveira](https://github.com/giovanne-oliveira)
+- Correção de exibição de produtos com estoque mínimo. [@MikeAlves](https://github.com/mikxingu)
+
+### Changed
+- Atualização da versão do Codeigniter para 3.1.11. [@RamonSilva20](https://github.com/RamonSilva20)
+- Refatoramento de controllers para diminuir repetição de código. [@RamonSilva20](https://github.com/RamonSilva20)
+- Simplificado exibição de mensagem de acesso expirado. [@RamonSilva20](https://github.com/RamonSilva20)
+- Remoção de data e hora no menu superior. [@RamonSilva20](https://github.com/RamonSilva20)
+- Nome do app dinâmico na área do cliente. [@TiagoOliveira](https://github.com/trollfalgar)
+
 ## [3.14.2] - 2019-12-18
 
 ### Fixed
