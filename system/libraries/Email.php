@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2017, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
@@ -913,18 +913,13 @@ class CI_Email {
 	/**
 	 * Get Mail Protocol
 	 *
-	 * @param	bool
 	 * @return	mixed
 	 */
-	protected function _get_protocol($return = TRUE)
+	protected function _get_protocol()
 	{
 		$this->protocol = strtolower($this->protocol);
 		in_array($this->protocol, $this->_protocols, TRUE) OR $this->protocol = 'mail';
-
-		if ($return === TRUE)
-		{
-			return $this->protocol;
-		}
+		return $this->protocol;
 	}
 
 	// --------------------------------------------------------------------
@@ -932,25 +927,21 @@ class CI_Email {
 	/**
 	 * Get Mail Encoding
 	 *
-	 * @param	bool
 	 * @return	string
 	 */
-	protected function _get_encoding($return = TRUE)
+	protected function _get_encoding()
 	{
 		in_array($this->_encoding, $this->_bit_depths) OR $this->_encoding = '8bit';
 
 		foreach ($this->_base_charsets as $charset)
 		{
-			if (strpos($charset, $this->charset) === 0)
+			if (strpos($this->charset, $charset) === 0)
 			{
 				$this->_encoding = '7bit';
 			}
 		}
 
-		if ($return === TRUE)
-		{
-			return $this->_encoding;
-		}
+		return $this->_encoding;
 	}
 
 	// --------------------------------------------------------------------
@@ -970,10 +961,8 @@ class CI_Email {
 		{
 			return 'plain-attach';
 		}
-		else
-		{
-			return 'plain';
-		}
+
+		return 'plain';
 	}
 
 	// --------------------------------------------------------------------
@@ -1043,9 +1032,17 @@ class CI_Email {
 	 */
 	public function valid_email($email)
 	{
-		if (function_exists('idn_to_ascii') && $atpos = strpos($email, '@'))
+		if (function_exists('idn_to_ascii') && strpos($email, '@'))
 		{
-			$email = self::substr($email, 0, ++$atpos).idn_to_ascii(self::substr($email, $atpos));
+			list($account, $domain) = explode('@', $email, 2);
+			$domain = defined('INTL_IDNA_VARIANT_UTS46')
+				? idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46)
+				: idn_to_ascii($domain);
+
+			if ($domain !== FALSE)
+			{
+				$email = $account.'@'.$domain;
+			}
 		}
 
 		return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -1829,14 +1826,15 @@ class CI_Email {
 	{
 		$this->_unwrap_specials();
 
-		$method = '_send_with_'.$this->_get_protocol();
+		$protocol = $this->_get_protocol();
+		$method   = '_send_with_'.$protocol;
 		if ( ! $this->$method())
 		{
-			$this->_set_error_message('lang:email_send_failure_'.($this->_get_protocol() === 'mail' ? 'phpmail' : $this->_get_protocol()));
+			$this->_set_error_message('lang:email_send_failure_'.($protocol === 'mail' ? 'phpmail' : $protocol));
 			return FALSE;
 		}
 
-		$this->_set_error_message('lang:email_sent', $this->_get_protocol());
+		$this->_set_error_message('lang:email_sent', $protocol);
 		return TRUE;
 	}
 
@@ -1859,9 +1857,17 @@ class CI_Email {
 	 */
 	protected function _validate_email_for_shell(&$email)
 	{
-		if (function_exists('idn_to_ascii') && $atpos = strpos($email, '@'))
+		if (function_exists('idn_to_ascii') && strpos($email, '@'))
 		{
-			$email = self::substr($email, 0, ++$atpos).idn_to_ascii(self::substr($email, $atpos));
+			list($account, $domain) = explode('@', $email, 2);
+			$domain = defined('INTL_IDNA_VARIANT_UTS46')
+				? idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46)
+				: idn_to_ascii($domain);
+
+			if ($domain !== FALSE)
+			{
+				$email = $account.'@'.$domain;
+			}
 		}
 
 		return (filter_var($email, FILTER_VALIDATE_EMAIL) === $email && preg_match('#\A[a-z0-9._+-]+@[a-z0-9.-]{1,253}\z#i', $email));
@@ -2076,7 +2082,19 @@ class CI_Email {
 			$this->_send_command('hello');
 			$this->_send_command('starttls');
 
-			$crypto = stream_socket_enable_crypto($this->_smtp_connect, TRUE, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+			/**
+			 * STREAM_CRYPTO_METHOD_TLS_CLIENT is quite the mess ...
+			 *
+			 * - On PHP <5.6 it doesn't even mean TLS, but SSL 2.0, and there's no option to use actual TLS
+			 * - On PHP 5.6.0-5.6.6, >=7.2 it means negotiation with any of TLS 1.0, 1.1, 1.2
+			 * - On PHP 5.6.7-7.1.* it means only TLS 1.0
+			 *
+			 * We want the negotiation, so we'll force it below ...
+			 */
+			$method = is_php('5.6')
+				? STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT | STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT | STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
+				: STREAM_CRYPTO_METHOD_TLS_CLIENT;
+			$crypto = stream_socket_enable_crypto($this->_smtp_connect, TRUE, $method);
 
 			if ($crypto !== TRUE)
 			{
@@ -2267,10 +2285,8 @@ class CI_Email {
 				usleep(250000);
 				continue;
 			}
-			else
-			{
-				$timestamp = 0;
-			}
+
+			$timestamp = 0;
 		}
 
 		if ($result === FALSE)

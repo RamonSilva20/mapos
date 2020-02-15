@@ -41,12 +41,14 @@ class MY_Controller extends CI_Controller
 
     private function load_configuration()
     {
-        $this->load->model('mapos_model');
-        $configuracoes = $this->mapos_model->get('configuracoes', '*', '');
-
+        $this->CI = &get_instance();
+        $this->CI->load->database();
+        $configuracoes = $this->CI->db->get('configuracoes')->result();
+        
         foreach ($configuracoes as $c) {
             $this->data['configuration'][$c->config] = $c->valor;
         }
+
     }
 
     public function layout()
