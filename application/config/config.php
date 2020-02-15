@@ -1,7 +1,21 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$config['app_version'] = '3.14.2';
+/**
+ * App current version
+ */
+$config['app_version'] = '3.15.0';
+
+/**
+ * Nome do sistema
+ */
+$config['app_name'] = 'Map-OS';
+
+/**
+ * Descrição do sistema
+ */
+$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+
 
 /*
 |--------------------------------------------------------------------------

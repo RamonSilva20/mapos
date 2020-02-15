@@ -185,4 +185,30 @@ class Produtos extends MY_Controller
         $this->session->set_flashdata('success', 'Produto excluido com sucesso!');
         redirect(site_url('produtos/gerenciar/'));
     }
+
+    public function atualizar_estoque()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar estoque de produtos.');
+            redirect(base_url());
+        }
+
+        $idProduto = $this->input->post('id');
+        $novoEstoque = $this->input->post('estoque');
+        $estoqueAtual = $this->input->post('estoqueAtual');
+
+        $estoque = $estoqueAtual + $novoEstoque;
+
+        $data = [
+            'estoque' => $estoque
+        ];
+
+        if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $idProduto) == true) {
+            $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
+            log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
+            redirect(site_url('produtos/visualizar/') . $idProduto);
+        } else {
+            $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
+        }
+    }
 }
