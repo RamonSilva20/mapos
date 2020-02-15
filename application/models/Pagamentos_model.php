@@ -36,7 +36,7 @@ class Pagamentos_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret');
+        $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret, pagamento.default_pag');
         $this->db->from('pagamento');
         $this->db->where('pagamento.idPag', $id);
         $this->db->limit(1);
@@ -45,7 +45,7 @@ class Pagamentos_model extends CI_Model
 
     function getPagamentos($id = null)//provisorio enquanto não implementar o default de pagamento
     {
-        $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret');
+        $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret, pagamento.default_pag');
         $this->db->from('pagamento');
         $this->db->where('idPag', 1);
         return $this->db->get()->row();

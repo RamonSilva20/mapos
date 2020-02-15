@@ -43,6 +43,10 @@
                         <label for="accessToken">Access Token<span class="required"></span></label>
                             <input type="text" class="span12" name="accessToken" placeholder="Informe sua credencial: Access_Token">
                         </div>
+                    <div class="span2" style="margin-left: 0">
+                        <label for="default_pag">Tornar Padrão<span class="required"></span></label>
+                            <input type="checkbox" class="span6" name="default_pag" id="default_pag">
+                        </div>
                     </div>
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset3" style="text-align: center">

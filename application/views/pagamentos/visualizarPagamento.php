@@ -9,7 +9,7 @@
                 <h5>Credencial de Pagamento</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePagamento')) {
-                        echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $result->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
+                        echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                                                     <h5><b>Nome</b></h5>
                                                 </span>
                                                 <span>
-                                                    <?php echo $result->nome ?></span> <br />
+                                                    <?php echo $pagamento->nome ?></span> <br />
                                             </li>
                                         </ul>
                                     </td>
@@ -55,12 +55,13 @@
                                                     <h5><b>Credenciais</b></h5>
                                                 </span>
                                                 <span><b>Client Id:</b>
-                                                    <?php echo $result->client_id ?></span> <br />
+                                                    <?php echo $pagamento->client_id ?></span> <br />
                                                 <span><b>Client Secret:</b>
-                                                    <?php echo $result->client_secret ?></span><br />
+                                                    <?php echo $pagamento->client_secret ?></span><br />
                                                 <span><b>Public key:</b>
-                                                    <?php echo $result->public_key ?></span><br />
-                                                <span><b>Access token:</b> <?php echo $result->access_token ?></span>
+                                                    <?php echo $pagamento->public_key ?></span><br />
+                                                <span><b>Access token:</b> <?php echo $pagamento->access_token ?></span><br />
+                                                <span><b>Pagamento Padrão:</b> <?php echo $pagamento->default_pag == 1 ? "SIM" : "NÃO"; ?>
                                             </li>
                                         </ul>
                                     </td>

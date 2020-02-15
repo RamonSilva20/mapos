@@ -37,5 +37,14 @@ class Ident_Pagamento
 
             return $preference;
         }
+        if ($IdNome === 'PayPal') {
+
+            $apiContext = new \PayPal\Rest\ApiContext(
+                new \PayPal\Auth\OAuthTokenCredential(
+                  'YOUR APPLICATION CLIENT ID',
+                  'YOUR APPLICATION CLIENT SECRET'
+                )
+              );
+        }
     }
 }

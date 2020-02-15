@@ -87,7 +87,8 @@ class Pagamentos extends CI_Controller
                 'public_key' => $this->input->post('publicKey'),
                 'access_token' => $this->input->post('accessToken'),
                 'client_id' => $this->input->post('clientId'),
-                'client_secret' => $this->input->post('clientSecret')
+                'client_secret' => $this->input->post('clientSecret'),
+                'default_pag' => ( isset($_POST['default_pag']) ) ? true : false
                 
             );
 
@@ -124,13 +125,15 @@ class Pagamentos extends CI_Controller
         if ($this->form_validation->run('pagamentos') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
+            
 
             $data = array(
                 'nome' => $this->input->post('nomePag'),
+                'client_id' => $this->input->post('clientId'),
+                'client_secret' => $this->input->post('clientSecret'),
                 'public_key' => $this->input->post('publicKey'),
                 'access_token' => $this->input->post('accessToken'),
-                'client_id' => $this->input->post('clientId'),
-                'client_secret' => $this->input->post('clientSecret')
+                'default_pag' => ( isset($_POST['default_pag']) ) ? true : false
                 
             );
 

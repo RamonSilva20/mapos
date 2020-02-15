@@ -46,6 +46,10 @@
                             <label for="accessToken">Access Token<span class="required"></span></label>
                             <input id="accessToken" class="span12" type="text" name="accessToken" value="<?php echo $result->access_token ?>" />
                         </div>
+                        <div class="span4" style="margin-left: 0">
+                            <label for="default_pag">Tornar Padrão<span class="required"></span></label>
+                            <input name="default_pag" id="default_pag" class="span12" type="checkbox" <?php echo $result->default_pag == 1 ? "checked" : null; ?> />
+                         </div>
                     </div>
 
                     <div class="span12" style="padding: 1%; margin-left: 0">
