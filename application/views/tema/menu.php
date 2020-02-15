@@ -102,8 +102,8 @@
                               }; ?>">
           <a href="#"><i class="fas fa-cog"></i> <span>Configurações</span> <span class="label"><i class="fas fa-chevron-down"></i></span></a>
           <ul>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cConfiguracao')) { ?>
-              <li><a href="<?= site_url('mapos/sistema') ?>">Sistema</a></li>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) { ?>
+              <li><a href="<?= site_url('mapos/configurar') ?>">Sistema</a></li>
             <?php } ?>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
               <li><a href="<?= site_url('usuarios') ?>">Usuários</a></li>
@@ -129,7 +129,7 @@
       <?php
       } ?>
       <li> 
-        <a class="text-white" href="<?= site_url('mapos/sair'); ?>"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></a>
+        <a class="text-white" href="<?= site_url('login/sair'); ?>"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></a>
       </li>
 
     </ul>

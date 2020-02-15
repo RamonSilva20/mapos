@@ -107,6 +107,7 @@ class Permissoes extends MY_Controller
                 'cBackup' => $this->input->post('cBackup'),
                 'cAuditoria' => $this->input->post('cAuditoria'),
                 'cEmail' => $this->input->post('cEmail'),
+                'cSistema' => $this->input->post('cSistema'),
 
                 'rCliente' => $this->input->post('rCliente'),
                 'rProduto' => $this->input->post('rProduto'),
@@ -200,6 +201,7 @@ class Permissoes extends MY_Controller
                 'cBackup' => $this->input->post('cBackup'),
                 'cAuditoria' => $this->input->post('cAuditoria'),
                 'cEmail' => $this->input->post('cEmail'),
+                'cSistema' => $this->input->post('cSistema'),
 
                 'rCliente' => $this->input->post('rCliente'),
                 'rProduto' => $this->input->post('rProduto'),

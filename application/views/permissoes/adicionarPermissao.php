@@ -419,7 +419,13 @@
                                                 <span class="lbl"> Emails</span>
                                             </label>
                                         </td>
-                                        <td colspan="2"></td>
+                                        <td>
+                                            <label>
+                                                <input name="cSistema" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Sistema</span>
+                                            </label>
+                                        </td>
+                                        <td></td>
                                     </tr>
 
                                 </tbody>

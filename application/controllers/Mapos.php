@@ -196,7 +196,7 @@ class Mapos extends MY_Controller
                 log_info('Adicionou informações de emitente.');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-                
+
             }
             redirect(site_url('mapos/emitente'));
         }
@@ -327,4 +327,45 @@ class Mapos extends MY_Controller
         $this->session->set_flashdata('success', 'E-mail removido da fila de envio!');
         redirect(site_url('mapos/emails/'));
     }
+
+    public function configurar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
+            redirect(base_url());
+        }
+        $this->load->library('form_validation');
+        $this->load->model('mapos_model');
+        
+        $this->data['custom_error'] = '';
+
+        $this->form_validation->set_rules('app_name', 'Nome do Sistema', 'required|trim');
+        $this->form_validation->set_rules('per_page', 'Registros por página', 'required|numeric|trim');
+        $this->form_validation->set_rules('app_theme', 'Tema do Sistema', 'required|trim');
+        $this->form_validation->set_rules('os_notification', 'Notificação de OS', 'required|trim');
+        $this->form_validation->set_rules('control_estoque', 'Controle de Estoque', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
+        } else {
+            $data = array(
+                'app_name' => $this->input->post('app_name'),
+                'per_page' => $this->input->post('per_page'),
+                'app_theme' => $this->input->post('app_theme'),
+                'os_notification' => $this->input->post('os_notification'),
+                'control_estoque' => $this->input->post('control_estoque'),
+            );
+
+            if ($this->mapos_model->saveConfiguracao($data) == true) {
+                $this->session->set_flashdata('success', 'Configurações do sistema atualiadas com sucesso!');
+                redirect(site_url('mapos/configurar'));
+            } else {
+                $this->data['custom_error'] = '<div class="alert">Ocorreu um errro.</div>';
+            }
+        }
+
+        $this->data['view'] = 'mapos/configurar';
+        return $this->layout();
+    }
+
 }

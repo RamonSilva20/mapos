@@ -128,18 +128,37 @@ class Os extends MY_Controller
                 $emitente = $this->mapos_model->getEmitente()[0];
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
-                $remetentes = [
-                    $os->email,
-                    $emitente->email,
-                    $tecnico->email,
-                ];
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
+                // Verificar configuração de notificação
+                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+                    $remetentes = [];
+                    switch ($this->data['configuration']['os_notification']) {
+                        case 'todos':
+                            array_push($remetentes, $os->email);
+                            array_push($remetentes, $tecnico->email);
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        case 'cliente':
+                            array_push($remetentes, $os->email);
+                            break;
+                        case 'tecnico':
+                            array_push($remetentes, $tecnico->email);
+                            break;
+                        case 'emitente':
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        default:
+                            array_push($remetentes, $os->email);
+                            break;
+                    }
+                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
+                }
 
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
                 log_info('Adicionou uma OS');
                 redirect(site_url('os/editar/') . $id);
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
+                $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
             }
         }
 
@@ -206,12 +225,31 @@ class Os extends MY_Controller
                 $emitente = $this->mapos_model->getEmitente()[0];
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
-                $remetentes = [
-                    $os->email,
-                    $emitente->email,
-                    $tecnico->email,
-                ];
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+                // Verificar configuração de notificação
+                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+                    $remetentes = [];
+                    switch ($this->data['configuration']['os_notification']) {
+                        case 'todos':
+                            array_push($remetentes, $os->email);
+                            array_push($remetentes, $tecnico->email);
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        case 'cliente':
+                            array_push($remetentes, $os->email);
+                            break;
+                        case 'tecnico':
+                            array_push($remetentes, $tecnico->email);
+                            break;
+                        case 'emitente':
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        default:
+                            array_push($remetentes, $os->email);
+                            break;
+                    }
+                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+                }
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
                 log_info('Alterou uma OS. ID: ' . $this->input->post('idGarantias'));
@@ -293,6 +331,7 @@ class Os extends MY_Controller
         }
 
         $this->load->model('mapos_model');
+        $this->load->model('usuarios_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         if (!isset($this->data['result']->email)) {
             $this->session->set_flashdata('error', 'O cliente não tem e-mail cadastrado.');
@@ -309,19 +348,49 @@ class Os extends MY_Controller
         }
 
         $idOs = $this->uri->segment(3);
-        $remetentes = [
-            $this->data['result']->email,
-        ];
-        $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
-        if ($enviouEmail) {
-            $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
-            log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
-            redirect(site_url('os'));
-        } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
-            redirect(site_url('os'));
+        $emitente = $this->data['emitente'][0];
+        $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
+
+        // Verificar configuração de notificação
+        if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+            $remetentes = [];
+            switch ($this->data['configuration']['os_notification']) {
+                case 'todos':
+                    array_push($remetentes, $this->data['result']->email);
+                    array_push($remetentes, $tecnico->email);
+                    array_push($remetentes, $emitente->email);
+                    break;
+                case 'cliente':
+                    array_push($remetentes, $this->data['result']->email);
+                    break;
+                case 'tecnico':
+                    array_push($remetentes, $tecnico->email);
+                    break;
+                case 'emitente':
+                    array_push($remetentes, $emitente->email);
+                    break;
+                default:
+                    array_push($remetentes, $this->data['result']->email);
+                    break;
+            }
+            $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
+
+            if ($enviouEmail) {
+                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
+                log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
+                redirect(site_url('os'));
+            } else {
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
+                redirect(site_url('os'));
+            }
+
         }
+
+        $this->session->set_flashdata('success', 'O sistema está com uma configuração ativada para não notificar. Entre em contato com o administrador.');
+        redirect(site_url('os'));
+
     }
 
     public function excluir()
@@ -413,10 +482,12 @@ class Os extends MY_Controller
         );
 
         if ($this->os_model->add('produtos_os', $data) == true) {
-            
+
             $this->load->model('produtos_model');
-            
-            $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+            }
             log_info('Adicionou produto a uma OS.');
             echo json_encode(array('result' => true));
         } else {
@@ -433,8 +504,10 @@ class Os extends MY_Controller
             $produto = $this->input->post('produto');
 
             $this->load->model('produtos_model');
-            $this->produtos_model->updateEstoque($produto, $quantidade, '+');
 
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+            }
             log_info('Removeu produto de uma OS.');
 
             echo json_encode(array('result' => true));

@@ -271,7 +271,10 @@ class Vendas extends MY_Controller
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
 
                 $this->load->model('produtos_model');
-                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                
+                if($this->data['configuration']['control_estoque']){
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
 
                 log_info('Adicionou produto a uma venda.');
 
@@ -297,7 +300,10 @@ class Vendas extends MY_Controller
             $produto = $this->input->post('produto');
 
             $this->load->model('produtos_model');
-            $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+            
+            if($this->data['configuration']['control_estoque']){
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+            }
 
             log_info('Removeu produto de uma venda.');
             echo json_encode(array('result' => true));
