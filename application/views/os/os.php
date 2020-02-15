@@ -30,8 +30,8 @@
         </div>
 
         <div class="span3">
-            <input type="text" name="data" id="data" placeholder="Data Inicial" class="span6 datepicker" value="">
-            <input type="text" name="data2" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
+            <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="">
+            <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
         </div>
         <div class="span1">
             <button class="span12 btn"> <i class="fas fa-search"></i> </button>

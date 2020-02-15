@@ -1,6 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Mapos extends CI_Controller
+class Mapos extends MY_Controller
 {
 
     /**
@@ -12,15 +12,11 @@ class Mapos extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('mapos_model', '', true);
+        $this->load->model('mapos_model');
     }
 
     public function index()
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
@@ -28,31 +24,23 @@ class Mapos extends CI_Controller
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function minhaConta()
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
         $this->data['view'] = 'mapos/minhaConta';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function alterarSenha()
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         $current_user = $this->mapos_model->getById($this->session->userdata('id'));
 
         if (!$current_user) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao pesquisar usuário!');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
+            redirect(site_url('mapos/minhaConta'));
         }
 
         $oldSenha = $this->input->post('oldSenha');
@@ -60,26 +48,22 @@ class Mapos extends CI_Controller
 
         if (!password_verify($oldSenha, $current_user->senha)) {
             $this->session->set_flashdata('error', 'A senha atual não corresponde com a senha informada.');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
+            redirect(site_url('mapos/minhaConta'));
         }
 
         $result = $this->mapos_model->alterarSenha($senha);
 
         if ($result) {
             $this->session->set_flashdata('success', 'Senha alterada com sucesso!');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
+            redirect(site_url('mapos/minhaConta'));
         }
 
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
-        redirect(base_url() . 'index.php/mapos/minhaConta');
+        redirect(site_url('mapos/minhaConta'));
     }
 
     public function pesquisar()
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         $termo = $this->input->get('termo');
 
         $data['results'] = $this->mapos_model->pesquisar($termo);
@@ -88,82 +72,11 @@ class Mapos extends CI_Controller
         $this->data['os'] = $data['results']['os'];
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mapos/pesquisa';
-        $this->load->view('tema/topo', $this->data);
-    }
-
-    public function login()
-    {
-
-        $this->load->view('mapos/login');
-    }
-    public function sair()
-    {
-        $this->session->sess_destroy();
-        redirect('mapos/login');
-    }
-
-    public function verificarLogin()
-    {
-
-        header('Access-Control-Allow-Origin: ' . base_url());
-        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-        header('Access-Control-Max-Age: 1000');
-        header('Access-Control-Allow-Headers: Content-Type');
-
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
-        $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
-        if ($this->form_validation->run() == false) {
-            $json = array('result' => false, 'message' => validation_errors());
-            echo json_encode($json);
-        } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
-            $this->load->model('Mapos_model');
-            $user = $this->Mapos_model->check_credentials($email);
-
-            if ($user) {
-                // Verificar se acesso está expirado
-                if($this->chk_date($user->dataExpiracao)){
-                    $json = array('result' => false, 'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.');
-                    echo json_encode($json);
-                    die();
-                }
-
-                // Verificar credenciais do usuário
-                if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
-                    $this->session->set_userdata($session_data);
-                    log_info('Efetuou login no sistema');
-                    $json = array('result' => true);
-                    echo json_encode($json);
-                } else {
-                    $json = array('result' => false, 'message' => 'Os dados de acesso estão incorretos.');
-                    echo json_encode($json);
-                }
-            } else {
-                $json = array('result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.');
-                echo json_encode($json);
-            }
-        }
-        die();
-    }
-
-    private function chk_date($data_banco)
-    {
-
-        $data_banco = new DateTime($data_banco);
-        $data_hoje = new DateTime("now");
-
-        return $data_banco < $data_hoje;
+        return $this->layout();
     }
 
     public function backup()
     {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para efetuar backup.');
@@ -190,29 +103,19 @@ class Mapos extends CI_Controller
 
     public function emitente()
     {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
 
-        $data['menuConfiguracoes'] = 'Configuracoes';
-        $data['dados'] = $this->mapos_model->getEmitente();
-        $data['view'] = 'mapos/emitente';
-        $this->load->view('tema/topo', $data);
-        $this->load->view('tema/rodape');
+        $this->data['menuConfiguracoes'] = 'Configuracoes';
+        $this->data['dados'] = $this->mapos_model->getEmitente();
+        $this->data['view'] = 'mapos/emitente';
+        return $this->layout();
     }
 
     public function do_upload()
     {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
@@ -250,10 +153,6 @@ class Mapos extends CI_Controller
     public function cadastrarEmitente()
     {
 
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
@@ -274,7 +173,7 @@ class Mapos extends CI_Controller
         if ($this->form_validation->run() == false) {
 
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url() . 'index.php/mapos/emitente');
+            redirect(site_url('mapos/emitente'));
         } else {
 
             $nome = $this->input->post('nome');
@@ -295,20 +194,16 @@ class Mapos extends CI_Controller
 
                 $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
                 log_info('Adicionou informações de emitente.');
-                redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-                redirect(base_url() . 'index.php/mapos/emitente');
+                
             }
+            redirect(site_url('mapos/emitente'));
         }
     }
 
     public function editarEmitente()
     {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
@@ -330,7 +225,7 @@ class Mapos extends CI_Controller
         if ($this->form_validation->run() == false) {
 
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url() . 'index.php/mapos/emitente');
+            redirect(site_url('mapos/emitente'));
         } else {
 
             $nome = $this->input->post('nome');
@@ -350,20 +245,15 @@ class Mapos extends CI_Controller
 
                 $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
                 log_info('Alterou informações de emitente.');
-                redirect(base_url() . 'index.php/mapos/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-                redirect(base_url() . 'index.php/mapos/emitente');
             }
+            redirect(site_url('mapos/emitente'));
         }
     }
 
     public function editarLogo()
     {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
@@ -373,7 +263,7 @@ class Mapos extends CI_Controller
         $id = $this->input->post('id');
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(base_url() . 'index.php/mapos/emitente');
+            redirect(site_url('mapos/emitente'));
         }
         $this->load->helper('file');
         delete_files(FCPATH . 'assets/uploads/');
@@ -386,10 +276,55 @@ class Mapos extends CI_Controller
 
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
             log_info('Alterou a logomarca do emitente.');
-            redirect(base_url() . 'index.php/mapos/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-            redirect(base_url() . 'index.php/mapos/emitente');
         }
+        redirect(site_url('mapos/emitente'));
+    }
+
+    public function emails()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar fila de e-mails');
+            redirect(base_url());
+        }
+
+        $this->data['menuConfiguracoes'] = 'Email';
+
+        $this->load->library('pagination');
+        $this->load->model('email_model');
+
+        $this->data['configuration']['base_url'] = site_url('mapos/emails/');
+        $this->data['configuration']['total_rows'] = $this->email_model->count('email_queue');
+
+        $this->pagination->initialize($this->data['configuration']);
+
+        $this->data['results'] = $this->email_model->get('email_queue', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+
+        $this->data['view'] = 'emails/emails';
+        return $this->layout();
+    }
+
+    public function excluirEmail()
+    {
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para excluir e-mail da fila.');
+            redirect(base_url());
+        }
+
+        $id = $this->input->post('id');
+        if ($id == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir e-mail da fila.');
+            redirect(site_url('mapos/emails/'));
+        }
+
+        $this->load->model('email_model');
+        $this->email_model->delete('email_queue', 'id', $id);
+
+        log_info('Removeu um e-mail da fila de envio. ID: ' . $id);
+
+        $this->session->set_flashdata('success', 'E-mail removido da fila de envio!');
+        redirect(site_url('mapos/emails/'));
     }
 }

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Vendas extends CI_Controller
+class Vendas extends MY_Controller
 {
 
     /**
@@ -13,12 +13,8 @@ class Vendas extends CI_Controller
     {
         parent::__construct();
 
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
-        $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('vendas_model', '', true);
+        $this->load->helper('form');
+        $this->load->model('vendas_model');
         $this->data['menuVendas'] = 'Vendas';
     }
 
@@ -37,34 +33,15 @@ class Vendas extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'index.php/vendas/gerenciar/';
-        $config['total_rows'] = $this->vendas_model->count('vendas');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $this->data['configuration']['base_url'] = site_url('vendas/gerenciar/');
+        $this->data['configuration']['total_rows'] = $this->vendas_model->count('vendas');
 
-        $this->pagination->initialize($config);
+        $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->vendas_model->get('vendas', '*', '', $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->vendas_model->get('vendas', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'vendas/vendas';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function adicionar()
@@ -102,7 +79,7 @@ class Vendas extends CI_Controller
             if (is_numeric($id = $this->vendas_model->add('vendas', $data, true))) {
                 $this->session->set_flashdata('success', 'Venda iniciada com sucesso, adicione os produtos.');
                 log_info('Adicionou uma venda.');
-                redirect('vendas/editar/' . $id);
+                redirect(site_url('vendas/editar/') . $id);
             } else {
 
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
@@ -110,7 +87,7 @@ class Vendas extends CI_Controller
         }
 
         $this->data['view'] = 'vendas/adicionarVenda';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function editar()
@@ -152,7 +129,7 @@ class Vendas extends CI_Controller
             if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas')) == true) {
                 $this->session->set_flashdata('success', 'Venda editada com sucesso!');
                 log_info('Alterou uma venda. ID: ' . $this->input->post('idVendas'));
-                redirect(base_url() . 'index.php/vendas/editar/' . $this->input->post('idVendas'));
+                redirect(site_url('vendas/editar/') . $this->input->post('idVendas'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -161,7 +138,7 @@ class Vendas extends CI_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['view'] = 'vendas/editarVenda';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function visualizar()
@@ -184,7 +161,7 @@ class Vendas extends CI_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->data['view'] = 'vendas/visualizarVenda';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function imprimir()
@@ -221,19 +198,18 @@ class Vendas extends CI_Controller
         if ($id == null) {
 
             $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
-            redirect(base_url() . 'index.php/vendas/gerenciar/');
+            redirect(site_url('vendas/gerenciar/'));
         }
 
-        $this->db->where('vendas_id', $id);
-        $this->db->delete('itens_de_vendas');
+        $this->load->model('vendas_model');
 
-        $this->db->where('idVendas', $id);
-        $this->db->delete('vendas');
+        $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
+        $this->vendas_model->delete('vendas', 'idVendas', $id);
 
         log_info('Removeu uma venda. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Venda excluída com sucesso!');
-        redirect(base_url() . 'index.php/vendas/gerenciar/');
+        redirect(site_url('vendas/gerenciar/'));
     }
 
     public function autoCompleteProduto()
@@ -293,8 +269,9 @@ class Vendas extends CI_Controller
             );
 
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
-                $sql = "UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?";
-                $this->db->query($sql, array($quantidade, $produto));
+
+                $this->load->model('produtos_model');
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
 
                 log_info('Adicionou produto a uma venda.');
 
@@ -319,9 +296,8 @@ class Vendas extends CI_Controller
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
 
-            $sql = "UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?";
-
-            $this->db->query($sql, array($quantidade, $produto));
+            $this->load->model('produtos_model');
+            $this->produtos_model->updateEstoque($produto, $quantidade, '+');
 
             log_info('Removeu produto de uma venda.');
             echo json_encode(array('result' => true));

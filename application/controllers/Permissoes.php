@@ -1,6 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Permissoes extends CI_Controller
+class Permissoes extends MY_Controller
 {
 
     /**
@@ -12,9 +12,6 @@ class Permissoes extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
@@ -22,7 +19,7 @@ class Permissoes extends CI_Controller
         }
 
         $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('permissoes_model', '', true);
+        $this->load->model('permissoes_model');
         $this->data['menuConfiguracoes'] = 'Permissões';
     }
 
@@ -36,34 +33,15 @@ class Permissoes extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'index.php/permissoes/gerenciar/';
-        $config['total_rows'] = $this->permissoes_model->count('permissoes');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $this->data['configuration']['base_url'] = site_url('permissoes/gerenciar/');
+        $this->data['configuration']['total_rows'] = $this->permissoes_model->count('permissoes');
 
-        $this->pagination->initialize($config);
+        $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/permissoes';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function adicionar()
@@ -151,14 +129,14 @@ class Permissoes extends CI_Controller
 
                 $this->session->set_flashdata('success', 'Permissão adicionada com sucesso!');
                 log_info('Adicionou uma permissão');
-                redirect(base_url() . 'index.php/permissoes/adicionar/');
+                redirect(site_url('permissoes/adicionar/'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
 
         $this->data['view'] = 'permissoes/adicionarPermissao';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function editar()
@@ -242,7 +220,7 @@ class Permissoes extends CI_Controller
             if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
                 $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
                 log_info('Alterou uma permissão. ID: ' . $this->input->post('idPermissao'));
-                redirect(base_url() . 'index.php/permissoes/editar/' . $this->input->post('idPermissao'));
+                redirect(site_url('permissoes/editar/') . $this->input->post('idPermissao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
             }
@@ -251,16 +229,16 @@ class Permissoes extends CI_Controller
         $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/editarPermissao';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function desativar()
     {
 
         $id = $this->input->post('id');
-        if ($id == null) {
+        if (!$id) {
             $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
-            redirect(base_url() . 'index.php/permissoes/gerenciar/');
+            redirect(site_url('permissoes/gerenciar/'));
         }
         $data = array(
             'situacao' => false,
@@ -272,7 +250,7 @@ class Permissoes extends CI_Controller
             $this->session->set_flashdata('error', 'Erro ao desativar permissão!');
         }
 
-        redirect(base_url() . 'index.php/permissoes/gerenciar/');
+        redirect(site_url('permissoes/gerenciar/'));
     }
 }
 

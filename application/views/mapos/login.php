@@ -5,24 +5,24 @@
     <title>MAP OS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <script src="<?php echo base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
+    <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
     <div id="loginbox">
-        <form class="form-vertical" id="formLogin" method="post" action="<?php echo base_url() ?>index.php/mapos/verificarLogin">
+        <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
             <?php if ($this->session->flashdata('error') != null) { ?>
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <?php echo $this->session->flashdata('error'); ?>
+                    <?= $this->session->flashdata('error'); ?>
                 </div>
             <?php } ?>
             <div class="control-group normal_text">
-                <h3><img src="<?php echo base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
+                <h3><img src="<?= base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
             </div>
             <div class="control-group">
                 <div class="controls">
@@ -47,8 +47,8 @@
         </form>
 
     </div>
-    <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/validate.js"></script>
+    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?= base_url() ?>assets/js/validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -79,12 +79,12 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/mapos/verificarLogin?ajax=true",
+                        url: "<?= site_url('login/verificarLogin?ajax=true'); ?>",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                window.location.href = "<?php echo base_url(); ?>index.php/mapos";
+                                window.location.href = "<?= site_url('mapos'); ?>";
                             } else {
 
 

@@ -278,4 +278,5 @@ class Os_model extends CI_Model
         $this->db->order_by('idAnotacoes', 'desc');
         return $this->db->get('anotacoes_os')->result();
     }
+
 }
