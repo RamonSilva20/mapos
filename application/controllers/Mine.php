@@ -46,8 +46,6 @@ class Mine extends CI_Controller
             $this->db->where('email', $email);
             $this->db->where('documento', $documento);
             $this->db->limit(1);
-            // Bugfix - Issue #513 - @giovanne-oliveira
-            //if (count($cliente) > 0) {
             $cliente = $this->db->get('clientes');
             if($cliente->num_rows() > 0){
                 $cliente = $cliente->row();
