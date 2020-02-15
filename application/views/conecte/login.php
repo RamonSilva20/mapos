@@ -128,7 +128,7 @@
                             if (data.result == true) {
                                 window.location.href = "<?php echo base_url(); ?>index.php/mine/painel";
                             } else {
-                                $('#call-modal').trigger('click');
+                                $("#notification").modal();
                             }
                         }
                     });
