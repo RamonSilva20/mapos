@@ -334,6 +334,8 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
         }
+        $this->data['menuConfiguracoes'] = 'Sistema';
+
         $this->load->library('form_validation');
         $this->load->model('mapos_model');
         
