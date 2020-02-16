@@ -2,7 +2,6 @@
 
 class MY_Controller extends CI_Controller
 {
-
     public $data = [
         'configuration' => [
             'per_page' => 10,
@@ -46,11 +45,10 @@ class MY_Controller extends CI_Controller
         $this->CI = &get_instance();
         $this->CI->load->database();
         $configuracoes = $this->CI->db->get('configuracoes')->result();
-        
+
         foreach ($configuracoes as $c) {
             $this->data['configuration'][$c->config] = $c->valor;
         }
-
     }
 
     public function layout()
