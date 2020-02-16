@@ -535,7 +535,7 @@ CREATE TABLE `anotacoes_os` (
     PRIMARY KEY (`idAnotacoes`)
 );
 
-CREATE TABLE `banco`.`configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+CREATE TABLE `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
 
 INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (2, 'app_name', 'Map-OS'),
