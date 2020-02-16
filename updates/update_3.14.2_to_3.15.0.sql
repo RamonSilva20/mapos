@@ -7,9 +7,6 @@ INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (5, 'os_notification', 'cliente'),
 (6, 'control_estoque', '1');
 
--- -----------------------------------------------------
--- Table `pagamento`
--- -----------------------------------------------------
 CREATE TABLE `pagamento` (
   `idPag` INT NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
