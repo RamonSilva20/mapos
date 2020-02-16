@@ -1,0 +1,13 @@
+{
+    "require": {
+        "fzaninotto/faker": "^1.9"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "scripts": {
+        "format": [
+            "vendor/bin/php-cs-fixer fix"
+        ]
+    }
+}
