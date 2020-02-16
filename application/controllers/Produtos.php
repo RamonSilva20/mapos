@@ -40,7 +40,7 @@ class Produtos extends MY_Controller
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', '*', '',  $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'produtos/produtos';
         return $this->layout();
@@ -79,7 +79,7 @@ class Produtos extends MY_Controller
             if ($this->produtos_model->add('produtos', $data) == true) {
                 $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
                 log_info('Adicionou um produto');
-                redirect(site_url('produtos/adicionar/') );
+                redirect(site_url('produtos/adicionar/'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
@@ -200,7 +200,7 @@ class Produtos extends MY_Controller
         $estoque = $estoqueAtual + $novoEstoque;
 
         $data = [
-            'estoque' => $estoque
+            'estoque' => $estoque,
         ];
 
         if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $idProduto) == true) {
@@ -211,4 +211,5 @@ class Produtos extends MY_Controller
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
         }
     }
+
 }
