@@ -56,7 +56,7 @@
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Venc. Da Garantia</th>
+                        <th>Venc. Garantia</th>
                         <th>Valor Total</th>
                         <th>Status</th>
                         <th>T. Garantia</th>
@@ -104,7 +104,7 @@
                                     $cor = '#E0E4CC';
                                     break;
                             }
-                            
+                            if($r->garantia != null || $r->garantia != ""){
                             // Criar o objeto representando a data
                             $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
                             $obj_data->setTime(0, 0, 0);
@@ -115,6 +115,7 @@
 
                             // Formatar a data obtida
                             $vencGarantia = $obj_data->format('d/m/Y');
+                            }
                     
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';

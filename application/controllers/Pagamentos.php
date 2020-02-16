@@ -1,6 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Pagamentos extends CI_Controller
+class Pagamentos extends MY_Controller
 {
 
     /**
@@ -13,13 +13,9 @@ class Pagamentos extends CI_Controller
     {
         parent::__construct();
 
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
-        $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('pagamentos_model', '', true);
-        $this->data['menuPagamento'] = 'Pagamentos';
+        $this->load->helper('form');
+        $this->load->model('pagamentos_model');
+        $this->data['menuConfiguracoes'] = 'Pagamentos';
     }
 
     public function index()
@@ -34,37 +30,18 @@ class Pagamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar Credencial de Pagamento.');
             redirect(base_url());
         }
-
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'index.php/pagamentos/gerenciar/';
-        $config['total_rows'] = $this->pagamentos_model->count('pagamento');
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $this->data['configuration']['base_url'] = site_url('pagamentos/gerenciar/');
+        $this->data['configuration']['total_rows'] = $this->pagamentos_model->count('pagamento');
 
-        $this->pagination->initialize($config);
+        $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->pagamentos_model->get('pagamento', '*', '', $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->pagamentos_model->get('pagamento', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'pagamentos/pagamentos';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
+
     }
 
     public function adicionar()
@@ -103,7 +80,7 @@ class Pagamentos extends CI_Controller
         }
 
         $this->data['view'] = 'pagamentos/adicionarPagamento';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function editar()
@@ -148,7 +125,7 @@ class Pagamentos extends CI_Controller
 
         $this->data['result'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['view'] = 'pagamentos/editarPagamento';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function visualizar()
@@ -170,7 +147,7 @@ class Pagamentos extends CI_Controller
         $this->data['pagamento'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'pagamentos/visualizarPagamento';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
 

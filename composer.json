@@ -1,6 +1,6 @@
 {
     "require": {
-        "mercadopago/dx-php": "1.8.0",
+        "mercadopago/dx-php": "^1.8",
         "paypal/rest-api-sdk-php": "*"
     }
 }
