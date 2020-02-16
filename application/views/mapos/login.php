@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>MAP OS</title>
+    <title><?= $this->config->item('app_name') ?> </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div id="loginbox">
+<div id="loginbox">
         <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
             <?php if ($this->session->flashdata('error') != null) { ?>
                 <div class="alert alert-danger">
