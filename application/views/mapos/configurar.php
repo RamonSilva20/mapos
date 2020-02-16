@@ -64,8 +64,9 @@
                     </div>
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
+                            <div class="span6">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Salvar Configurações</button>
+                                <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
                             </div>
                         </div>
                     </div>
@@ -74,3 +75,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#update-database').click(function () {
+        if (confirm('Confirma a atualização do banco de dados?')) {
+            window.location = "<?= site_url('mapos/atualizarBanco') ?>"
+        }
+    })
+</script>
