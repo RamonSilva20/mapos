@@ -9,5 +9,8 @@
         "format": [
             "vendor/bin/php-cs-fixer fix"
         ]
+    },
+    "config": {
+        "vendor-dir": "application/vendor"
     }
 }
