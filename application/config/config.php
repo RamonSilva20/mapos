@@ -92,7 +92,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']     = 'english';
+$config['language'] = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -152,7 +152,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = false;
+$config['composer_autoload'] = FCPATH . '/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -239,7 +239,7 @@ $config['allow_get_array'] = true;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
