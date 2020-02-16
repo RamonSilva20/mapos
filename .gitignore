@@ -15,6 +15,7 @@
 !blank/.gitkeep
 desktop.ini
 
+application/vendor/
 vendor/
 .idea/
 .php_cs
