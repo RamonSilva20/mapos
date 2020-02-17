@@ -92,7 +92,14 @@
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
-                                            <input id="garantia" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
+                                            <select id="garantia" name="garantia">
+												<option value="0" <?= ($result->garantia == 0) ? 'selected' : '' ?>>Sem garantia</option>
+                                                <option value="30" <?= ($result->garantia == 30) ? 'selected' : '' ?>>30 dias</option>
+                                                <option value="60" <?= ($result->garantia == 60) ? 'selected' : '' ?>>60 dias</option>
+                                                <option value="90" <?= ($result->garantia == 90) ? 'selected' : '' ?>>90 dias</option>
+                                                <option value="180" <?= ($result->garantia == 180) ? 'selected' : '' ?>>6 meses</option>
+                                                <option value="360" <?= ($result->garantia == 360) ? 'selected' : '' ?>>1 ano</option>
+                                            </select> 
 
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
