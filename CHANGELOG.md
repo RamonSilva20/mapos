@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.15.1] - 2020-02-17
+
+### Fixed
+- Correção de exibição das tabelas "Produtos com Estoque Mínimo", "Ordens de Serviço em Aberto" e "Ordens de Serviço Aguardando Peças". [@Bremyarck](https://github.com/bremyarck)
+
+### Changed
+- Refatoramento e remoção de linhas de códigos desnecessárias no arquivo "mapos/painel.php". [@Bremyarck](https://github.com/bremyarck)
 
 ## [3.15.0] - 2020-02-15
 
