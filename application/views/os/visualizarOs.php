@@ -247,15 +247,17 @@ $totalProdutos = 0; ?>
             </div>
 
         </div>
-        
+
         <?php
-         $preference = $this->ident_pagamento->IdPagamento($pagamento->nome, $pagamento->access_token, $result->idOs, $totalProdutos, $totalServico);
-         if ($totalProdutos != 0 || $totalServico != 0) { ?>
-            <form action="<?php site_url() ?>" method="POST">
-                <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="<?php echo $preference->id; ?>" data-button-label="Gerar Pagamento">
-                </script>
-            </form>
-        <?php } ?>
+        $preference = $this->ident_pagamento->IdPagamento($pagamento->nome, $pagamento->access_token, $result->idOs, $totalProdutos, $totalServico);
+        if ($pagamento->nome == 'MercadoPago' || $pagamento->nome == 'Mercado Pago') {
+            if ($totalProdutos != 0 || $totalServico != 0) { ?>
+                <form action="<?php site_url() ?>" method="POST">
+                    <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="<?php echo $preference->id; ?>" data-button-label="Gerar Pagamento">
+                    </script>
+                </form>
+        <?php }
+        } ?>
 
     </div>
 </div>

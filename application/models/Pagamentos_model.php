@@ -43,12 +43,23 @@ class Pagamentos_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function getPagamentos($id = null)//provisorio enquanto não implementar o default de pagamento
+    function getPagamentos()
+    {
+        $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret');
+        $this->db->from('pagamento');
+        $this->db->where('default_pag', 1);
+        return $this->db->get()->row();
+    }
+
+    function duplicadoPagDefault()
     {
         $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret, pagamento.default_pag');
         $this->db->from('pagamento');
-        $this->db->where('idPag', 1);
-        return $this->db->get()->row();
+        $this->db->where('pagamento.default_pag', 1);
+        
+        $json = json_encode($this->db->get()->row());
+        return json_decode($json);
+      
     }
 
      

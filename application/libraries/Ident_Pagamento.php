@@ -6,10 +6,9 @@ class Ident_Pagamento
     public function IdPagamento($IdNome, $access_token, $idOs, $totalProdutos, $totalServico)
     {
 
-        if ($IdNome === 'MercadoPago') {
+        if ($IdNome === 'MercadoPago' || $IdNome === 'Mercado Pago') {
 
             // SDK de Mercado Pago
-
             // Configura credenciais
             MercadoPago\SDK::setAccessToken($access_token);
 
@@ -37,7 +36,7 @@ class Ident_Pagamento
 
             return $preference;
         }
-        if ($IdNome === 'PayPal') {
+        if ($IdNome === 'PayPal' || $IdNome === 'Pay Pal') {
 
             $apiContext = new \PayPal\Rest\ApiContext(
                 new \PayPal\Auth\OAuthTokenCredential(
@@ -45,6 +44,8 @@ class Ident_Pagamento
                   'YOUR APPLICATION CLIENT SECRET'
                 )
               );
+
+              print('PayPal SDK pegou :D');
         }
     }
 }

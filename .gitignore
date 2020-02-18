@@ -8,6 +8,7 @@
 .vscode
 
 /vendor/
+/application/vendor/
 
 .env.local
 .env.development.local

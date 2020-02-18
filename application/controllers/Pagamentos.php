@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Pagamentos extends MY_Controller
 {
@@ -41,7 +43,6 @@ class Pagamentos extends MY_Controller
 
         $this->data['view'] = 'pagamentos/pagamentos';
         return $this->layout();
-
     }
 
     public function adicionar()
@@ -65,8 +66,8 @@ class Pagamentos extends MY_Controller
                 'access_token' => $this->input->post('accessToken'),
                 'client_id' => $this->input->post('clientId'),
                 'client_secret' => $this->input->post('clientSecret'),
-                'default_pag' => ( isset($_POST['default_pag']) ) ? true : false
-                
+                'default_pag' => (isset($_POST['default_pag'])) ? true : false
+
             );
 
             if (is_numeric($id = $this->pagamentos_model->add('pagamento', $data, true))) {
@@ -102,7 +103,7 @@ class Pagamentos extends MY_Controller
         if ($this->form_validation->run('pagamentos') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            
+
 
             $data = array(
                 'nome' => $this->input->post('nomePag'),
@@ -110,19 +111,26 @@ class Pagamentos extends MY_Controller
                 'client_secret' => $this->input->post('clientSecret'),
                 'public_key' => $this->input->post('publicKey'),
                 'access_token' => $this->input->post('accessToken'),
-                'default_pag' => ( isset($_POST['default_pag']) ) ? true : false
-                
-            );
+                'default_pag' => (isset($_POST['default_pag'])) ? true : false
 
-            if ($this->pagamentos_model->edit('pagamento', $data, 'idPag', $this->input->post('idPag')) == true) {
-                $this->session->set_flashdata('success', 'Credencial de Pagamento editada com sucesso!');
-                log_info('Alterou uma credencial de pagamento. ID: ' . $this->input->post('idPag'));
-                redirect(base_url() . 'index.php/pagamentos/editar/' . $this->input->post('idPag'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            );
+            
+            
+
+        if($this->pagamentos_model->duplicadoPagDefault()->default_pag != (isset($_POST['default_pag'])) ? true : false  &&
+                     $this->pagamentos_model->duplicadoPagDefault()->nome == $this->input->post('nomePag')) {
+                if ($this->pagamentos_model->edit('pagamento', $data, 'idPag', $this->input->post('idPag')) == true) {
+                    $this->session->set_flashdata('success', 'Credencial de Pagamento editada com sucesso!');
+                    log_info('Alterou uma credencial de pagamento. ID: ' . $this->input->post('idPag'));
+                    redirect(base_url() . 'index.php/pagamentos/editar/' . $this->input->post('idPag'));
+                } else {
+                    $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+                }
+            }else{
+                $this->session->set_flashdata('error', 'Já existe uma Credencial de Pagamento como Padrão!');
             }
         }
-
+        
         $this->data['result'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['view'] = 'pagamentos/editarPagamento';
         return $this->layout();
@@ -160,10 +168,10 @@ class Pagamentos extends MY_Controller
         }
 
         $ID = $this->input->post('idPag');
-        
+
         if ($ID == null) {
 
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir credencial de pagamento.'. $ID);
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir credencial de pagamento.' . $ID);
             redirect(base_url() . 'index.php/pagamentos/gerenciar/');
         }
 
@@ -172,16 +180,11 @@ class Pagamentos extends MY_Controller
             $this->pagamentos_model->delete('pagamento', 'idPag', $ID);
             $this->session->set_flashdata('success', 'Credencial de Pagamento excluída com sucesso!');
             log_info('Removeu uma credencial de pagamento. ID: ' . $ID);
-
         } else {
 
             $this->session->set_flashdata('error', 'Você não pode excluir essa Credencial de Pagamento.');
-
         }
 
         redirect(base_url() . 'index.php/pagamentos/gerenciar/');
-
     }
-
-
 }
