@@ -4,6 +4,22 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2020-02-16
+
+### Added
+- Adicionado composer ao projeto. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado biblioteca de migrations do CodeIgniter. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado seeders para inserção de dados no banco de dados.
+- Botão para atualizar banco de dados com as migrations em: Configurações -> Sistema. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado controller `Tools` para permitir a criação de migrations e seeders pelo terminal. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Fixed
+- Adicionado permissão de sistema e email ao usuário admin criado inicialmente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido valor de `dataCadastro` incorreta em admin criado inicialmente [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Banco de dados agora será gerenciado com migrations pela biblioteca do CodeIgniter, onde o último arquivo de atualização manual é o `update_3.15.0_to_4.0.0.sql`. Ainda será necessário atualizar sempre o arquivo `banco.sql` com as novas tabelas para que o script de instalação continue funcionando [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Ativado Logs para permitir melhor debug. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [3.15.0] - 2020-02-15
 
