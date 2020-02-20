@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -35,11 +36,10 @@
  * @since	Version 1.0.0
  * @filesource
  */
-
 /*
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  *
  * You can load different configurations depending on your
  * current environment. Setting the environment also influences
@@ -54,7 +54,6 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 // define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-
 //set the environment to production after installation
 define('ENVIRONMENT', 'pre_installation');
 
@@ -74,9 +73,9 @@ if (ENVIRONMENT === 'pre_installation') {
 }
 
 /*
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  * ERROR REPORTING
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  *
  * Different environments will require different levels of error reporting.
  * By default development will show errors but testing and live will hide them.
@@ -104,9 +103,9 @@ switch (ENVIRONMENT) {
 }
 
 /*
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  * SYSTEM DIRECTORY NAME
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  *
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
@@ -114,9 +113,9 @@ switch (ENVIRONMENT) {
 $system_path = 'system';
 
 /*
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  * APPLICATION DIRECTORY NAME
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  *
  * If you want this front controller to use a different "application"
  * directory than the default one you can set its name here. The directory
@@ -131,9 +130,9 @@ $system_path = 'system';
 $application_folder = 'application';
 
 /*
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  * VIEW DIRECTORY NAME
- *---------------------------------------------------------------
+ * ---------------------------------------------------------------
  *
  * If you want to move the view directory out of the application
  * directory, set the path to it here. The directory can be renamed
@@ -143,7 +142,7 @@ $application_folder = 'application';
  *
  * NO TRAILING SLASH!
  */
-$view_folder = '';
+$view_folder = 'application/views';
 
 
 /*
@@ -168,10 +167,8 @@ $view_folder = '';
 // The directory name, relative to the "controllers" directory.  Leave blank
 // if your controller is not in a sub-directory within the "controllers" one
 // $routing['directory'] = '';
-
 // The controller class file name.  Example:  mycontroller
 // $routing['controller'] = '';
-
 // The controller function you wish to be called.
 // $routing['function']	= '';
 
@@ -191,9 +188,6 @@ $view_folder = '';
  * Un-comment the $assign_to_config array below to use this feature
  */
 // $assign_to_config['name_of_config_item'] = 'value of config item';
-
-
-
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
@@ -214,10 +208,10 @@ if (($_temp = realpath($system_path)) !== false) {
 } else {
     // Ensure there's a trailing slash
     $system_path = strtr(
-        rtrim($system_path, '/\\'),
-        '/\\',
-        DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
-    ) . DIRECTORY_SEPARATOR;
+                    rtrim($system_path, '/\\'),
+                    '/\\',
+                    DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+            ) . DIRECTORY_SEPARATOR;
 }
 
 // Is the system path correct?
@@ -250,16 +244,16 @@ if (is_dir($application_folder)) {
         $application_folder = $_temp;
     } else {
         $application_folder = strtr(
-            rtrim($application_folder, '/\\'),
-            '/\\',
-            DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+                rtrim($application_folder, '/\\'),
+                '/\\',
+                DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
         );
     }
 } elseif (is_dir(BASEPATH . $application_folder . DIRECTORY_SEPARATOR)) {
     $application_folder = BASEPATH . strtr(
-        trim($application_folder, '/\\'),
-        '/\\',
-        DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+                    trim($application_folder, '/\\'),
+                    '/\\',
+                    DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
     );
 } else {
     header('HTTP/1.1 503 Service Unavailable.', true, 503);
@@ -277,16 +271,16 @@ if (!isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) 
         $view_folder = $_temp;
     } else {
         $view_folder = strtr(
-            rtrim($view_folder, '/\\'),
-            '/\\',
-            DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+                rtrim($view_folder, '/\\'),
+                '/\\',
+                DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
         );
     }
 } elseif (is_dir(APPPATH . $view_folder . DIRECTORY_SEPARATOR)) {
     $view_folder = APPPATH . strtr(
-        trim($view_folder, '/\\'),
-        '/\\',
-        DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+                    trim($view_folder, '/\\'),
+                    '/\\',
+                    DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
     );
 } else {
     header('HTTP/1.1 503 Service Unavailable.', true, 503);
