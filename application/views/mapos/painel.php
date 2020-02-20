@@ -4,55 +4,56 @@
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
+<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/tema.css" />
 
 <!--Action boxes-->
 <div class="container-fluid">
     <div class="quick-actions_homepage">
         <ul class="quick-actions">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
-                <li class="bg_lb">
+                <li class="bg-gradient-success">
                     <a href="<?= base_url() ?>index.php/clientes"> <i class="fas fa-users" style="font-size:36px"></i>
-                        <div>Clientes <span class="badge badge-light">F1</span></div>
+                        <div>Clientes <br><span class="badge badge-light">F1</span></div>
                     </a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
-                <li class="bg_lg">
-                    <a href="<?= base_url() ?>index.php/produtos"> <i class="fas fa-shopping-bag" style="font-size:36px"></i>
-                        <div>Produtos <span class="badge badge-light">F2</span></div>
+                <li class="bg-gradient-warning">
+                    <a href="<?= base_url() ?>index.php/produtos"> <i class="fa fa-box-open" style="font-size:36px"></i>
+                        <div>Produtos <br><span class="badge badge-light">F2</span></div>
                     </a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
-                <li class="bg_ly">
+                <li class="bg-gradient-primary">
                     <a href="<?= base_url() ?>index.php/servicos"> <i class="fas fa-wrench" style="font-size:36px"></i>
-                        <div>Serviços <span class="badge badge-light">F3</span></div>
+                        <div>Serviços <br><span class="badge badge-light">F3</span></div>
                     </a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                <li class="bg_lo">
+                <li class="bg-gradient-secondary">
                     <a href="<?= base_url() ?>index.php/os"> <i class="fas fa-diagnoses" style="font-size:36px"></i>
-                        <div>OS <span class="badge badge-light">F4</span></div>
+                        <div>OS <br></bre><span class="badge badge-light">F4</span></div>
                     </a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-                <li class="bg_ls">
+                <li class="bg-gradient-info">
                     <a href="<?= base_url() ?>index.php/vendas"><i class="fas fa-cash-register" style="font-size:36px"></i>
-                        <div>Vendas <span class="badge badge-light">F6</span></div>
+                        <div>Vendas <br><span class="badge badge-light">F6</span></div>
                     </a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
-                <li class="bg_ls">
+                <li class="bg-gradient-danger">
                     <a href="<?= base_url() ?>index.php/garantias"><i class="fas fa-book" style="font-size:36px"></i>
-                        <div>Termo Garantia <span class="badge badge-light">F7</span></div>
+                        <div>Termo Garantia <br><span class="badge badge-light">F7</span></div>
                     </a>
                 </li>
             <?php endif ?>
@@ -105,7 +106,7 @@
                                             <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn btn-info">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos?>" estoque="<?=$p->estoque?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -150,10 +151,10 @@
                                     </td>
 
                                     <td><?php if ($o->dataFinal != null) {
-                                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                                } else {
-                                                    echo "";
-                                                } ?></td>
+                                            echo date('d/m/Y', strtotime($o->dataFinal));
+                                        } else {
+                                            echo "";
+                                        } ?></td>
 
                                     <td>
                                         <?= $o->nomeCliente ?>
@@ -352,8 +353,8 @@
         $(document).ready(function() {
             var data = [
                 <?php foreach ($os as $o) {
-                        echo "['" . $o->status . "', " . $o->total . "],";
-                    } ?>
+                    echo "['" . $o->status . "', " . $o->total . "],";
+                } ?>
 
             ];
             var plot1 = jQuery.jqplot('chart-os', [data], {
@@ -382,7 +383,7 @@
 
 <?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {
-        ?>
+?>
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -487,8 +488,8 @@
             <div class="control-group">
                 <label for="estoque" class="control-label">Adicionar Produtos<span class="required">*</span></label>
                 <div class="controls">
-                    <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
-                    <input id="estoque" type="text" name="estoque" value=""/>
+                    <input type="hidden" id="idProduto" class="idProduto" name="id" value="" />
+                    <input id="estoque" type="text" name="estoque" value="" />
                 </div>
             </div>
         </div>
@@ -502,8 +503,8 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <!-- Modal Estoque-->
 <script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on('click', 'a', function (event) {
+    $(document).ready(function() {
+        $(document).on('click', 'a', function(event) {
             var produto = $(this).attr('produto');
             var estoque = $(this).attr('estoque');
             $('.idProduto').val(produto);
@@ -525,10 +526,10 @@
             },
             errorClass: "help-inline",
             errorElement: "span",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').addClass('error');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
             }

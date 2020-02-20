@@ -1,169 +1,281 @@
-/* ======================================*/
-/*  Thomas Lage - lage.thomas@gmail.com  */
-/*=======================================*/
-
-/* ===========================> FOCUS <=========================== */
+/* ======================================
+  Thomas Lage - lage.thomas@gmail.com   
+  Tema - Neve
+=======================================*/
 
 /* INPUT DE BUSCA NA PÁGINA */
-#search input:focus[type=text]{
+
+#search input:focus[type=text] {
     border: 1px solid;
-    border-top:none;
+    border-top: none;
     border-bottom: none;
     border-color: red;
     background-color: #FFFFFF;
-    color:#000000;
+    color: #000000;
 }
 
-/* ===========================> ACTIVE <=========================== */
-
 /* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li.active a{
+
+#sidebar>ul li ul li.active a {
     background-color: #7BCAE1;
 }
 
-/* MENUS LATERAIS*/
-#sidebar > ul > li.active{
-    background-color: rgba(79, 176, 241, 0.548);
+#sidebar>ul>li>a {
+    color: #888888 !important;
 }
 
-/* ITENS ATIVOS */
-#sidebar > ul > li.active a{
-    color:black;
-}  
+#sidebar>ul>li.active {
+    columns: #000000;
+    background-color: rgba(151, 150, 150, 0.596);
+    font-size: 13px;
+}
 
-/* ===========================> HOVERS <=========================== */
+#sidebar>ul>li.active a {
+    color: black !important;
+}
 
 /*MENUS LATERAIS*/
-#sidebar > ul > li > a:hover{
+
+#sidebar>ul>li>a:hover {
     background-color: #27a9e3;
     color: #fff;
 }
 
+#sidebar>ul>li>a>.label:hover {
+    background-color: rgb(255, 255, 255, 0) !important;
+}
+
+#sidebar>ul>li>a:hover {
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 13px;
+}
+
+#sidebar>ul>li>a {
+    padding: 10px 0 10px 15px;
+    display: block;
+    color: #939da8;
+}
+
+#user-nav>ul>li>a:hover {
+    color: #000000 !important;
+    background-color: rgba(151, 150, 150, 0.596) !important;
+}
+
 /* ICONES DE VISUALIZAR */
-.visualizar:hover{
+
+.visualizar:hover {
     background-color: #548B54;
 }
 
+/* ICONE DE SETA */
+
+.icon-arrow-left {
+    color: #000000 !important;
+}
+
 /* INPUT DE BUSCA NA PÁGINA */
-#search input:hover[type=text]{
+
+#search input:hover[type=text] {
     border: 1px solid;
-    border-top:none;
+    border-top: none;
     border-bottom: none;
     border-color: red;
-    color:#000000;
+    color: #000000;
 }
 
 /* LINHA */
-li:hover{
-    color:#666;
+
+li:hover {
+    color: #666;
 }
 
 /* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li a:hover{
-    background-color: #7BCAE1;
+
+#sidebar>ul li ul li a:hover {
+    background-color: rgba(151, 150, 150, 0.596);
 }
 
 /* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/
-#user-nav > ul > li > a:hover{
+
+#user-nav>ul>li>a:hover {
     background-color: #7BCAE1;
 }
 
 /* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > a > .label:hover{
+
+#sidebar>ul>li>a>.label:hover {
     background-color: #ffffff;
 }
 
 /*ITENS DO DASHBOARD - ICONES*/
+
+.bg_lr {
+    border-radius: 5px;
+}
+
+.bg_ls {
+    border-radius: 5px;
+}
+
+.bg_lo {
+    border-radius: 5px;
+}
+
+.bg_ly {
+    border-radius: 5px;
+}
+
+.bg_lg {
+    border-radius: 5px;
+}
+
+.bg_lb {
+    border-radius: 5px;
+}
+
 .quick-actions li a:hover {
     border-radius: 5px;
+}
+
+/* TEMPO DECARGA DA TELA */
+
+.tempo-carga {
+    color: #787878;
+    padding: 20px 0 0 0;
+    text-align: center;
 }
 
 /* ===========================> CSS NORMAL <=========================== */
 
 /* BORDAR REDONDA EM TODOS OS INPUTS */
+
 input {
     border-radius: 7px !important;
 }
 
 /* BACKGROUND DO SISTEMA */
-body{
+
+body {
     background-color: white;
 }
 
 /* REMOVER BORDAS ENTRE OS ITENS */
-#sidebar > ul > li{
-    border:none !important;
+
+#sidebar>ul>li {
+    border: none !important;
 }
 
 /* COR DOS CAMPOS DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > ul{
-    background-color:#E0E0E0;
+
+#sidebar>ul>li>ul {
+    background-color: #E0E0E0;
 }
+
 /* COR DOS TEXTOS DENTRO DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul li ul li a{color:black;}
+
+#sidebar>ul li ul li a {
+    color: black;
+}
 
 /* BORDA NOS MENUS LATERAIS */
-#sidebar > ul{
-    border:none;
+
+#sidebar>ul {
+    border: none;
 }
 
 /* ICONES DOS ITENS DO MENU LATERAL E OUTROS */
-#user-nav > ul > li > a > i, #sidebar li a i{
+
+#user-nav>ul>li>a>i, #sidebar li a i {
     opacity: .99;
 }
 
 /* CORES DOS  TEXTOS DO MENI LATERAL */
-#sidebar > ul > li > a{
-    color:#000000;
+
+#sidebar>ul>li>a {
+    color: #000000;
 }
 
 /* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > a > .label{
+
+#sidebar>ul>li>a>.label {
     background-color: #ffffff;
 }
 
 /* COR DOS ICONES MENU LATERAL E MENU SUPERIOR */
-#user-nav > ul > li > a > i, #sidebar li a i{
-    color:#000000;
+
+#user-nav>ul>li>a>i, #sidebar li a i {
+    color: #000000;
 }
 
 /*ITENS DO DASHBOARD - ICONES*/
-.bg_lr {border-radius: 5px;}
-.bg_ls {border-radius: 5px;}
-.bg_lo {border-radius: 5px;}
-.bg_ly {border-radius: 5px;}
-.bg_lg {border-radius: 5px;}
-.bg_lb {border-radius: 5px;}
+
+.bg_lr {
+    border-radius: 5px;
+}
+
+.bg_ls {
+    border-radius: 5px;
+}
+
+.bg_lo {
+    border-radius: 5px;
+}
+
+.bg_ly {
+    border-radius: 5px;
+}
+
+.bg_lg {
+    border-radius: 5px;
+}
+
+.bg_lb {
+    border-radius: 5px;
+}
 
 /* TEMPO DECARGA DA TELA */
-.tempo-carga{
+
+.tempo-carga {
     color: #787878;
     margin: 10px 0 0 20px;
 }
 
-/* ICONE RELÓGIO */
-.icon-time{
-    color:#000000 !important;
+.icon-size {
+    margin-bottom: 7px !important;
+    font-size: 15px;
 }
 
 /* ESTATISTICAS DO SISTEMA*/
-.bg_lh{
+
+.bg_lh {
     border-radius: 5px;
 }
 
 /*CABEÇALHO E BARCUMB*/
-#header{background-color: #ffffff}
-#breadcrumb{background-color: #D0D0D0}
-#breadcrumb a{color: #000000}
+
+#header {
+    background-color: #ffffff
+}
+
+#breadcrumb {
+    background-color: #D0D0D0
+}
+
+#breadcrumb a {
+    color: #000000
+}
 
 /* RELOGIO */
-.textoHora{
-    color: #000000; 
+
+.textoHora {
+    color: #000000;
 }
 
 /* BORDA ENTRE OS ITENS DO MENU SUPERIOR */
-#user-nav > ul > li{
-    border-top:none;
+
+#user-nav>ul>li {
+    border-top: none;
     border-bottom: none;
     border-left: 1px solid;
     border-right: none;
@@ -171,39 +283,187 @@ body{
 }
 
 /* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
-#user-nav > ul{
-    border-left:none;
+
+#user-nav>ul {
+    border-left: none;
     border-right: 1px solid;
     border-color: #E8E8E8;
 }
 
 /* TEXTOS DO MENU SUPERIOR */
-.navbar-inverse .brand, .navbar-inverse .nav>li>a{
+
+.navbar-inverse .brand, .navbar-inverse .nav>li>a {
     color: #000000;
-    text-shadow:none;
+    text-shadow: none;
 }
 
 /* PESQUISA */
-#search input[type=text]{
-    color:#000000;
+
+#search input[type=text] {
+    color: #000000;
     background-color: #ffffff;
 }
-#search button{
-    border-radius:5px;
+
+#search button {
+    border-radius: 5px;
     background-color: #ffffff;
 }
-#search button i{
-    color:black;
+
+#search button i {
+    color: black;
 }
 
 /* ICONES*/
-.btn{border-radius:5px;}
-.btn [class^="icon-"], .nav [class^="icon-"]{
-    color:#FFFFFF
+
+.btn {
+    border-radius: 5px;
+}
+
+.btn [class^="icon-"], .nav [class^="icon-"] {
+    color: #FFFFFF
 }
 
 /* ICONES DE VISUALIZAR */
-.visualizar{
+
+.visualizar {
     background-color: #7CCD7C;
 }
 
+.bg-gradient-primary {
+    background-color: #4e73df;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-secondary {
+    background-color: #858796;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #858796), to(#60616f));
+    background-image: linear-gradient(180deg, #858796 10%, #60616f 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-success {
+    background-color: #1cc88a;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #1cc88a), to(#13855c));
+    background-image: linear-gradient(180deg, #1cc88a 10%, #13855c 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-info {
+    background-color: #36b9cc;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #36b9cc), to(#258391));
+    background-image: linear-gradient(180deg, #36b9cc 10%, #258391 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-warning {
+    background-color: #f6c23e;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #f6c23e), to(#dda20a));
+    background-image: linear-gradient(180deg, #f6c23e 10%, #dda20a 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-danger {
+    background-color: #e74a3b;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #e74a3b), to(#be2617));
+    background-image: linear-gradient(180deg, #e74a3b 10%, #be2617 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-light {
+    background-color: #f8f9fc;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #f8f9fc), to(#c2cbe5));
+    background-image: linear-gradient(180deg, #f8f9fc 10%, #c2cbe5 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+.bg-gradient-dark {
+    background-color: #5a5c69;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #5a5c69), to(#373840));
+    background-image: linear-gradient(180deg, #5a5c69 10%, #373840 100%);
+    background-size: cover;
+    border-radius: 3px;
+    padding: 10px 0 10px 0 !important;
+}
+
+/* CORES BOTÕES LATERAIS*/
+
+.text-danger {
+    color: #f44336!important
+}
+
+.c-blue-500, .cH-blue-500:hover {
+    color: #005296!important
+}
+
+.c-cinza-500, .cH-cinza-500:hover {
+    color: #696969!important
+}
+
+.c-brown-500, .cH-brown-500:hover {
+    color: #795548!important
+}
+
+.c-red-500, .cH-red-500:hover {
+    color: #f44336!important
+}
+
+.c-dark-500, .cH-dark-500:hover {
+    color: #000000!important
+}
+
+.c-deep-purple-500, .cH-deep-purple-500:hover {
+    color: #673ab7!important
+}
+
+.c-light-blue-500, .cH-light-blue-500:hover {
+    color: #03a9f4!important
+}
+
+.c-indigo-500, .cH-indigo-500:hover {
+    color: #3f51b5!important
+}
+
+.c-pink-500, .cH-pink-500:hover {
+    color: #e40dae!important
+}
+
+.c-teal-500, .cH-teal-500:hover {
+    color: #009688!important
+}
+
+.c-DarkCyan-500, .cH-DarkCyan-500:hover {
+    color: #008B8B!important
+}
+
+.c-chocolate-500, .cH-chocolate-500:hover {
+    color: #D2691E !important;
+}
+
+.quick-actions_homepage .quick-actions li {
+    min-width: 20.5%;
+}
+
+.badge {
+    padding-right: 9px;
+    padding-left: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background-color: #000000 !important;
+}
