@@ -4,7 +4,6 @@
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
-<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/tema.css" />
 
 <!--Action boxes-->
 <div class="container-fluid">
