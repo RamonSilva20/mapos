@@ -4,8 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [3.15.0] - 2020-02-15
+
+### Added
+- Adicionados novos icones Themify Icon. [@lagethomas]https://github.com/lagethomas
+- Adicionado o tempo de carga de carregamento da página. [@lagethomas]https://github.com/lagethomas
+
+### Fixed
+- Corrigido o tema NEVE do sisetma. [@lagethomas]https://github.com/lagethomas
+
+## [3.15.0] - 2020-02-15 
 
 ### Added
 - Adicionado opções de configuração do sistema. [@RamonSilva20](https://github.com/RamonSilva20)
