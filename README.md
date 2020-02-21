@@ -8,29 +8,33 @@
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
 
-### Instalação
+### Instruções de Instalação
 
-1. Faça o download dos arquivos.
+1. Faça a transferência dos arquivos em (https://github.com/RamonSilva20/mapos/releases)
 2. Extraia o pacote e copie para seu webserver.
 3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
-4. Configure o email de envio no arquivo email.php
+4. Configure o email de envio no arquivo email.php.
 5. Configurar cron jobs para envio de e-mail
-    ##### Enviar emails pendentes a cada 2 minutos.
+    ##### Enviar e-mails pendentes a cada 2 minutos.
     - */2 * * * * php /var/www/index.php email/process
-    ##### Enviar emails com falha a cada 5 minutos.
+    ##### Enviar e-mails com falha a cada 5 minutos.
     - */5 * * * * php /var/www/index.php email/retry
 
-    ##### Obs: O path até o index.php (/var/www/) deve ser configurado conforme o seu ambiente
+    ##### Obs: O caminho até o index.php (/var/www/) deve ser configurado conforme o seu ambiente.
 
-### Atualização
+### Instruções de Atualização
 
-1. Faça o backup dos arquivos e do banco de dados
-2. Substitua os arquivos pelos da nova versão
-3. Verifique se é necessário executar algum arquivo de update do banco de dados
-4. Volte as configurações nos arquivos database.php e config.php
-5. Pronto, sua atualização está concluída
+1. Faça o backup dos arquivos e do banco de dados.
+2. Substitua os arquivos pelos da nova versão.
+3. Verifique se é necessário executar algum arquivo de update do banco de dados.
+4. Volte as configurações nos arquivos database.php e config.php.
+5. Pronto, sua atualização está concluída.
 
-### Frameworks/Bibliotecas
+### Requerimentos
+* PHP >= 5.6
+* MySQL
+
+### Frameworks / Bibliotecas Usadas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
 * [twbs/bootstrap](https://github.com/twbs/bootstrap)
 * [jquery/jquery](https://github.com/jquery/jquery)
@@ -38,16 +42,12 @@
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
-### Requerimentos
-* PHP >= 5.6
-* MySQL
-
 ### Contribuidores
 | [<img src="https://avatars.githubusercontent.com/Pr3d4dor?s=115"><br><sub>Gianluca Bine</sub>](https://github.com/Pr3d4dor) | [<img src="https://avatars.githubusercontent.com/Henrique-Miranda?s=115"><br><sub>Henrique Miranda</sub>](https://github.com/Henrique-Miranda) | [<img src="https://avatars.githubusercontent.com/mariolucasdev?s=115"><br><sub>Mário Lucas</sub>](https://github.com/mariolucasdev) | [<img src="https://avatars.githubusercontent.com/HelanAllysson?s=115"><br><sub>Helan Allysson</sub>](https://github.com/HelanAllysson) | [<img src="https://avatars.githubusercontent.com/KansasMyers?s=115"><br><sub>KansasMyers</sub>](https://github.com/KansasMyers)
 |:-:|:-:|:-:|:-:|:-:|
 | [<img src="https://avatars.githubusercontent.com/daniellbastos?s=115"><br><sub>Daniel Bastos</sub>](https://github.com/daniellbastos) | [<img src="https://avatars.githubusercontent.com/github?s=115"><br><sub>drelldeveloper</sub>](https://github.com/drelldeveloper) | [<img src="https://avatars.githubusercontent.com/fontebasso?s=115"><br><sub>Samuel Fontebasso</sub>](https://github.com/fontebasso) | [<img src="https://avatars.githubusercontent.com/marllonferreira?s=115"><br><sub>marllonferreira</sub>](https://github.com/marllonferreira) | [<img src="https://avatars.githubusercontent.com/rodrigo3d?s=115"><br><sub>Rodrigo Ribeiro</sub>](https://github.com/rodrigo3d)
 | [<img src="https://avatars.githubusercontent.com/willph?s=115"><br><sub>Wilmerson</sub>](https://github.com/willph) | [<img src="https://avatars.githubusercontent.com/bulfaitelo?s=115"><br><sub>Thiago Rodrigues</sub>](https://github.com/bulfaitelo) | [<img src="https://avatars.githubusercontent.com/mvnp?s=115"><br><sub>Marcos Pereira</sub>](https://github.com/mvnp)| [<img src="https://avatars.githubusercontent.com/marcotuliomtb?s=115"><br><sub>Marcos</sub>](https://github.com/marcotuliomtb)| [<img src="https://avatars.githubusercontent.com/zanzoushio?s=115"><br><sub>ZanzouShio</sub>](https://github.com/ZanzouShio)
 
-## Autor
+## Criador
 | [<img src="https://avatars.githubusercontent.com/RamonSilva20?s=115"><br><sub>Ramon Silva</sub>](https://github.com/RamonSilva20) |
 | :---: |
