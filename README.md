@@ -10,7 +10,7 @@
 
 ### Instruções de Instalação
 
-1. Faça a transferência dos arquivos em (https://github.com/RamonSilva20/mapos/releases)
+1. Faça a transferência dos arquivos em (https://github.com/Bremyarck/mapos/releases)
 2. Extraia o pacote e copie para seu webserver.
 3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
 4. Configure o email de envio no arquivo email.php.
@@ -20,7 +20,7 @@
     ##### Enviar e-mails com falha a cada 5 minutos.
     - */5 * * * * php /var/www/index.php email/retry
 
-    ##### Obs: O caminho até o index.php (/var/www/) deve ser configurado conforme o seu ambiente.
+    ##### Observações: O caminho até o index.php (/var/www/) deve ser configurado conforme o seu ambiente.
 
 ### Instruções de Atualização
 
@@ -34,7 +34,7 @@
 * PHP >= 5.6
 * MySQL
 
-### Frameworks / Bibliotecas Usadas
+### Bibliotecas Usadas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
 * [twbs/bootstrap](https://github.com/twbs/bootstrap)
 * [jquery/jquery](https://github.com/jquery/jquery)
@@ -42,7 +42,7 @@
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
-### Contribuidores
+### Contribuidor(es)
 | [<img src="https://avatars.githubusercontent.com/Pr3d4dor?s=115"><br><sub>Gianluca Bine</sub>](https://github.com/Pr3d4dor) | [<img src="https://avatars.githubusercontent.com/Henrique-Miranda?s=115"><br><sub>Henrique Miranda</sub>](https://github.com/Henrique-Miranda) | [<img src="https://avatars.githubusercontent.com/mariolucasdev?s=115"><br><sub>Mário Lucas</sub>](https://github.com/mariolucasdev) | [<img src="https://avatars.githubusercontent.com/HelanAllysson?s=115"><br><sub>Helan Allysson</sub>](https://github.com/HelanAllysson) | [<img src="https://avatars.githubusercontent.com/KansasMyers?s=115"><br><sub>KansasMyers</sub>](https://github.com/KansasMyers)
 |:-:|:-:|:-:|:-:|:-:|
 | [<img src="https://avatars.githubusercontent.com/daniellbastos?s=115"><br><sub>Daniel Bastos</sub>](https://github.com/daniellbastos) | [<img src="https://avatars.githubusercontent.com/github?s=115"><br><sub>drelldeveloper</sub>](https://github.com/drelldeveloper) | [<img src="https://avatars.githubusercontent.com/fontebasso?s=115"><br><sub>Samuel Fontebasso</sub>](https://github.com/fontebasso) | [<img src="https://avatars.githubusercontent.com/marllonferreira?s=115"><br><sub>marllonferreira</sub>](https://github.com/marllonferreira) | [<img src="https://avatars.githubusercontent.com/rodrigo3d?s=115"><br><sub>Rodrigo Ribeiro</sub>](https://github.com/rodrigo3d)
