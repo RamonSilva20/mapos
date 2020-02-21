@@ -10,10 +10,10 @@
 
 ### Instruções de Instalação
 
-1. Faça a transferência dos arquivos em (https://github.com/Bremyarck/mapos/releases)
-2. Extraia o pacote e copie para seu webserver.
+1. Faça a transferência dos arquivos em [Lançamentos](https://github.com/Bremyarck/mapos/releases)
+2. Extraia o pacote e copie para seu servidor remoto ou local.
 3. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
-4. Configure o email de envio no arquivo email.php.
+4. Configure o e-mail de envio no arquivo e-mail.php.
 5. Configurar cron jobs para envio de e-mail
     ##### Enviar e-mails pendentes a cada 2 minutos.
     - */2 * * * * php /var/www/index.php email/process
