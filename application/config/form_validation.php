@@ -1,63 +1,65 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
 
-$config =
+if (!defined('BASEPATH')) {
+    exit('Nenhum acesso direto ao script é permitido.');
+}
 
-array('clientes' => array(array(
-    'field' => 'nomeCliente',
-    'label' => 'Nome',
-    'rules' => 'required|trim',
-),
-    array(
-        'field' => 'documento',
-        'label' => 'CPF/CNPJ',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'telefone',
-        'label' => 'Telefone',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'email',
-        'label' => 'Email',
-        'rules' => 'required|trim|valid_email',
-    ),
-    array(
-        'field' => 'rua',
-        'label' => 'Rua',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'numero',
-        'label' => 'Número',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'bairro',
-        'label' => 'Bairro',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'cidade',
-        'label' => 'Cidade',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'estado',
-        'label' => 'Estado',
-        'rules' => 'required|trim',
-    ),
-    array(
-        'field' => 'cep',
-        'label' => 'CEP',
-        'rules' => 'required|trim',
-    ))
+$config = array('clientes' => array(array(
+            'field' => 'nomeCliente',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'documento',
+            'label' => 'CPF/CNPJ',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'telefone',
+            'label' => 'Telefone',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'email',
+            'label' => 'Email',
+            'rules' => 'required|trim|valid_email',
+        ),
+        array(
+            'field' => 'rua',
+            'label' => 'Rua',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'numero',
+            'label' => 'Número',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'bairro',
+            'label' => 'Bairro',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'cidade',
+            'label' => 'Cidade',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'estado',
+            'label' => 'Estado',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'cep',
+            'label' => 'CEP',
+            'rules' => 'required|trim',
+        ))
     ,
     'servicos' => array(array(
-        'field' => 'nome',
-        'label' => 'Nome',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'descricao',
             'label' => '',
@@ -70,10 +72,10 @@ array('clientes' => array(array(
         ))
     ,
     'produtos' => array(array(
-        'field' => 'descricao',
-        'label' => '',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'descricao',
+            'label' => '',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'unidade',
             'label' => 'Unidade',
@@ -101,10 +103,10 @@ array('clientes' => array(array(
         ))
     ,
     'usuarios' => array(array(
-        'field' => 'nome',
-        'label' => 'Nome',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'rg',
             'label' => 'RG',
@@ -162,10 +164,10 @@ array('clientes' => array(array(
         ))
     ,
     'os' => array(array(
-        'field' => 'dataInicial',
-        'label' => 'DataInicial',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'dataInicial',
+            'label' => 'DataInicial',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'dataFinal',
             'label' => 'DataFinal',
@@ -216,25 +218,23 @@ array('clientes' => array(array(
             'label' => 'Laudo Tecnico',
             'rules' => 'trim',
         ))
-
     ,
     'tiposUsuario' => array(array(
-        'field' => 'nomeTipo',
-        'label' => 'NomeTipo',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'nomeTipo',
+            'label' => 'NomeTipo',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'situacao',
             'label' => 'Situacao',
             'rules' => 'required|trim',
         ))
-
     ,
     'receita' => array(array(
-        'field' => 'descricao',
-        'label' => 'Descrição',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'valor',
             'label' => 'Valor',
@@ -245,7 +245,6 @@ array('clientes' => array(array(
             'label' => 'Data Vencimento',
             'rules' => 'required|trim',
         ),
-
         array(
             'field' => 'cliente',
             'label' => 'Cliente',
@@ -258,10 +257,10 @@ array('clientes' => array(array(
         ))
     ,
     'despesa' => array(array(
-        'field' => 'descricao',
-        'label' => 'Descrição',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'valor',
             'label' => 'Valor',
@@ -284,10 +283,10 @@ array('clientes' => array(array(
         ))
     ,
     'garantias' => array(array(
-        'field' => 'dataGarantia',
-        'label' => 'dataGarantia',
-        'rules' => 'trim',
-    ),
+            'field' => 'dataGarantia',
+            'label' => 'dataGarantia',
+            'rules' => 'trim',
+        ),
         array(
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
@@ -305,11 +304,10 @@ array('clientes' => array(array(
         ))
     ,
     'vendas' => array(array(
-
-        'field' => 'dataVenda',
-        'label' => 'Data da Venda',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'dataVenda',
+            'label' => 'Data da Venda',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'clientes_id',
             'label' => 'clientes',
@@ -321,14 +319,13 @@ array('clientes' => array(array(
             'rules' => 'trim|required',
         )),
     'anotacoes_os' => array(array(
-        'field' => 'anotacao',
-        'label' => 'Anotação',
-        'rules' => 'required|trim',
-    ),
+            'field' => 'anotacao',
+            'label' => 'Anotação',
+            'rules' => 'required|trim',
+        ),
         array(
             'field' => 'os_id',
             'label' => 'ID Os',
             'rules' => 'trim|required|integer',
         )),
-
 );
