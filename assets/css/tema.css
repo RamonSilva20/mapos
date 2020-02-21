@@ -5,6 +5,14 @@
 
 /* INPUT DE BUSCA NA PÁGINA */
 
+.hr-divider {
+    margin: 2px 0 !important;
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #fff;
+    border-top-color: #dadada !important;
+}
+
 #search input:focus[type=text] {
     border: 1px solid;
     border-top: none;
@@ -22,6 +30,10 @@
 
 #sidebar>ul>li>a {
     color: #888888 !important;
+}
+
+#sidebar>ul>li {
+    border: none !important;
 }
 
 #sidebar>ul>li.active {
@@ -158,12 +170,6 @@ input {
 
 body {
     background-color: white;
-}
-
-/* REMOVER BORDAS ENTRE OS ITENS */
-
-#sidebar>ul>li {
-    border: none !important;
 }
 
 /* COR DOS CAMPOS DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
@@ -455,9 +461,7 @@ body {
     color: #D2691E !important;
 }
 
-.quick-actions_homepage .quick-actions li {
-    min-width: 20.5%;
-}
+.quick-actions_homepage .quick-actions li {}
 
 .badge {
     padding-right: 9px;

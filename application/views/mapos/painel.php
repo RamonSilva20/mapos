@@ -10,7 +10,7 @@
         <ul class="quick-actions">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
                 <li class="bg-gradient-success bg_lg">
-                    <a href="<?= base_url() ?>index.php/clientes"> <i class="fas fa-users" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/clientes"> <i class="ti-user" style="font-size:36px"></i>
                         <div>Clientes <br><span class="badge badge-light">F1</span></div>
                     </a>
                 </li>
@@ -18,7 +18,7 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
                 <li class="bg-gradient-warning bg_ly">
-                    <a href="<?= base_url() ?>index.php/produtos"> <i class="fa fa-box-open" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/produtos"> <i class="ti-package" style="font-size:36px"></i>
                         <div>Produtos <br><span class="badge badge-light">F2</span></div>
                     </a>
                 </li>
@@ -26,7 +26,7 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
                 <li class="bg-gradient-primary bg_lo">
-                    <a href="<?= base_url() ?>index.php/servicos"> <i class="fas fa-wrench" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/servicos"> <i class="ti-hummer" style="font-size:36px"></i>
                         <div>Serviços <br><span class="badge badge-light">F3</span></div>
                     </a>
                 </li>
@@ -34,7 +34,7 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                 <li class="bg-gradient-secondary bg_ls">
-                    <a href="<?= base_url() ?>index.php/os"> <i class="fas fa-diagnoses" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/os"> <i class="ti-agenda" style="font-size:36px"></i>
                         <div>OS <br></bre><span class="badge badge-light">F4</span></div>
                     </a>
                 </li>
@@ -42,7 +42,7 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
                 <li class="bg-gradient-info bg_ls">
-                    <a href="<?= base_url() ?>index.php/vendas"><i class="fas fa-cash-register" style="font-size:36px"></i>
+                    <a href="<?= base_url() ?>index.php/vendas"><i class="ti-shopping-cart" style="font-size:36px"></i>
                         <div>Vendas <br><span class="badge badge-light">F6</span></div>
                     </a>
                 </li>
@@ -50,8 +50,8 @@
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
                 <li class="bg-gradient-danger bg_lo">
-                    <a href="<?= base_url() ?>index.php/garantias"><i class="fas fa-book" style="font-size:36px"></i>
-                        <div>Termo Garantia <br><span class="badge badge-light">F7</span></div>
+                    <a href="<?= base_url() ?>index.php/garantias"><i class="ti-book" style="font-size:36px"></i>
+                        <div>Garantia <br><span class="badge badge-light">F7</span></div>
                     </a>
                 </li>
             <?php endif ?>
