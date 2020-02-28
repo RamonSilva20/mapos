@@ -14,4 +14,7 @@
 
 !blank/.gitkeep
 desktop.ini
-/nbproject/private/
+/nbproject
+application/config/config.php
+application/config/database.php
+assets/img/logo.png
