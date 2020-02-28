@@ -32,7 +32,7 @@ Instalando o sistema manualmente
 
     - Execute o script de criação das tabelas - arquivo "banco.sql".
     - Dentro da pasta 'Application/Config' edite o arquivo 'database.php' e coloque os dados de acesso ao banco de dados.
-    - Adiciente a url do sistema no arquivo 'Application/Config/config.php' na seguinte linha. $config['base_url']='http://localhost/sistema/'; --> A url deve terminar com /
+    - Adicione a url do sistema no arquivo 'application/config/config.php' na seguinte linha. $config['base_url']='http://localhost/sistema/'; --> A url deve terminar com /
     - Altere a linha 332 no mesmo arquivo anterior para $config['encryption_key'] = '6f;~d5df;.s.d.fwe';
     - Altere no arquivo index.php na raiz a linha 59 para "define('ENVIRONMENT', 'production')"
     - Acesse a url do sistema.

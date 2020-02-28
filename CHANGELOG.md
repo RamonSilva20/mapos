@@ -1,178 +1,166 @@
 # Changelog
-Todas as alterações serão documentadas neste arquivo
-
-Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [3.15.1] - 2020-02-17
-
-### Fixed
-- Correção de exibição das tabelas "Produtos com Estoque Mínimo", "Ordens de Serviço em Aberto" e "Ordens de Serviço Aguardando Peças". [@Bremyarck](https://github.com/bremyarck)
-
-### Changed
-- Refatoramento e remoção de linhas de códigos desnecessárias no arquivo "mapos/painel.php". [@Bremyarck](https://github.com/bremyarck)
+Todas as alterações serão documentadas neste arquivo com formato baseado em [Mantenha um Changelog 1.0.0](https://keepachangelog.com/pt-BR/1.0.0/) e [Versionamento Semântico 2.0.0](https://semver.org/lang/pt-BR/).
 
 ## [3.15.0] - 2020-02-15
-
-### Added
+### Adicionado
 - Adicionado opções de configuração do sistema. [@RamonSilva20](https://github.com/RamonSilva20)
 - Adicionado status faturado no filtro de relatório de OS. [@ZanzouShio](https://github.com/ZanzouShio)
 - Adicionando opção de atualização de estoque pelo listagem e dashboard. [@TiagoOliveira](https://github.com/trollfalgar)
 
-### Fixed
+### Corrigido
 - Corrigido arquivo de configurações. [@RamonSilva20](https://github.com/RamonSilva20)
 - Correção de bug na área do cliente ao efetuar login. [@GiovanneOliveira](https://github.com/giovanne-oliveira)
 - Correção de exibição de produtos com estoque mínimo. [@MikeAlves](https://github.com/mikxingu)
 
-### Changed
+### Modificado
 - Atualização da versão do Codeigniter para 3.1.11. [@RamonSilva20](https://github.com/RamonSilva20)
 - Refatoramento de controllers para diminuir repetição de código. [@RamonSilva20](https://github.com/RamonSilva20)
 - Simplificado exibição de mensagem de acesso expirado. [@RamonSilva20](https://github.com/RamonSilva20)
 - Remoção de data e hora no menu superior. [@RamonSilva20](https://github.com/RamonSilva20)
 - Nome do app dinâmico na área do cliente. [@TiagoOliveira](https://github.com/trollfalgar)
 
-## [3.14.2] - 2019-12-18
 
-### Fixed
+## [3.14.2] - 2019-12-18
+### Corrigido
 - Corrigido data por extenso no topo do tema. [@ZanzouShio](https://github.com/ZanzouShio)
 - Corrigido icons que não apareciam. [@willph](https://github.com/willph)
 - Corrigido erro no botão de envio por WhatsApp. [@willph](https://github.com/willph)
 - Corrigido erro de comentário no arquivo config. [@willph](https://github.com/willph)
 
-### Changed
+### Modificado
 - Refatoramento de listagens de cadastros. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.14.1] - 2019-12-02
 
-### Fixed
+## [3.14.1] - 2019-12-02
+### Corrigido
 - Corrigido erro ao exibir logo na visualização de OS. [@willph](https://github.com/willph)
 - Corrigido icon de pesquisar na tela de OS. [@willph](https://github.com/willph)
 - Corrigido problema ao imprimir etiquetas. [@willph](https://github.com/willph)
 - Corrigido problema de return-path ao utilizar SMTP. [@RamonSilva20](https://github.com/RamonSilva20)
 - Corrigido erro no link de WhatsApp ao não ter cadastro de emitente. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.14.0] - 2019-11-22
 
-### Changed
+## [3.14.0] - 2019-11-22
+### Adicionado
 - Adicionado impressão de etiquetas nos padrões: EAN13, UPCA, CODE 93, CODE 128, CODABAR, QR-CODE. [@willph](https://github.com/willph) e [@Marco](https://github.com/marcotuliomtb)
 - Adicionado campo de cadastro de código de barra. [@willph](https://github.com/willph)
 - Adicionado teclas de atalho. [@willph](https://github.com/willph)
 - Adicionado botão de logout no menu lateral. [@mvnp](https://github.com/mvnp)
 
-### Changed
+### Modificado
 - Atualização da versão do mpdf para 6.1.4. [@willph](https://github.com/willph)
 - Visualização e impressão de saldo total das OS independente do status. [@bulfaitelo](https://github.com/bulfaitelo)
 
 
 ## [3.12.0] - 2019-11-06
-
-### Changed
+### Modificado
 - Organização do Menu. [@willph](https://github.com/willph)
 - Remoção de arquivo desnecessário. [@willph](https://github.com/willph)
 
-## [3.11.0] - 2019-10-22
 
-### Added
+## [3.11.0] - 2019-10-22
+### Adicionado
 - Adicionado alerta de cadastro com sucesso de cliente. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-## [3.10.0] - 2019-10-08
 
-### Added
+## [3.10.0] - 2019-10-08
+### Adicionado
 - Adicionado anotações na OS. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.9.0] - 2019-10-05
 
-### Added
+## [3.9.0] - 2019-10-05
+### Adicionado
 - Adicionado envio de email de OS automaticamente na criação e edição (email é enviado para o cliente da OS,  para o emitente e para o técnico da OS). [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Adicionado novas opções (M² e Outros) no select de unidade na criação e edição de produto. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-### Changed
+### Modificado
 - Alterado alert padrão para sweet alert. [@David Vilaça](https://github.com/davidpvilaca)
 
-### Fixed
+### Corrigido
 - Corrigido bug de máscara CPF/CNPJ. [will.phelipe@gmail.com](https://github.com/willph).
 - Corrigido arquivo de update de data de expiração com data futura. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [3.8.0] - 2019-07-25
-
-### Added
+### Adicionado
 - Adicionada pesquisa por múltiplos status em OS. [@RamonSilva20](https://github.com/RamonSilva20)
 - Ao adicionar OS e Vendas usuário logado preenchido por padrão como responsável. [@RamonSilva20](https://github.com/RamonSilva20)
 
-### Fixed
+### Corrigido
 - Correção tabela e botões OS. [@bulfaitelo](https://github.com/bulfaitelo)
 - Corrigido a tabela para torna-la responsiva, e os botões que não funcionavam em dispositivos móveis. [@bulfaitelo](https://github.com/bulfaitelo)
 
-## [3.7.0] - 2019-07-08
 
-### Added
+## [3.7.0] - 2019-07-08
+### Adicionado
 - Adicionada funcionalidade de envio de OS por email. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.6.0] - 2019-06-29
 
-### Added
+## [3.6.0] - 2019-06-29
+### Adicionado
 - Adicionada verificação de permissão para exibição de estatísticas no painel. [@RamonSilva20](https://github.com/RamonSilva20)
 - Adicionada possibilidade de alteração de preços de produtos e serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20)
 - Adicionada possibilidade de adicionar quantidade de serviços em OS. [@RamonSilva20](https://github.com/RamonSilva20)
 - Adicionada possibilidade de alterar preços de produtos em Vendas. [@RamonSilva20](https://github.com/RamonSilva20)
 
-### Changed
+### Modificado
 - Modificados alguns elementos de estilização. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.5.3] - 2019-05-18
 
-### Fixed
+## [3.5.3] - 2019-05-18
+### Corrigido
 - Corrigido remoção de garantias ao editar OS. [@RamonSilva20](https://github.com/RamonSilva20) e [@willph](https://github.com/willph)
 - Corrigido erro no arquivo matrix.js e funcoes.js. [will.phelipe@gmail.com](https://github.com/willph).
 
-### Changed
+### Modificado
 - Alterado exibição de mensagem para esconder depois de 2.5 segundos. [will.phelipe@gmail.com](https://github.com/willph)
 
-## [3.5.2] - 2019-05-14
 
-### Fixed
+## [3.5.2] - 2019-05-14
+### Corrigido
 - Corrigido pesquisa de termos de garantia. [@RamonSilva20](https://github.com/RamonSilva20).
 - Corrigido erro no cadastro de garantias ao buscar nome do usuário logado. [@RamonSilva20](https://github.com/RamonSilva20).
 
-### Changed
+### Modificado
 - Removendo textos desnecessários [will.phelipe@gmail.com](https://github.com/willph)
 
-## [3.5.1] - 2019-05-13
 
-### Fixed
+## [3.5.1] - 2019-05-13
+### Corrigido
 - Removendo obrigatoriedade do campo de garantias na tabela de OS para evitar erro ao não preencher no cadastro. [@RamonSilva20](https://github.com/RamonSilva20).
 
-### Changed
+### Modificado
 - Alterado insert de usuário com permissão para o módulo de auditoria no arquivo sql. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## [3.5.0] - 2019-05-12
 
-### Added
+## [3.5.0] - 2019-05-12
+### Adicionado
 - Adicionado modulo de auditoria para monitoramento de atividades no sistema. [@RamonSilva20](https://github.com/RamonSilva20).
+
 
 ## [3.4.0] - 2019-05-10
 Por: Wilmerson Felipe[will.phelipe@gmail.com](https://github.com/willph)
 
-### Fixed
+### Corrigido
 - Corrigido exibição do Telefone em VizualizarOS e ImprimirOS
 
-### Changed
+### Modificado
 - Padronização das Páginas para que todas tenha a palavra "Ações" referente aos botões vizualizar, adicionar, editar, excluir.
 - Adicionado campo Termo garantia em adicionarOS, editarOS referenciando ao termo garantia cadastrado.
 - Alterado Telefone para Celular do Cliente.
 
-### Added
+### Adicionado
 - Termo de Garantia referente ao request feature #253
 
 
 ## [3.3.2] - 2019-04-13
-### Fixed
+### Corrigido
 - Corrigido exibição da label de status faturado em painel de visualização de cliente [@Pr3d4dor](https://github.com/Pr3d4dor).
+
 
 ## [3.3.1] - 2019-03-03
 Por: Fábio Barbosa[fabiobarbosa@gmx.com](https://github.com/aportetecnologia)
 
-### Changed
+### Modificado
 - Modificado a cor de fundo para branco do box de texto do trumbowyg
 - Modificado a disposicao dos campos trumbowyg para evitar rolagem prolongada da tela desnecessáriamente.
 - Reestilizado a tela de login para uma tela transparente e fundo dinamico
@@ -180,61 +168,67 @@ Por: Fábio Barbosa[fabiobarbosa@gmx.com](https://github.com/aportetecnologia)
     - Adicionar OS
     - Editar OS
 
-### Fixed
+### Corrigido
 - Corrigido o calendario que ficava pro detras do modal no pagamento da os no fechamento da mesma.
-## [3.3] - 2019-02-28
-### Added
 
+
+## [3.3] - 2019-02-28
+### Adicionado
 - Adicionado máscaras 'CPF, CNPJ, TELEFONE, CEP, CELULAR, RG. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
 - Adicionado data de expiração de acesso. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
-Adicionado o campo valorTotal dentro do $this->data['results']. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
+- Adicionado o campo valorTotal dentro do $this->data['results']. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 - Adicionado a Funcao para incluir na os a opcao "Aguardando Pecas". [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 - Adicionado o campo Valor Total para aparecer o valor total da os quando estiver fechado. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 - Adicionado a div Ordens de Servicos Aguardando Pecas baseado no status da os. [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 
-### Changed
+### Modificado
 - Alterado layout da tela de login de clientes. [Thomas Henrique Lage Macedo](https://github.com/aportetecnologia) [lage.thomas@gmail.com]
 - Formatado o campo Valor total com 2 casas decimais e R$ (cifrao) - [Fábio Barbosa](https://github.com/aportetecnologia) - [fabiobarbosa@gmx.com]
 
+
 ## [3.2] - 2019-02-18
-### Added
+### Adicionado
 - Implementado editor WYSIWYG [Trumbowyg](https://github.com/Alex-D/Trumbowyg) nos campos (Ordem de Serviço). [@Pr3d4dor](https://github.com/Pr3d4dor).
     - Descrição Produto/Serviço
     - Defeito
     - Observações
     - Laudo Técnico
 
+
 ## [3.1.16] - 2019-01-14
-### Added
+### Adicionado
 - Adicionado e-mail do cliente na impressão da OS. [@RamonSilva20](https://github.com/RamonSilva20).
 
-### Fixed
+### Corrigido
 - Corrigido alteração de senha na tela minha conta [@RamonSilva20](https://github.com/RamonSilva20).
 - Corrigido link no formulário de adicionar arquivo. [@RamonSilva20](https://github.com/RamonSilva20).
 
+
 ## [3.1.15] - 2018-11-24
-### Fixed
+### Corrigido
 - Corrigido campo descrição na impressão e visualização de OS [@RamonSilva20](https://github.com/RamonSilva20).
 
+
 ## [3.1.14] - 2018-11-13
-### Added
+### Adicionado
 - Modelo de impressão de OS otimizando espaços [@RamonSilva20](https://github.com/RamonSilva20).
 - Refatoração de views [@mariolucasdev](https://github.com/mariolucasdev).
 
+
 ## [3.1.13] - 2018-10-04
-### Added
+### Adicionado
 - Assistente de instalação [@rodrigo3d](https://github.com/rodrigo3d).
 - Arquivo de changelog [@RamonSilva20](https://github.com/RamonSilva20).
 
 
 ## [3.1.12] - 2018-08-14
-### Added
+### Adicionado
 - Valor total no relatório de OS [@RamonSilva20](https://github.com/RamonSilva20).
 - Status alterado automaticamente para faturado [@Pr3d4dor](https://github.com/Pr3d4dor).
 - Exibir o nome do anexo na embaixo do thumbnail em anexos de OS [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Changed
+### Modificado
 - Atualização de biblioteca mPDF para versão 6.1 [@Pr3d4dor](https://github.com/Pr3d4dor).
 
-### Fixed
+### Corrigido
 - Correção de erro ao gerar relatório sem emitente estar configurado [@RamonSilva20](https://github.com/RamonSilva20).
