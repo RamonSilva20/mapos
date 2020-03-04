@@ -72,12 +72,11 @@
           <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class="fas fa-sign-out-alt"></i> <span class="text">Sair do Sistema</span></a></li>
         </ul>
       </li>
-
     </ul>
   </div>
   <!--start-top-serch-->
   <div id="search">
-    <form action="<?= base_url('mapos/pesquisar') ?>">
+    <form action="<?= site_url('mapos/pesquisar') ?>">
       <input type="text" name="termo" placeholder="Pesquisar..." />
       <button type="submit" class="tip-bottom" title="Pesquisar"><i class="fas fa-search fa-white"></i></button>
     </form>

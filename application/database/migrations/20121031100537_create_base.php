@@ -1335,6 +1335,52 @@ class Migration_create_base extends CI_Migration
         $this->dbforge->create_table("configuracoes", true);
         $this->db->query('ALTER TABLE `configuracoes` ADD CONSTRAINT `unique_valor` UNIQUE (`config`)');
         $this->db->query('ALTER TABLE `configuracoes` ENGINE = InnoDB');
+
+
+
+        ## Create Table anotacoes_os
+        $this->dbforge->add_field([
+            'idPag' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => false,
+                'auto_increment' => true
+            ],
+            'nome' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+                'null' => false,
+            ],
+            'client_id' => [
+                'type' => 'VARCHAR',
+                'constraint' => 200,
+                'null' => false,
+            ],
+            'client_secret' => [
+                'type' => 'VARCHAR',
+                'constraint' => 200,
+                'null' => false,
+            ],
+            'public_key' => [
+                'type' => 'VARCHAR',
+                'constraint' => 200,
+                'null' => false,
+            ],
+            'access_token' => [
+                'type' => 'VARCHAR',
+                'constraint' => 200,
+                'null' => false,
+            ],
+            
+            'default_pag' => [
+                'type' => 'INT',
+                'null' => false,
+            ],
+        ]);
+        $this->dbforge->add_key("idPag", true);
+        $this->dbforge->create_table("pagamento", true);
+        $this->db->query('ALTER TABLE `pagamento` ENGINE = InnoDB');
+
     }
 
     public function down()
@@ -1413,5 +1459,8 @@ class Migration_create_base extends CI_Migration
 
         ### Drop table ci_sessions ##
         $this->dbforge->drop_table("ci_sessions", true);
+
+        ### Drop table pagamento ##
+        $this->dbforge->drop_table("pagamento", true);
     }
 }

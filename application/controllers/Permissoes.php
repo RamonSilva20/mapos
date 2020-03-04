@@ -96,6 +96,11 @@ class Permissoes extends MY_Controller
                 'dArquivo' => $this->input->post('dArquivo'),
                 'vArquivo' => $this->input->post('vArquivo'),
 
+                'aPagamento' => $this->input->post('aPagamento'),
+                'ePagamento' => $this->input->post('ePagamento'),
+                'dPagamento' => $this->input->post('dPagamento'),
+                'vPagamento' => $this->input->post('vPagamento'),
+
                 'aLancamento' => $this->input->post('aLancamento'),
                 'eLancamento' => $this->input->post('eLancamento'),
                 'dLancamento' => $this->input->post('dLancamento'),
@@ -189,6 +194,11 @@ class Permissoes extends MY_Controller
                 'eArquivo' => $this->input->post('eArquivo'),
                 'dArquivo' => $this->input->post('dArquivo'),
                 'vArquivo' => $this->input->post('vArquivo'),
+
+                'aPagamento' => $this->input->post('aPagamento'),
+                'ePagamento' => $this->input->post('ePagamento'),
+                'dPagamento' => $this->input->post('dPagamento'),
+                'vPagamento' => $this->input->post('vPagamento'),
 
                 'aLancamento' => $this->input->post('aLancamento'),
                 'eLancamento' => $this->input->post('eLancamento'),
