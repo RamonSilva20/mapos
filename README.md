@@ -13,7 +13,7 @@
 
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
-3. Rode o comando `composer install` a partir da raiz do projeto.
+3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
 4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
 5. Configure o email de envio no arquivo email.php
 6. Configurar cron jobs para envio de e-mail
@@ -29,7 +29,7 @@
 
 1. Faça o backup dos arquivos e do banco de dados;
 2. Substitua os arquivos pelos da nova versão;
-3. Rode o comando `composer install` a partir da raiz do projeto.
+3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
 4. Volte as configurações nos arquivos database.php e config.php;
 5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
 6. Pronto, sua atualização está concluída;

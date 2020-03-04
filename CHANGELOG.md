@@ -4,9 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] - 2020-02-16
+## [4.0.0] - 2020-03-03
 
 ### Added
+- Adicionado o recibo para impressora não fiscal em OS e Vendas. [@willph](https://github.com/willph)
+- Adicionado opção de pagamento com Mercado Pago. [@willph](https://github.com/willph)
+- Adicionado informação de vencimento de prazo de garantia. [@willph](https://github.com/willph)
 - Adicionado composer ao projeto. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Adicionado biblioteca de migrations do CodeIgniter. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Implementado seeders para inserção de dados no banco de dados.
@@ -16,6 +19,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Adicionado permissão de sistema e email ao usuário admin criado inicialmente. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Corrigido valor de `dataCadastro` incorreta em admin criado inicialmente [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido erro no relatório de clientes com datas não preenchidas. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## Changed
 - Banco de dados agora será gerenciado com migrations pela biblioteca do CodeIgniter, onde o último arquivo de atualização manual é o `update_3.15.0_to_4.0.0.sql`. Ainda será necessário atualizar sempre o arquivo `banco.sql` com as novas tabelas para que o script de instalação continue funcionando [@Pr3d4dor](https://github.com/Pr3d4dor)
