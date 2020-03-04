@@ -7,6 +7,9 @@
 .DS_Store
 .vscode
 
+/vendor/
+/application/vendor/
+
 .env.local
 .env.development.local
 .env.test.local
@@ -14,7 +17,11 @@
 
 !blank/.gitkeep
 desktop.ini
-/nbproject
-application/config/config.php
-application/config/database.php
-assets/img/logo.png
+
+application/vendor/
+vendor/
+.idea/
+.php_cs
+.php_cs.cache
+application/logs/*
+ci_sessions/

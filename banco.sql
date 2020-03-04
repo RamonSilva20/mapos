@@ -368,6 +368,20 @@ CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `pagamento`
+-- -----------------------------------------------------
+CREATE TABLE `pagamento` (
+  `idPag` INT NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) COLLATE utf8_bin NOT NULL,
+  `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
+  `client_secret` varchar(200) COLLATE utf8_bin NOT NULL,
+  `public_key` varchar(200) COLLATE utf8_bin NOT NULL,
+  `access_token` varchar(200) COLLATE utf8_bin NOT NULL,
+  `default_pag` int(1) NOT NULL,
+   PRIMARY KEY (`idPag`)
+) ENGINE=InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `anexos`
@@ -527,15 +541,25 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
 -- -----------------------------------------------------
 -- Table `anotacaoes_os`
 -- -----------------------------------------------------
-CREATE TABLE `anotacoes_os` ( 
-    `idAnotacoes` INT(11) NOT NULL AUTO_INCREMENT, 
-    `anotacao` VARCHAR(255) NOT NULL , 
-    `data_hora` DATETIME NOT NULL , 
-    `os_id` INT(11) NOT NULL , 
+CREATE TABLE `anotacoes_os` (
+    `idAnotacoes` INT(11) NOT NULL AUTO_INCREMENT,
+    `anotacao` VARCHAR(255) NOT NULL ,
+    `data_hora` DATETIME NOT NULL ,
+    `os_id` INT(11) NOT NULL ,
     PRIMARY KEY (`idAnotacoes`)
 );
 
+-- -----------------------------------------------------
+-- Table `configuracoes`
+-- -----------------------------------------------------
 CREATE TABLE `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `migrations`
+-- -----------------------------------------------------
+CREATE TABLE `migrations` (
+  `version` BIGINT(20) NOT NULL
+);
 
 INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (2, 'app_name', 'MAPOS'),
@@ -545,10 +569,12 @@ INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (6, 'control_estoque', '1');
 
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES
-(1, 'Administrador', 'a:43:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:9:"aGarantia";s:1:"1";s:9:"eGarantia";s:1:"1";s:9:"dGarantia";s:1:"1";s:9:"vGarantia";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:10:"cAuditoria";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
+(1, 'Administrador', 'a:45:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:9:"aGarantia";s:1:"1";s:9:"eGarantia";s:1:"1";s:9:"dGarantia";s:1:"1";s:9:"vGarantia";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:10:"cAuditoria";s:1:"1";s:6:"cEmail";s:1:"1";s:8:"cSistema";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
 
 INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`,`dataExpiracao`) VALUES
-(1, 'admin_name', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin_email', 'admin_password', '000000-0000', '', 1, 'admin_created_at', 1, '3000-01-01');
+(1, 'admin_name', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin_email', 'admin_password', '000000-0000', '', 1, '2012-01-01', 1, '3000-01-01');
+
+INSERT INTO `migrations`(`version`) VALUES ('20121031100537');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

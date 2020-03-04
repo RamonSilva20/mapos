@@ -7,7 +7,7 @@ if (!defined('BASEPATH')) {
 /*
  * Versão atual do aplicativo
  */
-$config['app_version'] = '3.15.1';
+$config['app_version'] = '4.0.0';
 
 /*
  * Nome do sistema
@@ -86,15 +86,15 @@ $config['uri_protocol'] = 'REQUEST_URI';
 $config['url_suffix'] = '';
 
 /*
-  |--------------------------------------------------------------------------
-  | Default Language
-  |--------------------------------------------------------------------------
-  |
-  | This determines which set of language files should be used. Make sure
-  | there is an available translation if you intend to use something other
-  | than english.
-  |
- */
+|--------------------------------------------------------------------------
+| Default Language
+|--------------------------------------------------------------------------
+|
+| This determines which set of language files should be used. Make sure
+| there is an available translation if you intend to use something other
+| than english.
+|
+*/
 $config['language'] = 'english';
 
 /*
@@ -136,26 +136,26 @@ $config['enable_hooks'] = true;
 $config['subclass_prefix'] = 'MY_';
 
 /*
-  |--------------------------------------------------------------------------
-  | Composer auto-loading
-  |--------------------------------------------------------------------------
-  |
-  | Enabling this setting will tell CodeIgniter to look for a Composer
-  | package auto-loader script in application/vendor/autoload.php.
-  |
-  |	$config['composer_autoload'] = TRUE;
-  |
-  | Or if you have your vendor/ directory located somewhere else, you
-  | can opt to set a specific path as well:
-  |
-  |	$config['composer_autoload'] = '/path/to/vendor/autoload.php';
-  |
-  | For more information about Composer, please visit http://getcomposer.org/
-  |
-  | Note: This will NOT disable or override the CodeIgniter-specific
-  |	autoloading (application/config/autoload.php)
- */
-$config['composer_autoload'] = false;
+|--------------------------------------------------------------------------
+| Composer auto-loading
+|--------------------------------------------------------------------------
+|
+| Enabling this setting will tell CodeIgniter to look for a Composer
+| package auto-loader script in application/vendor/autoload.php.
+|
+|	$config['composer_autoload'] = TRUE;
+|
+| Or if you have your vendor/ directory located somewhere else, you
+| can opt to set a specific path as well:
+|
+|	$config['composer_autoload'] = '/path/to/vendor/autoload.php';
+|
+| For more information about Composer, please visit http://getcomposer.org/
+|
+| Note: This will NOT disable or override the CodeIgniter-specific
+|	autoloading (application/config/autoload.php)
+*/
+$config['composer_autoload'] = TRUE;
 
 /*
   |--------------------------------------------------------------------------
@@ -221,28 +221,28 @@ $config['directory_trigger'] = 'd';
 $config['allow_get_array'] = true;
 
 /*
-  |--------------------------------------------------------------------------
-  | Error Logging Threshold
-  |--------------------------------------------------------------------------
-  |
-  | You can enable error logging by setting a threshold over zero. The
-  | threshold determines what gets logged. Threshold options are:
-  |
-  |	0 = Disables logging, Error logging TURNED OFF
-  |	1 = Error Messages (including PHP errors)
-  |	2 = Debug Messages
-  |	3 = Informational Messages
-  |	4 = All Messages
-  |
-  | You can also pass an array with threshold levels to show individual error types
-  |
-  | 	array(2) = Debug Messages, without Error Messages
-  |
-  | For a live site you'll usually only enable Errors (1) to be logged otherwise
-  | your log files will fill up very fast.
-  |
- */
-$config['log_threshold'] = 0;
+|--------------------------------------------------------------------------
+| Error Logging Threshold
+|--------------------------------------------------------------------------
+|
+| You can enable error logging by setting a threshold over zero. The
+| threshold determines what gets logged. Threshold options are:
+|
+|	0 = Disables logging, Error logging TURNED OFF
+|	1 = Error Messages (including PHP errors)
+|	2 = Debug Messages
+|	3 = Informational Messages
+|	4 = All Messages
+|
+| You can also pass an array with threshold levels to show individual error types
+|
+| 	array(2) = Debug Messages, without Error Messages
+|
+| For a live site you'll usually only enable Errors (1) to be logged otherwise
+| your log files will fill up very fast.
+|
+*/
+$config['log_threshold'] = 1;
 
 /*
   |--------------------------------------------------------------------------
