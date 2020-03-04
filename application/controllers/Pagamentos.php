@@ -66,7 +66,7 @@ class Pagamentos extends MY_Controller
                 'access_token' => $this->input->post('accessToken'),
                 'client_id' => $this->input->post('clientId'),
                 'client_secret' => $this->input->post('clientSecret'),
-                'default_pag' => (isset($_POST['default_pag'])) ? true : false
+                'default_pag' => (isset($_POST['default_pag'])) ? true : false,
 
             );
 
@@ -104,33 +104,25 @@ class Pagamentos extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
 
-
             $data = array(
                 'nome' => $this->input->post('nomePag'),
                 'client_id' => $this->input->post('clientId'),
                 'client_secret' => $this->input->post('clientSecret'),
                 'public_key' => $this->input->post('publicKey'),
                 'access_token' => $this->input->post('accessToken'),
-                'default_pag' => (isset($_POST['default_pag'])) ? true : false
+                'default_pag' => (isset($_POST['default_pag'])) ? true : false,
 
             );
-            
-            
 
-        if($this->pagamentos_model->duplicadoPagDefault()->default_pag != (isset($_POST['default_pag'])) ? true : false  &&
-                     $this->pagamentos_model->duplicadoPagDefault()->nome == $this->input->post('nomePag')) {
-                if ($this->pagamentos_model->edit('pagamento', $data, 'idPag', $this->input->post('idPag')) == true) {
-                    $this->session->set_flashdata('success', 'Credencial de Pagamento editada com sucesso!');
-                    log_info('Alterou uma credencial de pagamento. ID: ' . $this->input->post('idPag'));
-                    redirect(site_url('pagamentos/editar/') . $this->input->post('idPag'));
-                } else {
-                    $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-                }
-            }else{
-                $this->session->set_flashdata('error', 'Já existe uma Credencial de Pagamento como Padrão!');
+            if ($this->pagamentos_model->edit('pagamento', $data, 'idPag', $this->input->post('idPag')) == true) {
+                $this->session->set_flashdata('success', 'Credencial de Pagamento editada com sucesso!');
+                log_info('Alterou uma credencial de pagamento. ID: ' . $this->input->post('idPag'));
+                redirect(site_url('pagamentos/editar/') . $this->input->post('idPag'));
+            } else {
+                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
         }
-        
+
         $this->data['result'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['view'] = 'pagamentos/editarPagamento';
         return $this->layout();
@@ -149,7 +141,6 @@ class Pagamentos extends MY_Controller
             redirect(base_url());
         }
 
-
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['pagamento'] = $this->pagamentos_model->getById($this->uri->segment(3));
@@ -157,7 +148,6 @@ class Pagamentos extends MY_Controller
         $this->data['view'] = 'pagamentos/visualizarPagamento';
         return $this->layout();
     }
-
 
     public function excluir()
     {

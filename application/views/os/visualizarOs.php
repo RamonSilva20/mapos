@@ -252,8 +252,8 @@ $totalProdutos = 0; ?>
         if($pagamento){
 
             if ($totalProdutos || $totalServico) {
-                $preference = $this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
-                if ($pagamento->nome == 'MercadoPago' || $pagamento->nome == 'Mercado Pago') {
+                $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
+                if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
                     echo '<form action="'.site_url().'" method="POST">
                             <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="'.$preference->id.'" data-button-label="Gerar Pagamento">
                             </script>

@@ -78,6 +78,11 @@ class Pagamentos_model extends CI_Model
     
     function edit($table, $data, $fieldID, $ID)
     {
+        if($data['default_pag']){
+            $this->db->set('default_pag', 0);
+            $this->db->update($table);
+        }
+
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 

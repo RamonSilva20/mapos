@@ -27,7 +27,7 @@
                         <div class="span2">
                             <label for="Nome">Nome</label>
                             <?php echo form_hidden('idPag', $result->idPag) ?>
-                            <select name="nomePag" id="nomePag">
+                            <select name="nomePag" id="nomePag" class="span12">
                                 <option value="MercadoPago" required>Mercado Pago</option>
                             </select>
                         </div>

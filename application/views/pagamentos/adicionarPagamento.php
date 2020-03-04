@@ -25,7 +25,7 @@
                     <div class="span12">
                         <div class="span3">
                             <label for="Nome">Nome<span class="required"></span></label>
-                            <select name="nomePag" id="nomePag">
+                            <select name="nomePag" id="nomePag" class="span12">
                                 <option value="MercadoPago" required>Mercado Pago</option>
                             </select>
                         </div>
