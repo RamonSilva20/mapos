@@ -1,6 +1,11 @@
 {
     "require": {
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "^1.9",
+        "mercadopago/dx-php": "^1.8.0",
+        "paypal/rest-api-sdk-php": "^1.14.0",
+        "codeigniter/framework": "3.1.11",
+        "mpdf/mpdf" : "8.0.5"
+        
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16"
@@ -12,5 +17,10 @@
     },
     "config": {
         "vendor-dir": "application/vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "Libraries\\": "application/libraries"
+        }
     }
 }

@@ -284,6 +284,38 @@
 
                                         <td>
                                             <label>
+                                                <input name="vPagamento" class="marcar" type="checkbox" checked="checked" value="1" />
+                                                <span class="lbl"> Visualizar Pagamento</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="aPagamento" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Adicionar Pagamento</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="ePagamento" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Editar Pagamento</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="dPagamento" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Excluir Pagamento</span>
+                                            </label>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>
+                                            <label>
                                                 <input name="vLancamento" class="marcar" type="checkbox" checked="checked" value="1" />
                                                 <span class="lbl"> Visualizar Lançamento</span>
                                             </label>

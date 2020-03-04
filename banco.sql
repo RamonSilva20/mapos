@@ -368,6 +368,20 @@ CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `pagamento`
+-- -----------------------------------------------------
+CREATE TABLE `pagamento` (
+  `idPag` INT NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) COLLATE utf8_bin NOT NULL,
+  `client_id` varchar(200) COLLATE utf8_bin NOT NULL,
+  `client_secret` varchar(200) COLLATE utf8_bin NOT NULL,
+  `public_key` varchar(200) COLLATE utf8_bin NOT NULL,
+  `access_token` varchar(200) COLLATE utf8_bin NOT NULL,
+  `default_pag` int(1) NOT NULL,
+   PRIMARY KEY (`idPag`)
+) ENGINE=InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `anexos`

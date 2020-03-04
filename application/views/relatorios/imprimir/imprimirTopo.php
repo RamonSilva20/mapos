@@ -7,6 +7,6 @@
         <b>EMPRESA: </b> <?= $emitente[0]->nome ?> <b>CNPJ: </b> <?= $emitente[0]->cnpj ?><br>
         <b>ENDEREÇO: </b> <?= $emitente[0]->rua ?>, <?= $emitente[0]->numero ?>, <?= $emitente[0]->bairro ?>, <?= $emitente[0]->cidade ?> - <?= $emitente[0]->uf ?> <br>
         <b>RELATÓRIO: </b> <?= $title ?> <br>
-        <b>DATA INICIAL: </b> <?= $dataInicial ?> <b>DATA FINAL: </b> <?= $dataFinal ?>
+        <b>DATA INICIAL: </b> <?= isset($dataInicial) ? $dataInicial : '' ?> <b>DATA FINAL: </b> <?= isset($dataFinal) ? $dataFinal : '' ?>
     </div>
 </div>
