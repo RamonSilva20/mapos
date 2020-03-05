@@ -288,14 +288,14 @@ class Os extends MY_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('pagamentos_model');
-        
+
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-        if($this->data['pagamento']){
+        if ($this->data['pagamento']) {
             $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
         }
 
@@ -582,8 +582,23 @@ class Os extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
+        $directory = FCPATH . 'assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico');
+
+        // If it exist, check if it's a directory
+        if (!is_dir($directory . '/thumbs')) {
+            // make directory for images and thumbs
+            try {
+                mkdir($directory . '/thumbs', 0755, true);  
+            }
+            catch(Exception $e){
+                echo json_encode(array('result' => false, 'mensagem' => $e->getMessage()));
+                die();
+            }
+
+        } 
+
         $upload_conf = array(
-            'upload_path' => realpath('./assets/anexos'),
+            'upload_path' => $directory,
             'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
             'max_size' => 0,
         );
@@ -628,7 +643,7 @@ class Os extends MY_Controller
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url() . 'assets/anexos/', 'thumb_' . $upload_data['file_name'], realpath('./assets/anexos/'));
+                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
                     }
                 } else {
 
@@ -636,7 +651,7 @@ class Os extends MY_Controller
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url() . 'assets/anexos/', '', realpath('./assets/anexos/'));
+                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), '', $directory);
                 }
             }
         }
