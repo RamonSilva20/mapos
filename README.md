@@ -47,7 +47,7 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
 ### Requerimentos
-* PHP >= 5.6
+* PHP >= 7.2
 * MySQL
 * Composer
 
