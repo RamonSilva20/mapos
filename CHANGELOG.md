@@ -4,6 +4,17 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [4.1.0] - 2020-03-04
+
+### Fixed
+- Corrigido layout e links de anexos de OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Corrigido problema no layout de etiquetas. [@RamonSilva20](https://github.com/RamonSilva20)
+- Corrigido layout e problema ao salvar pagamento. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## Changed
+- Anexos de OS estruturados dentro de pastas MM-AAAA/OS-#ID. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.0.0] - 2020-03-03
 
 ### Added
@@ -30,7 +41,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Adicionado opções de configuração do sistema. [@RamonSilva20](https://github.com/RamonSilva20)
 - Adicionado status faturado no filtro de relatório de OS. [@ZanzouShio](https://github.com/ZanzouShio)
-- Adicionando opção de atualização de estoque pelo listagem e dashboard. [@TiagoOliveira](https://github.com/trollfalgar)
+- Adicionado opção de atualização de estoque pelo listagem e dashboard. [@TiagoOliveira](https://github.com/trollfalgar)
 
 ### Fixed
 - Corrigido arquivo de configurações. [@RamonSilva20](https://github.com/RamonSilva20)
