@@ -345,6 +345,11 @@ class Migration_create_base extends CI_Migration
                 'constraint' => 20,
                 'null' => false,
             ],
+            'cep' => [
+                'type' => 'VARCHAR',
+                'constraint' => 9,
+                'null' => false,
+            ],
             'rua' => [
                 'type' => 'VARCHAR',
                 'constraint' => 70,
