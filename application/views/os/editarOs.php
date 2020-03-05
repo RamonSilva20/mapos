@@ -280,25 +280,17 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="span12" id="divAnexos" style="margin-left: 0">
+                                <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                    $cont = 1;
-                                    $flag = 5;
                                     foreach ($anexos as $a) {
                                         if ($a->thumb == null) {
                                             $thumb = base_url() . 'assets/img/icon-file.png';
                                             $link = base_url() . 'assets/img/icon-file.png';
                                         } else {
-                                            $thumb = base_url() . 'assets/anexos/thumbs/' . $a->thumb;
-                                            $link = $a->url . $a->anexo;
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url .'/'. $a->anexo;
                                         }
-                                        if ($cont == $flag) {
-                                            echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
-                                            $flag += 4;
-                                        } else {
-                                            echo '<div class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""><p align="center">' . $a->anexo . '</p></a></div>';
-                                        }
-                                        $cont++;
+                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
                                     } ?>
                                 </div>
                             </div>
