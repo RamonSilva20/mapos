@@ -34,7 +34,7 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfcnpj" type="text" name="cpf" value="<?php echo $result->cpf; ?>" />
+                            <input class="cpfUser" type="text" name="cpf" value="<?php echo $result->cpf; ?>" disabled/>
                         </div>
                     </div>
                     <div class="control-group">
@@ -69,7 +69,7 @@
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
+                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
                         </div>
                     </div>
 

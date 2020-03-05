@@ -60,6 +60,7 @@ class Usuarios extends MY_Controller
                 'nome' => set_value('nome'),
                 'rg' => set_value('rg'),
                 'cpf' => set_value('cpf'),
+                'cep' => set_value('cep'),
                 'rua' => set_value('rua'),
                 'numero' => set_value('numero'),
                 'bairro' => set_value('bairro'),
@@ -103,6 +104,7 @@ class Usuarios extends MY_Controller
         $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         $this->form_validation->set_rules('rg', 'RG', 'trim|required');
         $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
+        $this->form_validation->set_rules('cep', 'CEP', 'trim|required');
         $this->form_validation->set_rules('rua', 'Rua', 'trim|required');
         $this->form_validation->set_rules('numero', 'Número', 'trim|required');
         $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
@@ -131,6 +133,7 @@ class Usuarios extends MY_Controller
                     'nome' => $this->input->post('nome'),
                     'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
+                    'cep' => $this->input->post('cep'),
                     'rua' => $this->input->post('rua'),
                     'numero' => $this->input->post('numero'),
                     'bairro' => $this->input->post('bairro'),
@@ -150,6 +153,7 @@ class Usuarios extends MY_Controller
                     'nome' => $this->input->post('nome'),
                     'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
+                    'cep' => $this->input->post('cep'),
                     'rua' => $this->input->post('rua'),
                     'numero' => $this->input->post('numero'),
                     'bairro' => $this->input->post('bairro'),

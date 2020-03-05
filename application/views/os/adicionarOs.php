@@ -74,8 +74,8 @@
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia</label>
-                                            <input id="garantia" type="text" class="span12" name="garantia" value="" />
-
+                                            <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="" />
+                                            <?php echo form_error('garantia'); ?>
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="" />
                                             <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="" />
