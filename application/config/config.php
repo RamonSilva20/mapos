@@ -1,7 +1,21 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$config['app_version'] = '3.14.2';
+/**
+ * App current version
+ */
+$config['app_version'] = '4.1.0';
+
+/**
+ * Nome do sistema
+ */
+$config['app_name'] = 'Map-OS';
+
+/**
+ * Descrição do sistema
+ */
+$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -98,7 +112,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']     = 'english';
+$config['language'] = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -158,7 +172,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = false;
+$config['composer_autoload'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,7 +259,7 @@ $config['allow_get_array'] = true;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------

@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Relatorios extends CI_Controller
+class Relatorios extends MY_Controller
 {
 
     /**
@@ -14,13 +14,10 @@ class Relatorios extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
 
-        $this->load->model('Relatorios_model', '', true);
-        $this->load->model('Usuarios_model', '', true);
-        $this->load->model('Mapos_model', '', true);
+        $this->load->model('Relatorios_model');
+        $this->load->model('Usuarios_model');
+        $this->load->model('Mapos_model');
 
         $this->data['menuRelatorios'] = 'Relatórios';
     }
@@ -38,7 +35,7 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
         $this->data['view'] = 'relatorios/rel_clientes';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function produtos()
@@ -48,7 +45,7 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
         $this->data['view'] = 'relatorios/rel_produtos';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function clientesCustom()
@@ -164,7 +161,7 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
         $this->data['view'] = 'relatorios/rel_servicos';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function servicosCustom()
@@ -204,7 +201,7 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
         $this->data['view'] = 'relatorios/rel_os';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function osRapid()
@@ -271,7 +268,7 @@ class Relatorios extends CI_Controller
         }
 
         $this->data['view'] = 'relatorios/rel_financeiro';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function financeiroRapid()
@@ -315,7 +312,7 @@ class Relatorios extends CI_Controller
         }
 
         $this->data['view'] = 'relatorios/rel_vendas';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function vendasRapid()

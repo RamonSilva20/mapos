@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Financeiro extends CI_Controller
+class Financeiro extends MY_Controller
 {
 
     /**
@@ -12,12 +12,9 @@ class Financeiro extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-        $this->load->model('financeiro_model', '', true);
+        $this->load->model('financeiro_model');
+        $this->load->helper('codegen_helper');
         $this->data['menuFinanceiro'] = 'financeiro';
-        $this->load->helper(array('codegen_helper'));
     }
     public function index()
     {
@@ -140,35 +137,16 @@ class Financeiro extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . '/financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
-        $config['per_page'] = 20;
-        $config['page_query_string'] = true;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?periodo=$periodo&situacao=$situacao");
+        $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
+        $this->data['configuration']['page_query_string'] = true;
 
-        $this->pagination->initialize($config);
+        $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->financeiro_model->get('lancamentos', 'idLancamentos,descricao,valor,data_vencimento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto', $where, $config['per_page'], $this->input->get('per_page'));
+        $this->data['results'] = $this->financeiro_model->get('lancamentos', '*', $where, $this->data['configuration']['per_page'], $this->input->get('per_page'));
 
         $this->data['view'] = 'financeiro/lancamentos';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function adicionarReceita()

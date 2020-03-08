@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Os extends CI_Controller
+class Os extends MY_Controller
 {
     /**
      * author: Ramon Silva
@@ -13,13 +13,8 @@ class Os extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
-        }
-
-        $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('os_model', '', true);
+        $this->load->helper('form');
+        $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
     }
 
@@ -60,34 +55,15 @@ class Os extends CI_Controller
             $where_array['ate'] = $ate;
         }
 
-        $config['base_url'] = base_url() . 'index.php/os/gerenciar/';
-        $config['total_rows'] = $this->os_model->count('os');
-        $config['per_page'] = 30;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
+        $this->data['configuration']['total_rows'] = $this->os_model->count('os');
 
-        $this->pagination->initialize($config);
+        $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->os_model->getOs('os', 'idOs,dataInicial,dataFinal,garantia,refGarantia,descricaoProduto,defeito,status,observacoes,laudoTecnico,valorTotal', $where_array, $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->os_model->getOs('os', '*', $where_array, $this->data['configuration']['per_page'], $this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function adicionar()
@@ -152,55 +128,42 @@ class Os extends CI_Controller
                 $emitente = $this->mapos_model->getEmitente()[0];
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
-                $remetentes = [
-                    $os->email,
-                    $emitente->email,
-                    $tecnico->email,
-                ];
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
+                // Verificar configuração de notificação
+                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+                    $remetentes = [];
+                    switch ($this->data['configuration']['os_notification']) {
+                        case 'todos':
+                            array_push($remetentes, $os->email);
+                            array_push($remetentes, $tecnico->email);
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        case 'cliente':
+                            array_push($remetentes, $os->email);
+                            break;
+                        case 'tecnico':
+                            array_push($remetentes, $tecnico->email);
+                            break;
+                        case 'emitente':
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        default:
+                            array_push($remetentes, $os->email);
+                            break;
+                    }
+                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
+                }
 
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
                 log_info('Adicionou uma OS');
-                redirect('os/editar/' . $id);
+                redirect(site_url('os/editar/') . $id);
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
+                $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
             }
         }
 
         $this->data['view'] = 'os/adicionarOs';
-        $this->load->view('tema/topo', $this->data);
-    }
-
-    public function adicionarAjax()
-    {
-        $this->load->library('form_validation');
-
-        if ($this->form_validation->run('os') == false) {
-            $json = array("result" => false);
-            echo json_encode($json);
-        } else {
-            $data = array(
-                'dataInicial' => set_value('dataInicial'),
-                'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
-                'dataFinal' => set_value('dataFinal'),
-                'garantia' => set_value('garantia'),
-                'garantias_id' => $this->input->post('garantias_id'),
-                'descricaoProduto' => set_value('descricaoProduto'),
-                'defeito' => set_value('defeito'),
-                'status' => set_value('status'),
-                'observacoes' => set_value('observacoes'),
-                'laudoTecnico' => set_value('laudoTecnico'),
-            );
-
-            if (is_numeric($id = $this->os_model->add('os', $data, true))) {
-                $json = array("result" => true, "id" => $id);
-                echo json_encode($json);
-            } else {
-                $json = array("result" => false);
-                echo json_encode($json);
-            }
-        }
+        return $this->layout();
     }
 
     public function editar()
@@ -233,7 +196,7 @@ class Os extends CI_Controller
 
                 $dataFinal = explode('/', $dataFinal);
                 $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-                
+
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
             }
@@ -262,16 +225,35 @@ class Os extends CI_Controller
                 $emitente = $this->mapos_model->getEmitente()[0];
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
-                $remetentes = [
-                    $os->email,
-                    $emitente->email,
-                    $tecnico->email,
-                ];
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+                // Verificar configuração de notificação
+                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+                    $remetentes = [];
+                    switch ($this->data['configuration']['os_notification']) {
+                        case 'todos':
+                            array_push($remetentes, $os->email);
+                            array_push($remetentes, $tecnico->email);
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        case 'cliente':
+                            array_push($remetentes, $os->email);
+                            break;
+                        case 'tecnico':
+                            array_push($remetentes, $tecnico->email);
+                            break;
+                        case 'emitente':
+                            array_push($remetentes, $emitente->email);
+                            break;
+                        default:
+                            array_push($remetentes, $os->email);
+                            break;
+                    }
+                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+                }
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
                 log_info('Alterou uma OS. ID: ' . $this->input->post('idGarantias'));
-                redirect(base_url() . 'index.php/os/editar/' . $this->input->post('idOs'));
+                redirect(site_url('os/editar/') . $this->input->post('idOs'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -286,9 +268,9 @@ class Os extends CI_Controller
 
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-        
+
         $this->data['view'] = 'os/editarOs';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function visualizar()
@@ -305,13 +287,20 @@ class Os extends CI_Controller
 
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
+        $this->load->model('pagamentos_model');
+
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
+        if ($this->data['pagamento']) {
+            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
+        }
+
         $this->data['view'] = 'os/visualizarOs';
-        $this->load->view('tema/topo', $this->data);
+        return $this->layout();
     }
 
     public function imprimir()
@@ -336,6 +325,28 @@ class Os extends CI_Controller
         $this->load->view('os/imprimirOs', $this->data);
     }
 
+    public function imprimirTermica()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->view('os/imprimirOsTermica', $this->data);
+    }
+
     public function enviar_email()
     {
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -349,6 +360,7 @@ class Os extends CI_Controller
         }
 
         $this->load->model('mapos_model');
+        $this->load->model('usuarios_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         if (!isset($this->data['result']->email)) {
             $this->session->set_flashdata('error', 'O cliente não tem e-mail cadastrado.');
@@ -365,19 +377,49 @@ class Os extends CI_Controller
         }
 
         $idOs = $this->uri->segment(3);
-        $remetentes = [
-            $this->data['result']->email,
-        ];
-        $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
-        if ($enviouEmail) {
-            $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
-            log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
-            redirect(site_url('os'));
-        } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
-            redirect(site_url('os'));
+        $emitente = $this->data['emitente'][0];
+        $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
+
+        // Verificar configuração de notificação
+        if ($this->data['configuration']['os_notification'] != 'nenhum') {
+
+            $remetentes = [];
+            switch ($this->data['configuration']['os_notification']) {
+                case 'todos':
+                    array_push($remetentes, $this->data['result']->email);
+                    array_push($remetentes, $tecnico->email);
+                    array_push($remetentes, $emitente->email);
+                    break;
+                case 'cliente':
+                    array_push($remetentes, $this->data['result']->email);
+                    break;
+                case 'tecnico':
+                    array_push($remetentes, $tecnico->email);
+                    break;
+                case 'emitente':
+                    array_push($remetentes, $emitente->email);
+                    break;
+                default:
+                    array_push($remetentes, $this->data['result']->email);
+                    break;
+            }
+            $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
+
+            if ($enviouEmail) {
+                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
+                log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
+                redirect(site_url('os'));
+            } else {
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
+                redirect(site_url('os'));
+            }
+
         }
+
+        $this->session->set_flashdata('success', 'O sistema está com uma configuração ativada para não notificar. Entre em contato com o administrador.');
+        redirect(site_url('os'));
+
     }
 
     public function excluir()
@@ -394,20 +436,14 @@ class Os extends CI_Controller
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
 
-        $this->db->where('os_id', $id);
-        $this->db->delete('servicos_os');
-
-        $this->db->where('os_id', $id);
-        $this->db->delete('produtos_os');
-
-        $this->db->where('os_id', $id);
-        $this->db->delete('anexos');
-
+        $this->os_model->delete('servicos_os', 'os_id', $id);
+        $this->os_model->delete('produtos_os', 'os_id', $id);
+        $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
 
         log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
-        redirect(base_url() . 'index.php/os/gerenciar/');
+        redirect(site_url('os/gerenciar/'));
     }
 
     public function autoCompleteProduto()
@@ -475,8 +511,12 @@ class Os extends CI_Controller
         );
 
         if ($this->os_model->add('produtos_os', $data) == true) {
-            $sql = "UPDATE produtos set estoque = estoque - ? WHERE idProdutos = ?";
-            $this->db->query($sql, array($quantidade, $produto));
+
+            $this->load->model('produtos_model');
+
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+            }
             log_info('Adicionou produto a uma OS.');
             echo json_encode(array('result' => true));
         } else {
@@ -486,16 +526,17 @@ class Os extends CI_Controller
 
     public function excluirProduto()
     {
-        $ID = $this->input->post('idProduto');
-        if ($this->os_model->delete('produtos_os', 'idProdutos_os', $ID) == true) {
+        $id = $this->input->post('idProduto');
+        if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
 
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
 
-            $sql = "UPDATE produtos set estoque = estoque + ? WHERE idProdutos = ?";
+            $this->load->model('produtos_model');
 
-            $this->db->query($sql, array($quantidade, $produto));
-
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+            }
             log_info('Removeu produto de uma OS.');
 
             echo json_encode(array('result' => true));
@@ -541,8 +582,23 @@ class Os extends CI_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
+        $directory = FCPATH . 'assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico');
+
+        // If it exist, check if it's a directory
+        if (!is_dir($directory . '/thumbs')) {
+            // make directory for images and thumbs
+            try {
+                mkdir($directory . '/thumbs', 0755, true);  
+            }
+            catch(Exception $e){
+                echo json_encode(array('result' => false, 'mensagem' => $e->getMessage()));
+                die();
+            }
+
+        } 
+
         $upload_conf = array(
-            'upload_path' => realpath('./assets/anexos'),
+            'upload_path' => $directory,
             'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
             'max_size' => 0,
         );
@@ -587,7 +643,7 @@ class Os extends CI_Controller
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url() . 'assets/anexos/', 'thumb_' . $upload_data['file_name'], realpath('./assets/anexos/'));
+                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
                     }
                 } else {
 
@@ -595,7 +651,7 @@ class Os extends CI_Controller
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url() . 'assets/anexos/', '', realpath('./assets/anexos/'));
+                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), '', $directory);
                 }
             }
         }
@@ -642,11 +698,8 @@ class Os extends CI_Controller
             $file = $this->db->get('anexos', 1)->row();
 
             $this->load->library('zip');
-
             $path = $file->path;
-
             $this->zip->read_file($path . '/' . $file->anexo);
-
             $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
         }
     }

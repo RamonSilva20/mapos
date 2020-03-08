@@ -17,6 +17,7 @@
 	border: 1px dashed #777;
 	float: left;
 	padding: 5px;
+	page-break-inside:avoid; 
 }
 
 .detalheProdutoEtiquetaEan13 {
@@ -24,7 +25,7 @@
 	height: auto;
 	border: 1px dashed #777;
 	float: left;
-	padding: 5px;
+	padding: 4px;
 }
 
 .descricaoProdutoEtiqueta {

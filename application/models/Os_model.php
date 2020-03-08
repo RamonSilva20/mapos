@@ -166,7 +166,8 @@ class Os_model extends CI_Model
 
         $this->db->select('*');
         $this->db->limit(5);
-        $this->db->like('descricao', $q);
+        $this->db->like('codDeBarra', $q);
+        $this->db->or_like('descricao', $q);        
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
@@ -181,7 +182,8 @@ class Os_model extends CI_Model
 
         $this->db->select('*');
         $this->db->limit(5);
-        $this->db->like('descricao', $q);
+        $this->db->like('codDeBarra', $q);
+        $this->db->or_like('descricao', $q);
         $this->db->where('saida', 1);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
@@ -278,4 +280,5 @@ class Os_model extends CI_Model
         $this->db->order_by('idAnotacoes', 'desc');
         return $this->db->get('anotacoes_os')->result();
     }
+
 }

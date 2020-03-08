@@ -5,6 +5,56 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.1.0] - 2020-03-04
+
+### Fixed
+- Corrigido layout e links de anexos de OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Corrigido problema no layout de etiquetas. [@RamonSilva20](https://github.com/RamonSilva20)
+- Corrigido layout e problema ao salvar pagamento. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## Changed
+- Anexos de OS estruturados dentro de pastas MM-AAAA/OS-#ID. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [4.0.0] - 2020-03-03
+
+### Added
+- Adicionado o recibo para impressora não fiscal em OS e Vendas. [@willph](https://github.com/willph)
+- Adicionado opção de pagamento com Mercado Pago. [@willph](https://github.com/willph)
+- Adicionado informação de vencimento de prazo de garantia. [@willph](https://github.com/willph)
+- Adicionado composer ao projeto. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado biblioteca de migrations do CodeIgniter. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado seeders para inserção de dados no banco de dados.
+- Botão para atualizar banco de dados com as migrations em: Configurações -> Sistema. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado controller `Tools` para permitir a criação de migrations e seeders pelo terminal. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Fixed
+- Adicionado permissão de sistema e email ao usuário admin criado inicialmente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido valor de `dataCadastro` incorreta em admin criado inicialmente [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido erro no relatório de clientes com datas não preenchidas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Banco de dados agora será gerenciado com migrations pela biblioteca do CodeIgniter, onde o último arquivo de atualização manual é o `update_3.15.0_to_4.0.0.sql`. Ainda será necessário atualizar sempre o arquivo `banco.sql` com as novas tabelas para que o script de instalação continue funcionando [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Ativado Logs para permitir melhor debug. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [3.15.0] - 2020-02-15
+
+### Added
+- Adicionado opções de configuração do sistema. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionado status faturado no filtro de relatório de OS. [@ZanzouShio](https://github.com/ZanzouShio)
+- Adicionado opção de atualização de estoque pelo listagem e dashboard. [@TiagoOliveira](https://github.com/trollfalgar)
+
+### Fixed
+- Corrigido arquivo de configurações. [@RamonSilva20](https://github.com/RamonSilva20)
+- Correção de bug na área do cliente ao efetuar login. [@GiovanneOliveira](https://github.com/giovanne-oliveira)
+- Correção de exibição de produtos com estoque mínimo. [@MikeAlves](https://github.com/mikxingu)
+
+### Changed
+- Atualização da versão do Codeigniter para 3.1.11. [@RamonSilva20](https://github.com/RamonSilva20)
+- Refatoramento de controllers para diminuir repetição de código. [@RamonSilva20](https://github.com/RamonSilva20)
+- Simplificado exibição de mensagem de acesso expirado. [@RamonSilva20](https://github.com/RamonSilva20)
+- Remoção de data e hora no menu superior. [@RamonSilva20](https://github.com/RamonSilva20)
+- Nome do app dinâmico na área do cliente. [@TiagoOliveira](https://github.com/trollfalgar)
+
 ## [3.14.2] - 2019-12-18
 
 ### Fixed

@@ -75,4 +75,10 @@ class Produtos_model extends CI_Model
     {
         return $this->db->count_all($table);
     }
+
+    public function updateEstoque($produto, $quantidade, $operacao = '-')
+    {
+        $sql = "UPDATE produtos set estoque = estoque $operacao ? WHERE idProdutos = ?";
+        return $this->db->query($sql, array($quantidade, $produto));
+    }
 }

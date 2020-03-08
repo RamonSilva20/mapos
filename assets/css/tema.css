@@ -19,13 +19,11 @@
 /* SUBMENU FINANCEIRO E OUTROS*/
 #sidebar > ul li ul li.active a{
     background-color: #7BCAE1;
-    font-size:15px;
 }
 
 /* MENUS LATERAIS*/
 #sidebar > ul > li.active{
     background-color: rgba(79, 176, 241, 0.548);
-    font-size: 16px;
 }
 
 /* ITENS ATIVOS */
@@ -39,7 +37,6 @@
 #sidebar > ul > li > a:hover{
     background-color: #27a9e3;
     color: #fff;
-    font-size: 15px;
 }
 
 /* ICONES DE VISUALIZAR */
@@ -64,7 +61,6 @@ li:hover{
 /* SUBMENU FINANCEIRO E OUTROS*/
 #sidebar > ul li ul li a:hover{
     background-color: #7BCAE1;
-    font-size:15px;
 }
 
 /* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/

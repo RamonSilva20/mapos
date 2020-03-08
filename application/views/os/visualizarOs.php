@@ -14,7 +14,8 @@ $totalProdutos = 0; ?>
                         echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
 
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
                         echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
@@ -28,7 +29,7 @@ $totalProdutos = 0; ?>
                 <div class="invoice-content">
                     <div class="invoice-head" style="margin-bottom: 0">
 
-                        <table class="table table-condensed" style="">
+                        <table class="table table-condensed">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
 
@@ -101,19 +102,40 @@ $totalProdutos = 0; ?>
 
                                         <td>
                                             <b>GARANTIA: </b>
-                                            <?php echo $result->garantia; ?>
+                                            <?php echo $result->garantia . ' dias'; ?>
                                         </td>
 
                                         <td>
-                                            <b>TERMO GARANTIA: </b>
-                                            <?php echo $result->refGarantia; ?>
+                                            <b>
+                                                <?php if ($result->status == 'Finalizado') { ?>
+                                                    VENC. DA GARANTIA:
+                                            </b>
+                                            <?php
+                                                    $data = date('d/m/Y', strtotime($result->dataFinal));
+
+                                                    // Criar o objeto representando a data
+                                                    $obj_data = DateTime::createFromFormat('d/m/Y', $data);
+                                                    $obj_data->setTime(0, 0, 0);
+
+                                                    // Realizar a soma de dias
+                                                    $intervalo = new DateInterval('P' . $result->garantia . 'D');
+                                                    $obj_data->add($intervalo);
+
+                                                    // Formatar a data obtida
+                                                    echo $obj_data->format('d/m/Y'); ?><?php } ?>
                                         </td>
+                                        <?php if ($result->refGarantia != '') { ?>
+                                            <td>
+                                                <b>TERMO GARANTIA: </b>
+                                                <?php echo $result->refGarantia; ?>
+                                            </td>
+                                        <?php } ?>
                                     </tr>
                                 <?php } ?>
 
                                 <?php if ($result->descricaoProduto != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>DESCRIÇÃO: </b>
                                             <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                         </td>
@@ -122,7 +144,7 @@ $totalProdutos = 0; ?>
 
                                 <?php if ($result->defeito != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>DEFEITO APRESENTADO: </b>
                                             <?php echo htmlspecialchars_decode($result->defeito) ?>
                                         </td>
@@ -131,7 +153,7 @@ $totalProdutos = 0; ?>
 
                                 <?php if ($result->observacoes != null) { ?>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <b>OBSERVAÇÕES: </b>
                                             <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                         </td>
@@ -163,16 +185,16 @@ $totalProdutos = 0; ?>
                                 <tbody>
                                     <?php
 
-                                        foreach ($produtos as $p) {
+                                    foreach ($produtos as $p) {
 
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
                                     <tr>
                                         <td></td>
@@ -195,18 +217,18 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        setlocale(LC_MONETARY, 'en_US');
-                                        foreach ($servicos as $s) {
-                                            $preco = $s->preco ?: $s->precoVenda;
-                                            $subtotal = $preco * ($s->quantidade ?: 1);
-                                            $totalServico = $totalServico + $subtotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $s->nome . '</td>';
-                                            echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                            echo '<td>' . $preco . '</td>';
-                                            echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                    setlocale(LC_MONETARY, 'en_US');
+                                    foreach ($servicos as $s) {
+                                        $preco = $s->preco ?: $s->precoVenda;
+                                        $subtotal = $preco * ($s->quantidade ?: 1);
+                                        $totalServico = $totalServico + $subtotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $s->nome . '</td>';
+                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                        echo '<td>' . $preco . '</td>';
+                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -225,6 +247,21 @@ $totalProdutos = 0; ?>
             </div>
 
         </div>
+
+        <?php
+        if($pagamento){
+
+            if ($totalProdutos || $totalServico) {
+                $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
+                if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
+                    echo '<form action="'.site_url().'" method="POST">
+                            <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="'.$preference->id.'" data-button-label="Gerar Pagamento">
+                            </script>
+                          </form>';
+                }
+            }
+        } ?>
+
     </div>
 </div>
 </div>
