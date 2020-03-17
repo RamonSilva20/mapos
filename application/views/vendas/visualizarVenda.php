@@ -61,9 +61,9 @@
                                                         <?php echo $result->bairro ?></span><br />
                                                     <span>
                                                         <?php echo $result->cidade ?> -
-                                                        <?php echo $result->estado ?> -
+                                                        <?php echo $result->estado ?><br />
                                                         <span>Email:
-                                                            <?php echo $result->email ?></span>
+                                                            <?php echo $result->emailCliente ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -78,7 +78,7 @@
                                                 <span>Telefone:
                                                     <?php echo $result->telefone ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email ?></span>
+                                                    <?php echo $result->emailUser ?></span>
                                             </li>
                                         </ul>
                                     </td>

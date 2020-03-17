@@ -79,7 +79,7 @@
                                                 <span>Telefone:
                                                     <?php echo $result->telefone ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email ?></span>
+                                                    <?php echo $result->emailUser ?></span>
                                             </li>
                                         </ul>
                                     </td>
