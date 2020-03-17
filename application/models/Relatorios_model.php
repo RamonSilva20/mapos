@@ -188,34 +188,46 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, array($dataInicial, $dataFinal))->result();
     }
 
-    public function financeiroCustom($dataInicial, $dataFinal, $tipo = null, $situacao = null)
+    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null)
     {
-
-        $whereTipo = "";
-        $whereSituacao = "";
-
-        if ($dataInicial == null) {
-            $dataInicial = date('Y-m-01');
+        
+        // Tratamento de datas 
+        if (($dataInicial == null) && ($dataFinal == null)){
+            // pra caso seja necessário personalizar quando for null em ambos os lados.
+        } elseif (($dataInicial != null) && ($dataFinal == null)) {
+            $sub_query[] = "data_vencimento >= '$dataInicial'";
+        } elseif (($dataInicial == null) && ($dataFinal != null)) {
+            $sub_query[] = "data_vencimento <=  '$dataFinal' ";
+        }else {
+            $sub_query[] = "data_vencimento BETWEEN '$dataInicial' and '$dataFinal' ";
         }
-        if ($dataFinal == null) {
-            $dataFinal = date("Y-m-t");
-        }
-
+        
         if ($tipo == 'receita') {
-            $whereTipo = "AND tipo = 'receita'";
+            $sub_query[] = "tipo = 'receita'";
         }
         if ($tipo == 'despesa') {
-            $whereTipo = "AND tipo = 'despesa'";
+            $sub_query[] = "tipo = 'despesa'";
         }
         if ($situacao == 'pendente') {
-            $whereSituacao = "AND baixado = 0";
+            $sub_query[] = "baixado = 0 ";
         }
         if ($situacao == 'pago') {
-            $whereSituacao = "AND baixado = 1";
+            $sub_query[] = "baixado = 1 ";
         }
 
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? $whereTipo $whereSituacao";
-        return $this->db->query($query, array($dataInicial, $dataFinal))->result();
+        // Montando a query
+        if(is_array($sub_query)){
+            $sub_query_data = 'where ';
+            foreach ($sub_query as $key => $value) {
+                $sub_query_data.= $value;
+                if($key != end(array_keys($sub_query))){
+                    $sub_query_data.= " AND ";
+                }
+            }
+        }
+
+        $query = "SELECT * FROM lancamentos $sub_query_data order by data_vencimento";        
+        return $this->db->query($query)->result();
     }
 
     public function vendasRapid()
