@@ -46,9 +46,9 @@ class Mine extends CI_Controller
             $this->db->where('email', $email);
             $this->db->where('documento', $documento);
             $this->db->limit(1);
-            $cliente = $this->db->get('clientes')->row();
-
-            if (count($cliente) > 0) {
+            $cliente = $this->db->get('clientes');
+            if($cliente->num_rows() > 0){
+                $cliente = $cliente->row();
                 $dados = array('nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true);
                 $this->session->set_userdata($dados);
 

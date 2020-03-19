@@ -48,7 +48,7 @@
 <?php echo $this->pagination->create_links(); ?>
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/email/excluir" method="post">
+    <form action="<?= site_url('mapos/excluirEmail') ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir Email da Lista</h5>

@@ -30,8 +30,8 @@
         </div>
 
         <div class="span3">
-            <input type="text" name="data" id="data" placeholder="Data Inicial" class="span6 datepicker" value="">
-            <input type="text" name="data2" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
+            <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="">
+            <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
         </div>
         <div class="span1">
             <button class="span12 btn"> <i class="fas fa-search"></i> </button>
@@ -50,12 +50,13 @@
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr style="background-color: #2D335B">
                         <th>N° OS</th>
                         <th>Cliente</th>
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
+                        <th>Venc. Garantia</th>
                         <th>Valor Total</th>
                         <th>Status</th>
                         <th>T. Garantia</th>
@@ -67,7 +68,7 @@
                         
                         if(!$results){
                             echo '<tr>
-                                    <td colspan="6">Nenhuma OS Cadastrada</td>
+                                    <td colspan="9">Nenhuma OS Cadastrada</td>
                                   </tr>';
                         }
                         foreach ($results as $r) {
@@ -103,19 +104,34 @@
                                     $cor = '#E0E4CC';
                                     break;
                             }
+                            if($r->garantia != null || $r->garantia != ""){
+                            // Criar o objeto representando a data
+                            $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
+                            $obj_data->setTime(0, 0, 0);
+
+                            // Realizar a soma de dias
+                            $intervalo = new DateInterval('P' . $r->garantia . 'D');
+                            $obj_data->add($intervalo);
+
+                            // Formatar a data obtida
+                            $vencGarantia = $obj_data->format('d/m/Y');
+                            }
+                    
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $r->nomeCliente . '</td>';
                             echo '<td>' . $r->nome . '</td>';
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $dataFinal . '</td>';
+                            echo '<td>' . (isset($vencGarantia) ? $vencGarantia : '') . '</td>';
                             echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                             echo '<td>' . $r->refGarantia . '</td>';
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>';
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Normal A4"><i class="fas fa-print"></i></a>';
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a>';
 
                                 $zapnumber = preg_replace("/[^0-9]/", "", $r->celular_cliente);
                                 echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $r->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $r->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($r->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $r->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';

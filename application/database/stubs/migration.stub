@@ -1,0 +1,27 @@
+<?php
+
+class Migration_{name} extends CI_Migration
+{
+    public function up()
+    {
+        $this->dbforge->add_field([
+            'id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'auto_increment' => true
+            ],
+            'text' => [
+                'type' => 'VARCHAR',
+                'constraint' => 20,
+                'null' => true
+            ],
+        ]);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('table');
+    }
+
+    public function down()
+    {
+        $this->dbforge->drop_table('table');
+    }
+}

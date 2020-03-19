@@ -131,7 +131,8 @@
                                             } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
                                             <a href="<?php echo base_url() ?>index.php/os/visualizar/<?php echo $result->idOs; ?>" class="btn btn-secondary"><i class="fas fa-eye"></i> Visualizar OS</a>
-                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
+                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
+                                            <a target="_blank" title="Imprimir" class="btn btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                                             <a title="Enviar por E-mail" class="btn btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                                                 $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
@@ -279,25 +280,17 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="span12" id="divAnexos" style="margin-left: 0">
+                                <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                    $cont = 1;
-                                    $flag = 5;
                                     foreach ($anexos as $a) {
                                         if ($a->thumb == null) {
                                             $thumb = base_url() . 'assets/img/icon-file.png';
                                             $link = base_url() . 'assets/img/icon-file.png';
                                         } else {
-                                            $thumb = base_url() . 'assets/anexos/thumbs/' . $a->thumb;
-                                            $link = $a->url . $a->anexo;
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url .'/'. $a->anexo;
                                         }
-                                        if ($cont == $flag) {
-                                            echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
-                                            $flag += 4;
-                                        } else {
-                                            echo '<div class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""><p align="center">' . $a->anexo . '</p></a></div>';
-                                        }
-                                        $cont++;
+                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
                                     } ?>
                                 </div>
                             </div>
@@ -651,6 +644,11 @@
             submitHandler: function(form) {
                 var quantidade = parseInt($("#quantidade").val());
                 var estoque = parseInt($("#estoque").val());
+                
+                <?php if(!$configuration['control_estoque']){ 
+                    echo 'estoque = 1000000';
+                }; ?>
+
                 if (estoque < quantidade) {
                     Swal.fire({
                         type: "error",

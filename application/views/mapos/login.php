@@ -2,27 +2,27 @@
 <html lang="pt-br">
 
 <head>
-    <title>MAP OS</title>
+    <title><?= $this->config->item('app_name') ?> </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <script src="<?php echo base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
+    <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
-    <div id="loginbox">
-        <form class="form-vertical" id="formLogin" method="post" action="<?php echo base_url() ?>index.php/mapos/verificarLogin">
+<div id="loginbox">
+        <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
             <?php if ($this->session->flashdata('error') != null) { ?>
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <?php echo $this->session->flashdata('error'); ?>
+                    <?= $this->session->flashdata('error'); ?>
                 </div>
             <?php } ?>
             <div class="control-group normal_text">
-                <h3><img src="<?php echo base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
+                <h3><img src="<?= base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
             </div>
             <div class="control-group">
                 <div class="controls">
@@ -47,8 +47,23 @@
         </form>
 
     </div>
-    <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/validate.js"></script>
+
+    <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel">MapOS</h4>
+        </div>
+        <div class="modal-body">
+            <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        </div>
+    </div>
+    
+    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?= base_url() ?>assets/js/validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -79,18 +94,19 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/mapos/verificarLogin?ajax=true",
+                        url: "<?= site_url('login/verificarLogin?ajax=true'); ?>",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                window.location.href = "<?php echo base_url(); ?>index.php/mapos";
+                                window.location.href = "<?= site_url('mapos'); ?>";
                             } else {
 
 
                                 $('#btn-acessar').removeClass('disabled');
                                 $('#progress-acessar').addClass('hide');
-
+                                
+                                $('#message').text(data.message || 'Os dados de acesso estão incorretos, por favor tente novamente!');
                                 $('#call-modal').trigger('click');
                             }
                         }
@@ -112,20 +128,6 @@
 
         });
     </script>
-
-    <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 id="myModalLabel">MapOS</h4>
-        </div>
-        <div class="modal-body">
-            <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-        </div>
-    </div>
 
 </body>
 

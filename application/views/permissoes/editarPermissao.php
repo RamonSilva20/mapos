@@ -402,6 +402,56 @@
 
                                     <td>
                                         <label>
+                                            <input <?php if (isset($permissoes['vPagamento'])) {
+                                                if ($permissoes['vPagamento'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="vPagamento" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Pagamento</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aPagamento'])) {
+                                                if ($permissoes['aPagamento'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="aPagamento" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Pagamento</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['ePagamento'])) {
+                                                if ($permissoes['ePagamento'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="ePagamento" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Pagamento</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dPagamento'])) {
+                                                if ($permissoes['dPagamento'] == '1') {
+                                                    echo 'checked';
+                                                }
+}?> name="dPagamento" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Pagamento</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
+
+                                <tr><td colspan="4"></td></tr>
+
+                                <tr>
+
+                                    <td>
+                                        <label>
                                             <input <?php if (isset($permissoes['vLancamento'])) {
                                                 if ($permissoes['vLancamento'] == '1') {
                                                     echo 'checked';
@@ -581,7 +631,13 @@
                                             <span class="lbl"> Emails</span>
                                         </label>
                                     </td>
-                                    <td colspan="2"></td>
+                                    <td>
+                                        <label>
+                                            <input <?php echo (isset($permissoes['cSistema']) && $permissoes['cSistema'] == 1 ) ? 'checked' : ''; ?> name="cSistema" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Sistema</span>
+                                        </label>
+                                    </td>
+                                    <td></td>
                                 </tr>
 
                             </tbody>
