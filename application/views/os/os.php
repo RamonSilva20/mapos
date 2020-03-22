@@ -104,17 +104,17 @@
                                     $cor = '#E0E4CC';
                                     break;
                             }
-                            if($r->garantia != null || $r->garantia != ""){
-                            // Criar o objeto representando a data
-                            $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
-                            $obj_data->setTime(0, 0, 0);
+                            if($r->garantia && is_numeric($r->garantia)){
+                                // Criar o objeto representando a data
+                                $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
+                                $obj_data->setTime(0, 0, 0);
 
-                            // Realizar a soma de dias
-                            $intervalo = new DateInterval('P' . $r->garantia . 'D');
-                            $obj_data->add($intervalo);
+                                // Realizar a soma de dias
+                                $intervalo = new DateInterval('P' . $r->garantia . 'D');
+                                $obj_data->add($intervalo);
 
-                            // Formatar a data obtida
-                            $vencGarantia = $obj_data->format('d/m/Y');
+                                // Formatar a data obtida
+                                $vencGarantia = $obj_data->format('d/m/Y');
                             }
                     
                             echo '<tr>';
