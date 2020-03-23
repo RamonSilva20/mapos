@@ -104,17 +104,19 @@
                                     $cor = '#E0E4CC';
                                     break;
                             }
-                            if($r->garantia != null || $r->garantia != ""){
-                            // Criar o objeto representando a data
-                            $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
-                            $obj_data->setTime(0, 0, 0);
+                            $vencGarantia = '';
 
-                            // Realizar a soma de dias
-                            $intervalo = new DateInterval('P' . $r->garantia . 'D');
-                            $obj_data->add($intervalo);
+                            if($r->garantia && is_numeric($r->garantia)){
+                                // Criar o objeto representando a data
+                                $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
+                                $obj_data->setTime(0, 0, 0);
 
-                            // Formatar a data obtida
-                            $vencGarantia = $obj_data->format('d/m/Y');
+                                // Realizar a soma de dias
+                                $intervalo = new DateInterval('P' . $r->garantia . 'D');
+                                $obj_data->add($intervalo);
+
+                                // Formatar a data obtida
+                                $vencGarantia = $obj_data->format('d/m/Y');
                             }
                     
                             echo '<tr>';
@@ -123,7 +125,7 @@
                             echo '<td>' . $r->nome . '</td>';
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $dataFinal . '</td>';
-                            echo '<td>' . (isset($vencGarantia) ? $vencGarantia : '') . '</td>';
+                            echo '<td>' . $vencGarantia. '</td>';
                             echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                             echo '<td>' . $r->refGarantia . '</td>';
