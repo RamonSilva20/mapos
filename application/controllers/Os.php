@@ -588,14 +588,14 @@ class Os extends MY_Controller
         if (!is_dir($directory . '/thumbs')) {
             // make directory for images and thumbs
             try {
-                mkdir($directory . '/thumbs', 0755, true);  
+                mkdir($directory . '/thumbs', 0755, true);
             }
             catch(Exception $e){
                 echo json_encode(array('result' => false, 'mensagem' => $e->getMessage()));
                 die();
             }
 
-        } 
+        }
 
         $upload_conf = array(
             'upload_path' => $directory,
