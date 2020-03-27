@@ -64,8 +64,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                        
+                    <?php
+
                         if(!$results){
                             echo '<tr>
                                     <td colspan="9">Nenhuma OS Cadastrada</td>
@@ -106,19 +106,10 @@
                             }
                             $vencGarantia = '';
 
-                            if($r->garantia && is_numeric($r->garantia)){
-                                // Criar o objeto representando a data
-                                $obj_data = DateTime::createFromFormat('d/m/Y', $dataFinal);
-                                $obj_data->setTime(0, 0, 0);
-
-                                // Realizar a soma de dias
-                                $intervalo = new DateInterval('P' . $r->garantia . 'D');
-                                $obj_data->add($intervalo);
-
-                                // Formatar a data obtida
-                                $vencGarantia = $obj_data->format('d/m/Y');
+                            if ($r->garantia && is_numeric($r->garantia)) {
+                                $vencGarantia = dateInterval($dataFinal, $r->garantia);
                             }
-                    
+
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $r->nomeCliente . '</td>';
