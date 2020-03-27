@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.1.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.1.2-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -47,7 +47,7 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 
 ### Requerimentos
-* PHP >= 5.6
+* PHP >= 7.2
 * MySQL
 * Composer
 
