@@ -4,7 +4,7 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.2.2] - 2020-03-26
+## [4.1.2] - 2020-03-26
 
 ### Fixed
 
