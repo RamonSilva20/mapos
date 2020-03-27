@@ -110,19 +110,7 @@ $totalProdutos = 0; ?>
                                                 <?php if ($result->status == 'Finalizado') { ?>
                                                     VENC. DA GARANTIA:
                                             </b>
-                                            <?php
-                                                    $data = date('d/m/Y', strtotime($result->dataFinal));
-
-                                                    // Criar o objeto representando a data
-                                                    $obj_data = DateTime::createFromFormat('d/m/Y', $data);
-                                                    $obj_data->setTime(0, 0, 0);
-
-                                                    // Realizar a soma de dias
-                                                    $intervalo = new DateInterval('P' . $result->garantia . 'D');
-                                                    $obj_data->add($intervalo);
-
-                                                    // Formatar a data obtida
-                                                    echo $obj_data->format('d/m/Y'); ?><?php } ?>
+                                            <?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
                                         </td>
                                         <?php if ($result->refGarantia != '') { ?>
                                             <td>
@@ -257,7 +245,7 @@ $totalProdutos = 0; ?>
                     echo '<form action="'.site_url().'" method="POST">
                             <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="'.$preference->id.'" data-button-label="Gerar Pagamento">
                             </script>
-                          </form>';
+                        </form>';
                 }
             }
         } ?>
