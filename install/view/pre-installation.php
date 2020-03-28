@@ -128,10 +128,10 @@
                   <i class="status fa fa-check-circle-o"></i>
                   <?php
                 } else {
-                  $all_requirement_success = false;
-                  ?>
+                    $all_requirement_success = false; ?>
                   <i class="status fa fa-times-circle-o"></i>
-                <?php } ?>
+                <?php
+                } ?>
               </td>
             </tr>
           <?php }; ?>
@@ -141,6 +141,8 @@
   </div>
 
   <div class="panel-footer">
-    <button <?php if (!$all_requirement_success) { echo "disabled=disabled" ; } ?> class="btn btn-info
+    <button <?php if (!$all_requirement_success) {
+                    echo "disabled=disabled" ;
+                } ?> class="btn btn-info
       form-next"><i class='fa fa-chevron-right'></i> Próximo</button>
     </div>

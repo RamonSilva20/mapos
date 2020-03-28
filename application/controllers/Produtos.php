@@ -27,7 +27,6 @@ class Produtos extends MY_Controller
 
     public function gerenciar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
             redirect(base_url());
@@ -48,7 +47,6 @@ class Produtos extends MY_Controller
 
     public function adicionar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar produtos.');
             redirect(base_url());
@@ -64,7 +62,7 @@ class Produtos extends MY_Controller
             $precoCompra = str_replace(",", "", $precoCompra);
             $precoVenda = $this->input->post('precoVenda');
             $precoVenda = str_replace(",", "", $precoVenda);
-            $data = array(
+            $data = [
                 'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => set_value('descricao'),
                 'unidade' => set_value('unidade'),
@@ -74,7 +72,7 @@ class Produtos extends MY_Controller
                 'estoqueMinimo' => set_value('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
-            );
+            ];
 
             if ($this->produtos_model->add('produtos', $data) == true) {
                 $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
@@ -90,7 +88,6 @@ class Produtos extends MY_Controller
 
     public function editar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -110,7 +107,7 @@ class Produtos extends MY_Controller
             $precoCompra = str_replace(",", "", $precoCompra);
             $precoVenda = $this->input->post('precoVenda');
             $precoVenda = str_replace(",", "", $precoVenda);
-            $data = array(
+            $data = [
                 'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => $this->input->post('descricao'),
                 'unidade' => $this->input->post('unidade'),
@@ -120,7 +117,7 @@ class Produtos extends MY_Controller
                 'estoqueMinimo' => $this->input->post('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
-            );
+            ];
 
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
@@ -139,7 +136,6 @@ class Produtos extends MY_Controller
 
     public function visualizar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -163,7 +159,6 @@ class Produtos extends MY_Controller
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir produtos.');
             redirect(base_url());
@@ -171,7 +166,6 @@ class Produtos extends MY_Controller
 
         $id = $this->input->post('id');
         if ($id == null) {
-
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
             redirect(base_url() . 'index.php/produtos/gerenciar/');
         }
@@ -211,5 +205,4 @@ class Produtos extends MY_Controller
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
         }
     }
-
 }

@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Arquivos extends MY_Controller
 {
@@ -23,7 +25,6 @@ class Arquivos extends MY_Controller
     }
     public function gerenciar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar arquivos.');
             redirect(base_url());
@@ -36,7 +37,6 @@ class Arquivos extends MY_Controller
         $ate = $this->input->get('data2');
 
         if ($pesquisa == null && $de == null && $ate == null) {
-
             $this->data['configuration']['base_url'] = site_url('arquivos/gerenciar');
             $this->data['configuration']['total_rows'] = $this->arquivos_model->count('documentos');
 
@@ -44,9 +44,7 @@ class Arquivos extends MY_Controller
 
             $this->data['results'] = $this->arquivos_model->get('documentos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
         } else {
-
             if ($de != null) {
-
                 $de = explode('/', $de);
                 $de = $de[2] . '-' . $de[1] . '-' . $de[0];
 
@@ -67,7 +65,6 @@ class Arquivos extends MY_Controller
 
     public function adicionar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar arquivos.');
             redirect(base_url());
@@ -81,7 +78,6 @@ class Arquivos extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
             $arquivo = $this->do_upload();
 
             $file = $arquivo['file_name'];
@@ -99,7 +95,7 @@ class Arquivos extends MY_Controller
                 $data = $data[2] . '-' . $data[1] . '-' . $data[0];
             }
 
-            $data = array(
+            $data = [
                 'documento' => $this->input->post('nome'),
                 'descricao' => $this->input->post('descricao'),
                 'file' => $file,
@@ -108,7 +104,7 @@ class Arquivos extends MY_Controller
                 'cadastro' => $data,
                 'tamanho' => $tamanho,
                 'tipo' => $tipo,
-            );
+            ];
 
             if ($this->arquivos_model->add('documentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Arquivo adicionado com sucesso!');
@@ -127,7 +123,6 @@ class Arquivos extends MY_Controller
 
     public function editar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -145,7 +140,6 @@ class Arquivos extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
             $data = $this->input->post('data');
             if ($data == null) {
                 $data = date('Y-m-d');
@@ -154,11 +148,11 @@ class Arquivos extends MY_Controller
                 $data = $data[2] . '-' . $data[1] . '-' . $data[0];
             }
 
-            $data = array(
+            $data = [
                 'documento' => $this->input->post('nome'),
                 'descricao' => $this->input->post('descricao'),
                 'cadastro' => $data,
-            );
+            ];
 
             if ($this->arquivos_model->edit('documentos', $data, 'idDocumentos', $this->input->post('idDocumentos')) == true) {
                 $this->session->set_flashdata('success', 'Alterações efetuadas com sucesso!');
@@ -176,7 +170,6 @@ class Arquivos extends MY_Controller
 
     public function download($id = null)
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar arquivos.');
             redirect(base_url());
@@ -210,12 +203,10 @@ class Arquivos extends MY_Controller
         $file = $this->arquivos_model->getById($id);
         $this->db->where('idDocumentos', $id);
         if ($this->db->delete('documentos')) {
-
             $path = $file->path;
             unlink($path);
             $this->session->set_flashdata('success', 'Arquivo excluido com sucesso!');
             log_info('Removeu um arquivo. ID: ' . $id);
-
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o arquivo.');
         }
@@ -224,7 +215,6 @@ class Arquivos extends MY_Controller
 
     public function do_upload()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar arquivos.');
             redirect(base_url());
@@ -240,14 +230,13 @@ class Arquivos extends MY_Controller
         $config['encrypt_name'] = true;
 
         if (!is_dir('./assets/arquivos/' . $date)) {
-
             mkdir('./assets/arquivos/' . $date, 0777, true);
         }
 
         $this->load->library('upload', $config);
 
         if (!$this->upload->do_upload()) {
-            $error = array('error' => $this->upload->display_errors());
+            $error = ['error' => $this->upload->display_errors()];
 
             $this->session->set_flashdata('error', 'Erro ao fazer upload do arquivo, verifique se a extensão do arquivo é permitida.');
             redirect(site_url('arquivos/adicionar'));

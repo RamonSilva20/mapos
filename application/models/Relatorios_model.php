@@ -15,7 +15,6 @@ class Relatorios_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
@@ -69,13 +68,12 @@ class Relatorios_model extends CI_Model
 
     public function clientesCustom($dataInicial = null, $dataFinal = null)
     {
-
         if ($dataInicial == null || $dataFinal == null) {
             $dataInicial = date('Y-m-d');
             $dataFinal = date('Y-m-d');
         }
         $query = "SELECT * FROM clientes WHERE dataCadastro BETWEEN ? AND ?";
-        return $this->db->query($query, array($dataInicial, $dataFinal))->result();
+        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
     public function clientesRapid()
@@ -111,7 +109,8 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query)->result();
     }
 
-    public function produtosEtiquetas($de,$ate){
+    public function produtosEtiquetas($de, $ate)
+    {
         $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN ".$this->db->escape($de)." AND ".$this->db->escape($ate)." ORDER BY idProdutos";
         
         return $this->db->query($query)->result();
@@ -126,12 +125,11 @@ class Relatorios_model extends CI_Model
     public function servicosCustom($precoInicial = null, $precoFinal = null)
     {
         $query = "SELECT * FROM servicos WHERE preco BETWEEN ? AND ?";
-        return $this->db->query($query, array($precoInicial, $precoFinal))->result();
+        return $this->db->query($query, [$precoInicial, $precoFinal])->result();
     }
 
     public function osRapid()
     {
-
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
 
@@ -141,8 +139,8 @@ class Relatorios_model extends CI_Model
         $this->db->select('os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->join('total_produtos', 'total_produtos.os_id = os.idOs','left');
-        $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs','left');
+        $this->db->join('total_produtos', 'total_produtos.os_id = os.idOs', 'left');
+        $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs', 'left');
         return $this->db->get()->result();
     }
 
@@ -181,16 +179,14 @@ class Relatorios_model extends CI_Model
 
     public function financeiroRapid()
     {
-
         $dataInicial = date('Y-m-01');
         $dataFinal = date("Y-m-t");
         $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? ORDER BY tipo";
-        return $this->db->query($query, array($dataInicial, $dataFinal))->result();
+        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
     public function financeiroCustom($dataInicial, $dataFinal, $tipo = null, $situacao = null)
     {
-
         $whereTipo = "";
         $whereSituacao = "";
 
@@ -215,7 +211,7 @@ class Relatorios_model extends CI_Model
         }
 
         $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? $whereTipo $whereSituacao";
-        return $this->db->query($query, array($dataInicial, $dataFinal))->result();
+        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
     public function vendasRapid()

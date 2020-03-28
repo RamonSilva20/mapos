@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['migration_none_found']           = "Nenhuma migração foi encontrada.";
