@@ -294,6 +294,7 @@ class Relatorios extends MY_Controller
         $situacao = $this->input->get('situacao');
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
+
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
         pdf_create($html, 'relatorio_financeiro' . date('d/m/y'), true);

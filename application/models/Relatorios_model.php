@@ -112,7 +112,7 @@ class Relatorios_model extends CI_Model
     public function produtosEtiquetas($de, $ate)
     {
         $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN ".$this->db->escape($de)." AND ".$this->db->escape($ate)." ORDER BY idProdutos";
-        
+
         return $this->db->query($query)->result();
     }
 
@@ -135,7 +135,7 @@ class Relatorios_model extends CI_Model
 
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_servicos SELECT SUM(subTotal) as total_servico, os_id FROM servicos_os GROUP BY os_id; ';
         $this->db->query($query);
-        
+
         $this->db->select('os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
@@ -185,33 +185,30 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
-    public function financeiroCustom($dataInicial, $dataFinal, $tipo = null, $situacao = null)
+    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null)
     {
-        $whereTipo = "";
-        $whereSituacao = "";
-
-        if ($dataInicial == null) {
-            $dataInicial = date('Y-m-01');
-        }
-        if ($dataFinal == null) {
-            $dataFinal = date("Y-m-t");
+        if ($dataInicial) {
+            $this->db->where('data_vencimento >=', $dataInicial);
         }
 
-        if ($tipo == 'receita') {
-            $whereTipo = "AND tipo = 'receita'";
-        }
-        if ($tipo == 'despesa') {
-            $whereTipo = "AND tipo = 'despesa'";
-        }
-        if ($situacao == 'pendente') {
-            $whereSituacao = "AND baixado = 0";
-        }
-        if ($situacao == 'pago') {
-            $whereSituacao = "AND baixado = 1";
+        if ($dataFinal) {
+            $this->db->where('data_vencimento <=', $dataFinal);
         }
 
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? $whereTipo $whereSituacao";
-        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
+        if ($tipo !== 'todos' && $tipo) {
+            $this->db->where('tipo', $tipo);
+        }
+
+        if ($situacao !== 'todos' && $tipo) {
+            if ($situacao === 'pendente') {
+                $this->db->where('baixado', 0);
+            }
+            if ($situacao === 'pago') {
+                $this->db->where('baixado', 1);
+            }
+        }
+
+        return $this->db->get('lancamentos')->result();
     }
 
     public function vendasRapid()
