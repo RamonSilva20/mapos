@@ -8,7 +8,8 @@
         "filp/whoops": "^2.7"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "^5.0"
     },
     "scripts": {
         "format": [
