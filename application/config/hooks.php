@@ -16,8 +16,16 @@
 $hook['display_override'][] = array(
 	'class' => '',
 	'function' => 'compress',
-  'filename' => 'compress.php',
+	'filename' => 'compress.php',
 	'filepath' => 'hooks'
+);
+
+$hook['pre_system'][] = array(
+	'class'    => 'WhoopsHook',
+	'function' => 'bootWhoops',
+	'filename' => 'whoops.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
 /* End of file hooks.php */
