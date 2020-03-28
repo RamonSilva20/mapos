@@ -199,7 +199,7 @@ class Relatorios_model extends CI_Model
             $this->db->where('tipo', $tipo);
         }
 
-        if ($situacao !== 'todos' && $tipo) {
+        if ($situacao !== 'todos' && $situacao) {
             if ($situacao === 'pendente') {
                 $this->db->where('baixado', 0);
             }
