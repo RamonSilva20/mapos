@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.2] - 2020-03-28
+
+### Fixed
+- Otimizado e flexibilizado relatório financeiro. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado função dump and die para faciltar desenvolvimento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado dependência de desenvolvimento dumper de Symfony. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.2.1] - 2020-03-28
 
 ### Fixed
