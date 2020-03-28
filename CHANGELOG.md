@@ -6,7 +6,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [4.2.1] - 2020-03-28
 
-### Added
+### Fixed
 - Reformatação do código utilizando linter PSR-2. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.2.0] - 2020-03-28
