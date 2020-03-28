@@ -9,8 +9,8 @@
                 <h5>Credencial de Pagamento</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePagamento')) {
-                        echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
-                    } ?>
+    echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
+} ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">

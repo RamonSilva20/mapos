@@ -12,7 +12,7 @@
 |
 */
 
-$platforms = array (
+$platforms = [
                     'windows nt 6.0'    => 'Windows Longhorn',
                     'windows nt 5.2'    => 'Windows 2003',
                     'windows nt 5.0'    => 'Windows 2000',
@@ -44,12 +44,12 @@ $platforms = array (
                     'openbsd'           => 'OpenBSD',
                     'gnu'               => 'GNU/Linux',
                     'unix'              => 'Unknown Unix OS'
-                );
+                ];
 
 
 // The order of this array should NOT be changed. Many browsers return
 // multiple browser types so we want to identify the sub-type first.
-$browsers = array(
+$browsers = [
                     'Flock'                 => 'Flock',
                     'Chrome'            => 'Chrome',
                     'Opera'                 => 'Opera',
@@ -72,9 +72,9 @@ $browsers = array(
                     'hotjava'           => 'HotJava',
                     'amaya'                 => 'Amaya',
                     'IBrowse'           => 'IBrowse'
-                );
+                ];
 
-$mobiles = array(
+$mobiles = [
                     // legacy array, old values commented out
                     'mobileexplorer'    => 'Mobile Explorer',
 //					'openwave'			=> 'Open Wave',
@@ -162,10 +162,10 @@ $mobiles = array(
                     'up.browser'            => "Generic Mobile",
                     'smartphone'            => "Generic Mobile",
                     'cellphone'                 => "Generic Mobile"
-                );
+                ];
 
 // There are hundreds of bots but these are the most common.
-$robots = array(
+$robots = [
                     'googlebot'             => 'Googlebot',
                     'msnbot'            => 'MSNBot',
                     'slurp'                 => 'Inktomi Slurp',
@@ -174,7 +174,7 @@ $robots = array(
                     'fastcrawler'       => 'FastCrawler',
                     'infoseek'          => 'InfoSeek Robot 1.0',
                     'lycos'                 => 'Lycos'
-                );
+                ];
 
 /* End of file user_agents.php */
 /* Location: ./application/config/user_agents.php */

@@ -24,22 +24,22 @@
                 <?php } ?>
 
                 <?php foreach ($results as $r) {
-                    $status = array(
+    $status = [
                         'pending' => '<span class="badge badge-default">Pendente</span>',
                         'sending' => '<span class="badge badge-info">Enviando</span>',
                         'sent' => '<span class="badge badge-success">Enviado</span>',
                         'failed' => '<span class="badge badge-warning">Falhou</span>',
-                    );
-                    echo '<tr>';
-                    echo '<td>' . $r->id . '</td>';
-                    echo '<td>' . $r->to . '</td>';
-                    echo '<td>' . $status[$r->status] . '</td>';
-                    echo '<td>' . date('d/m/Y H:i:s', strtotime($r->date)) . '</td>';
-                    echo '<td>';
-                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . $r->id . '" class="btn btn-danger tip-top" title="Excluir Item"><i class="fas fa-trash-alt"></i></a>  ';
-                    echo '</td>';
-                    echo '</tr>';
-                } ?>
+                    ];
+    echo '<tr>';
+    echo '<td>' . $r->id . '</td>';
+    echo '<td>' . $r->to . '</td>';
+    echo '<td>' . $status[$r->status] . '</td>';
+    echo '<td>' . date('d/m/Y H:i:s', strtotime($r->date)) . '</td>';
+    echo '<td>';
+    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . $r->id . '" class="btn btn-danger tip-top" title="Excluir Item"><i class="fas fa-trash-alt"></i></a>  ';
+    echo '</td>';
+    echo '</tr>';
+} ?>
 
             </tbody>
         </table>

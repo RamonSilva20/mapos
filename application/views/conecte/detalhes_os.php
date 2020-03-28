@@ -116,7 +116,6 @@
                                         <?php
                                         $total = 0;
                                         foreach ($produtos as $p) {
-
                                             $total = $total + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';
@@ -204,7 +203,6 @@
                                     $cont = 1;
                                     $flag = 5;
                                     foreach ($anexos as $a) {
-
                                         if ($a->thumb == null) {
                                             $thumb = base_url() . 'assets/img/icon-file.png';
                                             $link = base_url() . 'assets/img/icon-file.png';

@@ -2,7 +2,6 @@
 
 class Auditoria extends MY_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -13,12 +12,10 @@ class Auditoria extends MY_Controller
         }
         $this->load->model('Audit_model');
         $this->data['menuConfiguracoes'] = 'Auditoria';
-
     }
 
     public function index()
     {
-
         $this->load->library('pagination');
 
         $this->data['configuration']['base_url'] = site_url('auditoria/index/');
@@ -30,12 +27,10 @@ class Auditoria extends MY_Controller
 
         $this->data['view'] = 'auditoria/logs';
         return $this->layout();
-
     }
 
     public function clean()
     {
-
         if ($this->Audit_model->clean()) {
             log_info('Efetuou limpeza de logs');
             $this->session->set_flashdata('success', 'Limpeza de logs realizada com sucesso.');
@@ -44,7 +39,6 @@ class Auditoria extends MY_Controller
         }
         redirect(site_url('auditoria'));
     }
-
 }
 
 /* End of file Controllername.php */

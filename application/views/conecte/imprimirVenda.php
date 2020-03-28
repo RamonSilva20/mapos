@@ -90,7 +90,6 @@
                                     <?php
 
                                         foreach ($produtos as $p) {
-
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';

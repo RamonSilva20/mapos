@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Servicos extends MY_Controller
 {
@@ -25,7 +27,6 @@ class Servicos extends MY_Controller
 
     public function gerenciar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar serviços.');
             redirect(base_url());
@@ -60,11 +61,11 @@ class Servicos extends MY_Controller
             $preco = $this->input->post('preco');
             $preco = str_replace(",", "", $preco);
 
-            $data = array(
+            $data = [
                 'nome' => set_value('nome'),
                 'descricao' => set_value('descricao'),
                 'preco' => $preco,
-            );
+            ];
 
             if ($this->servicos_model->add('servicos', $data) == true) {
                 $this->session->set_flashdata('success', 'Serviço adicionado com sucesso!');
@@ -92,11 +93,11 @@ class Servicos extends MY_Controller
         } else {
             $preco = $this->input->post('preco');
             $preco = str_replace(",", "", $preco);
-            $data = array(
+            $data = [
                 'nome' => $this->input->post('nome'),
                 'descricao' => $this->input->post('descricao'),
                 'preco' => $preco,
-            );
+            ];
 
             if ($this->servicos_model->edit('servicos', $data, 'idServicos', $this->input->post('idServicos')) == true) {
                 $this->session->set_flashdata('success', 'Serviço editado com sucesso!');
@@ -115,7 +116,6 @@ class Servicos extends MY_Controller
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir serviços.');
             redirect(base_url());
@@ -123,7 +123,6 @@ class Servicos extends MY_Controller
 
         $id = $this->input->post('id');
         if ($id == null) {
-
             $this->session->set_flashdata('error', 'Erro ao tentar excluir serviço.');
             redirect(site_url('servicos/gerenciar/'));
         }

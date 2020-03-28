@@ -1,6 +1,7 @@
 <?php
 
-class WhoopsHook {
+class WhoopsHook
+{
     public function bootWhoops()
     {
         $whoops = new \Whoops\Run;

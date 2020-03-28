@@ -13,8 +13,8 @@
             </div>
             <div class="widget-content nopadding">
                 <?php if ($custom_error != '') {
-                    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                } ?>
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idClientes', $result->idClientes) ?>

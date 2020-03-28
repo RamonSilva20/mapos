@@ -20,14 +20,14 @@
             </thead>
             <tbody>
                 <?php foreach ($results as $r) {
-                    echo '<tr>';
-                    echo '<td>' . $r->usuario . '</td>';
-                    echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
-                    echo '<td>' . $r->hora . '</td>';
-                    echo '<td>' . $r->ip . '</td>';
-                    echo '<td>' . $r->tarefa . '</td>';
-                    echo '</tr>';
-                } ?>
+    echo '<tr>';
+    echo '<td>' . $r->usuario . '</td>';
+    echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
+    echo '<td>' . $r->hora . '</td>';
+    echo '<td>' . $r->ip . '</td>';
+    echo '<td>' . $r->tarefa . '</td>';
+    echo '</tr>';
+} ?>
                 <?php if (!$results) { ?>
                     <tr>
                         <td colspan="5">Nenhum registro encontrado.</td>

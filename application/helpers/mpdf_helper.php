@@ -1,10 +1,11 @@
-<?php if (!defined('BASEPATH'))  { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 function pdf_create($html, $filename, $stream = true, $landscape = false)
 {
-
     if ($landscape) {
         $mpdf = new \Mpdf\Mpdf(['c', 'A4-L', 'tempDir' => FCPATH.'assets/uploads/temp/']);
     } else {

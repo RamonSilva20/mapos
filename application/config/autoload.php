@@ -39,7 +39,7 @@
 |
 */
 
-$autoload['packages'] = array();
+$autoload['packages'] = [];
 
 
 /*
@@ -54,7 +54,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database','session','permission');
+$autoload['libraries'] = ['database','session','permission'];
 
 
 /*
@@ -66,7 +66,7 @@ $autoload['libraries'] = array('database','session','permission');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'audit', 'date');
+$autoload['helper'] = ['url', 'audit', 'date'];
 
 
 /*
@@ -82,7 +82,7 @@ $autoload['helper'] = array('url', 'audit', 'date');
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = [];
 
 
 /*
@@ -98,7 +98,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = [];
 
 
 /*
@@ -111,7 +111,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
+$autoload['model'] = [];
 
 
 /* End of file autoload.php */

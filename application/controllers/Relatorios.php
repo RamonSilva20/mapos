@@ -29,7 +29,6 @@ class Relatorios extends MY_Controller
 
     public function clientes()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de clientes.');
             redirect(base_url());
@@ -155,7 +154,6 @@ class Relatorios extends MY_Controller
 
     public function servicos()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de serviços.');
             redirect(base_url());
@@ -166,7 +164,6 @@ class Relatorios extends MY_Controller
 
     public function servicosCustom()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de serviços.');
             redirect(base_url());
@@ -261,7 +258,6 @@ class Relatorios extends MY_Controller
 
     public function financeiro()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios financeiros.');
             redirect(base_url());
@@ -287,7 +283,6 @@ class Relatorios extends MY_Controller
 
     public function financeiroCustom()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios financeiros.');
             redirect(base_url());

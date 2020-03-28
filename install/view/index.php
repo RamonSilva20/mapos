@@ -33,7 +33,7 @@
 
       <div class="panel-body no-padding">
 
-        <?php if(!$installed) : ?>
+        <?php if (!$installed) : ?>
           <div class="tab-container clearfix">
             <div id="pre-installation" class="tab-title col-sm-4 active">
               <i class="fa fa-circle-o"></i>
@@ -79,7 +79,7 @@
 
   <script type="text/javascript">
 
-    <?php if($installed) : ?>
+    <?php if ($installed) : ?>
       $("#pre-installation-tab").removeClass('active');
       $("#finished-tab").addClass('active');
     <?php endif; ?>

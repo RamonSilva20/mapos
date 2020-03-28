@@ -11,15 +11,14 @@ class Financeiro_model extends CI_Model
      *
      */
     
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
 
     
-    function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('data_vencimento', 'asc');
@@ -35,14 +34,14 @@ class Financeiro_model extends CI_Model
     }
 
 
-    function getById($id)
+    public function getById($id)
     {
         $this->db->where('idClientes', $id);
         $this->db->limit(1);
         return $this->db->get('clientes')->row();
     }
     
-    function add($table, $data)
+    public function add($table, $data)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
@@ -52,7 +51,7 @@ class Financeiro_model extends CI_Model
         return false;
     }
     
-    function edit($table, $data, $fieldID, $ID)
+    public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
@@ -64,7 +63,7 @@ class Financeiro_model extends CI_Model
         return false;
     }
     
-    function delete($table, $fieldID, $ID)
+    public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
@@ -75,9 +74,8 @@ class Financeiro_model extends CI_Model
         return false;
     }
 
-    function count($table, $where)
+    public function count($table, $where)
     {
-
         $this->db->from($table);
         if ($where) {
             $this->db->where($where);

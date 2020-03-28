@@ -11,15 +11,14 @@ class Garantias_model extends CI_Model
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
 
     
-    function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        
         $this->db->select($fields.', usuarios.nome, usuarios.idUsuarios');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
@@ -35,7 +34,7 @@ class Garantias_model extends CI_Model
         return $result;
     }
 
-    function getById($id)
+    public function getById($id)
     {
         $this->db->select('garantias.*, usuarios.telefone, usuarios.email, usuarios.nome');
         $this->db->from('garantias');
@@ -46,7 +45,7 @@ class Garantias_model extends CI_Model
     }
 
      
-    function add($table, $data, $returnId = false)
+    public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
@@ -59,7 +58,7 @@ class Garantias_model extends CI_Model
         return false;
     }
     
-    function edit($table, $data, $fieldID, $ID)
+    public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
@@ -71,7 +70,7 @@ class Garantias_model extends CI_Model
         return false;
     }
     
-    function delete($table, $fieldID, $ID)
+    public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
@@ -82,21 +81,20 @@ class Garantias_model extends CI_Model
         return false;
     }
 
-    function count($table)
+    public function count($table)
     {
         return $this->db->count_all($table);
     }
 
     public function autoCompleteProduto($q)
     {
-
         $this->db->select('*');
         $this->db->limit(5);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']);
+                $row_set[] = ['label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -104,14 +102,13 @@ class Garantias_model extends CI_Model
 
     public function autoCompleteCliente($q)
     {
-
         $this->db->select('*');
         $this->db->limit(5);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']);
+                $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
             }
             echo json_encode($row_set);
         }
@@ -119,7 +116,6 @@ class Garantias_model extends CI_Model
 
     public function autoCompleteUsuario($q)
     {
-
         $this->db->select('*');
         $this->db->limit(5);
         $this->db->like('nome', $q);
@@ -127,7 +123,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']);
+                $row_set[] = ['label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']];
             }
             echo json_encode($row_set);
         }

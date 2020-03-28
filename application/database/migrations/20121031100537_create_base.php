@@ -1380,7 +1380,6 @@ class Migration_create_base extends CI_Migration
         $this->dbforge->add_key("idPag", true);
         $this->dbforge->create_table("pagamento", true);
         $this->db->query('ALTER TABLE `pagamento` ENGINE = InnoDB');
-
     }
 
     public function down()

@@ -21,7 +21,6 @@ desktop.ini
 application/vendor/
 vendor/
 .idea/
-.php_cs
 .php_cs.cache
 application/logs/*
 ci_sessions/
