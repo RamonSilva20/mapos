@@ -45,7 +45,6 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * [jquery/jquery-ui](https://github.com/jquery/jquery-ui)
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
-* []
 * [filp/whoops](https://github.com/filp/whoops)
 
 ### Requerimentos
