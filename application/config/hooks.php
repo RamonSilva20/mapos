@@ -28,5 +28,6 @@ $hook['pre_system'][] = [
     'params'   => []
 ];
 
+
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
