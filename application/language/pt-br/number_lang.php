@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['terabyte_abbr'] = "TB";

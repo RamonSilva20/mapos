@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['imglib_source_image_required'] = "Você deve especificar a fonte da imagem em suas preferências.";

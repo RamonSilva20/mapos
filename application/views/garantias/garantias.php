@@ -22,8 +22,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                    if(!$results){
+                <?php
+                    if (!$results) {
                         echo '<tr>
                                 <td colspan="6">Nenhum Termo de Garantia Cadastrada</td>
                                 </tr>';

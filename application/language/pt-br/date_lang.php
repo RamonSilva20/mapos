@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['date_year'] = "Ano";

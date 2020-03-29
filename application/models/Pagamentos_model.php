@@ -11,15 +11,14 @@ class Pagamentos_model extends CI_Model
      *
      */
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
 
     
-    function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        
         $this->db->select($fields.', pagamento.nome, pagamento.idPag');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
@@ -34,7 +33,7 @@ class Pagamentos_model extends CI_Model
         return $result;
     }
 
-    function getById($id)
+    public function getById($id)
     {
         $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret, pagamento.default_pag');
         $this->db->from('pagamento');
@@ -43,7 +42,7 @@ class Pagamentos_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function getPagamentos()
+    public function getPagamentos()
     {
         $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret');
         $this->db->from('pagamento');
@@ -51,7 +50,7 @@ class Pagamentos_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function duplicadoPagDefault()
+    public function duplicadoPagDefault()
     {
         $this->db->select('pagamento.idPag, pagamento.nome, pagamento.public_key, pagamento.access_token, pagamento.client_id, pagamento.client_secret, pagamento.default_pag');
         $this->db->from('pagamento');
@@ -59,11 +58,10 @@ class Pagamentos_model extends CI_Model
         
         $json = json_encode($this->db->get()->row());
         return json_decode($json);
-      
     }
 
      
-    function add($table, $data, $returnId = false)
+    public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
@@ -76,9 +74,9 @@ class Pagamentos_model extends CI_Model
         return false;
     }
     
-    function edit($table, $data, $fieldID, $ID)
+    public function edit($table, $data, $fieldID, $ID)
     {
-        if($data['default_pag']){
+        if ($data['default_pag']) {
             $this->db->set('default_pag', 0);
             $this->db->update($table);
         }
@@ -93,7 +91,7 @@ class Pagamentos_model extends CI_Model
         return false;
     }
     
-    function delete($table, $fieldID, $ID)
+    public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
@@ -104,12 +102,10 @@ class Pagamentos_model extends CI_Model
         return false;
     }
 
-    function count($table)
+    public function count($table)
     {
         return $this->db->count_all($table);
     }
-
-  
 }
 
 /* End of file vendas_model.php */

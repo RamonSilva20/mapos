@@ -53,7 +53,6 @@
                                 <option value="todos">Todos</option>
                                 <option value="pago">Pago</option>
                                 <option value="pendente">Pendente</option>
-
                             </select>
                         </div>
 

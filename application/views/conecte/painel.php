@@ -35,8 +35,6 @@
                     <?php
                     if ($os != null) {
                         foreach ($os as $o) {
-
-
                             echo '<tr>';
                             echo '<td>' . $o->idOs . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';

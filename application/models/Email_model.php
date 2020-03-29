@@ -15,7 +15,6 @@ class Email_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('id', 'desc');

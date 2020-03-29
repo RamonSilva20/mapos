@@ -4,7 +4,7 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.1.0';
+$config['app_version'] = '4.2.2';
 
 /**
  * Nome do sistema
@@ -172,7 +172,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = TRUE;
+$config['composer_autoload'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -348,7 +348,7 @@ $config['cache_path'] = '';
 |	             of query parameters.
 |
 */
-$config['cache_query_string'] = FALSE;
+$config['cache_query_string'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -437,11 +437,11 @@ $config['sess_regenerate_destroy'] = false;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']    = '';
-$config['cookie_domain']    = '';
-$config['cookie_path']      = '/';
-$config['cookie_secure']    = false;
-$config['cookie_httponly']  = false;
+$config['cookie_prefix']	= '';
+$config['cookie_domain']	= '';
+$config['cookie_path']		= '/';
+$config['cookie_secure']	= false;
+$config['cookie_httponly'] 	= false;
 
 /*
 |--------------------------------------------------------------------------
@@ -490,7 +490,7 @@ $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = true;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_exclude_uris'] = [];
 
 /*
 |--------------------------------------------------------------------------

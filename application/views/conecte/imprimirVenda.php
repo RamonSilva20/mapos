@@ -63,7 +63,7 @@
                                                 </span>
                                                 <span><?php echo $result->nome ?></span> <br />
                                                 <span>Telefone: <?php echo $result->telefone ?></span><br />
-                                                <span>Email: <?php echo $result->email ?></span>
+                                                <span>Email: <?php echo $result->email_user ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -90,7 +90,6 @@
                                     <?php
 
                                         foreach ($produtos as $p) {
-
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';

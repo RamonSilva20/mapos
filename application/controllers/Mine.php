@@ -1,18 +1,17 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Mine extends CI_Controller
 {
-
     public function __construct()
     {
-
         parent::__construct();
         $this->load->model('Conecte_model');
     }
 
     public function index()
     {
-
         $this->load->view('conecte/login');
     }
 
@@ -24,22 +23,19 @@ class Mine extends CI_Controller
 
     public function login()
     {
-
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'Email', 'valid_email|required|trim');
         $this->form_validation->set_rules('documento', 'Documento', 'required|trim');
         $ajax = $this->input->get('ajax');
         if ($this->form_validation->run() == false) {
-
             if ($ajax == true) {
-                $json = array('result' => false);
+                $json = ['result' => false];
                 echo json_encode($json);
             } else {
                 $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
                 redirect('mine');
             }
         } else {
-
             $email = $this->input->post('email');
             $documento = $this->input->post('documento');
 
@@ -47,21 +43,20 @@ class Mine extends CI_Controller
             $this->db->where('documento', $documento);
             $this->db->limit(1);
             $cliente = $this->db->get('clientes');
-            if($cliente->num_rows() > 0){
+            if ($cliente->num_rows() > 0) {
                 $cliente = $cliente->row();
-                $dados = array('nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true);
+                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true];
                 $this->session->set_userdata($dados);
 
                 if ($ajax == true) {
-                    $json = array('result' => true);
+                    $json = ['result' => true];
                     echo json_encode($json);
                 } else {
                     redirect(site_url() . '/mine');
                 }
             } else {
-
                 if ($ajax == true) {
-                    $json = array('result' => false);
+                    $json = ['result' => false];
                     echo json_encode($json);
                 } else {
                     $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
@@ -73,7 +68,6 @@ class Mine extends CI_Controller
 
     public function painel()
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -87,7 +81,6 @@ class Mine extends CI_Controller
 
     public function conta()
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -101,7 +94,6 @@ class Mine extends CI_Controller
 
     public function editarDados($id = null)
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -114,7 +106,7 @@ class Mine extends CI_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = array(
+            $data = [
                 'nomeCliente' => $this->input->post('nomeCliente'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
@@ -126,12 +118,13 @@ class Mine extends CI_Controller
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
-            );
+            ];
 
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
                 redirect(base_url() . 'index.php/mine/conta');
-            } else {}
+            } else {
+            }
         }
 
         $data['result'] = $this->Conecte_model->getDados();
@@ -142,7 +135,6 @@ class Mine extends CI_Controller
 
     public function compras()
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -182,7 +174,6 @@ class Mine extends CI_Controller
 
     public function os()
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -222,7 +213,6 @@ class Mine extends CI_Controller
 
     public function visualizarOs($id = null)
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -247,7 +237,6 @@ class Mine extends CI_Controller
 
     public function imprimirOs($id = null)
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -271,7 +260,6 @@ class Mine extends CI_Controller
 
     public function visualizarCompra($id = null)
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -295,7 +283,6 @@ class Mine extends CI_Controller
 
     public function imprimirCompra($id = null)
     {
-
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
@@ -318,7 +305,6 @@ class Mine extends CI_Controller
 
     public function minha_ordem_de_servico($y = null, $when = null)
     {
-
         if (($y != null) && (is_numeric($y))) {
 
             // Do not forget this number -> 44023
@@ -338,9 +324,7 @@ class Mine extends CI_Controller
             if ($data['result'] == null) {
                 // Resposta em caso de não encontrar a ordem de serviço
                 //$this->load->view('conecte/login');
-
             } else {
-
                 $data['produtos'] = $this->os_model->getProdutos($id);
                 $data['servicos'] = $this->os_model->getServicos($id);
                 $data['emitente'] = $this->mapos_model->getEmitente();
@@ -356,7 +340,6 @@ class Mine extends CI_Controller
     // Cadastro de OS pelo cliente
     public function adicionarOs()
     {
-
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('descricaoProduto', 'Descrição', 'required');
@@ -366,7 +349,6 @@ class Mine extends CI_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
-
             $id = null;
             $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
             if ($usuario->usuarios_id == null) {
@@ -384,7 +366,7 @@ class Mine extends CI_Controller
                 $id = $usuario->usuarios_id;
             }
 
-            $data = array(
+            $data = [
                 'dataInicial' => date('Y-m-d'),
                 'clientes_id' => $this->session->userdata('cliente_id'), //set_value('idCliente'),
                 'usuarios_id' => $id, //set_value('idUsuario'),
@@ -394,13 +376,12 @@ class Mine extends CI_Controller
                 'status' => 'Aberto',
                 'observacoes' => set_value('observacoes'),
                 'faturado' => 0,
-            );
+            ];
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
                 redirect('mine/detalhesOs/' . $id);
             } else {
-
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
@@ -412,7 +393,6 @@ class Mine extends CI_Controller
     public function detalhesOs($id = null)
     {
         if (is_numeric($id) && $id != null) {
-
             $this->load->model('mapos_model');
             $this->load->model('os_model');
 
@@ -436,7 +416,6 @@ class Mine extends CI_Controller
     // método para clientes se cadastratem
     public function cadastrar()
     {
-
         $this->load->model('clientes_model', '', true);
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
@@ -444,7 +423,7 @@ class Mine extends CI_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = array(
+            $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
@@ -457,7 +436,7 @@ class Mine extends CI_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-            );
+            ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
                 $this->session->set_flashdata('success', 'Cadastro realizado com sucesso!');

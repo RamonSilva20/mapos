@@ -15,7 +15,6 @@ class Mapos_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
@@ -53,7 +52,7 @@ class Mapos_model extends CI_Model
 
     public function pesquisar($termo)
     {
-        $data = array();
+        $data = [];
         // buscando clientes
         $this->db->like('nomeCliente', $termo);
         $this->db->limit(5);
@@ -137,7 +136,6 @@ class Mapos_model extends CI_Model
 
     public function getProdutosMinimo()
     {
-
         $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10";
         return $this->db->query($sql)->result();
     }
@@ -164,7 +162,6 @@ class Mapos_model extends CI_Model
 
     public function addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo)
     {
-
         $this->db->set('nome', $nome);
         $this->db->set('cnpj', $cnpj);
         $this->db->set('ie', $ie);
@@ -181,7 +178,6 @@ class Mapos_model extends CI_Model
 
     public function editEmitente($id, $nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email)
     {
-
         $this->db->set('nome', $nome);
         $this->db->set('cnpj', $cnpj);
         $this->db->set('ie', $ie);
@@ -198,7 +194,6 @@ class Mapos_model extends CI_Model
 
     public function editLogo($id, $logo)
     {
-
         $this->db->set('url_logo', $logo);
         $this->db->where('id', $id);
         return $this->db->update('emitente');
@@ -221,12 +216,10 @@ class Mapos_model extends CI_Model
     {
         try {
             foreach ($data as $key => $valor) {
-
                 $this->db->set('valor', $valor);
                 $this->db->where('config', $key);
                 $this->db->update('configuracoes');
             }
-
         } catch (Exception $e) {
             return false;
         }

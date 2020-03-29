@@ -9,7 +9,7 @@
  * @author      Thaynã Bruno Moretti
  * @link    http://www.meau.com.br/
  * @license http://www.opensource.org/licenses/mit-license.html
- * 
+ *
  * Updated by @RamonSilva for Map-OS
  */
 class MY_Email extends CI_Email
@@ -30,7 +30,7 @@ class MY_Email extends CI_Email
     /**
      * Constructor
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         parent::__construct($config);
 
@@ -83,7 +83,7 @@ class MY_Email extends CI_Email
         $cc = implode(", ", $this->_cc_array);
         $bcc = implode(", ", $this->_bcc_array);
 
-        $dbdata = array(
+        $dbdata = [
             'to' => $to,
             'cc' => $cc,
             'bcc' => $bcc,
@@ -91,7 +91,7 @@ class MY_Email extends CI_Email
             'headers' => serialize($this->_headers),
             'status' => 'pending',
             'date' => $date,
-        );
+        ];
 
         return $this->CI->db->insert($this->table_email_queue, $dbdata);
     }
@@ -129,8 +129,8 @@ class MY_Email extends CI_Email
         foreach ($emails as $email) {
             $recipients = explode(", ", $email->to);
 
-            $cc = !empty($email->cc) ? explode(", ", $email->cc) : array();
-            $bcc = !empty($email->bcc) ? explode(", ", $email->bcc) : array();
+            $cc = !empty($email->cc) ? explode(", ", $email->cc) : [];
+            $bcc = !empty($email->bcc) ? explode(", ", $email->bcc) : [];
 
             $this->_headers = unserialize($email->headers);
 

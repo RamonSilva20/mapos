@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Audit_model extends CI_Model
 {
@@ -9,7 +11,6 @@ class Audit_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('idLogs', 'desc');
@@ -40,7 +41,6 @@ class Audit_model extends CI_Model
 
     public function clean()
     {
-        
         $this->db->where('data <', date('Y-m-d', strtotime('- 30 days')));
         $this->db->delete('logs');
 
@@ -49,7 +49,6 @@ class Audit_model extends CI_Model
         }
 
         return false;
-        
     }
 }
 
