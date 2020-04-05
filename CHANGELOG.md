@@ -9,7 +9,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Implementado docker e docker-compose. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-## Changed
+### Changed
 - Removido verificação de timezone em instalação. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.2.2] - 2020-03-28
@@ -70,7 +70,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigido valor de `dataCadastro` incorreta em admin criado inicialmente [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Corrigido erro no relatório de clientes com datas não preenchidas. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-## Changed
+### Changed
 - Banco de dados agora será gerenciado com migrations pela biblioteca do CodeIgniter, onde o último arquivo de atualização manual é o `update_3.15.0_to_4.0.0.sql`. Ainda será necessário atualizar sempre o arquivo `banco.sql` com as novas tabelas para que o script de instalação continue funcionando [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Ativado Logs para permitir melhor debug. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
