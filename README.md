@@ -48,6 +48,7 @@ URL: http://localhost:8000/
 6. Configure o email de envio no arquivo email.php.
 
     ##### Obs: Cuide da pasta `docker/data`, onde é pasta que o mysql do docker salva os arquivos. Se for deletada você perderá seu banco de dados.
+    ##### Obs2: O PhpMyAdmin também e instalado e pode ser acessado em `http://localhost:8080/`.
 
 ### Atualização
 
