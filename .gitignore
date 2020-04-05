@@ -2,6 +2,7 @@
 
 # production
 /install/files
+/docker/data
 
 # misc
 .DS_Store
