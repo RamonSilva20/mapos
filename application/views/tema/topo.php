@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/matrix-media.css" />
   <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/fullcalendar.css" />
-  <?php if($configuration['app_theme'] == 'white') { ?>
+  <?php if ($configuration['app_theme'] == 'white') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema.css" />
   <?php } ?>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 $lang['required']           = "O campo %s é obrigatório.";
 $lang['isset']              = "O campo %s deve ter um valor.";

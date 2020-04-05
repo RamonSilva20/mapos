@@ -150,10 +150,10 @@
                                     </td>
 
                                     <td><?php if ($o->dataFinal != null) {
-                                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                                } else {
-                                                    echo "";
-                                                } ?></td>
+    echo date('d/m/Y', strtotime($o->dataFinal));
+} else {
+    echo "";
+} ?></td>
 
                                     <td>
                                         <?= $o->nomeCliente ?>
@@ -352,8 +352,8 @@
         $(document).ready(function() {
             var data = [
                 <?php foreach ($os as $o) {
-                        echo "['" . $o->status . "', " . $o->total . "],";
-                    } ?>
+    echo "['" . $o->status . "', " . $o->total . "],";
+} ?>
 
             ];
             var plot1 = jQuery.jqplot('chart-os', [data], {
@@ -437,8 +437,8 @@
 
 
                 var data4 = [
-                    ['Total em Caixa', <?php echo ($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
-                    ['Total a Entrar', <?php echo ($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
+                    ['Total em Caixa', <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
+                    ['Total a Entrar', <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
                 ];
                 var plot4 = jQuery.jqplot('chart-financeiro-caixa', [data4], {
 

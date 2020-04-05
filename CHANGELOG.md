@@ -4,6 +4,24 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.2] - 2020-03-28
+
+### Fixed
+- Otimizado e flexibilizado relatório financeiro. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado função dump and die para faciltar desenvolvimento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado dependência de desenvolvimento dumper de Symfony. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.2.1] - 2020-03-28
+
+### Fixed
+- Reformatação do código utilizando linter PSR-2. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.2.0] - 2020-03-28
+
+### Added
+- Implementado gestor de erros Whoops, que exibe páginas de erros formatadas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Atualizado bibliotecas do composer. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.1.2] - 2020-03-26
 
 ### Fixed

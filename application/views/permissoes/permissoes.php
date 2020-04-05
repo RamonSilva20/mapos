@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 
                     if (!$results) {
                         echo '<tr>

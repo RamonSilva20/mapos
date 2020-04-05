@@ -37,7 +37,6 @@
                             <tbody>
                                 <?php
                                         foreach ($vendas as $c) {
-
                                             echo '<tr>';
                                             echo '<td>' . $c->nomeCliente . '</td>';
                                             echo '<td>' . $c->valorTotal . '</td>';

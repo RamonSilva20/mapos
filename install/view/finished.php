@@ -1,7 +1,7 @@
 <div class="section text-center">
   <div class="clearfix">
 
-    <?php if(!$installed) : ?>
+    <?php if (!$installed) : ?>
 
       <i class="status fa fa-check-circle-o" style="font-size: 50px;"></i>
       <br />

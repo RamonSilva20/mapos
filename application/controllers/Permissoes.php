@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Permissoes extends MY_Controller
 {
@@ -18,7 +20,7 @@ class Permissoes extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->helper(array('form', 'codegen_helper'));
+        $this->load->helper(['form', 'codegen_helper']);
         $this->load->model('permissoes_model');
         $this->data['menuConfiguracoes'] = 'Permissões';
     }
@@ -30,7 +32,6 @@ class Permissoes extends MY_Controller
 
     public function gerenciar()
     {
-
         $this->load->library('pagination');
 
         $this->data['configuration']['base_url'] = site_url('permissoes/gerenciar/');
@@ -46,7 +47,6 @@ class Permissoes extends MY_Controller
 
     public function adicionar()
     {
-
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
@@ -54,12 +54,11 @@ class Permissoes extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
             $nomePermissao = $this->input->post('nome');
             $cadastro = date('Y-m-d');
             $situacao = 1;
 
-            $permissoes = array(
+            $permissoes = [
 
                 'aCliente' => $this->input->post('aCliente'),
                 'eCliente' => $this->input->post('eCliente'),
@@ -121,18 +120,17 @@ class Permissoes extends MY_Controller
                 'rVenda' => $this->input->post('rVenda'),
                 'rFinanceiro' => $this->input->post('rFinanceiro'),
 
-            );
+            ];
             $permissoes = serialize($permissoes);
 
-            $data = array(
+            $data = [
                 'nome' => $nomePermissao,
                 'data' => $cadastro,
                 'permissoes' => $permissoes,
                 'situacao' => $situacao,
-            );
+            ];
 
             if ($this->permissoes_model->add('permissoes', $data) == true) {
-
                 $this->session->set_flashdata('success', 'Permissão adicionada com sucesso!');
                 log_info('Adicionou uma permissão');
                 redirect(site_url('permissoes/adicionar/'));
@@ -147,7 +145,6 @@ class Permissoes extends MY_Controller
 
     public function editar()
     {
-
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
@@ -155,10 +152,9 @@ class Permissoes extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
             $nomePermissao = $this->input->post('nome');
             $situacao = $this->input->post('situacao');
-            $permissoes = array(
+            $permissoes = [
 
                 'aCliente' => $this->input->post('aCliente'),
                 'eCliente' => $this->input->post('eCliente'),
@@ -220,14 +216,14 @@ class Permissoes extends MY_Controller
                 'rVenda' => $this->input->post('rVenda'),
                 'rFinanceiro' => $this->input->post('rFinanceiro'),
 
-            );
+            ];
             $permissoes = serialize($permissoes);
 
-            $data = array(
+            $data = [
                 'nome' => $nomePermissao,
                 'permissoes' => $permissoes,
                 'situacao' => $situacao,
-            );
+            ];
 
             if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
                 $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
@@ -246,15 +242,14 @@ class Permissoes extends MY_Controller
 
     public function desativar()
     {
-
         $id = $this->input->post('id');
         if (!$id) {
             $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
             redirect(site_url('permissoes/gerenciar/'));
         }
-        $data = array(
+        $data = [
             'situacao' => false,
-        );
+        ];
         if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $id)) {
             log_info('Desativou uma permissão. ID: ' . $id);
             $this->session->set_flashdata('success', 'Permissão desativada com sucesso!');

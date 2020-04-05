@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['ftp_no_connection']          = "Não foi possível localizar um ID de conexão válido. Por favor tenha certeza que você está conectado antes de executar qualquer arquivo de rotina.";

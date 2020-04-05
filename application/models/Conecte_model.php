@@ -11,7 +11,7 @@ class Conecte_model extends CI_Model
      *
      */
     
-    function add($table, $data, $returnId = false)
+    public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
@@ -26,7 +26,6 @@ class Conecte_model extends CI_Model
 
     public function getLastOs($cliente)
     {
-        
         $this->db->where('clientes_id', $cliente);
         $this->db->limit(5);
 
@@ -35,7 +34,6 @@ class Conecte_model extends CI_Model
 
     public function getLastCompras($cliente)
     {
-        
         $this->db->select('vendas.*,usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
@@ -48,7 +46,6 @@ class Conecte_model extends CI_Model
 
     public function getCompras($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
     {
-        
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'vendas.usuarios_id = usuarios.idUsuarios', 'left');
@@ -67,7 +64,6 @@ class Conecte_model extends CI_Model
 
     public function getOs($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
     {
-        
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
@@ -92,14 +88,13 @@ class Conecte_model extends CI_Model
 
     public function getDados()
     {
-        
         $this->db->where('idclientes', $this->session->userdata('cliente_id'));
         $this->db->limit(1);
         return $this->db->get('clientes')->row();
     }
 
 
-    function edit($table, $data, $fieldID, $ID)
+    public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);

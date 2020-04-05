@@ -66,7 +66,7 @@
                 <tbody>
                     <?php
 
-                        if(!$results){
+                        if (!$results) {
                             echo '<tr>
                                     <td colspan="9">Nenhuma OS Cadastrada</td>
                                   </tr>';
