@@ -24,3 +24,5 @@ vendor/
 .php_cs.cache
 application/logs/*
 ci_sessions/
+
+uploads
