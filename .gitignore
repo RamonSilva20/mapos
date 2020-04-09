@@ -2,6 +2,7 @@
 
 # production
 /install/files
+/docker/data
 
 # misc
 .DS_Store
@@ -24,3 +25,5 @@ vendor/
 .php_cs.cache
 application/logs/*
 ci_sessions/
+
+uploads
