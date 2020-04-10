@@ -6,7 +6,8 @@ class Github_updater
 {
     const API_URL = 'https://api.github.com/repos/';
     const GITHUB_URL = 'https://github.com/';
-    const CONFIG_FILE = 'application/config/github_updater.php';
+    const GITHUB_UPDATER_CONFIG_FILE = 'application/config/github_updater.php';
+    const CONFIG_FILE = 'application/config/config.php';
 
     public function __construct()
     {
@@ -72,6 +73,7 @@ class Github_updater
     public function update()
     {
         $hash = $this->getCurrentCommitHash();
+        $currentVersion = $this->getCurrentVersion();
 
         if ($hash !== $this->ci->config->item('current_commit')) {
             $commits = json_decode($this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/compare/'.$this->ci->config->item('current_commit').'...'.$hash));
@@ -104,7 +106,10 @@ class Github_updater
                 }
 
                 // Update the current commit hash
-                $this->_set_config_hash($hash);
+                $this->_set_github_updater_config_hash($hash);
+
+                // Update the mapos version in the config filename
+                $this->_set_config_app_version($currentVersion);
 
                 return true;
             }
@@ -126,9 +131,9 @@ class Github_updater
         return false;
     }
 
-    private function _set_config_hash($hash)
+    private function _set_github_updater_config_hash($hash)
     {
-        $lines = file(self::CONFIG_FILE, FILE_IGNORE_NEW_LINES);
+        $lines = file(self::GITHUB_UPDATER_CONFIG_FILE, FILE_IGNORE_NEW_LINES);
         $count = count($lines);
 
         for ($i=0; $i < $count; $i++) {
@@ -136,6 +141,28 @@ class Github_updater
 
             if (strstr($lines[$i], $configline)) {
                 $lines[$i] = $configline.' = \''.$hash.'\';';
+                $file = implode(PHP_EOL, $lines);
+                $handle = @fopen(self::GITHUB_UPDATER_CONFIG_FILE, 'w');
+                fwrite($handle, $file);
+                fclose($handle);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function _set_config_app_version($version)
+    {
+        $lines = file(self::CONFIG_FILE, FILE_IGNORE_NEW_LINES);
+        $count = count($lines);
+
+        for ($i=0; $i < $count; $i++) {
+            $configline = '$config[\'app_version\']';
+
+            if (strstr($lines[$i], $configline)) {
+                $lines[$i] = $configline.' = \''.$version.'\';';
                 $file = implode(PHP_EOL, $lines);
                 $handle = @fopen(self::CONFIG_FILE, 'w');
                 fwrite($handle, $file);
@@ -207,6 +234,26 @@ class Github_updater
         }
 
         return $branchToUpdateFrom->commit->sha;
+    }
+
+    /**
+    * Get mapos current version.
+    *
+    * @return string Mapos current version.
+    */
+    private function getCurrentVersion()
+    {
+        $latestRelease = json_decode(
+            $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/releases/latest')
+        );
+
+        $version = $latestRelease->name;
+
+        if (!$version) {
+            throw new Exception('Error getting mapos version from GitHub!');
+        }
+
+        return str_replace("v", "", $version);
     }
 
     /**
