@@ -69,6 +69,12 @@ URL: http://localhost:8000/
 6. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
 7. Pronto, sua atualização está concluída;
 
+### Atualização via sistema
+
+1. Primeiro é necessário atualizar manualmente o sistema para a versão v4.4.0;
+2. Quando estiver nessa versão é possível atualizar o sistema clicando no botão "Atualizar Mapos" em Sistema >> Configurações;
+3. Serão baixados e atualizados todos os arquivos exceto: `config.php`, `database.php` e `email.php`;
+
 ### Comandos de terminal
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.
