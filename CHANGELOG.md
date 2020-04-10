@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2020-05-10
+
+### Added
+- Implementado atualizador automático via GitHub. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.3] - 2020-04-05
 
 ### Added

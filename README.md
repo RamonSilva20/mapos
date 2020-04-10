@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.3-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.4.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -68,6 +68,12 @@ URL: http://localhost:8000/
 5. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
 6. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
 7. Pronto, sua atualização está concluída;
+
+### Atualização via sistema
+
+1. Primeiro é necessário atualizar manualmente o sistema para a versão v4.4.0;
+2. Quando estiver nessa versão é possível atualizar o sistema clicando no botão "Atualizar Mapos" em Sistema >> Configurações;
+3. Serão baixados e atualizados todos os arquivos exceto: `config.php`, `database.php` e `email.php`;
 
 ### Comandos de terminal
 
