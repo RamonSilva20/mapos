@@ -541,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
 -- -----------------------------------------------------
 -- Table `anotacaoes_os`
 -- -----------------------------------------------------
-CREATE TABLE `anotacoes_os` (
+CREATE TABLE IF NOT EXISTS `anotacoes_os` (
     `idAnotacoes` INT(11) NOT NULL AUTO_INCREMENT,
     `anotacao` VARCHAR(255) NOT NULL ,
     `data_hora` DATETIME NOT NULL ,
@@ -552,12 +552,12 @@ CREATE TABLE `anotacoes_os` (
 -- -----------------------------------------------------
 -- Table `configuracoes`
 -- -----------------------------------------------------
-CREATE TABLE `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `migrations`
 -- -----------------------------------------------------
-CREATE TABLE `migrations` (
+CREATE TABLE IF NOT EXISTS `migrations` (
   `version` BIGINT(20) NOT NULL
 );
 

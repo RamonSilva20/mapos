@@ -11,7 +11,6 @@ if (!file_exists($settings_file)) {
 
 $php_version_success = false;
 $allow_url_fopen_success = false;
-$timezone_success = false;
 
 $php_version_required = "5.5.0";
 $current_php_version = PHP_VERSION;
@@ -26,14 +25,8 @@ if (ini_get('allow_url_fopen')) {
     $allow_url_fopen_success = true;
 }
 
-//check date.timezone
-$timezone_settings = ini_get('date.timezone');
-if ($timezone_settings) {
-    $timezone_success = true;
-}
-
 //check if all requirement is success
-if ($php_version_success && $allow_url_fopen_success && $timezone_success) {
+if ($php_version_success && $allow_url_fopen_success) {
     $all_requirement_success = true;
 } else {
     $all_requirement_success = false;
