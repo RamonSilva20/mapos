@@ -14,7 +14,6 @@ $config = [
             'errors' => [
                 'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
             ],
-
         ],
         [
             'field' => 'telefone',
@@ -354,7 +353,6 @@ $config = [
     ],
     'vendas' => [
         [
-
             'field' => 'dataVenda',
             'label' => 'Data da Venda',
             'rules' => 'required|trim',
