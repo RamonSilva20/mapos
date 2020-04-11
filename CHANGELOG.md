@@ -9,7 +9,6 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Criado mascara para cpf de usuario em adicionar e editar. Evitar erro de entra CNPJ nesse campo. [@willph](https://github.com/willph)
 - Validação de cpf do usuario em adicionarUsuario.php. [@willph](https://github.com/willph)
-- Desativado edição de cpf em editarUsuario.php. [@willph](https://github.com/willph)
 - Criado verificação de CPF e CNPJ em adicionarCliente.php e editarCliente.php. [@willph](https://github.com/willph)
 - Corrigido erro em view os.php devido preenchimendo de caracteres não numericos em view adicionarOs.php e EditarOs.php. [@willph](https://github.com/willph)
 - Criado Campo CEP na tabela USUÁRIOS. [@willph](https://github.com/willph)
