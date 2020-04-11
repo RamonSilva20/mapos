@@ -22,14 +22,13 @@
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhum Usuário Cadastrado</td>
                             </tr>';
                     }
                     foreach ($results as $r) {
-
                         echo '<tr>';
                         echo '<td>' . $r->idUsuarios . '</td>';
                         echo '<td>' . $r->nome . '</td>';

@@ -15,7 +15,6 @@ class Clientes_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('idClientes', 'desc');
@@ -102,7 +101,6 @@ class Clientes_model extends CI_Model
     public function removeClientOs($os)
     {
         try {
-
             foreach ($os as $o) {
                 $this->db->where('os_id', $o->idOs);
                 $this->db->delete('servicos_os');
@@ -113,7 +111,6 @@ class Clientes_model extends CI_Model
                 $this->db->where('idOs', $o->idOs);
                 $this->db->delete('os');
             }
-
         } catch (Exception $e) {
             return false;
         }
@@ -139,7 +136,6 @@ class Clientes_model extends CI_Model
     public function removeClientVendas($vendas)
     {
         try {
-
             foreach ($vendas as $v) {
                 $this->db->where('vendas_id', $v->idVendas);
                 $this->db->delete('itens_de_vendas');
@@ -147,7 +143,6 @@ class Clientes_model extends CI_Model
                 $this->db->where('idVendas', $v->idVendas);
                 $this->db->delete('vendas');
             }
-
         } catch (Exception $e) {
             return false;
         }

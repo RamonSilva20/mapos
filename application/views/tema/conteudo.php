@@ -30,7 +30,7 @@
           <?php
           } ?>
           <?php if (isset($view)) {
-            echo $this->load->view($view, null, true);
+              echo $this->load->view($view, null, true);
           } ?>
         </div>
       </div>

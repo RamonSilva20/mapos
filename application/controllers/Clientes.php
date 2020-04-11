@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Clientes extends MY_Controller
 {
@@ -24,7 +26,6 @@ class Clientes extends MY_Controller
 
     public function gerenciar()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
             redirect(base_url());
@@ -55,7 +56,7 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = array(
+            $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
@@ -68,7 +69,7 @@ class Clientes extends MY_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-            );
+            ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
                 $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
@@ -85,7 +86,6 @@ class Clientes extends MY_Controller
 
     public function editar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -102,7 +102,7 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = array(
+            $data = [
                 'nomeCliente' => $this->input->post('nomeCliente'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
@@ -114,7 +114,7 @@ class Clientes extends MY_Controller
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
-            );
+            ];
 
             if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
@@ -132,7 +132,6 @@ class Clientes extends MY_Controller
 
     public function visualizar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -152,7 +151,6 @@ class Clientes extends MY_Controller
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir clientes.');
             redirect(base_url());
@@ -166,7 +164,6 @@ class Clientes extends MY_Controller
 
         $os = $this->clientes_model->getAllOsByClient($id);
         if ($os != null) {
-
             $this->clientes_model->removeClientOs($os);
         }
 

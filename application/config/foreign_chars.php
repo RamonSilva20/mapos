@@ -9,7 +9,7 @@
 | conversion used by the Text helper
 |
 */
-$foreign_characters = array(
+$foreign_characters = [
     '/ä|æ|ǽ/' => 'ae',
     '/ö|œ/' => 'oe',
     '/ü/' => 'ue',
@@ -60,7 +60,7 @@ $foreign_characters = array(
     '/ĳ/' => 'ij',
     '/Œ/' => 'OE',
     '/ƒ/' => 'f'
-);
+];
 
 /* End of file foreign_chars.php */
 /* Location: ./application/config/foreign_chars.php */

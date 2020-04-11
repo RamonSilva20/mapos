@@ -13,12 +13,21 @@
 */
 
 // compress output
-$hook['display_override'][] = array(
-	'class' => '',
-	'function' => 'compress',
-  'filename' => 'compress.php',
-	'filepath' => 'hooks'
-);
+$hook['display_override'][] = [
+    'class' => '',
+    'function' => 'compress',
+    'filename' => 'compress.php',
+    'filepath' => 'hooks'
+];
+
+$hook['pre_system'][] = [
+    'class'    => 'WhoopsHook',
+    'function' => 'bootWhoops',
+    'filename' => 'whoops.php',
+    'filepath' => 'hooks',
+    'params'   => []
+];
+
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

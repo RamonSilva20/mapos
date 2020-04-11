@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* tradução: ferreiramauricio.com */
 
 $lang['email_must_be_array'] = "O método de validação de email deve ser passado um array.";

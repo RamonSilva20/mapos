@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Usuarios extends MY_Controller
 {
@@ -11,7 +13,6 @@ class Usuarios extends MY_Controller
 
     public function __construct()
     {
-
         parent::__construct();
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
@@ -32,7 +33,6 @@ class Usuarios extends MY_Controller
 
     public function gerenciar()
     {
-
         $this->load->library('pagination');
 
         $this->data['configuration']['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
@@ -48,15 +48,13 @@ class Usuarios extends MY_Controller
 
     public function adicionar()
     {
-
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('usuarios') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">' . validation_errors() . '</div>' : false);
         } else {
-
-            $data = array(
+            $data = [
                 'nome' => set_value('nome'),
                 'rg' => set_value('rg'),
                 'cpf' => set_value('cpf'),
@@ -74,7 +72,7 @@ class Usuarios extends MY_Controller
                 'situacao' => set_value('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id'),
                 'dataCadastro' => date('Y-m-d'),
-            );
+            ];
 
             if ($this->usuarios_model->add('usuarios', $data) == true) {
                 $this->session->set_flashdata('success', 'Usuário cadastrado com sucesso!');
@@ -93,7 +91,6 @@ class Usuarios extends MY_Controller
 
     public function editar()
     {
-
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -118,7 +115,6 @@ class Usuarios extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-
             if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0) {
                 $this->session->set_flashdata('error', 'O usuário super admin não pode ser desativado!');
                 redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
@@ -126,10 +122,9 @@ class Usuarios extends MY_Controller
 
             $senha = $this->input->post('senha');
             if ($senha != null) {
-
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
-                $data = array(
+                $data = [
                     'nome' => $this->input->post('nome'),
                     'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
@@ -146,10 +141,9 @@ class Usuarios extends MY_Controller
                     'dataExpiracao' => set_value('dataExpiracao'),
                     'situacao' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id'),
-                );
+                ];
             } else {
-
-                $data = array(
+                $data = [
                     'nome' => $this->input->post('nome'),
                     'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
@@ -165,7 +159,7 @@ class Usuarios extends MY_Controller
                     'dataExpiracao' => set_value('dataExpiracao'),
                     'situacao' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id'),
-                );
+                ];
             }
 
             if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
@@ -187,7 +181,6 @@ class Usuarios extends MY_Controller
 
     public function excluir()
     {
-
         $id = $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $id);
 

@@ -45,20 +45,6 @@
               <?php } ?>
             </td>
           </tr>
-          <tr>
-            <td>date.timezone</td>
-            <td>
-              <?php echo ini_get('date.timezone'); ?>
-            </td>
-            <td>America/Sao_Paulo</td>
-            <td class="text-center">
-              <?php if ($timezone_success) { ?>
-                <i class="status fa fa-check-circle-o"></i>
-              <?php } else { ?>
-                <i class="status fa fa-times-circle-o"></i>
-              <?php } ?>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -128,10 +114,10 @@
                   <i class="status fa fa-check-circle-o"></i>
                   <?php
                 } else {
-                  $all_requirement_success = false;
-                  ?>
+                    $all_requirement_success = false; ?>
                   <i class="status fa fa-times-circle-o"></i>
-                <?php } ?>
+                <?php
+                } ?>
               </td>
             </tr>
           <?php }; ?>
@@ -141,6 +127,8 @@
   </div>
 
   <div class="panel-footer">
-    <button <?php if (!$all_requirement_success) { echo "disabled=disabled" ; } ?> class="btn btn-info
+    <button <?php if (!$all_requirement_success) {
+                    echo "disabled=disabled" ;
+                } ?> class="btn btn-info
       form-next"><i class='fa fa-chevron-right'></i> Próximo</button>
     </div>

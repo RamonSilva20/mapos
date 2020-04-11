@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Mapos extends MY_Controller
 {
@@ -368,6 +370,7 @@ class Mapos extends MY_Controller
 
         if ($this->migration->current()) {
             $this->session->set_flashdata('success', 'O banco de dados já está atualizado!');
+
             return redirect(site_url('mapos/configurar'));
         }
 
@@ -375,6 +378,32 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', $this->migration->error_string());
         } else {
             $this->session->set_flashdata('success', 'Banco de dados atualizado com sucesso!');
+        }
+
+        return redirect(site_url('mapos/configurar'));
+    }
+
+    public function atualizarMapos()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
+            redirect(base_url());
+        }
+
+        $this->load->library('github_updater');
+
+        if (!$this->github_updater->has_update()) {
+            $this->session->set_flashdata('success', 'Seu mapos já está atualizado!');
+
+            return redirect(site_url('mapos/configurar'));
+        }
+
+        $success = $this->github_updater->update();
+
+        if ($success) {
+            $this->session->set_flashdata('success', 'Mapos atualizado com sucesso!');
+        } else {
+            $this->session->set_flashdata('error', 'Erro ao atualizar mapos!');
         }
 
         return redirect(site_url('mapos/configurar'));
