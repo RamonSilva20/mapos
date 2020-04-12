@@ -13,6 +13,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigido erro em view os.php devido preenchimendo de caracteres não numericos em view adicionarOs.php e EditarOs.php. [@willph](https://github.com/willph)
 - Criado Campo CEP na tabela USUÁRIOS. [@willph](https://github.com/willph)
 - Corrigido erro email do Usuário e Cliente em Vendas. [@willph](https://github.com/willph)
+- Otimizado configuração de nginx em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.4.0] - 2020-05-10
 
