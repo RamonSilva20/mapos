@@ -4,6 +4,17 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.1] - 2020-05-10
+
+### Fixed
+- Criado mascara para cpf de usuario em adicionar e editar. Evitar erro de entra CNPJ nesse campo. [@willph](https://github.com/willph)
+- Validação de cpf do usuario em adicionarUsuario.php. [@willph](https://github.com/willph)
+- Criado verificação de CPF e CNPJ em adicionarCliente.php e editarCliente.php. [@willph](https://github.com/willph)
+- Corrigido erro em view os.php devido preenchimendo de caracteres não numericos em view adicionarOs.php e EditarOs.php. [@willph](https://github.com/willph)
+- Criado Campo CEP na tabela USUÁRIOS. [@willph](https://github.com/willph)
+- Corrigido erro email do Usuário e Cliente em Vendas. [@willph](https://github.com/willph)
+- Otimizado configuração de nginx em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.4.0] - 2020-05-10
 
 ### Added

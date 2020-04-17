@@ -1,63 +1,67 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-$config =
-
-['clientes' => [[
-    'field' => 'nomeCliente',
-    'label' => 'Nome',
-    'rules' => 'required|trim',
-],
-    [
-        'field' => 'documento',
-        'label' => 'CPF/CNPJ',
-        'rules' => 'required|trim',
+$config = [
+    'clientes' => [
+        [
+            'field' => 'nomeCliente',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'documento',
+            'label' => 'CPF/CNPJ',
+            'rules' => 'required|trim|verific_cpf_cnpj',
+            'errors' => [
+                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
+            ],
+        ],
+        [
+            'field' => 'telefone',
+            'label' => 'Telefone',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'email',
+            'label' => 'Email',
+            'rules' => 'required|trim|valid_email',
+        ],
+        [
+            'field' => 'rua',
+            'label' => 'Rua',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'numero',
+            'label' => 'Número',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'bairro',
+            'label' => 'Bairro',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'cidade',
+            'label' => 'Cidade',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'estado',
+            'label' => 'Estado',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'cep',
+            'label' => 'CEP',
+            'rules' => 'required|trim',
+        ]
     ],
-    [
-        'field' => 'telefone',
-        'label' => 'Telefone',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'email',
-        'label' => 'Email',
-        'rules' => 'required|trim|valid_email',
-    ],
-    [
-        'field' => 'rua',
-        'label' => 'Rua',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'numero',
-        'label' => 'Número',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'bairro',
-        'label' => 'Bairro',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'cidade',
-        'label' => 'Cidade',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'estado',
-        'label' => 'Estado',
-        'rules' => 'required|trim',
-    ],
-    [
-        'field' => 'cep',
-        'label' => 'CEP',
-        'rules' => 'required|trim',
-    ]]
-    ,
-    'servicos' => [[
-        'field' => 'nome',
-        'label' => 'Nome',
-        'rules' => 'required|trim',
-    ],
+    'servicos' => [
+        [
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'descricao',
             'label' => '',
@@ -67,13 +71,14 @@ $config =
             'field' => 'preco',
             'label' => '',
             'rules' => 'required|trim',
-        ]]
-    ,
-    'produtos' => [[
-        'field' => 'descricao',
-        'label' => '',
-        'rules' => 'required|trim',
+        ]
     ],
+    'produtos' => [
+        [
+            'field' => 'descricao',
+            'label' => '',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'unidade',
             'label' => 'Unidade',
@@ -98,13 +103,14 @@ $config =
             'field' => 'estoqueMinimo',
             'label' => 'Estoque Mnimo',
             'rules' => 'trim',
-        ]]
-    ,
-    'usuarios' => [[
-        'field' => 'nome',
-        'label' => 'Nome',
-        'rules' => 'required|trim',
+        ]
     ],
+    'usuarios' => [
+        [
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'rg',
             'label' => 'RG',
@@ -113,7 +119,10 @@ $config =
         [
             'field' => 'cpf',
             'label' => 'CPF',
-            'rules' => 'required|trim|is_unique[usuarios.cpf]',
+            'rules' => 'required|trim|verific_cpf_cnpj|is_unique[usuarios.cpf]',
+            'errors' => [
+                'verific_cpf_cnpj' => "O campo %s não é um CPF válido."
+            ],
         ],
         [
             'field' => 'rua',
@@ -141,6 +150,11 @@ $config =
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'cep',
+            'label' => 'CEP',
+            'rules' => 'required|trim',
+        ],
+        [
             'field' => 'email',
             'label' => 'Email',
             'rules' => 'required|trim|valid_email|is_unique[usuarios.email]',
@@ -159,13 +173,14 @@ $config =
             'field' => 'situacao',
             'label' => 'Situacao',
             'rules' => 'required|trim',
-        ]]
-    ,
-    'os' => [[
-        'field' => 'dataInicial',
-        'label' => 'DataInicial',
-        'rules' => 'required|trim',
+        ]
     ],
+    'os' => [
+        [
+            'field' => 'dataInicial',
+            'label' => 'DataInicial',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'dataFinal',
             'label' => 'DataFinal',
@@ -174,7 +189,10 @@ $config =
         [
             'field' => 'garantia',
             'label' => 'Garantia',
-            'rules' => 'trim',
+            'rules' => 'trim|numeric',
+            'errors' => [
+                'numeric' => 'Por favor digite apenas número.'
+            ],
         ],
         [
             'field' => 'termoGarantia',
@@ -215,26 +233,26 @@ $config =
             'field' => 'laudoTecnico',
             'label' => 'Laudo Tecnico',
             'rules' => 'trim',
-        ]]
-
-    ,
-    'tiposUsuario' => [[
-        'field' => 'nomeTipo',
-        'label' => 'NomeTipo',
-        'rules' => 'required|trim',
+        ]
     ],
+    'tiposUsuario' => [
+        [
+            'field' => 'nomeTipo',
+            'label' => 'NomeTipo',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'situacao',
             'label' => 'Situacao',
             'rules' => 'required|trim',
-        ]]
-
-    ,
-    'receita' => [[
-        'field' => 'descricao',
-        'label' => 'Descrição',
-        'rules' => 'required|trim',
+        ]
     ],
+    'receita' => [
+        [
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'valor',
             'label' => 'Valor',
@@ -255,13 +273,14 @@ $config =
             'field' => 'tipo',
             'label' => 'Tipo',
             'rules' => 'required|trim',
-        ]]
-    ,
-    'despesa' => [[
-        'field' => 'descricao',
-        'label' => 'Descrição',
-        'rules' => 'required|trim',
+        ]
     ],
+    'despesa' => [
+        [
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'valor',
             'label' => 'Valor',
@@ -281,13 +300,14 @@ $config =
             'field' => 'tipo',
             'label' => 'Tipo',
             'rules' => 'required|trim',
-        ]]
-    ,
-    'garantias' => [[
-        'field' => 'dataGarantia',
-        'label' => 'dataGarantia',
-        'rules' => 'trim',
+        ]
     ],
+    'garantias' => [
+        [
+            'field' => 'dataGarantia',
+            'label' => 'dataGarantia',
+            'rules' => 'trim',
+        ],
         [
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
@@ -302,13 +322,14 @@ $config =
             'field' => 'textoGarantia',
             'label' => 'textoGarantia',
             'rules' => 'required|trim',
-        ]]
-    ,
-    'pagamentos' => [[
-        'field' => 'Nome',
-        'label' => 'nomePag',
-        'rules' => 'trim',
+        ]
     ],
+    'pagamentos' => [
+        [
+            'field' => 'Nome',
+            'label' => 'nomePag',
+            'rules' => 'trim',
+        ],
         [
             'field' => 'clientId',
             'label' => 'clientId',
@@ -328,14 +349,14 @@ $config =
             'field' => 'accessToken',
             'label' => 'accessToken',
             'rules' => 'trim',
-        ]]
-    ,
-    'vendas' => [[
-
-        'field' => 'dataVenda',
-        'label' => 'Data da Venda',
-        'rules' => 'required|trim',
+        ]
     ],
+    'vendas' => [
+        [
+            'field' => 'dataVenda',
+            'label' => 'Data da Venda',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'clientes_id',
             'label' => 'clientes',
@@ -345,16 +366,18 @@ $config =
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
             'rules' => 'trim|required',
-        ]],
-    'anotacoes_os' => [[
-        'field' => 'anotacao',
-        'label' => 'Anotação',
-        'rules' => 'required|trim',
+        ]
     ],
+    'anotacoes_os' => [
+        [
+            'field' => 'anotacao',
+            'label' => 'Anotação',
+            'rules' => 'required|trim',
+        ],
         [
             'field' => 'os_id',
             'label' => 'ID Os',
             'rules' => 'trim|required|integer',
-        ]],
-
+        ]
+    ],
 ];
