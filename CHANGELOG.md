@@ -12,6 +12,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - Melhoria em busca de tag em releases no atualizador. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
+### Fixed
+- Corrigido exibição de data de vencimento de garantia. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.4.1] - 2020-04-10
 
 ### Fixed
