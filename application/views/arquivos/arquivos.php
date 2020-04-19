@@ -63,7 +63,7 @@
                                 <?php if (getimagesize($r->path)): ?>
                                     <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
                                 <?php else: ?>
-                                    <a href="<?= $r->url ?>">Abrir Arquivo</a>
+                                    <span>-</span>
                                 <?php endif ?>
                             </td>
                             <td><?= $r->documento ?></td>
