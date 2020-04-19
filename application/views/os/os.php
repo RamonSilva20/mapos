@@ -58,6 +58,7 @@
                         <th>Data Final</th>
                         <th>Venc. Garantia</th>
                         <th>Valor Total</th>
+                        <th>Valor Total (Faturado)</th>
                         <th>Status</th>
                         <th>T. Garantia</th>
                         <th>Ações</th>
@@ -68,7 +69,7 @@
 
                         if (!$results) {
                             echo '<tr>
-                                    <td colspan="9">Nenhuma OS Cadastrada</td>
+                                    <td colspan="10">Nenhuma OS Cadastrada</td>
                                   </tr>';
                         }
                         foreach ($results as $r) {
@@ -117,6 +118,7 @@
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $dataFinal . '</td>';
                             echo '<td>' . $vencGarantia. '</td>';
+                            echo '<td>R$ ' . number_format($r->total, 2, ',', '.') . '</td>';
                             echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                             echo '<td>' . $r->refGarantia . '</td>';

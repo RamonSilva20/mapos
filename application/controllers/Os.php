@@ -59,7 +59,17 @@ class Os extends MY_Controller
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->os_model->getOs('os', '*', $where_array, $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->os_model->getOs(
+            'os',
+            'os.*,
+            SUM(produtos_os.preco * produtos_os.quantidade) as totalProdutos,
+            SUM(servicos_os.preco * servicos_os.quantidade) as totalServicos,
+            SUM(produtos_os.preco * produtos_os.quantidade) + SUM(servicos_os.preco * servicos_os.quantidade) as total',
+            $where_array,
+            $this->data['configuration']['per_page'],
+            $this->uri->segment(3)
+        );
+
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
         return $this->layout();
