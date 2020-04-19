@@ -10,7 +10,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adequação para mostrar valor total de OS na tela de listagem (valor total e valor total (faturado)). [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ### Changed
-- Melhoria em busca de tag em releases no atualuzador. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhoria em busca de tag em releases no atualizador. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.4.1] - 2020-04-10
 
