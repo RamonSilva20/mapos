@@ -247,7 +247,7 @@ class Github_updater
             $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/releases/latest')
         );
 
-        $version = $latestRelease->name;
+        $version = $latestRelease->tag_name;
 
         if (!$version) {
             throw new Exception('Error getting mapos version from GitHub!');
