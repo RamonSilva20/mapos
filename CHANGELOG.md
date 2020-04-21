@@ -6,7 +6,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [4.5.1] - 2020-04-21
 
-### Added
+### Changed
 - Adicionando Descrição na busca geral, juntamente da coluna no resultado. [@bulfaitelo](https://github.com/bulfaitelo)
 
 ## [4.5.0] - 2020-04-19
