@@ -27,10 +27,11 @@ class Os_model extends CI_Model
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 
-    public function getOs($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function getOs($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         $lista_clientes = [];
         if ($where) {
@@ -51,6 +52,8 @@ class Os_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
+        $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
 
         // condicionais da pesquisa
 
@@ -76,11 +79,13 @@ class Os_model extends CI_Model
         }
 
         $this->db->limit($perpage, $start);
-
         $this->db->order_by('os.idOs', 'desc');
+        $this->db->group_by('os.idOs');
+
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 

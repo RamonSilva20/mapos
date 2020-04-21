@@ -4,6 +4,42 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.5.0] - 2020-04-19
+
+### Added
+- Adequação para mostrar valor total de OS na tela de listagem (valor total e valor total (faturado)). [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed
+- Melhoria em busca de tag em releases no atualizador. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhoria em listagem de arquivos. [@hoshikawakun](https://github.com/hoshikawakun)
+
+### Fixed
+- Corrigido exibição de data de vencimento de garantia. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.4.1] - 2020-04-10
+
+### Fixed
+- Criado mascara para cpf de usuario em adicionar e editar. Evitar erro de entra CNPJ nesse campo. [@willph](https://github.com/willph)
+- Validação de cpf do usuario em adicionarUsuario.php. [@willph](https://github.com/willph)
+- Criado verificação de CPF e CNPJ em adicionarCliente.php e editarCliente.php. [@willph](https://github.com/willph)
+- Corrigido erro em view os.php devido preenchimendo de caracteres não numericos em view adicionarOs.php e EditarOs.php. [@willph](https://github.com/willph)
+- Criado Campo CEP na tabela USUÁRIOS. [@willph](https://github.com/willph)
+- Corrigido erro email do Usuário e Cliente em Vendas. [@willph](https://github.com/willph)
+- Otimizado configuração de nginx em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.4.0] - 2020-04-10
+
+### Added
+- Implementado atualizador automático via GitHub. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.3] - 2020-04-05
+
+### Added
+- Implementado docker e docker-compose. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed
+- Removido verificação de timezone em instalação. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.2.2] - 2020-03-28
 
 ### Fixed
@@ -62,7 +98,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigido valor de `dataCadastro` incorreta em admin criado inicialmente [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Corrigido erro no relatório de clientes com datas não preenchidas. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
-## Changed
+### Changed
 - Banco de dados agora será gerenciado com migrations pela biblioteca do CodeIgniter, onde o último arquivo de atualização manual é o `update_3.15.0_to_4.0.0.sql`. Ainda será necessário atualizar sempre o arquivo `banco.sql` com as novas tabelas para que o script de instalação continue funcionando [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Ativado Logs para permitir melhor debug. [@Pr3d4dor](https://github.com/Pr3d4dor)
 

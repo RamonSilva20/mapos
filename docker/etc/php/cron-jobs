@@ -1,0 +1,2 @@
+*/2 * * * * /usr/local/bin/php /var/www/html/index.php email/process >> /var/log/cron.log
+*/5 * * * * /usr/local/bin/php /var/www/html/index.php email/retry >> /var/log/cron.log
