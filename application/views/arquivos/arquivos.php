@@ -34,40 +34,44 @@
             <h5>Arquivos</h5>
         </div>
         <div class="widget-content nopadding">
-            <table class="table table-bordered ">
+            <table width="100%" class="table table-bordered ">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Documento</th>
-                        <th>Data</th>
-                        <th>Tamanho</th>
-                        <th>Extensão</th>
-                        <th>Ações</th>
+                        <th width="5%">#</th>
+                        <th width="10%">Miniatura</th>
+                        <th width="10%">Nome</th>
+                        <th width="8%">Data</th>
+                        <th>Descrição</th>
+                        <th width="8%">Tamanho</th>
+                        <th width="5%">Extensão</th>
+                        <th width="14%">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    
-                    if (!$results) {
+
+                    if(!$results){
+
                         echo '<tr>
                                 <td colspan="5">Nenhum Arquivo Encontrado</td>
-                              </tr>';
+                            </tr>';
                     }
                     foreach ($results as $r) : ?>
                         <tr>
                             <td><?= $r->idDocumentos ?></td>
+                            <td>
+                                <?php if (getimagesize($r->path)): ?>
+                                    <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
+                                <?php else: ?>
+                                    <span>-</span>
+                                <?php endif ?>
+                            </td>
                             <td><?= $r->documento ?></td>
                             <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
+                            <td><?= $r->descricao ?></td>
                             <td><?= $r->tamanho ?> KB</td>
                             <td><?= $r->tipo ?></td>
-                            <td>
-                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                    <a class="btn btn-inverse tip-top" style="margin-right: 1%" target="_blank" href="<?= $r->url ?>" class="btn tip-top" title="Imprimir">
-                                        <i class="fas fa-print"></i>
-                                    </a>
-                                <?php endif ?>
-
-                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
+                            <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
                                     <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn tip-top" style="margin-right: 1%" title="Download">
                                         <i class="fas fa-download"></i>
                                     </a>
