@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.5.3] - 2020-04-21
+
+### Fixed
+- Corrigido ordem de exibição de últimas OS em painel de cliente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido exibição e download de anexos de OS em painel de cliente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.5.2] - 2020-04-21
 
 ### Fixed
