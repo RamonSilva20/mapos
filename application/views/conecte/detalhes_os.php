@@ -337,7 +337,6 @@
         event.preventDefault();
         var link = $(this).attr('link');
         var id = $(this).attr('imagem');
-        var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
         $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
         $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
     });
