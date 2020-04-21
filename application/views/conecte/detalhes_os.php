@@ -196,29 +196,17 @@
 
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
                                     <?php
-
-                                    if ($anexos == null) {
-                                        echo '<div class="alert alert-danger">Nenhum item foi anexado a esta ordem de serviço</div>';
-                                    }
-                                    $cont = 1;
-                                    $flag = 5;
-                                    foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = base_url() . 'assets/anexos/thumbs/' . $a->thumb;
-                                            $link = $a->url . $a->anexo;
+                                        foreach ($anexos as $a) {
+                                            if ($a->thumb == null) {
+                                                $thumb = base_url() . 'assets/img/icon-file.png';
+                                                $link = base_url() . 'assets/img/icon-file.png';
+                                            } else {
+                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                                $link = $a->url .'/'. $a->anexo;
+                                            }
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
                                         }
-
-                                        if ($cont == $flag) {
-                                            echo '<div style="margin-left: 0" class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
-                                            $flag += 4;
-                                        } else {
-                                            echo '<div class="span3"><a href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo" data-toggle="modal"><img src="' . $thumb . '" alt=""><p align="center">' . $a->anexo . '</p></a></div>';
-                                        }
-                                        $cont++;
-                                    } ?>
+                                    ?>
                                 </div>
 
                             </div>
@@ -259,7 +247,6 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
         <a href="" id-imagem="" class="btn btn-inverse" id="download">Download</a>
-        <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
     </div>
 </div>
 
@@ -344,5 +331,13 @@
         $('.editor').trumbowyg({
             lang: 'pt_br'
         });
+    });
+
+    $(document).on('click', '.anexo', function(event) {
+        event.preventDefault();
+        var link = $(this).attr('link');
+        var id = $(this).attr('imagem');
+        $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
+        $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
     });
 </script>

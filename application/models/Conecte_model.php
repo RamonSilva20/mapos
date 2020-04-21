@@ -10,7 +10,7 @@ class Conecte_model extends CI_Model
      * email: silva018-mg@yahoo.com.br
      *
      */
-    
+
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -26,10 +26,13 @@ class Conecte_model extends CI_Model
 
     public function getLastOs($cliente)
     {
+        $this->db->from('os');
+        $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit(5);
+        $this->db->order_by('idOs', 'desc');
 
-        return $this->db->get('os')->result();
+        return $this->db->get()->result();
     }
 
     public function getLastCompras($cliente)
@@ -54,9 +57,9 @@ class Conecte_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
+
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
@@ -73,9 +76,9 @@ class Conecte_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
+
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
@@ -102,7 +105,7 @@ class Conecte_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
 }
