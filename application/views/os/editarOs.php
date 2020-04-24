@@ -798,12 +798,14 @@
             var idProduto = $(this).attr('idAcao');
             var quantidade = $(this).attr('quantAcao');
             var produto = $(this).attr('prodAcao');
+            var idOS = "<?php echo $result->idOs ?>"
+
             if ((idProduto % 1) == 0) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirProduto",
-                    data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto,
+                    data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto + "&idOs=" + idOS,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
@@ -825,12 +827,14 @@
 
         $(document).on('click', '.servico', function(event) {
             var idServico = $(this).attr('idAcao');
+            var idOS = "<?php echo $result->idOs ?>"
+
             if ((idServico % 1) == 0) {
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirServico",
-                    data: "idServico=" + idServico,
+                    data: "idServico=" + idServico + "&idOs=" + idOS,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
@@ -865,6 +869,8 @@
             event.preventDefault();
 
             var link = $(this).attr('link');
+            var idOS = "<?php echo $result->idOs ?>"
+
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -872,6 +878,7 @@
                 type: "POST",
                 url: link,
                 dataType: 'json',
+                data: "idOs=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
@@ -888,12 +895,14 @@
 
         $(document).on('click', '.anotacao', function(event) {
             var idAnotacao = $(this).attr('idAcao');
+            var idOS = "<?php echo $result->idOs ?>"
+
             if ((idAnotacao % 1) == 0) {
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirAnotacao",
-                    data: "idAnotacao=" + idAnotacao,
+                    data: "idAnotacao=" + idAnotacao + "&idOs=" + idOS,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {

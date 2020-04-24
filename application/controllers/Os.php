@@ -252,7 +252,7 @@ class Os extends MY_Controller
                 }
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
-                log_info('Alterou uma OS. ID: ' . $this->input->post('idGarantias'));
+                log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
                 redirect(site_url('os/editar/') . $this->input->post('idOs'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -510,7 +510,7 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
-            log_info('Adicionou produto a uma OS.');
+            log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
@@ -520,6 +520,8 @@ class Os extends MY_Controller
     public function excluirProduto()
     {
         $id = $this->input->post('idProduto');
+        $idOs = $this->input->post('idOs');
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
@@ -529,7 +531,7 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
-            log_info('Removeu produto de uma OS.');
+            log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
             echo json_encode(['result' => true]);
         } else {
@@ -548,7 +550,7 @@ class Os extends MY_Controller
         ];
 
         if ($this->os_model->add('servicos_os', $data) == true) {
-            log_info('Adicionou serviço a uma OS.');
+            log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
@@ -558,8 +560,10 @@ class Os extends MY_Controller
     public function excluirServico()
     {
         $ID = $this->input->post('idServico');
+        $idOs = $this->input->post('idOs');
+
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
-            log_info('Removeu serviço de uma OS.');
+            log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
@@ -571,13 +575,13 @@ class Os extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $directory = FCPATH . 'assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico');
+        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico');
 
         // If it exist, check if it's a directory
-        if (!is_dir($directory . '/thumbs')) {
+        if (!is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
             // make directory for images and thumbs
             try {
-                mkdir($directory . '/thumbs', 0755, true);
+                mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true);
             } catch (Exception $e) {
                 echo json_encode(['result' => false, 'mensagem' => $e->getMessage()]);
                 die();
@@ -617,7 +621,7 @@ class Os extends MY_Controller
                     $resize_conf = [
 
                         'source_image' => $upload_data['full_path'],
-                        'new_image' => $upload_data['file_path'] . 'thumbs/thumb_' . $upload_data['file_name'],
+                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $upload_data['file_name'],
                         'width' => 200,
                         'height' => 125,
                     ];
@@ -629,14 +633,14 @@ class Os extends MY_Controller
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
+                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
                     }
                 } else {
                     $success[] = $upload_data;
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets/anexos/' . date('m-Y') . '/OS-' . $this->input->post('idOsServico')), '', $directory);
+                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR .'OS-' . $this->input->post('idOsServico')), '', $directory);
                 }
             }
         }
@@ -644,7 +648,7 @@ class Os extends MY_Controller
         if (count($error) > 0) {
             echo json_encode(['result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.']);
         } else {
-            log_info('Adicionou anexo(s) a uma OS.');
+            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
             echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .']);
         }
     }
@@ -656,15 +660,16 @@ class Os extends MY_Controller
         } else {
             $this->db->where('idAnexos', $id);
             $file = $this->db->get('anexos', 1)->row();
+            $idOs = $this->input->post('idOs');
 
-            unlink($file->path . '/' . $file->anexo);
+            unlink($file->path . DIRECTORY_SEPARATOR . $file->anexo);
 
             if ($file->thumb != null) {
-                unlink($file->path . '/thumbs/' . $file->thumb);
+                unlink($file->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file->thumb);
             }
 
             if ($this->os_model->delete('anexos', 'idAnexos', $id) == true) {
-                log_info('Removeu anexo de uma OS.');
+                log_info('Removeu anexo de uma OS. ID (OS): ' . $idOs);
                 echo json_encode(['result' => true, 'mensagem' => 'Anexo excluído com sucesso.']);
             } else {
                 echo json_encode(['result' => false, 'mensagem' => 'Erro ao tentar excluir anexo.']);
@@ -800,7 +805,7 @@ class Os extends MY_Controller
             ];
 
             if ($this->os_model->add('anotacoes_os', $data) == true) {
-                log_info('Adicionou anotação a uma OS.');
+                log_info('Adicionou anotação a uma OS. ID (OS): ' . $this->input->post('os_id'));
                 echo json_encode(['result' => true]);
             } else {
                 echo json_encode(['result' => false]);
@@ -811,8 +816,10 @@ class Os extends MY_Controller
     public function excluirAnotacao()
     {
         $id = $this->input->post('idAnotacao');
+        $idOs = $this->input->post('idOs');
+
         if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $id) == true) {
-            log_info('Removeu anotação de uma OS.');
+            log_info('Removeu anotação de uma OS. ID (OS): ' . $idOs);
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
