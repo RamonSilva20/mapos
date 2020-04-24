@@ -4,7 +4,7 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.5.4] - 2020-04-21
+## [4.5.4] - 2020-04-23
 
 ### Fixed
 - Corrigido logs de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
