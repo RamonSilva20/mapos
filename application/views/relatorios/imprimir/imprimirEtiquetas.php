@@ -18,16 +18,6 @@
 				<div class="widget-box">
 					<div class="widget-content nopadding">
 						<?php
-                        function limitarTexto($texto, $limite)
-                        {
-                            $contador = strlen($texto);
-                            if ($contador >= $limite) {
-                                $texto = substr($texto, 0, strrpos(substr($texto, 0, $limite), ' ')) . '...';
-                                return $texto;
-                            } else {
-                                return $texto;
-                            }
-                        }
                         if (
                             $this->input->get("etiquetaCode") !== "EAN13" && $this->input->get("etiquetaCode") !== "QR"
                             && $this->input->get("etiquetaCode") !== "UPCA"
