@@ -65,11 +65,17 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
+                                        <td style="text-align: right; width: 30%"><strong>Contato:</strong></td>
                                         <td>
-                                            <?php echo $result->telefone ?>
+                                            <?php echo $result->contato ?>
                                         </td>
                                     </tr>
+                                        <tr>
+                                            <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
+                                            <td>
+                                                <?php echo $result->telefone ?>
+                                            </td>
+                                        </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Celular</strong></td>
                                         <td>
@@ -110,6 +116,12 @@
                                         <td style="text-align: right"><strong>Número</strong></td>
                                         <td>
                                             <?php echo $result->numero ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right"><strong>Complemento</strong></td>
+                                        <td>
+                                            <?php echo $result->complemento ?>
                                         </td>
                                     </tr>
                                     <tr>
