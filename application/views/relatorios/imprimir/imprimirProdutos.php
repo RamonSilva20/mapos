@@ -14,18 +14,15 @@
 </head>
 
 <body style="background-color: transparent">
-
     <div class="container-fluid">
-
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="widget-box">
+                    <?= $topo ?>
                     <div class="widget-title">
                         <h4 style="text-align: center">Produtos</h4>
                     </div>
                     <div class="widget-content nopadding">
-
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -50,10 +47,9 @@
                                 ?>
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
+
                 <h5 style="text-align: right">Data do Relatório: <?php echo date('d/m/Y'); ?>
                 </h5>
             </div>

@@ -12,6 +12,7 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
         $mpdf = new \Mpdf\Mpdf(['c', 'A4', 'tempDir' => FCPATH.'assets/uploads/temp/']);
     }
 
+    $mpdf->showImageErrors = true;
     $mpdf->WriteHTML($html);
 
     if ($stream) {
