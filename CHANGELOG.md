@@ -4,6 +4,14 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.0] - 2020-04-27
+
+### Fixed
+- Corrigido topo de todos os relatórios. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Added
+- Implementado gráfico de barras dinâmico de vendas por ano.[@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.5.4] - 2020-04-23
 
 ### Fixed
