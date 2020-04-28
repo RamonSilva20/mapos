@@ -22,8 +22,11 @@ $(function () {
 });
 
 $(document).ready(function () {
-    if (typeof $("[name='idClientes']").val() === 'undefined'){ $("#documento").focus(); }
-    else { $("#nomeCliente").focus(); }
+    if ($("[name='idClientes']").val()) {
+        $("#nomeCliente").focus();
+    } else { 
+        $("#documento").focus();
+    }
     function limpa_formulario_cep() {
         // Limpa valores do formulário de cep.
         $("#rua").val("");
