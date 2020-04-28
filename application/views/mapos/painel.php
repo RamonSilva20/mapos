@@ -282,16 +282,12 @@ if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro-
                     tooltip: {
                         valueDecimals: 2,
                         valuePrefix: 'R$: '
-
-
                     },
                     plotOptions: {
                         series: {
                             dataLabels: {
                                 enabled: true,
                                 format: 'R$: {y}',
-
-
                             }
                         }
                     },
