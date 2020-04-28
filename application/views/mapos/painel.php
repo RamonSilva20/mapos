@@ -228,6 +228,94 @@
 
 </div>
 
+<?php if ($estatisticas_financeiro != null) {
+if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+        <div class="row-fluid" style="margin-top: 0">
+
+            <div class="row-fluid" style="margin-top: 0;">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="fas fa-diagnoses"></i></span>
+                            <h5>
+                                Balanço Mensal do Ano:
+                            </h5>
+                            <form method="get">
+                                <input type="number" name="year" style="height: 1.1rem; margin-bottom: 0; margin-top: 0.2rem" value="<?php echo intval(preg_replace( '/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                                <button type="submit" class="btn-xs" style="height: 1.8rem; margin-bottom: 0; margin-top: 0.2rem">Pesquisar</button>
+                            </form>
+                        </div>
+                        <div class="widget-content">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div id="chart-vendas-mes1" style=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="<?= base_url('assets/js/highchart/highcharts.js') ?>"></script>
+
+        <script type="text/javascript">
+            $(function () {
+                var myChart = Highcharts.chart('chart-vendas-mes1', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Vendas'
+                    },
+                    xAxis: {
+                        categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Reais',
+                            format: 'R$: {value}'
+                        }
+                    },
+                    tooltip: {
+                        valueDecimals: 2,
+                        valuePrefix: 'R$: '
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: 'R$: {y}',
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Receita Líquida',
+                        negativeColor: '#FF0000',
+                        data: [<?php echo ($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
+                            <?php echo ($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>]
+                    }]
+                });
+            });
+
+        </script>
+    <?php endif ?>
+<?php  } } ?>
 
 <?php if ($estatisticas_financeiro != null) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
