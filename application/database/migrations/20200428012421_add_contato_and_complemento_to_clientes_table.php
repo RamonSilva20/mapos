@@ -1,6 +1,6 @@
 <?php
 
-class Migration_add_cep_to_usuarios_table extends CI_Migration
+class Migration_add_contato_and_complemento_to_clientes_table extends CI_Migration
 {
     public function up()
     {
