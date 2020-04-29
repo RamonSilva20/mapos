@@ -1,5 +1,4 @@
 $(function () {
-
     $("#celular").mask("(00)00000-0000")
     $("#telefone").mask("(00)0000-0000")
     $("#cep").mask("00000-000")
@@ -27,6 +26,7 @@ $(document).ready(function () {
     } else { 
         $("#documento").focus();
     }
+    
     function limpa_formulario_cep() {
         // Limpa valores do formulário de cep.
         $("#rua").val("");
@@ -34,9 +34,16 @@ $(document).ready(function () {
         $("#cidade").val("");
         $("#estado").val("");
     }
-    function capitalizeFirstLetter(string) { if (typeof string === 'undefined'){ return; } return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase(); }
-    function capital_letter(str)
-    {
+    
+    function capitalizeFirstLetter(string) { 
+        if (typeof string === 'undefined'){ 
+            return; 
+        } 
+        
+        return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase(); 
+    }
+    
+    function capital_letter(str) {
         if (typeof str === 'undefined'){ return; }
         str = str.toLocaleLowerCase().split(" ");
 
@@ -49,7 +56,6 @@ $(document).ready(function () {
 
     //Quando o campo documento perde o foco.
     $("#documento").blur(function () {
-
         // No caso da edição a consulta automatica pode bagunçar todas as demais informações
         if (typeof $("[name='idClientes']").val() !== 'undefined'){
           if(!confirm("Deseja consultar o CNPJ?")){
@@ -107,10 +113,6 @@ $(document).ready(function () {
             }
         }
     });
-
-
-
-
 
     //Quando o campo cep perde o foco.
     $("#cep").blur(function () {
