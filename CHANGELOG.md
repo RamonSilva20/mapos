@@ -4,6 +4,25 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.0] - 2020-04-28
+
+### Added
+- Adicionado coluna contato e coluna complemento na tabela de clientes. [@gustavol](https://github.com/gustavol)
+- Implementado auto complete de dados de cliente via API da Receita Federal (CNPJ). [@gustavol](https://github.com/gustavol)
+
+## [4.6.1] - 2020-04-28
+
+### Changed
+- Melhorado extração de zip de atualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.6.0] - 2020-04-27
+
+### Fixed
+- Corrigido topo de todos os relatórios. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Added
+- Implementado gráfico de barras dinâmico de vendas por ano.[@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.5.4] - 2020-04-23
 
 ### Fixed
