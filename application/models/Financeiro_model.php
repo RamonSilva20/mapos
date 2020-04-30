@@ -4,19 +4,19 @@
 
 class Financeiro_model extends CI_Model
 {
-    
+
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
      *
      */
-    
+
     public function __construct()
     {
         parent::__construct();
     }
 
-    
+
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         $this->db->select($fields);
@@ -26,13 +26,28 @@ class Financeiro_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
+
+        $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 
+    public function getTotals($where = '')
+    {
+        $this->db->select("
+            SUM(case when tipo = 'despesa' then valor end) as despesas,
+            SUM(case when tipo = 'receita' then valor end) as receitas
+        ");
+        $this->db->from('lancamentos');
+
+        if ($where) {
+            $this->db->where($where);
+        }
+
+        return (array) $this->db->get()->row();
+    }
 
     public function getById($id)
     {
@@ -40,17 +55,17 @@ class Financeiro_model extends CI_Model
         $this->db->limit(1);
         return $this->db->get('clientes')->row();
     }
-    
+
     public function add($table, $data)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -59,10 +74,10 @@ class Financeiro_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -70,7 +85,7 @@ class Financeiro_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
 
