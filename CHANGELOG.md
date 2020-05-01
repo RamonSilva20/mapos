@@ -8,6 +8,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changed
 - Melhoria em execução de migration e refatoração em helper de validação. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhoria em busca de informações na receita federal (CNPJ). [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.7.0] - 2020-04-28
 
