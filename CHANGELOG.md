@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.1] - 2020-05-01
+
+## Changed
+- Melhoria em execução de migration e refatoração em helper de validação. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhoria em busca de informações na receita federal (CNPJ). [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.7.0] - 2020-04-28
 
 ### Added

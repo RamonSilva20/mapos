@@ -369,12 +369,6 @@ class Mapos extends MY_Controller
 
         $this->load->library('migration');
 
-        if ($this->migration->current()) {
-            $this->session->set_flashdata('success', 'O banco de dados já está atualizado!');
-
-            return redirect(site_url('mapos/configurar'));
-        }
-
         if ($this->migration->latest() === false) {
             $this->session->set_flashdata('error', $this->migration->error_string());
         } else {
