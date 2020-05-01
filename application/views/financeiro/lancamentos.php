@@ -109,9 +109,6 @@ $periodo = $this->input->get('periodo');
                         <td colspan="8" >Nenhum lançamento encontrado</td>
                       </tr>';
               }
-              $totalReceita = 0;
-              $totalDespesa = 0;
-              $saldo = 0;
               foreach ($results as $r) {
                   $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
                   if ($r->baixado == 0) {
@@ -121,10 +118,8 @@ $periodo = $this->input->get('periodo');
                   };
                   if ($r->tipo == 'receita') {
                       $label = 'success';
-                      $totalReceita += $r->valor;
                   } else {
                       $label = 'important';
-                      $totalDespesa += $r->valor;
                   }
                   echo '<tr>';
                   echo '<td>' . $r->idLancamentos . '</td>';
@@ -153,15 +148,15 @@ $periodo = $this->input->get('periodo');
           <tfoot>
             <tr>
               <td colspan="6" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
-              <td colspan="3" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totalReceita, 2, ',', '.') ?></strong></td>
+              <td colspan="3" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong></td>
             </tr>
             <tr>
               <td colspan="6" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
-              <td colspan="3" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totalDespesa, 2, ',', '.') ?></strong></td>
+              <td colspan="3" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong></td>
             </tr>
             <tr>
               <td colspan="6" style="text-align: right"> <strong>Saldo:</strong></td>
-              <td colspan="3" style="text-align: left;"><strong>R$ <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?></strong></td>
+              <td colspan="3" style="text-align: left;"><strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong></td>
             </tr>
           </tfoot>
         </table>

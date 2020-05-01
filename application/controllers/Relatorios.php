@@ -57,12 +57,12 @@ class Relatorios extends MY_Controller
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
 
-        $data['title'] = 'Relatório de Clientes Costumizado';
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Clientes Custumizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
@@ -78,9 +78,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $data['title'] = 'Relatório de Clientes';
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Clientes';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
@@ -97,6 +97,9 @@ class Relatorios extends MY_Controller
         }
 
         $data['produtos'] = $this->Relatorios_model->produtosRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Produtos';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -111,6 +114,9 @@ class Relatorios extends MY_Controller
         }
 
         $data['produtos'] = $this->Relatorios_model->produtosRapidMin();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Produtos Com Estoque Mínimo';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -130,6 +136,9 @@ class Relatorios extends MY_Controller
         $estoqueFinal = $this->input->get('estoqueFinal');
 
         $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Produtos Customizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -171,7 +180,12 @@ class Relatorios extends MY_Controller
 
         $precoInicial = $this->input->get('precoInicial');
         $precoFinal = $this->input->get('precoFinal');
+
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Serviços Customizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
         pdf_create($html, 'relatorio_servicos' . date('d/m/y'), true);
@@ -185,6 +199,9 @@ class Relatorios extends MY_Controller
         }
 
         $data['servicos'] = $this->Relatorios_model->servicosRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Serviços';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
@@ -209,7 +226,9 @@ class Relatorios extends MY_Controller
         }
 
         $data['os'] = $this->Relatorios_model->osRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de OS';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
@@ -244,13 +263,8 @@ class Relatorios extends MY_Controller
 
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
         $data['dataFinal'] = $dataFinal != null ? date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
-
-        if ($emitente) {
-            $data['em_nome'] = $emitente[0]->nome;
-            $data['em_cnpj'] = $emitente[0]->cnpj;
-            $data['em_logo'] = $emitente[0]->url_logo;
-            $data['topo'] = $this->load->view('relatorios/rel_os_topo', $data, true);
-        }
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
@@ -275,6 +289,9 @@ class Relatorios extends MY_Controller
         }
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório Financeiro';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
@@ -294,6 +311,9 @@ class Relatorios extends MY_Controller
         $situacao = $this->input->get('situacao');
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório Financeiro Customizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
@@ -318,6 +338,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
         $data['vendas'] = $this->Relatorios_model->vendasRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Clientes Custumizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
@@ -336,6 +359,10 @@ class Relatorios extends MY_Controller
         $responsavel = $this->input->get('responsavel');
 
         $data['vendas'] = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Vendas Custumizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
         pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);

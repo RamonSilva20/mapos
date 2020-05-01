@@ -178,7 +178,17 @@ class Github_updater
     private function _get_and_extract($hash)
     {
         copy(self::GITHUB_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/zipball/'.$this->ci->config->item('github_branch'), "{$hash}.zip");
-        shell_exec("unzip {$hash}.zip");
+
+        $unzip = new ZipArchive();
+
+        $output = $unzip->open("{$hash}.zip");
+        if ($output) {
+            $unzip->extractTo(getcwd());
+            $unzip->close();
+        } else {
+            throw new Error('Error opening zip file!');
+        }
+
         $files = scandir('.');
 
         foreach ($files as $file) {

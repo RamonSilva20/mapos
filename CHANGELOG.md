@@ -10,6 +10,11 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adicionado coluna contato e coluna complemento na tabela de clientes. [@gustavol](https://github.com/gustavol)
 - Implementado auto complete de dados de cliente via API da Receita Federal (CNPJ). [@gustavol](https://github.com/gustavol)
 
+## [4.6.2] - 2020-04-29
+
+### Fixed
+- Corrigido total de receitas, despesas e saldo em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.6.1] - 2020-04-28
 
 ### Changed

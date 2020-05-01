@@ -6,6 +6,7 @@
  */
 $config['app_version'] = '4.7.0';
 
+
 /**
  * Nome do sistema
  */
