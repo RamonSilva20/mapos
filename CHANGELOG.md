@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.0] - 2020-04-28
+
+### Added
+- Adicionado coluna contato e coluna complemento na tabela de clientes. [@gustavol](https://github.com/gustavol)
+- Implementado auto complete de dados de cliente via API da Receita Federal (CNPJ). [@gustavol](https://github.com/gustavol)
+
 ## [4.6.2] - 2020-04-29
 
 ### Fixed

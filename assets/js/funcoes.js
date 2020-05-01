@@ -1,5 +1,4 @@
 $(function () {
-
     $("#celular").mask("(00)00000-0000")
     $("#telefone").mask("(00)0000-0000")
     $("#cep").mask("00000-000")
@@ -22,6 +21,12 @@ $(function () {
 });
 
 $(document).ready(function () {
+    if ($("[name='idClientes']").val()) {
+        $("#nomeCliente").focus();
+    } else { 
+        $("#documento").focus();
+    }
+    
     function limpa_formulario_cep() {
         // Limpa valores do formulário de cep.
         $("#rua").val("");
@@ -29,6 +34,85 @@ $(document).ready(function () {
         $("#cidade").val("");
         $("#estado").val("");
     }
+    
+    function capitalizeFirstLetter(string) { 
+        if (typeof string === 'undefined'){ 
+            return; 
+        } 
+        
+        return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase(); 
+    }
+    
+    function capital_letter(str) {
+        if (typeof str === 'undefined'){ return; }
+        str = str.toLocaleLowerCase().split(" ");
+
+        for (var i = 0, x = str.length; i < x; i++) {
+            str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+        }
+
+        return str.join(" ");
+    }
+
+    //Quando o campo documento perde o foco.
+    $("#documento").blur(function () {
+        // No caso da edição a consulta automatica pode bagunçar todas as demais informações
+        if (typeof $("[name='idClientes']").val() !== 'undefined'){
+          if(!confirm("Deseja consultar o CNPJ?")){
+            return;
+          }
+        }
+
+        //Nova variável "ndocumento" somente com dígitos.
+        var ndocumento = $(this).val().replace(/\D/g, '');
+        //Verifica se campo documento possui valor informado.
+        if (ndocumento != "") {
+            //Valida o numero de digitos
+            if (ndocumento.length > 10) {
+                //Preenche os campos com "..." enquanto consulta webservice.
+                $("#nomeCliente").val("...");
+                $("#cep").val("...");
+                $("#email").val("...");
+                $("#numero").val("...");
+                $("#complemento").val("...");
+                $("#telefone").val("...");
+
+                //Consulta o webservice receitaws.com.br/
+                $.getJSON("https://www.receitaws.com.br/v1/cnpj/" + ndocumento + "?callback=?", function (dados) {
+                    if (dados.status == "OK") {
+                        //Atualiza os campos com os valores da consulta.
+                        //if ()
+                        $("#nomeCliente").val(capital_letter(dados.nome));
+                        $("#cep").val(dados.cep.replace(/\D/g, ''));
+                        $("#email").val(dados.email.toLocaleLowerCase());
+                        $("#numero").val(dados.numero);
+                        $("#complemento").val(capitalizeFirstLetter(dados.complemento));
+                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\D/g, ''));
+
+
+                        // Força uma atualizacao do endereco via cep
+                        document.getElementById("cep").focus();
+                        document.getElementById("nomeCliente").focus();
+                    } //end if.
+                    else {
+                        //CEP pesquisado não foi encontrado.
+                        $("#nomeCliente").val("");
+                        $("#cep").val("");
+                        $("#email").val("");
+                        $("#numero").val("");
+                        $("#complemento").val("");
+                        $("#telefone").val("");
+
+                        Swal.fire({
+                            type: "warning",
+                            title: "Atenção",
+                            text: "CNPJ não encontrado."
+                        });
+                    }
+                });
+            }
+        }
+    });
 
     //Quando o campo cep perde o foco.
     $("#cep").blur(function () {
@@ -62,7 +146,6 @@ $(document).ready(function () {
                         $("#bairro").val(dados.bairro);
                         $("#cidade").val(dados.localidade);
                         $("#estado").val(dados.uf);
-                        document.getElementById("numero").focus();
                     } //end if.
                     else {
                         //CEP pesquisado não foi encontrado.
