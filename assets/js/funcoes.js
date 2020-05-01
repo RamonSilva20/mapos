@@ -23,10 +23,10 @@ $(function () {
 $(document).ready(function () {
     if ($("[name='idClientes']").val()) {
         $("#nomeCliente").focus();
-    } else { 
+    } else {
         $("#documento").focus();
     }
-    
+
     function limpa_formulario_cep() {
         // Limpa valores do formulário de cep.
         $("#rua").val("");
@@ -34,15 +34,15 @@ $(document).ready(function () {
         $("#cidade").val("");
         $("#estado").val("");
     }
-    
-    function capitalizeFirstLetter(string) { 
-        if (typeof string === 'undefined'){ 
-            return; 
-        } 
-        
-        return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase(); 
+
+    function capitalizeFirstLetter(string) {
+        if (typeof string === 'undefined'){
+            return;
+        }
+
+        return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase();
     }
-    
+
     function capital_letter(str) {
         if (typeof str === 'undefined'){ return; }
         str = str.toLocaleLowerCase().split(" ");
@@ -54,41 +54,88 @@ $(document).ready(function () {
         return str.join(" ");
     }
 
-    //Quando o campo documento perde o foco.
-    $("#documento").blur(function () {
-        // No caso da edição a consulta automatica pode bagunçar todas as demais informações
-        if (typeof $("[name='idClientes']").val() !== 'undefined'){
-          if(!confirm("Deseja consultar o CNPJ?")){
-            return;
-          }
+    function validarCNPJ(cnpj) {
+        cnpj = cnpj.replace(/[^\d]+/g,'');
+
+        if(cnpj == '') return false;
+
+        if (cnpj.length != 14) return false;
+
+        // Elimina CNPJs invalidos conhecidos
+        if (cnpj == "00000000000000" ||
+            cnpj == "11111111111111" ||
+            cnpj == "22222222222222" ||
+            cnpj == "33333333333333" ||
+            cnpj == "44444444444444" ||
+            cnpj == "55555555555555" ||
+            cnpj == "66666666666666" ||
+            cnpj == "77777777777777" ||
+            cnpj == "88888888888888" ||
+            cnpj == "99999999999999")
+            return false;
+
+        // Valida DVs
+        tamanho = cnpj.length - 2
+        numeros = cnpj.substring(0,tamanho);
+        digitos = cnpj.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0))
+            return false;
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0,tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                    pos = 9;
         }
 
-        //Nova variável "ndocumento" somente com dígitos.
-        var ndocumento = $(this).val().replace(/\D/g, '');
-        //Verifica se campo documento possui valor informado.
-        if (ndocumento != "") {
-            //Valida o numero de digitos
-            if (ndocumento.length > 10) {
-                //Preenche os campos com "..." enquanto consulta webservice.
-                $("#nomeCliente").val("...");
-                $("#cep").val("...");
-                $("#email").val("...");
-                $("#numero").val("...");
-                $("#complemento").val("...");
-                $("#telefone").val("...");
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
 
-                //Consulta o webservice receitaws.com.br/
-                $.getJSON("https://www.receitaws.com.br/v1/cnpj/" + ndocumento + "?callback=?", function (dados) {
+        if (resultado != digitos.charAt(1))
+            return false;
+
+        return true;
+    }
+
+    $('#buscar_info_cnpj').on('click', function () {
+        //Nova variável "ndocumento" somente com dígitos.
+        var ndocumento = $('#documento').val().replace(/\D/g, '');
+
+        if (validarCNPJ(ndocumento)) {
+            //Preenche os campos com "..." enquanto consulta webservice.
+            $("#nomeCliente").val("...");
+            $("#cep").val("...");
+            $("#email").val("...");
+            $("#numero").val("...");
+            $("#complemento").val("...");
+            $("#telefone").val("...");
+
+            //Consulta o webservice receitaws.com.br/
+            $.ajax({
+                url: "https://www.receitaws.com.br/v1/cnpj/" + ndocumento,
+                dataType: 'jsonp',
+                crossDomain: true,
+                contentType: "text/javascript",
+                success: function (dados) {
                     if (dados.status == "OK") {
                         //Atualiza os campos com os valores da consulta.
-                        //if ()
                         $("#nomeCliente").val(capital_letter(dados.nome));
                         $("#cep").val(dados.cep.replace(/\D/g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
                         $("#numero").val(dados.numero);
                         $("#complemento").val(capitalizeFirstLetter(dados.complemento));
                         $("#telefone").val(dados.telefone.split("/")[0].replace(/\D/g, ''));
-
 
                         // Força uma atualizacao do endereco via cep
                         document.getElementById("cep").focus();
@@ -109,8 +156,30 @@ $(document).ready(function () {
                             text: "CNPJ não encontrado."
                         });
                     }
-                });
-            }
+                },
+                error: function() {
+                    ///CEP pesquisado não foi encontrado.
+                    $("#nomeCliente").val("");
+                    $("#cep").val("");
+                    $("#email").val("");
+                    $("#numero").val("");
+                    $("#complemento").val("");
+                    $("#telefone").val("");
+
+                    Swal.fire({
+                        type: "warning",
+                        title: "Atenção",
+                        text: "CNPJ não encontrado."
+                    });
+                },
+                timeout: 2000,
+            });
+        } else {
+            Swal.fire({
+                type: "warning",
+                title: "Atenção",
+                text: "CNPJ inválido!"
+            });
         }
     });
 
