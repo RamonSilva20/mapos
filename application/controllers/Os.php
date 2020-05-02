@@ -62,7 +62,8 @@ class Os extends MY_Controller
         $this->data['results'] = $this->os_model->getOs(
             'os',
             'os.*,
-            COALESCE(SUM(produtos_os.preco * produtos_os.quantidade), 0) + COALESCE(SUM(servicos_os.preco * servicos_os.quantidade), 0) as total',
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',
             $where_array,
             $this->data['configuration']['per_page'],
             $this->uri->segment(3)
