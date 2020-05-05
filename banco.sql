@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `cidade` VARCHAR(45) NULL DEFAULT NULL,
   `estado` VARCHAR(20) NULL DEFAULT NULL,
   `cep` VARCHAR(20) NULL DEFAULT NULL,
+  `contato` varchar(45) DEFAULT NULL,
+  `complemento` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idClientes`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
