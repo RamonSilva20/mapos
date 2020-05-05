@@ -27,3 +27,5 @@ application/logs/*
 ci_sessions/
 
 uploads
+
+application/config/email.php
