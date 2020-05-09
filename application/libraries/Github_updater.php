@@ -299,7 +299,8 @@ class Github_updater
         return false;
     }
 
-    private function deleteDirectory($dir) {
+    private function deleteDirectory($dir)
+    {
         if (!file_exists($dir)) {
             return true;
         }
@@ -316,7 +317,6 @@ class Github_updater
             if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
 
         return rmdir($dir);

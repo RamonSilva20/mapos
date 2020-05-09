@@ -159,7 +159,7 @@ class Mapos_model extends CI_Model
 
     public function getEstatisticasVendasMes($year)
     {
-        $numbersOnly = preg_replace( '/[^0-9]/', '', $year);
+        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
         if (!$numbersOnly) {
             $numbersOnly = date('Y');
