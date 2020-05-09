@@ -16,16 +16,23 @@
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
-                    <div class="control-group">
+                  <div class="control-group">
+                      <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                      <div class="controls">
+                          <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
+                          <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar Informações (CNPJ)</button>
+                      </div>
+                  </div>
+                  <div class="control-group">
                         <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
                             <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo set_value('nomeCliente'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                        <label for="contato" class="control-label">Contato:</label>
                         <div class="controls">
-                            <input class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
+                            <input class="nomeCliente" type="text" name="contato" value="<?php echo set_value('contato'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -48,25 +55,28 @@
                             <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
                         </div>
                     </div>
-
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
                             <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
                         </div>
                     </div>
-
+                    <div class="control-group" class="control-label">
+                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
+                        </div>
+                    </div>
                     <div class="control-group">
                         <label for="numero" class="control-label">Número<span class="required">*</span></label>
                         <div class="controls">
                             <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>" />
                         </div>
                     </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
+                    <div class="control-group">
+                        <label for="complemento" class="control-label">Complemento</label>
                         <div class="controls">
-                            <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
+                            <input id="complemento" type="text" name="complemento" value="<?php echo set_value('complemento'); ?>" />
                         </div>
                     </div>
 

@@ -58,12 +58,14 @@ class Clientes extends MY_Controller
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
+                'contato' => set_value('contato'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
+                'celular' => set_value('celular'),
                 'email' => set_value('email'),
                 'rua' => set_value('rua'),
                 'numero' => set_value('numero'),
+                'complemento' => set_value('complemento'),
                 'bairro' => set_value('bairro'),
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
@@ -104,12 +106,14 @@ class Clientes extends MY_Controller
         } else {
             $data = [
                 'nomeCliente' => $this->input->post('nomeCliente'),
+                'contato' => $this->input->post('contato'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
                 'celular' => $this->input->post('celular'),
                 'email' => $this->input->post('email'),
                 'rua' => $this->input->post('rua'),
                 'numero' => $this->input->post('numero'),
+                'complemento' => $this->input->post('complemento'),
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),

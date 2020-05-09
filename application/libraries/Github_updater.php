@@ -97,7 +97,7 @@ class Github_updater
 
                 // Clean up
                 if ($this->ci->config->item('clean_update_files')) {
-                    shell_exec("rm -rf {$dir}");
+                    $this->deleteDirectory($dir);
                     unlink("{$hash}.zip");
                 }
 
@@ -178,7 +178,17 @@ class Github_updater
     private function _get_and_extract($hash)
     {
         copy(self::GITHUB_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/zipball/'.$this->ci->config->item('github_branch'), "{$hash}.zip");
-        shell_exec("unzip {$hash}.zip");
+
+        $unzip = new ZipArchive();
+
+        $output = $unzip->open("{$hash}.zip");
+        if ($output) {
+            $unzip->extractTo(getcwd());
+            $unzip->close();
+        } else {
+            throw new Error('Error opening zip file!');
+        }
+
         $files = scandir('.');
 
         foreach ($files as $file) {
@@ -287,5 +297,28 @@ class Github_updater
         }
 
         return false;
+    }
+
+    private function deleteDirectory($dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+
+        return rmdir($dir);
     }
 }

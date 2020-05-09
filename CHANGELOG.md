@@ -4,6 +4,57 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.4] - 2020-05-09
+
+## Changed
+- Melhorado a limpeza de diretório extrapido de atualização para funcionar em qualquer SO. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.7.3] - 2020-05-08
+
+## Fixed
+- Corrigido versão inicial de migrations. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.7.2] - 2020-05-02
+
+## Fixed
+- Corrigido valor total de OS incorreto por conta de JOINS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.7.1] - 2020-05-01
+
+## Changed
+- Melhoria em execução de migration e refatoração em helper de validação. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhoria em busca de informações na receita federal (CNPJ). [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.7.0] - 2020-04-28
+
+### Added
+- Adicionado coluna contato e coluna complemento na tabela de clientes. [@gustavol](https://github.com/gustavol)
+- Implementado auto complete de dados de cliente via API da Receita Federal (CNPJ). [@gustavol](https://github.com/gustavol)
+
+## [4.6.2] - 2020-04-29
+
+### Fixed
+- Corrigido total de receitas, despesas e saldo em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.6.1] - 2020-04-28
+
+### Changed
+- Melhorado extração de zip de atualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.6.0] - 2020-04-27
+
+### Fixed
+- Corrigido topo de todos os relatórios. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Added
+- Implementado gráfico de barras dinâmico de vendas por ano.[@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.5.4] - 2020-04-23
+
+### Fixed
+- Corrigido logs de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido separador de diretórios em upload de anexo em OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.5.3] - 2020-04-21
 
 ### Fixed
