@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.3] - 2020-05-08
+- Corrigido versão inicial de migrations. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Corrigido valor total de OS incorreto por conta de JOINS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.7.2] - 2020-05-02
 
 ## Fixed
