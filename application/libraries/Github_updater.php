@@ -97,7 +97,7 @@ class Github_updater
 
                 // Clean up
                 if ($this->ci->config->item('clean_update_files')) {
-                    shell_exec("rm -rf {$dir}");
+                    $this->deleteDirectory($dir);
                     unlink("{$hash}.zip");
                 }
 
@@ -297,5 +297,28 @@ class Github_updater
         }
 
         return false;
+    }
+
+    private function deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
     }
 }

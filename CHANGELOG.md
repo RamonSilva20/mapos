@@ -7,7 +7,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [4.7.4] - 2020-05-09
 
 ## Changed
-- Melhorodado limpeza de diretório extrapido de atualização para funcionar em qualquer SO. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Melhorado a limpeza de diretório extrapido de atualização para funcionar em qualquer SO. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.7.3] - 2020-05-08
 
