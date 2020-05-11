@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.5] - 2020-05-11
+
+## Fixed
+- Refatorado a adição de produtos/serviços na OS com a adição de form_validation. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.7.4] - 2020-05-09
 
 ## Changed
