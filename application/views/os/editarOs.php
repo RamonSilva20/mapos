@@ -632,11 +632,23 @@
 
         $("#formProdutos").validate({
             rules: {
+                produto: {
+                    required: true
+                },
+                preco: {
+                    required: true
+                },
                 quantidade: {
                     required: true
                 }
             },
             messages: {
+                produto: {
+                    required: 'Insira o produto'
+                },
+                preco: {
+                    required: 'Insira o preço'
+                },
                 quantidade: {
                     required: 'Insira a quantidade'
                 }
@@ -663,19 +675,19 @@
                         url: "<?php echo base_url(); ?>index.php/os/adicionarProduto",
                         data: dados,
                         dataType: 'json',
-                        success: function(data) {
-                            if (data.result == true) {
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
-                                $("#quantidade").val('');
-                                $("#preco").val('');
-                                $("#produto").val('').focus();
-                            } else {
-                                Swal.fire({
-                                    type: "error",
-                                    title: "Atenção",
-                                    text: "Ocorreu um erro ao tentar adicionar produto."
-                                });
-                            }
+                        success: function() {
+                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#quantidade").val('');
+                            $("#preco").val('');
+                            $("#produto").val('').focus();
+                        },
+                        error: function() {
+                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar adicionar produto."
+                            });
                         }
                     });
                     return false;
@@ -687,12 +699,24 @@
             rules: {
                 servico: {
                     required: true
-                }
+                },
+                preco: {
+                    required: true
+                },
+                quantidade: {
+                    required: true
+                },
             },
             messages: {
                 servico: {
                     required: 'Insira um serviço'
-                }
+                },
+                preco: {
+                    required: 'Insira o preço'
+                },
+                quantidade: {
+                    required: 'Insira a quantidade'
+                },
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
@@ -703,19 +727,19 @@
                     url: "<?php echo base_url(); ?>index.php/os/adicionarServico",
                     data: dados,
                     dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
-                            $("#quantidade_servico").val('');
-                            $("#preco_servico").val('');
-                            $("#servico").val('').focus();
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar adicionar serviço."
-                            });
-                        }
+                    success: function() {
+                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                        $("#quantidade_servico").val('');
+                        $("#preco_servico").val('');
+                        $("#servico").val('').focus();
+                    },
+                    error: function() {
+                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: "Ocorreu um erro ao tentar adicionar serviço."
+                        });
                     }
                 });
                 return false;

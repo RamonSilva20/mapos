@@ -380,4 +380,48 @@ $config = [
             'rules' => 'trim|required|integer',
         ]
     ],
+    'adicionar_produto_os' => [
+        [
+            'field' => 'idProduto',
+            'label' => 'idProduto',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'quantidade',
+            'label' => 'quantidade',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'idOsProduto',
+            'label' => 'idOsProduto',
+            'rules' => 'trim|required|numeric',
+        ],
+    ],
+    'adicionar_servico_os' => [
+        [
+            'field' => 'idServico',
+            'label' => 'idServico',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'quantidade',
+            'label' => 'quantidade',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'idOsServico',
+            'label' => 'idOsServico',
+            'rules' => 'trim|required|numeric',
+        ],
+    ]
 ];
