@@ -21,15 +21,15 @@ class MercadoPago implements GatewayPagamento
         $item->unit_price = $unit_price;
         $this->preference->items = [$item];
 
-        # Salvar e postar a preferência
-        #exclui metodo de pagamento boleto
-        $this->preference->payment_methods = [
+       #Deixar apenas cartão de credito e excluir as demais forma de pagamentos, delete /* */ linha 26  e 31
+        /*$this->preference->payment_methods = [
             "excluded_payment_types" => [
                 ["id" => "ticket"],
             ],
             "installments" => 12,
-        ];
+        ];*/
 
+        # Salvar e postar a preferência
         $this->preference->save();
         return $this->preference;
     }
