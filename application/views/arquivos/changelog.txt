@@ -1,0 +1,516 @@
+Responsive Filemanager Changelog 
+
+*********************************************************
+*  RFM 9.14.0
+*********************************************************
+- add support to tinymce 5 (thanks to mikolaj pich)
+- change image editor to Toast UI Image Editor (thanks to jack denning)
+- fix Critical Security (thanks to Fariskhi Vidyan for reporting)
+- add ckEditor on html file edit
+- update context menu (thanks to joshua schmidtke)
+- fix upload an image with malicius code inside
+- added compatibility with memory_limit expressed in G
+- fix relative url return
+- fix error on file duplication
+- fix error with memory usage (thanks to tim mclaughlin)
+- fix a vulnerability on url upload (thanks to donot-wong for reporting)
+- fix return on upload in same cases
+- other fixes (thanks to all for reporting)
+
+*********************************************************
+*  RFM 9.13.4
+*********************************************************
+- fix Directory Traversal Allows to Read Any File (thanks to Simon Uvarov for reporting)
+- fix Path Traversal While Upacking Archives (thanks to Simon Uvarov for reporting)
+- Fix foreach warning on URL upload
+- Fix http https URL upload
+- add toggle on config for extract_files
+- prevent image creation for broken links in URL upload (thanks to davodavodavo3)
+- Migrate to yarn on development (thanks to mklkj)
+- code refactoring
+
+
+
+*********************************************************
+*  RFM 9.13.3
+*********************************************************
+- support to files without extension
+- fix Path Traversal vulnerability and url validation
+- fix vulnerability that permits to see server files
+- fix double file and folder rename
+- refactoring
+- update Hungarian, German and Thai languages
+- fix nested php tags in download permission
+- change jPlayer script to cdn
+
+
+*********************************************************
+*  RFM 9.13.2
+*********************************************************
+- empty filename support (like .htaccess, .env,...)
+- fix download bug
+- refactoring check extension
+
+
+*********************************************************
+*  RFM 9.13.1
+*********************************************************
+- folder creation fix
+- blacklist fix
+- php < 5.6 compatibility fix
+
+*********************************************************
+*  RFM 9.13.0
+*********************************************************
+- multiple file selection: you can delete multiple files, you can select multiple file (n.b. if you select multiple files on stand alone mode it return a json list of urls, if you use editor with normal mode return only the first and if you use tinymce with responsivefilemanager plugin return all files on editor)
+- you can disable mime type renaming on config
+- blacklist extensions available on config
+- fixed precompiled test on duplication
+- rfm remember the last folder when return to filemanager
+- added mime type .rar
+- fixed folder permission to get config value
+- fixed an error on folder renaming
+- a lot of others bugs fixed
+
+
+*********************************************************
+*  RFM 9.12.2
+*********************************************************
+- fixed a security vulnerability (thanks to sashaptrw)
+- fixed other minor problems
+
+*********************************************************
+*  RFM 9.12.1
+*********************************************************
+- fix FTP support
+- fix problem with subfolder session
+
+*********************************************************
+*  RFM 9.12.0
+*********************************************************
+- fixed multiple security vulnerabilities (thanks to Ryan Dewhurst - BSc Ethical Hacking for Computer Security, CCNA)
+- fixed lazy loading problems with a new plugin
+- copy url without flash with clipboard.js
+- removed java uploader and introduce new upload system with canucks part
+- new upload method with jQuery-File-Upload
+- removed viewer_js and substituted with google preview
+- fix problem with url upload
+- multiple files, folder upload permission also WITH RECURSIVE FOLDER UPLOAD
+- fix the config.php inclusion on subfolders see CUSTOMISE CONFIGURATION FOR EACH FOLDER on documentation
+- RTL stylesheet on repository (if you want to use simply include on dialog.php)
+- you can now drop files/folders everywhere to upload
+
+*********************************************************
+*  RFM 9.11.3
+*********************************************************
+- fixed multiple security vulnerabilities (thanks to Wiswat Aswamenakul (Nick))
+- url upload toggle
+- fixed upload xml
+- prettify improvement
+- added cad preview
+- other minor bug fixes
+
+*********************************************************
+*  RFM 9.11.0
+*********************************************************
+- fixed multiple security vulnerabilities (thanks to CERT-W and Davide Girardi from Outpost24)
+- Add FTP beta support
+- Upload from URL
+- Add watermark on images
+- fixed problem with some file type on upload
+- fixed a problem with change language
+- fixed a problem with rename
+- fixed a problem with upload mine type
+- fixed memory_error bool indicator
+- add configuration to add &time to image to prevent chaching
+- other fixes
+
+*********************************************************
+*  RFM 9.10.2
+*********************************************************
+- fixed Download of large file
+- added pause resume download
+- fixed problem with base_url function
+- removed set_time_limit call
+
+*********************************************************
+*  RFM 9.10.1
+*********************************************************
+- now you can pass available extensions list in url (ex. you can show only excel files)
+- fixed a problem with php<5.3
+- remember filter and sort after refresh
+- added config toggle to show/hide filter buttons and language selection button
+- fixed a problem when you click on namefile label (previously was equal to click two times)
+- fixed a problem with relative path with folder (thanks to gordon-matt)
+- fixed a problem with mimetype in some cases
+- fixed a problem with cache on image editor include
+- fixed a problem with + char on folders name
+
+*********************************************************
+*  RFM 9.10.0
+*********************************************************
+- added total max size control to limit the size of all files into
+source folder (you can control it in config.php) (thanks to Stephane MERCIER)
+- improved the error messages (thanks to Stephane MERCIER)
+- update jplayer
+- fixed a incorrect closing of upload modal
+- fixed lowercase on convert_spaces active and add lower_case option on config.php
+- add mimetype control on upload (ex. if i renane img.jpg to img.pdf and upload to filemananger the system check the time type and converte it to img.jpg)
+- fixed permission error on files and folders
+- other fix
+
+
+*********************************************************
+*  RFM 9.9.7
+*********************************************************
+- fixed pdf preview
+- fixed a bug with session subfolder folder creation
+- fixed a bug with folder creation
+- fixed a problem with ie and allow_url_fopen server config
+- fixed a problem with folder copy
+- fixed a problem with relative folder url export
+- fixed error 'TypeError: $ is not a function'
+- fixed a problem with lang in query string
+- fixed a problem with drag&drop on android
+
+*********************************************************
+*  RFM 9.9.6
+*********************************************************
+- fixed a security vulnerability (thanks to securitum.pl)
+- code refactoring removed thumb path to ajax calls
+- improve file/folder permission layout and fixed a error
+- fixed a problem with image editor
+- added vitnamese language
+
+
+*********************************************************
+*  RFM 9.9.5
+*********************************************************
+- fixed a Adobe Creative SDK issue
+- fixed a problem when you edit multiple image in the same session
+- fixed a problem with security issue in some server configurations
+- added maxSize config to Adobe Creative SDK export image (default now is 1400)
+
+
+*********************************************************
+*  RFM 9.9.4
+*********************************************************
+- Upgrade Aviary Image Editor with new Adobe Creative SDK without size limitation
+- Add files and folders counter on each folder
+- Fixed a problem with folder selection on relative url
+
+*********************************************************
+*  RFM 9.9.3
+*********************************************************
+- Fixed the problem with undefined windowParent
+- Fixed a problem with selection on CKeditor
+- Added bootstrap modal default support
+
+*********************************************************
+*  RFM 9.9.2
+*********************************************************
+- added file selection directly from dropzone upload area (you can now select file directly after upload)
+- folder selection in context menu (you can now select also a folder)
+- responsive filemanager modal open on tinyMCE (the dimension of modal depend on window dimension)
+- utf8 translitteration fix
+
+*********************************************************
+*  RFM 9.9.1
+*********************************************************
+- bugfix
+
+*********************************************************
+*  RFM 9.9.0
+*********************************************************
+- add compatibility with CKEditor (thanks to dennis.buijs)
+- fix ordering and filtering bugs (in js and php)
+- Refactoring of configuration and language files (thanks to rkgrep)
+- updated libraries via bower dependency management (thanks to rkgrep)
+- added Assets compilation via gulp for developing (thanks to rkgrep)
+- added Hebrew lang (sagie212)
+
+
+*********************************************************
+*  RFM 9.8.1
+*********************************************************
+- add compatibility with free full resolution with aviary image editor
+- convert all include(); with include ‘’;
+- fix a problem with lowercase automatically change 
+
+*********************************************************
+*  RFM 9.8
+*********************************************************
+- added pdf, openoffice files preview with customized viewer.js
+- added other office file preview with google preview
+- fixed ordering bug
+- improved layout style
+- added copy to clipboard button on show url dialog
+- fixed a bug when download a file
+- fixed a bug in relative path images creation
+- adding custom convert_spaces [by fungio]
+
+*********************************************************
+*  RFM 9.7.3
+*********************************************************
+- Fix a problem with lazy load and filters
+- add option to remember text filter in session
+
+*********************************************************
+*  RFM 9.7.2
+*********************************************************
+
+***** Major *****
+- Added mime type lib for downloads
+- Added lazy loading feature
+- Added options for auto and max image resizing
+- Lang. updates
+- Added touch devices support for drag&drop
+- Added support for returning relative URL-s
+- Bugfixes
+
+
+***** Detailed *****
+- Added mime type lib for downloads
+	All downloads no should load successfuly
+
+- Added lazy loading feature
+	Images will only load when in the viewport so when you are in a crowded folder it will load faster
+
+- Added options for auto and max image resizing
+	In the past all images that was resized either with max_image or auto resize was cropped.
+	Now the user can specify to crop,exact,landscape or portrait options.
+	The max image size can be overridden by auto resize option
+
+- Added support for returning relative URL-s
+	Relative URL-s can be returned when selecting files from the filemanager: a 'relative_url' GET parameter should be
+	added to the request with a value of "1" when opening RFM. Otherwise returned URL-s will be absolute.
+
+- Bugfixes
+	Fixed css bugs
+	Fixed drag&drop bugs
+	Removed 'default' access keys for security
+
+
+*********************************************************
+*  RFM 9.6.0
+*********************************************************
+
+***** Major *****
+- Cross domain feature
+- Add in config.php a option to replace all spaces with _
+- Encoding of Export URL
+- Code refactoring
+
+
+***** Detailed *****
+- Cross domain feature:To enable cross-domain file selector, where files are hosted on one server (for example, serverA.com) and URL is being sent to another (for example, serverB.com), include crossdomain=1 in the URL.
+For example, to instantiate image picker, use the following URL: http://serverA.com/[path to filemanager]/filemanager/dialog.php?type=1&field_id=fieldID&crossdomain=1
+Then on serverB.com, the following code can be used to retrieve the URL after file selection is made. Please note, that the code is written for jQuery with FancyBox plug-in.
+
+//
+// Handles message from ResponsiveFilemanager
+//
+function OnMessage(e){
+  var event = e.originalEvent;
+   // Make sure the sender of the event is trusted
+   if(event.data.sender === 'responsivefilemanager'){
+      if(event.data.field_id){
+      	var fieldID=event.data.field_id;
+      	var url=event.data.url;
+	$('#'+fieldID).val(url).trigger('change');
+	$.fancybox.close();
+
+	// Delete handler of the message from ResponsiveFilemanager
+	$(window).off('message', OnMessage);
+      }
+   }
+}
+
+// Handler for a message from ResponsiveFilemanager
+$(‘.opener-class).on('click',function(){
+  $(window).on('message', OnMessage);
+});
+
+
+FILE MANAGER AS TINYMCE PLUG-IN
+There is extra parameter needed filemanager_crossdomain when calling tinymce.init(), please see below.
+tinymce.init({
+   ...
+   filemanager_crossdomain: true,
+   external_filemanager_path:"http://path/secondaryserver/filemanager/",
+    external_plugins: { "filemanager" : "http://path/secondaryserver/filemanager/plugin.min.js"},
+   ...
+});
+
+
+- Convert_spaces options: enable the conversion of spaces to _ in file and folder name
+
+
+*********************************************************
+*  RFM 9.5.0
+*********************************************************
+
+***** Major *****
+- File permission changing
+- Language Changing
+- View/edit/create text files
+- Fixes
+
+NOTE: Changed upload button's icon!
+
+***** Detailed *****
+- File permission changing (OFF BY DEFAULT!)
+	Now you can change the files/folders permission with a slick window.
+	To access the window first you must activate it in the config file.
+	After you activated it you can reach it from the rigth click menu.
+	You can configure the permission with both text and checkboxes.
+	If you entered a wrong format/number the initial state will be restored.
+	When changing permissions for folders there will be more options for
+	recursive changing (No/only files/only folders/both).
+	If you set the permission wrong there will be errors.
+
+	NOTE! If you don't know what you are doing then leave as it is bacause
+	you can cause trouble.
+	Usually files are 644 and folders are 755
+	You CANNOT set the sticky bit!
+
+- Language Changing
+	You can now change the language dynamicly from the menu.
+	The button is located next to the refresh button (a globe icon)
+	
+	If adding new language, it should be added to the languages.php file as 
+	well for it to show up.
+	
+	I tried to identify all language codes and add the name on there own
+	language but I might messed up so please check it and correct it if
+	necessary. (Because I'm only a human and speak only 2 languages)
+
+- View/edit/create text files
+	You can now view/edit/create text based files like .txt.
+
+	To view a file's content just click on the preview (eye) icon.
+	To edit a file rigth click on it and select "Edit file's content"
+	To create a new file just click on the "+ file" icon (old upload button)
+
+	When creating a new file you must specify it's extension.
+	All valid extensions for edit/create are listed in the config file
+	($editable_text_file_exts)
+
+- Fixes
+	Fixed some css overflow errors
+	Removed lang_View from menu because it was overflowing
+	Removed hr.php lang because it's the same as hr_HR.php
+	Changed upload buttons icon to accomodate the "new file" addition
+
+*********************************************************
+*  RFM 9.4.1
+*********************************************************
+
+***** Major *****
+- Security Access Keys
+- More Tinymce settings
+- Tinymce 3.* support
+- Added image resize options
+- Bugfixes
+
+
+***** Detailed *****
+- Security Access Keys
+	If 'USE_ACCESS_KEYS' are set to true only those will access RF whose url
+	contains the access key (akey) like:
+	<input type="button" href="../filemanager/dialog.php?akey=myPrivateKey">
+
+	Allowed access keys are defined in the config as well.
+	$access_keys must be an array so you can add multiple.
+	Your access key should NEVER be 'key' and keep in mind they are CASE
+	SENSITIVE!
+	For recommended key generation read the comments in the config file.
+
+	If there's no access key supplied with the url or it's not in the
+	$access_key array you will get 'Access Denied' and you cannot continue.
+
+	For tinymce a new variable was added: "filemanager_access_key"
+
+	Tinymce config example:
+
+	tinyinit
+	...
+	external_filemanager_path:"../filemanager",
+	filemanager_access_key: "myPrivateKey",
+	...
+
+	This is a bit of additional security so no one can access your filesystem.
+
+- More Tinymce settings
+	- Added 'filemanager_subfolder' param so you can now define the starting folder in tinymce
+  	eg: 'filemanager_subfolder:"subfolder/"'
+
+- Bugfixes
+	- Fixed audio/video player bug
+	- Fix in remember last position
+	- Show url context link in all files and folder
+	- Fixed a problem with old thumbnails on renaming
+	- Fixed a copy past issue
+	- Fixed Standalone Mode not using the field_id passed in mixed use cases
+
+*********************************************************
+*  RFM 9.4.0
+*********************************************************
+
+***** Major *****
+- Cut/copy/paste support
+- Drag&drop support
+- Few new icons
+- Code refactor
+- Bugfixes
+
+
+***** Detailed *****
+- Cut/copy/paste
+	You can configure the actions in config.php file and disable/ limit them if needed.
+	When right clicking on a folder/file there will be options for copy and cut 
+	(and paste if files on clipboard and righ clicked on a file)
+	There's icon for paste to this dir and clear clipboard after the 'new dir' icons
+	They will grey out if there's nothing on the clipboard.
+
+- Drag&drop
+	Now you can drag n drop files/folders to other folders 
+	(this will overwrite existing files if encountered any!)
+
+- Icons
+	Added new icons for the new functions
+	All are legit made by me or get from free icon sites
+
+- Code Refator
+	- Added bunch of comments and change a lot of codes.
+
+	- Changed all $_SESSION vars to be in a separet array 
+	eg.:$_SESSION["verify"] -> $_SESSION['RF']["verify"]
+	So now there won't be any problem with big projecfts integrating RF
+
+	- Added the lang file url to $_SESSION['RF']['language_file']
+	Now it can be included easily
+
+	- Added a lot of new lang. lines and feedback info
+	New lines added to every language (in english) so translation can go smoothly
+	(There are places where i added %s to lang lines which will be swapped with an action name
+	, commented out what will be inserted at runtime)
+
+	- Added timeout when closing upload tab
+
+
+- Bugfixes
+	- Corrected issue #69 Dropzone spritemap.png problem
+	Now when loading a language it will search for the appropiate spritemaps.
+	If none found will fallback to english
+	All spritemaps should follow the language code naming eg:
+	For hu_HU:
+		spritemap_hu_HU.png
+		spritemap@2x_hu_HU.png
+
+	(might consider moving them in a separte folder in the future)
+
+	- Fixed issue #71 The uploaded file exceeds the max size allowed
+	Now when uploading it properly check for max post size
+	It is dealt with in config.php after definning the max upload size and if it's bigger 
+	than server's ini it will revert it back to it. 
