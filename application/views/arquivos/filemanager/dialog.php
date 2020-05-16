@@ -778,9 +778,9 @@ $files = $sorted;
                 <?php if($config['upload_files']){ ?>
                 <button class="tip btn upload-btn" title="<?php echo  trans('Upload_file');?>"><i class="rficon-upload"></i></button>
                 <?php } ?>
-                <?php if($config['create_text_files']){ ?>
+                <?php /*?><?php if($config['create_text_files']){ ?>
                 <button class="tip btn create-file-btn" title="<?php echo  trans('New_File');?>"><i class="icon-plus"></i><i class="icon-file"></i></button>
-                <?php } ?>
+                <?php } ?><?php */?>
                 <?php if($config['create_folders']){ ?>
                 <button class="tip btn new-folder" title="<?php echo  trans('New_Folder')?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button>
                 <?php } ?>
