@@ -778,7 +778,7 @@ $files = $sorted;
                 <?php if($config['upload_files']){ ?>
                 <button class="tip btn upload-btn" title="<?php echo  trans('Upload_file');?>"><i class="rficon-upload"></i></button>
                 <?php } ?>
-                <?php/*?><?php if($config['create_text_files']){ ?>
+                <?php /*?><?php if($config['create_text_files']){ ?>
                 <button class="tip btn create-file-btn" title="<?php echo  trans('New_File');?>"><i class="icon-plus"></i><i class="icon-file"></i></button>
                 <?php } ?><?php */?>
                 <?php if($config['create_folders']){ ?>
@@ -1188,17 +1188,15 @@ $files = $sorted;
 
                     <a title="<?php echo trans('Download')?>" class="tip-right" href="javascript:void('')" <?php if($config['download_files']) echo "onclick=\"$('#form".$nu."').submit();\"" ?>><i class="icon-download <?php if(!$config['download_files']) echo 'icon-white'; ?>"></i></a>
 
-                    <?php if($is_img && $src_thumb!=""){ ?>
-                    <a class="tip-right preview" title="<?php echo trans('Preview')?>" data-featherlight="<?php echo $src;?>"  href="#"><i class=" icon-eye-open"></i></a>
-                    <?php }elseif(($is_video || $is_audio) && in_array($file_array['extension'],$config['jplayer_exts'])){ ?>
+                    <?php if(($is_video || $is_audio) && in_array($file_array['extension'],$config['jplayer_exts'])){ ?>
                     <a class="tip-right modalAV <?php if($is_audio){ echo "audio"; }else{ echo "video"; } ?>"
                     title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=media_preview&title=<?php echo $filename;?>&file=<?php echo $rfm_subfolder.$subdir.$file;?>"
                     href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
                     <?php }elseif(in_array($file_array['extension'],$config['cad_exts'])){ ?>
                     <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=cad_preview&title=<?php echo $filename;?>&file=<?php echo $rfm_subfolder.$subdir.$file;?>"
                     href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
-                    <?php }elseif($config['preview_text_files'] && in_array($file_array['extension'],$config['previewable_text_file_exts'])){ ?>
-                    <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=text&title=<?php echo $filename;?>&file=<?php echo $rfm_subfolder.$subdir.$file;?>"
+                    <?php /*?><?php }elseif($config['preview_text_files'] && in_array($file_array['extension'],$config['previewable_text_file_exts'])){ ?>
+                    <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=text&title=<?php echo $filename;?>&file=<?php echo $rfm_subfolder.$subdir.$file;?>"<?php */?>
                     href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
                     <?php }elseif($config['googledoc_enabled'] && in_array($file_array['extension'],$config['googledoc_file_exts'])){ ?>
                     <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=google&title=<?php echo $filename;?>&file=<?php echo $rfm_subfolder.$subdir.$file;?>"
@@ -1362,7 +1360,7 @@ $files = $sorted;
 </body>
 </html>
 <script>
-$(".nomeArq").dblclick(function(){
+$(".nomeArq").click(function(){
 	var caminho = $( this ).attr('data-path');
 	var w = window.open("../source/" + caminho + "?id=","popupWindow", "width=" + screen.availWidth + ", height=" + (screen.availHeight - 65) + ", scrollbars=no,  menubar=no");
 	});
