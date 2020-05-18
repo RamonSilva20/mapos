@@ -4,6 +4,15 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.8.0] - 2020-05-18
+
+## Fixed
+- Correção de alguns erros de escrita em form_validation. [@willph](https://github.com/willph)
+
+## Changed
+- Liberado todos os modos de pagamento em mercado pago. [@willph](https://github.com/willph)
+- Melhoria em impressão de OS em impressora térmica. [@willph](https://github.com/willph)
+
 ## [4.7.5] - 2020-05-11
 
 ## Fixed
