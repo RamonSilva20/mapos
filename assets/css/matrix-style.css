@@ -1285,7 +1285,7 @@ form {
 	margin-top: -31px;
 	border-top:1px solid #363E48;
 	margin-bottom: 0px;
-	background:#D0D0D0;
+	background:#2E363F;
 	float:right;
 }
 .navbar > .nav {
@@ -1403,7 +1403,7 @@ form {
 	cursor:pointer;
 	margin:0px 2px 0 5px;
 	font-weight:bold;
-	color:#000;
+	color:#fff;
 	font-size:12px;
 }
 #sidebar > ul li a i {
