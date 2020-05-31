@@ -493,6 +493,17 @@ class Os extends MY_Controller
 
     public function adicionarProduto()
     {
+        $this->load->library('form_validation');
+
+        if ($this->form_validation->run('adicionar_produto_os') === false) {
+            $errors = validation_errors();
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($errors));
+        }
+
         $preco = $this->input->post('preco');
         $quantidade = $this->input->post('quantidade');
         $subtotal = $preco * $quantidade;
@@ -512,9 +523,16 @@ class Os extends MY_Controller
                 $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
-            echo json_encode(['result' => true]);
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true]));
         } else {
-            echo json_encode(['result' => false]);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode(['result' => false]));
         }
     }
 
@@ -542,6 +560,17 @@ class Os extends MY_Controller
 
     public function adicionarServico()
     {
+        $this->load->library('form_validation');
+
+        if ($this->form_validation->run('adicionar_servico_os') === false) {
+            $errors = validation_errors();
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($errors));
+        }
+
         $data = [
             'servicos_id' => $this->input->post('idServico'),
             'quantidade' => $this->input->post('quantidade'),
@@ -552,9 +581,16 @@ class Os extends MY_Controller
 
         if ($this->os_model->add('servicos_os', $data) == true) {
             log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
-            echo json_encode(['result' => true]);
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true]));
         } else {
-            echo json_encode(['result' => false]);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode(['result' => false]));
         }
     }
 

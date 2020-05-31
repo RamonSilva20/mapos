@@ -22,14 +22,6 @@ class MercadoPago implements GatewayPagamento
         $this->preference->items = [$item];
 
         # Salvar e postar a preferência
-        #exclui metodo de pagamento boleto
-        $this->preference->payment_methods = [
-            "excluded_payment_types" => [
-                ["id" => "ticket"],
-            ],
-            "installments" => 12,
-        ];
-
         $this->preference->save();
         return $this->preference;
     }

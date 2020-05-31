@@ -449,7 +449,7 @@ hr{ border-top-color:#dadada;}
 	margin-bottom: 3px;
 	margin-top: 6px;
 }
-.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good, {
+.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good {
  color: #459D1C;
 }
 .stat-boxes .peity_bar_neutral, .stat-boxes .peity_line_neutral {
