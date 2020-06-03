@@ -9,7 +9,7 @@
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
 
-### Instalação
+### [Instalação](Instalacao_xampp_windows.md)
 
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
