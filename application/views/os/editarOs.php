@@ -282,21 +282,22 @@
                                 </div>
                                 <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                    foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                            $link = $a->url .'/'. $a->anexo;
+                                        foreach ($anexos as $a) {
+                                            if ($a->thumb == null) {
+                                                $thumb = base_url() . 'assets/img/icon-file.png';
+                                                $link = base_url() . 'assets/img/icon-file.png';
+                                            } else {
+                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                                $link = $a->url .'/'. $a->anexo;
+                                            }
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . $thumb . '" alt="">
+                                                    </a>
+                                                    <span>'. $a->anexo .'</span>
+                                                </div>';
                                         }
-                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                                <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                                    <img src="' . $thumb . '" alt="">
-                                                </a>
-                                                <span>'. $a->anexo .'</span>
-                                            </div>';
-                                    } ?>
+                                    ?>
                                 </div>
                             </div>
                         </div>
