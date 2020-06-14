@@ -4,10 +4,15 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.8.3] - 2020-06-14
+
+## Fixed
+- Corrigido download de anexo de OS em área de cliente e adequação para exibir nome do arquivo abaixo. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.8.2] - 2020-05-29
 
 ## Fixed
-- Adequação para mostrar nome abaixo do ícone do anexo em OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adequação para mostrar nome abaixo do ícone do anexo em OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Corrigido tema neve em mobile. [@willph](https://github.com/willph)
 - Corrigido permissões padrão em instalação. [@willph](https://github.com/willph)
 
