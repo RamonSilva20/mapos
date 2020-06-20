@@ -55,6 +55,8 @@ class Mapos_model extends CI_Model
         $data = [];
         // buscando clientes
         $this->db->like('nomeCliente', $termo);
+        $this->db->or_like('telefone', $termo);
+        $this->db->or_like('celular', $termo);
         $this->db->limit(5);
         $data['clientes'] = $this->db->get('clientes')->result();
 

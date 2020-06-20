@@ -167,7 +167,7 @@ body{
     border-bottom: none;
     border-left: 1px solid;
     border-right: none;
-    border-color: #E8E8E8;
+    border-color: #D0D0D0;
 }
 
 /* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
@@ -207,3 +207,13 @@ body{
     background-color: #7CCD7C;
 }
 
+/* Responsive design */
+@media (max-width: 480px) {
+    #user-nav {
+        border-top:1px solid #D0D0D0;
+        background:#FFF;
+    }
+    #sidebar > ul li span {
+        color:#000;
+    }
+}

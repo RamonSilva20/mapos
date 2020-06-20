@@ -223,7 +223,7 @@ if (($_temp = realpath($system_path)) !== false) {
 // Is the system path correct?
 if (!is_dir($system_path)) {
     header('HTTP/1.1 503 Service Unavailable.', true, 503);
-    echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
+    echo 'Sua instalação está incompleta, por favor instale as dependências utilizando o composer. A pasta system não foi localizada.';
     exit(3); // EXIT_CONFIG
 }
 
