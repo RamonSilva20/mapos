@@ -4,6 +4,14 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.10.0] - 2020-07-01
+
+## Added
+- Adicionando suporte a HMVC. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## Fixed 
+- Corrigindo erro na listagem quando arquivo não encontrado. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.9.0] - 2020-06-14
 
 ## Added
