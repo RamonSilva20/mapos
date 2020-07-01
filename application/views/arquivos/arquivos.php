@@ -59,7 +59,7 @@
                         <tr>
                             <td><?= $r->idDocumentos ?></td>
                             <td>
-                                <?php if (getimagesize($r->path)): ?>
+                                <?php if (@getimagesize($r->path)): ?>
                                     <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
                                 <?php else: ?>
                                     <span>-</span>
