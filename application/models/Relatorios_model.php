@@ -81,11 +81,15 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
-    public function clientesRapid()
+    public function clientesRapid($array = false)
     {
         $this->db->order_by('nomeCliente', 'asc');
 
-        return $this->db->get('clientes')->result();
+        $result = $this->db->get('clientes');
+        if($array){
+            return $result->result_array();
+        }
+        return $result->result();
     }
 
     public function produtosRapid()
