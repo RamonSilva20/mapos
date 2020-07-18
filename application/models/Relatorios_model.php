@@ -86,7 +86,7 @@ class Relatorios_model extends CI_Model
         $this->db->order_by('nomeCliente', 'asc');
 
         $result = $this->db->get('clientes');
-        if($array){
+        if ($array) {
             return $result->result_array();
         }
         return $result->result();
