@@ -60,12 +60,12 @@
 
                                     </div>
                                     <div class="span3">
-                                        <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                        <input id="dataInicial" disabled="disabled" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                        <label for="dataInicial">Data e Horário Inicial<span class="required">*</span></label>
+                                        <input id="dataInicial" disabled="disabled" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?>" />
                                     </div>
                                     <div class="span3">
-                                        <label for="dataFinal">Data Final</label>
-                                        <input id="dataFinal" disabled="disabled" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                        <label for="dataFinal">Data e Horário Final</label>
+                                        <input id="dataFinal" disabled="disabled" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y H:i', strtotime($result->dataFinal)); ?>" />
                                     </div>
 
                                     <div class="span3">
@@ -196,21 +196,21 @@
 
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                        foreach ($anexos as $a) {
-                                            if ($a->thumb == null) {
-                                                $thumb = base_url() . 'assets/img/icon-file.png';
-                                                $link = base_url() . 'assets/img/icon-file.png';
-                                            } else {
-                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                                $link = $a->url .'/'. $a->anexo;
-                                            }
-                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                    foreach ($anexos as $a) {
+                                        if ($a->thumb == null) {
+                                            $thumb = base_url() . 'assets/img/icon-file.png';
+                                            $link = base_url() . 'assets/img/icon-file.png';
+                                        } else {
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url . '/' . $a->anexo;
+                                        }
+                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0">
                                                     <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
                                                         <img src="' . $thumb . '" alt="">
                                                     </a>
-                                                    <span>'. $a->anexo .'</span>
+                                                    <span>' . $a->anexo . '</span>
                                                 </div>';
-                                        }
+                                    }
                                     ?>
                                 </div>
 

@@ -1,10 +1,14 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jquery-ui-timepicker-addon.css" />
+
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui-timepicker-addon-i18n.min.js"></script>
 
 <style>
     .ui-datepicker {
@@ -65,11 +69,11 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
+                                            <label for="dataInicial">Data e Horário Inicial<span class="required">*</span></label>
+                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
+                                            <label for="dataFinal">Data e Horário Final<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="" />
                                         </div>
                                         <div class="span3">
@@ -185,8 +189,17 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-        $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy'
+        $('.datepicker').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm',
+            timeText: 'Horário',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            millisecText: 'Milisegundo',
+            microsecText: 'Microsegundo',
+            timezoneText: 'Timezone',
+            closeText: 'Concluído',
+            currentText: 'Horário atual',
         });
         $('.editor').trumbowyg({
             lang: 'pt_br'

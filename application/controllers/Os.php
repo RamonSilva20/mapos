@@ -2,6 +2,8 @@
     exit('No direct script access allowed');
 }
 
+use Carbon\Carbon;
+
 class Os extends MY_Controller
 {
     /**
@@ -91,30 +93,23 @@ class Os extends MY_Controller
             $dataFinal = $this->input->post('dataFinal');
             $termoGarantiaId = $this->input->post('termoGarantia');
 
-            try {
-                $dataInicial = explode('/', $dataInicial);
-                $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
+            $dataInicialFormatada = Carbon::createFromFormat('d/m/Y H:i', $dataInicial);
+            $dataFinalFormatada = Carbon::createFromFormat('d/m/Y H:i', $dataFinal);
 
-                if ($dataFinal) {
-                    $dataFinal = explode('/', $dataFinal);
-                    $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-                } else {
-                    $dataFinal = date('Y/m/d');
-                }
-
-                $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                ? $this->input->post('garantias_id')
-                : null;
-            } catch (Exception $e) {
-                $dataInicial = date('Y/m/d');
-                $dataFinal = date('Y/m/d');
+            if ($dataInicialFormatada >= $dataFinalFormatada) {
+                $this->session->set_flashdata('error', 'A data final deve ser maior que a data inicial.');
+                redirect(base_url() . '/os');
             }
 
+            $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
+                ? $this->input->post('garantias_id')
+                : null;
+
             $data = [
-                'dataInicial' => $dataInicial,
+                'dataInicial' => $dataInicialFormatada,
+                'dataFinal' => $dataFinalFormatada,
                 'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
-                'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),

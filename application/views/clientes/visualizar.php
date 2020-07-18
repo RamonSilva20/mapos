@@ -164,8 +164,8 @@
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>N° OS</th>
-                            <th>Data Inicial</th>
-                            <th>Data Final</th>
+                            <th>Data e Horário Inicial</th>
+                            <th>Data e Horário Final</th>
                             <th>Descricao</th>
                             <th>Defeito</th>
                             <th></th>
@@ -189,8 +189,8 @@
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>N° OS</th>
-                            <th>Data Inicial</th>
-                            <th>Data Final</th>
+                            <th>Data e Horário Inicial</th>
+                            <th>Data e Horário Final</th>
                             <th>Descricao</th>
                             <th>Defeito</th>
                             <th></th>
@@ -199,8 +199,8 @@
                     <tbody>
                         <?php
                             foreach ($results as $r) {
-                                $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                                $dataInicial = date(('d/m/Y H:i'), strtotime($r->dataInicial));
+                                $dataFinal = date(('d/m/Y H:i'), strtotime($r->dataFinal));
                                 echo '<tr>';
                                 echo '<td>' . $r->idOs . '</td>';
                                 echo '<td>' . $dataInicial . '</td>';

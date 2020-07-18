@@ -1,10 +1,14 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jquery-ui-timepicker-addon.css" />
+
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui-timepicker-addon-i18n.min.js"></script>
 
 <style>
     .ui-datepicker {
@@ -60,35 +64,35 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-    echo 'selected';
-} ?> value="Orçamento">Orçamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Orçamento">Orçamento</option>
                                                 <option <?php if ($result->status == 'Aberto') {
-    echo 'selected';
-} ?> value="Aberto">Aberto</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aberto">Aberto</option>
                                                 <option <?php if ($result->status == 'Faturado') {
-    echo 'selected';
-} ?> value="Faturado">Faturado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Faturado">Faturado</option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-    echo 'selected';
-} ?> value="Em Andamento">Em Andamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Em Andamento">Em Andamento</option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-    echo 'selected';
-} ?> value="Finalizado">Finalizado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Finalizado">Finalizado</option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-    echo 'selected';
-} ?> value="Cancelado">Cancelado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Cancelado">Cancelado</option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-    echo 'selected';
-} ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aguardando Peças">Aguardando Peças</option>
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                            <label for="dataInicial">Data e Horário Inicial<span class="required">*</span></label>
+                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
-                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                            <label for="dataFinal">Data e Horário Final<span class="required">*</span></label>
+                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y H:i', strtotime($result->dataFinal)); ?>" />
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia (dias)</label>
@@ -282,21 +286,21 @@
                                 </div>
                                 <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                        foreach ($anexos as $a) {
-                                            if ($a->thumb == null) {
-                                                $thumb = base_url() . 'assets/img/icon-file.png';
-                                                $link = base_url() . 'assets/img/icon-file.png';
-                                            } else {
-                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                                $link = $a->url .'/'. $a->anexo;
-                                            }
-                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                    foreach ($anexos as $a) {
+                                        if ($a->thumb == null) {
+                                            $thumb = base_url() . 'assets/img/icon-file.png';
+                                            $link = base_url() . 'assets/img/icon-file.png';
+                                        } else {
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url . '/' . $a->anexo;
+                                        }
+                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0">
                                                     <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
                                                         <img src="' . $thumb . '" alt="">
                                                     </a>
-                                                    <span>'. $a->anexo .'</span>
+                                                    <span>' . $a->anexo . '</span>
                                                 </div>';
-                                        }
+                                    }
                                     ?>
                                 </div>
                             </div>
@@ -664,8 +668,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
@@ -951,8 +955,17 @@
             }
         });
 
-        $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy'
+        $('.datepicker').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm',
+            timeText: 'Horário',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            millisecText: 'Milisegundo',
+            microsecText: 'Microsegundo',
+            timezoneText: 'Timezone',
+            closeText: 'Concluído',
+            currentText: 'Horário atual',
         });
 
         $('.editor').trumbowyg({

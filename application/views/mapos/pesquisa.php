@@ -162,7 +162,7 @@
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>#</th>
-                            <th>Data Inicial</th>
+                            <th>Data e Horário Inicial</th>
                             <th>Descrição</th>
                             <th>Defeito</th>
                             <th></th>
@@ -174,8 +174,7 @@
                             echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
                         }
                         foreach ($os as $r) {
-                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                            $dataInicial = date(('d/m/Y H:i'), strtotime($r->dataInicial));
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $dataInicial . '</td>';

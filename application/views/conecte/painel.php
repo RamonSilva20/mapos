@@ -6,7 +6,7 @@
         <li class="bg_ls span3"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class="fas fa-shopping-cart" style="font-size:36px"></i>
                 <div>Compras</div>
             </a></li>
-        <li class="bg_lg span3"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user"  style="font-size:36px"></i>
+        <li class="bg_lg span3"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user" style="font-size:36px"></i>
                 <div>Minha Conta</div>
             </a></li>
     </ul>
@@ -24,8 +24,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
+                        <th>Data e Horário Inicial</th>
+                        <th>Data e Horário Final</th>
                         <th>Garantia</th>
                         <th>Status</th>
                         <th></th>
@@ -37,8 +37,8 @@
                         foreach ($os as $o) {
                             echo '<tr>';
                             echo '<td>' . $o->idOs . '</td>';
-                            echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
-                            echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
+                            echo '<td>' . date('d/m/Y H:i', strtotime($o->dataInicial)) . '</td>';
+                            echo '<td>' . date('d/m/Y H:i', strtotime($o->dataFinal)) . '</td>';
                             echo '<td>' . $o->garantia . '</td>';
                             echo '<td>' . $o->status . '</td>';
                             echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';

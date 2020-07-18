@@ -93,13 +93,13 @@ $totalProdutos = 0; ?>
                                         </td>
 
                                         <td>
-                                            <b>DATA INICIAL: </b>
-                                            <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                            <b>DATA E HORÁRIO INICIAL: </b>
+                                            <?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?>
                                         </td>
 
                                         <td>
-                                            <b>DATA FINAL: </b>
-                                            <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                            <b>DATA E HORÁRIO FINAL: </b>
+                                            <?php echo $result->dataFinal ? date('d/m/Y H:i', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
 
                                         <td>
@@ -238,7 +238,7 @@ $totalProdutos = 0; ?>
                                     </td>
                                     <td>Assinatura do Técnico Responsável
                                         <hr>
-                                 </td>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

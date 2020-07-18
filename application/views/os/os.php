@@ -54,8 +54,8 @@
                         <th>N° OS</th>
                         <th>Cliente</th>
                         <th>Responsável</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
+                        <th>Data e Horário Inicial</th>
+                        <th>Data e Horário Final</th>
                         <th>Venc. Garantia</th>
                         <th>Valor Total</th>
                         <th>Valor Total (Faturado)</th>
@@ -73,9 +73,9 @@
                                   </tr>';
                         }
                         foreach ($results as $r) {
-                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                            $dataInicial = date(('d/m/Y H:i'), strtotime($r->dataInicial));
                             if ($r->dataFinal != null) {
-                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                                $dataFinal = date(('d/m/Y H:i'), strtotime($r->dataFinal));
                             } else {
                                 $dataFinal = "";
                             }
