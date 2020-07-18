@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.12.0] - 2020-07-18
+
+## Added
+- Implementado controle de horário (final e inicial) em OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.11.0] - 2020-07-16
 
 ## Added
@@ -14,7 +19,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Added
 - Adicionando suporte a HMVC. [@RamonSilva20](https://github.com/RamonSilva20)
 
-## Fixed 
+## Fixed
 - Corrigindo erro na listagem quando arquivo não encontrado. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [4.9.0] - 2020-06-14
