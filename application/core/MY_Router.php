@@ -27,7 +27,7 @@ class MY_Router extends MX_Router
      * An array of variables to be passed through to the
      * view, layout,....
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * [__construct description]

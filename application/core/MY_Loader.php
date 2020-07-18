@@ -26,7 +26,7 @@ class MY_Loader extends MX_Loader
      * An array of variables to be passed through to the
      * view, layout,....
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * [__construct description]
