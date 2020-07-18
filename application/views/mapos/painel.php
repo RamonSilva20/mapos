@@ -135,6 +135,7 @@
                             <th>Data e Horário Inicial</th>
                             <th>Data e Horário Final</th>
                             <th>Cliente</th>
+                            <th>Valor Total</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -158,6 +159,10 @@
                                     <td>
                                         <?= $o->nomeCliente ?>
                                     </td>
+                                    <td>
+                                        <?php echo 'R$ ' . number_format($o->totalProdutos + $o->totalServicos, 2, ',', '.') ?>
+                                    </td>
+
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                                             <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn">
@@ -189,6 +194,7 @@
                         <th>Data e Horário Inicial</th>
                         <th>Data e Horário Final</th>
                         <th>Cliente</th>
+                        <th>Valor Total</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -208,6 +214,11 @@
                                 <td>
                                     <?= $o->nomeCliente ?>
                                 </td>
+
+                                <td>
+                                    <?php echo 'R$ ' . number_format($o->totalProdutos + $o->totalServicos, 2, ',', '.') ?>
+                                </td>
+
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                                         <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn">

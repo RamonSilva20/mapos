@@ -119,21 +119,36 @@ class Mapos_model extends CI_Model
 
     public function getOsAbertas()
     {
-        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->select('
+            os.*,
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos,
+            clientes.nomeCliente'
+        );
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
         $this->db->where('os.status', 'Aberto');
         $this->db->limit(10);
+
         return $this->db->get()->result();
     }
 
     public function getOsAguardandoPecas()
     {
-        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->select('
+            os.*,
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos,
+            clientes.nomeCliente');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
         $this->db->where('os.status', 'Aguardando Peças');
         $this->db->limit(10);
+
         return $this->db->get()->result();
     }
 
