@@ -186,21 +186,15 @@ class Os extends MY_Controller
         } else {
             $dataInicial = $this->input->post('dataInicial');
             $dataFinal = $this->input->post('dataFinal');
+
+            $dataInicialFormatada = Carbon::createFromFormat('d/m/Y H:i', $dataInicial);
+            $dataFinalFormatada = Carbon::createFromFormat('d/m/Y H:i', $dataFinal);
+
             $termoGarantiaId = $this->input->post('garantias_id') ?: null;
 
-            try {
-                $dataInicial = explode('/', $dataInicial);
-                $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
-
-                $dataFinal = explode('/', $dataFinal);
-                $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-            } catch (Exception $e) {
-                $dataInicial = date('Y/m/d');
-            }
-
             $data = [
-                'dataInicial' => $dataInicial,
-                'dataFinal' => $dataFinal,
+                'dataInicial' => $dataInicialFormatada,
+                'dataFinal' => $dataFinalFormatada,
                 'garantia' => $this->input->post('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),

@@ -50,7 +50,7 @@ $totalProdutos = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-    
+
                         <table class="table table-condensend">
                             <tbody>
                                 <tr>
@@ -90,12 +90,12 @@ $totalProdutos = 0; ?>
 
                                         <td>
                                             <b>Inicial: </b>
-                                            <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                            <?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?>
                                         </td>
 
                                         <td>
                                             <b>Final: </b>
-                                            <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                            <?php echo $result->dataFinal ? date('d/m/Y H:i', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
 
                                         <td>
