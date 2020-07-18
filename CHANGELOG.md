@@ -9,6 +9,11 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Added
 - Implementado controle de horário (final e inicial) em OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
+## [4.11.1] - 2020-07-18
+
+## Added
+- Corrigido relatório rápido de produtos com estoque mínimo. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.11.0] - 2020-07-16
 
 ## Added

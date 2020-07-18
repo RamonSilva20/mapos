@@ -6,6 +6,7 @@
  */
 $config['app_version'] = '4.12.0';
 
+
 /**
  * Nome do sistema
  */
@@ -499,6 +500,10 @@ $config['proxy_ips'] = '';
 
 
 
-$config['modules_locations'] = array(
+$config['modules_locations'] = [
     APPPATH.'modules/' => '../modules/',
+<<<<<<< HEAD
 );
+=======
+];
+>>>>>>> 9844fc8babe9f8f854cd74f9f5f6f5964b0d56c6
