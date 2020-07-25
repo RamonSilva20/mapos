@@ -118,6 +118,7 @@ class Os extends MY_Controller
                 'observacoes' => set_value('observacoes'),
                 'laudoTecnico' => set_value('laudoTecnico'),
                 'faturado' => 0,
+                'intervalo' => $this->input->post('intervalo'),
             ];
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
@@ -204,6 +205,7 @@ class Os extends MY_Controller
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
+                'intervalo' => $this->input->post('intervalo'),
             ];
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {

@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 function dateInterval($startDate, $finalDate)
 {
     $data = date('d/m/Y', strtotime($startDate));
@@ -14,4 +16,26 @@ function dateInterval($startDate, $finalDate)
 
     // Formatar a data obtida
     return $obj_data->format('d/m/Y');
+}
+
+function dateIntervalInHours($startDate, $finalDate, $discount = null)
+{
+    $startDate = Carbon::create($startDate);
+    $finalDate = Carbon::create($finalDate);
+
+    if ($discount) {
+        list($hours, $minutes, $seconds) = explode(':', $discount);
+
+        $finalDate->subHours(intval($hours));
+        $finalDate->subMinutes(intval($minutes));
+        $finalDate->subSeconds(intval($seconds));
+    }
+
+    $diff = $startDate->diffInSeconds($finalDate, false);
+
+    $time = gmdate('H:i:s', abs($diff));
+
+    return $diff < 0
+        ? '-' . $time
+        : $time;
 }

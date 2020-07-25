@@ -119,6 +119,20 @@ $totalProdutos = 0; ?>
                                             </td>
                                         <?php } ?>
                                     </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>INTERVALO: </b>
+                                            <?php echo $result->intervalo ?>
+                                        </td>
+
+                                        <?php if ($result->dataInicial != null): ?>
+                                            <td>
+                                                <b>TOTAL DE HORAS: </b>
+                                                <?php echo dateIntervalInHours($result->dataInicial, $result->dataFinal, $result->intervalo); ?>
+                                            </td>
+                                        <?php endif ?>
+                                    </tr>
                                 <?php } ?>
 
                                 <?php if ($result->descricaoProduto != null) { ?>

@@ -64,26 +64,26 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-    echo 'selected';
-} ?> value="Orçamento">Orçamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Orçamento">Orçamento</option>
                                                 <option <?php if ($result->status == 'Aberto') {
-    echo 'selected';
-} ?> value="Aberto">Aberto</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aberto">Aberto</option>
                                                 <option <?php if ($result->status == 'Faturado') {
-    echo 'selected';
-} ?> value="Faturado">Faturado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Faturado">Faturado</option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-    echo 'selected';
-} ?> value="Em Andamento">Em Andamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Em Andamento">Em Andamento</option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-    echo 'selected';
-} ?> value="Finalizado">Finalizado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Finalizado">Finalizado</option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-    echo 'selected';
-} ?> value="Cancelado">Cancelado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Cancelado">Cancelado</option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-    echo 'selected';
-} ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aguardando Peças">Aguardando Peças</option>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -98,11 +98,21 @@
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
                                             <?php echo form_error('garantia'); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
                                             <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
                                         </div>
+                                        <div class="span3">
+                                            <label for="intervalo">Tempo Total de Intervalo<span class="required"></span></label>
+                                            <input id="intervalo" autocomplete="off" class="span12 timepicker" type="text" name="intervalo" value="<?php echo $result->intervalo; ?>" />
+                                        </div>
                                     </div>
+
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="descricaoProduto">
                                             <h4>Descrição Produto/Serviço</h4>
@@ -668,8 +678,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
@@ -957,6 +967,20 @@
 
         $('.datepicker').datetimepicker({
             format: 'DD/MM/YYYY HH:mm',
+            timeText: 'Horário',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            millisecText: 'Milisegundo',
+            microsecText: 'Microsegundo',
+            timezoneText: 'Timezone',
+            closeText: 'Concluído',
+            currentText: 'Horário atual',
+        });
+
+        $('.timepicker').timepicker({
+            timeFormat: 'HH:mm',
+            timeOnlyTitle: 'Intervalo',
             timeText: 'Horário',
             hourText: 'Hora',
             minuteText: 'Minuto',
