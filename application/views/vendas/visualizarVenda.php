@@ -91,6 +91,7 @@
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
+                                        <th style="font-size: 15px">Cód. de barra</th>
                                         <th style="font-size: 15px">Produto</th>
                                         <th style="font-size: 15px">Quantidade</th>
                                         <th style="font-size: 15px">Preço unit.</th>
@@ -102,6 +103,7 @@
                                         foreach ($produtos as $p) {
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
+                                            echo '<td>' . $p->codDeBarra . '</td>';
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td>' . $p->quantidade . '</td>';
                                             echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
