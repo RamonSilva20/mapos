@@ -119,7 +119,8 @@ class Mapos_model extends CI_Model
 
     public function getOsAbertas()
     {
-        $this->db->select('
+        $this->db->select(
+            '
             os.*,
             COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
             COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos,
