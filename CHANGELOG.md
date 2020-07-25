@@ -4,6 +4,14 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.11.2] - 2020-07-25
+
+## Changed
+- Mudança (Linhas 70,71,72) realizada para incluir nas pesquisas também o código de barras, assim poderia ser feito através de leitor e alterado o limite devido termos muitos itens com descrição similar se a pesquisa for executada pelo nome. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo e não em corpo do e-mail. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 94,106) para incluir o código do Produto na venda e facilitar a identificação. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo. [@FlexoSol](https://github.com/FlexoSol)
+
 ## [4.11.1] - 2020-07-18
 
 ## Added
