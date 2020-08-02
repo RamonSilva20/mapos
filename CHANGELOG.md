@@ -4,6 +4,32 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.11.2] - 2020-07-25
+
+## Changed
+- Mudança (Linhas 70,71,72) realizada para incluir nas pesquisas também o código de barras, assim poderia ser feito através de leitor e alterado o limite devido termos muitos itens com descrição similar se a pesquisa for executada pelo nome. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo e não em corpo do e-mail. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 94,106) para incluir o código do Produto na venda e facilitar a identificação. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo. [@FlexoSol](https://github.com/FlexoSol)
+
+## [4.11.1] - 2020-07-18
+
+## Added
+- Corrigido relatório rápido de produtos com estoque mínimo. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.11.0] - 2020-07-16
+
+## Added
+- Adicionando relatório de clientes em xls. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [4.10.0] - 2020-07-01
+
+## Added
+- Adicionando suporte a HMVC. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## Fixed
+- Corrigindo erro na listagem quando arquivo não encontrado. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.9.0] - 2020-06-14
 
 ## Added
