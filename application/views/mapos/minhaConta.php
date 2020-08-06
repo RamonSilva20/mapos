@@ -43,7 +43,7 @@
 
                         <div class="span12" style="margin-left: 0">
                             <label for="">Senha Atual</label>
-                            <input type="password" id="oldSenha2" name="oldSenha2" class="span12" />
+                            <input type="password" id="oldSenha" name="oldSenha2" class="span12" />
                         </div>
                         <div class="span12" style="margin-left: 0">
                             <label for="">Nova Senha</label>
