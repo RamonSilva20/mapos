@@ -100,6 +100,12 @@ class Os_model extends CI_Model
         $this->db->limit(1);
         return $this->db->get()->row();
     }
+        public function getById2($id)
+    {
+        $this->db->where('idClientes', $id);
+        $this->db->limit(1);
+        return $this->db->get('clientes')->row();
+    }
 
     public function getProdutos($id = null)
     {
@@ -202,6 +208,22 @@ class Os_model extends CI_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
                 $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'], 'id' => $row['idClientes']];
+            }
+            echo json_encode($row_set);
+        }
+    }
+
+    public function autoCompleteMarca($q)
+    {
+        $this->db->select('*');
+        $this->db->limit(5);
+        $this->db->like('marca', $q);
+        $this->db->or_like('modelo', $q);
+        $this->db->or_like('serie', $q);
+        $query = $this->db->get('os');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['marca']];
             }
             echo json_encode($row_set);
         }

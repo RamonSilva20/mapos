@@ -38,6 +38,13 @@
                     </div>
 
                     <div class="control-group">
+                        <label for="chaveweb" class="control-label">Chave Web<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="chaveweb" type="text" name="chaveweb" value="<?php echo $result->chaveweb; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
                         <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
                             <input id="email" type="text" name="email" value="<?php echo $result->email; ?>" />

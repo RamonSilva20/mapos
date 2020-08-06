@@ -9,14 +9,14 @@ html, body{height:100%}
 
 body {
 	overflow-x: hidden;
-	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:12px; color:#666;
+	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:12px; color:#000;
 }
-a{color:#666;}
+a{color:#000;}
 a:hover, a:focus {
 	text-decoration: none; color:#28b779;
 }
 .dropdown-menu .divider{ margin:4px 0px;}
-.dropdown-menu{ min-width:180px;}
+.dropdown-menu{ min-width:60px;}
 .dropdown-menu > li > a{ padding:3px 10px; color:#666; font-size:12px;}
 .dropdown-menu > li > a i{ padding-right:3px;}
 .userphoto img{ width:19px; height:19px;}
@@ -33,17 +33,18 @@ hr{ border-top-color:#dadada;}
 .label-important, .badge-important{ background:#f74d4d;}
 
 /*Metro Background color class*/
-.bg_lb{ background:#1f6377;}
+.bg_lb{ background:#006633;}
 .bg_db{ background:#24748c;}
-.bg_lg{ background:#a5d24a;}
+.bg_lg{ background:#CCCC00;}
 .bg_dg{ background:#28b779;}
-.bg_ly{ background:#ee5f5b;}
+.bg_ly{ background:#993300;}
 .bg_dy{ background:#da9628;}
-.bg_ls{ background:#7ab5d3;}
-.bg_lo{ background:#595959;}
+.bg_ls{ background:#0066FF;}
+.bg_lo{ background:#FF6600;}
 .bg_lr{ background:#f74d4d;}
 .bg_lv{ background:#603bbc;}
 .bg_lh{ background:#b6b3b3;}
+.bg_jj{ background:#0099FF;}
 
 /* Header */
 #header {
@@ -54,13 +55,13 @@ hr{ border-top-color:#dadada;}
 }
 #header h1 {
 	background: url("../img/logo.png") no-repeat scroll 0 0 transparent;
-	height: 31px;
-	left: 20px;
+	height: 50px;
+	left: 5px;
 	line-height: 600px;
 	overflow: hidden;
 	position: relative;
-	top: 26px;
-	width: 191px;
+	top: 15px;
+	width: 201px;
 }
 #header h1 a {
 	display: block;
@@ -449,7 +450,7 @@ hr{ border-top-color:#dadada;}
 	margin-bottom: 3px;
 	margin-top: 6px;
 }
-.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good {
+.stat-boxes .peity_bar_good, .stat-boxes .peity_line_good, {
  color: #459D1C;
 }
 .stat-boxes .peity_bar_neutral, .stat-boxes .peity_line_neutral {

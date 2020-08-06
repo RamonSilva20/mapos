@@ -25,7 +25,7 @@ class Mine extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'Email', 'valid_email|required|trim');
-        $this->form_validation->set_rules('documento', 'Documento', 'required|trim');
+        $this->form_validation->set_rules('chaveweb', 'Documento', 'required|trim');
         $ajax = $this->input->get('ajax');
         if ($this->form_validation->run() == false) {
             if ($ajax == true) {
@@ -37,10 +37,10 @@ class Mine extends CI_Controller
             }
         } else {
             $email = $this->input->post('email');
-            $documento = $this->input->post('documento');
+            $documento = $this->input->post('chaveweb');
 
             $this->db->where('email', $email);
-            $this->db->where('documento', $documento);
+            $this->db->where('chaveweb', $documento);
             $this->db->limit(1);
             $cliente = $this->db->get('clientes');
             if ($cliente->num_rows() > 0) {
@@ -111,6 +111,7 @@ class Mine extends CI_Controller
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
                 'celular' => $this->input->post('celular'),
+                'chaveweb' => $this->input->post('chaveweb'),
                 'email' => $this->input->post('email'),
                 'rua' => $this->input->post('rua'),
                 'numero' => $this->input->post('numero'),
@@ -427,7 +428,8 @@ class Mine extends CI_Controller
                 'nomeCliente' => set_value('nomeCliente'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
+                'celular' => set_value('celular'),
+                'chaveweb' => set_value('chaveweb'),
                 'email' => set_value('email'),
                 'rua' => set_value('rua'),
                 'numero' => set_value('numero'),

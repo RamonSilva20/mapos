@@ -76,6 +76,10 @@ class Os extends MY_Controller
 
     public function adicionar()
     {
+            if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, clique em + para adicionar OS.');
+            redirect('/clientes');
+        }
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar O.S.');
             redirect(base_url());
@@ -118,7 +122,13 @@ class Os extends MY_Controller
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),
-                'defeito' => set_value('defeito'),
+                'defeito' => strtoupper(set_value('defeito')),
+                'aparelho' => strtoupper(set_value('aparelho')),
+                'marca' => strtoupper(set_value('marca')),
+                'modelo' => strtoupper(set_value('modelo')),
+                'serie' => strtoupper(set_value('serie')),
+                'cor' => strtoupper(set_value('cor')),
+                'acessorio' => strtoupper(set_value('acessorio')),
                 'status' => set_value('status'),
                 'observacoes' => set_value('observacoes'),
                 'laudoTecnico' => set_value('laudoTecnico'),
@@ -167,6 +177,15 @@ class Os extends MY_Controller
             }
         }
 
+        $this->data['result'] = $this->os_model->getById2($this->uri->segment(3));
+
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/adicionarOs';
         return $this->layout();
     }
@@ -210,6 +229,12 @@ class Os extends MY_Controller
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
+                'aparelho' => strtoupper($this->input->post('aparelho')),
+                'marca' => strtoupper($this->input->post('marca')),
+                'modelo' => strtoupper($this->input->post('modelo')),
+                'serie' => strtoupper($this->input->post('serie')),
+                'cor' => strtoupper($this->input->post('cor')),
+                'acessorio' => strtoupper($this->input->post('acessorio')),
                 'status' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
@@ -464,6 +489,13 @@ class Os extends MY_Controller
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteCliente($q);
+        }
+    }
+    public function autoCompleteMarca()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->os_model->autoCompleteMarca($q);
         }
     }
 

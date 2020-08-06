@@ -15,7 +15,21 @@
         margin-top: 0;
         margin-bottom: 0;
     }
+.alert {
+    display:block !important;
+}
 </style>
+<form action="<?php echo current_url(); ?>" method="post" id="formOs">
+<div class="alert alert-success" role="alert">
+  <h3 class="alert-heading"><strong><i class="fas fa-wrench"></i>N° OS: <?php echo $result->idOs; ?></strong></h3>
+  <hr>
+  <p class="mb-0"><strong><h4><i class="fas fa-user"></i> Cliente: </strong><small><?php echo $result->nomeCliente ?> (<a href="<?php echo base_url() ?>index.php/clientes/visualizar/<?php echo $result->clientes_id ?>" class="alert-link" target="_blank"><strong>Cod. <?php echo $result->clientes_id ?></a>)</strong></small></h4></p>
+  <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
+  <input id="valorTotal" type="hidden" name="valorTotal" value="" />
+  <p class="mb-0"><strong><h4><i class="fas fa-home"></i> Endereço: </strong><small><?php echo $result->rua ?>, nº<?php echo $result->numero ?> - <?php echo $result->bairro ?> - <?php echo $result->cidade ?> - <?php echo $result->estado ?></small></h4></p>
+  <p class="mb-0"><strong><h4><i class="fas fa-phone-square-alt"></i> Telefones: </strong><small><?php echo $result->telefone ?>, <?php echo $result->celular ?></small></h4></p>
+</div>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -40,22 +54,12 @@
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
                                     <?php echo form_hidden('idOs', $result->idOs) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>N° OS:
-                                            <?php echo $result->idOs; ?>
-                                        </h3>
-                                        <div class="span6" style="margin-left: 0">
-                                            <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
-                                            <input id="valorTotal" type="hidden" name="valorTotal" value="" />
-                                        </div>
-                                        <div class="span6">
+                                        <div class="span3" style="margin-left: 0">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
+
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
@@ -80,48 +84,70 @@
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
     echo 'selected';
 } ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                <option <?php if ($result->status == 'whatsapp') {
+    echo 'selected';
+} ?> value="Orçamento enviado via Whatsapp">Orçamento enviado via Whatsapp</option>
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
+                                            <label for="dataInicial">Data Entrada<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="hidden" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                        
+                                        </div>
+                                        </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
+                                            <label for="aparelho">Aparelho<span class="required">*</span></label>
+                                            <input id="aparelho" class="span12" type="text" name="aparelho" value="<?php echo $result->aparelho ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
-                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                            <label for="marca">Marca<span class="required">*</span></label>
+                                            <input id="marca" class="span12" type="text" name="marca" value="<?php echo $result->marca ?>" />
                                         </div>
                                         <div class="span3">
-                                            <label for="garantia">Garantia (dias)</label>
-                                            <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
-                                            <?php echo form_error('garantia'); ?>
-                                            <label for="termoGarantia">Termo Garantia</label>
-                                            <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
-                                            <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
+                                            <label for="modelo">Modelo<span class="required">*</span></label>
+                                            <input id="modelo" class="span12" type="text" name="modelo" value="<?php echo $result->modelo ?>" />
+                                        </div>
+                                        <div class="span3">
+                                            <label for="serie">Série<span class="required">*</span></label>
+                                            <input id="serie" class="span12" type="text" name="serie" value="<?php echo $result->serie ?>" />
+                                        </div>
+                                        <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
+                                            <label for="cor">Cor<span class="required">*</span></label>
+                                            <input id="cor" class="span12" type="text" name="cor" value="<?php echo $result->cor ?>" />
+                                        </div>
+                                        <div class="span3">
+                                            <label for="acessorio">Acessórios</label>
+                                            <input id="acessorio" class="span12" type="text" name="acessorio" value="<?php echo $result->acessorio ?>" />
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="descricaoProduto">
                                             <h4>Descrição Produto/Serviço</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
+                                        <textarea class="span12" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito">
                                             <h4>Defeito</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
+                                        <textarea class="span12" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                        <textarea class="span12" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="laudoTecnico">
                                             <h4>Laudo Técnico</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
+                                        <textarea class="span12" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
@@ -321,6 +347,7 @@
                                         <tbody>
                                             <?php
                                             foreach ($anotacoes as $a) {
+
                                                 echo '<tr>';
                                                 echo '<td>' . $a->anotacao . '</td>';
                                                 echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
@@ -344,7 +371,7 @@
                 &nbsp
             </div>
         </div>
-    </div>
+  </div>
 </div>
 
 <!-- Modal visualizar anexo -->
@@ -608,7 +635,7 @@
                     required: true
                 },
                 dataFinal: {
-                    required: true
+                    required: false
                 }
             },
             messages: {

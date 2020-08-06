@@ -7,14 +7,7 @@ $config = [
             'label' => 'Nome',
             'rules' => 'required|trim',
         ],
-        [
-            'field' => 'documento',
-            'label' => 'CPF/CNPJ',
-            'rules' => 'required|trim|verific_cpf_cnpj',
-            'errors' => [
-                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
-            ],
-        ],
+ 
         [
             'field' => 'telefone',
             'label' => 'Telefone',

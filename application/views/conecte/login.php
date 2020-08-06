@@ -61,7 +61,7 @@
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
-                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" />
+                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input maxlength="18" size="18" name="chaveweb" type="password" placeholder="Chave Web"/>
                     </div>
                 </div>
             </div>

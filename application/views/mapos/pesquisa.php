@@ -9,6 +9,63 @@
             </div>
         </form>
     </div>
+        <!--Ordens de Serviço-->
+    <div class="span12">
+        <div class="widget-box" style="min-height: 100%">
+            <div class="widget-title">
+                <span class="icon">
+                    <i class="fas fa-diagnoses"></i>
+                </span>
+                <h5>Ordens de Serviço</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr style="backgroud-color: #2D335B">
+                            <th>OS</th>
+                            <th>Data Entrada</th>
+                            <th>Aparelho</th>
+                            <th>Modelo</th>
+                            <th>Serie</th>
+                            <th>Descrição</th>
+                            <th>Defeito</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($os == null) {
+                            echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
+                        }
+                        foreach ($os as $r) {
+                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                            echo '<tr>';
+                            echo '<td>' . $r->idOs . '</td>';
+                            echo '<td>' . $dataInicial . '</td>';
+                            echo '<td>' . $r->aparelho . '</td>';
+                            echo '<td>' . $r->modelo . '</td>';
+                            echo '<td>' . $r->serie . '</td>';
+                            echo '<td>' . $r->descricaoProduto . '</td>';
+                            echo '<td>' . $r->defeito . '</td>';
+                            echo '<td>';
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            }
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                            }
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <div class="span12" style="margin-left: 0; margin-top: 0">
         <!--Produtoss-->
         <div class="span6" style="margin-left: 0; margin-top: 0">
@@ -162,6 +219,7 @@
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>#</th>
+                            <th>Modelo</th>
                             <th>Data Inicial</th>
                             <th>Descrição</th>
                             <th>Defeito</th>
@@ -178,6 +236,7 @@
                             $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
+                            echo '<td>' . $r->modelo . '</td>';
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $r->descricaoProduto . '</td>';
                             echo '<td>' . $r->defeito . '</td>';

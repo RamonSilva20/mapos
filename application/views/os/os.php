@@ -25,6 +25,7 @@
                 <option value="Finalizado">Finalizado</option>
                 <option value="Cancelado">Cancelado</option>
                 <option value="Aguardando Peças">Aguardando Peças</option>
+                <option value="Orçamento enviado via Whatsapp">Orçamento enviado via Whatsapp</option>
             </select>
 
         </div>
@@ -87,7 +88,7 @@
                                     $cor = '#436eee';
                                     break;
                                 case 'Orçamento':
-                                    $cor = '#CDB380';
+                                    $cor = '#ffa500';
                                     break;
                                 case 'Cancelado':
                                     $cor = '#CD0000';
@@ -101,6 +102,9 @@
                                 case 'Aguardando Peças':
                                     $cor = '#FF7F00';
                                     break;
+                                case 'Orçamento enviado via Whatsapp':
+                                    $cor = '#FFFF00';
+                                    break;
                                 default:
                                     $cor = '#E0E4CC';
                                     break;
@@ -111,7 +115,7 @@
                                 $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
                             }
 
-                            echo '<tr>';
+                            echo '<tr bgcolor=' . $cor . '>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $r->nomeCliente . '</td>';
                             echo '<td>' . $r->nome . '</td>';
@@ -124,19 +128,24 @@
                             echo '<td>' . $r->refGarantia . '</td>';
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Normal A4"><i class="fas fa-print"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a>';
-
+                                echo '<div class="dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Opções <span class="caret"></span>
+                                 </button>';
+                                echo '<ul class="dropdown-menu">';
+                                echo '<li><a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a></li>';
+                                echo '<li><a href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Normal A4"><i class="fas fa-print"></i></a></li>';
+                                echo '<li><a href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a></li>';
                                 $zapnumber = preg_replace("/[^0-9]/", "", $r->celular_cliente);
-                                echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $r->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $r->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($r->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $r->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
+                                echo '<li><a class="btn btn-success tip-top" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $r->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $r->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($r->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $r->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a></li>';
+                                echo '<li><a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a></li>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-                            }
+                                echo '<li><a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a></li>';
+                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                                echo '<li><a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a></li>';
+                                echo '</ul>';
                             }
                             echo  '</td>';
                             echo '</tr>';

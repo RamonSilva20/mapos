@@ -38,6 +38,9 @@
                         echo '<td>' . $r->telefone . '</td>';
                         echo '<td>' . $r->email . '</td>';
                         echo '<td>';
+                                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
+                            echo '<a href="' . base_url() . 'index.php/os/adicionar/' . $r->idClientes . '" style="margin-right: 1%" class="btn btn-success tip-top" title="Adicionar Ordem de Serviço"><i class="fas fa-plus"></i></a>';
+                        }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
                             echo '<a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
                         }

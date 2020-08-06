@@ -1,0 +1,8 @@
+CREATE TABLE `os` (
+  `aparelho` varchar(100) DEFAULT NULL,
+  `marca` varchar(100) DEFAULT NULL,
+  `modelo` varchar(100) DEFAULT NULL,
+  `serie` varchar(100) DEFAULT NULL,
+  `cor` varchar(100) DEFAULT NULL,
+  `acessorio` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -53,12 +53,17 @@
                     </div>
 
                     <div class="control-group">
+                        <label for="chaveweb" class="control-label">Chave Web<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="chaveweb" type="text" name="chaveweb" value="<?php echo set_value('chaveweb'); ?>"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
                             <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>"/>
                         </div>
                     </div>
-
                     <div class="control-group">
                         <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
