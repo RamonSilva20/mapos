@@ -128,7 +128,7 @@
                             echo '<td>' . $r->refGarantia . '</td>';
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                echo '<div class="dropdown">
+                                echo '<div class="dropdown show">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Opções <span class="caret"></span>
                                  </button>';
