@@ -10,7 +10,7 @@
                 <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
             </div>
         <?php
-        } ?>
+        } ?>    
 
         <div class="span3">
             <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
