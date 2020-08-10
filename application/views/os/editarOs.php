@@ -237,7 +237,7 @@
                                         <div class="span6">
                                             <input type="hidden" name="idServico" id="idServico" />
                                             <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs; ?>" />
-                                            <label for="">Serviço</label>
+                                            <label for="">Serviço (<a href="<?php echo base_url() ?>index.php/servicos/adicionar" target="_blank"><strong>Cadastra mais serviços</strong></a>)</label>
                                             <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
                                         </div>
                                         <div class="span2">
