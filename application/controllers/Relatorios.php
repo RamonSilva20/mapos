@@ -330,7 +330,7 @@ class Relatorios extends MY_Controller
         if ($format == 'xls') {
             $lancamentos = $this->Relatorios_model->financeiroRapid(true);
 
-            $lancamentosFormatados = array_map(function($item) {
+            $lancamentosFormatados = array_map(function ($item) {
                 return [
                     'idLancamentos' => $item['idLancamentos'],
                     'descricao' => $item['descricao'],
