@@ -200,16 +200,21 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query)->result();
     }
 
-    public function financeiroRapid()
+    public function financeiroRapid($array = false)
     {
         $dataInicial = date('Y-m-01');
         $dataFinal = date("Y-m-t");
         $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? ORDER BY tipo";
 
-        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
+        $result = $this->db->query($query, [$dataInicial, $dataFinal]);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
-    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null)
+    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null, $array = false)
     {
         if ($dataInicial) {
             $this->db->where('data_vencimento >=', $dataInicial);
@@ -232,7 +237,12 @@ class Relatorios_model extends CI_Model
             }
         }
 
-        return $this->db->get('lancamentos')->result();
+        $result = $this->db->get('lancamentos');
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
     public function vendasRapid()

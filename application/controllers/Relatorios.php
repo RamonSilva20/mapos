@@ -79,7 +79,7 @@ class Relatorios extends MY_Controller
         }
 
         $format = $this->input->get('format');
-        
+
         if ($format == 'xls') {
             $clientes = $this->Relatorios_model->clientesRapid($array = true);
             $cabecalho = [
@@ -103,12 +103,12 @@ class Relatorios extends MY_Controller
             ];
 
             $writer = new XLSXWriter();
-    
+
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($clientes as $cliente) {
                 $writer->writeSheetRow('Sheet1', $cliente);
             }
-    
+
             $arquivo = $writer->writeToString();
             $this->load->helper('download');
             force_download('relatorio_clientes.xlsx', $arquivo);
@@ -325,6 +325,51 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
+        $format = $this->input->get('format');
+
+        if ($format == 'xls') {
+            $lancamentos = $this->Relatorios_model->financeiroRapid(true);
+
+            $lancamentosFormatados = array_map(function($item) {
+                return [
+                    'idLancamentos' => $item['idLancamentos'],
+                    'descricao' => $item['descricao'],
+                    'valor' => $item['valor'],
+                    'data_vencimento' => $item['data_vencimento'],
+                    'data_pagamento' => $item['data_pagamento'],
+                    'baixado' => $item['baixado'],
+                    'cliente_fornecedor' => $item['cliente_fornecedor'],
+                    'forma_pgto' => $item['forma_pgto'],
+                    'tipo' => $item['tipo'],
+                ];
+            }, $lancamentos);
+
+            $cabecalho = [
+                'ID Lançamentos' => 'integer',
+                'Descricao' => 'string',
+                'Valor' => 'price',
+                'Data Vencimento' => 'YYYY-MM-DD',
+                'Data Pagamento' => 'YYYY-MM-DD',
+                'Baixado' => 'integer',
+                'Cliente/Fornecedor' => 'string',
+                'Forma Pagamento' => 'string',
+                'Tipo' => 'string',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($lancamentosFormatados as $lancamento) {
+                $writer->writeSheetRow('Sheet1', $lancamento);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_financeiro.xlsx', $arquivo);
+
+            return;
+        }
+
         $data['lancamentos'] = $this->Relatorios_model->financeiroRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório Financeiro';
@@ -346,6 +391,50 @@ class Relatorios extends MY_Controller
         $dataFinal = $this->input->get('dataFinal');
         $tipo = $this->input->get('tipo');
         $situacao = $this->input->get('situacao');
+        $format = $this->input->get('format');
+
+        if ($format == 'xls') {
+            $lancamentos = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao, true);
+
+            $lancamentosFormatados = array_map(function ($item) {
+                return [
+                    'idLancamentos' => $item['idLancamentos'],
+                    'descricao' => $item['descricao'],
+                    'valor' => $item['valor'],
+                    'data_vencimento' => $item['data_vencimento'],
+                    'data_pagamento' => $item['data_pagamento'],
+                    'baixado' => $item['baixado'],
+                    'cliente_fornecedor' => $item['cliente_fornecedor'],
+                    'forma_pgto' => $item['forma_pgto'],
+                    'tipo' => $item['tipo'],
+                ];
+            }, $lancamentos);
+
+            $cabecalho = [
+                'ID Lançamentos' => 'integer',
+                'Descricao' => 'string',
+                'Valor' => 'price',
+                'Data Vencimento' => 'YYYY-MM-DD',
+                'Data Pagamento' => 'YYYY-MM-DD',
+                'Baixado' => 'integer',
+                'Cliente/Fornecedor' => 'string',
+                'Forma Pagamento' => 'string',
+                'Tipo' => 'string',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($lancamentosFormatados as $lancamento) {
+                $writer->writeSheetRow('Sheet1', $lancamento);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_financeiro_custom.xlsx', $arquivo);
+
+            return;
+        }
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
         $data['emitente'] = $this->Mapos_model->getEmitente();
