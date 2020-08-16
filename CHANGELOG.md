@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.12.1] - 2020-08-16
+
+## Fixed
+- Corrigido quantidade e valor de serviços/produtos em área de clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.12.0] - 2020-08-15
 
 ## Added
