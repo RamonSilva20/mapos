@@ -100,7 +100,7 @@ $totalProdutos = 0; ?>
                                         </tr>
 
                                     <?php
-                                        } ?>
+                                    } ?>
 
                                     <?php if ($result->defeito != null) { ?>
                                         <tr>
@@ -110,7 +110,7 @@ $totalProdutos = 0; ?>
                                             </td>
                                         </tr>
                                     <?php
-                                        } ?>
+                                    } ?>
 
                                     <?php if ($result->laudoTecnico != null) { ?>
                                         <tr>
@@ -120,7 +120,7 @@ $totalProdutos = 0; ?>
                                             </td>
                                         </tr>
                                     <?php
-                                        } ?>
+                                    } ?>
 
                                     <?php if ($result->observacoes != null) { ?>
                                         <tr>
@@ -130,7 +130,7 @@ $totalProdutos = 0; ?>
                                             </td>
                                         </tr>
                                     <?php
-                                        } ?>
+                                    } ?>
 
                                 </tbody>
                             </table>
@@ -145,6 +145,7 @@ $totalProdutos = 0; ?>
                                 <thead>
                                     <tr>
                                         <th style="font-size: large">Item</th>
+                                        <th style="font-size: large">Preço unit.</th>
                                         <th style="font-size: large">Quantidade</th>
                                         <th style="font-size: large">Sub-total</th>
                                     </tr>
@@ -152,32 +153,31 @@ $totalProdutos = 0; ?>
                                 <tbody>
                                     <?php
 
-                                        foreach ($produtos as $p) {
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td style="text-align: center">' . $p->descricao . '</td>';
-                                            echo '<td style="text-align: center">' . $p->quantidade . '</td>';
-
-                                            echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                    foreach ($produtos as $p) {
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td style="text-align: center">' . $p->descricao . '</td>';
+                                        echo '<td style="text-align: center">R$' . number_format($p->preco, 2, ',', '.') . '</td>';
+                                        echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                        echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
 
                                     <?php
-                                        setlocale(LC_MONETARY, 'en_US');
-                                        foreach ($servicos as $s) {
-                                            $preco = $s->preco;
-                                            $totalServico = $totalServico + $preco;
-                                            echo '<tr>';
-                                            echo '<td style="text-align: center">' . $s->nome . '</td>';
-                                            echo '<td></td>';
-                                            echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        }
-                                        ?>
+                                    foreach ($servicos as $s) {
+                                        $totalServico = $totalServico + $s->subTotal;
+                                        echo '<tr>';
+                                        echo '<td style="text-align: center">' . $s->nome . '</td>';
+                                        echo '<td style="text-align: center">R$' . number_format($s->preco, 2, ',', '.') . '</td>';
+                                        echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                        echo '<td style="text-align: center">R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    ?>
 
                                     <tr>
-                                        <td colspan="2" style="text-align: right"></td>
+                                        <td colspan="3" style="text-align: right"></td>
                                         <td style="text-align: center"><strong>Total: R$
                                                 <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong></td>
                                     </tr>

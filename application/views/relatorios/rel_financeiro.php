@@ -9,7 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - pdf</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid?format=xls"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - xls</small></a></li>
                 </ul>
             </div>
         </div>
@@ -55,8 +56,18 @@
                                 <option value="pendente">Pendente</option>
                             </select>
                         </div>
-
                     </div>
+
+                    <div class="span12 well" style="margin-left: 0">
+                        <div class="span12">
+                            <label for="">Tipo de impressão:</label>
+                            <select name="format" class="span12">
+                                <option value="">PDF</option>
+                                <option value="xls">XLS</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="span12" style="margin-left: 0; text-align: center">
                         <input type="reset" class="btn" value="Limpar" />
                         <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>

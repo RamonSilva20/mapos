@@ -120,7 +120,6 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
                 'dataFinal' => $dataFinal,
-                'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => strtoupper(set_value('defeito')),
@@ -226,7 +225,6 @@ class Os extends MY_Controller
             $data = [
                 'dataInicial' => $dataInicial,
                 'dataFinal' => $dataFinal,
-                'garantia' => $this->input->post('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),

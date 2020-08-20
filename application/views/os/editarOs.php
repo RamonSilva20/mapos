@@ -188,7 +188,7 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">Quantidade</label>
-                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12"/>
                                     </div>
                                     <div class="span2">
                                         <label for="">.</label>
@@ -246,7 +246,7 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">Quantidade</label>
-                                            <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" />
+                                            <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" value="1" />
                                         </div>
                                         <div class="span2">
                                             <label for="">.</label>
@@ -453,6 +453,8 @@
                     <label for="recebido">Recebido?</label>
                     &nbsp &nbsp &nbsp &nbsp <input id="recebido" type="checkbox" name="recebido" value="1" />
                 </div>
+                <input type="text" name="garantia" value="<?php echo date('d/m/Y', strtotime('+90 days')); ?>">
+                
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
