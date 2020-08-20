@@ -4,7 +4,7 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.12.2';
+$config['app_version'] = '4.12.1';
 
 /**
  * Nome do sistema
@@ -39,7 +39,7 @@ $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/mapos';
+$config['base_url'] = 'enter_baseurl';
 
 /*
 |--------------------------------------------------------------------------

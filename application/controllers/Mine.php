@@ -429,7 +429,6 @@ class Mine extends CI_Controller
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),
-                'chaveweb' => set_value('chaveweb'),
                 'email' => set_value('email'),
                 'rua' => set_value('rua'),
                 'numero' => set_value('numero'),

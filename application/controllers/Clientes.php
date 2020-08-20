@@ -66,9 +66,9 @@ class Clientes extends MY_Controller
                 'rua' => strtoupper(set_value('rua')),
                 'numero' => set_value('numero'),
                 'complemento' => set_value('complemento'),
-                'bairro' => strtoupper(set_value('bairro')),
-                'cidade' => strtoupper(set_value('cidade')),
-                'estado' => strtoupper(set_value('estado')),
+                'bairro' => set_value('bairro'),
+                'cidade' => set_value('cidade'),
+                'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
             ];
@@ -114,9 +114,9 @@ class Clientes extends MY_Controller
                 'rua' => strtoupper($this->input->post('rua')),
                 'numero' => $this->input->post('numero'),
                 'complemento' => $this->input->post('complemento'),
-                'bairro' => strtoupper($this->input->post('bairro')),
-                'cidade' => strtoupper($this->input->post('cidade')),
-                'estado' => strtoupper($this->input->post('estado')),
+                'bairro' => $this->input->post('bairro'),
+                'cidade' => $this->input->post('cidade'),
+                'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
             ];
 
