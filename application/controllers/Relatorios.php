@@ -198,6 +198,122 @@ class Relatorios extends MY_Controller
         }
     }
 
+    public function sku()
+    {
+        if (!($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')
+            && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs'))) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatório SKU.');
+            redirect(base_url());
+        }
+
+        $this->data['view'] = 'relatorios/rel_sku';
+        return $this->layout();
+    }
+
+    public function skuRapid()
+    {
+        if (!($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')
+            && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs'))) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatório SKU.');
+            redirect(base_url());
+        }
+
+        $format = $this->input->get('format');
+
+        if ($format == 'xls') {
+            $vendas = $this->Relatorios_model->skuRapid(true);
+
+            $cabecalho = [
+                'ID Cliente' => 'integer',
+                'Nome Cliente' => 'string',
+                'ID Produto' => 'integer',
+                'Descrição Produto' => 'string',
+                'Quantidade' => 'integer',
+                'ID Relacionado' => 'integer',
+                'Data' => 'YYYY-MM-DD',
+                'Preço Unitário' => 'price',
+                'Preço Total' => 'price',
+                'Origem' => 'string'
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_sku.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['resultados'] = $this->Relatorios_model->skuRapid();
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório SKU';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+
+        $this->load->helper('mpdf');
+        $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
+    }
+
+    public function skuCustom()
+    {
+        if (!($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')
+            && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs'))) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatório SKU.');
+            redirect(base_url());
+        }
+
+        $dataInicial = $this->input->get('dataInicial');
+        $dataFinal = $this->input->get('dataFinal');
+        $cliente = $this->input->get('clientes_id');
+        $format = $this->input->get('format');
+        $origem = $this->input->get('origem');
+
+        if ($format == 'xls') {
+            $vendas = $this->Relatorios_model->skuCustom($dataInicial, $dataFinal, $cliente, $origem, true);
+
+            $cabecalho = [
+                'ID Cliente' => 'integer',
+                'Nome Cliente' => 'string',
+                'ID Produto' => 'integer',
+                'Descrição Produto' => 'string',
+                'Quantidade' => 'integer',
+                'ID Relacionado' => 'integer',
+                'Data' => 'YYYY-MM-DD',
+                'Preço Unitário' => 'price',
+                'Preço Total' => 'price',
+                'Origem' => 'string'
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_sku.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['resultados'] = $this->Relatorios_model->skuCustom($dataInicial, $dataFinal, $cliente, $origem);
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório SKU';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+
+        $this->load->helper('mpdf');
+        $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
+    }
+
     public function servicos()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rServico')) {
