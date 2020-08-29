@@ -9,8 +9,12 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Added
 - Implementado relatório SKU. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
+## Changed
+- Adequação para retornar relatórios financeiros ordenados por data de vencimento do lançamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## Fixed
 - Corrigido título de modal e descrição de faturamento de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido bug de relatório financeiro rápido omitindo alguns lançamentos. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.12.1] - 2020-08-16
 

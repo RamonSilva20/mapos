@@ -278,11 +278,13 @@ class Relatorios_model extends CI_Model
 
     public function financeiroRapid($array = false)
     {
-        $dataInicial = date('Y-m-01');
-        $dataFinal = date("Y-m-t");
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? ORDER BY tipo";
+        $primeiroDiaMes = new \DateTime('first day of this month');
+        $ultimodiaMes = new DateTime('last day of this month');
 
-        $result = $this->db->query($query, [$dataInicial, $dataFinal]);
+        $this->db->where('data_vencimento >=', $primeiroDiaMes->format('Y-m-d'));
+        $this->db->where('data_vencimento <=', $ultimodiaMes->format('Y-m-d'));
+        $this->db->order_by('data_vencimento', 'asc');
+        $result = $this->db->get('lancamentos');
         if ($array) {
             return $result->result_array();
         }
@@ -313,6 +315,7 @@ class Relatorios_model extends CI_Model
             }
         }
 
+        $this->db->order_by('data_vencimento', 'asc');
         $result = $this->db->get('lancamentos');
         if ($array) {
             return $result->result_array();
@@ -352,7 +355,7 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVEnda";
+        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
 
         return $this->db->query($query)->result();
     }
