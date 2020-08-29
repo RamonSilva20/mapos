@@ -93,6 +93,14 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * MySQL
 * Composer
 
+### Doações
+
+Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
+
+Doações podem ser realizadas nos links:
+* [catarse/mapos](https://www.catarse.me/mapos) - Mensal
+* [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
+
 ### Contribuidores
 | [<img src="https://avatars.githubusercontent.com/Pr3d4dor?s=115"><br><sub>Gianluca Bine</sub>](https://github.com/Pr3d4dor) | [<img src="https://avatars.githubusercontent.com/Henrique-Miranda?s=115"><br><sub>Henrique Miranda</sub>](https://github.com/Henrique-Miranda) | [<img src="https://avatars.githubusercontent.com/mariolucasdev?s=115"><br><sub>Mário Lucas</sub>](https://github.com/mariolucasdev) | [<img src="https://avatars.githubusercontent.com/HelanAllysson?s=115"><br><sub>Helan Allysson</sub>](https://github.com/HelanAllysson) | [<img src="https://avatars.githubusercontent.com/KansasMyers?s=115"><br><sub>KansasMyers</sub>](https://github.com/KansasMyers)
 |:-:|:-:|:-:|:-:|:-:|
