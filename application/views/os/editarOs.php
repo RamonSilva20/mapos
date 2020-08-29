@@ -394,13 +394,13 @@
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Faturar Venda</h3>
+            <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de OS - #<?php echo $result->idOs; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
