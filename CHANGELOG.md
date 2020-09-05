@@ -4,10 +4,68 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.13.0] - 2020-08-29
+
+## Added
+- Implementado relatório SKU. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Adequação para retornar relatórios financeiros ordenados por data de vencimento do lançamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Corrigido título de modal e descrição de faturamento de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido bug de relatório financeiro rápido omitindo alguns lançamentos. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.12.1] - 2020-08-16
+
+## Fixed
+- Corrigido quantidade e valor de serviços/produtos em área de clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.12.0] - 2020-08-15
+
+## Added
+- Implementado relatório financeiro em XLSX. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.11.2] - 2020-07-25
+
+## Changed
+- Mudança (Linhas 70,71,72) realizada para incluir nas pesquisas também o código de barras, assim poderia ser feito através de leitor e alterado o limite devido termos muitos itens com descrição similar se a pesquisa for executada pelo nome. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo e não em corpo do e-mail. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 94,106) para incluir o código do Produto na venda e facilitar a identificação. [@FlexoSol](https://github.com/FlexoSol)
+- Mudança (Linha 7 para facilitar a localização e posterior envio via e-mail, onde alguns clientes(empresas) exigem que a proposta esteja em anexo. [@FlexoSol](https://github.com/FlexoSol)
+
+## [4.11.1] - 2020-07-18
+
+## Added
+- Corrigido relatório rápido de produtos com estoque mínimo. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.11.0] - 2020-07-16
+
+## Added
+- Adicionando relatório de clientes em xls. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [4.10.0] - 2020-07-01
+
+## Added
+- Adicionando suporte a HMVC. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## Fixed
+- Corrigindo erro na listagem quando arquivo não encontrado. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [4.9.0] - 2020-06-14
+
+## Added
+- Adequação para permitir a busca de cliente via telefone e celular. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.8.3] - 2020-06-14
+
+## Fixed
+- Corrigido download de anexo de OS em área de cliente e adequação para exibir nome do arquivo abaixo. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.8.2] - 2020-05-29
 
 ## Fixed
-- Adequação para mostrar nome abaixo do ícone do anexo em OS. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adequação para mostrar nome abaixo do ícone do anexo em OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Corrigido tema neve em mobile. [@willph](https://github.com/willph)
 - Corrigido permissões padrão em instalação. [@willph](https://github.com/willph)
 

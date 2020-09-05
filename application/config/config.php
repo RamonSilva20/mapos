@@ -4,7 +4,7 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.8.2';
+$config['app_version'] = '4.13.0';
 
 /**
  * Nome do sistema
@@ -496,3 +496,9 @@ $config['time_reference'] = 'local';
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+
+$config['modules_locations'] = [
+    APPPATH.'modules/' => '../modules/',
+];

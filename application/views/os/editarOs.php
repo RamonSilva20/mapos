@@ -282,21 +282,22 @@
                                 </div>
                                 <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                    foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                            $link = $a->url .'/'. $a->anexo;
+                                        foreach ($anexos as $a) {
+                                            if ($a->thumb == null) {
+                                                $thumb = base_url() . 'assets/img/icon-file.png';
+                                                $link = base_url() . 'assets/img/icon-file.png';
+                                            } else {
+                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                                $link = $a->url .'/'. $a->anexo;
+                                            }
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . $thumb . '" alt="">
+                                                    </a>
+                                                    <span>'. $a->anexo .'</span>
+                                                </div>';
                                         }
-                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                                <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                                    <img src="' . $thumb . '" alt="">
-                                                </a>
-                                                <span>'. $a->anexo .'</span>
-                                            </div>';
-                                    } ?>
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -393,13 +394,13 @@
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Faturar Venda</h3>
+            <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de OS - #<?php echo $result->idOs; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
