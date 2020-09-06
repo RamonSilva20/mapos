@@ -4,6 +4,28 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.13.0] - 2020-08-29
+
+## Added
+- Implementado relatório SKU. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Adequação para retornar relatórios financeiros ordenados por data de vencimento do lançamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Corrigido título de modal e descrição de faturamento de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido bug de relatório financeiro rápido omitindo alguns lançamentos. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.12.1] - 2020-08-16
+
+## Fixed
+- Corrigido quantidade e valor de serviços/produtos em área de clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.12.0] - 2020-08-15
+
+## Added
+- Implementado relatório financeiro em XLSX. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.11.2] - 2020-07-25
 
 ## Changed
