@@ -527,10 +527,10 @@ $periodo = $this->input->get('periodo');
       $("#urlAtualEditar").val($(location).attr('href'));
       var baixado = $(this).attr('baixado');
       if (baixado == 1) {
-        $("#pagoEditar").attr('checked', true);
+        $("#pagoEditar").prop('checked', true);
         $("#divPagamentoEditar").show();
       } else {
-        $("#pagoEditar").attr('checked', false);
+        $("#pagoEditar").prop('checked', false);
         $("#divPagamentoEditar").hide();
       }
 
