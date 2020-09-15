@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.13.1] - 2020-09-15
+
+## Fixed
+- Adequação para manter o estado da checkbox "pagoEditar" em lançamentos. [@nmdavi](https://github.com/nmdavi)
+
 ## [4.13.0] - 2020-08-29
 
 ## Added
