@@ -21,6 +21,7 @@ class Mapos extends MY_Controller
     {
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
+        $this->data['ordensAll'] = $this->mapos_model->getOsAllStatus($this->input->post('statusOsGet'));
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
