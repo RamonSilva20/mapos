@@ -80,6 +80,7 @@
                             <select class="span12" name="statusOsGet" id="statusOsGet" value="">
                                 <option value="">Selecione um Status</option>
                                 <option value="Aberto">Aberto</option>
+                                <option value="Faturado">Faturado</option>
                                 <option value="Orçamento">Orçamento</option>
                                 <option value="Em Andamento">Em Andamento</option>
                                 <option value="Finalizado">Finalizado</option>
