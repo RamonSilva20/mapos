@@ -96,7 +96,7 @@
             </div>
         </div>
     </div>
-    <div class="span12">
+    <div class="span12" style="margin-left: 0">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon"><i class="fas fa-shopping-bag"></i></span>
