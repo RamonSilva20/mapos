@@ -138,6 +138,28 @@ class Mapos_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function calendario($start, $end, $status = null)
+    {
+        $this->db->select(
+            'os.*,
+            clientes.nomeCliente,
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
+        );
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+        $this->db->where('os.dataFinal >=', $start);
+        $this->db->where('os.dataFinal <=', $end);
+
+        if (! empty($status)) {
+            $this->db->where('os.status', $status);
+        }
+
+        return $this->db->get()->result();
+    }
+
     public function getProdutosMinimo()
     {
         $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10";
