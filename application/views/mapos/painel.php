@@ -78,7 +78,7 @@
                     <div id='source-calendar'>
                         <form method="post">
                             <select class="span12" name="statusOsGet" id="statusOsGet" value="">
-                                <option value="">Selecione um Status</option>
+                                <option value="">Todos os Status</option>
                                 <option value="Aberto">Aberto</option>
                                 <option value="Faturado">Faturado</option>
                                 <option value="Orçamento">Orçamento</option>
@@ -87,7 +87,7 @@
                                 <option value="Cancelado">Cancelado</option>
                                 <option value="Aguardando Peças">Aguardando Peças</option>
                             </select>
-                            <button type="submit" class="btn-xs" id="btn-calendar">Pesquisar</button>
+                            <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
                         </form>
 
                     </div>
@@ -681,43 +681,27 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-    });
-</script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
         var srcCalendarEl = document.getElementById('source-calendar');
         var srcCalendar = new FullCalendar.Calendar(srcCalendarEl, {
-
             locale: 'pt-br',
             height: 500,
             editable: false,
             selectable: false,
             businessHours: true,
             dayMaxEvents: true, // allow "more" link when too many events
-            events: [
-                <?php foreach ($ordensAll as $o) : ?> {
-
-                        title: 'OS: <?= $o->idOs ?>, Cliente: <?= $o->nomeCliente ?>',
-                        start: '<?= $o->dataFinal ?>',
-                        end: '<?= $o->dataFinal ?>',
-                        extendedProps: {
-                            id: '<b>OS:</b> <?= $o->idOs ?>',
-                            cliente: '<b>Cliente:</b> <?= $o->nomeCliente ?>',
-                            dataInicial: '<b>Data Inicial:</b> <?= $o->dataInicial ?>',
-                            dataFinal: '<b>Data Final:</b> <?= $o->dataFinal ?>',
-                            garantia: '<b>Garantia:</b> <?= $o->garantia ?>',
-                            status: '<b>Status da OS:</b> <?= $o->status ?>',
-                            description: '<b>Descrição/Produto:</b> <?= $o->descricaoProduto ?>',
-                            defeito: '<b>Defeito:</b> <?= $o->defeito ?>',
-                            observacoes: '<b>Observações:</b> <?= $o->observacoes ?>',
-                            valorTotal: '<b>Valor Total:</b> R$ <?= $o->valorTotal ?>',
-                        },
-
-                    },
-                <?php endforeach ?>
-            ],
-
+            events: {
+                url: "<?= base_url() . "mapos/calendario"; ?>",
+                method: 'GET',
+                extraParams: function() { // a function that returns an object
+                    return {
+                        status: $("#statusOsGet").val(),
+                    };
+                },
+                failure: function() {
+                    alert('Falha ao buscar OS de calendário!');
+                },
+            },
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
@@ -738,5 +722,8 @@
 
         srcCalendar.render();
 
+        $('#btn-calendar').on('click', function() {
+            srcCalendar.refetchEvents();
+        });
     });
 </script>

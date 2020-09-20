@@ -138,12 +138,18 @@ class Mapos_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function getOsAllStatus($statusOsGet)
+    public function calendario($start, $end, $status = null)
     {
         $this->db->select('os.*, clientes.nomeCliente');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', $statusOsGet);
+        $this->db->where('os.dataFinal >=', $start);
+        $this->db->where('os.dataFinal <=', $end);
+
+        if (! empty($status)) {
+            $this->db->where('os.status', $status);
+        }
+
         return $this->db->get()->result();
     }
 
