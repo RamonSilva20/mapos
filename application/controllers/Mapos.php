@@ -436,7 +436,8 @@ class Mapos extends MY_Controller
                     'description' => '<b>Descrição/Produto:</b> ' . $os->descricaoProduto,
                     'defeito' => '<b>Defeito:</b> ' . $os->defeito,
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
-                    'valorTotal' => '<b>Valor Total:</b> ' . $os->valorTotal,
+                    'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
                 ]
             ];
         }, $allOs);

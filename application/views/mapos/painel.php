@@ -608,8 +608,8 @@
         <div id="modalDescription" class="modal-Description"></div>
         <div id="modalDefeito" class="modal-Defeito"></div>
         <div id="modalObservacoes" class="modal-Observacoes"></div>
-        <div id="modalValorTotal" class="modal-ValorTotal"></div>
-
+        <div id="modalTotal" class="modal-Total"></div>
+        <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
     </div>
 
     <div class="span12" style="margin-left: 0">
@@ -690,6 +690,7 @@
             selectable: false,
             businessHours: true,
             dayMaxEvents: true, // allow "more" link when too many events
+            displayEventTime: false,
             events: {
                 url: "<?= base_url() . "mapos/calendario"; ?>",
                 method: 'GET',
@@ -713,7 +714,8 @@
                 $('#modalDescription').html(eventObj.description);
                 $('#modalDefeito').html(eventObj.defeito);
                 $('#modalObservacoes').html(eventObj.observacoes);
-                $('#modalValorTotal').html(eventObj.valorTotal);
+                $('#modalTotal').html(eventObj.total);
+                $('#modalValorFaturado').html(eventObj.valorFaturado);
 
                 $('#eventUrl').attr('href', event.url);
                 $('#calendarModal').modal();
