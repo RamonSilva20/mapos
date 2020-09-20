@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.13.2] - 2020-09-20
+
+## Fixed
+- Corrigido problema em adicionar produtos/serviços e OS em que o último id de produto/serviço era mantido no campo hidden e assim era desconsiderado o produto/serviço sendo escolhido na segunda adição. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.13.1] - 2020-09-15
 
 ## Fixed

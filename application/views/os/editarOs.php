@@ -694,6 +694,9 @@
                                 title: "Atenção",
                                 text: "Ocorreu um erro ao tentar adicionar produto."
                             });
+                        },
+                        complete: function() {
+                            $("#idProduto").val('');
                         }
                     });
                     return false;
@@ -746,6 +749,9 @@
                             title: "Atenção",
                             text: "Ocorreu um erro ao tentar adicionar serviço."
                         });
+                    },
+                    complete: function() {
+                        $("#idServico").val('');
                     }
                 });
                 return false;
