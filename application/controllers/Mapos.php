@@ -418,7 +418,7 @@ class Mapos extends MY_Controller
         $allOs = $this->mapos_model->calendario(
             $start,
             $end,
-            $status,
+            $status
         );
 
         $events = array_map(function ($os) {
