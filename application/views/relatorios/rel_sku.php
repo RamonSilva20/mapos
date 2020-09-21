@@ -1,16 +1,18 @@
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+
 <div class="row-fluid" style="margin-top: 0">
     <div class="span4">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
-                    <i class="fas fa-hand-holding-usd"></i>
+                    <i class="fas fa-shopping-bag"></i>
                 </span>
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - pdf</small></a></li>
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid?format=xls"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - xls</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
                 </ul>
             </div>
         </div>
@@ -25,35 +27,31 @@
                 <h5>Relatórios Customizáveis</h5>
             </div>
             <div class="widget-content">
-                <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/financeiroCustom" method="get">
+                <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/skuCustom" method="get">
                     <div class="span12 well">
-
                         <div class="span6">
-                            <label for="">Vencimento de:</label>
+                            <label for="">Data de ocorrência de:</label>
                             <input type="date" name="dataInicial" class="span12" />
                         </div>
                         <div class="span6">
                             <label for="">até:</label>
                             <input type="date" name="dataFinal" class="span12" />
                         </div>
-
                     </div>
 
                     <div class="span12 well" style="margin-left: 0">
-                        <div class="span6">
-                            <label for="">Tipo:</label>
-                            <select name="tipo" class="span12">
-                                <option value="todos">Todos</option>
-                                <option value="receita">Receita</option>
-                                <option value="despesa">Despesa</option>
-                            </select>
-                        </div>
-                        <div class="span6">
-                            <label for="">Situação:</label>
-                            <select name="situacao" class="span12">
-                                <option value="todos">Todos</option>
-                                <option value="pago">Pago</option>
-                                <option value="pendente">Pendente</option>
+                        <label for="cliente">Cliente</label>
+                        <input class="span12" id="cliente" type="text" name="cliente" />
+                        <input type="hidden" name="clientes_id" id="clientes_id">
+                    </div>
+
+                    <div class="span12 well" style="margin-left: 0">
+                        <div class="span12">
+                            <label for="">Origem:</label>
+                            <select name="origem" class="span12">
+                                <option value="">Todas</option>
+                                <option value="os">Ordem de Serviço</option>
+                                <option value="venda">Venda</option>
                             </select>
                         </div>
                     </div>
@@ -78,3 +76,19 @@
         </div>
     </div>
 </div>
+</div>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".money").maskMoney();
+
+        $("#cliente").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            minLength: 2,
+            select: function(event, ui) {
+                $("#clientes_id").val(ui.item.id);
+            }
+        });
+    });
+</script>

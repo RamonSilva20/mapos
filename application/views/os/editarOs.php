@@ -282,16 +282,22 @@
                                 </div>
                                 <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
                                     <?php
-                                    foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                            $link = $a->url .'/'. $a->anexo;
+                                        foreach ($anexos as $a) {
+                                            if ($a->thumb == null) {
+                                                $thumb = base_url() . 'assets/img/icon-file.png';
+                                                $link = base_url() . 'assets/img/icon-file.png';
+                                            } else {
+                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                                $link = $a->url .'/'. $a->anexo;
+                                            }
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . $thumb . '" alt="">
+                                                    </a>
+                                                    <span>'. $a->anexo .'</span>
+                                                </div>';
                                         }
-                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
-                                    } ?>
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -388,13 +394,13 @@
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Faturar Venda</h3>
+            <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de OS - #<?php echo $result->idOs; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -632,11 +638,23 @@
 
         $("#formProdutos").validate({
             rules: {
+                produto: {
+                    required: true
+                },
+                preco: {
+                    required: true
+                },
                 quantidade: {
                     required: true
                 }
             },
             messages: {
+                produto: {
+                    required: 'Insira o produto'
+                },
+                preco: {
+                    required: 'Insira o preço'
+                },
                 quantidade: {
                     required: 'Insira a quantidade'
                 }
@@ -663,19 +681,22 @@
                         url: "<?php echo base_url(); ?>index.php/os/adicionarProduto",
                         data: dados,
                         dataType: 'json',
-                        success: function(data) {
-                            if (data.result == true) {
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
-                                $("#quantidade").val('');
-                                $("#preco").val('');
-                                $("#produto").val('').focus();
-                            } else {
-                                Swal.fire({
-                                    type: "error",
-                                    title: "Atenção",
-                                    text: "Ocorreu um erro ao tentar adicionar produto."
-                                });
-                            }
+                        success: function() {
+                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#quantidade").val('');
+                            $("#preco").val('');
+                            $("#produto").val('').focus();
+                        },
+                        error: function() {
+                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar adicionar produto."
+                            });
+                        },
+                        complete: function() {
+                            $("#idProduto").val('');
                         }
                     });
                     return false;
@@ -687,12 +708,24 @@
             rules: {
                 servico: {
                     required: true
-                }
+                },
+                preco: {
+                    required: true
+                },
+                quantidade: {
+                    required: true
+                },
             },
             messages: {
                 servico: {
                     required: 'Insira um serviço'
-                }
+                },
+                preco: {
+                    required: 'Insira o preço'
+                },
+                quantidade: {
+                    required: 'Insira a quantidade'
+                },
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
@@ -703,19 +736,22 @@
                     url: "<?php echo base_url(); ?>index.php/os/adicionarServico",
                     data: dados,
                     dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
-                            $("#quantidade_servico").val('');
-                            $("#preco_servico").val('');
-                            $("#servico").val('').focus();
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar adicionar serviço."
-                            });
-                        }
+                    success: function() {
+                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                        $("#quantidade_servico").val('');
+                        $("#preco_servico").val('');
+                        $("#servico").val('').focus();
+                    },
+                    error: function() {
+                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: "Ocorreu um erro ao tentar adicionar serviço."
+                        });
+                    },
+                    complete: function() {
+                        $("#idServico").val('');
                     }
                 });
                 return false;

@@ -91,6 +91,10 @@
             <li><a href="<?= site_url('relatorios/financeiro') ?>">Financeiro</a></li>
           <?php
           } ?>
+          <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda') && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
+            <li><a href="<?= site_url('relatorios/sku') ?>">SKU</a></li>
+          <?php
+          } ?>
         </ul>
       </li>
     <?php

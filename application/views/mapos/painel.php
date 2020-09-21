@@ -3,6 +3,10 @@
 <script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+<script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
+<script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
+
+<link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
 
 <!--Action boxes-->
@@ -62,8 +66,37 @@
 <!--End-Action boxes-->
 
 <div class="row-fluid" style="margin-top: 0">
-
     <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"><i class="fas fa-calendar"></i></span>
+                <h5>Agenda</h5>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered">
+
+                    <div id='source-calendar'>
+                        <form method="post">
+                            <select class="span12" name="statusOsGet" id="statusOsGet" value="">
+                                <option value="">Todos os Status</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Faturado">Faturado</option>
+                                <option value="Orçamento">Orçamento</option>
+                                <option value="Em Andamento">Em Andamento</option>
+                                <option value="Finalizado">Finalizado</option>
+                                <option value="Cancelado">Cancelado</option>
+                                <option value="Aguardando Peças">Aguardando Peças</option>
+                            </select>
+                            <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
+                        </form>
+
+                    </div>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="span12" style="margin-left: 0">
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon"><i class="fas fa-shopping-bag"></i></span>
@@ -105,7 +138,7 @@
                                             <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn btn-info">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos?>" estoque="<?=$p->estoque?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -229,93 +262,94 @@
 </div>
 
 <?php if ($estatisticas_financeiro != null) {
-if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-        <div class="row-fluid" style="margin-top: 0">
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+            <div class="row-fluid" style="margin-top: 0">
 
-            <div class="row-fluid" style="margin-top: 0;">
-                <div class="span12">
-                    <div class="widget-box">
-                        <div class="widget-title">
-                            <span class="icon"><i class="fas fa-diagnoses"></i></span>
-                            <h5>
-                                Balanço Mensal do Ano:
-                            </h5>
-                            <form method="get">
-                                <input type="number" name="year" style="height: 1.1rem; margin-bottom: 0; margin-top: 0.2rem" value="<?php echo intval(preg_replace( '/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
-                                <button type="submit" class="btn-xs" style="height: 1.8rem; margin-bottom: 0; margin-top: 0.2rem">Pesquisar</button>
-                            </form>
-                        </div>
-                        <div class="widget-content">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div id="chart-vendas-mes1" style=""></div>
+                <div class="row-fluid" style="margin-top: 0;">
+                    <div class="span12">
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="fas fa-diagnoses"></i></span>
+                                <h5>
+                                    Balanço Mensal do Ano:
+                                </h5>
+                                <form method="get">
+                                    <input type="number" name="year" style="height: 1.1rem; margin-bottom: 0; margin-top: 0.2rem" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                                    <button type="submit" class="btn-xs" style="height: 1.8rem; margin-bottom: 0; margin-top: 0.2rem">Pesquisar</button>
+                                </form>
+                            </div>
+                            <div class="widget-content">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div id="chart-vendas-mes1" style=""></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <script src="<?= base_url('assets/js/highchart/highcharts.js') ?>"></script>
+            <script src="<?= base_url('assets/js/highchart/highcharts.js') ?>"></script>
 
-        <script type="text/javascript">
-            $(function () {
-                var myChart = Highcharts.chart('chart-vendas-mes1', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'Vendas'
-                    },
-                    xAxis: {
-                        categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-                    },
-                    yAxis: {
+            <script type="text/javascript">
+                $(function() {
+                    var myChart = Highcharts.chart('chart-vendas-mes1', {
+                        chart: {
+                            type: 'column'
+                        },
                         title: {
-                            text: 'Reais',
-                            format: 'R$: {value}'
-                        }
-                    },
-                    tooltip: {
-                        valueDecimals: 2,
-                        valuePrefix: 'R$: '
-                    },
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true,
-                                format: 'R$: {y}',
+                            text: 'Vendas'
+                        },
+                        xAxis: {
+                            categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Reais',
+                                format: 'R$: {value}'
                             }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Receita Líquida',
-                        negativeColor: '#FF0000',
-                        data: [<?php echo ($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
-                            <?php echo ($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>]
-                    }]
+                        },
+                        tooltip: {
+                            valueDecimals: 2,
+                            valuePrefix: 'R$: '
+                        },
+                        plotOptions: {
+                            series: {
+                                dataLabels: {
+                                    enabled: true,
+                                    format: 'R$: {y}',
+                                }
+                            }
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Receita Líquida',
+                            negativeColor: '#FF0000',
+                            data: [<?php echo($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>
+                            ]
+                        }]
+                    });
                 });
-            });
-
-        </script>
-    <?php endif ?>
-<?php  } } ?>
+            </script>
+        <?php endif ?>
+<?php  }
+} ?>
 
 <?php if ($estatisticas_financeiro != null) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
@@ -557,6 +591,32 @@ if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro-
     }
 } ?>
 
+<!-- Modal Status OS Calendar -->
+<div id="calendarModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Status OS Detalhada</h3>
+    </div>
+    <div class="modal-body">
+        <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
+        <h4 id="modalId" class="modal-id"></h4>
+        <h5 id="modalCliente" class="modal-cliente"></h5>
+        <div id="modalDataInicial" class="modal-DataInicial"></div>
+        <div id="modalDataFinal" class="modal-DataFinal"></div>
+        <div id="modalGarantia" class="modal-Garantia"></div>
+        <div id="modalStatus" class="modal-Status"></div>
+        <div id="modalDescription" class="modal-Description"></div>
+        <div id="modalDefeito" class="modal-Defeito"></div>
+        <div id="modalObservacoes" class="modal-Observacoes"></div>
+        <div id="modalTotal" class="modal-Total"></div>
+        <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
+    </div>
+
+    <div class="span12" style="margin-left: 0">
+
+    </div>
+</div>
+
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
@@ -575,8 +635,8 @@ if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro-
             <div class="control-group">
                 <label for="estoque" class="control-label">Adicionar Produtos<span class="required">*</span></label>
                 <div class="controls">
-                    <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
-                    <input id="estoque" type="text" name="estoque" value=""/>
+                    <input type="hidden" id="idProduto" class="idProduto" name="id" value="" />
+                    <input id="estoque" type="text" name="estoque" value="" />
                 </div>
             </div>
         </div>
@@ -590,8 +650,8 @@ if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro-
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <!-- Modal Estoque-->
 <script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on('click', 'a', function (event) {
+    $(document).ready(function() {
+        $(document).on('click', 'a', function(event) {
             var produto = $(this).attr('produto');
             var estoque = $(this).attr('estoque');
             $('.idProduto').val(produto);
@@ -613,13 +673,59 @@ if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro-
             },
             errorClass: "help-inline",
             errorElement: "span",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').addClass('error');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
             }
+        });
+
+        var srcCalendarEl = document.getElementById('source-calendar');
+        var srcCalendar = new FullCalendar.Calendar(srcCalendarEl, {
+            locale: 'pt-br',
+            height: 500,
+            editable: false,
+            selectable: false,
+            businessHours: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            displayEventTime: false,
+            events: {
+                url: "<?= base_url() . "mapos/calendario"; ?>",
+                method: 'GET',
+                extraParams: function() { // a function that returns an object
+                    return {
+                        status: $("#statusOsGet").val(),
+                    };
+                },
+                failure: function() {
+                    alert('Falha ao buscar OS de calendário!');
+                },
+            },
+            eventClick: function(info) {
+                var eventObj = info.event.extendedProps;
+                $('#modalId').html(eventObj.id);
+                $('#modalCliente').html(eventObj.cliente);
+                $('#modalDataInicial').html(eventObj.dataInicial);
+                $('#modalDataFinal').html(eventObj.dataFinal);
+                $('#modalGarantia').html(eventObj.garantia);
+                $('#modalStatus').html(eventObj.status);
+                $('#modalDescription').html(eventObj.description);
+                $('#modalDefeito').html(eventObj.defeito);
+                $('#modalObservacoes').html(eventObj.observacoes);
+                $('#modalTotal').html(eventObj.total);
+                $('#modalValorFaturado').html(eventObj.valorFaturado);
+
+                $('#eventUrl').attr('href', event.url);
+                $('#calendarModal').modal();
+            },
+        });
+
+        srcCalendar.render();
+
+        $('#btn-calendar').on('click', function() {
+            srcCalendar.refetchEvents();
         });
     });
 </script>

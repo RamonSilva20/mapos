@@ -403,4 +403,48 @@ class Mapos extends MY_Controller
 
         return redirect(site_url('mapos/configurar'));
     }
+
+    public function calendario()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
+        $status = $this->input->get('status') ?: null;
+        $start = $this->input->get('start') ?: null;
+        $end = $this->input->get('end') ?: null;
+
+        $allOs = $this->mapos_model->calendario(
+            $start,
+            $end,
+            $status,
+        );
+
+        $events = array_map(function ($os) {
+            return [
+                'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
+                'start' => $os->dataFinal,
+                'end' => $os->dataFinal,
+                'extendedProps' => [
+                    'id' => '<b>OS:</b> ' . $os->idOs,
+                    'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
+                    'dataInicial' => '<b>Data Inicial:</b> ' . $os->dataInicial,
+                    'dataFinal' => '<b>Data Final:</b> ' . $os->dataFinal,
+                    'garantia' => '<b>Garantia:</b> ' . $os->garantia,
+                    'status' => '<b>Status da OS:</b> ' . $os->status,
+                    'description' => '<b>Descrição/Produto:</b> ' . $os->descricaoProduto,
+                    'defeito' => '<b>Defeito:</b> ' . $os->defeito,
+                    'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
+                    'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
+                ]
+            ];
+        }, $allOs);
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($events));
+    }
 }

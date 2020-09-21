@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.7.2-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.14.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -9,7 +9,7 @@
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
 
-### Instalação
+### [Instalação](Instalacao_xampp_windows.md)
 
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
@@ -92,6 +92,14 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * PHP >= 7.2
 * MySQL
 * Composer
+
+### Doações
+
+Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
+
+Doações podem ser realizadas nos links:
+* [catarse/mapos](https://www.catarse.me/mapos) - Mensal
+* [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
 
 ### Contribuidores
 | [<img src="https://avatars.githubusercontent.com/Pr3d4dor?s=115"><br><sub>Gianluca Bine</sub>](https://github.com/Pr3d4dor) | [<img src="https://avatars.githubusercontent.com/Henrique-Miranda?s=115"><br><sub>Henrique Miranda</sub>](https://github.com/Henrique-Miranda) | [<img src="https://avatars.githubusercontent.com/mariolucasdev?s=115"><br><sub>Mário Lucas</sub>](https://github.com/mariolucasdev) | [<img src="https://avatars.githubusercontent.com/HelanAllysson?s=115"><br><sub>Helan Allysson</sub>](https://github.com/HelanAllysson) | [<img src="https://avatars.githubusercontent.com/KansasMyers?s=115"><br><sub>KansasMyers</sub>](https://github.com/KansasMyers)

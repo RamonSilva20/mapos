@@ -448,6 +448,19 @@ class Mine extends CI_Controller
         $data = '';
         $this->load->view('conecte/cadastrar', $data);
     }
+
+    public function downloadanexo($id = null)
+    {
+        if ($id != null && is_numeric($id)) {
+            $this->db->where('idAnexos', $id);
+            $file = $this->db->get('anexos', 1)->row();
+
+            $this->load->library('zip');
+            $path = $file->path;
+            $this->zip->read_file($path . '/' . $file->anexo);
+            $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        }
+    }
 }
 
 /* End of file conecte.php */

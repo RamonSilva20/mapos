@@ -55,23 +55,26 @@ class Mapos_model extends CI_Model
         $data = [];
         // buscando clientes
         $this->db->like('nomeCliente', $termo);
-        $this->db->limit(5);
+        $this->db->or_like('telefone', $termo);
+        $this->db->or_like('celular', $termo);
+        $this->db->limit(15);
         $data['clientes'] = $this->db->get('clientes')->result();
 
         // buscando os
         $this->db->like('idOs', $termo);
         $this->db->or_like('descricaoProduto', $termo);
-        $this->db->limit(5);
+        $this->db->limit(15);
         $data['os'] = $this->db->get('os')->result();
 
         // buscando produtos
-        $this->db->like('descricao', $termo);
-        $this->db->limit(5);
+        $this->db->like('codDeBarra', $termo);
+        $this->db->or_like('descricao', $termo);
+        $this->db->limit(50);
         $data['produtos'] = $this->db->get('produtos')->result();
 
         //buscando serviços
         $this->db->like('nome', $termo);
-        $this->db->limit(5);
+        $this->db->limit(15);
         $data['servicos'] = $this->db->get('servicos')->result();
 
         return $data;
@@ -135,6 +138,28 @@ class Mapos_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function calendario($start, $end, $status = null)
+    {
+        $this->db->select(
+            'os.*,
+            clientes.nomeCliente,
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
+        );
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
+        $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+        $this->db->where('os.dataFinal >=', $start);
+        $this->db->where('os.dataFinal <=', $end);
+
+        if (! empty($status)) {
+            $this->db->where('os.status', $status);
+        }
+
+        return $this->db->get()->result();
+    }
+
     public function getProdutosMinimo()
     {
         $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10";
@@ -159,7 +184,7 @@ class Mapos_model extends CI_Model
 
     public function getEstatisticasVendasMes($year)
     {
-        $numbersOnly = preg_replace( '/[^0-9]/', '', $year);
+        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
         if (!$numbersOnly) {
             $numbersOnly = date('Y');
