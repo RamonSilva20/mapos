@@ -337,8 +337,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                    echo 'estoque = 1000000';
-                }; ?>
+                                                echo 'estoque = 1000000';
+                                            }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
