@@ -4,6 +4,14 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.1] - 2020-09-26
+
+## Fixed
+- Corrigido colar texto em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Adicionado regra de validação unique em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.15.0] - 2020-09-21
 
 ## Added
