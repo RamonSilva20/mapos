@@ -358,6 +358,11 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'observacoes',
+            'label' => 'Observacoes',
+            'rules' => 'trim',
+        ],
+        [
             'field' => 'clientes_id',
             'label' => 'clientes',
             'rules' => 'trim|required',
