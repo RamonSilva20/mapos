@@ -78,19 +78,27 @@ class Github_updater
         if ($hash !== $this->ci->config->item('current_commit')) {
             $commits = json_decode($this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/compare/'.$this->ci->config->item('current_commit').'...'.$hash));
             $files = $commits->files;
+            $no_update = ['index.php'];
 
             if ($dir = $this->_get_and_extract($hash)) {
                 // Loop through the list of changed files for this commit
                 foreach ($files as $file) {
-                    // If the file isn't in the ignored list then perform the update
                     if (!$this->_is_ignored($file->filename)) {
-                        // If the status is removed then delete the file
                         if ($file->status === 'removed') {
                             unlink($file->filename);
-                        }
-                        // Otherwise copy the file from the update.
-                        else {
-                            copy($dir.'/'.$file->filename, $file->filename);
+                        } else {
+                            if (!in_array($file->filename, $no_update)) {
+                                if (!file_exists($file->filename)) {
+                                    mkdir($file->filename, 0777, true);
+                                    if (!is_dir($file->filename)) {
+                                        copy($dir.'/'.$file->filename, $file->filename);
+                                    }
+                                } else {
+                                    if (!is_dir($file->filename)) {
+                                        copy($dir.'/'.$file->filename, $file->filename);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
