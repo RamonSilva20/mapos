@@ -221,7 +221,7 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, [$precoInicial, $precoFinal])->result();
     }
 
-    public function osRapid()
+    public function osRapid($array = false)
     {
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
@@ -236,10 +236,15 @@ class Relatorios_model extends CI_Model
         $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs', 'left');
         $this->db->order_by('os.dataInicial', 'DESC');
 
-        return $this->db->get()->result();
+        $result = $this->db->get();
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
-    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null)
+    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null, $array = false)
     {
         $whereData = "";
         $whereCliente = "";
@@ -273,7 +278,12 @@ class Relatorios_model extends CI_Model
                    WHERE idOs != 0 $whereData $whereCliente $whereResponsavel $whereStatus
                    ORDER BY os.dataInicial";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
     public function financeiroRapid($array = false)

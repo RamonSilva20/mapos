@@ -378,6 +378,50 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
+        $format = $this->input->get('format');
+        if ($format == 'xls') {
+            $os = $this->Relatorios_model->osRapid(true);
+
+            $osFormatadas = array_map(function ($item) {
+                $total = floatval($item['total_servico']) + floatval($item['total_produto']);
+
+                return [
+                    'idOs' => $item['idOs'],
+                    'nomeCliente' => $item['nomeCliente'],
+                    'status' => $item['status'],
+                    'dataFinal' => $item['dataInicial'],
+                    'descricaoProduto' => $item['descricaoProduto'],
+                    'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
+                    'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
+                    'valorTotal' => $total ? $total : 0,
+                ];
+            }, $os);
+
+            $cabecalho = [
+                'ID OS' => 'integer',
+                'Cliente' => 'string',
+                'Status' => 'string',
+                'Data' => 'YYYY-MM-DD',
+                'Descrição' => 'string',
+                'Total Produtos' => 'price',
+                'Total Serviços' => 'price',
+                'Total' => 'price',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($osFormatadas as $os) {
+                $writer->writeSheetRow('Sheet1', $os);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_os.xlsx', $arquivo);
+
+            return;
+        }
+
         $data['os'] = $this->Relatorios_model->osRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de OS';
@@ -400,6 +444,50 @@ class Relatorios extends MY_Controller
         $cliente = $this->input->get('cliente');
         $responsavel = $this->input->get('responsavel');
         $status = $this->input->get('status');
+        $format = $this->input->get('format');
+
+        if ($format == 'xls') {
+            $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status, true);
+
+            $osFormatadas = array_map(function ($item) {
+                $total = floatval($item['total_servico']) + floatval($item['total_produto']);
+
+                return [
+                    'idOs' => $item['idOs'],
+                    'nomeCliente' => $item['nomeCliente'],
+                    'status' => $item['status'],
+                    'dataFinal' => $item['dataInicial'],
+                    'descricaoProduto' => $item['descricaoProduto'],
+                    'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
+                    'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
+                    'valorTotal' => $total ? $total : 0,
+                ];
+            }, $os);
+
+            $cabecalho = [
+                'ID OS' => 'integer',
+                'Cliente' => 'string',
+                'Status' => 'string',
+                'Data' => 'YYYY-MM-DD',
+                'Descrição' => 'string',
+                'Total Produtos' => 'price',
+                'Total Serviços' => 'price',
+                'Total' => 'price',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($osFormatadas as $os) {
+                $writer->writeSheetRow('Sheet1', $os);
+            }
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_os_custom.xlsx', $arquivo);
+
+            return;
+        }
 
         $this->load->helper('mpdf');
 

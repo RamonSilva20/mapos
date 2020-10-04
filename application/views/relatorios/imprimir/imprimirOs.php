@@ -21,13 +21,14 @@
                     <?= $topo ?>
                     <div class="widget-title">
                         <h4 style="text-align: center">
-                            <?=ucfirst($title)?>
+                            <?= ucfirst($title) ?>
                         </h4>
                     </div>
                     <div class="widget-content nopadding">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th style="padding: 5px;">ID OS</th>
                                     <th style="padding: 5px;">CLIENTE</th>
                                     <th style="padding: 5px;">STATUS</th>
                                     <th style="padding: 5px;">DATA</th>
@@ -41,6 +42,7 @@
                                 <?php
                                     foreach ($os as $c) {
                                         echo '<tr>';
+                                        echo '<td><small>' . $c->idOs . '</small></td>';
                                         echo '<td><small>' . $c->nomeCliente . '</small></td>';
                                         echo '<td><small>' . $c->status . '</small></td>';
                                         echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
