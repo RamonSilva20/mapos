@@ -36,6 +36,7 @@ class Financeiro extends MY_Controller
         $cliente = $this->input->get('cliente');
         $tipo = $this->input->get('tipo');
         $status = $this->input->get('status');
+        $periodo = $this->input->get('periodo');
 
         if (! empty($vencimento_de)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
@@ -83,7 +84,7 @@ class Financeiro extends MY_Controller
 
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?vencimento_de=$vencimento_de&vencimento_ate=$vencimento_ate&cliente=$cliente&tipo=$tipo&status=$status");
+        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?vencimento_de=$vencimento_de&vencimento_ate=$vencimento_ate&cliente=$cliente&tipo=$tipo&status=$status&periodo=$periodo");
         $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $this->data['configuration']['page_query_string'] = true;
 
