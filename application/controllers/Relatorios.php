@@ -379,9 +379,21 @@ class Relatorios extends MY_Controller
         }
 
         $format = $this->input->get('format');
-        if ($format == 'xls') {
-            $os = $this->Relatorios_model->osRapid(true);
 
+        $isXls = $format === 'xls';
+        $os = $this->Relatorios_model->osRapid($isXls);
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        foreach ($os as $o) {
+            $totalProdutos += $isXls
+                ? floatval($o['total_produto'])
+                : floatval($o->total_produto);
+            $totalServicos += $isXls
+                ? floatval($o['total_servico'])
+                : floatval($o->total_servico);
+        }
+
+        if ($isXls) {
             $osFormatadas = array_map(function ($item) {
                 $total = floatval($item['total_servico']) + floatval($item['total_produto']);
 
@@ -414,6 +426,17 @@ class Relatorios extends MY_Controller
             foreach ($osFormatadas as $os) {
                 $writer->writeSheetRow('Sheet1', $os);
             }
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                null,
+                null,
+                null,
+                null,
+                $totalProdutos,
+                $totalServicos,
+                $totalProdutos + $totalServicos,
+            ]);
 
             $arquivo = $writer->writeToString();
             $this->load->helper('download');
@@ -422,7 +445,10 @@ class Relatorios extends MY_Controller
             return;
         }
 
-        $data['os'] = $this->Relatorios_model->osRapid();
+        $data['os'] = $os;
+        $data['total_produtos'] = $totalProdutos;
+        $data['total_servicos'] = $totalServicos;
+        $data['total_geral'] = $totalProdutos + $totalServicos;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de OS';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
@@ -446,9 +472,20 @@ class Relatorios extends MY_Controller
         $status = $this->input->get('status');
         $format = $this->input->get('format');
 
-        if ($format == 'xls') {
-            $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status, true);
+        $isXls = $format === 'xls';
+        $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status, $isXls);
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        foreach ($os as $o) {
+            $totalProdutos += $isXls
+                ? floatval($o['total_produto'])
+                : floatval($o->total_produto);
+            $totalServicos += $isXls
+                ? floatval($o['total_servico'])
+                : floatval($o->total_servico);
+        }
 
+        if ($format == 'xls') {
             $osFormatadas = array_map(function ($item) {
                 $total = floatval($item['total_servico']) + floatval($item['total_produto']);
 
@@ -481,6 +518,17 @@ class Relatorios extends MY_Controller
             foreach ($osFormatadas as $os) {
                 $writer->writeSheetRow('Sheet1', $os);
             }
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                null,
+                null,
+                null,
+                null,
+                $totalProdutos,
+                $totalServicos,
+                $totalProdutos + $totalServicos,
+            ]);
 
             $arquivo = $writer->writeToString();
             $this->load->helper('download');
@@ -494,12 +542,14 @@ class Relatorios extends MY_Controller
         $title = $status == null ? 'Todas' : $status;
         $user = $responsavel == null ? 'Não foi selecionado' : $this->Usuarios_model->get(1, intval($responsavel) - 1);
 
-        $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status);
         $emitente = $this->Mapos_model->getEmitente();
         $usuario = is_array($user) ? $user[0]->nome : $user;
 
         $data['title'] = 'Relatório de OS - ' . $title;
         $data['os'] = $os;
+        $data['total_produtos'] = $totalProdutos;
+        $data['total_servicos'] = $totalServicos;
+        $data['total_geral'] = $totalProdutos + $totalServicos;
         $data['res_nome'] = $usuario;
 
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
