@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.16.0] - 2020-10-04
+
+## Added
+- Adicionado filtro por nome de cliente/fornecedor e filtro de tipo de lançamento em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado totais (produtos, serviços e geral) no final do relatório de os (rápido e custom). [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado relatório de OS (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.15.1] - 2020-09-26
 
 ## Fixed
