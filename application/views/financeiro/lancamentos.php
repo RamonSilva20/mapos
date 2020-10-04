@@ -28,9 +28,9 @@ $periodo = $this->input->get('periodo');
   </div>
 <?php } ?>
 
-<div class="span7" style="margin-left: 0">
+<div class="span12" style="margin-left: 0;margin-top: 1rem;">
   <form action="<?php echo current_url(); ?>" method="get">
-    <div class="span4" style="margin-left: 0">
+    <div class="span2" style="margin-left: 0">
       <label>Período <i class="fas fa-calendar-day tip-top" title="Lançamentos com vencimento no período."></i></label>
       <select name="periodo" class="span12">
         <option value="dia">Dia</option>
@@ -48,7 +48,8 @@ $periodo = $this->input->get('periodo');
 } ?>>Todos</option>
       </select>
     </div>
-    <div class="span4">
+
+    <div class="span2">
       <label>Situação <i class="fas fa-sign tip-top" title="Lançamentos com situação específica ou todos."></i></label>
       <select name="situacao" class="span12">
         <option value="todos">Todos</option>
@@ -66,102 +67,115 @@ $periodo = $this->input->get('periodo');
 } ?>>Pendente</option>
       </select>
     </div>
-    <div class="span4">
-      &nbsp
-      <button type="submit" class="span12 btn btn-primary">Filtrar</button>
+
+    <div class="span2">
+      <label>Tipo <i class="fas fa-hand-holding-usd tip-top" title="Tipo."></i></label>
+      <select name="tipo" class="span12">
+        <option value="">Todos</option>
+        <option value="receita" <?= $this->input->get('tipo') === 'receita' ? 'selected' : '' ?>>Receita</option>
+        <option value="despesa" <?= $this->input->get('tipo') === 'despesa' ? 'selected' : '' ?>>Despesa</option>
+      </select>
     </div>
 
+    <div class="span2">
+      <label>Cliente <i class="fas fa-user tip-top" title="Cliente."></i></label>
+      <input type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+    </div>
+
+    <div class="span2 pull-right">
+      &nbsp
+      <button type="submit" class="span12 btn btn-primary btn-sm" style="margin-top: 0.3rem;">Filtrar</button>
+    </div>
   </form>
 </div>
 
 <div class="span12" style="margin-left: 0;">
+  <div class="widget-box">
+    <div class="widget-title">
+      <span class="icon">
+        <i class="fas fa-hand-holding-usd"></i>
+      </span>
+      <h5>Lançamentos Financeiros</h5>
 
-    <div class="widget-box">
-      <div class="widget-title">
-        <span class="icon">
-          <i class="fas fa-hand-holding-usd"></i>
-        </span>
-        <h5>Lançamentos Financeiros</h5>
+    </div>
 
-      </div>
-
-      <div class="widget-content nopadding">
+    <div class="widget-content nopadding">
 
 
-        <table class="table table-bordered " id="divLancamentos">
-          <thead>
-            <tr style="backgroud-color: #2D335B">
-              <th>#</th>
-              <th>Tipo</th>
-              <th>Cliente / Fornecedor</th>
-              <th>Descrição</th>
-              <th>Vencimento</th>
-              <th>Status</th>
-              <th>Valor</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
+      <table class="table table-bordered " id="divLancamentos">
+        <thead>
+          <tr style="backgroud-color: #2D335B">
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Cliente / Fornecedor</th>
+            <th>Descrição</th>
+            <th>Vencimento</th>
+            <th>Status</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
 
-              if (!$results) {
-                  echo '<tr>
+          if (!$results) {
+              echo '<tr>
                         <td colspan="8" >Nenhum lançamento encontrado</td>
                       </tr>';
+          }
+          foreach ($results as $r) {
+              $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
+              if ($r->baixado == 0) {
+                  $status = 'Pendente';
+              } else {
+                  $status = 'Pago';
+              };
+              if ($r->tipo == 'receita') {
+                  $label = 'success';
+              } else {
+                  $label = 'important';
               }
-              foreach ($results as $r) {
-                  $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
-                  if ($r->baixado == 0) {
-                      $status = 'Pendente';
-                  } else {
-                      $status = 'Pago';
-                  };
-                  if ($r->tipo == 'receita') {
-                      $label = 'success';
-                  } else {
-                      $label = 'important';
-                  }
-                  echo '<tr>';
-                  echo '<td>' . $r->idLancamentos . '</td>';
-                  echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                  echo '<td>' . $r->cliente_fornecedor . '</td>';
-                  echo '<td>' . $r->descricao . '</td>';
-                  echo '<td>' . $vencimento . '</td>';
-                  echo '<td>' . $status . '</td>';
-                  echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
+              echo '<tr>';
+              echo '<td>' . $r->idLancamentos . '</td>';
+              echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
+              echo '<td>' . $r->cliente_fornecedor . '</td>';
+              echo '<td>' . $r->descricao . '</td>';
+              echo '<td>' . $vencimento . '</td>';
+              echo '<td>' . $status . '</td>';
+              echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
-                  echo '<td>';
-                  if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                      echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
-                  }
-                  if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                      echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
-                  }
+              echo '<td>';
+              if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+              }
+              if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                  echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
+              }
 
-                  echo '</td>';
-                  echo '</tr>';
-              } ?>
-            <tr>
+              echo '</td>';
+              echo '</tr>';
+          } ?>
+          <tr>
 
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="6" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
-              <td colspan="3" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong></td>
-            </tr>
-            <tr>
-              <td colspan="6" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
-              <td colspan="3" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong></td>
-            </tr>
-            <tr>
-              <td colspan="6" style="text-align: right"> <strong>Saldo:</strong></td>
-              <td colspan="3" style="text-align: left;"><strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" style="text-align: right; color: green"> <strong>Total Receitas:</strong></td>
+            <td colspan="3" style="text-align: left; color: green"><strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong></td>
+          </tr>
+          <tr>
+            <td colspan="6" style="text-align: right; color: red"> <strong>Total Despesas:</strong></td>
+            <td colspan="3" style="text-align: left; color: red"><strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong></td>
+          </tr>
+          <tr>
+            <td colspan="6" style="text-align: right"> <strong>Saldo:</strong></td>
+            <td colspan="3" style="text-align: left;"><strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
+  </div>
 
 </div>
 

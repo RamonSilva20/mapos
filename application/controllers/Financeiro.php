@@ -33,6 +33,8 @@ class Financeiro extends MY_Controller
         $where = '';
         $periodo = $this->input->get('periodo');
         $situacao = $this->input->get('situacao');
+        $cliente = $this->input->get('cliente');
+        $tipo = $this->input->get('tipo');
 
         // busca todos os lançamentos
         if ($periodo == 'todos') {
@@ -132,9 +134,25 @@ class Financeiro extends MY_Controller
             }
         }
 
+        if (! empty($cliente)) {
+            if (empty($where)) {
+                $where = "cliente_fornecedor LIKE BINARY '%${cliente}%'";
+            } else {
+                $where .= " AND cliente_fornecedor LIKE BINARY '%${cliente}%'";
+            }
+        }
+
+        if (!empty($tipo)) {
+            if (empty($where)) {
+                $where = "tipo = '$tipo'";
+            } else {
+                $where .= " AND tipo = '$tipo'";
+            }
+        }
+
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?periodo=$periodo&situacao=$situacao");
+        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?periodo=$periodo&situacao=$situacao&cliente=$cliente&tipo=$tipo");
         $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $this->data['configuration']['page_query_string'] = true;
 
