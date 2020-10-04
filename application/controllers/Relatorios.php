@@ -485,7 +485,7 @@ class Relatorios extends MY_Controller
                 : floatval($o->total_servico);
         }
 
-        if ($format == 'xls') {
+        if ($isXls) {
             $osFormatadas = array_map(function ($item) {
                 $total = floatval($item['total_servico']) + floatval($item['total_produto']);
 
