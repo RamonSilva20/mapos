@@ -69,6 +69,7 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
+                'observacoes' => $this->input->post('observacoes'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0,
@@ -116,6 +117,7 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
+                'observacoes' => $this->input->post('observacoes'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
@@ -276,7 +278,7 @@ class Vendas extends MY_Controller
 
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
                 $this->load->model('produtos_model');
-                
+
                 if ($this->data['configuration']['control_estoque']) {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '-');
                 }
@@ -303,7 +305,7 @@ class Vendas extends MY_Controller
             $produto = $this->input->post('produto');
 
             $this->load->model('produtos_model');
-            
+
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }

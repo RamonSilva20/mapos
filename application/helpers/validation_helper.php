@@ -113,3 +113,23 @@ if (!function_exists('verific_cpf_cnpj')) {
         return false;
     }
 }
+
+if (!function_exists('unique')) {
+    function unique($value, $params)
+    {
+        $CI = &get_instance();
+        $CI->load->database();
+
+        $CI->form_validation->set_message('unique', "O campo %s já está cadastrado.");
+
+        list($table, $field, $current_id, $key) = explode(".", $params);
+
+        $query = $CI->db->select()->from($table)->where($field, $value)->limit(1)->get();
+
+        if ($query->row() && $query->row()->{$key} != $current_id) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
