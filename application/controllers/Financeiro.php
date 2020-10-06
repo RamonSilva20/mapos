@@ -58,7 +58,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($status)) {
+        if (isset($status) && $status != '') {
             if (empty($where)) {
                 $where = "baixado = '$status'";
             } else {
