@@ -3,7 +3,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Map OS</title>
+    <title>Map_OS_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -92,6 +92,7 @@
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
+                                        <th style="font-size: 15px">Cód. de barra</th>
                                         <th style="font-size: 15px">Produto</th>
                                         <th style="font-size: 15px">Quantidade</th>
                                         <th style="font-size: 15px">Preço unit.</th>
@@ -103,6 +104,7 @@
                                         foreach ($produtos as $p) {
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
+                                            echo '<td>' . $p->codDeBarra . '</td>';
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td>' . $p->quantidade . '</td>';
                                             echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
@@ -122,6 +124,23 @@
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
+                        <hr />
+                         <h4 style="text-align: left">Observações:
+                        </h4>
+                         <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 100%; padding-left: 0">
+                                        <ul>
+                                            <li>
+                                                <span><?php echo htmlspecialchars_decode($result->obscliente) ?></span><br />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                         </table>
+                       <hr />
                     </div>
                 </div>
             </div>
