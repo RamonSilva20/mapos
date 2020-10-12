@@ -123,6 +123,23 @@
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
+                        <hr />
+                         <h4 style="text-align: left">Observações:
+                        </h4>
+                         <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 100%; padding-left: 0">
+                                        <ul>
+                                            <li>
+                                                <span><?php echo htmlspecialchars_decode($result->obscliente) ?></span><br />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                         </table>
+                       <hr />
                     </div>
                 </div>
             </div>
