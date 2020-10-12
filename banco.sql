@@ -323,6 +323,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `desconto` VARCHAR(45) NULL,
   `faturado` TINYINT(1) NULL,
   `observacoes` TEXT NULL,
+  `obscliente` TEXT NULL,      
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NULL,
   `lancamentos_id` INT(11) NULL,
