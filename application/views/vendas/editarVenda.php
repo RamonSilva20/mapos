@@ -51,6 +51,14 @@
                                         </label>
                                         <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
+                                    
+                                    </div>
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <label for="obscliente">
+                                            <h4>Observações para Cliente</h4>
+                                        </label>
+                                        <textarea class="editor" name="obscliente" id="obscliente" cols="30" rows="5"><?php echo $result->obscliente ?></textarea>
+                                    </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
