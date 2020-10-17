@@ -21,7 +21,7 @@ if (!$results) {
 
             </div>
 
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
 
 
                 <table class="table table-bordered ">
@@ -60,7 +60,7 @@ if (!$results) {
 
             </div>
 
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
 
 
                 <table class="table table-bordered ">
@@ -101,7 +101,7 @@ if (!$results) {
 
         echo '<td><a href="' . base_url() . 'index.php/mine/visualizarOs/' . $r->idOs . '" class="btn tip-top" title="Visualizar e Imprimir"><i class="fas fa-eye"></i></a>
                                   <a href="' . base_url() . 'index.php/mine/imprimirOs/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>
-                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="fas fa-bars"></i></a>  
+                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="fas fa-bars"></i></a>
                               </td>';
         echo '</tr>';
     } ?>

@@ -10,7 +10,7 @@
         <h5>Clientes</h5>
     </div>
 
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -24,7 +24,7 @@
             </thead>
             <tbody>
                 <?php
-                    
+
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhum Cliente Cadastrado</td>
@@ -50,7 +50,7 @@
                         echo '</td>';
                         echo '</tr>';
                     } ?>
-          
+
             </tbody>
         </table>
     </div>

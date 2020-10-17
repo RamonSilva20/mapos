@@ -9,7 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/vendasRapid"><i class="fas fa-cash-register"></i> <small>Todas as Vendas</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/vendasRapid"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - pdf</small></a></li>
+                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/vendasRapid?format=xls"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - xls</small></a></li>
                 </ul>
             </div>
         </div>
@@ -47,6 +48,15 @@
                                 <input type="hidden" name="responsavel" id="responsavelHide" />
                             </div>
                         </div>
+
+                        <div class="span12 well" style="margin-left: 0">
+                            <label for="">Tipo de impressão:</label>
+                            <select name="format" class="span12">
+                                <option value="">PDF</option>
+                                <option value="xls">XLS</option>
+                            </select>
+                        </div>
+
                         <div class="span12" style="margin-left: 0; text-align: center">
                             <input type="reset" class="btn" value="Limpar" />
                             <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>

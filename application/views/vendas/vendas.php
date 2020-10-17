@@ -9,7 +9,7 @@
         </span>
         <h5>Vendas</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr style="background-color: #2D335B">
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <?php
-                
+
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhuma Venda Cadastrada</td>

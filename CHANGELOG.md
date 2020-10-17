@@ -4,6 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.0] - 2020-10-17
+
+## Fixed
+- Corrigido bug de visualização de sidebar em mobile. [@visaotec](https://github.com/visaotec)
+- Corrigido exibição de ícones em mobile. [@visaotec](https://github.com/visaotec)
+
+## Added
+- Implementado relatório de vendas (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado campo de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
 ## [4.17.1] - 2020-10-05
 
 ## Fixed

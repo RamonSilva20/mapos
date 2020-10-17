@@ -14,7 +14,7 @@
                 </span>
                 <h5>Editar Venda</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Venda</a></li>
@@ -50,6 +50,13 @@
                                             <h4>Observações</h4>
                                         </label>
                                         <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                    </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes_cliente">
+                                            <h4>Observações para o Cliente</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
