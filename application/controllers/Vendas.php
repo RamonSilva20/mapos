@@ -70,6 +70,7 @@ class Vendas extends MY_Controller
             $data = [
                 'dataVenda' => $dataVenda,
                 'observacoes' => $this->input->post('observacoes'),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0,
@@ -118,6 +119,7 @@ class Vendas extends MY_Controller
             $data = [
                 'dataVenda' => $dataVenda,
                 'observacoes' => $this->input->post('observacoes'),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];

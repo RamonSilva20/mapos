@@ -53,6 +53,13 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes_cliente">
+                                            <h4>Observações para o Cliente</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
+                                    </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
@@ -337,8 +344,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
