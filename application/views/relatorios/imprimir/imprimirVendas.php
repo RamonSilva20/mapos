@@ -34,15 +34,24 @@
                             </thead>
                             <tbody>
                                 <?php
-                                        foreach ($vendas as $c) {
-                                            echo '<tr>';
-                                            echo '<td>' . $c->nomeCliente . '</td>';
-                                            echo '<td>' . $c->valorTotal . '</td>';
-                                            echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
-                                            echo '<td>' . $c->nome . '</td>';
-                                            echo '</tr>';
-                                        }
-                                        ?>
+                                foreach ($vendas as $c) {
+                                    echo '<tr>';
+                                    echo '<td>' . $c->nomeCliente . '</td>';
+                                    echo '<td>R$ ' . number_format($c->valorTotal, 2, ',', '.') . '</td>';
+                                    echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
+                                    echo '<td>' . $c->nome . '</td>';
+                                    echo '</tr>';
+                                }
+                                ?>
+
+                                <tr>
+                                    <td colspan="8"></td>
+                                </tr>
+
+                                <tr style="background-color: gainsboro;">
+                                    <td colspan="1"></td>
+                                    <td><small>R$ <?= number_format($total_vendas, 2, ',', '.') ?></small></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
