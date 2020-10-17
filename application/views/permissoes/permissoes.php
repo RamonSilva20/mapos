@@ -8,7 +8,7 @@
         <h5>Permissões</h5>
     </div>
 
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 <?php
-                
+
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhuma Permissão foi cadastrada</td>

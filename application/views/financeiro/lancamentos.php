@@ -91,7 +91,7 @@ $periodo = $this->input->get('periodo');
 
     </div>
 
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
 
 
       <table class="table table-bordered " id="divLancamentos">

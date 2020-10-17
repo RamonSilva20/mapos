@@ -24,7 +24,7 @@
                             <?= ucfirst($title) ?>
                         </h4>
                     </div>
-                    <div class="widget-content nopadding">
+                    <div class="widget-content nopadding tab-content">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
