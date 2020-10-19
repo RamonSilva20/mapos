@@ -133,7 +133,7 @@
                                 <td style="width: 100%; padding-left: 0">
                                     <ul>
                                         <li>
-                                            <span><?php echo htmlspecialchars_decode($result->obscliente) ?></span><br />
+                                            <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
                                         </li>
                                     </ul>
                                 </td>
