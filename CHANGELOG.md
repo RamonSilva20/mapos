@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.1] - 2020-10-18
+
+## Fixed
+- Corrigido exibição de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
 ## [4.18.0] - 2020-10-17
 
 ## Fixed
