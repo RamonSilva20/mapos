@@ -4,6 +4,71 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.1] - 2020-10-18
+
+## Fixed
+- Corrigido exibição de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
+## [4.18.0] - 2020-10-17
+
+## Fixed
+- Corrigido bug de visualização de sidebar em mobile. [@visaotec](https://github.com/visaotec)
+- Corrigido exibição de ícones em mobile. [@visaotec](https://github.com/visaotec)
+
+## Added
+- Implementado relatório de vendas (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado campo de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
+## [4.17.1] - 2020-10-05
+
+## Fixed
+- Corrigido filtro de status de lançamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.17.0] - 2020-10-04
+
+## Added
+- Modificado filtros de lançamentos para permitir período arbitrário de data e adicionado filtro de status. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.16.0] - 2020-10-04
+
+## Added
+- Adicionado filtro por nome de cliente/fornecedor e filtro de tipo de lançamento em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado totais (produtos, serviços e geral) no final do relatório de os (rápido e custom). [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado relatório de OS (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.15.1] - 2020-09-26
+
+## Fixed
+- Corrigido colar texto em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Adicionado regra de validação unique em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.15.0] - 2020-09-21
+
+## Added
+- Adicionado observacões em vendas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.14.1] - 2020-09-21
+
+## Fixed
+- Corrigido busca de calendário de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.14.0] - 2020-09-20
+
+## Fixed
+- Implementado calendário com as OS em dashboard. [@willph](https://github.com/willph)
+
+## [4.13.2] - 2020-09-20
+
+## Fixed
+- Corrigido problema em adicionar produtos/serviços e OS em que o último id de produto/serviço era mantido no campo hidden e assim era desconsiderado o produto/serviço sendo escolhido na segunda adição. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.13.1] - 2020-09-15
+
+## Fixed
+- Adequação para manter o estado da checkbox "pagoEditar" em lançamentos. [@nmdavi](https://github.com/nmdavi)
+
 ## [4.13.0] - 2020-08-29
 
 ## Added

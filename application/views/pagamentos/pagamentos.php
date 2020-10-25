@@ -9,7 +9,7 @@
         </span>
         <h5>Pagamentos</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr style="background-color: #2D335B">
@@ -34,7 +34,7 @@
                         $textoPublicKeyShort = mb_strimwidth(strip_tags($r->public_key), 0, 10, "...");
                         $textoClientIdShort = mb_strimwidth(strip_tags($r->client_id), 0, 10, "...");
                         $textoClientSecretShort = mb_strimwidth(strip_tags($r->client_secret), 0, 10, "...");
-                        
+
 
                         echo '<tr>';
                         echo '<td>' . $r->idPag . '</td>';

@@ -14,9 +14,14 @@ $(function () {
         cpfOptions = {
             onKeyPress: function (val, e, field, options) {
                 field.mask(cpfMascara.apply({}, arguments), options);
-            }
+            },
         };
     $('.cpfcnpj').mask(cpfMascara, cpfOptions);
+    $('.cpfcnpj').on('paste', function (e) {
+        e.preventDefault();
+        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+        $('.cpfcnpj').val(clipboardCurrentData);
+    });
     // FIM FUNÇÃO DE MASCARA CPF/CNPJ
 });
 

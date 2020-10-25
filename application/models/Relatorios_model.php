@@ -221,7 +221,7 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, [$precoInicial, $precoFinal])->result();
     }
 
-    public function osRapid()
+    public function osRapid($array = false)
     {
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
@@ -236,10 +236,15 @@ class Relatorios_model extends CI_Model
         $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs', 'left');
         $this->db->order_by('os.dataInicial', 'DESC');
 
-        return $this->db->get()->result();
+        $result = $this->db->get();
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
-    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null)
+    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null, $array = false)
     {
         $whereData = "";
         $whereCliente = "";
@@ -273,7 +278,12 @@ class Relatorios_model extends CI_Model
                    WHERE idOs != 0 $whereData $whereCliente $whereResponsavel $whereStatus
                    ORDER BY os.dataInicial";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
     public function financeiroRapid($array = false)
@@ -324,19 +334,23 @@ class Relatorios_model extends CI_Model
         return $result->result();
     }
 
-    public function vendasRapid()
+    public function vendasRapid($array = false)
     {
         $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-
         $this->db->order_by('vendas.dataVenda', 'DESC');
 
-        return $this->db->get()->result();
+        $result = $this->db->get();
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
-    public function vendasCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null)
+    public function vendasCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $array = false)
     {
         $whereData = "";
         $whereCliente = "";
@@ -357,6 +371,11 @@ class Relatorios_model extends CI_Model
 
         $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 }

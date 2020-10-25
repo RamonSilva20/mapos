@@ -27,7 +27,7 @@
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php
-                                                            } else { ?> <tr>
+                                                        } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
@@ -45,7 +45,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                } ?>
+                                                        } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -92,6 +92,7 @@
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
+                                        <th style="font-size: 15px">Cód. de barra</th>
                                         <th style="font-size: 15px">Produto</th>
                                         <th style="font-size: 15px">Quantidade</th>
                                         <th style="font-size: 15px">Preço unit.</th>
@@ -100,15 +101,16 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                        foreach ($produtos as $p) {
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                    foreach ($produtos as $p) {
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $p->codDeBarra . '</td>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$
@@ -118,6 +120,22 @@
                             </table>
                         <?php
                         } ?>
+                        <hr />
+                        <h4 style="text-align: left">Observações:
+                        </h4>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 100%; padding-left: 0">
+                                        <ul>
+                                            <li>
+                                                <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <hr />
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
