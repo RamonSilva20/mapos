@@ -599,7 +599,7 @@
     </div>
     <div class="modal-body">
         <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
-        <h4 id="modalId" class="modal-id"></h4>
+		<h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
         <h5 id="modalCliente" class="modal-cliente"></h5>
         <div id="modalDataInicial" class="modal-DataInicial"></div>
         <div id="modalDataFinal" class="modal-DataFinal"></div>
@@ -611,10 +611,37 @@
         <div id="modalTotal" class="modal-Total"></div>
         <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
     </div>
-
-    <div class="span12" style="margin-left: 0">
-
+	<div class="modal-footer">
+			<?php
+			if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+				echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+            }
+			if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+				echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+            }
+			if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                echo '<a href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+            }
+			?>
     </div>
+</div>
+
+<!-- Modal Excluir Os -->
+<div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel">Excluir OS</h5>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="modalIdExcluir" name="id" value="" />
+            <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-danger">Excluir</button>
+        </div>
+    </form>
 </div>
 
 <!-- Modal Estoque -->
@@ -706,6 +733,9 @@
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
+				$('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/"+eventObj.id);
+				$('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/"+eventObj.id);
+				$('#modalIdExcluir').val(eventObj.id);
                 $('#modalCliente').html(eventObj.cliente);
                 $('#modalDataInicial').html(eventObj.dataInicial);
                 $('#modalDataFinal').html(eventObj.dataFinal);
