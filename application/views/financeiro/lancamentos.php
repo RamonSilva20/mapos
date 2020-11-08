@@ -116,42 +116,42 @@ $periodo = $this->input->get('periodo');
           <?php
 
           if (!$results) {
-            echo '<tr>
+              echo '<tr>
               <td colspan="8" >Nenhum lançamento encontrado</td>
             </tr>';
           }
           foreach ($results as $r) {
-            $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
-            if ($r->baixado == 0) {
-              $status = 'Pendente';
-            } else {
-              $status = 'Pago';
-            };
-            if ($r->tipo == 'receita') {
-              $label = 'success';
-            } else {
-              $label = 'important';
-            }
-            echo '<tr>';
-            echo '<td>' . $r->idLancamentos . '</td>';
-            echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-            echo '<td>' . $r->cliente_fornecedor . '</td>';
-            echo '<td>' . $r->descricao . '</td>';
-            echo '<td>' . $vencimento . '</td>';
-            echo '<td>' . $status . '</td>';
-            echo '<td>' . $r->observacoes . '</td>';
-            echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
+              $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
+              if ($r->baixado == 0) {
+                  $status = 'Pendente';
+              } else {
+                  $status = 'Pago';
+              };
+              if ($r->tipo == 'receita') {
+                  $label = 'success';
+              } else {
+                  $label = 'important';
+              }
+              echo '<tr>';
+              echo '<td>' . $r->idLancamentos . '</td>';
+              echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
+              echo '<td>' . $r->cliente_fornecedor . '</td>';
+              echo '<td>' . $r->descricao . '</td>';
+              echo '<td>' . $vencimento . '</td>';
+              echo '<td>' . $status . '</td>';
+              echo '<td>' . $r->observacoes . '</td>';
+              echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-              echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-              echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
-            }
+              echo '<td>';
+              if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+              }
+              if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                  echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
+              }
 
-            echo '</td>';
-            echo '</tr>';
+              echo '</td>';
+              echo '</tr>';
           } ?>
           <tr>
 
