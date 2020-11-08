@@ -319,6 +319,14 @@ class Financeiro extends MY_Controller
         }
     }
 
+    public function autoCompleteClienteFornecedor()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteClienteFornecedor($q);
+        }
+    }
+
     protected function getThisYear()
     {
         $dias = date("z");
