@@ -4,6 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.20.0] - 2020-11-08
+
+## Added
+- Adicionado observações em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado autocomplete de cliente/fornecedor em listagem de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Adequação para excluir os lançamentos financeiros ao excluir uma OS/Venda faturada. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para permitir adicionar produtos/serviços na OS com preço zerado. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.19.0] - 2020-10-26
 
 ## Added
