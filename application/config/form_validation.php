@@ -399,7 +399,7 @@ $config = [
         [
             'field' => 'preco',
             'label' => 'preco',
-            'rules' => 'trim|required|numeric|greater_than[0]',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
         ],
         [
             'field' => 'idOsProduto',
@@ -421,7 +421,7 @@ $config = [
         [
             'field' => 'preco',
             'label' => 'preco',
-            'rules' => 'trim|required|numeric|greater_than[0]',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
         ],
         [
             'field' => 'idOsServico',
