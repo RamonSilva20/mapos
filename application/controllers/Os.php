@@ -428,7 +428,8 @@ class Os extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        if ($id == null) {
+        $os =$this->os_model->getById($id);
+        if ($os == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
@@ -437,6 +438,9 @@ class Os extends MY_Controller
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
+        if ((int) $os->faturado === 1) {
+            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
+        }
 
         log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
