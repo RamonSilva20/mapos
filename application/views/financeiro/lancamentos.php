@@ -19,6 +19,10 @@ $periodo = $this->input->get('periodo');
   input.valid {
     border-color: #5bb75b;
   }
+
+  textarea {
+    resize: vertical;
+  }
 </style>
 
 
@@ -70,8 +74,8 @@ $periodo = $this->input->get('periodo');
     </div>
 
     <div class="span2">
-      <label>Cliente <i class="fas fa-user tip-top" title="Cliente."></i></label>
-      <input type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+      <label>Cliente/Fornecedor <i class="fas fa-user tip-top" title="Cliente."></i></label>
+      <input id="cliente_fornecedor" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
     </div>
 
     <div class="span2 pull-right">
@@ -103,6 +107,7 @@ $periodo = $this->input->get('periodo');
             <th>Descrição</th>
             <th>Vencimento</th>
             <th>Status</th>
+            <th>Observações</th>
             <th>Valor</th>
             <th>Ações</th>
           </tr>
@@ -134,6 +139,7 @@ $periodo = $this->input->get('periodo');
               echo '<td>' . $r->descricao . '</td>';
               echo '<td>' . $vencimento . '</td>';
               echo '<td>' . $status . '</td>';
+              echo '<td>' . $r->observacoes . '</td>';
               echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
               echo '<td>';
@@ -195,6 +201,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="cliente" type="text" name="cliente" />
         </div>
 
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes" name="observacoes"></textarea>
+        </div>
 
       </div>
       <div class="span12" style="margin-left: 0">
@@ -262,6 +272,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="fornecedor" type="text" name="fornecedor" />
         </div>
 
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes" name="observacoes"></textarea>
+        </div>
 
       </div>
       <div class="span12" style="margin-left: 0">
@@ -594,6 +608,14 @@ $periodo = $this->input->get('periodo');
           $('#vencimento_de').val(dayjs().startOf('year').locale('pt-br').format('DD/MM/YYYY'));
           $('#vencimento_ate').val(dayjs().endOf('year').locale('pt-br').format('DD/MM/YYYY'));
           break;
+      }
+    });
+
+    $("#cliente_fornecedor").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteFornecedor",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#cliente_fornecedor").val(ui.item.value);
       }
     });
   });
