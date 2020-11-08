@@ -4,6 +4,15 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.19.0] - 2020-10-26
+
+## Added
+- Implementado possibilidade de visualizar/editar/excluir OS pelo calendário de OS. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido SDK de PayPal abandonada. [@willph](https://github.com/willph)
+- Atualizado SDK de mercado pago. [@willph](https://github.com/willph)
+
 ## [4.18.1] - 2020-10-18
 
 ## Fixed

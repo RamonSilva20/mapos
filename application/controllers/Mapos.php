@@ -427,7 +427,7 @@ class Mapos extends MY_Controller
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
                 'extendedProps' => [
-                    'id' => '<b>OS:</b> ' . $os->idOs,
+                    'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
                     'dataInicial' => '<b>Data Inicial:</b> ' . $os->dataInicial,
                     'dataFinal' => '<b>Data Final:</b> ' . $os->dataFinal,
