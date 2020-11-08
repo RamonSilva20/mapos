@@ -760,6 +760,7 @@ class Os extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
+                'observacoes' => set_value('observacoes'),
             ];
 
             if ($this->os_model->add('lancamentos', $data) == true) {

@@ -46,20 +46,6 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes">
-                                            <h4>Observações</h4>
-                                        </label>
-                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
-                                    </div>
-
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes_cliente">
-                                            <h4>Observações para o Cliente</h4>
-                                        </label>
-                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
-                                    </div>
-
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
@@ -71,6 +57,7 @@
                                         </div>
                                     </div>
                                 </form>
+
                                 <div class="span12 well" style="padding: 1%; margin-left: 0">
                                     <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
@@ -126,6 +113,20 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+
+                                <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <label for="observacoes">
+                                        <h4>Observações</h4>
+                                    </label>
+                                    <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                </div>
+
+                                <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <label for="observacoes_cliente">
+                                        <h4>Observações para o Cliente</h4>
+                                    </label>
+                                    <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
                                 </div>
                             </div>
                         </div>
