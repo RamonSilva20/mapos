@@ -116,7 +116,7 @@ $periodo = $this->input->get('periodo');
           <?php
 
           if (!$results) {
-              echo '<tr>
+            echo '<tr>
               <td colspan="8" >Nenhum lançamento encontrado</td>
             </tr>';
           }

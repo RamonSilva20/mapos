@@ -68,9 +68,9 @@ class Financeiro extends MY_Controller
 
         if (! empty($cliente)) {
             if (empty($where)) {
-                $where = "cliente_fornecedor LIKE BINARY '%${cliente}%'";
+                $where = "cliente_fornecedor LIKE '%${cliente}%'";
             } else {
-                $where .= " AND cliente_fornecedor LIKE BINARY '%${cliente}%'";
+                $where .= " AND cliente_fornecedor LIKE '%${cliente}%'";
             }
         }
 
