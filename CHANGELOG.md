@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.20.1] - 2020-11-10
+
+## Fixed
+- Correção de filtro de cliente/fornecedor que não funcionava com caracteres especiais. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.20.0] - 2020-11-08
 
 ## Added
