@@ -68,9 +68,9 @@ class Financeiro extends MY_Controller
 
         if (! empty($cliente)) {
             if (empty($where)) {
-                $where = "cliente_fornecedor LIKE BINARY '%${cliente}%'";
+                $where = "cliente_fornecedor LIKE '%${cliente}%'";
             } else {
-                $where .= " AND cliente_fornecedor LIKE BINARY '%${cliente}%'";
+                $where .= " AND cliente_fornecedor LIKE '%${cliente}%'";
             }
         }
 
@@ -144,6 +144,7 @@ class Financeiro extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
+                'observacoes' => set_value('observacoes'),
             ];
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
@@ -206,6 +207,7 @@ class Financeiro extends MY_Controller
                 'cliente_fornecedor' => set_value('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
+                'observacoes' => set_value('observacoes'),
             ];
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
@@ -314,6 +316,14 @@ class Financeiro extends MY_Controller
                 $json = ['result' => false];
                 echo json_encode($json);
             }
+        }
+    }
+
+    public function autoCompleteClienteFornecedor()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteClienteFornecedor($q);
         }
     }
 

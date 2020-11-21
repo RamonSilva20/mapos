@@ -97,4 +97,18 @@ class Financeiro_model extends CI_Model
         }
         return $this->db->count_all_results();
     }
+
+    public function autoCompleteClienteFornecedor($q)
+    {
+        $this->db->select('DISTINCT(cliente_fornecedor) as cliente_fornecedor');
+        $this->db->limit(5);
+        $this->db->like('cliente_fornecedor', $q);
+        $query = $this->db->get('lancamentos');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['cliente_fornecedor'], 'id' => $row['cliente_fornecedor']];
+            }
+            echo json_encode($row_set);
+        }
+    }
 }
