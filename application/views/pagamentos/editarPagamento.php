@@ -23,12 +23,17 @@
 
                 <form action="<?php echo current_url(); ?>" method="post" id="formPagamento">
 
-                <div class="span12">
+                    <div class="span12">
                         <div class="span2">
                             <label for="Nome">Nome</label>
                             <?php echo form_hidden('idPag', $result->idPag) ?>
                             <select name="nomePag" id="nomePag" class="span12">
-                                <option value="MercadoPago" required>Mercado Pago</option>
+                                <option <?php if ($result->nome == 'MercadoPago') {
+                                            echo 'selected';
+                                        } ?> value="MercadoPago">MercadoPago</option>
+                                <option <?php if ($result->nome == 'Wirecard') {
+                                            echo 'selected';
+                                        } ?> value="Wirecard">Wirecard</option>
                             </select>
                         </div>
                         <div class="span5">
@@ -51,7 +56,7 @@
                         <div class="span4" style="margin-left: 0">
                             <label for="default_pag">Tornar Padrão<span class="required"></span></label>
                             <input name="default_pag" id="default_pag" class="span12" type="checkbox" <?php echo $result->default_pag == 1 ? "checked" : null; ?> />
-                         </div>
+                        </div>
                     </div>
 
                     <div class="span12" style="padding: 1%; margin-left: 0">

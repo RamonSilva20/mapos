@@ -27,6 +27,7 @@
                             <label for="Nome">Nome<span class="required"></span></label>
                             <select name="nomePag" id="nomePag" class="span12">
                                 <option value="MercadoPago" required>Mercado Pago</option>
+                                <option value="Wirecard" required>Wirecard</option>
                             </select>
                         </div>
                         <div class="span4">

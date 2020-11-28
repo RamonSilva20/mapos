@@ -11,15 +11,15 @@ $totalProdutos = 0; ?>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-    echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
-} ?>
+                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
+                    } ?>
 
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-} ?>
+                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
+                        echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+                    } ?>
 
                     <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
                     <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php  } ?>
@@ -236,14 +236,63 @@ $totalProdutos = 0; ?>
         </div>
 
         <?php
+
         if ($pagamento) {
             if ($totalProdutos || $totalServico) {
-                $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
-                if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
-                    echo '<form action="'.site_url().'" method="POST">
-                            <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="'.$preference->id.'" data-button-label="Gerar Pagamento">
+
+                try {
+                    //code...
+                    $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
+                    if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
+                        echo '<form action="' . site_url() . '" method="POST">
+                            <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="' . $preference->id . '" data-button-label="Gerar Pagamento">
                             </script>
                         </form>';
+                    }
+                } catch (\Throwable $th) {
+                    //throw $th;
+                    echo '<div id="msgConexao" class=" alert alert-danger"> Precisa de conexão com a internet para gerar pagamento!</div>';
+                }
+            }
+        }
+        ?>
+
+        <table id="tabelaPagamento" name="tabelaPagamento" class="table table-condensed" hidden="true">
+            <tbody>
+                <tr>
+                    <td colspan="3" id="dadosPagamento" name="dadosPagamento" class="alert">
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="msg"></div>
+        </td>
+        <?php
+        if ($pagamento) {
+            if ($totalProdutos || $totalServico) {
+                echo $pagamento->defaultpag;
+                if ($pagamento->nome == 'Wirecard') {
+
+                    echo '<form id="form-gerar-pagamento" action="' . base_url() . 'index.php/os/gerarpagamento" method="POST">
+                    <input type="hidden" id="access_token" name="access_token" value="' . $pagamento->access_token . '">
+                    <input type="hidden" id="public_key" name="public_key" value="' . $pagamento->public_key . '">
+                    <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
+                    <input type="hidden" id="emailCliente" name="emailCliente" value="' . $result->email . '">
+                    <input type="hidden" id="documentoCliente" name="documentoCliente" value="' . $result->documento . '">
+                    <input type="hidden" id="celular_cliente" name="celular_cliente" value="' . $result->celular_cliente . '">
+                    <input type="hidden" id="ruaCliente" name="ruaCliente" value="' . $result->rua . '">
+                    <input type="hidden" id="numeroCliente" name="numeroCliente" value="' . $result->numero . '">
+                    <input type="hidden" id="bairroCliente" name="bairroCliente" value="' . $result->bairro . '">
+                    <input type="hidden" id="cidadeCliente" name="cidadeCliente" value="' . $result->cidade . '">
+                    <input type="hidden" id="estadoCliente" name="estadoCliente" value="' . $result->estado . '">
+                    <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
+                    <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
+                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS: ">
+                    <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
+                    <input type="hidden" id="quantidade" name="quantidade" value="1">
+                    <button type="submit" class="btn btn-success">Gerar Pagamento</button>
+                    </form>';
                 }
             }
         } ?>
@@ -251,3 +300,27 @@ $totalProdutos = 0; ?>
     </div>
 </div>
 </div>
+<script type="text/javascript">
+    $('form#form-gerar-pagamento').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: form.serialize(),
+            success: function(response) {
+                $("#tabelaPagamento").show();
+                document.getElementById("dadosPagamento").innerHTML = response;
+                //window.focus(); //manter focus na janela anterior e não na nova janela.
+                //$('#msg').html(response).fadeIn('slow');
+                if (online = navigator.onLine) {
+                    $('#msg').addClass("alert alert-success").html("Pagamento gerado com sucesso!").fadeIn('slow'); //also show a success message 
+                    $('#msg').delay(5000).fadeOut('slow');
+                }
+
+            }
+        });
+        return false;
+
+    });
+</script>
