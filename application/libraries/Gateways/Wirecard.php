@@ -25,7 +25,7 @@ class Wirecard
         $idOs,
         $title,
         $unit_price,
-        $quantity = 1
+        $quantity
     ) {
 
         $token = $access_token;

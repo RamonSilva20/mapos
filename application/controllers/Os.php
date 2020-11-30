@@ -331,6 +331,33 @@ class Os extends MY_Controller
         echo $pagamento;
     }
 
+    public function gerarPagamentoGerencianet()
+    {
+        
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $this->input->post('client_id'),
+            $this->input->post('client_secret'),
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idOs'),
+            $this->input->post('titleBoleto'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+        
+        echo $pagamento;
+    }
+
     public function imprimir()
     {
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {

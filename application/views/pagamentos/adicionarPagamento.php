@@ -28,6 +28,7 @@
                             <select name="nomePag" id="nomePag" class="span12">
                                 <option value="MercadoPago" required>Mercado Pago</option>
                                 <option value="Wirecard" required>Wirecard</option>
+                                <option value="GerenciaNet" required>GerenciaNet</option>
                             </select>
                         </div>
                         <div class="span4">

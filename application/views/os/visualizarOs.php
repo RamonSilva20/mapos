@@ -259,6 +259,7 @@ $totalProdutos = 0; ?>
 
         <table id="tabelaPagamento" name="tabelaPagamento" class="table table-condensed" hidden="true">
             <tbody>
+                <div id="msg"></div>
                 <tr>
                     <td colspan="3" id="dadosPagamento" name="dadosPagamento" class="alert">
 
@@ -266,12 +267,11 @@ $totalProdutos = 0; ?>
                 </tr>
             </tbody>
         </table>
-        <div id="msg"></div>
-        </td>
+
         <?php
         if ($pagamento) {
             if ($totalProdutos || $totalServico) {
-                echo $pagamento->defaultpag;
+
                 if ($pagamento->nome == 'Wirecard') {
 
                     echo '<form id="form-gerar-pagamento" action="' . base_url() . 'index.php/os/gerarpagamento" method="POST">
@@ -297,12 +297,42 @@ $totalProdutos = 0; ?>
             }
         } ?>
 
+        <?php
+        if ($pagamento) {
+            if ($totalProdutos || $totalServico) {
+
+                if ($pagamento->nome == 'GerenciaNet') {
+
+                    echo '<form id="form-gerar-pagamento" action="' . base_url() . 'index.php/os/gerarpagamentogerencianet" method="POST">
+                    <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
+                    <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
+                    <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
+                    <input type="hidden" id="emailCliente" name="emailCliente" value="' . $result->email . '">
+                    <input type="hidden" id="documentoCliente" name="documentoCliente" value="' . $result->documento . '">
+                    <input type="hidden" id="celular_cliente" name="celular_cliente" value="' . $result->celular_cliente . '">
+                    <input type="hidden" id="ruaCliente" name="ruaCliente" value="' . $result->rua . '">
+                    <input type="hidden" id="numeroCliente" name="numeroCliente" value="' . $result->numero . '">
+                    <input type="hidden" id="bairroCliente" name="bairroCliente" value="' . $result->bairro . '">
+                    <input type="hidden" id="cidadeCliente" name="cidadeCliente" value="' . $result->cidade . '">
+                    <input type="hidden" id="estadoCliente" name="estadoCliente" value="' . $result->estado . '">
+                    <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
+                    <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
+                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS: ">
+                    <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
+                    <input type="hidden" id="quantidade" name="quantidade" value="1">
+                    <button type="submit" class="btn btn-success">Gerar Pagamento</button>
+                    </form>';
+                }
+            }
+        } ?>
+
     </div>
-</div>
 </div>
 <script type="text/javascript">
     $('form#form-gerar-pagamento').submit(function(e) {
         e.preventDefault();
+        $("#tabelaPagamento").show();
+        document.getElementById("dadosPagamento").innerHTML = "Por favor aguarde gerando o boleto....";
         var form = $(this);
         $.ajax({
             url: form.attr('action'),
