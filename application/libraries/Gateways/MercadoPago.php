@@ -4,7 +4,7 @@ use Libraries\Gateways\Contracts\GatewayPagamento;
 
 class MercadoPago implements GatewayPagamento
 {
-    public function getPreference($access_token, $idOs, $title = 'Pagamento da OS', $unit_price, $quantity = 1)
+    public function getPreference($access_token, $id, $title, $unit_price, $quantity = 1)
     {
 
         // SDK de Mercado Pago
@@ -15,8 +15,8 @@ class MercadoPago implements GatewayPagamento
         $this->preference = new MercadoPago\Preference();
 
         $item = new MercadoPago\Item();
-        $item->id = $idOs;
-        $item->title = $title . $idOs;
+        $item->id = $id;
+        $item->title = $title . ' ' . $id;
         $item->quantity = $quantity;
         $item->unit_price = $unit_price;
         $this->preference->items = [$item];

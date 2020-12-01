@@ -22,7 +22,7 @@ class Wirecard
         $addressCidade,
         $addressEstado,
         $addressCep,
-        $idOs,
+        $id,
         $title,
         $unit_price,
         $quantity
@@ -80,7 +80,7 @@ class Wirecard
 
             // Creating an order
             $order = $moip->orders()->setOwnId(uniqid())
-                ->addItem('OS: ' . $idOs, $quantity, 'sku1', $new_unit_price)
+                ->addItem($title . ' ' . $id, $quantity, 'sku1', $new_unit_price)
                 ->setShippingAmount(0)->setAddition(0)->setDiscount(0)
                 ->setCustomer($customer)
                 ->create();

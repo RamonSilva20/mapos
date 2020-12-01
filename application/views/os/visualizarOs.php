@@ -288,7 +288,7 @@ $totalProdutos = 0; ?>
                     <input type="hidden" id="estadoCliente" name="estadoCliente" value="' . $result->estado . '">
                     <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
                     <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
-                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS: ">
+                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
                     <input type="hidden" id="quantidade" name="quantidade" value="1">
                     <button type="submit" class="btn btn-success">Gerar Pagamento</button>
@@ -317,7 +317,7 @@ $totalProdutos = 0; ?>
                     <input type="hidden" id="estadoCliente" name="estadoCliente" value="' . $result->estado . '">
                     <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
                     <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
-                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS: ">
+                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
                     <input type="hidden" id="quantidade" name="quantidade" value="1">
                     <button type="submit" class="btn btn-success">Gerar Pagamento</button>

@@ -18,7 +18,7 @@ class GerencianetSdk
         $addressCidade,
         $addressEstado,
         $addressCep,
-        $idOs,
+        $id,
         $title,
         $unit_price,
         $quantity
@@ -42,7 +42,7 @@ class GerencianetSdk
         ];
 
         $item_1 = [
-            'name' => 'OS: ' . $idOs, // nome do item, produto ou serviço
+            'name' => $title . ' ' . $id, // nome do item, produto ou serviço
             'amount' => $quantity, // quantidade
             'value' => $new_unit_price // valor (1000 = R$ 10,00) (Obs: É possível a criação de itens com valores negativos. Porém, o valor total da fatura deve ser superior ao valor mínimo para geração de transações.)
         ];
