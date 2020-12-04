@@ -153,7 +153,7 @@ class Pagamentos extends MY_Controller
         $this->load->library('Gateways/Wirecard', null, 'Wirecard');
         $boleto = $this->Wirecard->gerarBoleto($this->input->post('accessToken'), $this->input->post('publicKey'), $this->input->post('codePayment'));
 
-        return print($boleto->getHrefPrintBoleto());
+        return print_r($boleto->getHrefPrintBoleto());
     }
 
     public function excluir()
