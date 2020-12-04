@@ -65,7 +65,6 @@ class GerencianetSdk
             'phone_number' => $phoneClient, // telefone do cliente
             'email' => $emailClient,
             'address' => $address,
-
         ];
 
         /*$discount = [ // configuração de descontos

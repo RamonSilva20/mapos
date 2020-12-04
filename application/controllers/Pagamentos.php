@@ -139,20 +139,21 @@ class Pagamentos extends MY_Controller
         $this->data['pagamento'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-       if ($this->data['pagamento']) {
+        if ($this->data['pagamento']) {
             $this->load->library('Gateways/Wirecard', null, 'Wirecard');
         }
 
         $this->data['view'] = 'pagamentos/visualizarPagamento';
 
         return $this->layout();
-        
     }
 
-    public function gerarBoleto(){
+    public function gerarBoleto()
+    {
         $this->load->library('Gateways/Wirecard', null, 'Wirecard');
         $boleto = $this->Wirecard->gerarBoleto($this->input->post('accessToken'), $this->input->post('publicKey'), $this->input->post('codePayment'));
-        echo $boleto;
+
+        return print($boleto->getHrefPrintBoleto());
     }
 
     public function excluir()

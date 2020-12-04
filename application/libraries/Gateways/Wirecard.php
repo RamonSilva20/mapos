@@ -125,7 +125,7 @@ class Wirecard
 
         $payment = $moip->payments()->get($codePayment);
 
-        return $payment->getHrefPrintBoleto();
+        return $payment;
     }
 
 
@@ -151,8 +151,6 @@ class Wirecard
 
         // With specific value
         //$orders = $this->moip->orders()->getList(null, null, "josé silva");
-
-        //echo (json_encode($orders));
 
         return json_encode($orders, JSON_PRETTY_PRINT);
     }

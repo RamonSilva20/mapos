@@ -240,18 +240,12 @@ $totalProdutos = 0; ?>
         if ($pagamento) {
             if ($totalProdutos || $totalServico) {
 
-                try {
-                    //code...
-                    $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico));
-                    if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
-                        echo '<form action="' . site_url() . '" method="POST">
+                $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico), $quantidade = 1);
+                if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
+                    echo '<form action="' . site_url() . '" method="POST">
                             <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="' . $preference->id . '" data-button-label="Gerar Pagamento">
                             </script>
                         </form>';
-                    }
-                } catch (\Throwable $th) {
-                    //throw $th;
-                    echo '<div id="msgConexao" class=" alert alert-danger"> Precisa de conexão com a internet para gerar pagamento!</div>';
                 }
             }
         }
@@ -351,6 +345,5 @@ $totalProdutos = 0; ?>
             }
         });
         return false;
-
     });
 </script>

@@ -18,7 +18,7 @@
                     <div class="invoice-head">
                         <table class="table">
                             <tbody>
-                               
+
                             </tbody>
                         </table>
                         <table class="table">
@@ -122,7 +122,7 @@
                                                                         echo '<td>' . $valor["customer"]["fullname"] . '</td>';
                                                                         echo '<td>' . $valor["id"] . '</td>';
                                                                         echo '<td>' . $valor["status"] . '</td>';
-                                                                        echo '<td> R$ ' . $newValor = number_format(floatval($valor["amount"]["total"])/100, 2, ',', '.') . '</td>';
+                                                                        echo '<td> R$ ' . $newValor = number_format(floatval($valor["amount"]["total"]) / 100, 2, ',', '.') . '</td>';
                                                                         echo '<td>' . $valor["payments"]["0"]["fundingInstrument"]["method"] . '</td>';
                                                                         echo '<td><form id="form-gerar-boleto" action="' . base_url() . 'index.php/pagamentos/gerarboleto" method="POST">
                                                                 <input type="hidden" id="accessToken" name="accessToken" value="' . $pagamento->access_token . '">
