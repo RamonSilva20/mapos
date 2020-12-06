@@ -94,18 +94,7 @@ class Wirecard
                 ->setBoleto($expiration_date, $logo_uri, $instruction_lines)
                 ->execute();
 
-            echo 'Order ID: ' . $order->getId() . '<br />';
-            echo 'Payment ID: ' . $payment->getId() . '<br />';
-            echo 'Created at: ' . $payment->getCreatedAt()->format('Y-m-d H:i:s') . '<br />';
-            echo 'Status: ' . $payment->getStatus() . '<br />';
-            echo 'Amount: ' . $payment->getAmount()->total . '<br />';
-            echo 'Funding Instrument: ' . $payment->getFundingInstrument()->method . '<br />';
-
-            echo 'Codigo de barra: ' . $payment->getLineCodeBoleto().'<br />';
-            $boleto = $payment->getHrefPrintBoleto();
-
-            echo '<a href="' . $boleto . '" target="_blank">Clique aqui para abrir boleto</a>';
-
+            return json_encode($payment);
         } catch (\Moip\Exceptions\UnautorizedException $e) {
             echo $e->getMessage();
         } catch (\Moip\Exceptions\ValidationException $e) {

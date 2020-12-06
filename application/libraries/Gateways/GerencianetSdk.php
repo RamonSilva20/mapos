@@ -100,14 +100,7 @@ class GerencianetSdk
         try {
             $api = new Gerencianet($options);
             $pay_charge = $api->oneStep([], $body);
-            $date = new DateTime($pay_charge["data"]["expire_at"]);
-
-            echo 'Nº da Transação: ' . $pay_charge["data"]["charge_id"] . '<br />';
-            echo 'Vencimento: ' . $date->format('d/m/Y') . '<br />';
-            echo 'Status: ' . $pay_charge["data"]["status"] . '<br />';
-            echo 'Valor: R$ ' . number_format(floatval($pay_charge["data"]["total"]) / 100, 2, ',', '.') . '<br />';
-            echo 'Codigo de Barra: ' . $pay_charge["data"]["barcode"] . '<br />';
-            echo '<a href="' . $pay_charge["data"]['pdf']["charge"] . '" target="_blank">Clique aqui para abrir boleto</a>';
+            return json_encode($pay_charge);
         } catch (GerencianetException $e) {
             print_r($e->code);
             print_r($e->error);

@@ -306,7 +306,7 @@ class Os extends MY_Controller
 
     public function gerarPagamento()
     {
-        
+
         $this->load->library('Gateways/Wirecard', null, 'Wirecard');
 
         $pagamento = $this->Wirecard->getPayment(
@@ -327,13 +327,13 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-        
-        echo $pagamento;
+
+        print_r($pagamento);
     }
 
     public function gerarPagamentoGerencianet()
     {
-        
+
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
         $pagamento = $this->GerencianetSdk->gerarBoleto(
@@ -354,8 +354,8 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-        
-        echo $pagamento;
+
+        print_r($pagamento);
     }
 
     public function imprimir()
