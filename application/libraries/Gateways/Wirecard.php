@@ -110,7 +110,7 @@ class Wirecard
         $token = $access_token;
         $key = $public_key;
 
-        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_SANDBOX);
+        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_PRODUCTION);
 
         $payment = $moip->payments()->get($codePayment);
 
@@ -123,7 +123,7 @@ class Wirecard
         $token = $access_token;
         $key = $public_key;
 
-        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_SANDBOX);
+        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_PRODUCTION);
 
         $orders = $moip->orders()->getList();
 
