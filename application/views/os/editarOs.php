@@ -64,26 +64,26 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-    echo 'selected';
-} ?> value="Orçamento">Orçamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Orçamento">Orçamento</option>
                                                 <option <?php if ($result->status == 'Aberto') {
-    echo 'selected';
-} ?> value="Aberto">Aberto</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aberto">Aberto</option>
                                                 <option <?php if ($result->status == 'Faturado') {
-    echo 'selected';
-} ?> value="Faturado">Faturado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Faturado">Faturado</option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-    echo 'selected';
-} ?> value="Em Andamento">Em Andamento</option>
+                                                            echo 'selected';
+                                                        } ?> value="Em Andamento">Em Andamento</option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-    echo 'selected';
-} ?> value="Finalizado">Finalizado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Finalizado">Finalizado</option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-    echo 'selected';
-} ?> value="Cancelado">Cancelado</option>
+                                                            echo 'selected';
+                                                        } ?> value="Cancelado">Cancelado</option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-    echo 'selected';
-} ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                            echo 'selected';
+                                                        } ?> value="Aguardando Peças">Aguardando Peças</option>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -98,6 +98,14 @@
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
                                             <?php echo form_error('garantia'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
+                                            <label for="desconto">Desconto</label>
+                                            <input id="desconto" name="desconto" class="money" value="<?php echo number_format($result->desconto, 2) ?>" />
+                                        </div>
+                                        <div class="span3 pull-right">
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
                                             <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
@@ -422,7 +430,7 @@
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total - $result->desconto, 2); ?> " />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -485,7 +493,8 @@
             total_servico = total_servico.replace(',', '');
             total_servico = parseFloat(total_servico);
             valor = parseFloat(valor);
-            $('#valor').val(valor + total_servico);
+            desconto = $("#desconto").val() || 0;
+            $('#valor').val(valor + total_servico - desconto);
         });
 
         $("#formFaturar").validate({

@@ -233,6 +233,11 @@ $config = [
             'field' => 'laudoTecnico',
             'label' => 'Laudo Tecnico',
             'rules' => 'trim',
+        ],
+        [
+            'field' => 'desconto',
+            'label' => 'Desconto',
+            'rules' => 'trim|required',
         ]
     ],
     'tiposUsuario' => [

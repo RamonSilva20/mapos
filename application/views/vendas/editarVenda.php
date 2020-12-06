@@ -28,20 +28,24 @@
                                         <h3>#Venda:
                                             <?php echo $result->idVendas ?>
                                         </h3>
-                                        <div class="span2" style="margin-left: 0">
+                                        <div class="span3" style="margin-left: 0">
                                             <label for="dataFinal">Data Final</label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
+                                        </div>
+                                        <div class="span3">
+                                            <label for="desconto">Desconto</label>
+                                            <input id="desconto" name="desconto" class="money" value="<?php echo number_format($result->desconto, 2); ?>" />
                                         </div>
                                     </div>
 
@@ -163,7 +167,7 @@
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total - floatval($result->desconto), 2); ?> " />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -217,7 +221,8 @@
             event.preventDefault();
             valor = $('#total-venda').val();
             valor = valor.replace(',', '');
-            $('#valor').val(valor);
+            desconto = $("#desconto").val() || 0;
+            $('#valor').val(valor - desconto);
         });
         $("#formFaturar").validate({
             rules: {
@@ -345,8 +350,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

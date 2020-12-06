@@ -50,7 +50,7 @@ $totalProdutos = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-    
+
                         <table class="table table-condensend">
                             <tbody>
                                 <tr>
@@ -221,7 +221,9 @@ $totalProdutos = 0; ?>
                                 <tr>
                                     <td colspan="5"> <?php
                                                         if ($totalProdutos != 0 || $totalServico != 0) {
-                                                            echo "<h4 style='text-align: right; font-size: 13px;'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                                            echo "<h4 style='text-align: right; font-size: 13px;'>Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                                            echo "<h4 style='text-align: right; font-size: 13px;'>Desconto: R$ " . number_format($result->desconto, 2, ',', '.') . "</h4>";
+                                                            echo "<h4 style='text-align: right; font-size: 13px;'>Valor Final: R$ " . number_format($totalProdutos + $totalServico - $result->desconto, 2, ',', '.') . "</h4>";
                                                         }
 
                                                         ?>

@@ -178,8 +178,20 @@ $totalProdutos = 0; ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"></td>
-                                        <td style="text-align: center"><strong>Total: R$
+                                        <td style="text-align: center"><strong>Valor Total: R$
                                                 <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"></td>
+                                        <td style="text-align: center"><strong>Desconto: R$
+                                                <?php echo number_format($result->desconto, 2, ',', '.'); ?></strong></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"></td>
+                                        <td style="text-align: center"><strong>Valor Final: R$
+                                                <?php echo number_format($totalProdutos + $totalServico - $result->desconto, 2, ',', '.'); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>

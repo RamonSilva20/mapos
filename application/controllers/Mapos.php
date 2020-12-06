@@ -438,6 +438,8 @@ class Mapos extends MY_Controller
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
+                    'desconto' => '<b>Desconto:</b> R$ ' . number_format($os->desconto, 2, ',', '.'),
+                    'valorFinal' => '<b>Valor Final:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos - $os->desconto, 2, ',', '.'),
                 ]
             ];
         }, $allOs);

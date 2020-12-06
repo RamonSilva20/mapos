@@ -183,10 +183,10 @@
                                     </td>
 
                                     <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
+                                            echo date('d/m/Y', strtotime($o->dataFinal));
+                                        } else {
+                                            echo "";
+                                        } ?></td>
 
                                     <td>
                                         <?= $o->nomeCliente ?>
@@ -330,18 +330,18 @@
                         series: [{
                             name: 'Receita Líquida',
                             negativeColor: '#FF0000',
-                            data: [<?php echo($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>
+                            data: [<?php echo ($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
+                                <?php echo ($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>
                             ]
                         }]
                     });
@@ -474,8 +474,8 @@
         $(document).ready(function() {
             var data = [
                 <?php foreach ($os as $o) {
-    echo "['" . $o->status . "', " . $o->total . "],";
-} ?>
+                    echo "['" . $o->status . "', " . $o->total . "],";
+                } ?>
 
             ];
             var plot1 = jQuery.jqplot('chart-os', [data], {
@@ -504,7 +504,7 @@
 
 <?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {
-        ?>
+?>
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -559,8 +559,8 @@
 
 
                 var data4 = [
-                    ['Total em Caixa', <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
-                    ['Total a Entrar', <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
+                    ['Total em Caixa', <?php echo ($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
+                    ['Total a Entrar', <?php echo ($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
                 ];
                 var plot4 = jQuery.jqplot('chart-financeiro-caixa', [data4], {
 
@@ -610,6 +610,8 @@
         <div id="modalObservacoes" class="modal-Observacoes"></div>
         <div id="modalTotal" class="modal-Total"></div>
         <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
+        <div id="modalDesconto" class="modal-Desconto"></div>
+        <div id="modalValorFinal" class="modal-ValorFinal"></div>
     </div>
     <div class="modal-footer">
         <?php
@@ -746,6 +748,8 @@
                 $('#modalObservacoes').html(eventObj.observacoes);
                 $('#modalTotal').html(eventObj.total);
                 $('#modalValorFaturado').html(eventObj.valorFaturado);
+                $('#modalDesconto').html(eventObj.desconto);
+                $('#modalValorFinal').html(eventObj.valorFinal);
 
                 $('#eventUrl').attr('href', event.url);
                 $('#calendarModal').modal();

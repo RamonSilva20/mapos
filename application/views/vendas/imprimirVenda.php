@@ -140,6 +140,12 @@
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
+                        <h4 style="text-align: right">Desconto: R$
+                            <?php echo number_format($result->desconto, 2, ',', '.'); ?>
+                        </h4>
+                        <h4 style="text-align: right">Valor Final: R$
+                            <?php echo number_format($totalProdutos - floatval($result->desconto), 2, ',', '.'); ?>
+                        </h4>
                     </div>
                 </div>
             </div>

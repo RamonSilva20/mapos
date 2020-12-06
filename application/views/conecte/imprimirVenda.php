@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
-    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
@@ -63,7 +63,6 @@
                                                 </span>
                                                 <span><?php echo $result->nome ?></span> <br />
                                                 <span>Telefone: <?php echo $result->telefone ?></span><br />
-                                                <span>Email: <?php echo $result->email_user ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -111,6 +110,8 @@
                         <hr />
 
                         <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
+                        <h4 style="text-align: right">Desconto: R$ <?php echo number_format($result->desconto, 2, ',', '.'); ?></h4>
+                        <h4 style="text-align: right">Valor Final: R$ <?php echo number_format(floatval($totalProdutos) - floatval($result->desconto), 2, ',', '.'); ?></h4>
 
                     </div>
                 </div>

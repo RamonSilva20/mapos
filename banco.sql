@@ -199,6 +199,7 @@ CREATE TABLE IF NOT EXISTS `os` (
   `lancamento` INT(11) NULL DEFAULT NULL,
   `faturado` TINYINT(1) NOT NULL,
   `garantias_id` int(11) NULL,
+  `desconto` DECIMAL(10, 2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`idOs`),
   INDEX `fk_os_clientes1` (`clientes_id` ASC),
   INDEX `fk_os_usuarios1` (`usuarios_id` ASC),

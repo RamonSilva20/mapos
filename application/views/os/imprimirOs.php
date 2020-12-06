@@ -222,7 +222,9 @@ $totalProdutos = 0; ?>
                         <?php } ?>
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
-                            echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                            echo "<h4 style='text-align: right'>Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                            echo "<h4 style='text-align: right'>Desconto: R$ " . number_format($result->desconto, 2, ',', '.') . "</h4>";
+                            echo "<h4 style='text-align: right'>Valor Final: R$ " . number_format($totalProdutos + $totalServico - $result->desconto, 2, ',', '.') . "</h4>";
                         }
 
                         ?>

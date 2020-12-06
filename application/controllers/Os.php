@@ -215,6 +215,7 @@ class Os extends MY_Controller
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
+                'desconto' => floatval($this->input->post('desconto'))
             ];
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
