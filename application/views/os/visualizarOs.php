@@ -273,7 +273,7 @@ $totalProdutos = 0; ?>
                     <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
                     <input type="hidden" id="quantidade" name="quantidade" value="1">
-                    <button type="submit" class="btn btn-success">Gerar Pagamento</button>
+                    <button type="submit" id="submitPayment" class="btn btn-success">Gerar Pagamento</button>
                     </form>';
                 }
             }
@@ -302,7 +302,7 @@ $totalProdutos = 0; ?>
                     <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
                     <input type="hidden" id="quantidade" name="quantidade" value="1">
-                    <button id="btn_emitir_boleto" type="submit" class="btn btn-success">Gerar Pagamento</button>
+                    <button id="submitPayment" type="submit" class="btn btn-success">Gerar Pagamento</button>
                     </form>';
                 }
             }

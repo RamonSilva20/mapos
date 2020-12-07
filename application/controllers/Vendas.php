@@ -191,7 +191,7 @@ class Vendas extends MY_Controller
             intval($this->input->post('quantidade'))
         );
         
-        echo $pagamento;
+        print_r($pagamento);
     }
 
     public function gerarPagamentoGerencianet()
@@ -218,7 +218,7 @@ class Vendas extends MY_Controller
             intval($this->input->post('quantidade'))
         );
         
-        echo $pagamento;
+        print_r($pagamento);
     }
 
     public function imprimir()

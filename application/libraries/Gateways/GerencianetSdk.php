@@ -31,14 +31,13 @@ class GerencianetSdk
 
         $new_unit_price = intval(preg_replace('/[^0-9]/', '', number_format($unit_price, 2, '.', '')));
 
-
         $clientId = $client_Id; // insira seu Client_Id, conforme o ambiente (Des ou Prod)
         $clientSecret = $client_Secret; // insira seu Client_Secret, conforme o ambiente (Des ou Prod)
 
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => false // altere conforme o ambiente (true = desenvolvimento e false = producao)
+            'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = producao)
         ];
 
         $item_1 = [
@@ -102,11 +101,11 @@ class GerencianetSdk
             $pay_charge = $api->oneStep([], $body);
             return json_encode($pay_charge);
         } catch (GerencianetException $e) {
-            print_r($e->code);
-            print_r($e->error);
-            print_r($e->errorDescription);
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
         }
     }
 }

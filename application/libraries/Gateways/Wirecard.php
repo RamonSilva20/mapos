@@ -96,11 +96,15 @@ class Wirecard
 
             return json_encode($payment);
         } catch (\Moip\Exceptions\UnautorizedException $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
             echo $e->getMessage();
         } catch (\Moip\Exceptions\ValidationException $e) {
-            printf($e->__toString());
+            $error = array("error" => "Error", "errorDescription" => $e->__toString());
+            return json_encode($error);
         } catch (\Moip\Exceptions\UnexpectedException $e) {
-            echo $e->getMessage();
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
         }
     }
 
@@ -110,7 +114,7 @@ class Wirecard
         $token = $access_token;
         $key = $public_key;
 
-        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_PRODUCTION);
+        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_SANDBOX);
 
         $payment = $moip->payments()->get($codePayment);
 
@@ -118,12 +122,12 @@ class Wirecard
     }
 
 
-    public function allPayment($access_token, $public_key)
+    public function allPayment($access_token, $public_key, $numberBoleto)
     {
         $token = $access_token;
         $key = $public_key;
 
-        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_PRODUCTION);
+        $moip = new Moip(new BasicAuth($token, $key), Moip::ENDPOINT_SANDBOX);
 
         $orders = $moip->orders()->getList();
 
@@ -136,7 +140,7 @@ class Wirecard
         $orders = $moip->orders()->getList(null, $filters);
 
         // With pagination
-        $orders = $moip->orders()->getList(new Pagination(100, 0));
+        $orders = $moip->orders()->getList(new Pagination($numberBoleto, 0));
 
         // With specific value
         //$orders = $this->moip->orders()->getList(null, null, "josé silva");

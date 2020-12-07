@@ -140,53 +140,30 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td style="width: 100%; padding-left: 0">
-                                    <ul>
-                                        <li>
+                    <hr />
+                    <div id="msgError" class=" alert alert-danger" hidden> </div>
+                    <?php
 
-                                            <?php
+                    if ($pagamento) {
+                        if ($totalProdutos || $totalServico) {
 
-                                            if ($pagamento) {
-                                                if ($totalProdutos) {
+                            $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico), $quantidade = 1);
+                            if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
+                                echo '<form action="' . site_url() . '" method="POST">
+                            <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="' . $preference->id . '" data-button-label="Gerar Pagamento">
+                            </script>
+                        </form>';
+                            }
+                        }
+                    }
+                    ?>
+                    <?php
+                    if ($pagamento) {
+                        if ($totalProdutos) {
 
-                                                    try {
-                                                        //code...
-                                                        $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idVendas, 'Pagamento da Venda ', ($totalProdutos));
-                                                        if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
-                                                            echo '<form action="' . site_url() . '" method="POST">
-                    <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="' . $preference->id . '" data-button-label="Gerar Pagamento">
-                    </script>
-                </form>';
-                                                        }
-                                                    } catch (\Throwable $th) {
-                                                        //throw $th;
-                                                        echo '<div id="msgConexao" class=" alert alert-danger"> Precisa de conexão com a internet para gerar pagamento!</div>';
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                            if ($pagamento->nome == 'Wirecard') {
 
-                                            <table id="tabelaPagamento" name="tabelaPagamento" class="table table-condensed" hidden="true">
-                                                <tbody>
-                                                    <div id="msg"></div>
-                                                    <tr>
-                                                        <td colspan="3" id="dadosPagamento" name="dadosPagamento" class="alert">
-
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <?php
-                                            if ($pagamento) {
-                                                if ($totalProdutos) {
-
-                                                    if ($pagamento->nome == 'Wirecard') {
-
-                                                        echo '<form id="form-gerar-pagamento" action="' . base_url() . 'index.php/vendas/gerarpagamento" method="POST">
+                                echo '<form id="form-gerar-pagamento-wirecard" action="' . base_url() . 'index.php/vendas/gerarpagamento" method="POST">
             <input type="hidden" id="access_token" name="access_token" value="' . $pagamento->access_token . '">
             <input type="hidden" id="public_key" name="public_key" value="' . $pagamento->public_key . '">
             <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
@@ -201,21 +178,21 @@
             <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
             <input type="hidden" id="idVenda" name="idVenda" value="' . $result->idVendas . '">
             <input type="hidden" id="titleVenda" name="titleVenda" value="Venda:">
-            <input type="hidden" id="totalValor" name="totalValor" value="' . (number_format($totalProdutos, 2, ',', '.')) . '">
+            <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos) . '">
             <input type="hidden" id="quantidade" name="quantidade" value="1">
-            <button type="submit" class="btn btn-success">Gerar Pagamento</button>
+            <button type="submit" id="submitPayment" class="btn btn-success">Gerar Pagamento</button>
             </form>';
-                                                    }
-                                                }
-                                            } ?>
+                            }
+                        }
+                    } ?>
 
-                                            <?php
-                                            if ($pagamento) {
-                                                if ($totalProdutos) {
+                    <?php
+                    if ($pagamento) {
+                        if ($totalProdutos) {
 
-                                                    if ($pagamento->nome == 'GerenciaNet') {
+                            if ($pagamento->nome == 'GerenciaNet') {
 
-                                                        echo '<form id="form-gerar-pagamento" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianet" method="POST">
+                                echo '<form id="form-gerar-pagamento-gerencianet" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianet" method="POST">
             <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
             <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
             <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
@@ -232,50 +209,58 @@
             <input type="hidden" id="titleVenda" name="titleVenda" value="Venda:">
             <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos) . '">
             <input type="hidden" id="quantidade" name="quantidade" value="1">
-            <button type="submit" class="btn btn-success">Gerar Pagamento</button>
+            <button type="submit" id="submitPayment" class="btn btn-success">Gerar Pagamento</button>
             </form>';
-                                                    }
-                                                }
-                                            } ?>
+                            }
+                        }
+                    } ?>
 
                 </div>
             </div>
-            <script type="text/javascript">
-                $('form#form-gerar-pagamento').submit(function(e) {
-                    e.preventDefault();
-                    $("#tabelaPagamento").show();
-                    document.getElementById("dadosPagamento").innerHTML = "Por favor aguarde gerando o boleto....";
-                    var form = $(this);
-                    $.ajax({
-                        url: form.attr('action'),
-                        type: form.attr('method'),
-                        data: form.serialize(),
-                        success: function(response) {
-                            $("#tabelaPagamento").show();
-                            document.getElementById("dadosPagamento").innerHTML = response;
-                            //window.focus(); //manter focus na janela anterior e não na nova janela.
-                            //$('#msg').html(response).fadeIn('slow');
-                            if (online = navigator.onLine) {
-                                $('#msg').addClass("alert alert-success").html("Pagamento gerado com sucesso!").fadeIn('slow'); //also show a success message 
-                                $('#msg').delay(5000).fadeOut('slow');
-                            }
-
-                        }
-                    });
-                    return false;
-
-                });
-            </script>
-
-            </li>
-            </ul>
-            </td>
-            </tr>
-            </tbody>
-            </table>
-            <hr />
         </div>
+
+        <!--div responsável por exibir o resultado da emissão do boleto-->
+        <div class="modal fade" id="myModalBoleto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Boleto Emitido</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="boleto" class="">
+                            <table class="table" id="result_table">
+                                <!--"code":200,"data":{"barcode":"03399.32766 55400.000000 60348.101027 6 69020000009000","link":"https:\/\/visualizacaosandbox.gerencianet.com.br\/emissao\/59808_79_FORAA2\/A4XB-59808-60348-HIMA4","expire_at":"2016-08-30","charge_id":76777,"status":"waiting","total":9000,"payment":"banking_billet"-->
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Este componente é utilizando para exibir um alerta(modal) para o usuário aguardar as consultas via API.  -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Um momento.</h4>
+                    </div>
+                    <div class="modal-body">
+                        Estamos processando a requisição <img src="<?= base_url('assets/img/ajax-loader.gif'); ?>">.
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<?= base_url('assets/js/script-payments.js'); ?>"></script>
     </div>
-</div>
-</div>
 </div>
