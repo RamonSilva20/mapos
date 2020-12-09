@@ -254,35 +254,6 @@ $totalProdutos = 0; ?>
         if ($pagamento) {
             if ($totalProdutos || $totalServico) {
 
-                if ($pagamento->nome == 'Wirecard') {
-
-                    echo '<form id="form-gerar-pagamento-wirecard" action="' . base_url() . 'index.php/os/gerarpagamento" method="POST">
-                    <input type="hidden" id="access_token" name="access_token" value="' . $pagamento->access_token . '">
-                    <input type="hidden" id="public_key" name="public_key" value="' . $pagamento->public_key . '">
-                    <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
-                    <input type="hidden" id="emailCliente" name="emailCliente" value="' . $result->email . '">
-                    <input type="hidden" id="documentoCliente" name="documentoCliente" value="' . $result->documento . '">
-                    <input type="hidden" id="celular_cliente" name="celular_cliente" value="' . $result->celular_cliente . '">
-                    <input type="hidden" id="ruaCliente" name="ruaCliente" value="' . $result->rua . '">
-                    <input type="hidden" id="numeroCliente" name="numeroCliente" value="' . $result->numero . '">
-                    <input type="hidden" id="bairroCliente" name="bairroCliente" value="' . $result->bairro . '">
-                    <input type="hidden" id="cidadeCliente" name="cidadeCliente" value="' . $result->cidade . '">
-                    <input type="hidden" id="estadoCliente" name="estadoCliente" value="' . $result->estado . '">
-                    <input type="hidden" id="cepCliente" name="cepCliente" value="' . $result->cep . '">
-                    <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
-                    <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
-                    <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
-                    <input type="hidden" id="quantidade" name="quantidade" value="1">
-                    <button type="submit" id="submitPayment" class="btn btn-success">Gerar Pagamento</button>
-                    </form>';
-                }
-            }
-        } ?>
-
-        <?php
-        if ($pagamento) {
-            if ($totalProdutos || $totalServico) {
-
                 if ($pagamento->nome == 'GerenciaNet') {
 
                     echo '<form id="form-gerar-pagamento-gerencianet" action="' . base_url() . 'index.php/os/gerarpagamentogerencianet" method="POST">

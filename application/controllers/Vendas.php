@@ -167,33 +167,6 @@ class Vendas extends MY_Controller
         return $this->layout();
     }
 
-    public function gerarPagamento()
-    {
-        
-        $this->load->library('Gateways/Wirecard', null, 'Wirecard');
-
-        $pagamento = $this->Wirecard->getPayment(
-            $this->input->post('access_token'),
-            $this->input->post('public_key'),
-            $this->input->post('nomeCliente'),
-            $this->input->post('emailCliente'),
-            $this->input->post('documentoCliente'),
-            $this->input->post('celular_cliente'),
-            $this->input->post('ruaCliente'),
-            $this->input->post('numeroCliente'),
-            $this->input->post('bairroCliente'),
-            $this->input->post('cidadeCliente'),
-            $this->input->post('estadoCliente'),
-            $this->input->post('cepCliente'),
-            $this->input->post('idVenda'),
-            $this->input->post('titleVenda'),
-            $this->input->post('totalValor'),
-            intval($this->input->post('quantidade'))
-        );
-        
-        print_r($pagamento);
-    }
-
     public function gerarPagamentoGerencianet()
     {
         
