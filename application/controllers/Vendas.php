@@ -153,12 +153,45 @@ class Vendas extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
+        $this->load->model('pagamentos_model');
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $this->data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        if ($this->data['pagamento']) {
+            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
+        }
 
         $this->data['view'] = 'vendas/visualizarVenda';
         return $this->layout();
+    }
+
+    public function gerarPagamentoGerencianet()
+    {
+        
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $this->input->post('client_id'),
+            $this->input->post('client_secret'),
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idVenda'),
+            $this->input->post('titleVenda'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+        
+        print_r($pagamento);
     }
 
     public function imprimir()
