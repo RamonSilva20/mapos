@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.0] - 2020-12-10
+
+## Added
+- Implementado pagamento via gerencianet. [@willph](https://github.com/willph)
+
 ## [4.20.2] - 2020-12-06
 
 ## Fixed
