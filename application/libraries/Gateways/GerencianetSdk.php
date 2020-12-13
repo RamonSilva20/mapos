@@ -79,7 +79,7 @@ class GerencianetSdk
             'value' => 500, // porcentagem de desconto
             'until_date' => '2019-08-30' // data máxima para aplicação do desconto
         ];*/
-        $expiration_date = (new DateTime())->add(new DateInterval('P3D'));
+        $expiration_date = (new DateTime())->add(new DateInterval('P3D')); // quantidade de dias para vencimento 3 indica 3 dias
         $expiration_date = ($expiration_date->format('Y-m-d'));
         $bankingBillet = [
             'expire_at' => $expiration_date, // data de vencimento do titulo
@@ -100,6 +100,75 @@ class GerencianetSdk
             $api = new Gerencianet($options);
             $pay_charge = $api->oneStep([], $body);
             return json_encode($pay_charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+
+    public function gerarLink(
+        $client_Id,
+        $client_Secret,
+        $id = "2",
+        $title,
+        $unit_price,
+        $quantity
+    ) {
+
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $new_unit_price = preg_replace('/[^0-9]/', '', number_format($unit_price, 2, '.', ''));
+        $expiration_date = (new DateTime())->add(new DateInterval('P3D')); // quantidade de dias para vencimento 3 indica 3 dias
+        $expiration_date = ($expiration_date->format('Y-m-d'));
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $item_1 = [
+            'name' => $title . " " . $id,
+            'amount' => (int) $quantity,
+            'value' => (int) $new_unit_price
+        ];
+
+        $items = [
+            $item_1
+        ];
+
+        $body = ['items' => $items];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->createCharge([], $body);
+
+
+            if ($charge["code"] == 200) {
+
+                $params = ['id' => $charge["data"]["charge_id"]];
+
+                $body = [
+                    //'billet_discount' => 1,
+                    //'card_discount' => 1,
+                    'message' => "Pagamento referente a " . $title . " " . $id, //$_POST["message"], Mensagem que ira aparecer no topo para o cliente
+                    'expire_at' => $expiration_date,
+                    //'request_delivery_address' => (boolean) $_POST["request"],
+                    'request_delivery_address' => (bool) false, //$_POST["request"],  solicitação de endereço para entrega true or false
+                    'payment_method' => "all" // $_POST["method"] aqui você escolhe o metodo de pagamento
+                ];
+
+                //$body = ['payment' => $payment];
+
+                $api = new Gerencianet($options);
+                $response = $api->linkCharge($params, $body);
+                echo json_encode($response);
+            } else {
+            }
         } catch (GerencianetException $e) {
             $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
             return json_encode($error);

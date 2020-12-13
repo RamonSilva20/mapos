@@ -250,13 +250,39 @@ $totalProdutos = 0; ?>
         }
         ?>
 
-        <?php
-        if ($pagamento) {
-            if ($totalProdutos || $totalServico) {
+    </div>
+</div>
 
-                if ($pagamento->nome == 'GerenciaNet') {
+<a href="#myModalFormaPagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
 
-                    echo '<form id="form-gerar-pagamento-gerencianet" action="' . base_url() . 'index.php/os/gerarpagamentogerencianet" method="POST">
+<div class="modal fade" id="myModalFormaPagamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Escolher Forma de Pagamento</h4>
+            </div>
+            <div class="modal-body">
+                <div id="forma-pag" class="">
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Forma de Pagamento: </label>
+                        <select id="escolha-pagamento" class="form-control" required>
+                            <option value="" selected>Forma de Pagamento</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="link-pagamento">Link de Pagamento</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="mostra-butao-pagamento-boleto" hidden>
+                    <?php
+                    if ($pagamento) {
+                        if ($totalProdutos || $totalServico) {
+
+                            if ($pagamento->nome == 'GerenciaNet') {
+
+                                echo '<form id="form-gerar-pagamento-gerencianet-boleto" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetboleto" method="POST">
                     <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
                     <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
                     <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
@@ -273,13 +299,37 @@ $totalProdutos = 0; ?>
                     <input type="hidden" id="titleBoleto" name="titleBoleto" value="OS:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
                     <input type="hidden" id="quantidade" name="quantidade" value="1">
-                    <button id="submitPayment" type="submit" class="btn btn-success">Gerar Pagamento</button>
+                    <button id="submitPayment" type="submit" class="btn btn-success">Gerar Boleto de Pagamento</button>
                     </form>';
-                }
-            }
-        } ?>
+                            }
+                        }
+                    } ?>
+                </div>
 
+                <div id="mostra-butao-pagamento-link" hidden>
+                    <?php
+                    if ($pagamento) {
+                        if ($totalProdutos || $totalServico) {
+
+                            if ($pagamento->nome == 'GerenciaNet') {
+
+                                echo '<form id="form-gerar-pagamento-gerencianet-link" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetlink" method="POST">
+                    <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
+                    <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
+                    <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
+                    <input type="hidden" id="titleLink" name="titleLink" value="OS:">
+                    <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos + $totalServico) . '">
+                    <input type="hidden" id="quantidade" name="quantidade" value="1">
+                    <button id="submitPayment" type="submit" class="btn btn-success">Gerar Link de Pagamento</button>
+                    </form>';
+                            }
+                        }
+                    } ?>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <!--div responsável por exibir o resultado da emissão do boleto-->
@@ -288,11 +338,34 @@ $totalProdutos = 0; ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Boleto Emitido</h4>
+                <h4 class="modal-title" id="myModalLabelMsg">Boleto Emitido</h4>
             </div>
             <div class="modal-body">
                 <div id="boleto" class="">
                     <table class="table" id="result_table">
+                        <!--"code":200,"data":{"barcode":"03399.32766 55400.000000 60348.101027 6 69020000009000","link":"https:\/\/visualizacaosandbox.gerencianet.com.br\/emissao\/59808_79_FORAA2\/A4XB-59808-60348-HIMA4","expire_at":"2016-08-30","charge_id":76777,"status":"waiting","total":9000,"payment":"banking_billet"-->
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="myModalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title-msg" id="myModalLabelMsg">Link Emitido</h4>
+            </div>
+            <div class="modal-body">
+                <div id="boleto" class="">
+                    <table class="table" id="result_table_link">
                         <!--"code":200,"data":{"barcode":"03399.32766 55400.000000 60348.101027 6 69020000009000","link":"https:\/\/visualizacaosandbox.gerencianet.com.br\/emissao\/59808_79_FORAA2\/A4XB-59808-60348-HIMA4","expire_at":"2016-08-30","charge_id":76777,"status":"waiting","total":9000,"payment":"banking_billet"-->
 
                     </table>
