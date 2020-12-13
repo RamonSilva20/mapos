@@ -167,7 +167,7 @@ class Vendas extends MY_Controller
         return $this->layout();
     }
 
-    public function gerarPagamentoGerencianet()
+    public function gerarPagamentoGerencianetBoleto()
     {
         
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
@@ -193,6 +193,24 @@ class Vendas extends MY_Controller
         
         print_r($pagamento);
     }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $pagamento = $this->GerencianetSdk->gerarLink(
+            $this->input->post('client_id'),
+            $this->input->post('client_secret'),
+            $this->input->post('idVenda'),
+            $this->input->post('titleLink'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
+    }
+
 
     public function imprimir()
     {
