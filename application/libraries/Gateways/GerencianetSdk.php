@@ -177,4 +177,78 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
+
+    public function gerarCarne(
+        $client_Id,
+        $client_Secret,
+        $nameClient,
+        $emailClient,
+        $cpfClient,
+        $phoneClient,
+        $addressCep,
+        $id,
+        $title,
+        $unit_price,
+        $quantity,
+        $parcelas,
+        $vencimento
+    ) {
+        $clientId = $client_Id;
+        $clientSecret = $client_Secret;
+
+        $new_unit_price = preg_replace('/[^0-9]/', '', number_format($unit_price, 2, '.', ''));
+
+        $phoneClient = preg_replace("/[^0-9]/", "", $phoneClient);
+        $cpfClient = preg_replace("/[^0-9]/", "", $cpfClient);
+        $addressCep = preg_replace("/[^0-9]/", "", $addressCep);
+
+        $expiration_date = strtotime($vencimento); // data de vencimento do boleto
+        $expiration_date = date('Y-m-d',$expiration_date);
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => true
+        ];
+
+        $instructions = ["Pago em qualquer loterica", "Pagar até o vencimento", "Caixa após vencimento não aceitar"]; // Pode colocar até quatro instrunções
+
+        $item_1 = [
+            'name' => $title . " " . $id,
+            'amount' => (int) $quantity,
+            'value' => (int) $new_unit_price
+        ];
+
+        $items = [
+            $item_1
+        ];
+
+        $customer = [
+            'name' => $nameClient,
+            'cpf' => $cpfClient,
+            'phone_number' => $phoneClient,
+            'email' => $emailClient,
+        ];
+
+        $body = [
+            'items' => $items,
+            'repeats' => (int)$parcelas, // numero de parcelas que ira conter no boleto
+            'split_items' => false,
+            'expire_at' => $expiration_date,
+            'customer' => $customer,
+            'instructions' => $instructions
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->createCarnet([], $body);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
 }
