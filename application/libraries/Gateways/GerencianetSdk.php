@@ -112,7 +112,7 @@ class GerencianetSdk
     public function gerarLink(
         $client_Id,
         $client_Secret,
-        $id = "2",
+        $id,
         $title,
         $unit_price,
         $quantity
