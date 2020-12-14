@@ -186,7 +186,6 @@ class Relatorios extends MY_Controller
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
         try {
-            //code...
             if ($de <= $ate) {
                 $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
                 $this->load->helper('mpdf');
@@ -197,7 +196,6 @@ class Relatorios extends MY_Controller
                 redirect('produtos');
             }
         } catch (Exception $e) {
-            //throw $th;
             $this->session->set_flashdata('error', $e->getMessage());
             redirect('produtos');
         }
