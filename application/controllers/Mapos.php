@@ -422,10 +422,37 @@ class Mapos extends MY_Controller
         );
 
         $events = array_map(function ($os) {
+            switch ($os->status) {
+                case 'Aberto':
+                    $cor = '#00cd00';
+                    break;
+                case 'Em Andamento':
+                    $cor = '#436eee';
+                    break;
+                case 'Orçamento':
+                    $cor = '#CDB380';
+                    break;
+                case 'Cancelado':
+                    $cor = '#CD0000';
+                    break;
+                case 'Finalizado':
+                    $cor = '#256';
+                    break;
+                case 'Faturado':
+                    $cor = '#B266FF';
+                    break;
+                case 'Aguardando Peças':
+                    $cor = '#FF7F00';
+                    break;
+                default:
+                    $cor = '#E0E4CC';
+                    break;
+            }
             return [
                 'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
+                'color' => $cor,
                 'extendedProps' => [
                     'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
