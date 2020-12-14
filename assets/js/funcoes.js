@@ -19,7 +19,7 @@ $(function () {
         var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
         $('#telefone').val(clipboardCurrentData);
     });
-    // FIM FUNÇÃO DE MASCARA CPF/CNPJ
+    
 });
 
 $(function () {
