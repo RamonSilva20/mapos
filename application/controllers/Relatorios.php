@@ -185,14 +185,18 @@ class Relatorios extends MY_Controller
     {
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
-
-        if ($de <= $ate) {
-            $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
-            $this->load->helper('mpdf');
-            $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
-            pdf_create($html, 'etiquetas_' . $de . '_' . $ate, true);
-        } else {
-            $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
+        try {
+            if ($de <= $ate) {
+                $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
+                $this->load->helper('mpdf');
+                $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
+                pdf_create($html, 'etiquetas_' . $de . '_' . $ate, true);
+            } else {
+                $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
+                redirect('produtos');
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
             redirect('produtos');
         }
     }

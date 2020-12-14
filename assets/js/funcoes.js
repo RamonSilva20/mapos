@@ -1,9 +1,25 @@
 $(function () {
     $("#celular").mask("(00)00000-0000")
-    $("#telefone").mask("(00)0000-0000")
     $("#cep").mask("00000-000")
-    $('.cpfUser').mask('000.000.000-00', {reverse: true});
+    $('.cpfUser').mask('000.000.000-00', { reverse: true });
+});
 
+$(function () {
+    var telefoneN = function (val) {
+        return val.replace(/\D/g, '').length > 10 ? '(00)00000-0000' : '(00)0000-00009';
+    },
+        telefoneOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(telefoneN.apply({}, arguments), options);
+            },
+        };
+    $('#telefone').mask(telefoneN, telefoneOptions);
+    $('#telefone').on('paste', function (e) {
+        e.preventDefault();
+        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+        $('#telefone').val(clipboardCurrentData);
+    });
+    
 });
 
 $(function () {
@@ -41,7 +57,7 @@ $(document).ready(function () {
     }
 
     function capitalizeFirstLetter(string) {
-        if (typeof string === 'undefined'){
+        if (typeof string === 'undefined') {
             return;
         }
 
@@ -49,7 +65,7 @@ $(document).ready(function () {
     }
 
     function capital_letter(str) {
-        if (typeof str === 'undefined'){ return; }
+        if (typeof str === 'undefined') { return; }
         str = str.toLocaleLowerCase().split(" ");
 
         for (var i = 0, x = str.length; i < x; i++) {
@@ -60,9 +76,9 @@ $(document).ready(function () {
     }
 
     function validarCNPJ(cnpj) {
-        cnpj = cnpj.replace(/[^\d]+/g,'');
+        cnpj = cnpj.replace(/[^\d]+/g, '');
 
-        if(cnpj == '') return false;
+        if (cnpj == '') return false;
 
         if (cnpj.length != 14) return false;
 
@@ -81,13 +97,13 @@ $(document).ready(function () {
 
         // Valida DVs
         tamanho = cnpj.length - 2
-        numeros = cnpj.substring(0,tamanho);
+        numeros = cnpj.substring(0, tamanho);
         digitos = cnpj.substring(tamanho);
         soma = 0;
         pos = tamanho - 7;
         for (i = tamanho; i >= 1; i--) {
-        soma += numeros.charAt(tamanho - i) * pos--;
-        if (pos < 2)
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
                 pos = 9;
         }
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
@@ -95,14 +111,14 @@ $(document).ready(function () {
             return false;
 
         tamanho = tamanho + 1;
-        numeros = cnpj.substring(0,tamanho);
+        numeros = cnpj.substring(0, tamanho);
         soma = 0;
         pos = tamanho - 7;
 
         for (i = tamanho; i >= 1; i--) {
             soma += numeros.charAt(tamanho - i) * pos--;
             if (pos < 2)
-                    pos = 9;
+                pos = 9;
         }
 
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
@@ -162,7 +178,7 @@ $(document).ready(function () {
                         });
                     }
                 },
-                error: function() {
+                error: function () {
                     ///CEP pesquisado não foi encontrado.
                     $("#nomeCliente").val("");
                     $("#cep").val("");
