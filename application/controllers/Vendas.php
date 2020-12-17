@@ -172,9 +172,12 @@ class Vendas extends MY_Controller
         
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
         $pagamento = $this->GerencianetSdk->gerarBoleto(
-            $this->input->post('client_id'),
-            $this->input->post('client_secret'),
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
             $this->input->post('nomeCliente'),
             $this->input->post('emailCliente'),
             $this->input->post('documentoCliente'),
@@ -199,9 +202,12 @@ class Vendas extends MY_Controller
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
         $pagamento = $this->GerencianetSdk->gerarLink(
-            $this->input->post('client_id'),
-            $this->input->post('client_secret'),
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
             $this->input->post('idVenda'),
             $this->input->post('titleLink'),
             $this->input->post('totalValor'),

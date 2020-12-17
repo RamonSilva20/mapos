@@ -190,8 +190,6 @@
                                     if ($pagamento->nome == 'GerenciaNet') {
 
                                         echo '<form id="form-gerar-pagamento-gerencianet-boleto" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianetboleto" method="POST">
-            <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
-            <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
             <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
             <input type="hidden" id="emailCliente" name="emailCliente" value="' . $result->email . '">
             <input type="hidden" id="documentoCliente" name="documentoCliente" value="' . $result->documento . '">
@@ -221,8 +219,6 @@
                                     if ($pagamento->nome == 'GerenciaNet') {
 
                                         echo '<form id="form-gerar-pagamento-gerencianet-link" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianetlink" method="POST">
-                    <input type="hidden" id="client_id" name="client_id" value="' . $pagamento->client_id . '">
-                    <input type="hidden" id="client_secret" name="client_secret" value="' . $pagamento->client_secret . '">
                     <input type="hidden" id="idVenda" name="idVenda" value="' . $result->idVendas . '">
                     <input type="hidden" id="titleLink" name="titleLink" value="Venda:">
                     <input type="hidden" id="totalValor" name="totalValor" value="' . ($totalProdutos) . '">
