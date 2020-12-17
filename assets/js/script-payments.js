@@ -52,7 +52,8 @@ $('form#form-gerar-pagamento-gerencianet-boleto').submit(function (e) {
                     html += "<tr><th>Total: </th><td>" + moedaN + "</td></tr>"
                     html += "<tr><th>Método de pagamento: <td>" + boleto + "</td></tr>";
                     html += "<tr><th>Código de Barras: </th><td>" + dadosBoletos.data.barcode + "</td></tr>"
-                    html += "<tr><th>Link do Boleto: </th><td><a href=" + dadosBoletos.data.link + " target='_blank'>Clique aqui para abrir boleto</a></td></tr>"
+                    html += "<tr><th>Link do Boleto: </th><td><a href=" + dadosBoletos.data.link + " target='_blank'>Clique aqui para visualizar boleto.</a><br />"
+                    html += "<a href=" + dadosBoletos.data.pdf.charge + " target='_blank'>Clique aqui para gerar PDF.</a></td></tr>"
                     $("#result_table").html(html);
 
                 } else {
