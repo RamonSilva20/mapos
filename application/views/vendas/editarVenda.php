@@ -18,6 +18,7 @@
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Venda</a></li>
+                        <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -46,6 +47,20 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes">
+                                            <h4>Observações</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                    </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes_cliente">
+                                            <h4>Observações para o Cliente</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
+                                    </div>
+
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
@@ -57,77 +72,64 @@
                                         </div>
                                     </div>
                                 </form>
-
-                                <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
-                                        <div class="span6">
-                                            <input type="hidden" name="idProduto" id="idProduto" />
-                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
-                                            <input type="hidden" name="estoque" id="estoque" value="" />
-                                            <label for="">Produto</label>
-                                            <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">Preço</label>
-                                            <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">Quantidade</label>
-                                            <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">&nbsp</label>
-                                            <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="span12" id="divProdutos" style="margin-left: 0">
-                                    <table class="table table-bordered" id="tblProdutos">
-                                        <thead>
-                                            <tr>
-                                                <th>Produto</th>
-                                                <th>Quantidade</th>
-                                                <th>Preço</th>
-                                                <th>Ações</th>
-                                                <th>Sub-total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $total = 0;
-                                            foreach ($produtos as $p) {
-                                                $preco = $p->preco ?: $p->precoVenda;
-                                                $total = $total + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td>' . $p->quantidade . '</td>';
-                                                echo '<td>' . $preco . '</td>';
-                                                echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
-                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
-                                            <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                                <td><strong>R$
-                                                        <?php echo number_format($total, 2, ',', '.'); ?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="span12" style="padding: 1%; margin-left: 0">
-                                    <label for="observacoes">
-                                        <h4>Observações</h4>
-                                    </label>
-                                    <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
-                                </div>
-
-                                <div class="span12" style="padding: 1%; margin-left: 0">
-                                    <label for="observacoes_cliente">
-                                        <h4>Observações para o Cliente</h4>
-                                    </label>
-                                    <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+                                <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                    <div class="span6">
+                                        <input type="hidden" name="idProduto" id="idProduto" />
+                                        <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
+                                        <input type="hidden" name="estoque" id="estoque" value="" />
+                                        <label for="">Produto</label>
+                                        <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Preço</label>
+                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Quantidade</label>
+                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">&nbsp</label>
+                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="span12" id="divProdutos" style="margin-left: 0">
+                                <table class="table table-bordered" id="tblProdutos">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                            <th>Preço</th>
+                                            <th>Ações</th>
+                                            <th>Sub-total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $total = 0;
+                                        foreach ($produtos as $p) {
+                                            $preco = $p->preco ?: $p->precoVenda;
+                                            $total = $total + $p->subTotal;
+                                            echo '<tr>';
+                                            echo '<td>' . $p->descricao . '</td>';
+                                            echo '<td>' . $p->quantidade . '</td>';
+                                            echo '<td>' . $preco . '</td>';
+                                            echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                            echo '</tr>';
+                                        } ?>
+                                        <tr>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                            <td><strong>R$
+                                                    <?php echo number_format($total, 2, ',', '.'); ?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -345,8 +347,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
