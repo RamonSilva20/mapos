@@ -74,8 +74,6 @@
         <div class="modal-body">
             <input type="hidden" id="idPag" name="idPag" value="" />
             <h5 style="text-align: center">Deseja realmente excluir esta Credencial de Pagamento?</h5>
-
-            <p style="text-align: center; margin-top: 4em;"><i><?php echo $r->nome ?></i></p>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
