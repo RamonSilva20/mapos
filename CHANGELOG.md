@@ -4,6 +4,19 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.23.0] - 2020-12-17
+
+## Added
+- Adicionado a opção de gerar o PDF do Boleto. [@willph](https://github.com/willph)
+- Adicionado cor na Agenda OS. [@willph](https://github.com/willph)
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido do form os client id e secret em OS e vendas. [@willph](https://github.com/willph)
+- Corrigido bug que quebrava a exibição da pagina por causa de um erro de exception ao clicar gerar etiqueta. [@willph](https://github.com/willph)
+- Corrigido observações e observações para cliente em vendas e melhorado visualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido exibição de modal de conformação de exclusão de credenciais de pagamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.22.0] - 2020-12-13
 
 ## Added
