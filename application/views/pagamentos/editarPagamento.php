@@ -31,9 +31,6 @@
                                 <option <?php if ($result->nome == 'MercadoPago') {
                                             echo 'selected';
                                         } ?> value="MercadoPago">MercadoPago</option>
-                                <option <?php if ($result->nome == 'Wirecard') {
-                                            echo 'selected';
-                                        } ?> value="Wirecard">Wirecard</option>
                                 <option <?php if ($result->nome == 'GerenciaNet') {
                                             echo 'selected';
                                         } ?> value="GerenciaNet">GerenciaNet</option>
