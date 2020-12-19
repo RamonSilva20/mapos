@@ -27,7 +27,6 @@
                             <label for="Nome">Nome<span class="required"></span></label>
                             <select name="nomePag" id="nomePag" class="span12">
                                 <option value="MercadoPago" required>Mercado Pago</option>
-                                <option value="Wirecard" required>Wirecard</option>
                                 <option value="GerenciaNet" required>GerenciaNet</option>
                             </select>
                         </div>
@@ -35,8 +34,8 @@
                             <label for="clientId">Client Id<span class="required"></span></label>
                             <input type="text" class="span12" name="clientId" placeholder="Informe sua credencial: Client Id">
                         </div>
-                        <div class="span5" >
-                        <label for="clientSecret">Client Secret<span class="required"></span></label>
+                        <div class="span5">
+                            <label for="clientSecret">Client Secret<span class="required"></span></label>
                             <input type="text" class="span12" name="clientSecret" placeholder="Informe sua credencial: Client Secret">
                         </div>
                         <div class="span4" style="margin-left: 0">
@@ -44,11 +43,11 @@
                             <input type="text" class="span12" name="publicKey" placeholder="Informe sua credencial: Public Key">
                         </div>
                         <div class="span8">
-                        <label for="accessToken">Access Token<span class="required"></span></label>
+                            <label for="accessToken">Access Token<span class="required"></span></label>
                             <input type="text" class="span12" name="accessToken" placeholder="Informe sua credencial: Access_Token">
                         </div>
-                    <div class="span2" style="margin-left: 0">
-                        <label for="default_pag">Tornar Padrão<span class="required"></span></label>
+                        <div class="span2" style="margin-left: 0">
+                            <label for="default_pag">Tornar Padrão<span class="required"></span></label>
                             <input type="checkbox" class="span6" name="default_pag" id="default_pag">
                         </div>
                     </div>
