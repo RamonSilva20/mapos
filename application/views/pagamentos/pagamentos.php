@@ -9,7 +9,7 @@
         </span>
         <h5>Pagamentos</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr style="background-color: #2D335B">
@@ -34,7 +34,7 @@
                         $textoPublicKeyShort = mb_strimwidth(strip_tags($r->public_key), 0, 10, "...");
                         $textoClientIdShort = mb_strimwidth(strip_tags($r->client_id), 0, 10, "...");
                         $textoClientSecretShort = mb_strimwidth(strip_tags($r->client_secret), 0, 10, "...");
-                        
+
 
                         echo '<tr>';
                         echo '<td>' . $r->idPag . '</td>';
@@ -74,8 +74,6 @@
         <div class="modal-body">
             <input type="hidden" id="idPag" name="idPag" value="" />
             <h5 style="text-align: center">Deseja realmente excluir esta Credencial de Pagamento?</h5>
-
-            <p style="text-align: center; margin-top: 4em;"><i><?php echo $r->nome ?></i></p>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>

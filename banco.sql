@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `forma_pgto` VARCHAR(100) NULL DEFAULT NULL,
   `tipo` VARCHAR(45) NULL DEFAULT NULL,
   `anexo` VARCHAR(250) NULL,
+  `observacoes` TEXT NULL,
   `clientes_id` INT(11) NULL DEFAULT NULL,
   `categorias_id` INT NULL,
   `contas_id` INT NULL,
@@ -323,6 +324,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `desconto` VARCHAR(45) NULL,
   `faturado` TINYINT(1) NULL,
   `observacoes` TEXT NULL,
+  `observacoes_cliente` TEXT NULL,
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NULL,
   `lancamentos_id` INT(11) NULL,
@@ -578,7 +580,7 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`,`dataExpiracao`) VALUES
 (1, 'admin_name', 'MG-25.502.560', '600.021.520-87', '70005-115', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin_email', 'admin_password', '000000-0000', '', 1, 'admin_created_at', 1, '3000-01-01');
 
-INSERT INTO `migrations`(`version`) VALUES ('20200921012421');
+INSERT INTO `migrations`(`version`) VALUES ('20200921012423');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

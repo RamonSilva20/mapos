@@ -103,8 +103,8 @@ class Os extends MY_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                ? $this->input->post('garantias_id')
-                : null;
+                    ? $this->input->post('garantias_id')
+                    : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -304,6 +304,56 @@ class Os extends MY_Controller
         return $this->layout();
     }
 
+    public function gerarPagamentoGerencianetBoleto()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idOs'),
+            $this->input->post('titleBoleto'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
+    }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarLink(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('idOs'),
+            $this->input->post('titleLink'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
+    }
+
     public function imprimir()
     {
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -428,7 +478,8 @@ class Os extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        if ($id == null) {
+        $os = $this->os_model->getById($id);
+        if ($os == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
@@ -437,6 +488,9 @@ class Os extends MY_Controller
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
+        if ((int) $os->faturado === 1) {
+            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
+        }
 
         log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
@@ -677,7 +731,7 @@ class Os extends MY_Controller
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR .'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
                 }
             }
         }
@@ -760,6 +814,7 @@ class Os extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
+                'observacoes' => set_value('observacoes'),
             ];
 
             if ($this->os_model->add('lancamentos', $data) == true) {

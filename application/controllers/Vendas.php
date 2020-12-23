@@ -70,6 +70,7 @@ class Vendas extends MY_Controller
             $data = [
                 'dataVenda' => $dataVenda,
                 'observacoes' => $this->input->post('observacoes'),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0,
@@ -118,6 +119,7 @@ class Vendas extends MY_Controller
             $data = [
                 'dataVenda' => $dataVenda,
                 'observacoes' => $this->input->post('observacoes'),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
@@ -151,13 +153,70 @@ class Vendas extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
+        $this->load->model('pagamentos_model');
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $this->data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        if ($this->data['pagamento']) {
+            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
+        }
 
         $this->data['view'] = 'vendas/visualizarVenda';
         return $this->layout();
     }
+
+    public function gerarPagamentoGerencianetBoleto()
+    {
+        
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idVenda'),
+            $this->input->post('titleVenda'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+        
+        print_r($pagamento);
+    }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarLink(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('idVenda'),
+            $this->input->post('titleLink'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
+    }
+
 
     public function imprimir()
     {
@@ -208,16 +267,20 @@ class Vendas extends MY_Controller
             redirect(base_url());
         }
 
+        $this->load->model('vendas_model');
+
         $id = $this->input->post('id');
-        if ($id == null) {
+        $venda = $this->vendas_model->getById($id);
+        if ($venda == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
             redirect(site_url('vendas/gerenciar/'));
         }
 
-        $this->load->model('vendas_model');
-
         $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
         $this->vendas_model->delete('vendas', 'idVendas', $id);
+        if ((int) $venda->faturado === 1) {
+            $this->vendas_model->delete('lancamentos', 'descricao', "Fatura de Venda - #${id}");
+        }
 
         log_info('Removeu uma venda. ID: ' . $id);
 

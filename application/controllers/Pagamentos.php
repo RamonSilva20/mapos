@@ -138,10 +138,13 @@ class Pagamentos extends MY_Controller
         $this->load->model('mapos_model');
         $this->data['pagamento'] = $this->pagamentos_model->getById($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+
         $this->data['view'] = 'pagamentos/visualizarPagamento';
+
         return $this->layout();
     }
 
+   
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dPagamento')) {

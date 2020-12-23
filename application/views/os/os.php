@@ -46,7 +46,7 @@
         </span>
         <h5>Ordens de Serviço</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>

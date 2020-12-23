@@ -4,25 +4,30 @@ use Libraries\Gateways\Contracts\GatewayPagamento;
 
 class MercadoPago implements GatewayPagamento
 {
-    public function getPreference($access_token, $idOs, $title = 'Pagamento da OS', $unit_price, $quantity = 1)
+    public function getPreference($access_token, $id, $title, $unit_price, $quantity)
     {
+        try {
+            //code...
+            // SDK de Mercado Pago
+            // Configura credenciais
+            MercadoPago\SDK::setAccessToken($access_token);
 
-        // SDK de Mercado Pago
-        // Configura credenciais
-        MercadoPago\SDK::setAccessToken($access_token);
+            # Criar um objeto preferência
+            $this->preference = new MercadoPago\Preference();
 
-        # Criar um objeto preferência
-        $this->preference = new MercadoPago\Preference();
+            $item = new MercadoPago\Item();
+            $item->id = $id;
+            $item->title = $title . ' ' . $id;
+            $item->quantity = $quantity;
+            $item->unit_price = $unit_price;
+            $this->preference->items = [$item];
 
-        $item = new MercadoPago\Item();
-        $item->id = $idOs;
-        $item->title = $title . $idOs;
-        $item->quantity = $quantity;
-        $item->unit_price = $unit_price;
-        $this->preference->items = [$item];
-
-        # Salvar e postar a preferência
-        $this->preference->save();
+            # Salvar e postar a preferência
+            $this->preference->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            echo '<div id="msgConexao" class=" alert alert-danger"> Precisa de conexão com a internet para gerar pagamento!</div>';
+        }
         return $this->preference;
     }
 }

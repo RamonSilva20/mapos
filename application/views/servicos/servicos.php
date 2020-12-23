@@ -9,7 +9,7 @@
         </span>
         <h5>Serviços</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <table class="table table-bordered ">
             <thead>
                 <tr style="backgroud-color: #2D335B">

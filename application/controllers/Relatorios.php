@@ -62,11 +62,10 @@ class Relatorios extends MY_Controller
 
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
-        $data['title'] = 'Relatório de Clientes Custumizado';
+        $data['title'] = 'Relatório de Clientes Customizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
-        //$this->load->view('relatorios/imprimir/imprimirClientes', $data);
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
         pdf_create($html, 'relatorio_clientes' . date('d/m/y'), true);
     }
@@ -186,14 +185,18 @@ class Relatorios extends MY_Controller
     {
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
-
-        if ($de <= $ate) {
-            $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
-            $this->load->helper('mpdf');
-            $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
-            pdf_create($html, 'etiquetas_' . $de . '_' . $ate, true);
-        } else {
-            $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
+        try {
+            if ($de <= $ate) {
+                $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
+                $this->load->helper('mpdf');
+                $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
+                pdf_create($html, 'etiquetas_' . $de . '_' . $ate, true);
+            } else {
+                $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
+                redirect('produtos');
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
             redirect('produtos');
         }
     }
@@ -717,9 +720,57 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de vendas.');
             redirect(base_url());
         }
-        $data['vendas'] = $this->Relatorios_model->vendasRapid();
+
+        $format = $this->input->get('format');
+        $isXls = $format === 'xls';
+        $vendas = $this->Relatorios_model->vendasRapid($isXls);
+        $totalVendas = 0;
+        foreach ($vendas as $venda) {
+            $totalVendas += $isXls
+                ? floatval($venda['valorTotal'])
+                : floatval($venda->valorTotal);
+        }
+
+        if ($format == 'xls') {
+            $vendasFormatadas = array_map(function ($item) {
+                return [
+                    'cliente' => $item['nomeCliente'],
+                    'total' => $item['valorTotal'] ?: 0,
+                    'data' => $item['dataVenda'],
+                    'vendedor' => $item['nome'],
+                ];
+            }, $vendas);
+
+            $cabecalho = [
+                'Cliente' => 'string',
+                'Total' => 'price',
+                'Data' => 'YYYY-MM-DD',
+                'Vendedor' => 'string',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendasFormatadas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                $totalVendas,
+            ]);
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_vendas.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['vendas'] = $vendas;
+        $data['total_vendas'] = $totalVendas;
         $data['emitente'] = $this->Mapos_model->getEmitente();
-        $data['title'] = 'Relatório de Clientes Custumizado';
+        $data['title'] = 'Relatório de Vendas Rápido';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
@@ -737,10 +788,57 @@ class Relatorios extends MY_Controller
         $dataFinal = $this->input->get('dataFinal');
         $cliente = $this->input->get('cliente');
         $responsavel = $this->input->get('responsavel');
+        $format = $this->input->get('format');
 
-        $data['vendas'] = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel);
+        $isXls = $format === 'xls';
+        $vendas = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel, $isXls);
+        $totalVendas = 0;
+        foreach ($vendas as $venda) {
+            $totalVendas += $isXls
+                ? floatval($venda['valorTotal'])
+                : floatval($venda->valorTotal);
+        }
+
+        if ($format == 'xls') {
+            $vendasFormatadas = array_map(function ($item) {
+                return [
+                    'cliente' => $item['nomeCliente'],
+                    'total' => $item['valorTotal'] ?: 0,
+                    'data' => $item['dataVenda'],
+                    'vendedor' => $item['nome'],
+                ];
+            }, $vendas);
+
+            $cabecalho = [
+                'Cliente' => 'string',
+                'Total' => 'price',
+                'Data' => 'YYYY-MM-DD',
+                'Vendedor' => 'string',
+            ];
+
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendasFormatadas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                $totalVendas,
+            ]);
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_vendas.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['vendas'] = $vendas;
+        $data['total_vendas'] = $totalVendas;
         $data['emitente'] = $this->Mapos_model->getEmitente();
-        $data['title'] = 'Relatório de Vendas Custumizado';
+        $data['title'] = 'Relatório de Vendas Customizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');

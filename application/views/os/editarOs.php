@@ -15,6 +15,10 @@
         margin-top: 0;
         margin-bottom: 0;
     }
+
+    textarea {
+        resize: vertical;
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -25,7 +29,7 @@
                 </span>
                 <h5>Editar OS</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
@@ -409,6 +413,10 @@
                     <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
                     <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
                 </div>
+            </div>
+            <div class="span12" style="margin-left: 0">
+                <label for="observacoes">Observações</label>
+                <textarea class="span12" id="observacoes" name="observacoes"></textarea>
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">

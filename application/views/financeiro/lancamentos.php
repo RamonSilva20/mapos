@@ -19,6 +19,10 @@ $periodo = $this->input->get('periodo');
   input.valid {
     border-color: #5bb75b;
   }
+
+  textarea {
+    resize: vertical;
+  }
 </style>
 
 
@@ -70,8 +74,8 @@ $periodo = $this->input->get('periodo');
     </div>
 
     <div class="span2">
-      <label>Cliente <i class="fas fa-user tip-top" title="Cliente."></i></label>
-      <input type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+      <label>Cliente/Fornecedor <i class="fas fa-user tip-top" title="Cliente."></i></label>
+      <input id="cliente_fornecedor" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
     </div>
 
     <div class="span2 pull-right">
@@ -91,7 +95,7 @@ $periodo = $this->input->get('periodo');
 
     </div>
 
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
 
 
       <table class="table table-bordered " id="divLancamentos">
@@ -103,6 +107,7 @@ $periodo = $this->input->get('periodo');
             <th>Descrição</th>
             <th>Vencimento</th>
             <th>Status</th>
+            <th>Observações</th>
             <th>Valor</th>
             <th>Ações</th>
           </tr>
@@ -134,11 +139,12 @@ $periodo = $this->input->get('periodo');
               echo '<td>' . $r->descricao . '</td>';
               echo '<td>' . $vencimento . '</td>';
               echo '<td>' . $status . '</td>';
+              echo '<td>' . $r->observacoes . '</td>';
               echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
               echo '<td>';
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
               }
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                   echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
@@ -195,6 +201,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="cliente" type="text" name="cliente" />
         </div>
 
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes" name="observacoes"></textarea>
+        </div>
 
       </div>
       <div class="span12" style="margin-left: 0">
@@ -262,6 +272,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="fornecedor" type="text" name="fornecedor" />
         </div>
 
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes" name="observacoes"></textarea>
+        </div>
 
       </div>
       <div class="span12" style="margin-left: 0">
@@ -332,7 +346,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="fornecedorEditar" type="text" name="fornecedor" />
         </div>
 
-
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes_edit" name="observacoes"></textarea>
+        </div>
       </div>
       <div class="span12" style="margin-left: 0">
         <div class="span4" style="margin-left: 0">
@@ -525,6 +542,7 @@ $periodo = $this->input->get('periodo');
       $("#idEditar").val($(this).attr('idLancamento'));
       $("#descricaoEditar").val($(this).attr('descricao'));
       $("#fornecedorEditar").val($(this).attr('cliente'));
+      $("#observacoes_edit").val($(this).attr('observacoes'));
       $("#valorEditar").val($(this).attr('valor'));
       $("#vencimentoEditar").val($(this).attr('vencimento'));
       $("#pagamentoEditar").val($(this).attr('pagamento'));
@@ -594,6 +612,14 @@ $periodo = $this->input->get('periodo');
           $('#vencimento_de').val(dayjs().startOf('year').locale('pt-br').format('DD/MM/YYYY'));
           $('#vencimento_ate').val(dayjs().endOf('year').locale('pt-br').format('DD/MM/YYYY'));
           break;
+      }
+    });
+
+    $("#cliente_fornecedor").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteFornecedor",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#cliente_fornecedor").val(ui.item.value);
       }
     });
   });

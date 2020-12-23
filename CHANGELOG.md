@@ -4,6 +4,73 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.23.0] - 2020-12-17
+
+## Added
+- Adicionado a opção de gerar o PDF do Boleto. [@willph](https://github.com/willph)
+- Adicionado cor na Agenda OS. [@willph](https://github.com/willph)
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido do form os client id e secret em OS e vendas. [@willph](https://github.com/willph)
+- Corrigido bug que quebrava a exibição da pagina por causa de um erro de exception ao clicar gerar etiqueta. [@willph](https://github.com/willph)
+- Corrigido observações e observações para cliente em vendas e melhorado visualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido exibição de modal de conformação de exclusão de credenciais de pagamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.22.0] - 2020-12-13
+
+## Added
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## [4.21.0] - 2020-12-10
+
+## Added
+- Implementado pagamento via gerencianet. [@willph](https://github.com/willph)
+
+## [4.20.2] - 2020-12-06
+
+## Fixed
+- Adequação para permitir editar observações de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.20.1] - 2020-11-10
+
+## Fixed
+- Correção de filtro de cliente/fornecedor que não funcionava com caracteres especiais. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.20.0] - 2020-11-08
+
+## Added
+- Adicionado observações em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado autocomplete de cliente/fornecedor em listagem de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Adequação para excluir os lançamentos financeiros ao excluir uma OS/Venda faturada. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para permitir adicionar produtos/serviços na OS com preço zerado. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.19.0] - 2020-10-26
+
+## Added
+- Implementado possibilidade de visualizar/editar/excluir OS pelo calendário de OS. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido SDK de PayPal abandonada. [@willph](https://github.com/willph)
+- Atualizado SDK de mercado pago. [@willph](https://github.com/willph)
+
+## [4.18.1] - 2020-10-18
+
+## Fixed
+- Corrigido exibição de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
+## [4.18.0] - 2020-10-17
+
+## Fixed
+- Corrigido bug de visualização de sidebar em mobile. [@visaotec](https://github.com/visaotec)
+- Corrigido exibição de ícones em mobile. [@visaotec](https://github.com/visaotec)
+
+## Added
+- Implementado relatório de vendas (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado campo de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
 ## [4.17.1] - 2020-10-05
 
 ## Fixed

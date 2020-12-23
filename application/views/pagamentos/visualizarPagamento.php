@@ -9,8 +9,8 @@
                 <h5>Credencial de Pagamento</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePagamento')) {
-    echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
-} ?>
+                        echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
+                    } ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -18,20 +18,7 @@
                     <div class="invoice-head">
                         <table class="table">
                             <tbody>
-                                <?php if ($emitente == null) { ?>
-                                    <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php
-                                                            } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                        <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo $emitente[0]->cnpj; ?> </br>
-                                                <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
-                                    </tr>
-                                <?php
-                                } ?>
+
                             </tbody>
                         </table>
                         <table class="table">
