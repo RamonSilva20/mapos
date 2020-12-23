@@ -69,7 +69,7 @@ $totalProdutos = 0; ?>
                                                 </span>
                                                 <span><?php echo $result->nome ?></span> <br />
                                                 <span>Contato: <?php echo $result->telefone_usuario ?></span><br />
-                                                <span>Email: <?php echo $result->email_responsavel ?></span>
+                                                <span>Email: <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
