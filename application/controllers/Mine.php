@@ -221,9 +221,12 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
+        $this->load->model('pagamentos_model');
+
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
@@ -231,8 +234,62 @@ class Mine extends CI_Controller
             redirect('mine/painel');
         }
 
+        if ($data['pagamento']) {
+            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
+        }
+        
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
+    }
+
+    public function gerarPagamentoGerencianetBoleto()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idOs'),
+            $this->input->post('titleBoleto'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
+    }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarLink(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('idOs'),
+            $this->input->post('titleLink'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+
+        print_r($pagamento);
     }
 
     public function imprimirOs($id = null)
@@ -268,15 +325,21 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('vendas_model');
+        $this->load->model('pagamentos_model');
+
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
         }
-
+        if ($data['pagamento']) {
+            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
+        }
+        
         $data['output'] = 'conecte/visualizar_compra';
         $this->load->view('conecte/template', $data);
     }
