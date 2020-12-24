@@ -5,6 +5,24 @@ $(function () {
     $('.cnpjEmitente').mask('00.000.000/0000-00', { reverse: true });
 });
 
+
+$(function () {
+    if ($('.cpfcnpj').val() != null) {
+        var cpfcnpj = $('.cpfcnpj').val().length;
+        if (cpfcnpj == "14") {
+            $(".cpfcnpj").prop('disabled', true);
+        }
+    }
+    if ($('.cpfUser').val() != null) {
+        var cpfUser = $('.cpfUser').val().length;
+        if (cpfUser == "14") {
+            $(".cpfcnpj").prop('disabled', true);
+            $(".cpfUser").prop('disabled', true);
+        }
+    }
+
+});
+
 $(function () {
     var telefoneN = function (val) {
         return val.replace(/\D/g, '').length > 10 ? '(00)00000-0000' : '(00)0000-00009';
@@ -20,7 +38,7 @@ $(function () {
         var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
         $('#telefone').val(clipboardCurrentData);
     });
-    
+
 });
 
 $(function () {
@@ -167,7 +185,7 @@ $(document).ready(function () {
                         // Força uma atualizacao do endereco via cep
                         document.getElementById("cep").focus();
                         if ($("#nomeCliente").val() != null) {
-                        document.getElementById("nomeCliente").focus();
+                            document.getElementById("nomeCliente").focus();
                         }
                         if ($("#nomeEmitente").val() != null) {
                             document.getElementById("nomeEmitente").focus();
