@@ -6,7 +6,8 @@ class Migration_add_cep_to_emitente_table extends CI_Migration
     {
         $this->dbforge->add_column('emitente', [
             'cep' => [
-                'type' => 'VARCHAR(20)',
+                'type' => 'VARCHAR',
+                'constraint' => '20',
                 'null' => true,
                 'default' => null,
             ],
