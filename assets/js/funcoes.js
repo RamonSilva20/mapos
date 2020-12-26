@@ -2,6 +2,25 @@ $(function () {
     $("#celular").mask("(00)00000-0000")
     $("#cep").mask("00000-000")
     $('.cpfUser').mask('000.000.000-00', { reverse: true });
+    $('.cnpjEmitente').mask('00.000.000/0000-00', { reverse: true });
+});
+
+
+$(function () {
+    if ($('.cpfcnpj').val() != null) {
+        var cpfcnpj = $('.cpfcnpj').val().length;
+        if (cpfcnpj == "14") {
+            $(".cpfcnpj").prop('disabled', true);
+        }
+    }
+    if ($('.cpfUser').val() != null) {
+        var cpfUser = $('.cpfUser').val().length;
+        if (cpfUser == "14") {
+            $(".cpfcnpj").prop('disabled', true);
+            $(".cpfUser").prop('disabled', true);
+        }
+    }
+
 });
 
 $(function () {
@@ -19,7 +38,7 @@ $(function () {
         var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
         $('#telefone').val(clipboardCurrentData);
     });
-    
+
 });
 
 $(function () {
@@ -151,20 +170,35 @@ $(document).ready(function () {
                 success: function (dados) {
                     if (dados.status == "OK") {
                         //Atualiza os campos com os valores da consulta.
-                        $("#nomeCliente").val(capital_letter(dados.nome));
-                        $("#cep").val(dados.cep.replace(/\D/g, ''));
+                        if ($("#nomeCliente").val() != null) {
+                            $("#nomeCliente").val(capital_letter(dados.nome));
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            $("#nomeEmitente").val(capital_letter(dados.nome));
+                        }
+                        $("#cep").val(dados.cep.replace(/\./g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
                         $("#numero").val(dados.numero);
                         $("#complemento").val(capitalizeFirstLetter(dados.complemento));
-                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\D/g, ''));
+                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
 
                         // Força uma atualizacao do endereco via cep
                         document.getElementById("cep").focus();
-                        document.getElementById("nomeCliente").focus();
+                        if ($("#nomeCliente").val() != null) {
+                            document.getElementById("nomeCliente").focus();
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            document.getElementById("nomeEmitente").focus();
+                        }
                     } //end if.
                     else {
                         //CEP pesquisado não foi encontrado.
-                        $("#nomeCliente").val("");
+                        if ($("#nomeCliente").val() != null) {
+                            $("#nomeCliente").val("");
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            $("#nomeEmitente").val("");
+                        }
                         $("#cep").val("");
                         $("#email").val("");
                         $("#numero").val("");
@@ -180,7 +214,12 @@ $(document).ready(function () {
                 },
                 error: function () {
                     ///CEP pesquisado não foi encontrado.
-                    $("#nomeCliente").val("");
+                    if ($("#nomeCliente").val() != null) {
+                        $("#nomeCliente").val("");
+                    }
+                    if ($("#nomeEmitente").val() != null) {
+                        $("#nomeEmitente").val("");
+                    }
                     $("#cep").val("");
                     $("#email").val("");
                     $("#numero").val("");
