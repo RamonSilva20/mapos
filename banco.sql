@@ -526,6 +526,7 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   `telefone` VARCHAR(20) NULL ,
   `email` VARCHAR(255) NULL ,
   `url_logo` VARCHAR(225) NULL ,
+  `cep` VARCHAR(20) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
