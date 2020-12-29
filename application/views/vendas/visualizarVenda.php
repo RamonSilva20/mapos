@@ -76,9 +76,9 @@
                                                 <span>
                                                     <?php echo $result->nome ?></span> <br />
                                                 <span>Telefone:
-                                                    <?php echo $result->telefone ?></span><br />
+                                                    <?php echo $result->telefone_usuario ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->emailUser ?></span>
+                                                    <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -147,7 +147,7 @@
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
 
-                            $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico), $quantidade = 1);
+                            $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idVendas, 'Pagamento da Venda', ($totalProdutos + $totalServico), $quantidade = 1);
                             if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
                                 echo '<form action="' . site_url() . '" method="POST">
                             <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="' . $preference->id . '" data-button-label="Gerar Pagamento">
@@ -161,7 +161,9 @@
                 </div>
             </div>
         </div>
-        <a href="#myModalFormaPagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
+        <?php if ($pagamento->nome != "MercadoPago") { ?>
+            <a href="#myModalFormaPagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
+        <?php } ?>
         <div class="modal fade" id="myModalFormaPagamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

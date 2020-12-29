@@ -4,6 +4,17 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.24.0] - 2020-12-27
+
+## Added
+- Máscara em CNPJ no menu adicionar e editar emitente. [@willph](https://github.com/willph)
+- Adicionado campo CEP em Emitente para facilitar preenchimento e organizado controller, model e bd para aceitar novo campo. [@willph](https://github.com/willph)
+- Adaptado função javascript para buscar dados do CNPJ em Cliente e Emitente. [@willph](https://github.com/willph)
+- Adicionado botão para pesquisar e preencher os dados da empresa automaticamente em cadastro/editar do emitente. [@willph](https://github.com/willph)
+
+## Fixed
+- Correção de bug na area do cliente nos campos telefone e email em visualizarOs e visualizarVenda. [@willph](https://github.com/willph)
+
 ## [4.23.0] - 2020-12-17
 
 ## Added

@@ -69,7 +69,7 @@ $totalProdutos = 0; ?>
                                                 </span>
                                                 <span><?php echo $result->nome ?></span> <br />
                                                 <span>Contato: <?php echo $result->telefone_usuario ?></span><br />
-                                                <span>Email: <?php echo $result->email_responsavel ?></span>
+                                                <span>Email: <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -252,9 +252,9 @@ $totalProdutos = 0; ?>
 
     </div>
 </div>
-
-<a href="#myModalFormaPagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
-
+<?php if ($pagamento->nome != "MercadoPago") { ?>
+    <a href="#myModalFormaPagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
+<?php } ?>
 <div class="modal fade" id="myModalFormaPagamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
