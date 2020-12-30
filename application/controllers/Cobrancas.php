@@ -42,8 +42,7 @@ class Cobrancas extends MY_Controller
         $this->data['results'] = $this->cobrancas_model->get('cobrancas', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'cobrancas/cobrancas';
-
-
+        
         return $this->layout();
     }
 
@@ -56,9 +55,6 @@ class Cobrancas extends MY_Controller
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
         $this->load->model('pagamentos_model');
-
-
-
         $change_id = $this->input->post('charge_id');
         if ($change_id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir cobrança.');
@@ -110,26 +106,19 @@ class Cobrancas extends MY_Controller
         $obj = json_decode(json_encode($pagamento), false);
 
         $data = [
-
             'status' => $obj->data->status,
-
         ];
 
         if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
             $this->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
             log_info('Alterou um status de cobrança. ID' .  $change_id);
-
-
             //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
             if ($obj->data->status == "paid" || $obj->data->status == "settled") {
-
                 //TODO: dar baixa no lançamento caso exista
             }
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
         }
-
-
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -144,10 +133,7 @@ class Cobrancas extends MY_Controller
         $this->load->model('pagamentos_model');
 
         $change_id = $this->input->post('confirma_id');
-
-
         $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
 
         $pagamento = $this->GerencianetSdk->confirmarPagamento(
             $change_id,
@@ -162,10 +148,8 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('success', 'Pagamento da cobrança confirmada com sucesso!');
         } else {
             $this->session->set_flashdata('error', $obj->errorDescription);
-
             redirect(site_url('cobrancas/cobrancas/'));
         }
-
         //Pegamos o retorno para atualizar o banco
         $pagamento = $this->GerencianetSdk->receberInfo(
             $change_id,
@@ -177,25 +161,17 @@ class Cobrancas extends MY_Controller
         $obj = json_decode(json_encode($pagamento), false);
 
         $data = [
-
             'status' => $obj->data->status,
-
         ];
 
         if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
-
             //TODO: fazer a baixa do financeiro
-
             log_info('Alterou um status de cobrança. ID' .  $change_id);
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
         }
-
-
         redirect(site_url('cobrancas/cobrancas/'));
     }
-
-
 
     public function cancelar()
     {
@@ -208,10 +184,7 @@ class Cobrancas extends MY_Controller
         $this->load->model('pagamentos_model');
 
         $change_id = $this->input->post('cancela_id');
-
-
         $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
         $pagamento = $this->GerencianetSdk->cancelarTransacao(
             $change_id,
             $defaultPayment->client_id,
@@ -221,9 +194,6 @@ class Cobrancas extends MY_Controller
         $pagamento = json_decode($pagamento, true);
         $obj = json_decode(json_encode($pagamento), false);
 
-
-        //print_r($obj);
-
         if ($obj->code == '200') {
             $this->session->set_flashdata('success', 'Cobrança cancelada com sucesso!');
         } else {
@@ -231,30 +201,22 @@ class Cobrancas extends MY_Controller
 
             redirect(site_url('cobrancas/cobrancas/'));
         }
-
         //Pegamos o retorno para atualizar o banco
         $pagamento = $this->GerencianetSdk->receberInfo(
             $change_id,
             $defaultPayment->client_id,
             $defaultPayment->client_secret
         );
-
         $pagamento = json_decode($pagamento, true);
         $obj = json_decode(json_encode($pagamento), false);
-
         $data = [
-
             'status' => $obj->data->status,
-
         ];
-
         if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
             log_info('Alterou um status de cobrança. ID' .  $change_id);
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
         }
-
-
         redirect(site_url('cobrancas/cobrancas/'));
     }
 }
