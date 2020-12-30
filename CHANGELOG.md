@@ -8,7 +8,8 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 - Adicionado módulo para gerenciar as cobranças emitidas por boleto/link. [@seitbnao](https://github.com/seitbnao)
-
+## Fixed
+- Corrigido problema na geração da cobrança a partir da ordem de serviço. [@seitbnao](https://github.com/seitbnao)
 
 ## [4.24.0] - 2020-12-27
 
