@@ -40,5 +40,5 @@ ALTER TABLE `cobrancas`
 --
 ALTER TABLE `cobrancas`
   ADD CONSTRAINT `fk_cobrancas_vendas1` FOREIGN KEY (`vendas_id`) REFERENCES `vendas` (`idVendas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
+
  
