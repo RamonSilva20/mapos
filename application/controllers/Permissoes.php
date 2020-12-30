@@ -120,6 +120,12 @@ class Permissoes extends MY_Controller
                 'rVenda' => $this->input->post('rVenda'),
                 'rFinanceiro' => $this->input->post('rFinanceiro'),
 
+
+                'aCobranca' => $this->input->post('aCobranca'),
+                'eCobranca' => $this->input->post('eCobranca'),
+                'dCobranca' => $this->input->post('dCobranca'),
+                'vCobranca' => $this->input->post('vCobranca'),
+
             ];
             $permissoes = serialize($permissoes);
 
@@ -215,6 +221,11 @@ class Permissoes extends MY_Controller
                 'rOs' => $this->input->post('rOs'),
                 'rVenda' => $this->input->post('rVenda'),
                 'rFinanceiro' => $this->input->post('rFinanceiro'),
+
+                'aCobranca' => $this->input->post('aCobranca'),
+                'eCobranca' => $this->input->post('eCobranca'),
+                'dCobranca' => $this->input->post('dCobranca'),
+                'vCobranca' => $this->input->post('vCobranca'),
 
             ];
             $permissoes = serialize($permissoes);

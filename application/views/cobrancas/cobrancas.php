@@ -65,7 +65,7 @@
                             echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Confirmar pagamento"><i class="fas fa-check-circle"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda') && $r->barcode != '') {
-                            echo '<a style="margin-right: 1%" href="' . $r->payment_url . '" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
                             echo '<a href="#modal-excluir" role="button" data-toggle="modal" charge_id="' . $r->charge_id . '" class="btn btn-danger tip-top" title="Excluir cobrança"><i class="fas fa-trash-alt"></i></a>';

@@ -27,7 +27,7 @@ class Cobrancas extends MY_Controller
 
     public function cobrancas()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobrancas.');
             redirect(base_url());
         }
@@ -49,7 +49,7 @@ class Cobrancas extends MY_Controller
 
     public function excluir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dCobranca')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir cobranças');
             redirect(site_url('cobrancas/cobrancas/'));
         }
@@ -89,7 +89,7 @@ class Cobrancas extends MY_Controller
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
             redirect(base_url());
         }
@@ -137,7 +137,7 @@ class Cobrancas extends MY_Controller
 
     public function confirmarPagamento()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para confirmar pagamento da cobrança.');
             redirect(base_url());
         }
@@ -201,7 +201,7 @@ class Cobrancas extends MY_Controller
 
     public function cancelar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para cancelar cobrança.');
             redirect(base_url());
         }

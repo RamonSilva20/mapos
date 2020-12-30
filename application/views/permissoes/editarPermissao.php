@@ -295,6 +295,58 @@
                                  
                                 </tr>
 
+
+
+                                <tr><td colspan="4"></td></tr>
+                                
+                                <tr>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['vCobranca'])) {
+    if ($permissoes['vCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="vCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Cobranças</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aCobranca'])) {
+    if ($permissoes['aCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="aCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Cobranças</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['eCobranca'])) {
+    if ($permissoes['eCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="eCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Cobranças</span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dCobranca'])) {
+    if ($permissoes['dCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="dCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Cobranças</span>
+                                        </label>
+                                    </td>
+                                 
+                                </tr>
+
                                 <tr><td colspan="4"></td></tr>
                                 
                                 <tr>
