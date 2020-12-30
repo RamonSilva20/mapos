@@ -1,3 +1,4 @@
+
 --
 -- Estrutura da tabela `cobrancas`
 --
@@ -19,26 +20,26 @@ CREATE TABLE `cobrancas` (
   `link` varchar(255) NOT NULL,
   `payment` varchar(64) NOT NULL,
   `pdf` varchar(255) DEFAULT NULL,
-  `vendas_id` int(11) NOT NULL
+  `vendas_id` int(11) DEFAULT NULL,
+  `os_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- 
+
+--
+-- Índices para tabelas despejadas
+--
+
 --
 -- Índices para tabela `cobrancas`
 --
 ALTER TABLE `cobrancas`
-  ADD PRIMARY KEY (`idCobranca`),
-  ADD KEY `fk_cobrancas_vendas1_idx` (`vendas_id`);
- 
+  ADD PRIMARY KEY (`idCobranca`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
 --
 -- AUTO_INCREMENT de tabela `cobrancas`
 --
 ALTER TABLE `cobrancas`
-  MODIFY `idCobranca` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
- 
---
--- Limitadores para a tabela `cobrancas`
---
-ALTER TABLE `cobrancas`
-  ADD CONSTRAINT `fk_cobrancas_vendas1` FOREIGN KEY (`vendas_id`) REFERENCES `vendas` (`idVendas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
- 
+  MODIFY `idCobranca` int(4) NOT NULL AUTO_INCREMENT;

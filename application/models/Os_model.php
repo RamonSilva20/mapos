@@ -273,4 +273,12 @@ class Os_model extends CI_Model
         $this->db->order_by('idAnotacoes', 'desc');
         return $this->db->get('anotacoes_os')->result();
     }
+
+    public function getCobrancas($id = null)
+    {
+        $this->db->select('cobrancas.*');
+        $this->db->from('cobrancas');
+        $this->db->where('os_id', $id);
+        return $this->db->get()->result();
+    }
 }

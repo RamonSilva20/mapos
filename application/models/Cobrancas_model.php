@@ -19,10 +19,9 @@ class Cobrancas_model extends CI_Model
     
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields,'vendas.*');
+        $this->db->select($fields,'vendas.*,os.*');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
-        $this->db->join('vendas', 'vendas.idVendas = '.$table.'.vendas_id');
         $this->db->order_by('idCobranca', 'desc');
         if ($where) {
             $this->db->where($where);
@@ -33,6 +32,7 @@ class Cobrancas_model extends CI_Model
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
+ 
 
     public function getById($id)
     {
