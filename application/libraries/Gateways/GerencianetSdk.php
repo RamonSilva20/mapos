@@ -318,7 +318,7 @@ class GerencianetSdk
 
         try {
             $api = new Gerencianet($options);
-            $charge = $api->cancelCharge($param, []);
+            $charge = $api->cancelCharge($param, $param);
             return json_encode($charge);
         } catch (GerencianetException $e) {
             $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);

@@ -56,6 +56,9 @@ class Cobrancas extends MY_Controller
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
         $this->load->model('pagamentos_model');
+
+
+
         $change_id = $this->input->post('charge_id');
         if ($change_id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir cobrança.');
@@ -118,8 +121,11 @@ class Cobrancas extends MY_Controller
             log_info('Alterou um status de cobrança. ID' .  $change_id);
 
 
-            //Cobrança foi paga ou foi confirmada de forma manual, então damo baixa 
+            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa 
             if ($obj->data->status == "paid" || $obj->data->status == "settled") {
+
+                //TODO: dar baixa no lançamento caso exista
+
             }
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -128,13 +134,73 @@ class Cobrancas extends MY_Controller
 
         redirect(site_url('cobrancas/cobrancas/'));
     }
-    public function cancelar()
+
+    public function confirmarPagamento()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para confirmar pagamento da cobrança.');
+            redirect(base_url());
         }
 
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $this->load->model('pagamentos_model');
+
+        $change_id = $this->input->post('confirma_id');
+
+
+        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
+
+
+        $pagamento = $this->GerencianetSdk->confirmarPagamento(
+            $change_id,
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $obj = json_decode(json_encode($pagamento), FALSE);
+
+        if ($obj->code == '200') {
+            $this->session->set_flashdata('success', 'Pagamento da cobrança confirmada com sucesso!');
+        } else {
+            $this->session->set_flashdata('error', $obj->errorDescription);
+
+            redirect(site_url('cobrancas/cobrancas/'));
+        }
+
+        //Pegamos o retorno para atualizar o banco
+        $pagamento = $this->GerencianetSdk->receberInfo(
+            $change_id,
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $obj = json_decode(json_encode($pagamento), FALSE);
+
+        $data = [
+
+            'status' => $obj->data->status,
+
+        ];
+
+        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id',  $change_id) == true) {
+
+            //TODO: fazer a baixa do financeiro
+
+            log_info('Alterou um status de cobrança. ID' .  $change_id);
+        } else {
+            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+        }
+
+
+        redirect(site_url('cobrancas/cobrancas/'));
+    }
+
+
+
+    public function cancelar()
+    {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para cancelar cobrança.');
             redirect(base_url());
@@ -143,10 +209,11 @@ class Cobrancas extends MY_Controller
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
         $this->load->model('pagamentos_model');
 
-        $change_id = intval($this->uri->segment(3));
+        $change_id = $this->input->post('cancela_id');
+
+
         $defaultPayment = $this->pagamentos_model->getPagamentos(0);
 
-        //Cancelamos o pagamento
         $pagamento = $this->GerencianetSdk->cancelarTransacao(
             $change_id,
             $defaultPayment->client_id,
@@ -155,6 +222,9 @@ class Cobrancas extends MY_Controller
 
         $pagamento = json_decode($pagamento, true);
         $obj = json_decode(json_encode($pagamento), FALSE);
+
+
+        //print_r($obj);
 
         if ($obj->code == '200') {
             $this->session->set_flashdata('success', 'Cobrança cancelada com sucesso!');

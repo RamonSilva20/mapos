@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.24.1] - 2020-12-30
+
+## Added
+- Adicionado módulo para gerenciar as cobranças emitidas por boleto/link. [@seitbnao](https://github.com/seitbnao)
+
+
 ## [4.24.0] - 2020-12-27
 
 ## Added

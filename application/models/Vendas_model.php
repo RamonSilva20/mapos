@@ -55,6 +55,13 @@ class Vendas_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function getCobrancas($id = null)
+    {
+        $this->db->select('cobrancas.*');
+        $this->db->from('cobrancas');
+        $this->db->where('vendas_id', $id);
+        return $this->db->get()->result();
+    }
     
     public function add($table, $data, $returnId = false)
     {

@@ -167,9 +167,16 @@ class Vendas extends MY_Controller
         return $this->layout();
     }
 
+
     public function gerarPagamentoGerencianetBoleto()
     {
-        
+        $cobrancas_vendas = $this->vendas_model->getCobrancas($this->input->post('idVenda'));
+        if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
+            $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste pagamento, verifique em Financeiro/Cobranças');
+            redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
+        }
+
+
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
         $this->load->model('pagamentos_model');
@@ -193,12 +200,41 @@ class Vendas extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-        
+
+        $obj = json_decode($pagamento);
+
+        if ($obj->code == 200) {
+            $data = [
+                'barcode' => $obj->data->barcode,
+                'link' => $obj->data->link,
+                'pdf' => $obj->data->pdf->charge,
+                'expire_at' => $obj->data->expire_at,
+                'charge_id' => $obj->data->charge_id,
+                'status' => $obj->data->status,
+                'total' =>  $this->input->post('totalValor'),
+                'payment' => $obj->data->payment,
+                'vendas_id' => $this->input->post('idVenda'),
+            ];
+            if ($this->vendas_model->add('cobrancas', $data) == true) {
+
+                log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
+                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/boleto verifique a conexão com a internet');
+            redirect(base_url());
+        }
         print_r($pagamento);
     }
 
     public function gerarPagamentoGerencianetLink()
     {
+        $cobrancas_vendas = $this->vendas_model->getCobrancas($this->input->post('idVenda'));
+        if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
+            $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste pagamento, verifique em Financeiro/Cobranças');
+            redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
+        }
+
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
@@ -214,6 +250,32 @@ class Vendas extends MY_Controller
             intval($this->input->post('quantidade'))
         );
 
+        $obj = json_decode($pagamento);
+        if ($obj->code == 200) {
+            $data = [
+
+                'charge_id' => $obj->data->charge_id,
+                'status' => $obj->data->status,
+                'total' =>  $this->input->post('totalValor'),
+                'custom_id' => $obj->data->custom_id,
+                'payment_url' => $obj->data->payment_url,
+                'payment_method' => $obj->data->payment_method,
+                'conditional_discount_date' => $obj->data->conditional_discount_date,
+                'request_delivery_address' => $obj->data->request_delivery_address,
+                'message' => $obj->data->message,
+                'expire_at' => $obj->data->expire_at,
+                'created_at' => $obj->data->created_at,
+                'vendas_id' => $this->input->post('idVenda'),
+            ];
+            if ($this->vendas_model->add('cobrancas', $data) == true) {
+
+                log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
+                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/link verifique a conexão com a internet');
+            redirect(base_url());
+        }
         print_r($pagamento);
     }
 
