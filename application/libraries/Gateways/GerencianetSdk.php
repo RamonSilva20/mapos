@@ -3,6 +3,10 @@
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
 
+/* Define se vai ser produção ou ambiente de testes */
+
+define('ENABLE_SENDBOX', true);
+
 class GerencianetSdk
 {
     public function gerarBoleto(
@@ -51,7 +55,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = producao)
+                'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = producao)
             ];
 
             $item_1 = [
@@ -157,7 +161,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $item_1 = [
@@ -195,7 +199,7 @@ class GerencianetSdk
 
                 $api = new Gerencianet($options);
                 $response = $api->linkCharge($params, $body);
-                echo json_encode($response);
+                return json_encode($response);
             } else {
             }
         } catch (GerencianetException $e) {
@@ -254,7 +258,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => true
+                'sandbox' => ENABLE_SENDBOX
             ];
 
             $instructions = ["Pago em qualquer loterica", "Pagar até o vencimento", "Caixa após vencimento não aceitar"]; // Pode colocar até quatro instrunções
@@ -287,6 +291,148 @@ class GerencianetSdk
 
             $api = new Gerencianet($options);
             $charge = $api->createCarnet([], $body);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+    /* Cancela um boleto, link ou carne */
+    public function cancelarTransacao($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->cancelCharge($param, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+    /* Faz o envio de uma cobranca seja link ou boletos para um email */
+    public function enviarBoletoEmail($charge_id, $emailClient, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        $body = [
+            'email' => $emailClient
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->resendBillet($param, $body);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+    /* Retorna todas as informações de uma transação */
+    public function receberInfo($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->detailCharge($param, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+    /* Marca uma transação como paga */
+    public function confirmarPagamento($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->settleCharge($param, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            return json_encode($error);
+        }
+    }
+    /* Marca uma parcela de algum carne como paga */
+    public function confirmarPagamentoCarne($charge_id, $n_parcela, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $params = ['id' => $charge_id, 'parcel' => $n_parcela];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->settleCarnetParcel($params, []);
             return json_encode($charge);
         } catch (GerencianetException $e) {
             $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
