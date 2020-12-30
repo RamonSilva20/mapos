@@ -350,7 +350,6 @@ class Os extends MY_Controller
                 'os_id' => $this->input->post('idOs'),
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
-
                 log_info('Cobrança (OS) criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
@@ -401,7 +400,6 @@ class Os extends MY_Controller
                 'os_id' => $this->input->post('idOs'),
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
-
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }

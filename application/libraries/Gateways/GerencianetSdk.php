@@ -29,7 +29,7 @@ class GerencianetSdk
     ) {
         try {
             if ($phoneClient != "" || $phoneClient != null) {
-                $phoneClient = preg_replace("/[^0-9]/", "",  $phoneClient);
+                $phoneClient = preg_replace("/[^0-9]/", "", $phoneClient);
             } else {
                 throw new Exception('O celular do cliente precisa ser preenchido.');
             }
@@ -66,7 +66,7 @@ class GerencianetSdk
             $items = [
                 $item_1
             ];
-            $metadata = array('notification_url' => 'http://mapos.com.br/'); //Url de notificações
+            $metadata = ['notification_url' => 'http://mapos.com.br/']; //Url de notificações
             $address = [
                 "street" => $addressRua,
                 "number" => $addressNumero,
@@ -101,14 +101,14 @@ class GerencianetSdk
 
             /*$discount = [ // configuração de descontos
             'type' => 'currency', // tipo de desconto a ser aplicado
-            'value' => 599 // valor de desconto 
+            'value' => 599 // valor de desconto
         ];
         $configurations = [ // configurações de juros e mora
             'fine' => 200, // porcentagem de multa
             'interest' => 33 // porcentagem de juros
         ];
         $conditional_discount = [ // configurações de desconto condicional
-            'type' => 'percentage', // seleção do tipo de desconto 
+            'type' => 'percentage', // seleção do tipo de desconto
             'value' => 500, // porcentagem de desconto
             'until_date' => '2019-08-30' // data máxima para aplicação do desconto
         ];*/
@@ -134,10 +134,10 @@ class GerencianetSdk
             $pay_charge = $api->oneStep([], $body);
             return json_encode($pay_charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -150,7 +150,6 @@ class GerencianetSdk
         $unit_price,
         $quantity
     ) {
-
         $clientId = $client_Id; // informe seu Client_Id
         $clientSecret = $client_Secret; // informe seu Client_Secret
 
@@ -182,7 +181,6 @@ class GerencianetSdk
 
 
             if ($charge["code"] == 200) {
-
                 $params = ['id' => $charge["data"]["charge_id"]];
 
                 $body = [
@@ -203,10 +201,10 @@ class GerencianetSdk
             } else {
             }
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -231,7 +229,7 @@ class GerencianetSdk
 
         try {
             if ($phoneClient != "" || $phoneClient != null) {
-                $phoneClient = preg_replace("/[^0-9]/", "",  $phoneClient);
+                $phoneClient = preg_replace("/[^0-9]/", "", $phoneClient);
             } else {
                 throw new Exception('O celular do cliente precisa ser preenchido.');
             }
@@ -293,10 +291,10 @@ class GerencianetSdk
             $charge = $api->createCarnet([], $body);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -321,10 +319,10 @@ class GerencianetSdk
             $charge = $api->cancelCharge($param, $param);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -353,10 +351,10 @@ class GerencianetSdk
             $charge = $api->resendBillet($param, $body);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -381,10 +379,10 @@ class GerencianetSdk
             $charge = $api->detailCharge($param, []);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -409,10 +407,10 @@ class GerencianetSdk
             $charge = $api->settleCharge($param, []);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -435,10 +433,10 @@ class GerencianetSdk
             $charge = $api->settleCarnetParcel($params, []);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }

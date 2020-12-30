@@ -244,7 +244,6 @@ class Mine extends CI_Controller
 
     public function gerarPagamentoGerencianetBoleto()
     {
-
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
         $this->load->model('pagamentos_model');
@@ -274,7 +273,6 @@ class Mine extends CI_Controller
 
     public function gerarPagamentoGerencianetLink()
     {
-
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
 
         $this->load->model('pagamentos_model');

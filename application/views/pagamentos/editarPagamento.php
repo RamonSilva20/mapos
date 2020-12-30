@@ -29,11 +29,11 @@
                             <?php echo form_hidden('idPag', $result->idPag) ?>
                             <select name="nomePag" id="nomePag" class="span12">
                                 <option <?php if ($result->nome == 'MercadoPago') {
-                                            echo 'selected';
-                                        } ?> value="MercadoPago">MercadoPago</option>
+    echo 'selected';
+} ?> value="MercadoPago">MercadoPago</option>
                                 <option <?php if ($result->nome == 'GerenciaNet') {
-                                            echo 'selected';
-                                        } ?> value="GerenciaNet">GerenciaNet</option>
+    echo 'selected';
+} ?> value="GerenciaNet">GerenciaNet</option>
                             </select>
                         </div>
                         <div class="span5">

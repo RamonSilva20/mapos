@@ -65,7 +65,6 @@ class Cobrancas extends MY_Controller
             redirect(site_url('cobrancas/cobrancas/'));
         }
         if ($this->cobrancas_model->delete('cobrancas', 'charge_id', $change_id) == true) {
-
             $defaultPayment = $this->pagamentos_model->getPagamentos(0);
             //Cancelamos o pagamento caso esteja em aberto
             $pagamento = $this->GerencianetSdk->cancelarTransacao(
@@ -108,7 +107,7 @@ class Cobrancas extends MY_Controller
         );
 
         $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), FALSE);
+        $obj = json_decode(json_encode($pagamento), false);
 
         $data = [
 
@@ -116,16 +115,15 @@ class Cobrancas extends MY_Controller
 
         ];
 
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id',  $change_id) == true) {
+        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
             $this->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
             log_info('Alterou um status de cobrança. ID' .  $change_id);
 
 
-            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa 
+            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
             if ($obj->data->status == "paid" || $obj->data->status == "settled") {
 
                 //TODO: dar baixa no lançamento caso exista
-
             }
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -158,7 +156,7 @@ class Cobrancas extends MY_Controller
         );
 
         $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), FALSE);
+        $obj = json_decode(json_encode($pagamento), false);
 
         if ($obj->code == '200') {
             $this->session->set_flashdata('success', 'Pagamento da cobrança confirmada com sucesso!');
@@ -176,7 +174,7 @@ class Cobrancas extends MY_Controller
         );
 
         $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), FALSE);
+        $obj = json_decode(json_encode($pagamento), false);
 
         $data = [
 
@@ -184,7 +182,7 @@ class Cobrancas extends MY_Controller
 
         ];
 
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id',  $change_id) == true) {
+        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
 
             //TODO: fazer a baixa do financeiro
 
@@ -221,7 +219,7 @@ class Cobrancas extends MY_Controller
         );
 
         $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), FALSE);
+        $obj = json_decode(json_encode($pagamento), false);
 
 
         //print_r($obj);
@@ -242,7 +240,7 @@ class Cobrancas extends MY_Controller
         );
 
         $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), FALSE);
+        $obj = json_decode(json_encode($pagamento), false);
 
         $data = [
 
@@ -250,8 +248,7 @@ class Cobrancas extends MY_Controller
 
         ];
 
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id',  $change_id) == true) {
-
+        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
             log_info('Alterou um status de cobrança. ID' .  $change_id);
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';

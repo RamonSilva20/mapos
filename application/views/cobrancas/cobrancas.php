@@ -28,7 +28,7 @@
                         $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
                         
 
-                        $transactions_status = array(
+                        $transactions_status = [
                             "new" => "Cobrança / Assinatura gerada.",
                             "waiting" => "Aguardando a confirmação do pagamento.",
                             "paid" => "Pagamento confirmado.",
@@ -42,18 +42,16 @@
                             "active" => "Assinatura ativa. Todas as cobranças estão sendo geradas.",
                             "finished" => "Carnê está finalizado.",
                             "up_to_date" => "Carnê encontra-se em dia.",
-                        );
+                        ];
                       
                         echo '<tr>';
                         echo '<td>' . $r->charge_id . '</td>';
                         echo '<td>' . $dataVenda . '</td>';
 
-                        if($r->os_id != '')
-                        {
+                        if ($r->os_id != '') {
                             echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '">  Ordem de Serviço: #' . $r->os_id . '</a></td>';
                         }
-                        if($r->vendas_id != '')
-                        {
+                        if ($r->vendas_id != '') {
                             echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
                         }
                         
