@@ -13,6 +13,7 @@
                     <th>Data de Vencimento</th>
                     <th>Referência</th>
                     <th>Status</th>
+                    <th>Valor</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -56,6 +57,7 @@
                         }
                         
                         echo '<td>' .  $transactions_status[$r->status] . '</td>';
+                        echo '<td>R$ ' . number_format($r->total, 2, ',', '.') . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
                             echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->charge_id . '" class="btn tip-top" title="Cancelar cobrança"><i class="fas fa-power-off"></i></a>';
