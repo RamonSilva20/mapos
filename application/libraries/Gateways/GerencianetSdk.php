@@ -51,7 +51,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = producao)
+                'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = producao)
             ];
 
             $item_1 = [
@@ -156,7 +156,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $item_1 = [
@@ -252,7 +252,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => ENABLE_SENDBOX
+                'sandbox' => PAGAMENTOS_MODO_SANDBOX
             ];
 
             $instructions = ["Pago em qualquer loterica", "Pagar até o vencimento", "Caixa após vencimento não aceitar"]; // Pode colocar até quatro instrunções
@@ -303,7 +303,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $param = [
@@ -331,7 +331,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $param = [
@@ -363,7 +363,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $param = [
@@ -391,7 +391,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $param = [
@@ -419,7 +419,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => ENABLE_SENDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $params = ['id' => $charge_id, 'parcel' => $n_parcela];
