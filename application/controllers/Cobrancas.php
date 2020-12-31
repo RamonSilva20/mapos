@@ -42,7 +42,7 @@ class Cobrancas extends MY_Controller
         $this->data['results'] = $this->cobrancas_model->get('cobrancas', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'cobrancas/cobrancas';
-        
+
         return $this->layout();
     }
 
@@ -213,6 +213,7 @@ class Cobrancas extends MY_Controller
             'status' => $obj->data->status,
         ];
         if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
+            //TODO: dar baixa no lançamento caso exista
             log_info('Alterou um status de cobrança. ID' .  $change_id);
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';

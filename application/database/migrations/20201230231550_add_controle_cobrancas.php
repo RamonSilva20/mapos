@@ -4,7 +4,6 @@ class Migration_add_controle_cobrancas extends CI_Migration
 {
     public function up()
     {
-        ## Create Table cobrancas
         $this->dbforge->add_field([
             'idCobranca' => [
                 'type' => 'INT',
@@ -27,7 +26,7 @@ class Migration_add_controle_cobrancas extends CI_Migration
             ],
             'custom_id' => [
                 'type' => 'INT',
-                'constraint' => 4,
+                'constraint' => 11,
                 'null' => true,
             ],
             'expire_at' => [

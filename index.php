@@ -295,7 +295,8 @@ if (!isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) 
 }
 
 define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
-
+// Define se vai ser produção ou ambiente de testes
+define('ENABLE_SENDBOX', true);
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

@@ -308,7 +308,7 @@ class Os extends MY_Controller
     {
         $cobrancas_vendas = $this->os_model->getCobrancas($this->input->post('idOs'));
         if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
-            $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste OS, verifique em Financeiro/Cobranças');
+            $this->session->set_flashdata('error', 'Já existe cobrança veículadas neste OS, verifique em Financeiro/Cobranças');
             redirect(site_url('os/visualizar/' . $this->input->post('idOs')));
         }
 
@@ -364,7 +364,7 @@ class Os extends MY_Controller
     {
         $cobrancas_vendas = $this->os_model->getCobrancas($this->input->post('idOs'));
         if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
-            $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste OS, verifique em Financeiro/Cobranças');
+            $this->session->set_flashdata('error', 'Já existe cobrança veículadas neste OS, verifique em Financeiro/Cobranças');
             redirect(site_url('os/visualizar/' . $this->input->post('idOs')));
         }
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');

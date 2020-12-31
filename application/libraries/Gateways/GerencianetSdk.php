@@ -3,10 +3,6 @@
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
 
-/* Define se vai ser produção ou ambiente de testes */
-
-define('ENABLE_SENDBOX', true);
-
 class GerencianetSdk
 {
     public function gerarBoleto(
@@ -298,7 +294,7 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
-    /* Cancela um boleto, link ou carne */
+
     public function cancelarTransacao($charge_id, $client_Id, $client_Secret)
     {
         $clientId = $client_Id; // informe seu Client_Id
@@ -326,7 +322,7 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
-    /* Faz o envio de uma cobranca seja link ou boletos para um email */
+
     public function enviarBoletoEmail($charge_id, $emailClient, $client_Id, $client_Secret)
     {
         $clientId = $client_Id; // informe seu Client_Id
@@ -358,7 +354,7 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
-    /* Retorna todas as informações de uma transação */
+
     public function receberInfo($charge_id, $client_Id, $client_Secret)
     {
         $clientId = $client_Id; // informe seu Client_Id
@@ -386,7 +382,7 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
-    /* Marca uma transação como paga */
+
     public function confirmarPagamento($charge_id, $client_Id, $client_Secret)
     {
         $clientId = $client_Id; // informe seu Client_Id
@@ -414,7 +410,7 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
-    /* Marca uma parcela de algum carne como paga */
+
     public function confirmarPagamentoCarne($charge_id, $n_parcela, $client_Id, $client_Secret)
     {
         $clientId = $client_Id; // informe seu Client_Id

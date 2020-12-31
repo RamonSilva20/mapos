@@ -176,9 +176,7 @@ class Vendas extends MY_Controller
             redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
         }
 
-
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-
         $this->load->model('pagamentos_model');
         $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
 
@@ -202,7 +200,6 @@ class Vendas extends MY_Controller
         );
 
         $obj = json_decode($pagamento);
-
         if ($obj->code == 200) {
             $data = [
                 'barcode' => $obj->data->barcode,
@@ -234,9 +231,7 @@ class Vendas extends MY_Controller
             redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
         }
 
-
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-
         $this->load->model('pagamentos_model');
         $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
 
@@ -252,7 +247,6 @@ class Vendas extends MY_Controller
         $obj = json_decode($pagamento);
         if ($obj->code == 200) {
             $data = [
-
                 'charge_id' => $obj->data->charge_id,
                 'status' => $obj->data->status,
                 'total' =>  $this->input->post('totalValor'),

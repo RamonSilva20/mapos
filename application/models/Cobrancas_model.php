@@ -28,8 +28,8 @@ class Cobrancas_model extends CI_Model
         }
         
         $query = $this->db->get();
-        
         $result =  !$one  ? $query->result() : $query->row();
+
         return $result;
     }
  
@@ -44,6 +44,7 @@ class Cobrancas_model extends CI_Model
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -88,6 +89,3 @@ class Cobrancas_model extends CI_Model
         return $this->db->count_all($table);
     }
 }
-
-/* End of file cobrancas_model.php */
-/* Location: ./application/models/cobrancas_model.php */
