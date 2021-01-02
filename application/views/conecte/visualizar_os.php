@@ -201,7 +201,6 @@ $totalProdutos = 0; ?>
 
 if ($pagamento) {
     if ($totalProdutos || $totalServico) {
-
         $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico), $quantidade = 1);
         if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
             echo '<form action="' . site_url() . '" method="POST">
@@ -241,7 +240,6 @@ if ($pagamento) {
                     <?php
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
-
                             if ($pagamento->nome == 'GerenciaNet') {
                                 echo '<form id="form-gerar-pagamento-gerencianet-boleto" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetboleto" method="POST">
                                 <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
@@ -269,9 +267,7 @@ if ($pagamento) {
                     <?php
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
-
                             if ($pagamento->nome == 'GerenciaNet') {
-
                                 echo '<form id="form-gerar-pagamento-gerencianet-link" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetlink" method="POST">
                     <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
                     <input type="hidden" id="titleLink" name="titleLink" value="OS:">

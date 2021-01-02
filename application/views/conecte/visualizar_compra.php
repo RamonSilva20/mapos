@@ -135,7 +135,6 @@
 
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
-
                             $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idVendas, 'Pagamento da Venda', ($totalProdutos + $totalServico), $quantidade = 1);
                             if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
                                 echo '<form action="' . site_url() . '" method="POST">
@@ -177,9 +176,7 @@
                             <?php
                             if ($pagamento) {
                                 if ($totalProdutos) {
-
                                     if ($pagamento->nome == 'GerenciaNet') {
-
                                         echo '<form id="form-gerar-pagamento-gerencianet-boleto" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianetboleto" method="POST">
             <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
             <input type="hidden" id="emailCliente" name="emailCliente" value="' . $result->email . '">
@@ -206,9 +203,7 @@
                             <?php
                             if ($pagamento) {
                                 if ($totalProdutos || $totalServico) {
-
                                     if ($pagamento->nome == 'GerenciaNet') {
-
                                         echo '<form id="form-gerar-pagamento-gerencianet-link" action="' . base_url() . 'index.php/vendas/gerarpagamentogerencianetlink" method="POST">
                     <input type="hidden" id="idVenda" name="idVenda" value="' . $result->idVendas . '">
                     <input type="hidden" id="titleLink" name="titleLink" value="Venda:">

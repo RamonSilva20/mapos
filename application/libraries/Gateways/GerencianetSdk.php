@@ -25,7 +25,7 @@ class GerencianetSdk
     ) {
         try {
             if ($phoneClient != "" || $phoneClient != null) {
-                $phoneClient = preg_replace("/[^0-9]/", "",  $phoneClient);
+                $phoneClient = preg_replace("/[^0-9]/", "", $phoneClient);
             } else {
                 throw new Exception('O celular do cliente precisa ser preenchido.');
             }
@@ -51,7 +51,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = producao)
+                'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = producao)
             ];
 
             $item_1 = [
@@ -62,7 +62,7 @@ class GerencianetSdk
             $items = [
                 $item_1
             ];
-            $metadata = array('notification_url' => 'http://mapos.com.br/'); //Url de notificações
+            $metadata = ['notification_url' => 'http://mapos.com.br/']; //Url de notificações
             $address = [
                 "street" => $addressRua,
                 "number" => $addressNumero,
@@ -97,14 +97,14 @@ class GerencianetSdk
 
             /*$discount = [ // configuração de descontos
             'type' => 'currency', // tipo de desconto a ser aplicado
-            'value' => 599 // valor de desconto 
+            'value' => 599 // valor de desconto
         ];
         $configurations = [ // configurações de juros e mora
             'fine' => 200, // porcentagem de multa
             'interest' => 33 // porcentagem de juros
         ];
         $conditional_discount = [ // configurações de desconto condicional
-            'type' => 'percentage', // seleção do tipo de desconto 
+            'type' => 'percentage', // seleção do tipo de desconto
             'value' => 500, // porcentagem de desconto
             'until_date' => '2019-08-30' // data máxima para aplicação do desconto
         ];*/
@@ -130,10 +130,10 @@ class GerencianetSdk
             $pay_charge = $api->oneStep([], $body);
             return json_encode($pay_charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -146,7 +146,6 @@ class GerencianetSdk
         $unit_price,
         $quantity
     ) {
-
         $clientId = $client_Id; // informe seu Client_Id
         $clientSecret = $client_Secret; // informe seu Client_Secret
 
@@ -157,7 +156,7 @@ class GerencianetSdk
         $options = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'sandbox' => true // altere conforme o ambiente (true = desenvolvimento e false = produção)
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
         ];
 
         $item_1 = [
@@ -178,7 +177,6 @@ class GerencianetSdk
 
 
             if ($charge["code"] == 200) {
-
                 $params = ['id' => $charge["data"]["charge_id"]];
 
                 $body = [
@@ -195,14 +193,14 @@ class GerencianetSdk
 
                 $api = new Gerencianet($options);
                 $response = $api->linkCharge($params, $body);
-                echo json_encode($response);
+                return json_encode($response);
             } else {
             }
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }
@@ -227,7 +225,7 @@ class GerencianetSdk
 
         try {
             if ($phoneClient != "" || $phoneClient != null) {
-                $phoneClient = preg_replace("/[^0-9]/", "",  $phoneClient);
+                $phoneClient = preg_replace("/[^0-9]/", "", $phoneClient);
             } else {
                 throw new Exception('O celular do cliente precisa ser preenchido.');
             }
@@ -254,7 +252,7 @@ class GerencianetSdk
             $options = [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'sandbox' => true
+                'sandbox' => PAGAMENTOS_MODO_SANDBOX
             ];
 
             $instructions = ["Pago em qualquer loterica", "Pagar até o vencimento", "Caixa após vencimento não aceitar"]; // Pode colocar até quatro instrunções
@@ -289,10 +287,152 @@ class GerencianetSdk
             $charge = $api->createCarnet([], $body);
             return json_encode($charge);
         } catch (GerencianetException $e) {
-            $error = array("code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription);
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
             return json_encode($error);
         } catch (Exception $e) {
-            $error = array("error" => "Error", "errorDescription" => $e->getMessage());
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
+
+    public function cancelarTransacao($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->cancelCharge($param, $param);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
+
+    public function enviarBoletoEmail($charge_id, $emailClient, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        $body = [
+            'email' => $emailClient
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->resendBillet($param, $body);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
+
+    public function receberInfo($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->detailCharge($param, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
+
+    public function confirmarPagamento($charge_id, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $param = [
+            'id' => $charge_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->settleCharge($param, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
+
+    public function confirmarPagamentoCarne($charge_id, $n_parcela, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $params = ['id' => $charge_id, 'parcel' => $n_parcela];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->settleCarnetParcel($params, []);
+            return json_encode($charge);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
             return json_encode($error);
         }
     }

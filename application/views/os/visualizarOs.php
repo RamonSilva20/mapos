@@ -11,15 +11,15 @@ $totalProdutos = 0; ?>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
-                    } ?>
+    echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
+} ?>
 
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-                    } ?>
+    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
+    echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+} ?>
 
                     <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
                     <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php  } ?>
@@ -238,7 +238,6 @@ $totalProdutos = 0; ?>
 
         if ($pagamento) {
             if ($totalProdutos || $totalServico) {
-
                 $preference = @$this->MercadoPago->getPreference($pagamento->access_token, $result->idOs, 'Pagamento da OS', ($totalProdutos + $totalServico), $quantidade = 1);
                 if ($pagamento->nome == 'MercadoPago' && isset($preference->id)) {
                     echo '<form action="' . site_url() . '" method="POST">
@@ -279,7 +278,6 @@ $totalProdutos = 0; ?>
                     <?php
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
-
                             if ($pagamento->nome == 'GerenciaNet') {
                                 echo '<form id="form-gerar-pagamento-gerencianet-boleto" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetboleto" method="POST">
                                 <input type="hidden" id="nomeCliente" name="nomeCliente" value="' . $result->nomeCliente . '">
@@ -307,9 +305,7 @@ $totalProdutos = 0; ?>
                     <?php
                     if ($pagamento) {
                         if ($totalProdutos || $totalServico) {
-
                             if ($pagamento->nome == 'GerenciaNet') {
-
                                 echo '<form id="form-gerar-pagamento-gerencianet-link" action="' . base_url() . 'index.php/os/gerarpagamentogerencianetlink" method="POST">
                     <input type="hidden" id="idOs" name="idOs" value="' . $result->idOs . '">
                     <input type="hidden" id="titleLink" name="titleLink" value="OS:">
