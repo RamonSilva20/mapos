@@ -372,7 +372,12 @@ CREATE TABLE `cobrancas` (
   `pdf` varchar(255) DEFAULT NULL,
   `vendas_id` int(11) DEFAULT NULL,
   `os_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idCobranca`)
+  PRIMARY KEY (`idCobranca`),
+  INDEX `fk_cobrancas_os1` (`os_id` ASC),
+  CONSTRAINT `fk_cobrancas_os1` FOREIGN KEY (`os_id`) REFERENCES `os` (`idOs`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  INDEX `fk_cobrancas_vendas1` (`vendas_id` ASC),
+  CONSTRAINT `fk_cobrancas_vendas1` FOREIGN KEY (`vendas_id`) REFERENCES `vendas` (`idVendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
