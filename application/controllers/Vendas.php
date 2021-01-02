@@ -173,7 +173,10 @@ class Vendas extends MY_Controller
         $cobrancas_vendas = $this->vendas_model->getCobrancas($this->input->post('idVenda'));
         if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
             $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste pagamento, verifique em Financeiro/Cobranças');
-            redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
+            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Já existe uma cobrança desta venda'];
+
+            print_r(json_encode($json));
+            return;
         }
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
@@ -228,7 +231,10 @@ class Vendas extends MY_Controller
         $cobrancas_vendas = $this->vendas_model->getCobrancas($this->input->post('idVenda'));
         if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
             $this->session->set_flashdata('error', 'Já existe cobrança vículadas neste pagamento, verifique em Financeiro/Cobranças');
-            redirect(site_url('vendas/visualizar/' . $this->input->post('idVenda')));
+            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Já existe uma cobrança desta venda'];
+
+            print_r(json_encode($json));
+            return;
         }
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
