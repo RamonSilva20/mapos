@@ -98,6 +98,7 @@ class Os_model extends CI_Model
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
+        
         return $this->db->get()->row();
     }
 
@@ -107,6 +108,7 @@ class Os_model extends CI_Model
         $this->db->from('produtos_os');
         $this->db->join('produtos', 'produtos.idProdutos = produtos_os.produtos_id');
         $this->db->where('os_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -116,6 +118,7 @@ class Os_model extends CI_Model
         $this->db->from('servicos_os');
         $this->db->join('servicos', 'servicos.idServicos = servicos_os.servicos_id');
         $this->db->where('os_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -271,6 +274,16 @@ class Os_model extends CI_Model
     {
         $this->db->where('os_id', $os);
         $this->db->order_by('idAnotacoes', 'desc');
+
         return $this->db->get('anotacoes_os')->result();
+    }
+
+    public function getCobrancas($id = null)
+    {
+        $this->db->select('cobrancas.*');
+        $this->db->from('cobrancas');
+        $this->db->where('os_id', $id);
+
+        return $this->db->get()->result();
     }
 }

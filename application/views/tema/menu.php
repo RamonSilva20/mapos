@@ -54,6 +54,9 @@
         <ul>
           <li><a href="<?= site_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
         </ul>
+        <ul>
+          <li><a href="<?= site_url('cobrancas/cobrancas') ?>">Cobranças</a></li>
+        </ul>
       </li>
     <?php
     } ?>

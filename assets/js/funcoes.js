@@ -10,14 +10,13 @@ $(function () {
     if ($('.cpfcnpj').val() != null) {
         var cpfcnpj = $('.cpfcnpj').val().length;
         if (cpfcnpj == "14") {
-            $(".cpfcnpj").prop('disabled', true);
+            $(".cpfcnpj").prop('readonly', true);
         }
     }
     if ($('.cpfUser').val() != null) {
         var cpfUser = $('.cpfUser').val().length;
         if (cpfUser == "14") {
-            $(".cpfcnpj").prop('disabled', true);
-            $(".cpfUser").prop('disabled', true);
+            $(".cpfUser").prop('readonly', true);
         }
     }
 

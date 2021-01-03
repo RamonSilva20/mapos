@@ -203,6 +203,41 @@
                                         </td>
 
                                     </tr>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>
+                                            <label>
+                                                <input name="vCobranca" class="marcar" type="checkbox" checked="checked" value="1" />
+                                                <span class="lbl"> Visualizar Cobranças</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="aCobranca" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Adicionar Cobranças</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="eCobranca" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Editar Cobranças</span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            <label>
+                                                <input name="dCobranca" class="marcar" type="checkbox" value="1" />
+                                                <span class="lbl"> Excluir Cobranças</span>
+                                            </label>
+                                        </td>
+
+                                    </tr>
 
                                     <tr>
                                         <td colspan="4"></td>
