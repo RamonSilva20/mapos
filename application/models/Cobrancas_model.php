@@ -41,7 +41,7 @@ class Cobrancas_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
         $this->db->join('cobrancas', 'cobrancas.vendas_id = vendas.idVendas');
-        $this->db->join('cobrancas', 'cobrancas.os_id = os.isos');
+        $this->db->join('cobrancas', 'cobrancas.os_id = os.idOs');
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
