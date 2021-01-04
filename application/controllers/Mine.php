@@ -45,7 +45,7 @@ class Mine extends CI_Controller
             $cliente = $this->db->get('clientes');
             if ($cliente->num_rows() > 0) {
                 $cliente = $cliente->row();
-                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true];
+                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
                 $this->session->set_userdata($dados);
 
                 if ($ajax == true) {
@@ -172,6 +172,134 @@ class Mine extends CI_Controller
         $this->load->view('conecte/template', $data);
     }
 
+    public function cobrancas()
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        $data['menuCobrancas'] = 'cobrancas';
+        $this->load->library('pagination');
+
+        $config['base_url'] = base_url() . 'index.php/mine/cobrancas/';
+        $config['total_rows'] = $this->Conecte_model->count('cobrancas', $this->session->userdata('cliente_id'));
+        $config['per_page'] = 10;
+        $config['next_link'] = 'Próxima';
+        $config['prev_link'] = 'Anterior';
+        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
+        $config['full_tag_close'] = '</ul></div>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['first_link'] = 'Primeira';
+        $config['last_link'] = 'Última';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        $this->pagination->initialize($config);
+
+        $data['results'] = $this->Conecte_model->getCobrancas('cobrancas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
+
+        $data['output'] = 'conecte/cobrancas';
+        $this->load->view('conecte/template', $data);
+    }
+
+    public function atualizarcobranca($id = null)
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
+            redirect(base_url());
+        }
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $this->load->model('pagamentos_model');
+
+        $change_id = intval($this->uri->segment(3));
+        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
+
+        //Pegamos o retorno para atualizar o banco
+        $pagamento = $this->GerencianetSdk->receberInfo(
+            $change_id,
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $obj = json_decode(json_encode($pagamento), false);
+
+        $data = [
+            'status' => $obj->data->status,
+        ];
+
+        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
+            $this->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
+            log_info('Alterou um status de cobrança. ID' .  $change_id);
+            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
+            if ($obj->data->status == "paid" || $obj->data->status == "settled") {
+                //TODO: dar baixa no lançamento caso exista
+            }
+        } else {
+            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+        }
+        redirect(site_url('mine/cobrancas/'));
+    }
+
+    public function enviarcobranca($id = null)
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
+            redirect(base_url());
+        }
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $this->load->model('pagamentos_model');
+
+        $change_id = intval($this->uri->segment(3));
+        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
+        //Pegamos o retorno para atualizar o banco
+        $pagamento = $this->GerencianetSdk->enviarBoletoEmail(
+            $change_id,
+            $this->session->userdata('email'),
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $obj = json_decode(json_encode($pagamento), false);
+
+        if ($obj->code == 200) {
+            $this->session->set_flashdata('success', 'Cobrança enviada para o email: '.$this->session->userdata('email'));
+        } else {
+            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+        }
+        redirect(site_url('mine/cobrancas/'));
+    }
+
     public function os()
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
@@ -244,50 +372,18 @@ class Mine extends CI_Controller
 
     public function gerarPagamentoGerencianetBoleto()
     {
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-
-        $this->load->model('pagamentos_model');
-        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
-
-        $pagamento = $this->GerencianetSdk->gerarBoleto(
-            $pagamentoM->client_id,
-            $pagamentoM->client_secret,
-            $this->input->post('nomeCliente'),
-            $this->input->post('emailCliente'),
-            $this->input->post('documentoCliente'),
-            $this->input->post('celular_cliente'),
-            $this->input->post('ruaCliente'),
-            $this->input->post('numeroCliente'),
-            $this->input->post('bairroCliente'),
-            $this->input->post('cidadeCliente'),
-            $this->input->post('estadoCliente'),
-            $this->input->post('cepCliente'),
-            $this->input->post('idOs'),
-            $this->input->post('titleBoleto'),
-            $this->input->post('totalValor'),
-            intval($this->input->post('quantidade'))
-        );
-
-        print_r($pagamento);
+        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        print_r(json_encode($json));
+        
+        return;
     }
 
     public function gerarPagamentoGerencianetLink()
     {
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        print_r(json_encode($json));
 
-        $this->load->model('pagamentos_model');
-        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
-
-        $pagamento = $this->GerencianetSdk->gerarLink(
-            $pagamentoM->client_id,
-            $pagamentoM->client_secret,
-            $this->input->post('idOs'),
-            $this->input->post('titleLink'),
-            $this->input->post('totalValor'),
-            intval($this->input->post('quantidade'))
-        );
-
-        print_r($pagamento);
+        return;
     }
 
     public function imprimirOs($id = null)

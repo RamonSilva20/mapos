@@ -49,6 +49,9 @@
         <li class="<?php if (isset($menuVendas)) {
     echo 'active';
 }; ?>"><a href="<?php echo base_url() ?>index.php/mine/compras"><i class="icon fas fa-shopping-cart"></i> <span>Compras</span></a></li>
+        <li class="<?php if (isset($menuCobrancas)) {
+    echo 'active';
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class="icon fas fa-barcode"></i> <span>Cobranças</span></a></li>
         <li class=""><a href="<?php echo base_url() ?>index.php/mine/sair"><i class="icon fas fa-sign-out-alt"></i> <span>Sair</span></a></li>
 
     </ul>
