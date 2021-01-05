@@ -13,7 +13,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Permite atualizar o status de cobrança;[@seitbnao](https://github.com/seitbnao)
 - Bloqueia o cliente de gerar uma cobrança, sendo restrito apenas para o administrador;[@seitbnao](https://github.com/seitbnao)
 - Faz uma alteração na tabela cobrancas, para que a mesma receba o id do cliente.[@seitbnao](https://github.com/seitbnao)
-- Altera a versão do mapos de 4.25.0 para 4.25.1[@seitbnao](https://github.com/seitbnao)
+- Altera a versão do mapos de 4.25.1 para 4.26.0
 
 ## [4.25.1] - 2021-01-04
 
