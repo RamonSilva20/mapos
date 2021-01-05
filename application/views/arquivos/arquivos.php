@@ -34,7 +34,7 @@
             <h5>Arquivos</h5>
         </div>
         <div class="widget-content nopadding tab-content">
-            <table width="100%" class="table table-bordered ">
+            <table id="tabela" width="100%" class="table table-bordered ">
                 <thead>
                     <tr>
                         <th width="5%">#</th>

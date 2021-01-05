@@ -8,6 +8,14 @@
   <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
   <script src="<?= base_url(); ?>assets/js/matrix.js"></script>
 </body>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tabela').dataTable( {
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
+            }
+        } );
+} );
+</script>
 </html>
 

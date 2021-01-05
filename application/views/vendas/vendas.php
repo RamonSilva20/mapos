@@ -10,7 +10,7 @@
         <h5>Vendas</h5>
     </div>
     <div class="widget-content nopadding tab-content">
-        <table class="table table-bordered ">
+        <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr style="background-color: #2D335B">
                     <th>#</th>
@@ -55,8 +55,6 @@
                         echo '</td>';
                         echo '</tr>';
                     } ?>
-                <tr>
-                </tr>
             </tbody>
         </table>
     </div>
