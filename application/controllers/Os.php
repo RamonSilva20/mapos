@@ -338,8 +338,8 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
+        $os = $this->os_model->getById($this->input->post('idOs'));
         $obj = json_decode($pagamento);
-
         if ($obj->code == 200) {
             $data = [
                 'barcode' => $obj->data->barcode,
@@ -351,6 +351,7 @@ class Os extends MY_Controller
                 'total' =>  $this->input->post('totalValor'),
                 'payment' => $obj->data->payment,
                 'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança (OS) criada com suceso. ID: ' . $obj->data->charge_id);
@@ -386,9 +387,8 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-
+        $os = $this->os_model->getById($this->input->post('idOs'));
         $obj = json_decode($pagamento);
-
         if ($obj->code == 200) {
             $data = [
 
@@ -404,6 +404,7 @@ class Os extends MY_Controller
                 'expire_at' => $obj->data->expire_at,
                 'created_at' => $obj->data->created_at,
                 'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);

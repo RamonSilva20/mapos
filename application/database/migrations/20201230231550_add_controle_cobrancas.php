@@ -93,6 +93,11 @@ class Migration_add_controle_cobrancas extends CI_Migration
                 'constraint' => 11,
                 'null' => true,
             ],
+            'clientes_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true,
+            ],
         ]);
         $this->dbforge->add_key("idCobranca", true);
         $this->dbforge->create_table("cobrancas", true);
@@ -107,6 +112,13 @@ class Migration_add_controle_cobrancas extends CI_Migration
         $this->db->query('ALTER TABLE  `cobrancas` ADD CONSTRAINT `fk_cobrancas_vendas1`
 			FOREIGN KEY (`vendas_id`)
 			REFERENCES `vendas` (`idVendas`)
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION
+		');
+        $this->db->query('ALTER TABLE  `cobrancas` ADD INDEX `fk_cobrancas_clientes1` (`clientes_id` ASC)');
+        $this->db->query('ALTER TABLE  `cobrancas` ADD CONSTRAINT `fk_cobrancas_clientes1`
+			FOREIGN KEY (`clientes_id`)
+			REFERENCES `clientes` (`idClientes`)
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION
 		');
