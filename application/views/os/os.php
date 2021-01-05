@@ -48,7 +48,7 @@
     </div>
     <div class="widget-content nopadding tab-content">
         <div class="table-responsive">
-            <table id="tabela" class="table table-bordered ">
+            <table class="table table-bordered ">
                 <thead>
                     <tr style="background-color: #2D335B">
                         <th>N° OS</th>
