@@ -41,6 +41,7 @@
       </li>
     </ul>
 </div>
+
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon fas fa-bars"></i> Menu</a>
     <ul>
         <li class="<?php if (isset($menuPainel)) {
