@@ -220,4 +220,42 @@ class Cobrancas extends MY_Controller
         }
         redirect(site_url('cobrancas/cobrancas/'));
     }
+
+    public function visualizar()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
+            redirect(base_url());
+        }
+        $this->load->model('cobrancas_model');
+        $this->data['result'] = $this->cobrancas_model->getById($this->uri->segment(3));
+
+        if ($this->data['result'] == null) {
+            $this->session->set_flashdata('error', 'Produto não encontrado.');
+            redirect(site_url('cobrancas/visualizar/') . $this->uri->segment(3));
+        }
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $this->load->model('pagamentos_model');
+
+        $change_id = intval($this->uri->segment(3));
+        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
+
+        $pagamento = $this->GerencianetSdk->receberInfo(
+            $change_id,
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $this->data['gerencianet'] = json_decode(json_encode($pagamento), false);
+        $this->data['view'] = 'cobrancas/visualizarCobranca';
+
+        return $this->layout();
+    }
 }
