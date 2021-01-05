@@ -6,19 +6,15 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [4.25.1] - 2021-01-04
 
-## Added
-- Adiciona a cobrança ao lado do cliente;[@seitbnao](https://github.com/seitbnao)
-- Permite reenviar a cobrança por email;[@seitbnao](https://github.com/seitbnao)
-- Permite visualizar o boleto de cobrança;[@seitbnao](https://github.com/seitbnao)
-- Permite atualizar o status de cobrança;[@seitbnao](https://github.com/seitbnao)
-- Bloqueia o cliente de gerar uma cobrança, sendo restrito apenas para o administrador;[@seitbnao](https://github.com/seitbnao)
-- Faz uma alteração na tabela cobrancas, para que a mesma receba o id do cliente.[@seitbnao](https://github.com/seitbnao)
-- Altera a versão do mapos de 4.25.0 para 4.25.1[@seitbnao](https://github.com/seitbnao)
+## Fixed
+- Corrigido as permissões para que não ocorra erros após a instalação. [@seitbnao](https://github.com/seitbnao)
+- Corrigido o erro ao emitir o alerta de erro caso uma cobrança já esteja viculada a alguma venda/os. [@seitbnao](https://github.com/seitbnao)
 
 ## [4.25.0] - 2020-12-30
 
 ## Added
 - Adicionado módulo para gerenciar as cobranças emitidas por boleto/link. [@seitbnao](https://github.com/seitbnao)
+
 ## Fixed
 - Corrigido problema na geração da cobrança a partir da ordem de serviço. [@seitbnao](https://github.com/seitbnao)
 
