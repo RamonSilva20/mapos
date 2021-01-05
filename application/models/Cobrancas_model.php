@@ -36,16 +36,17 @@ class Cobrancas_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('vendas.*, clientes.*, Cobrancas.*,os.* clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->select('vendas.*, clientes.*, cobrancas.*,os.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-        $this->db->join('cobrancas', 'cobrancas.vendas_id = vendas.idVendas');
-        $this->db->join('cobrancas', 'cobrancas.os_id = os.idOs');
+        $this->db->join('cobrancas', 'cobrancas.clientes_id = vendas.clientes_id');
+        $this->db->join('os', 'os.idOs = cobrancas.os_id');
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
+        $this->db->or_where('cobrancas.charge_id', $id);
         $this->db->limit(1);
-
+        
         return $this->db->get()->row();
     }
 
