@@ -354,7 +354,7 @@ ENGINE = InnoDB;
 -- Estrutura da tabela `cobrancas`
 --
 CREATE TABLE `cobrancas` (
-  `idCobranca` int(11) NOT NULL,
+    `idCobranca` INT(11) NOT NULL AUTO_INCREMENT,
   `charge_id` int(11) DEFAULT NULL,
   `conditional_discount_date` date DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
