@@ -233,17 +233,18 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
         $this->load->model('cobrancas_model');
+
         $this->data['result'] = $this->cobrancas_model->getById($this->uri->segment(3));
 
         if ($this->data['result'] == null) {
-            $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('cobrancas/visualizar/') . $this->uri->segment(3));
+            $this->session->set_flashdata('error', 'Cobrança não encontrada.');
+            redirect(site_url('cobrancas/'));
         }
 
         $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
         $this->load->model('pagamentos_model');
 
-        $change_id = intval($this->uri->segment(3));
+        $change_id = intval($this->data['result']->charge_id);
         $defaultPayment = $this->pagamentos_model->getPagamentos(0);
 
         $pagamento = $this->GerencianetSdk->receberInfo(

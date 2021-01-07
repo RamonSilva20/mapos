@@ -63,7 +63,7 @@
                             echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->charge_id . '" class="btn tip-top" title="Cancelar cobrança"><i class="fas fa-power-off"></i></a>';
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
                             echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Confirmar pagamento"><i class="fas fa-check-circle"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Visualizar Cobrança"><i class="fas fa-eye"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->vendas_id . '" class="btn btn-inverse tip-top" title="Visualizar Cobrança"><i class="fas fa-eye"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
                             echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
