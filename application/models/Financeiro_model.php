@@ -19,8 +19,9 @@ class Financeiro_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields);
+        $this->db->select($fields.', usuarios.*');
         $this->db->from($table);
+        $this->db->join('usuarios', 'usuarios.idUsuarios = usuarios_id');
         $this->db->order_by('data_vencimento', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
@@ -48,6 +49,7 @@ class Financeiro_model extends CI_Model
 
         return (array) $this->db->get()->row();
     }
+
 
     public function getById($id)
     {

@@ -109,6 +109,7 @@ $periodo = $this->input->get('periodo');
             <th>Status</th>
             <th>Observações</th>
             <th>Valor</th>
+            <th>Modificado por</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -141,7 +142,7 @@ $periodo = $this->input->get('periodo');
               echo '<td>' . $status . '</td>';
               echo '<td>' . $r->observacoes . '</td>';
               echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
-
+              echo '<td>' . $r->nome == null ? 'Nenhum' : $r->nome . '</td>';
               echo '<td>';
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                   echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
