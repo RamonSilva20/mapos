@@ -81,6 +81,7 @@
                                 <option value="">Todos os Status</option>
                                 <option value="Aberto">Aberto</option>
                                 <option value="Faturado">Faturado</option>
+                                <option value="Negociação">Negociação</option>
                                 <option value="Orçamento">Orçamento</option>
                                 <option value="Em Andamento">Em Andamento</option>
                                 <option value="Finalizado">Finalizado</option>
@@ -329,7 +330,7 @@
                         },
                         series: [{
                             name: 'Receita Líquida',
-                            negativeColor: '#FF0000',
+                            negativeColor: '#00CED1',
                             data: [<?php echo($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
@@ -342,6 +343,57 @@
                                 <?php echo($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>
+                            ]
+                        },
+                        {
+                            name: 'Receita Bruta',
+                            negativeColor: '#32CD32',
+                            data: [<?php echo($vendas_mes->VALOR_JAN_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_FEV_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_MAR_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_ABR_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_MAI_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_JUN_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_JUL_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_AGO_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_SET_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_OUT_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_NOV_REC); ?>,
+                                <?php echo($vendas_mes->VALOR_DEZ_REC); ?>
+                            ]
+                        },
+                        {
+                            name: 'Despesas',
+                            negativeColor: '#FF0000',
+                            data: [<?php echo($vendas_mes->VALOR_JAN_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_FEV_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_MAR_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_ABR_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_MAI_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_JUN_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_JUL_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_AGO_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_SET_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_OUT_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_NOV_DES); ?>,
+                                <?php echo($vendas_mes->VALOR_DEZ_DES); ?>
+                            ]
+                        },
+                        {
+                            name: 'Inadimplência',
+                            negativeColor: '#8B008B',
+                            data: [<?php echo($vendas_mesinadipl->VALOR_JAN_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_FEV_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_MAR_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_ABR_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_MAI_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_JUN_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_JUL_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_AGO_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_SET_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_OUT_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_NOV_REC); ?>,
+                                <?php echo($vendas_mesinadipl->VALOR_DEZ_REC); ?>
                             ]
                         }]
                     });

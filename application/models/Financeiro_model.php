@@ -111,4 +111,18 @@ class Financeiro_model extends CI_Model
             echo json_encode($row_set);
         }
     }
+
+    public function autoCompleteClienteReceita($q)
+    {
+        $this->db->select('idClientes, nomeCliente');
+        $this->db->limit(5);
+        $this->db->like('nomeCliente', $q);
+        $query = $this->db->get('clientes');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['nomeCliente'], 'id' => $row['idClientes']];
+            }
+            echo json_encode($row_set);
+        }
+    }
 }

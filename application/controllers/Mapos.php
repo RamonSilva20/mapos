@@ -25,6 +25,7 @@ class Mapos extends MY_Controller
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['vendas_mes'] = $this->mapos_model->getEstatisticasVendasMes($this->input->get('year'));
+        $this->data['vendas_mesinadipl'] = $this->mapos_model->getEstatisticasVendasMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         return $this->layout();

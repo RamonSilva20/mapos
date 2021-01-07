@@ -196,6 +196,7 @@ $periodo = $this->input->get('periodo');
         <div class="span12" style="margin-left: 0">
           <label for="cliente">Cliente*</label>
           <input class="span12" id="cliente" type="text" name="cliente" />
+          <input class="span12" id="idCliente" type="hidden" name="idCliente" />
         </div>
 
         <div class="span12" style="margin-left: 0">
@@ -267,6 +268,7 @@ $periodo = $this->input->get('periodo');
         <div class="span12" style="margin-left: 0">
           <label for="fornecedor">Fornecedor / Empresa*</label>
           <input class="span12" id="fornecedor" type="text" name="fornecedor" />
+          <input class="span12" id="idFornecedor" type="hidden" name="idFornecedor" />
         </div>
 
         <div class="span12" style="margin-left: 0">
@@ -617,6 +619,23 @@ $periodo = $this->input->get('periodo');
       minLength: 1,
       select: function(event, ui) {
         $("#cliente_fornecedor").val(ui.item.value);
+        $("#idFornecedor").val(ui.item.id);
+      }
+    });
+    $("#cliente").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#cliente").val(ui.item.label);
+        $("#idCliente").val(ui.item.id);
+      }
+    });
+    $("#fornecedor").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#fornecedor").val(ui.item.label);
+        $("#idFornecedor").val(ui.item.id);
       }
     });
   });

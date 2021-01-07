@@ -81,7 +81,7 @@
                                 $dataFinal = "";
                             }
                             switch ($r->status) {
-                                case 'Negociação';
+                                case 'Negociação':
                                 case 'Aberto':
                                     $cor = '#00cd00';
                                     break;
