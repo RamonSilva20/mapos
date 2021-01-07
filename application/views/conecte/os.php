@@ -90,8 +90,7 @@ if (!$results) {
             $status = '<span class="label">Faturado</span>';
         } elseif ($r->status == "Negociação") {
             $status = '<span class="label">Negociação / Inadimplente</span>';
-        } 
-        else {
+        } else {
             $status = '<span class="label">Em Andamento</span>';
         }
         echo '<tr>';
