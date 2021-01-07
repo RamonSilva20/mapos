@@ -88,7 +88,10 @@ if (!$results) {
             $status = '<span class="label label-inverse">Cancelado</span>';
         } elseif ($r->status == "Faturado") {
             $status = '<span class="label">Faturado</span>';
-        } else {
+        } elseif ($r->status == "Negociação") {
+            $status = '<span class="label">Negociação / Inadimplente</span>';
+        } 
+        else {
             $status = '<span class="label">Em Andamento</span>';
         }
         echo '<tr>';

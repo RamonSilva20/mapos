@@ -430,6 +430,7 @@ class Mapos extends MY_Controller
                 case 'Aberto':
                     $cor = '#00cd00';
                     break;
+                case 'Negociação':
                 case 'Em Andamento':
                     $cor = '#436eee';
                     break;
