@@ -12,7 +12,7 @@
     $(document).ready(function() {
         $('#tabela').dataTable( {
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
+                "url": "<?= base_url(); ?>assets/js/dataTable_pt-br.json"
             }
         } );
 } );
