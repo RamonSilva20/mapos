@@ -138,6 +138,16 @@ class Mapos_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function getOsAndamento()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Em Andamento');
+        $this->db->limit(10);
+        return $this->db->get()->result();
+    }
+
     public function calendario($start, $end, $status = null)
     {
         $this->db->select(
