@@ -221,13 +221,7 @@ class Vendas extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            if ($obj->code >= 40000) {
-                $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
-                print_r(json_encode($json));
-
-                return;
-            }
-            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Falha ao gerar cobrança/link verifique a conexão com a internet'];
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
             return print_r(json_encode($json));
         }
         print_r($pagamento);
@@ -279,12 +273,7 @@ class Vendas extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            if ($obj->code >= 40000) {
-                $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
-                print_r(json_encode($json));
-                return;
-            }
-            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Falha ao gerar cobrança/link verifique a conexão com a internet'];
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
             return print_r(json_encode($json));
         }
         print_r($pagamento);
