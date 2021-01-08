@@ -551,8 +551,12 @@ class Os extends MY_Controller
         }
 
         if ($os->idCobranca != null) {
-            $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar ou excluir a cobrança primeiro!');
-            redirect(site_url('os/gerenciar/'));
+            if ($os->status == "canceled") {
+                $this->os_model->delete('cobrancas', 'os_id', $id);
+            } else {
+                $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar e/ou excluir a cobrança primeiro!');
+                redirect(site_url('vendas/gerenciar/'));
+            }
         }
 
         $this->os_model->delete('servicos_os', 'os_id', $id);

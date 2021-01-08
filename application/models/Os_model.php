@@ -104,7 +104,7 @@ class Os_model extends CI_Model
 
     public function getByIdCobrancas($id)
     {
-        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome,cobrancas.os_id,cobrancas.idCobranca');
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome,cobrancas.os_id,cobrancas.idCobranca,cobrancas.status');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
@@ -115,7 +115,7 @@ class Os_model extends CI_Model
         
         return $this->db->get()->row();
     }
-    
+
     public function getProdutos($id = null)
     {
         $this->db->select('produtos_os.*, produtos.*');
