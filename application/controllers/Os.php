@@ -358,8 +358,7 @@ class Os extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            if($obj->code >= 40000)
-            {
+            if ($obj->code >= 40000) {
                 $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
                 print_r(json_encode($json));
                 
@@ -418,8 +417,7 @@ class Os extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            if($obj->code >= 40000)
-            {
+            if ($obj->code >= 40000) {
                 $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
                 print_r(json_encode($json));
                 return;
