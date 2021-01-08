@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `categorias_id` INT NULL,
   `contas_id` INT NULL,
   `vendas_id` INT NULL,
+  `usuarios_id` INT NOT NULL,
   PRIMARY KEY (`idLancamentos`),
   INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC),
   INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC),
@@ -109,6 +110,11 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   CONSTRAINT `fk_lancamentos_contas1`
     FOREIGN KEY (`contas_id`)
     REFERENCES `contas` (`idContas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_usuarios1`
+    FOREIGN KEY (`usuarios_id`)
+    REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
