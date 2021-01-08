@@ -91,6 +91,19 @@ class Os_model extends CI_Model
 
     public function getById($id)
     {
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
+        $this->db->where('os.idOs', $id);
+        $this->db->limit(1);
+        
+        return $this->db->get()->row();
+    }
+
+    public function getByIdCobrancas($id)
+    {
         $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome,cobrancas.os_id,cobrancas.idCobranca');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
