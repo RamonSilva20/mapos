@@ -338,7 +338,11 @@ class Vendas extends MY_Controller
             redirect(site_url('vendas/gerenciar/'));
         }
 
-        $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
+        if($venda->idCobranca != null) {
+            $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta venda, deve cancelar ou excluir a cobrança primeiro!');
+            redirect(site_url('vendas/gerenciar/'));
+        }
+
         $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
         $this->vendas_model->delete('vendas', 'idVendas', $id);
         if ((int) $venda->faturado === 1) {
