@@ -338,7 +338,7 @@ class Vendas extends MY_Controller
             redirect(site_url('vendas/gerenciar/'));
         }
 
-        if($venda->idCobranca != null) {
+        if ($venda->idCobranca != null) {
             $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta venda, deve cancelar ou excluir a cobrança primeiro!');
             redirect(site_url('vendas/gerenciar/'));
         }

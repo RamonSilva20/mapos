@@ -547,7 +547,7 @@ class Os extends MY_Controller
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
 
-        if($os->idCobranca != null) {
+        if ($os->idCobranca != null) {
             $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar ou excluir a cobrança primeiro!');
             redirect(site_url('os/gerenciar/'));
         }
