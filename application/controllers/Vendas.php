@@ -334,8 +334,11 @@ class Vendas extends MY_Controller
         $id = $this->input->post('id');
         $venda = $this->vendas_model->getByIdCobrancas($id);
         if ($venda == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
-            redirect(site_url('vendas/gerenciar/'));
+            $venda = $this->vendas_model->getById($id);
+            if ($venda == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
+                redirect(site_url('vendas/gerenciar/'));
+            }
         }
 
         if ($venda->idCobranca != null) {

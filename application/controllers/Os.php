@@ -543,8 +543,11 @@ class Os extends MY_Controller
         $id = $this->input->post('id');
         $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-            redirect(base_url() . 'index.php/os/gerenciar/');
+            $os = $this->os_model->getById($id);
+            if ($os == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
+                redirect(base_url() . 'index.php/os/gerenciar/');
+            }
         }
 
         if ($os->idCobranca != null) {
