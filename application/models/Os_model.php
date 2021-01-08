@@ -115,7 +115,7 @@ class Os_model extends CI_Model
         
         return $this->db->get()->row();
     }
-
+    
     public function getProdutos($id = null)
     {
         $this->db->select('produtos_os.*, produtos.*');
