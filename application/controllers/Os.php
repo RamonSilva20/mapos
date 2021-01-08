@@ -358,6 +358,13 @@ class Os extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
+            if($obj->code >= 40000)
+            {
+                $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+                print_r(json_encode($json));
+                
+                return;
+            }
             $this->session->set_flashdata('error', 'Falha ao gerar cobrança/boleto verifique a conexão com a internet');
             redirect(base_url());
         }
@@ -411,6 +418,12 @@ class Os extends MY_Controller
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
+            if($obj->code >= 40000)
+            {
+                $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+                print_r(json_encode($json));
+                return;
+            }
             $this->session->set_flashdata('error', 'Falha ao gerar cobrança/link verifique a conexão com a internet');
             redirect(base_url());
         }
