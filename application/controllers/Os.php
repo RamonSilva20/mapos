@@ -557,6 +557,7 @@ class Os extends MY_Controller
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
 
+        $this->os_model->delete('cobrancas', 'os_id', $id);
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
