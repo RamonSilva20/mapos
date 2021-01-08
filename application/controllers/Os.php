@@ -886,6 +886,7 @@ class Os extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
             if ($this->os_model->add('lancamentos', $data) == true) {
