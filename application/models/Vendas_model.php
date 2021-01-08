@@ -130,6 +130,11 @@ class Vendas_model extends CI_Model
             }
             echo json_encode($row_set);
         }
+        else 
+        {
+            $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
+            echo json_encode($row_set);
+        }
     }
 
     public function autoCompleteUsuario($q)
