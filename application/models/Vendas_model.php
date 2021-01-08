@@ -129,9 +129,7 @@ class Vendas_model extends CI_Model
                 $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
             }
             echo json_encode($row_set);
-        }
-        else 
-        {
+        } else {
             $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
             echo json_encode($row_set);
         }
