@@ -4,6 +4,74 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.26.1] - 2021-01-09
+
+## Fixed
+- Corrige um erro que bloqueava o preenchimento do cliente em adicionar vendas. [@seitbnao](https://github.com/seitbnao)
+
+## [4.26.0] - 2021-01-05
+
+## Added
+- Adiciona a cobrança ao lado do cliente. [@seitbnao](https://github.com/seitbnao)
+- Permite reenviar a cobrança por email. [@seitbnao](https://github.com/seitbnao)
+- Permite visualizar o boleto de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Permite atualizar o status de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Bloqueia o cliente de gerar uma cobrança, sendo restrito apenas para o administrador. [@seitbnao](https://github.com/seitbnao)
+- Faz uma alteração na tabela cobrancas, para que a mesma receba o id do cliente. [@seitbnao](https://github.com/seitbnao)
+
+## [4.25.1] - 2021-01-04
+
+## Fixed
+- Corrigido as permissões para que não ocorra erros após a instalação. [@seitbnao](https://github.com/seitbnao)
+- Corrigido o erro ao emitir o alerta de erro caso uma cobrança já esteja viculada a alguma venda/os. [@seitbnao](https://github.com/seitbnao)
+
+## [4.25.0] - 2020-12-30
+
+## Added
+- Adicionado módulo para gerenciar as cobranças emitidas por boleto/link. [@seitbnao](https://github.com/seitbnao)
+
+## Fixed
+- Corrigido problema na geração da cobrança a partir da ordem de serviço. [@seitbnao](https://github.com/seitbnao)
+
+## [4.24.0] - 2020-12-27
+
+## Added
+- Máscara em CNPJ no menu adicionar e editar emitente. [@willph](https://github.com/willph)
+- Adicionado campo CEP em Emitente para facilitar preenchimento e organizado controller, model e bd para aceitar novo campo. [@willph](https://github.com/willph)
+- Adaptado função javascript para buscar dados do CNPJ em Cliente e Emitente. [@willph](https://github.com/willph)
+- Adicionado botão para pesquisar e preencher os dados da empresa automaticamente em cadastro/editar do emitente. [@willph](https://github.com/willph)
+
+## Fixed
+- Correção de bug na area do cliente nos campos telefone e email em visualizarOs e visualizarVenda. [@willph](https://github.com/willph)
+
+## [4.23.0] - 2020-12-17
+
+## Added
+- Adicionado a opção de gerar o PDF do Boleto. [@willph](https://github.com/willph)
+- Adicionado cor na Agenda OS. [@willph](https://github.com/willph)
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido do form os client id e secret em OS e vendas. [@willph](https://github.com/willph)
+- Corrigido bug que quebrava a exibição da pagina por causa de um erro de exception ao clicar gerar etiqueta. [@willph](https://github.com/willph)
+- Corrigido observações e observações para cliente em vendas e melhorado visualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido exibição de modal de conformação de exclusão de credenciais de pagamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.22.0] - 2020-12-13
+
+## Added
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## [4.21.0] - 2020-12-10
+
+## Added
+- Implementado pagamento via gerencianet. [@willph](https://github.com/willph)
+
+## [4.20.2] - 2020-12-06
+
+## Fixed
+- Adequação para permitir editar observações de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.20.1] - 2020-11-10
 
 ## Fixed

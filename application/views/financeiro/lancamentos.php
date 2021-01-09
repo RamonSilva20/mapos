@@ -116,7 +116,7 @@ $periodo = $this->input->get('periodo');
           <?php
 
           if (!$results) {
-            echo '<tr>
+              echo '<tr>
               <td colspan="8" >Nenhum lançamento encontrado</td>
             </tr>';
           }
@@ -141,10 +141,9 @@ $periodo = $this->input->get('periodo');
               echo '<td>' . $status . '</td>';
               echo '<td>' . $r->observacoes . '</td>';
               echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
-
               echo '<td>';
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" usuario="' . $r->nome . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
               }
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                   echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
@@ -153,9 +152,6 @@ $periodo = $this->input->get('periodo');
               echo '</td>';
               echo '</tr>';
           } ?>
-          <tr>
-
-          </tr>
         </tbody>
         <tfoot>
           <tr>
@@ -199,6 +195,7 @@ $periodo = $this->input->get('periodo');
         <div class="span12" style="margin-left: 0">
           <label for="cliente">Cliente*</label>
           <input class="span12" id="cliente" type="text" name="cliente" />
+          <input class="span12" id="idCliente" type="hidden" name="idCliente" />
         </div>
 
         <div class="span12" style="margin-left: 0">
@@ -270,6 +267,7 @@ $periodo = $this->input->get('periodo');
         <div class="span12" style="margin-left: 0">
           <label for="fornecedor">Fornecedor / Empresa*</label>
           <input class="span12" id="fornecedor" type="text" name="fornecedor" />
+          <input class="span12" id="idFornecedor" type="hidden" name="idFornecedor" />
         </div>
 
         <div class="span12" style="margin-left: 0">
@@ -346,7 +344,10 @@ $periodo = $this->input->get('periodo');
           <input class="span12" id="fornecedorEditar" type="text" name="fornecedor" />
         </div>
 
-
+        <div class="span12" style="margin-left: 0">
+          <label for="observacoes">Observações</label>
+          <textarea class="span12" id="observacoes_edit" name="observacoes"></textarea>
+        </div>
       </div>
       <div class="span12" style="margin-left: 0">
         <div class="span4" style="margin-left: 0">
@@ -396,6 +397,7 @@ $periodo = $this->input->get('periodo');
 
     </div>
     <div class="modal-footer">
+    Modificado:<input disabled id="usuarioEditar" value="" />
       <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar">Cancelar</button>
       <button class="btn btn-primary">Salvar Alterações</button>
     </div>
@@ -538,7 +540,9 @@ $periodo = $this->input->get('periodo');
     $(document).on('click', '.editar', function(event) {
       $("#idEditar").val($(this).attr('idLancamento'));
       $("#descricaoEditar").val($(this).attr('descricao'));
+      $("#usuarioEditar").val($(this).attr('usuario'));
       $("#fornecedorEditar").val($(this).attr('cliente'));
+      $("#observacoes_edit").val($(this).attr('observacoes'));
       $("#valorEditar").val($(this).attr('valor'));
       $("#vencimentoEditar").val($(this).attr('vencimento'));
       $("#pagamentoEditar").val($(this).attr('pagamento'));
@@ -616,6 +620,23 @@ $periodo = $this->input->get('periodo');
       minLength: 1,
       select: function(event, ui) {
         $("#cliente_fornecedor").val(ui.item.value);
+        $("#idFornecedor").val(ui.item.id);
+      }
+    });
+    $("#cliente").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#cliente").val(ui.item.label);
+        $("#idCliente").val(ui.item.id);
+      }
+    });
+    $("#fornecedor").autocomplete({
+      source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+      minLength: 1,
+      select: function(event, ui) {
+        $("#fornecedor").val(ui.item.label);
+        $("#idFornecedor").val(ui.item.id);
       }
     });
   });

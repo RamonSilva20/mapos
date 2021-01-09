@@ -21,10 +21,12 @@ class Mapos extends MY_Controller
     {
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
+        $this->data['ordens_andamento'] = $this->mapos_model->getOsAndamento();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['vendas_mes'] = $this->mapos_model->getEstatisticasVendasMes($this->input->get('year'));
+        $this->data['vendas_mesinadipl'] = $this->mapos_model->getEstatisticasVendasMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         return $this->layout();
@@ -162,6 +164,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
         $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
         $this->form_validation->set_rules('ie', 'IE', 'required|trim');
+        $this->form_validation->set_rules('cep', 'CEP', 'required|trim');
         $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
         $this->form_validation->set_rules('numero', 'Número', 'required|trim');
         $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
@@ -177,6 +180,7 @@ class Mapos extends MY_Controller
             $nome = $this->input->post('nome');
             $cnpj = $this->input->post('cnpj');
             $ie = $this->input->post('ie');
+            $cep = $this->input->post('cep');
             $logradouro = $this->input->post('logradouro');
             $numero = $this->input->post('numero');
             $bairro = $this->input->post('bairro');
@@ -187,7 +191,7 @@ class Mapos extends MY_Controller
             $image = $this->do_upload();
             $logo = 'assets/uploads/' . $image;
 
-            $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
+            $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
                 $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
                 log_info('Adicionou informações de emitente.');
@@ -209,6 +213,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
         $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
         $this->form_validation->set_rules('ie', 'IE', 'required|trim');
+        $this->form_validation->set_rules('cep', 'CEP', 'required|trim');
         $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
         $this->form_validation->set_rules('numero', 'Número', 'required|trim');
         $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
@@ -224,6 +229,7 @@ class Mapos extends MY_Controller
             $nome = $this->input->post('nome');
             $cnpj = $this->input->post('cnpj');
             $ie = $this->input->post('ie');
+            $cep = $this->input->post('cep');
             $logradouro = $this->input->post('logradouro');
             $numero = $this->input->post('numero');
             $bairro = $this->input->post('bairro');
@@ -233,7 +239,7 @@ class Mapos extends MY_Controller
             $email = $this->input->post('email');
             $id = $this->input->post('id');
 
-            $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
+            $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
             if ($retorno) {
                 $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
                 log_info('Alterou informações de emitente.');
@@ -422,10 +428,38 @@ class Mapos extends MY_Controller
         );
 
         $events = array_map(function ($os) {
+            switch ($os->status) {
+                case 'Aberto':
+                    $cor = '#00cd00';
+                    break;
+                case 'Negociação':
+                case 'Em Andamento':
+                    $cor = '#436eee';
+                    break;
+                case 'Orçamento':
+                    $cor = '#CDB380';
+                    break;
+                case 'Cancelado':
+                    $cor = '#CD0000';
+                    break;
+                case 'Finalizado':
+                    $cor = '#256';
+                    break;
+                case 'Faturado':
+                    $cor = '#B266FF';
+                    break;
+                case 'Aguardando Peças':
+                    $cor = '#FF7F00';
+                    break;
+                default:
+                    $cor = '#E0E4CC';
+                    break;
+            }
             return [
                 'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
+                'color' => $cor,
                 'extendedProps' => [
                     'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,

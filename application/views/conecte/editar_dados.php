@@ -1,3 +1,7 @@
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -18,9 +22,13 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label">CPF<span class="required">*</span></label>
+                        <?php if ($custom_error != '') {
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
+                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="documento" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                            <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                            <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                     <div class="control-group">

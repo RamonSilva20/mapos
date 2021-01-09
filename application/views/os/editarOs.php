@@ -72,6 +72,9 @@
                                                 <option <?php if ($result->status == 'Faturado') {
     echo 'selected';
 } ?> value="Faturado">Faturado</option>
+                                                <option <?php if ($result->status == 'Negociação') {
+    echo 'selected';
+} ?> value="Negociação">Negociação</option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
     echo 'selected';
 } ?> value="Em Andamento">Em Andamento</option>

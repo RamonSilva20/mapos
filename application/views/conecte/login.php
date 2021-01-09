@@ -30,6 +30,10 @@
         }
     </script>
 </head>
+<?php
+   $parse_email = $this->input->get('e');
+   $parse_cpfcnpj = $this->input->get('c');
+?>
 <!-- particles.js container -->
 <div id="particles-js"><canvas class="particles-js-canvas-el" width="842" height="913" style="width: 100%; height: 100%;"></canvas></div>
 
@@ -54,19 +58,19 @@
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
-                        <span class="add-on bg_lg"><i class="fas fa-user"></i></span><input id="email" name="email" type="text" placeholder="Email" />
+                        <span class="add-on bg_lg"><i class="fas fa-user"></i></span><input id="email" name="email" type="text" placeholder="Email" value="<?php echo trim($parse_email); ?>"/>
                     </div>
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
-                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" />
+                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" value="<?php echo trim($parse_cpfcnpj); ?>"/>
                     </div>
                 </div>
             </div>
             <div class="form-actions" style="text-align: center">
-                <button class="btn btn-info btn-large" /> Acessar</button>
+                <button class="btn btn-info btn-large"> Acessar</button>
                 <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
             </div>
         </form>

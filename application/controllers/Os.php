@@ -103,8 +103,8 @@ class Os extends MY_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                ? $this->input->post('garantias_id')
-                : null;
+                    ? $this->input->post('garantias_id')
+                    : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
                 $dataFinal = date('Y/m/d');
@@ -304,6 +304,119 @@ class Os extends MY_Controller
         return $this->layout();
     }
 
+    public function gerarPagamentoGerencianetBoleto()
+    {
+        $cobrancas_vendas = $this->os_model->getCobrancas($this->input->post('idOs'));
+        if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
+            $this->session->set_flashdata('error', 'Já existe cobrança veiculadas nesta OS, verifique em Financeiro/Cobranças');
+            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Já existe uma cobrança desta venda'];
+
+            print_r(json_encode($json));
+            return;
+        }
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarBoleto(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('nomeCliente'),
+            $this->input->post('emailCliente'),
+            $this->input->post('documentoCliente'),
+            $this->input->post('celular_cliente'),
+            $this->input->post('ruaCliente'),
+            $this->input->post('numeroCliente'),
+            $this->input->post('bairroCliente'),
+            $this->input->post('cidadeCliente'),
+            $this->input->post('estadoCliente'),
+            $this->input->post('cepCliente'),
+            $this->input->post('idOs'),
+            $this->input->post('titleBoleto'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+        $os = $this->os_model->getById($this->input->post('idOs'));
+        $obj = json_decode($pagamento);
+        if ($obj->code == 200) {
+            $data = [
+                'barcode' => $obj->data->barcode,
+                'link' => $obj->data->link,
+                'pdf' => $obj->data->pdf->charge,
+                'expire_at' => $obj->data->expire_at,
+                'charge_id' => $obj->data->charge_id,
+                'status' => $obj->data->status,
+                'total' =>  $this->input->post('totalValor'),
+                'payment' => $obj->data->payment,
+                'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
+            ];
+            if ($this->os_model->add('cobrancas', $data) == true) {
+                log_info('Cobrança (OS) criada com suceso. ID: ' . $obj->data->charge_id);
+                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
+            }
+        } else {
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
+        }
+        print_r($pagamento);
+    }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+        $cobrancas_vendas = $this->os_model->getCobrancas($this->input->post('idOs'));
+        if ($cobrancas_vendas != null && count($cobrancas_vendas) >= 1) {
+            $this->session->set_flashdata('error', 'Já existe cobrança veiculadas nesta OS, verifique em Financeiro/Cobranças');
+            $json = ['code' => 4001, 'error' => 'server_error' , 'errorDescription' => 'Já existe uma cobrança desta venda'];
+
+            print_r(json_encode($json));
+            return;
+        }
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+
+        $this->load->model('pagamentos_model');
+        $pagamentoM = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
+
+        $pagamento = $this->GerencianetSdk->gerarLink(
+            $pagamentoM->client_id,
+            $pagamentoM->client_secret,
+            $this->input->post('idOs'),
+            $this->input->post('titleLink'),
+            $this->input->post('totalValor'),
+            intval($this->input->post('quantidade'))
+        );
+        $os = $this->os_model->getById($this->input->post('idOs'));
+        $obj = json_decode($pagamento);
+        if ($obj->code == 200) {
+            $data = [
+
+                'charge_id' => $obj->data->charge_id,
+                'status' => $obj->data->status,
+                'total' =>  $this->input->post('totalValor'),
+                'custom_id' => $obj->data->custom_id,
+                'payment_url' => $obj->data->payment_url,
+                'payment_method' => $obj->data->payment_method,
+                'conditional_discount_date' => $obj->data->conditional_discount_date,
+                'request_delivery_address' => $obj->data->request_delivery_address,
+                'message' => $obj->data->message,
+                'expire_at' => $obj->data->expire_at,
+                'created_at' => $obj->data->created_at,
+                'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
+            ];
+            if ($this->os_model->add('cobrancas', $data) == true) {
+                log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
+                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
+            }
+        } else {
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
+        }
+        print_r($pagamento);
+    }
+
     public function imprimir()
     {
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
@@ -428,10 +541,22 @@ class Os extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        $os =$this->os_model->getById($id);
+        $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-            redirect(base_url() . 'index.php/os/gerenciar/');
+            $os = $this->os_model->getById($id);
+            if ($os == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
+                redirect(base_url() . 'index.php/os/gerenciar/');
+            }
+        }
+
+        if ($os->idCobranca != null) {
+            if ($os->status == "canceled") {
+                $this->os_model->delete('cobrancas', 'os_id', $id);
+            } else {
+                $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar e/ou excluir a cobrança primeiro!');
+                redirect(site_url('os/gerenciar/'));
+            }
         }
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
@@ -520,11 +645,20 @@ class Os extends MY_Controller
             'os_id' => $this->input->post('idOsProduto'),
         ];
 
+        $id = $this->input->post('idOsProduto');
+        $os = $this->os_model->getById($id);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar inserir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->add('produtos_os', $data) == true) {
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -545,6 +679,12 @@ class Os extends MY_Controller
         $id = $this->input->post('idProduto');
         $idOs = $this->input->post('idOs');
 
+        $os = $this->os_model->getById($idOs);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
@@ -552,7 +692,9 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                }
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
@@ -681,7 +823,7 @@ class Os extends MY_Controller
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR .'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
                 }
             }
         }
@@ -765,6 +907,7 @@ class Os extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
             if ($this->os_model->add('lancamentos', $data) == true) {
