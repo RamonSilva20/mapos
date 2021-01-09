@@ -92,11 +92,12 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `categorias_id` INT NULL,
   `contas_id` INT NULL,
   `vendas_id` INT NULL,
-  `usuarios_id` INT NOT NULL,
+  `usuarios_id` INT NULL,
   PRIMARY KEY (`idLancamentos`),
   INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC),
   INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC),
   INDEX `fk_lancamentos_contas1_idx` (`contas_id` ASC),
+  INDEX `fk_lancamentos_usuarios1` (`usuarios_id` ASC),
   CONSTRAINT `fk_lancamentos_clientes1`
     FOREIGN KEY (`clientes_id`)
     REFERENCES `clientes` (`idClientes`)
