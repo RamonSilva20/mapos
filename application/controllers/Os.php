@@ -645,11 +645,20 @@ class Os extends MY_Controller
             'os_id' => $this->input->post('idOsProduto'),
         ];
 
+        $id = $this->input->post('idOsProduto');
+        $os = $this->os_model->getById($id);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar inserir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->add('produtos_os', $data) == true) {
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -670,6 +679,12 @@ class Os extends MY_Controller
         $id = $this->input->post('idProduto');
         $idOs = $this->input->post('idOs');
 
+        $os = $this->os_model->getById($idOs);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
@@ -677,7 +692,9 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                }
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
