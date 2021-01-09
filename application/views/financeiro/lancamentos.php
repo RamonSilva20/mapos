@@ -109,7 +109,6 @@ $periodo = $this->input->get('periodo');
             <th>Status</th>
             <th>Observações</th>
             <th>Valor</th>
-            <th>Modificado por</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -142,10 +141,9 @@ $periodo = $this->input->get('periodo');
               echo '<td>' . $status . '</td>';
               echo '<td>' . $r->observacoes . '</td>';
               echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
-              echo '<td>' . $r->nome. '</td>';
               echo '<td>';
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+                  echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" usuario="' . $r->nome . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
               }
               if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                   echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
@@ -399,6 +397,7 @@ $periodo = $this->input->get('periodo');
 
     </div>
     <div class="modal-footer">
+    Modificado:<input disabled id="usuarioEditar" value="" />
       <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar">Cancelar</button>
       <button class="btn btn-primary">Salvar Alterações</button>
     </div>
@@ -541,6 +540,7 @@ $periodo = $this->input->get('periodo');
     $(document).on('click', '.editar', function(event) {
       $("#idEditar").val($(this).attr('idLancamento'));
       $("#descricaoEditar").val($(this).attr('descricao'));
+      $("#usuarioEditar").val($(this).attr('usuario'));
       $("#fornecedorEditar").val($(this).attr('cliente'));
       $("#observacoes_edit").val($(this).attr('observacoes'));
       $("#valorEditar").val($(this).attr('valor'));
