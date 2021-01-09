@@ -46,14 +46,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>
                                         </label>
                                         <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
 
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes_cliente">
                                             <h4>Observações para o Cliente</h4>
                                         </label>
