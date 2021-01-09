@@ -234,8 +234,10 @@ class Cobrancas extends MY_Controller
         }
         $this->load->model('cobrancas_model');
 
-        $this->data['result'] = $this->cobrancas_model->getById($this->uri->segment(3));
-
+        $this->data['result'] = $this->cobrancas_model->getByOs($this->uri->segment(3));
+        if ($this->data['result'] == null) {
+            $this->data['result'] = $this->cobrancas_model->getByVendas($this->uri->segment(3));
+        }
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Cobrança não encontrada.');
             redirect(site_url('cobrancas/'));

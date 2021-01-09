@@ -412,7 +412,7 @@
                         },
                         {
                             name: 'Despesas',
-                            negativeColor: '#FF0000',
+                            negativeColor: '#FF6347',
                             data: [<?php echo($vendas_mes->VALOR_JAN_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_FEV_DES); ?>,
                                 <?php echo($vendas_mes->VALOR_MAR_DES); ?>,
