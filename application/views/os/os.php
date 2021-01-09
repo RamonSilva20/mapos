@@ -20,6 +20,7 @@
                 <option value="">Selecione status</option>
                 <option value="Aberto">Aberto</option>
                 <option value="Faturado">Faturado</option>
+                <option value="Negociação">Negociação</option>
                 <option value="Em Andamento">Em Andamento</option>
                 <option value="Orçamento">Orçamento</option>
                 <option value="Finalizado">Finalizado</option>
@@ -80,6 +81,7 @@
                                 $dataFinal = "";
                             }
                             switch ($r->status) {
+                                case 'Negociação':
                                 case 'Aberto':
                                     $cor = '#00cd00';
                                     break;

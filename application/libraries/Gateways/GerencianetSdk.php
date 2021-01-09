@@ -436,4 +436,36 @@ class GerencianetSdk
             return json_encode($error);
         }
     }
+
+    public function getNotifications($token, $client_Id, $client_Secret)
+    {
+        $clientId = $client_Id; // informe seu Client_Id
+        $clientSecret = $client_Secret; // informe seu Client_Secret
+
+        $options = [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'sandbox' => PAGAMENTOS_MODO_SANDBOX // altere conforme o ambiente (true = desenvolvimento e false = produção)
+        ];
+
+        $params = ['token' => $token];
+
+        try {
+            $api = new Gerencianet($options);
+            $charge = $api->getNotification($params, []);
+            $i = count($charge["data"]);
+            $ultimoStatus = $charge["data"][$i-1];
+            $status = $ultimoStatus["status"];
+            $charge_id = $ultimoStatus["identifiers"]["charge_id"];
+            $statusAtual = $status["current"];
+            $json = ['status' => $status, 'charge_id' => $charge_id , 'statusatual' => $statusAtual];
+            return json_encode($json);
+        } catch (GerencianetException $e) {
+            $error = ["code" => $e->code, "error" => $e->error, "errorDescription" => $e->errorDescription];
+            return json_encode($error);
+        } catch (Exception $e) {
+            $error = ["error" => "Error", "errorDescription" => $e->getMessage()];
+            return json_encode($error);
+        }
+    }
 }

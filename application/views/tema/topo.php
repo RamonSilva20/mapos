@@ -19,7 +19,7 @@
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/shortcut.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
-
+  <script type="text/javascript" src="<?= base_url(); ?>assets/js/datatables.min.js"></script>
   <script type="text/javascript">
     shortcut.add("escape", function() {
       location.href = '<?= base_url(); ?>';

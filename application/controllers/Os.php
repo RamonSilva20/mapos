@@ -338,8 +338,8 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
+        $os = $this->os_model->getById($this->input->post('idOs'));
         $obj = json_decode($pagamento);
-
         if ($obj->code == 200) {
             $data = [
                 'barcode' => $obj->data->barcode,
@@ -351,14 +351,15 @@ class Os extends MY_Controller
                 'total' =>  $this->input->post('totalValor'),
                 'payment' => $obj->data->payment,
                 'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança (OS) criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/boleto verifique a conexão com a internet');
-            redirect(base_url());
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
         }
         print_r($pagamento);
     }
@@ -386,9 +387,8 @@ class Os extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-
+        $os = $this->os_model->getById($this->input->post('idOs'));
         $obj = json_decode($pagamento);
-
         if ($obj->code == 200) {
             $data = [
 
@@ -404,14 +404,15 @@ class Os extends MY_Controller
                 'expire_at' => $obj->data->expire_at,
                 'created_at' => $obj->data->created_at,
                 'os_id' => $this->input->post('idOs'),
+                'clientes_id' => $os->idClientes,
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/link verifique a conexão com a internet');
-            redirect(base_url());
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
         }
         print_r($pagamento);
     }
@@ -540,10 +541,22 @@ class Os extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        $os = $this->os_model->getById($id);
+        $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-            redirect(base_url() . 'index.php/os/gerenciar/');
+            $os = $this->os_model->getById($id);
+            if ($os == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
+                redirect(base_url() . 'index.php/os/gerenciar/');
+            }
+        }
+
+        if ($os->idCobranca != null) {
+            if ($os->status == "canceled") {
+                $this->os_model->delete('cobrancas', 'os_id', $id);
+            } else {
+                $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar e/ou excluir a cobrança primeiro!');
+                redirect(site_url('os/gerenciar/'));
+            }
         }
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
@@ -632,11 +645,20 @@ class Os extends MY_Controller
             'os_id' => $this->input->post('idOsProduto'),
         ];
 
+        $id = $this->input->post('idOsProduto');
+        $os = $this->os_model->getById($id);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar inserir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->add('produtos_os', $data) == true) {
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -657,6 +679,12 @@ class Os extends MY_Controller
         $id = $this->input->post('idProduto');
         $idOs = $this->input->post('idOs');
 
+        $os = $this->os_model->getById($idOs);
+        if ($os == null) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir produto na OS.');
+            redirect(base_url() . 'index.php/os/gerenciar/');
+        }
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
@@ -664,7 +692,9 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                if ($os->status != "Orçamento") {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                }
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
@@ -877,6 +907,7 @@ class Os extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
             if ($this->os_model->add('lancamentos', $data) == true) {

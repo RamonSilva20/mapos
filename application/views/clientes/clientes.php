@@ -11,7 +11,7 @@
     </div>
 
     <div class="widget-content nopadding tab-content">
-        <table class="table table-bordered ">
+        <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr>
                     <th>Cod.</th>
@@ -40,6 +40,7 @@
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
                             echo '<a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            echo '<a href="' . base_url() . 'index.php/mine?e=' . $r->email . '&c=' . $r->documento . '" target="new" style="margin-right: 1%" class="btn tip-top" title="Área do cliente"><i class="fas fa-key"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
                             echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" style="margin-right: 1%" class="btn btn-info tip-top" title="Editar Cliente"><i class="fas fa-edit"></i></a>';

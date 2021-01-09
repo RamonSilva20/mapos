@@ -55,21 +55,16 @@
                         if ($r->vendas_id != '') {
                             echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
                         }
-
+                        
                         echo '<td>' .  $transactions_status[$r->status] . '</td>';
                         echo '<td>R$ ' . number_format($r->total, 2, ',', '.') . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->charge_id . '" class="btn tip-top" title="Cancelar cobrança"><i class="fas fa-power-off"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
-                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Confirmar pagamento"><i class="fas fa-check-circle"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Visualizar Cobrança"><i class="fas fa-eye"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/atualizarcobranca/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
                             echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCobranca')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" charge_id="' . $r->charge_id . '" class="btn btn-danger tip-top" title="Excluir cobrança"><i class="fas fa-trash-alt"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->charge_id . '" class="btn btn-info tip-top" title="Reenviar por email"><i class="fas fa-envelope-open-text"></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';

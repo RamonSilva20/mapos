@@ -21,10 +21,12 @@ class Mapos extends MY_Controller
     {
         $this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
+        $this->data['ordens_andamento'] = $this->mapos_model->getOsAndamento();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
         $this->data['vendas_mes'] = $this->mapos_model->getEstatisticasVendasMes($this->input->get('year'));
+        $this->data['vendas_mesinadipl'] = $this->mapos_model->getEstatisticasVendasMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         return $this->layout();
@@ -430,6 +432,7 @@ class Mapos extends MY_Controller
                 case 'Aberto':
                     $cor = '#00cd00';
                     break;
+                case 'Negociação':
                 case 'Em Andamento':
                     $cor = '#436eee';
                     break;

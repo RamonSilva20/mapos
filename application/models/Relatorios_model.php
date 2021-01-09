@@ -336,10 +336,11 @@ class Relatorios_model extends CI_Model
 
     public function vendasRapid($array = false)
     {
-        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
+        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('itens_de_vendas', 'itens_de_vendas.vendas_id = vendas.idVendas');
         $this->db->order_by('vendas.dataVenda', 'DESC');
 
         $result = $this->db->get();
@@ -369,7 +370,11 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id FROM vendas 
+        LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes 
+        LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios 
+        LEFT JOIN itens_de_vendas ON itens_de_vendas.vendas_id = vendas.idVendas
+        WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
 
         $result = $this->db->query($query);
         if ($array) {

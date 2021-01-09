@@ -52,10 +52,14 @@
     }; ?>">
         <a href="#"><i class="fas fa-hand-holding-usd"></i> <span>Financeiro</span> <span class="label"><i class="fas fa-chevron-down"></i></span></a>
         <ul>
-          <li><a href="<?= site_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
+        <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'financeiro') {
+        echo 'active';
+    }; ?>"><a href="<?= site_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
         </ul>
         <ul>
-          <li><a href="<?= site_url('cobrancas/cobrancas') ?>">Cobranças</a></li>
+        <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'cobrancas') {
+        echo 'active';
+    }; ?>"><a href="<?= site_url('cobrancas/cobrancas') ?>">Cobranças</a></li>
         </ul>
       </li>
     <?php

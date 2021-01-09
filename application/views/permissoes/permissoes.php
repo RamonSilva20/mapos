@@ -9,7 +9,7 @@
     </div>
 
     <div class="widget-content nopadding tab-content">
-        <table class="table table-bordered ">
+        <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr>
                     <th>#</th>

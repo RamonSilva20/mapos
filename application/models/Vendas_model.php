@@ -46,6 +46,19 @@ class Vendas_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function getByIdCobrancas($id)
+    {
+        $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome, usuarios.nome, cobrancas.vendas_id,cobrancas.idCobranca,cobrancas.status');
+        $this->db->from('vendas');
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('cobrancas', 'cobrancas.vendas_id = vendas.idVendas');
+        $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
+        $this->db->where('vendas.idVendas', $id);
+        $this->db->limit(1);
+        return $this->db->get()->row();
+    }
+
     public function getProdutos($id = null)
     {
         $this->db->select('itens_de_vendas.*, produtos.*');
@@ -128,6 +141,9 @@ class Vendas_model extends CI_Model
             foreach ($query->result_array() as $row) {
                 $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
             }
+            echo json_encode($row_set);
+        } else {
+            $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
             echo json_encode($row_set);
         }
     }
