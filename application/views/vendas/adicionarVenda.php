@@ -82,7 +82,7 @@
         $("#cliente").autocomplete({
             source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteCliente",
             minLength: 1,
-            close: function(ui) { if(ui.id == null)ui.target.value = '';},
+            close: function(ui) { if(ui.label == 'Adicionar cliente...')ui.target.value = '';},
             select: function(event, ui) {
                 if(ui.item.label == 'Adicionar cliente...')
                     $('.addclient').show();
