@@ -72,56 +72,6 @@ CREATE TABLE IF NOT EXISTS `contas` (
   PRIMARY KEY (`idContas`))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `lancamentos`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `lancamentos` (
-  `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(255) NULL DEFAULT NULL,
-  `valor` VARCHAR(15) NOT NULL,
-  `data_vencimento` DATE NOT NULL,
-  `data_pagamento` DATE NULL DEFAULT NULL,
-  `baixado` TINYINT(1) NULL DEFAULT 0,
-  `cliente_fornecedor` VARCHAR(255) NULL DEFAULT NULL,
-  `forma_pgto` VARCHAR(100) NULL DEFAULT NULL,
-  `tipo` VARCHAR(45) NULL DEFAULT NULL,
-  `anexo` VARCHAR(250) NULL,
-  `observacoes` TEXT NULL,
-  `clientes_id` INT(11) NULL DEFAULT NULL,
-  `categorias_id` INT NULL,
-  `contas_id` INT NULL,
-  `vendas_id` INT NULL,
-  `usuarios_id` INT NULL,
-  PRIMARY KEY (`idLancamentos`),
-  INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC),
-  INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC),
-  INDEX `fk_lancamentos_contas1_idx` (`contas_id` ASC),
-  INDEX `fk_lancamentos_usuarios1` (`usuarios_id` ASC),
-  CONSTRAINT `fk_lancamentos_clientes1`
-    FOREIGN KEY (`clientes_id`)
-    REFERENCES `clientes` (`idClientes`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lancamentos_categorias1`
-    FOREIGN KEY (`categorias_id`)
-    REFERENCES `categorias` (`idCategorias`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lancamentos_contas1`
-    FOREIGN KEY (`contas_id`)
-    REFERENCES `contas` (`idContas`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lancamentos_usuarios1`
-    FOREIGN KEY (`usuarios_id`)
-    REFERENCES `usuarios` (`idUsuarios`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
 -- -----------------------------------------------------
 -- Table `permissoes`
 -- -----------------------------------------------------
@@ -167,6 +117,57 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
+
+
+
+-- -----------------------------------------------------
+-- Table `lancamentos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lancamentos` (
+  `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(255) NULL DEFAULT NULL,
+  `valor` VARCHAR(15) NOT NULL,
+  `data_vencimento` DATE NOT NULL,
+  `data_pagamento` DATE NULL DEFAULT NULL,
+  `baixado` TINYINT(1) NULL DEFAULT 0,
+  `cliente_fornecedor` VARCHAR(255) NULL DEFAULT NULL,
+  `forma_pgto` VARCHAR(100) NULL DEFAULT NULL,
+  `tipo` VARCHAR(45) NULL DEFAULT NULL,
+  `anexo` VARCHAR(250) NULL,
+  `observacoes` TEXT NULL,
+  `clientes_id` INT(11) NULL DEFAULT NULL,
+  `categorias_id` INT NULL,
+  `contas_id` INT NULL,
+  `vendas_id` INT NULL,
+  `usuarios_id` INT NOT NULL,
+  PRIMARY KEY (`idLancamentos`),
+  INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC),
+  INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC),
+  INDEX `fk_lancamentos_contas1_idx` (`contas_id` ASC),
+  INDEX `fk_lancamentos_usuarios1` (`usuarios_id` ASC),
+  CONSTRAINT `fk_lancamentos_clientes1`
+    FOREIGN KEY (`clientes_id`)
+    REFERENCES `clientes` (`idClientes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_categorias1`
+    FOREIGN KEY (`categorias_id`)
+    REFERENCES `categorias` (`idCategorias`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_contas1`
+    FOREIGN KEY (`contas_id`)
+    REFERENCES `contas` (`idContas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lancamentos_usuarios1`
+    FOREIGN KEY (`usuarios_id`)
+    REFERENCES `usuarios` (`idUsuarios`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
 
 -- -----------------------------------------------------
 -- Table `Garantia`
