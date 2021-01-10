@@ -68,19 +68,29 @@
                         <div class="controls">
                             <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder = "Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>
                         </div>
+                        <div class="span3">
+                                            <label for="notifica_whats_select">Tags de preenchimento<span class="required"></span></label>
+                                            <select class="span12" name="notifica_whats_select" id="notifica_whats_select" value="">
+                                                <option value="{CLIENTE_NOME}">Nome do Cliente</option>
+                                                <option value="{NUMERO_OS}">Número da OS</option>
+                                                <option value="{STATUS_OS}">Status da OS</option>
+                                                <option value="{VALOR_OS}">Valor da OS</option>
+                                                <option value="{DESCRI_PRODUTOS}">Descrição produtos</option>
+                                                <option value="{EMITENTE}">Nome emitente</option>
+                                                <option value="{TELEFONE_EMITENTE}">Telefone emitente</option>
+                                                <option value="{OBS_OS}">Observações</option>
+                                                <option value="{DEFEITO_OS}">Defeitos emitente</option>
+                                                <option value="{LAUDO_OS}">Laudo</option>
+                                                <option value="{DATA_FINAL}">Data Final</option>
+                                                <option value="{DATA_INICIAL}">Data Inicial</option>
+                                                <option value="{DATA_GARANTIA}">Data da Garantia</option>
+                                            </select>
+                                        </div>
                     <span6 class="span10">
                         Para negrito use: *palavra* 
                         Para itálico use: _palavra_ 
-                        Para riscado use: ~palavra~ 
-                        <br>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{CLIENTE_NOME}');">Nome do Cliente</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{NUMERO_OS}');">Número da OS</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{STATUS_OS}');">Status da OS</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{VALOR_OS}');">Valor da OS</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{DESCRI_PRODUTOS}');">Descrição produtos</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{EMITENTE}');">Nome emitente</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{TELEFONE_EMITENTE}');">Telefone emitente</a>                            
-                            </span>
+                        Para riscado use: ~palavra~                            
+                    </span>
                     </div>
 
                     <div class="form-actions">
@@ -111,7 +121,12 @@
         }
     });
 
-    function addText(str) {
-       document.getElementById("notifica_whats").value += str;
-    }
+    $(document).ready(function(){ 
+             $('#notifica_whats_select').change(function(){
+               if($(this).val() != "")
+                   document.getElementById("notifica_whats").value += $(this).val();
+               $(this).prop('selectedIndex', -1)                                                          
+             });
+        });
+ 
 </script>
