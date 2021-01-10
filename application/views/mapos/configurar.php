@@ -69,6 +69,10 @@
                             <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder = "Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>
                         </div>
                     <span6 class="span10">
+                        Para negrito use: *palavra* 
+                        Para itálico use: _palavra_ 
+                        Para riscado use: ~palavra~ 
+                        <br>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{CLIENTE_NOME}');">Nome do Cliente</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{NUMERO_OS}');">Número da OS</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{STATUS_OS}');">Status da OS</a>
@@ -108,8 +112,6 @@
     });
 
     function addText(str) {
-       str = str.replace(/<b>/g, "*").replace(/<\/b>/g,"*"); 
        document.getElementById("notifica_whats").value += str;
     }
 </script>
-
