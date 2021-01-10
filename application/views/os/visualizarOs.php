@@ -18,9 +18,10 @@ $totalProdutos = 0; ?>
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
     $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    $procura  = array("{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}");
-    $troca = array($result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''));
+    $procura  = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}"];
+    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : '')];
     $str =  str_replace($procura, $troca, $str);
+    $str = htmlentities(urlencode($str));
     echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $str . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
 } ?>
 

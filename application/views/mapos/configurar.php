@@ -75,9 +75,7 @@
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{VALOR_OS}');">Valor da OS</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{DESCRI_PRODUTOS}');">Descrição produtos</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{EMITENTE}');">Nome emitente</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{TELEFONE_EMITENTE}');">Telefone emitente</a>
-                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('\n');">Quebra Linha</a>
-                            
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{TELEFONE_EMITENTE}');">Telefone emitente</a>                            
                             </span>
                     </div>
 
@@ -96,6 +94,7 @@
     </div>
 </div>
 
+<script src="<?= base_url(); ?>assets/js/whatsapp-editor.js"></script>
 <script>
     $('#update-database').click(function () {
         if (confirm('Confirma a atualização do banco de dados?')) {
@@ -108,9 +107,9 @@
             window.location = "<?= site_url('mapos/atualizarMapos') ?>"
         }
     });
+
     function addText(str) {
-        if(str == '\n')
-           str = '%0d%0a%0d%0a';
        document.getElementById("notifica_whats").value += str;
     }
 </script>
+
