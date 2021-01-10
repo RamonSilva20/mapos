@@ -121,12 +121,11 @@
         }
     });
 
-    $(document).ready(function(){ 
-             $('#notifica_whats_select').change(function(){
-               if($(this).val() != "")
-                   document.getElementById("notifica_whats").value += $(this).val();
-               $(this).prop('selectedIndex', -1)                                                          
-             });
-        });
- 
+    $(document).ready(function() {
+    $('#notifica_whats_select').change(function() {
+        if ($(this).val() != "")
+            document.getElementById("notifica_whats").value += $(this).val();
+        $(this).prop('selectedIndex', -1);
+       });
+    });
 </script>
