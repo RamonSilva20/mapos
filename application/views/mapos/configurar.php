@@ -79,7 +79,7 @@
                                                 <option value="{EMITENTE}">Nome emitente</option>
                                                 <option value="{TELEFONE_EMITENTE}">Telefone emitente</option>
                                                 <option value="{OBS_OS}">Observações</option>
-                                                <option value="{DEFEITO_OS}">Defeitos emitente</option>
+                                                <option value="{DEFEITO_OS}">Defeitos</option>
                                                 <option value="{LAUDO_OS}">Laudo</option>
                                                 <option value="{DATA_FINAL}">Data Final</option>
                                                 <option value="{DATA_INICIAL}">Data Inicial</option>
