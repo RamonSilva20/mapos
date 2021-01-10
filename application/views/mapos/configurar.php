@@ -94,7 +94,6 @@
     </div>
 </div>
 
-<script src="<?= base_url(); ?>assets/js/whatsapp-editor.js"></script>
 <script>
     $('#update-database').click(function () {
         if (confirm('Confirma a atualização do banco de dados?')) {
@@ -109,6 +108,7 @@
     });
 
     function addText(str) {
+       str = str.replace(/<b>/g, "*").replace(/<\/b>/g,"*"); 
        document.getElementById("notifica_whats").value += str;
     }
 </script>
