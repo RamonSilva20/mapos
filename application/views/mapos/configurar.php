@@ -76,6 +76,8 @@
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{DESCRI_PRODUTOS}');">Descrição produtos</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{EMITENTE}');">Nome emitente</a>
                             <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{TELEFONE_EMITENTE}');">Telefone emitente</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('\n');">Quebra Linha</a>
+                            
                             </span>
                     </div>
 
@@ -107,6 +109,8 @@
         }
     });
     function addText(str) {
+        if(str == '\n')
+           str = '%0d%0a%0d%0a';
        document.getElementById("notifica_whats").value += str;
     }
 </script>
