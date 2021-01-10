@@ -73,6 +73,7 @@
                                     <td colspan="10">Nenhuma OS Cadastrada</td>
                                   </tr>';
                         }
+                        $this->load->model('os_model');
                         foreach ($results as $r) {
                             $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                             if ($r->dataFinal != null) {
@@ -130,12 +131,9 @@
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Normal A4"><i class="fas fa-print"></i></a>';
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a>';
                                 $zapnumber = preg_replace("/[^0-9]/", "", $r->celular_cliente);
-                                $procura  = array("{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}","{OBS_OS}","{DEFEITO_OS}","{LAUDO_OS}","{DATA_FINAL}","{DATA_INICIAL}","{DATA_GARANTIA}");
                                 $troca = [$r->nomeCliente, $r->idOs, $r->status, 'R$ '.number_format($r->valorTotal, 2, ',', '.'), strip_tags($r->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$r->observacoes,$r->defeito,$r->laudoTecnico,date('d/m/Y', strtotime($r->dataFinal)),date('d/m/Y', strtotime($r->dataInicial)),$vencGarantia];
-                                $str =  str_replace($procura, $troca, $str);
-                                $str = htmlentities(urlencode($str));
-                                $str = strip_tags($str);
-                                echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $str . '"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
+                                $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
+                                echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
