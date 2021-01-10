@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.26.2] - 2021-01-09
+
+### Fixed
+- Corrigindo erro nos lancamentos, onde após update não eram listados os lancamentos sem usuarios_id. [@bulfaitelo](https://github.com/bulfaitelo)
+
 ## [4.26.1] - 2021-01-09
 
 ## Fixed
