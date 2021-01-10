@@ -18,7 +18,10 @@ $totalProdutos = 0; ?>
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
     $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $result->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $result->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($result->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $result->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+    $procura  = array("{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}");
+    $troca = array($result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''));
+    $str =  str_replace($procura, $troca, $str);
+    echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $str . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
 } ?>
 
                     <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>

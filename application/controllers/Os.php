@@ -69,6 +69,7 @@ class Os extends MY_Controller
             $this->uri->segment(3)
         );
 
+        $this->data['str'] = $str = $this->data['configuration']['notifica_whats'];
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
         return $this->layout();
@@ -185,6 +186,7 @@ class Os extends MY_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
+        $this->data['str'] = $str = $this->data['configuration']['notifica_whats'];
 
         if ($this->form_validation->run('os') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -287,6 +289,8 @@ class Os extends MY_Controller
         }
 
         $this->data['custom_error'] = '';
+        $this->data['str'] = $str = $this->data['configuration']['notifica_whats'];
+        
         $this->load->model('mapos_model');
         $this->load->model('pagamentos_model');
 

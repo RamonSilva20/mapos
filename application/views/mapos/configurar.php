@@ -62,9 +62,26 @@
                             <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label for="notifica_whats" class="control-label">Notificação do whatsapp</label>
+                        <div class="controls">
+                            <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder = "Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>
+                        </div>
+                    <span6 class="span10">
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{CLIENTE_NOME}');">Nome do Cliente</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{NUMERO_OS}');">Número da OS</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{STATUS_OS}');">Status da OS</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{VALOR_OS}');">Valor da OS</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{DESCRI_PRODUTOS}');">Descrição produtos</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{EMITENTE}');">Nome emitente</a>
+                            <a class="btn btn-outline-dark" href="#" role="button" onclick="addText('{TELEFONE_EMITENTE}');">Telefone emitente</a>
+                            </span>
+                    </div>
+
                     <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6">
+                        <div class="span8">
+                            <div class="span9">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Salvar Configurações</button>
                                 <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
                                 <button id="update-mapos" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Atualizar Mapos</button>
@@ -89,4 +106,7 @@
             window.location = "<?= site_url('mapos/atualizarMapos') ?>"
         }
     });
+    function addText(str) {
+       document.getElementById("notifica_whats").value += str;
+    }
 </script>
