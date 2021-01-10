@@ -147,6 +147,7 @@
                                                 $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$result->observacoes,$result->defeito,$result->laudoTecnico,date('d/m/Y', strtotime($result->dataFinal)),date('d/m/Y', strtotime($result->dataInicial)),$result->garantia];
                                                 $str =  str_replace($procura, $troca, $str);
                                                 $str = htmlentities(urlencode($str));
+                                                $str = strip_tags($str);
                                                 echo '<a title="Enviar Por WhatsApp" class="btn btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $str . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
                                             } ?>
                                             <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php  } ?>

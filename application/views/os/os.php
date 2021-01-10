@@ -134,6 +134,7 @@
                                 $troca = [$r->nomeCliente, $r->idOs, $r->status, 'R$ '.number_format($r->valorTotal, 2, ',', '.'), strip_tags($r->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$r->observacoes,$r->defeito,$r->laudoTecnico,date('d/m/Y', strtotime($r->dataFinal)),date('d/m/Y', strtotime($r->dataInicial)),$vencGarantia];
                                 $str =  str_replace($procura, $troca, $str);
                                 $str = htmlentities(urlencode($str));
+                                $str = strip_tags($str);
                                 echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $str . '"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
                             }
