@@ -33,20 +33,14 @@ class Cobrancas_model extends CI_Model
         return $result;
     }
  
-
-    public function getById($id)
+    public function getByOs($id)
     {
-        $this->db->select('vendas.*, clientes.*, Cobrancas.*,os.* clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
-        $this->db->from('vendas');
-        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-        $this->db->join('cobrancas', 'cobrancas.vendas_id = vendas.idVendas');
-        $this->db->join('cobrancas', 'cobrancas.os_id = os.idOs');
-        $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
-        $this->db->where('vendas.idVendas', $id);
-        $this->db->limit(1);
+        return $this->db->query("SELECT DISTINCT `cobrancas`.*,`clientes`.*,`os`.* FROM `cobrancas`,`clientes`,`os` WHERE `charge_id` = $id AND `os`.`idOs` = `cobrancas`.`os_id`")->row();
+    }
 
-        return $this->db->get()->row();
+    public function getByVendas($id)
+    {
+        return $this->db->query("SELECT DISTINCT `cobrancas`.*,`clientes`.*,`vendas`.* FROM `cobrancas`,`clientes`,`vendas` WHERE `charge_id` = $id AND `vendas`.`idVendas` = `cobrancas`.`vendas_id`")->row();
     }
 
     public function add($table, $data, $returnId = false)

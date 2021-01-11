@@ -201,7 +201,7 @@ class Vendas extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-
+        $vendas = $this->vendas_model->getById($this->input->post('idVenda'));
         $obj = json_decode($pagamento);
         if ($obj->code == 200) {
             $data = [
@@ -214,14 +214,15 @@ class Vendas extends MY_Controller
                 'total' =>  $this->input->post('totalValor'),
                 'payment' => $obj->data->payment,
                 'vendas_id' => $this->input->post('idVenda'),
+                'clientes_id' => $vendas->idClientes,
             ];
             if ($this->vendas_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/boleto verifique a conexão com a internet');
-            redirect(base_url());
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
         }
         print_r($pagamento);
     }
@@ -249,7 +250,7 @@ class Vendas extends MY_Controller
             $this->input->post('totalValor'),
             intval($this->input->post('quantidade'))
         );
-
+        $vendas = $this->vendas_model->getById($this->input->post('idVenda'));
         $obj = json_decode($pagamento);
         if ($obj->code == 200) {
             $data = [
@@ -265,14 +266,15 @@ class Vendas extends MY_Controller
                 'expire_at' => $obj->data->expire_at,
                 'created_at' => $obj->data->created_at,
                 'vendas_id' => $this->input->post('idVenda'),
+                'clientes_id' => $vendas->idClientes,
             ];
             if ($this->vendas_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
                 $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
-            $this->session->set_flashdata('error', 'Falha ao gerar cobrança/link verifique a conexão com a internet');
-            redirect(base_url());
+            $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
+            return print_r(json_encode($json));
         }
         print_r($pagamento);
     }
@@ -330,10 +332,23 @@ class Vendas extends MY_Controller
         $this->load->model('vendas_model');
 
         $id = $this->input->post('id');
-        $venda = $this->vendas_model->getById($id);
+        $venda = $this->vendas_model->getByIdCobrancas($id);
         if ($venda == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
-            redirect(site_url('vendas/gerenciar/'));
+            $venda = $this->vendas_model->getById($id);
+            if ($venda == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
+                redirect(site_url('vendas/gerenciar/'));
+            }
+        }
+
+
+        if ($venda->idCobranca != null) {
+            if ($venda->status == "canceled") {
+                $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
+            } else {
+                $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta venda, deve cancelar e/ou excluir a cobrança primeiro!');
+                redirect(site_url('vendas/gerenciar/'));
+            }
         }
 
         $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
@@ -480,6 +495,7 @@ class Vendas extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
             if ($this->vendas_model->add('lancamentos', $data) == true) {

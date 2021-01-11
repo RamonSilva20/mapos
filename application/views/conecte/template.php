@@ -29,11 +29,18 @@
 <!--top-Header-menu-->
 <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
-        <li class=""><a title="" href="<?php echo base_url() ?>index.php/mine/conta"><i class="icon fas fa-user"></i> <span class="text"> Minha Conta</span></a></li>
-        <li class=""><a title="" href="<?php echo base_url() ?>index.php/mine/sair"><i class="icon fas fa-sign-out-alt"></i> <span class="text"> Sair</span></a></li>
+      <li class="pull-right"><a href="https://github.com/RamonSilva20/mapos" target="_blank"><i class="fas fa-asterisk"></i> <span class="text">Versão:
+            <?= $this->config->item('app_version'); ?></span></a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user-cog"></i> <?= $this->session->userdata('nome') ?> <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class=""><a title="Meu Perfil"  href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user"></i> <span class="text">Meu Perfil</span></a></li>
+          <li class="divider"></li>
+          <li class=""><a title="Sair" href="<?php echo base_url() ?>index.php/mine/sair"><i class="fas fa-sign-out-alt"></i> <span class="text">Sair</span></a></li>
+        </ul>
+      </li>
     </ul>
 </div>
-
 
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon fas fa-bars"></i> Menu</a>
     <ul>
@@ -49,6 +56,9 @@
         <li class="<?php if (isset($menuVendas)) {
     echo 'active';
 }; ?>"><a href="<?php echo base_url() ?>index.php/mine/compras"><i class="icon fas fa-shopping-cart"></i> <span>Compras</span></a></li>
+        <li class="<?php if (isset($menuCobrancas)) {
+    echo 'active';
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class="icon fas fa-barcode"></i> <span>Cobranças</span></a></li>
         <li class=""><a href="<?php echo base_url() ?>index.php/mine/sair"><i class="icon fas fa-sign-out-alt"></i> <span>Sair</span></a></li>
 
     </ul>

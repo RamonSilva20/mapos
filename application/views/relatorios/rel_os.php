@@ -59,6 +59,7 @@
                                     <option value="Finalizado">Finalizado</option>
                                     <option value="Faturado">Faturado</option>
                                     <option value="Cancelado">Cancelado</option>
+                                    <option value="Negociação">Negociação</option>
                                     <option value="Aguardando Peças">Aguardando Peças</option>
                                 </select>
                             </div>

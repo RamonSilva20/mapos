@@ -17,7 +17,7 @@ class Cobrancas extends MY_Controller
 
         $this->load->helper('form');
         $this->load->model('cobrancas_model');
-        $this->data['menuCobrancas'] = 'cobrancas';
+        $this->data['menuFinanceiro'] = 'cobrancas';
     }
 
     public function index()
@@ -219,5 +219,46 @@ class Cobrancas extends MY_Controller
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
         }
         redirect(site_url('cobrancas/cobrancas/'));
+    }
+
+    public function visualizar()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('cobrancas');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
+            redirect(base_url());
+        }
+        $this->load->model('cobrancas_model');
+
+        $this->data['result'] = $this->cobrancas_model->getByOs($this->uri->segment(3));
+        if ($this->data['result'] == null) {
+            $this->data['result'] = $this->cobrancas_model->getByVendas($this->uri->segment(3));
+        }
+        if ($this->data['result'] == null) {
+            $this->session->set_flashdata('error', 'Cobrança não encontrada.');
+            redirect(site_url('cobrancas/'));
+        }
+
+        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
+        $this->load->model('pagamentos_model');
+
+        $change_id = intval($this->data['result']->charge_id);
+        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
+
+        $pagamento = $this->GerencianetSdk->receberInfo(
+            $change_id,
+            $defaultPayment->client_id,
+            $defaultPayment->client_secret
+        );
+
+        $pagamento = json_decode($pagamento, true);
+        $this->data['gerencianet'] = json_decode(json_encode($pagamento), false);
+        $this->data['view'] = 'cobrancas/visualizarCobranca';
+
+        return $this->layout();
     }
 }

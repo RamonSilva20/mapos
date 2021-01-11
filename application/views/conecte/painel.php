@@ -20,7 +20,7 @@
             <h5>Últimas Ordens de Serviço</h5>
         </div>
         <div class="widget-content">
-            <table class="table table-bordered">
+            <table id="tabela" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -59,7 +59,7 @@
             <h5>Últimas Compras</h5>
         </div>
         <div class="widget-content">
-            <table class="table table-bordered">
+            <table id="tabela" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>

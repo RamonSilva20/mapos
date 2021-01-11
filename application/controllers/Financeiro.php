@@ -145,8 +145,15 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Receita adicionada com sucesso!');
                 log_info('Adicionou uma receita');
@@ -208,8 +215,15 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Despesa adicionada com sucesso!');
                 log_info('Adicionou uma despesa');
@@ -267,8 +281,15 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => $this->input->post('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
                 log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
@@ -291,7 +312,15 @@ class Financeiro extends MY_Controller
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
             'tipo' => $this->input->post('tipo'),
+            'usuarios_id' => $this->session->userdata('id'),
         ];
+        if (set_value('idFornecedor')) {
+            $data['clientes_id'] =  set_value('idFornecedor');
+        }
+        if (set_value('idCliente')) {
+            $data['clientes_id'] =  set_value('idCliente');
+        }
+
         print_r($data);
     }
 
@@ -328,6 +357,14 @@ class Financeiro extends MY_Controller
         }
     }
 
+    public function autoCompleteClienteAddReceita()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteClienteReceita($q);
+        }
+    }
+    
     protected function getThisYear()
     {
         $dias = date("z");

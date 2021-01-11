@@ -24,7 +24,7 @@ if (!$results) {
             <div class="widget-content nopadding tab-content">
 
 
-                <table class="table table-bordered ">
+                <table id="tabela" class="table table-bordered ">
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>#</th>
@@ -88,6 +88,8 @@ if (!$results) {
             $status = '<span class="label label-inverse">Cancelado</span>';
         } elseif ($r->status == "Faturado") {
             $status = '<span class="label">Faturado</span>';
+        } elseif ($r->status == "Negociação") {
+            $status = '<span class="label">Negociação / Inadimplente</span>';
         } else {
             $status = '<span class="label">Em Andamento</span>';
         }
@@ -105,9 +107,6 @@ if (!$results) {
                               </td>';
         echo '</tr>';
     } ?>
-                        <tr>
-
-                        </tr>
                     </tbody>
                 </table>
             </div>

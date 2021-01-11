@@ -4,6 +4,26 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.26.2] - 2021-01-09
+
+### Fixed
+- Corrigindo erro nos lancamentos, onde após update não eram listados os lancamentos sem usuarios_id. [@bulfaitelo](https://github.com/bulfaitelo)
+
+## [4.26.1] - 2021-01-09
+
+## Fixed
+- Corrige um erro que bloqueava o preenchimento do cliente em adicionar vendas. [@seitbnao](https://github.com/seitbnao)
+
+## [4.26.0] - 2021-01-05
+
+## Added
+- Adiciona a cobrança ao lado do cliente. [@seitbnao](https://github.com/seitbnao)
+- Permite reenviar a cobrança por email. [@seitbnao](https://github.com/seitbnao)
+- Permite visualizar o boleto de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Permite atualizar o status de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Bloqueia o cliente de gerar uma cobrança, sendo restrito apenas para o administrador. [@seitbnao](https://github.com/seitbnao)
+- Faz uma alteração na tabela cobrancas, para que a mesma receba o id do cliente. [@seitbnao](https://github.com/seitbnao)
+
 ## [4.25.1] - 2021-01-04
 
 ## Fixed
