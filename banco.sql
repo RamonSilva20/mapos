@@ -601,7 +601,7 @@ CREATE TABLE IF NOT EXISTS `anotacoes_os` (
 -- -----------------------------------------------------
 -- Table `configuracoes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` VARCHAR(20) NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` TEXT NOT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `migrations`
