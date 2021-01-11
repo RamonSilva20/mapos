@@ -71,6 +71,7 @@
                         <div class="span3">
                                             <label for="notifica_whats_select">Tags de preenchimento<span class="required"></span></label>
                                             <select class="span12" name="notifica_whats_select" id="notifica_whats_select" value="">
+                                                <option value="0">Selecione...</option>
                                                 <option value="{CLIENTE_NOME}">Nome do Cliente</option>
                                                 <option value="{NUMERO_OS}">Número da OS</option>
                                                 <option value="{STATUS_OS}">Status da OS</option>
@@ -123,9 +124,9 @@
 
     $(document).ready(function() {
     $('#notifica_whats_select').change(function() {
-        if ($(this).val() != "")
+        if ($(this).val() != "0")
             document.getElementById("notifica_whats").value += $(this).val();
-        $(this).prop('selectedIndex', -1);
+        $(this).prop('selectedIndex', 0);
        });
     });
 </script>
