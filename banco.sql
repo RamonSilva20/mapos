@@ -615,7 +615,7 @@ INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (3, 'app_theme', 'white'),
 (4, 'per_page', '10'),
 (5, 'os_notification', 'cliente'),
-(6, 'control_estoque', '1');
+(6, 'control_estoque', '1'),
 (7, 'notifica_whats', 'Prezado(a), {CLIENTE_NOME} a OS de nº {NUMERO_OS} teve o status alterado para :{STATUS_OS} segue a descrição {DESCRI_PRODUTOS} com valor total de {VALOR_OS}!
 Para mais informações entre em contato conosco.
 Atenciosamente, {EMITENTE} {TELEFONE_EMITENTE}.');
