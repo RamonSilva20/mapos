@@ -21,7 +21,7 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Emitida em</strong></td>
                             <td>
-                                <?php echo date(('d/m/Y'), strtotime($result->dataVenda)); ?>    
+                                <?php echo date(('d/m/Y'), strtotime($result->dataVenda == null ? $result->dataInicial : $result->dataVenda)); ?>    
                             </td>
                         </tr>
                         <tr>
