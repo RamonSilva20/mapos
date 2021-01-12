@@ -21,13 +21,7 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Emitida em</strong></td>
                             <td>
-                                <?php
-                                if ($gerencianet->data->created_at != null) {
-                                    echo date(('d/m/Y H:i:s'), strtotime($gerencianet->data->created_at));
-                                } else {
-                                    echo date(('d/m/Y'), strtotime($result->dataVenda));
-                                }
-                                ?>    
+                                <?php echo date(('d/m/Y'), strtotime($result->dataVenda)); ?>    
                             </td>
                         </tr>
                         <tr>
