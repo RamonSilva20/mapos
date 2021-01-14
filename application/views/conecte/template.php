@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css"/>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
 </head>
 
@@ -74,22 +75,8 @@
         <div class="row-fluid">
 
             <div class="span12">
-                <?php if ($this->session->flashdata('error') != null) { ?>
-                    <div class="alert alert-danger">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <?php echo $this->session->flashdata('error'); ?>
-                    </div>
-                    <?php
-                } ?>
-
-                <?php if ($this->session->flashdata('success') != null) { ?>
-                    <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <?php echo $this->session->flashdata('success'); ?>
-                    </div>
-                    <?php
-                } ?>
-
+                <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo $var; ?>", "success");</script><?php endif; ?>
+                <?php if ($var = $this->session->flashdata('error')): ?><script>swal("Falha!", "<?php echo $var; ?>", "error");</script><?php endif; ?>
                 <?php if (isset($output)) {
                     $this->load->view($output);
                 } ?>
