@@ -589,9 +589,8 @@ $periodo = $this->input->get('periodo');
     });
 
     $(".datepicker").datepicker({
-      dateFormat: 'dd/mm/yy'
+      dateFormat: 'dd/mm/yy',<?php echo $configuration['control_baixa'] == 1 ? 'minDate: 0,maxDate: 0' : '' ?>
     });
-
     $('#periodo').on('change', function(event) {
       const period = $('#periodo').val();
 

@@ -62,6 +62,16 @@
                             <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label for="control_baixa" class="control-label">Controle de baixa retroativa</label>
+                        <div class="controls">
+                            <select name="control_baixa" id="control_baixa">
+                                <option value="1">Sim</option>
+                                <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?> >Não</option>
+                            </select>
+                            <span class="help-inline">Ativar ou desativar o controle de baixa financeira, com data retroativa.</span>
+                        </div>
+                    </div>
 
                     <div class="control-group">
                         <label for="notifica_whats" class="control-label">Notificação do whatsapp</label>
