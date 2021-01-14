@@ -160,7 +160,7 @@ class Os extends MY_Controller
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
                 }
 
-                $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
+                $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de Produtos e Serviços!');
                 log_info('Adicionou uma OS');
                 redirect(site_url('os/editar/') . $id);
             } else {
