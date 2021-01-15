@@ -62,9 +62,41 @@
                             <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label for="notifica_whats" class="control-label">Notificação do whatsapp</label>
+                        <div class="controls">
+                            <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder = "Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>
+                        </div>
+                        <div class="span3">
+                                            <label for="notifica_whats_select">Tags de preenchimento<span class="required"></span></label>
+                                            <select class="span12" name="notifica_whats_select" id="notifica_whats_select" value="">
+                                                <option value="0">Selecione...</option>
+                                                <option value="{CLIENTE_NOME}">Nome do Cliente</option>
+                                                <option value="{NUMERO_OS}">Número da OS</option>
+                                                <option value="{STATUS_OS}">Status da OS</option>
+                                                <option value="{VALOR_OS}">Valor da OS</option>
+                                                <option value="{DESCRI_PRODUTOS}">Descrição produtos</option>
+                                                <option value="{EMITENTE}">Nome emitente</option>
+                                                <option value="{TELEFONE_EMITENTE}">Telefone emitente</option>
+                                                <option value="{OBS_OS}">Observações</option>
+                                                <option value="{DEFEITO_OS}">Defeitos</option>
+                                                <option value="{LAUDO_OS}">Laudo</option>
+                                                <option value="{DATA_FINAL}">Data Final</option>
+                                                <option value="{DATA_INICIAL}">Data Inicial</option>
+                                                <option value="{DATA_GARANTIA}">Data da Garantia</option>
+                                            </select>
+                                        </div>
+                    <span6 class="span10">
+                        Para negrito use: *palavra* 
+                        Para itálico use: _palavra_ 
+                        Para riscado use: ~palavra~                            
+                    </span>
+                    </div>
+
                     <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6">
+                        <div class="span8">
+                            <div class="span9">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Salvar Configurações</button>
                                 <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
                                 <button id="update-mapos" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Atualizar Mapos</button>
@@ -88,5 +120,13 @@
         if (confirm('Confirma a atualização do mapos?')) {
             window.location = "<?= site_url('mapos/atualizarMapos') ?>"
         }
+    });
+
+    $(document).ready(function() {
+    $('#notifica_whats_select').change(function() {
+        if ($(this).val() != "0")
+            document.getElementById("notifica_whats").value += $(this).val();
+        $(this).prop('selectedIndex', 0);
+       });
     });
 </script>

@@ -13,9 +13,15 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Emitida em</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>Código da Transação</strong></td>
                             <td>
-                                <?php  echo date(('d/m/Y'), strtotime($result->dataVenda)); ?>
+                                <?php echo $result->charge_id ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Data da venda/os</strong></td>
+                            <td>
+                                <?php echo date(('d/m/Y'), strtotime($result->dataVenda == null ? $result->dataInicial : $result->dataVenda)); ?>    
                             </td>
                         </tr>
                         <tr>
@@ -52,12 +58,6 @@
                         echo $transactions_status[$gerencianet->data->status]; ?>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código da Transação</strong></td>
-                            <td>
-                                <?php echo $result->charge_id ?>
-                            </td>
-                        </tr>
                         <?php
                         foreach ($gerencianet->data->items as $items) {
                             echo '<tr><td style="text-align: right"><strong>Referência</strong></td><td>'.$items->name.'</td></tr>';
@@ -77,7 +77,7 @@
                     <tbody>
                         <?php
                         foreach ($gerencianet->data->history as $history) {
-                            $dataInicial = date(('d/m/yyyy H:i:s'), strtotime($history->created_at));
+                            $dataInicial = date(('d/m/Y H:i:s'), strtotime($history->created_at));
                             echo '<tr><td style="text-align: right"><strong>'.$dataInicial.'</strong></td><td>'.$history->message.'</td></tr>';
                         }
                          ?>

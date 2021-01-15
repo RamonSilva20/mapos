@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.27.0] - 2021-01-13
+
+### Added
+- Implementado notificação whatsapp personalizada e sweetalert. [@seitbnao](https://github.com/seitbnao)
+
 ## [4.26.2] - 2021-01-09
 
 ### Fixed

@@ -34,6 +34,13 @@ class Configuracoes extends Seeder
                 'config' => 'control_estoque',
                 'valor' => '1',
             ],
+            [
+                'idConfig' => 7,
+                'config' => 'notifica_whats',
+                'valor' => 'Prezado(a), {CLIENTE_NOME} a OS de nº {NUMERO_OS} teve o status alterado para :{STATUS_OS} segue a descrição {DESCRI_PRODUTOS} com valor total de {VALOR_OS}!
+                Para mais informações entre em contato conosco.
+                Atenciosamente, {EMITENTE} {TELEFONE_EMITENTE}.',
+            ],
         ];
 
         foreach ($configs as $config) {
