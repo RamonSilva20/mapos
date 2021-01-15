@@ -587,10 +587,17 @@ $periodo = $this->input->get('periodo');
       });
       return false;
     });
-
-    $(".datepicker").datepicker({
-      dateFormat: 'dd/mm/yy',<?php echo $configuration['control_baixa'] == 1 ? 'minDate: 0,maxDate: 0' : '' ?>
-    });
+    let controlBaixa = "<?php echo $configuration['control_baixa']; ?>";
+    let datePickerOptions = {
+        dateFormat: 'dd/mm/yy',
+    };
+    if (controlBaixa === '1') {
+        datePickerOptions.minDate = 0;
+        datePickerOptions.maxDate = 0;
+    }
+    $(".datepicker").datepicker(
+        datePickerOptions
+    );
     $('#periodo').on('change', function(event) {
       const period = $('#periodo').val();
 
