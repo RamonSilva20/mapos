@@ -28,6 +28,7 @@ class MY_Controller extends CI_Controller
             'os_notification' => 'cliente',
             'control_estoque' => '1',
             'notifica_whats' => '',
+            'control_baixa' => '0',
         ],
     ];
 
