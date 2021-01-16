@@ -41,6 +41,11 @@ class Configuracoes extends Seeder
                 Para mais informações entre em contato conosco.
                 Atenciosamente, {EMITENTE} {TELEFONE_EMITENTE}.',
             ],
+            [
+                'idConfig' => 8,
+                'config' => 'control_baixa',
+                'valor' => '0',
+            ],
         ];
 
         foreach ($configs as $config) {
