@@ -128,7 +128,7 @@
                    $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
                    $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected",true);
             }
-		});  
+        }); 
         $('#formProduto').validate({
             rules: {
                 descricao: {
