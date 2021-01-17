@@ -3,7 +3,7 @@
     <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
 
     <div class="span12" style="margin-left: 0">
-        
+
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
@@ -12,7 +12,7 @@
                 <h5>Editar Permissão</h5>
             </div>
             <div class="widget-content">
-                
+
                 <div class="span4">
                     <label>Nome da Permissão</label>
                     <input name="nome" type="text" id="nome" class="span12" value="<?php echo $result->nome; ?>" />
@@ -22,7 +22,7 @@
 
                 <div class="span3">
                     <label>Situação</label>
-                    
+
                     <select name="situacao" id="situacao" class="span12">
                         <?php if ($result->situacao == 1) {
     $sim = 'selected';
@@ -96,7 +96,7 @@
                                             <span class="lbl"> Excluir Cliente</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
@@ -145,10 +145,10 @@
                                             <span class="lbl"> Excluir Produto</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -194,9 +194,9 @@
                                             <span class="lbl"> Excluir Serviço</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
-                                
+
                                 <tr><td colspan="4"></td></tr>
                                 <tr>
 
@@ -243,10 +243,10 @@
                                             <span class="lbl"> Excluir OS</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -292,11 +292,11 @@
                                             <span class="lbl"> Excluir Venda</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -342,11 +342,11 @@
                                             <span class="lbl"> Excluir Cobranças</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
-                                
+
                                 <tr>
 
                                     <td>
@@ -392,9 +392,9 @@
                                             <span class="lbl"> Excluir Garantia</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
-                                
+
                                 <tr><td colspan="4"></td></tr>
 
                                 <tr>
@@ -442,57 +442,7 @@
                                             <span class="lbl"> Excluir Arquivo</span>
                                         </label>
                                     </td>
-                                 
-                                </tr>
-                                
-                                <tr><td colspan="4"></td></tr>
 
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['vPagamento'])) {
-    if ($permissoes['vPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="vPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Visualizar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['aPagamento'])) {
-    if ($permissoes['aPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="aPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Adicionar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['ePagamento'])) {
-    if ($permissoes['ePagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="ePagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Editar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['dPagamento'])) {
-    if ($permissoes['dPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="dPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Excluir Pagamento</span>
-                                        </label>
-                                    </td>
-                                 
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
@@ -542,7 +492,7 @@
                                             <span class="lbl"> Excluir Lançamento</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr><td colspan="4"></td></tr>
@@ -592,7 +542,7 @@
                                             <span class="lbl"> Relatório Produto</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr>
@@ -619,7 +569,7 @@
                                         </label>
                                     </td>
                                     <td colspan="2"></td>
-                                 
+
                                 </tr>
                                 <tr><td colspan="4"></td></tr>
 
@@ -668,7 +618,7 @@
                                             <span class="lbl"> Backup</span>
                                         </label>
                                     </td>
-                                 
+
                                 </tr>
 
                                 <tr>
@@ -698,8 +648,8 @@
                     </div>
                 </div>
 
-              
-    
+
+
             <div class="form-actions">
                 <div class="span12">
                     <div class="span6 offset3">
@@ -708,11 +658,11 @@
                     </div>
                 </div>
             </div>
-           
+
             </div>
         </div>
 
-                   
+
     </div>
 
 </form>
@@ -726,9 +676,9 @@
 
     $("#marcarTodos").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
-    });   
+    });
 
- 
+
     $("#formPermissao").validate({
         rules :{
             nome: {required: true}
@@ -736,9 +686,9 @@
         messages:{
             nome: {required: 'Campo obrigatório'}
         }
-    });     
+    });
 
-        
+
 
     });
 </script>

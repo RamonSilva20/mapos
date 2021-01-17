@@ -133,11 +133,6 @@
           <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
             <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
           <?php } ?>
-          <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPagamento')) { ?>
-            <li><a href="<?= site_url('pagamentos') ?>"><span>Pagamentos</span></a></li>
-          <?php
-          } ?>
-
         </ul>
       </li>
     <?php

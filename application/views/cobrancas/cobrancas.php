@@ -19,7 +19,6 @@
             </thead>
             <tbody>
                 <?php
-
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhuma cobrança Cadastrada</td>
@@ -27,49 +26,36 @@
                     }
                     foreach ($results as $r) {
                         $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
-                        
+                        $cobrancaStatus = getCobrancaTransactionStatus(
+                            $this->config->item('payment_gateways'),
+                            $r->payment_gateway,
+                            $r->status
+                        );
 
-                        $transactions_status = [
-                            "new" => "Cobrança / Assinatura gerada.",
-                            "waiting" => "Aguardando a confirmação do pagamento.",
-                            "paid" => "Pagamento confirmado.",
-                            "unpaid" => "Não foi possível confirmar o pagamento da cobrança.",
-                            "refunded" => "Pagamento devolvido pelo lojista ou pelo intermediador Gerencianet. ",
-                            "contested" => "Pagamento em processo de contestação.",
-                            "canceled" => "Cobrança/Assinatura cancelada pelo vendedor ou pelo pagador. ",
-                            "settled" => "Cobrança/Pagamento foi confirmada manualmente. ",
-                            "link" => "Link de pagamento.",
-                            "expired" => "Link/Assinatura de pagamento expirado.",
-                            "active" => "Assinatura ativa. Todas as cobranças estão sendo geradas.",
-                            "finished" => "Carnê está finalizado.",
-                            "up_to_date" => "Carnê encontra-se em dia.",
-                        ];
-                      
                         echo '<tr>';
-                        echo '<td>' . $r->charge_id . '</td>';
                         echo '<td>' . $dataVenda . '</td>';
 
                         if ($r->os_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '">  Ordem de Serviço: #' . $r->os_id . '</a></td>';
+                            echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '"> Ordem de Serviço: #' . $r->os_id . '</a></td>';
                         }
                         if ($r->vendas_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
+                            echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '"> Venda: #' . $r->vendas_id . '</a></td>';
                         }
 
-                        echo '<td>' .  $transactions_status[$r->status] . '</td>';
-                        echo '<td>R$ ' . number_format($r->total, 2, ',', '.') . '</td>';
+                        echo '<td>' .  $cobrancaStatus . '</td>';
+                        echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->charge_id . '" class="btn tip-top" title="Cancelar cobrança"><i class="fas fa-power-off"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
-                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Confirmar pagamento"><i class="fas fa-check-circle"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Visualizar Cobrança"><i class="fas fa-eye"></i></a>';
+                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->idCobranca . '" class="btn tip-top" title="Cancelar cobrança"><i class="fas fa-power-off"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->idCobranca . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
+                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->idCobranca . '" class="btn btn-inverse tip-top" title="Confirmar pagamento"><i class="fas fa-check-circle"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->idCobranca . '" class="btn btn-inverse tip-top" title="Visualizar Cobrança"><i class="fas fa-eye"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
                             echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCobranca')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" charge_id="' . $r->charge_id . '" class="btn btn-danger tip-top" title="Excluir cobrança"><i class="fas fa-trash-alt"></i></a>';
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" excluir_id="' . $r->idCobranca . '" class="btn btn-danger tip-top" title="Excluir cobrança"><i class="fas fa-trash-alt"></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -88,7 +74,7 @@
             <h5 id="myModalLabel">Excluir cobrança</h5>
         </div>
         <div class="modal-body">
-            <input type="hidden" id="charge_id" name="charge_id" value="" />
+            <input type="hidden" id="excluir_id" name="excluir_id" value="" />
             <h5 style="text-align: center">Deseja realmente excluir esta cobrança? A cobrança será cancelada.</h5>
         </div>
         <div class="modal-footer">
@@ -97,7 +83,6 @@
         </div>
     </form>
 </div>
-
 
 <div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
@@ -115,7 +100,6 @@
         </div>
     </form>
 </div>
-
 
 <div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/cobrancas/cancelar" method="post">
@@ -136,10 +120,9 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        
         $(document).on('click', 'a', function(event) {
-            var cobranca = $(this).attr('charge_id');
-            $('#charge_id').val(cobranca);
+            var cobranca = $(this).attr('excluir_id');
+            $('#excluir_id').val(cobranca);
         });
 
         $(document).on('click', 'a', function(event) {

@@ -8,8 +8,8 @@ $config['payment_gateways'] = [
         'library_name' => 'GerencianetSdk',
         'production' => false,
         'credentials' => [
-            'client_id' => 'Client_Id_8f9bbd52f9628ff88b863ebc82ebf8f0fa83ace7',
-            'client_secret' => 'Client_Secret_a6de90f01e0b3fbf19fe16ce4877bb3f22c6491f'
+            'client_id' => '',
+            'client_secret' => ''
         ],
         'timeout' => 30,
         'payment_methods' => [
@@ -19,7 +19,7 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link',
+                'value' => 'link'
             ]
         ],
         'transaction_status' => [
@@ -41,15 +41,31 @@ $config['payment_gateways'] = [
     'MercadoPago' => [
         'name' => 'MercadoPago',
         'library_name' => 'MercadoPago',
-        'production' => false,
-        'credentials' => [],
-        'timeout' => 30,
+        'credentials' => [
+            'access_token' => '',
+            'public_key' => '',
+            'client_secret' => '',
+            'client_id' => '',
+            'integrator_id' => '',
+            'platform_id' => '',
+            'corporation_id' => ''
+        ],
         'payment_methods' => [
             [
                 'name' => 'Boleto',
                 'value' => 'boleto',
-            ],
+            ]
         ],
-        'transaction_status' => []
+        'transaction_status' => [
+            'pending' => 'O usuário ainda não concluiu o processo de pagamento',
+            'approved' => 'O pagamento foi aprovado e credenciado',
+            'authorized' => 'O pagamento foi autorizado, mas ainda não foi capturado',
+            'in_process' => 'O pagamento está sendo revisado',
+            'in_mediation' => 'Os usuários iniciaram uma disputa',
+            'rejected' => 'O pagamento foi rejeitado, o usuário pode tentar o pagamento novamente',
+            'cancelled' => 'O pagamento foi cancelado por uma das partes ou porque o prazo para pagamento expirou',
+            'refunded' => 'O pagamento foi reembolsado ao usuário',
+            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador'
+        ]
     ]
 ];

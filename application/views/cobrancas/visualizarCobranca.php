@@ -13,77 +13,131 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código da Transação</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>Cliente</strong></td>
                             <td>
-                                <?php echo $result->charge_id ?>
+                                <?php echo $result->nomeCliente; ?>
                             </td>
                         </tr>
+
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Data da venda/os</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>Cliente (Documento)</strong></td>
                             <td>
-                                <?php echo date(('d/m/Y'), strtotime($result->dataVenda == null ? $result->dataInicial : $result->dataVenda)); ?>    
+                                <?php echo $result->documento; ?>
                             </td>
                         </tr>
+
                         <tr>
-                            <td style="text-align: right"><strong>Cliente</strong></td>
+                            <td style="text-align: right; width: 30%"><strong>Cliente (Telefone)</strong></td>
                             <td>
-                                <?php echo $result->nomeCliente ?>
+                                <?php echo $result->telefone; ?>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Cliente (Documento)</strong></td>
+                            <td>
+                                <?php echo $result->celular; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Cliente (Email)</strong></td>
+                            <td>
+                                <?php echo $result->email; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Id interno (id)</strong></td>
+                            <td>
+                                <?php echo $result->idCobranca; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Id externo (charge_id)</strong></td>
+                            <td>
+                                <?php echo $result->charge_id; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Gateway de Pagamento</strong></td>
+                            <td>
+                                <?php echo $result->payment_gateway; ?>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td style="text-align: right"><strong>Valor da cobrança</strong></td>
                             <td>R$
-                                <?php echo number_format($result->total, 2, ',', '.'); ?>
+                                <?php echo number_format($result->total / 100, 2, ',', '.'); ?>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="text-align: right"><strong>Status atual</strong></td>
                             <td>
                                 <?php
-                                $transactions_status = [
-                            "new" => "Cobrança / Assinatura gerada.",
-                            "waiting" => "Aguardando a confirmação do pagamento.",
-                            "paid" => "Pagamento confirmado.",
-                            "unpaid" => "Não foi possível confirmar o pagamento da cobrança.",
-                            "refunded" => "Pagamento devolvido pelo lojista ou pelo intermediador Gerencianet. ",
-                            "contested" => "Pagamento em processo de contestação.",
-                            "canceled" => "Cobrança/Assinatura cancelada pelo vendedor ou pelo pagador. ",
-                            "settled" => "Cobrança/Pagamento foi confirmada manualmente. ",
-                            "link" => "Link de pagamento.",
-                            "expired" => "Link/Assinatura de pagamento expirado.",
-                            "active" => "Assinatura ativa. Todas as cobranças estão sendo geradas.",
-                            "finished" => "Carnê está finalizado.",
-                            "up_to_date" => "Carnê encontra-se em dia.",
-                        ];
-                        echo $transactions_status[$gerencianet->data->status]; ?>
+                                echo getCobrancaTransactionStatus(
+                                    $this->config->item('payment_gateways'),
+                                    $result->payment_gateway,
+                                    $result->status
+                                );
+                                ?>
                             </td>
                         </tr>
-                        <?php
-                        foreach ($gerencianet->data->items as $items) {
-                            echo '<tr><td style="text-align: right"><strong>Referência</strong></td><td>'.$items->name.'</td></tr>';
-                        }
-                         ?>
-                    </tbody>
-                </table>
-            <div class="accordion-heading">
-            <div class="widget-title">
-                <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                    <span class="icon"><i class="fas fa-history"></i></span>
-                    <h5>Histórico da cobrança</h5>
-                </a>
-            </div>
-            </div>
-                <table class="table table-bordered">
-                    <tbody>
-                        <?php
-                        foreach ($gerencianet->data->history as $history) {
-                            $dataInicial = date(('d/m/Y H:i:s'), strtotime($history->created_at));
-                            echo '<tr><td style="text-align: right"><strong>'.$dataInicial.'</strong></td><td>'.$history->message.'</td></tr>';
-                        }
-                         ?>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Expiração</strong></td>
+                            <td>
+                                <?php echo $result->expire_at; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Método de pagamento</strong></td>
+                            <td>
+                                <?php echo $result->payment_method; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Url de pagamento</strong></td>
+                            <td>
+                                <?php echo $result->payment_url; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Código de barras</strong></td>
+                            <td>
+                                <?php echo $result->barcode; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Link</strong></td>
+                            <td>
+                                <a href="<?php echo $result->link; ?>" target="_blank">Abrir em nova aba</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>PDF</strong></td>
+                            <td>
+                                <a href="<?php echo $result->pdf; ?>" target="_blank">Abrir em nova aba</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right"><strong>Mensagem</strong></td>
+                            <td>
+                                <?php echo $result->message; ?>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-</div>

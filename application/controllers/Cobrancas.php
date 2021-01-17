@@ -25,6 +25,61 @@ class Cobrancas extends MY_Controller
         $this->cobrancas();
     }
 
+    public function adicionar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aCobranca')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['message' => 'Você não tem permissão para adicionar cobrança!']));
+        }
+
+        $this->load->library('form_validation');
+        if ($this->form_validation->run('cobrancas') == false) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['message' => validation_errors()]));
+        } else {
+            $id = $this->input->post('id');
+            $tipo = $this->input->post('tipo');
+            $formaPagamento = $this->input->post('forma_pagamento');
+            $gatewayDePagamento = $this->input->post('gateway_de_pagamento');
+
+            $this->load->model('Os_model');
+            $this->load->model('vendas_model');
+            $cobranca = $tipo === 'os'
+                ? $this->Os_model->getCobrancas($this->input->post('id'))
+                : $this->vendas_model->getCobrancas($this->input->post('id'));
+            if ($cobranca) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['message' => 'Já existe cobrança!']));
+            }
+
+            $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
+
+            try {
+                $cobranca = $this->PaymentGateway->gerarCobranca(
+                    $id,
+                    $tipo,
+                    $formaPagamento
+                );
+
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode($cobranca));
+            } catch (\Exception $e) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(500)
+                    ->set_output(json_encode(['message' => $e->getMessage()]));
+            }
+        }
+    }
+
     public function cobrancas()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
@@ -33,6 +88,7 @@ class Cobrancas extends MY_Controller
         }
 
         $this->load->library('pagination');
+        $this->load->config('payment_gateways');
 
         $this->data['configuration']['base_url'] = site_url('cobrancas/cobrancas/');
         $this->data['configuration']['total_rows'] = $this->cobrancas_model->count('cobrancas');
@@ -53,27 +109,15 @@ class Cobrancas extends MY_Controller
             redirect(site_url('cobrancas/cobrancas/'));
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
-        $change_id = $this->input->post('charge_id');
-        if ($change_id == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir cobrança.');
-            redirect(site_url('cobrancas/cobrancas/'));
-        }
-        if ($this->cobrancas_model->delete('cobrancas', 'charge_id', $change_id) == true) {
-            $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-            //Cancelamos o pagamento caso esteja em aberto
-            $pagamento = $this->GerencianetSdk->cancelarTransacao(
-                $change_id,
-                $defaultPayment->client_id,
-                $defaultPayment->client_secret
-            );
+        $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
 
-            log_info('Removeu uma cobrança. ID' . $change_id);
+        if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
+            log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
             $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
         } else {
             $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
         }
+
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -89,36 +133,9 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
 
-        $change_id = intval($this->uri->segment(3));
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
-        //Pegamos o retorno para atualizar o banco
-        $pagamento = $this->GerencianetSdk->receberInfo(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        $data = [
-            'status' => $obj->data->status,
-        ];
-
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
-            $this->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID' .  $change_id);
-            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
-            if ($obj->data->status == "paid" || $obj->data->status == "settled") {
-                //TODO: dar baixa no lançamento caso exista
-            }
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -129,47 +146,9 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
 
-        $change_id = $this->input->post('confirma_id');
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
-        $pagamento = $this->GerencianetSdk->confirmarPagamento(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        if ($obj->code == '200') {
-            $this->session->set_flashdata('success', 'Pagamento da cobrança confirmada com sucesso!');
-        } else {
-            $this->session->set_flashdata('error', $obj->errorDescription);
-            redirect(site_url('cobrancas/cobrancas/'));
-        }
-        //Pegamos o retorno para atualizar o banco
-        $pagamento = $this->GerencianetSdk->receberInfo(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        $data = [
-            'status' => $obj->data->status,
-        ];
-
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
-            //TODO: fazer a baixa do financeiro
-            log_info('Alterou um status de cobrança. ID' .  $change_id);
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -180,44 +159,9 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
 
-        $change_id = $this->input->post('cancela_id');
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-        $pagamento = $this->GerencianetSdk->cancelarTransacao(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        if ($obj->code == '200') {
-            $this->session->set_flashdata('success', 'Cobrança cancelada com sucesso!');
-        } else {
-            $this->session->set_flashdata('error', $obj->errorDescription);
-
-            redirect(site_url('cobrancas/cobrancas/'));
-        }
-        //Pegamos o retorno para atualizar o banco
-        $pagamento = $this->GerencianetSdk->receberInfo(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-        $data = [
-            'status' => $obj->data->status,
-        ];
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
-            //TODO: dar baixa no lançamento caso exista
-            log_info('Alterou um status de cobrança. ID' .  $change_id);
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -233,30 +177,14 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
         $this->load->model('cobrancas_model');
+        $this->load->config('payment_gateways');
 
-        $this->data['result'] = $this->cobrancas_model->getByOs($this->uri->segment(3));
-        if ($this->data['result'] == null) {
-            $this->data['result'] = $this->cobrancas_model->getByVendas($this->uri->segment(3));
-        }
+        $this->data['result'] = $this->cobrancas_model->getById($this->uri->segment(3));
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Cobrança não encontrada.');
             redirect(site_url('cobrancas/'));
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
-
-        $change_id = intval($this->data['result']->charge_id);
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
-        $pagamento = $this->GerencianetSdk->receberInfo(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $this->data['gerencianet'] = json_decode(json_encode($pagamento), false);
         $this->data['view'] = 'cobrancas/visualizarCobranca';
 
         return $this->layout();
