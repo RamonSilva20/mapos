@@ -77,15 +77,7 @@
                     <div class="control-group">
                         <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                         <div class="controls">
-                            <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
-                            <select id="unidade" name="unidade">
-                                <option value="UN">Unidade</option>
-                                <option value="KG">Kilograma</option>
-                                <option value="LT">Litro</option>
-                                <option value="CX">Caixa</option>
-                                <option value="M2">M²</option>
-                                <option value="OT">Outro</option>
-                            </select>
+                            <select id="unidade" name="unidade"></select>
                         </div>
                     </div>
                     <div class="control-group">
@@ -117,6 +109,11 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+            for (i in data.medidas) {
+                   $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
+            }
+        });
         $(".money").maskMoney();
         $('#formProduto').validate({
             rules: {
