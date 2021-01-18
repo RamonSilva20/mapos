@@ -162,7 +162,7 @@ class Vendas extends MY_Controller
                 'id' => $this->uri->segment(3),
                 'tipo' => 'venda',
             ],
-            true,
+            true
         );
 
         $this->data['view'] = 'vendas/visualizarVenda';

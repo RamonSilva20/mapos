@@ -302,7 +302,7 @@ class Os extends MY_Controller
                 'id' => $this->uri->segment(3),
                 'tipo' => 'os',
             ],
-            true,
+            true
         );
         $this->data['view'] = 'os/visualizarOs';
 
