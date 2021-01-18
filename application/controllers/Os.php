@@ -160,7 +160,7 @@ class Os extends MY_Controller
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
                 }
 
-                $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de "Produtos" e "Serviços"!');
+                $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de Produtos e Serviços!');
                 log_info('Adicionou uma OS');
                 redirect(site_url('os/editar/') . $id);
             } else {
@@ -359,7 +359,6 @@ class Os extends MY_Controller
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança (OS) criada com suceso. ID: ' . $obj->data->charge_id);
-                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
             $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
@@ -412,7 +411,6 @@ class Os extends MY_Controller
             ];
             if ($this->os_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
-                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
             $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];

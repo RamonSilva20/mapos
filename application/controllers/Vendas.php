@@ -218,7 +218,6 @@ class Vendas extends MY_Controller
             ];
             if ($this->vendas_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
-                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
             $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];
@@ -270,7 +269,6 @@ class Vendas extends MY_Controller
             ];
             if ($this->vendas_model->add('cobrancas', $data) == true) {
                 log_info('Cobrança criada com suceso. ID: ' . $obj->data->charge_id);
-                $this->session->set_flashdata('success', 'Cobrança criada com sucesso!');
             }
         } else {
             $json = ['code' => $obj->code, 'error' => $obj->error , 'errorDescription' => $obj->errorDescription ];

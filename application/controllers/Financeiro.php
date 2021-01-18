@@ -273,9 +273,9 @@ class Financeiro extends MY_Controller
 
             $data = [
                 'descricao' => $this->input->post('descricao'),
-                'valor' => $this->input->post('valor'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
+                'valor' => $this->input->post('valor'),
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
@@ -305,9 +305,9 @@ class Financeiro extends MY_Controller
 
         $data = [
             'descricao' => $this->input->post('descricao'),
-            'valor' => $this->input->post('valor'),
             'data_vencimento' => $this->input->post('vencimento'),
-            'data_pagamento' => $this->input->post('pagamento'),
+            'data_pagamento' => $pagamento,
+            'valor' => $this->input->post('valor'),
             'baixado' => $this->input->post('pago'),
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
