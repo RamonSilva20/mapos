@@ -22,6 +22,6 @@ class Migration_add_usuarios_lancamentos extends CI_Migration
 
     public function down()
     {
-        $this->dbforge->drop_column('emitente', 'cep');
+        $this->dbforge->drop_column('lancamentos', 'usuarios_id');
     }
 }
