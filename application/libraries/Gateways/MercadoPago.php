@@ -2,8 +2,8 @@
 
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
-use MercadoPago\SDK;
 use MercadoPago\Payment;
+use MercadoPago\SDK;
 
 class MercadoPago extends BasePaymentGateway
 {

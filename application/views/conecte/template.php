@@ -75,11 +75,11 @@
         <div class="row-fluid">
 
             <div class="span12">
-                <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"','',$var); ?>", "success");</script><?php endif; ?>
-                <?php if ($var = $this->session->flashdata('error')): ?><script>swal("Falha!", "<?php echo str_replace('"','',$var); ?>", "error");</script><?php endif; ?>
+                <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
+                <?php if ($var = $this->session->flashdata('error')): ?><script>swal("Falha!", "<?php echo str_replace('"', '', $var); ?>", "error");</script><?php endif; ?>
                 <?php if (isset($output)) {
-                    $this->load->view($output);
-                } ?>
+    $this->load->view($output);
+} ?>
 
             </div>
         </div>

@@ -55,7 +55,7 @@ abstract class BasePaymentGateway implements PaymentGateway
         throw new \Exception('Não implementado');
     }
 
-    protected abstract function gerarCobrancaBoleto($id, $tipo);
+    abstract protected function gerarCobrancaBoleto($id, $tipo);
 
-    protected abstract function gerarCobrancaLink($id, $tipo);
+    abstract protected function gerarCobrancaLink($id, $tipo);
 }
