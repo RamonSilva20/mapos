@@ -189,4 +189,23 @@ class Cobrancas extends MY_Controller
 
         return $this->layout();
     }
+
+    public function enviarEmail()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('cobrancas');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
+            redirect(base_url());
+        }
+
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->enviarEmail($this->uri->segment(3));
+        $this->session->set_flashdata('success', 'Email adicionado na fila.');
+
+        redirect(site_url('cobrancas/cobrancas/'));
+    }
 }

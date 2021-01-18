@@ -17,6 +17,8 @@ class MercadoPago extends BasePaymentGateway
         $this->ci->load->model('Os_model');
         $this->ci->load->model('vendas_model');
         $this->ci->load->model('cobrancas_model');
+        $this->ci->load->model('mapos_model');
+        $this->ci->load->model('email_model');
 
         $mercadoPagoConfig = $this->ci->config->item('payment_gateways')['MercadoPago'];
 
@@ -58,6 +60,45 @@ class MercadoPago extends BasePaymentGateway
         $cobranca = $this->ci->cobrancas_model->getById($id);
         if (!$cobranca) {
             throw new \Exception('Cobrança não existe!');
+        }
+
+        $emitente = $this->ci->mapos_model->getEmitente();
+        if (!$emitente) {
+            throw new \Exception('Emitente não configurado!');
+        }
+
+        $html = $this->ci->load->view(
+            'cobrancas/emails/cobranca',
+            [
+                'cobranca' => $cobranca,
+                'emitente' => $emitente[0],
+                'paymentGatewaysConfig' => $this->ci->config->item('payment_gateways'),
+            ],
+            true
+        );
+
+        $assunto = "Cobrança - " . $emitente[0]->nome;
+        if ($cobranca->os_id) {
+            $assunto .= ' - OS #' . $cobranca->os_id;
+        } else {
+            $assunto .= ' - Venda #' . $cobranca->vendas_id;
+        }
+
+        $remetentes = [$cobranca->email];
+        foreach ($remetentes as $remetente) {
+            $headers = [
+                'From' => $emitente[0]->email,
+                'Subject' => $assunto,
+                'Return-Path' => ''
+            ];
+            $email = [
+                'to' => $remetente,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            ];
+            $this->ci->email_model->add('email_queue', $email);
         }
     }
 
