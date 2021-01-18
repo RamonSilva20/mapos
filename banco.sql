@@ -376,6 +376,7 @@ CREATE TABLE `cobrancas` (
   `total` varchar(15) DEFAULT NULL,
   `barcode` varchar(255) NOT NULL,
   `link` varchar(255) NOT NULL,
+  `payment_gateway` varchar(255) NULL DEFAULT NULL,
   `payment` varchar(64) NOT NULL,
   `pdf` varchar(255) DEFAULT NULL,
   `vendas_id` int(11) DEFAULT NULL,
