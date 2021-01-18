@@ -123,7 +123,7 @@
 <script type="text/javascript">
     function gerarCPF() {
         $.getJSON('http://geradorapp.com/api/v1/cpf/generate?token=7559f6941d8a2bdbafc13c0973d5852d', function(r) {
-           if(r.status == 1) {
+           if (r.status == 1) {
                $('#documento').val(r.data.number_formatted);
            }
         });
