@@ -9,6 +9,8 @@ class GerencianetSdk extends BasePaymentGateway
     /** Gerencianet $gerenciaNetApi */
     private $gerenciaNetApi;
 
+    private $gerenciaNetConfig;
+
     public function __construct()
     {
         $this->ci = &get_instance();
@@ -20,6 +22,7 @@ class GerencianetSdk extends BasePaymentGateway
         $this->ci->load->model('email_model');
 
         $gerenciaNetConfig = $this->ci->config->item('payment_gateways')['GerencianetSdk'];
+        $this->gerenciaNetConfig = $gerenciaNetConfig;
         $this->gerenciaNetApi = new Gerencianet([
             'client_id' => $gerenciaNetConfig['credentials']['client_id'],
             'client_secret' => $gerenciaNetConfig['credentials']['client_secret'],
@@ -205,7 +208,7 @@ class GerencianetSdk extends BasePaymentGateway
             ];
         }
 
-        $expirationDate = (new DateTime())->add(new DateInterval('P3D'));
+        $expirationDate = (new DateTime())->add(new DateInterval($this->gerenciaNetConfig['boleto_expiration']));
         $expirationDate = ($expirationDate->format('Y-m-d'));
         $body = [
             'items' => [

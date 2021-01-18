@@ -10,6 +10,8 @@ class MercadoPago extends BasePaymentGateway
     /** SDK $mercadoPagoApi */
     private $mercadoPagoApi;
 
+    private $mercadoPagoConfig;
+
     public function __construct()
     {
         $this->ci = &get_instance();
@@ -21,6 +23,7 @@ class MercadoPago extends BasePaymentGateway
         $this->ci->load->model('email_model');
 
         $mercadoPagoConfig = $this->ci->config->item('payment_gateways')['MercadoPago'];
+        $this->mercadoPagoConfig = $mercadoPagoConfig;
 
         $mercadoPagoApi = new SDK();
         $mercadoPagoApi->setAccessToken($mercadoPagoConfig['credentials']['access_token']);
@@ -192,15 +195,15 @@ class MercadoPago extends BasePaymentGateway
 
         $clientNameParts = explode(' ', $entity->nomeCliente);
         $documento = preg_replace('/[^0-9]/', '', $entity->documento);
-        // $expirationDate = (new DateTime())->add(new DateInterval('P3D'));
-        // $expirationDate = ($expirationDate->format('c'));
+        $expirationDate = (new DateTime())->add(new DateInterval($this->mercadoPagoConfig['boleto_expiration']));
+        $expirationDate = ($expirationDate->format(DateTime::RFC3339_EXTENDED));
 
         $payment = new Payment();
         $payment->transaction_amount = floatval($totalProdutos) + floatval($totalServicos);
         $payment->description = PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
         $payment->payment_method_id = "bolbradesco";
         $payment->notification_url = "http://mapos.com.br/";
-        // $payment->date_of_expiration = $expirationDate;
+        $payment->date_of_expiration = $expirationDate;
         $payment->payer = [
             'email' => $entity->email,
             'first_name' => $clientNameParts[0],

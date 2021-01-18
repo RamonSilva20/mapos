@@ -12,6 +12,7 @@ $config['payment_gateways'] = [
             'client_secret' => ''
         ],
         'timeout' => 30,
+        'boleto_expiration' => 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
@@ -50,6 +51,7 @@ $config['payment_gateways'] = [
             'platform_id' => '',
             'corporation_id' => ''
         ],
+        'boleto_expiration' => 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
