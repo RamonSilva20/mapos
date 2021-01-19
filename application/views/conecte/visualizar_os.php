@@ -192,7 +192,6 @@ $totalProdutos = 0; ?>
     </div>
 </div>
 
-<script src="<?= base_url('assets/js/script-payments.js'); ?>"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#imprimir").click(function() {
@@ -222,16 +221,13 @@ $totalProdutos = 0; ?>
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-style.css' />");
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-media.css' />");
 
-
             mywindow.document.write("</head><body >");
             mywindow.document.write(data);
             mywindow.document.write("</body></html>");
 
             mywindow.document.close(); // necessary for IE >= 10
 
-
             return true;
         }
-
     });
 </script>
