@@ -345,6 +345,7 @@ class GerencianetSdk extends BasePaymentGateway
             'payment_method' => 'link',
             'payment_gateway' => 'GerencianetSdk',
             'payment_url' => $result['data']['payment_url'],
+            'link' => $result['data']['payment_url'],
             'message' => $result['data']['message'],
         ];
 
