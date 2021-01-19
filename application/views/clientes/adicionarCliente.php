@@ -19,9 +19,8 @@
                   <div class="control-group">
                       <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                       <div class="controls">
-                          <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
+                          <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento') == '' ? '000.000.000-00' : set_value('documento'); ?>"  />
                           <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar Informações (CNPJ)</button>
-                          <button onclick="gerarCPF();" class="btn btn-xs" type="button">Gerar CPF</button>
                       </div>
                   </div>
                   <div class="control-group">
@@ -121,13 +120,6 @@
 
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
-    function gerarCPF() {
-        $.getJSON('http://geradorapp.com/api/v1/cpf/generate?token=7559f6941d8a2bdbafc13c0973d5852d', function(r) {
-           if (r.status == 1) {
-               $('#documento').val(r.data.number_formatted);
-           }
-        });
-    }
     $(document).ready(function() {
         $('#formCliente').validate({
             rules: {
