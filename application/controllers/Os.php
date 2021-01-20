@@ -220,7 +220,11 @@ class Os extends MY_Controller
             ];
 
             $osAntes = $this->os_model->getById($this->input->post('idOs'));
+            if($osAntes->status == "Cancelado") {
+                $this->session->set_flashdata('error', 'Esta OS já foi cancelada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
 
+                redirect(site_url('os/editar/') . $this->input->post('idOs'));
+            }
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -261,13 +265,7 @@ class Os extends MY_Controller
                     if ($this->data['configuration']['control_estoque'] && $os->status == "Cancelado" && $osAntes->status != "Cancelado") {
                         foreach ($produtos as $p) {
                             $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
-                        }
-                    }
-                    if ($this->data['configuration']['control_estoque'] && $os->status != "Cancelado" && $osAntes->status == "Cancelado") {
-                        foreach ($produtos as $p) {
-                            $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
-                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: (+)'.$p->quantidade);
                         }
                     }
                 }
