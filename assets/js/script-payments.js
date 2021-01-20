@@ -22,7 +22,7 @@ $('#form-gerar-cobranca').submit(function (e) {
         success: function (response) {
             swal("Sucesso!", "Cobrança criada com sucesso!", "success");
             setTimeout(function() {
-                window.location.href = '/index.php/cobrancas/visualizar/' + response.idCobranca;
+                window.location.href = window.BaseUrl + 'index.php/cobrancas/visualizar/' + response.idCobranca;
             }, 5000);
         },
         error: function (response) {
