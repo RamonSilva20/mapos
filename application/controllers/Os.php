@@ -655,13 +655,6 @@ class Os extends MY_Controller
         }
 
         if ($this->os_model->add('produtos_os', $data) == true) {
-            $this->load->model('produtos_model');
-
-            if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
-                }
-            }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
             return $this->output
@@ -688,16 +681,6 @@ class Os extends MY_Controller
         }
 
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
-            $quantidade = $this->input->post('quantidade');
-            $produto = $this->input->post('produto');
-
-            $this->load->model('produtos_model');
-
-            if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
-                }
-            }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
             echo json_encode(['result' => true]);
@@ -921,17 +904,30 @@ class Os extends MY_Controller
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
 
-                log_info('Faturou uma OS. ID: ' . $os);
+                if ($produtos = $this->os_model->getProdutos($os)) {
+                    $this->load->model('produtos_model');
+                    if ($this->data['configuration']['control_estoque']) {
+                        foreach ($produtos as $p) {
+                            $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
+                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                        }
+                    }
+                }
 
+                log_info('Faturou uma OS. ID: ' . $os);
                 $this->session->set_flashdata('success', 'OS faturada com sucesso!');
-                $json = ['result' => true];
-                echo json_encode($json);
-                die();
+
+                return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true]));
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
-                $json = ['result' => false];
-                echo json_encode($json);
-                die();
+
+                return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => false]));
             }
         }
 
