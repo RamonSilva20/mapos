@@ -27,24 +27,12 @@
                     }
                     foreach ($results as $r) {
                         $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
-                        
+                        $cobrancaStatus = getCobrancaTransactionStatus(
+                            $this->config->item('payment_gateways'),
+                            $r->payment_gateway,
+                            $r->status
+                        );
 
-                        $transactions_status = [
-                            "new" => "Cobrança / Assinatura gerada.",
-                            "waiting" => "Aguardando a confirmação do pagamento.",
-                            "paid" => "Pagamento confirmado.",
-                            "unpaid" => "Não foi possível confirmar o pagamento da cobrança.",
-                            "refunded" => "Pagamento devolvido pelo lojista ou pelo intermediador Gerencianet. ",
-                            "contested" => "Pagamento em processo de contestação.",
-                            "canceled" => "Cobrança/Assinatura cancelada pelo vendedor ou pelo pagador. ",
-                            "settled" => "Cobrança/Pagamento foi confirmada manualmente. ",
-                            "link" => "Link de pagamento.",
-                            "expired" => "Link/Assinatura de pagamento expirado.",
-                            "active" => "Assinatura ativa. Todas as cobranças estão sendo geradas.",
-                            "finished" => "Carnê está finalizado.",
-                            "up_to_date" => "Carnê encontra-se em dia.",
-                        ];
-                      
                         echo '<tr>';
                         echo '<td>' . $r->charge_id . '</td>';
                         echo '<td>' . $dataVenda . '</td>';
@@ -55,16 +43,17 @@
                         if ($r->vendas_id != '') {
                             echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
                         }
-                        
-                        echo '<td>' .  $transactions_status[$r->status] . '</td>';
-                        echo '<td>R$ ' . number_format($r->total, 2, ',', '.') . '</td>';
+
+                        echo '<td>' . $cobrancaStatus . '</td>';
+                        echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/atualizarcobranca/' . $r->charge_id . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/atualizarcobranca/' . $r->idCobranca . '" class="btn btn-inverse tip-top" title="Atualizar Cobrança"><i class="fas fa-sync"></i></a>';
                         }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
+
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
                             echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->charge_id . '" class="btn btn-info tip-top" title="Reenviar por email"><i class="fas fa-envelope-open-text"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->idCobranca . '" class="btn btn-info tip-top" title="Reenviar por email"><i class="fas fa-envelope-open-text"></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -131,7 +120,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
         $(document).on('click', 'a', function(event) {
             var cobranca = $(this).attr('charge_id');
             $('#charge_id').val(cobranca);
