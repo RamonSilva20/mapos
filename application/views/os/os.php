@@ -136,7 +136,7 @@
                                 echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
                             }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && ($r->status != "Cancelado" && $r->faturado != 1)) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
