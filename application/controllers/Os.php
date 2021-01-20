@@ -220,8 +220,8 @@ class Os extends MY_Controller
             ];
 
             $osAntes = $this->os_model->getById($this->input->post('idOs'));
-            if($osAntes->status == "Cancelado") {
-                $this->session->set_flashdata('error', 'Esta OS já foi cancelada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
+            if ($osAntes->status == "Cancelado" || $osAntes->status == "Faturado" || $osAntes->faturado == 1) {
+                $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
 
                 redirect(site_url('os/editar/') . $this->input->post('idOs'));
             }
@@ -933,6 +933,14 @@ class Os extends MY_Controller
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id'),
             ];
+
+            $getOs = $this->os_model->getById($this->input->post('os_id'));
+            if ($getOs->status == "Cancelado" || $getOs->status == "Faturado" || $getOs->faturado == 1) {
+                return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => false]));
+            }
 
             if ($this->os_model->add('lancamentos', $data) == true) {
                 $os = $this->input->post('os_id');
