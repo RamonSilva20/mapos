@@ -11,7 +11,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 - Atualizado lib de QR code. [@seitbnao](https://github.com/seitbnao)
-- Corrigdo alerts gerais. [@seitbnao](https://github.com/seitbnao)
+- Corrigido alerts gerais. [@seitbnao](https://github.com/seitbnao)
 - Refatorado módulo de pagamentos. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.27.0] - 2021-01-13
