@@ -219,6 +219,8 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
 
+            $osAntes = $this->os_model->getById($this->input->post('idOs'));
+
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -252,6 +254,22 @@ class Os extends MY_Controller
                             break;
                     }
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+                }
+                
+                if ($produtos = $this->os_model->getProdutos($idOs)) {
+                    $this->load->model('produtos_model');
+                    if ($this->data['configuration']['control_estoque'] && $os->status == "Cancelado" && $osAntes->status != "Cancelado") {
+                        foreach ($produtos as $p) {
+                            $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                        }
+                    }
+                    if ($this->data['configuration']['control_estoque'] && $os->status != "Cancelado" && $osAntes->status == "Cancelado") {
+                        foreach ($produtos as $p) {
+                            $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
+                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                        }
+                    }
                 }
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
@@ -561,6 +579,16 @@ class Os extends MY_Controller
             }
         }
 
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                    log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                }
+            }
+        }
+
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
@@ -656,6 +684,11 @@ class Os extends MY_Controller
 
         if ($this->os_model->add('produtos_os', $data) == true) {
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
+            $this->load->model('produtos_model');
+
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+            }
 
             return $this->output
                 ->set_content_type('application/json')
@@ -682,6 +715,14 @@ class Os extends MY_Controller
 
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
+            $quantidade = $this->input->post('quantidade');
+            $produto = $this->input->post('produto');
+
+            $this->load->model('produtos_model');
+
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+            }
 
             echo json_encode(['result' => true]);
         } else {
@@ -903,16 +944,6 @@ class Os extends MY_Controller
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
-
-                if ($produtos = $this->os_model->getProdutos($os)) {
-                    $this->load->model('produtos_model');
-                    if ($this->data['configuration']['control_estoque']) {
-                        foreach ($produtos as $p) {
-                            $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
-                            log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
-                        }
-                    }
-                }
 
                 log_info('Faturou uma OS. ID: ' . $os);
                 $this->session->set_flashdata('success', 'OS faturada com sucesso!');
