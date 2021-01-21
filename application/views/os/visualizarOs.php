@@ -10,7 +10,7 @@ $totalProdutos = 0; ?>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
-                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && ($result->status != "Cancelado" && $result->status != "Faturado" && $result->faturado != 1)) {
     echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
 } ?>
 
