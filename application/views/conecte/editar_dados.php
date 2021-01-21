@@ -23,8 +23,8 @@
                     </div>
                     <div class="control-group">
                         <?php if ($custom_error != '') {
-    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                            echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+                        } ?>
                         <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
                             <input id="documento" class="cpfcnpjmine" type="text" name="documento" value="<?php echo $result->documento; ?>" />
