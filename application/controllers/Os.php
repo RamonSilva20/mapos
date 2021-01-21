@@ -467,7 +467,7 @@ class Os extends MY_Controller
                 }
             }
         }
-        
+
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
@@ -565,9 +565,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '-');
-                }
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -601,9 +599,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '+');
-                }
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
