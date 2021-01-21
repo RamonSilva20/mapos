@@ -4,7 +4,7 @@
         "mercadopago/dx-php": "^2.2.1",
         "gerencianet/gerencianet-sdk-php": "^2.4.1",
         "codeigniter/framework": "3.1.11",
-        "mpdf/mpdf" : "8.0.5",
+        "mpdf/mpdf" : "^8.0.10",
         "filp/whoops": "^2.7",
         "mk-j/php_xlsxwriter": "^0.38.0",
         "mpdf/qrcode": "^1.1"
