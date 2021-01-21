@@ -463,6 +463,7 @@ class Mapos extends MY_Controller
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
                 'color' => $cor,
+                'editar' => !($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1),
                 'extendedProps' => [
                     'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
