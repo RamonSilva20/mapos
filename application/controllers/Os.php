@@ -815,6 +815,15 @@ class Os extends MY_Controller
                 'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            $currentOS = $this->os_model->getById($this->input->post('os_id'));
+            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+                
+                return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => false]));
+            }
+
             if ($this->os_model->add('lancamentos', $data) == true) {
                 $os = $this->input->post('os_id');
 
