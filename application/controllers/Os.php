@@ -219,6 +219,13 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
 
+            $currentOS = $this->os_model->getById($this->input->post('idOs'));
+            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+                $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
+
+                redirect(site_url('os'));
+            }
+
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
