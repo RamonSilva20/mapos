@@ -834,7 +834,7 @@
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
                 $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
-                if(info.event.editar) {
+                if(eventObj.editar) {
                      $('#modalIdEditar').show();
                      $('#linkExcluir').show();
                      $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);

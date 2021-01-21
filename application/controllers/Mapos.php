@@ -463,7 +463,6 @@ class Mapos extends MY_Controller
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
                 'color' => $cor,
-                'editar' => !($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1),
                 'extendedProps' => [
                     'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
@@ -476,6 +475,7 @@ class Mapos extends MY_Controller
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
+                    'editar' => !($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1),
                 ]
             ];
         }, $allOs);
