@@ -7,10 +7,9 @@ $(function () {
 
 
 $(function () {
-    if ($('.cpfcnpj').val() != null) {
-        var cpfcnpj = $('.cpfcnpj').val().length;
-        if (cpfcnpj == "14") {
-            $(".cpfcnpj").prop('readonly', true);
+    if ($('.cpfcnpjmine').val() != null) {
+        if ($('.cpfcnpjmine').val() != "") {
+            $(".cpfcnpjmine").prop('readonly', true);
         }
     }
     if ($('.cpfUser').val() != null) {
