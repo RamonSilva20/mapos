@@ -108,16 +108,18 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir cobranças');
             redirect(site_url('cobrancas/cobrancas/'));
         }
+        try {
+            $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
 
-        $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
-
-        if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
-            log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
-            $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
+                log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
+                $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
+            } else {
+                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
         }
-
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -132,10 +134,12 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
             redirect(base_url());
         }
-
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
-
+        try {
+            $this->load->model('cobrancas_model');
+            $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
+        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -145,10 +149,13 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para confirmar pagamento da cobrança.');
             redirect(base_url());
         }
+        try {
 
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
-
+            $this->load->model('cobrancas_model');
+            $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
+        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
@@ -158,10 +165,13 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para cancelar cobrança.');
             redirect(base_url());
         }
+        try {
 
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
-
+            $this->load->model('cobrancas_model');
+            $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage());
+        }
         redirect(site_url('cobrancas/cobrancas/'));
     }
 
