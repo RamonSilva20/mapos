@@ -143,8 +143,18 @@
                                             <a title="Enviar por E-mail" class="btn btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                                                 $this->load->model('os_model');
+                                                $totalServico = 0;
+                                                $totalProdutos = 0; 
+                                                foreach ($produtos as $p) {
+                                                    $totalProdutos = $totalProdutos + $p->subTotal;
+                                                }
+                                                foreach ($servicos as $s) {
+                                                    $preco = $s->preco ?: $s->precoVenda;
+                                                    $subtotal = $preco * ($s->quantidade ?: 1);
+                                                    $totalServico = $totalServico + $subtotal;
+                                                }
                                                 $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                                                $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$result->observacoes,$result->defeito,$result->laudoTecnico,date('d/m/Y', strtotime($result->dataFinal)),date('d/m/Y', strtotime($result->dataInicial)),$result->garantia];
+                                                $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($totalServico + $totalProdutos, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$result->observacoes,$result->defeito,$result->laudoTecnico,date('d/m/Y', strtotime($result->dataFinal)),date('d/m/Y', strtotime($result->dataInicial)),$result->garantia];
                                                 $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                                                 echo '<a title="Enviar Por WhatsApp" class="btn btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
                                             } ?>
@@ -261,7 +271,7 @@
                                                 echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                                 echo '<td>' . $preco  . '</td>';
                                                 echo '<td><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger servico"><i class="fas fa-trash-alt"></i></span></td>';
-                                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                                echo '<td>R$ ' . number_format($totalOS, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
                                             <tr>
