@@ -178,8 +178,10 @@ class Mine extends CI_Controller
             redirect('mine');
         }
 
-        $data['menuCobrancas'] = 'cobrancas';
         $this->load->library('pagination');
+        $this->load->config('payment_gateways');
+
+        $data['menuCobrancas'] = 'cobrancas';
 
         $config['base_url'] = base_url() . 'index.php/mine/cobrancas/';
         $config['total_rows'] = $this->Conecte_model->count('cobrancas', $this->session->userdata('cliente_id'));
@@ -206,8 +208,8 @@ class Mine extends CI_Controller
         $this->pagination->initialize($config);
 
         $data['results'] = $this->Conecte_model->getCobrancas('cobrancas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-
         $data['output'] = 'conecte/cobrancas';
+
         $this->load->view('conecte/template', $data);
     }
 
@@ -227,40 +229,13 @@ class Mine extends CI_Controller
             redirect(base_url());
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
 
-        $change_id = intval($this->uri->segment(3));
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-
-        //Pegamos o retorno para atualizar o banco
-        $pagamento = $this->GerencianetSdk->receberInfo(
-            $change_id,
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        $data = [
-            'status' => $obj->data->status,
-        ];
-
-        if ($this->pagamentos_model->edit('cobrancas', $data, 'charge_id', $change_id) == true) {
-            $this->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID' .  $change_id);
-            //Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
-            if ($obj->data->status == "paid" || $obj->data->status == "settled") {
-                //TODO: dar baixa no lançamento caso exista
-            }
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-        }
         redirect(site_url('mine/cobrancas/'));
     }
 
-    public function enviarcobranca($id = null)
+    public function enviarcobranca()
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
@@ -276,27 +251,10 @@ class Mine extends CI_Controller
             redirect(base_url());
         }
 
-        $this->load->library('Gateways/GerencianetSdk', null, 'GerencianetSdk');
-        $this->load->model('pagamentos_model');
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->enviarEmail($this->uri->segment(3));
+        $this->session->set_flashdata('success', 'Email adicionado na fila.');
 
-        $change_id = intval($this->uri->segment(3));
-        $defaultPayment = $this->pagamentos_model->getPagamentos(0);
-        //Pegamos o retorno para atualizar o banco
-        $pagamento = $this->GerencianetSdk->enviarBoletoEmail(
-            $change_id,
-            $this->session->userdata('email'),
-            $defaultPayment->client_id,
-            $defaultPayment->client_secret
-        );
-
-        $pagamento = json_decode($pagamento, true);
-        $obj = json_decode(json_encode($pagamento), false);
-
-        if ($obj->code == 200) {
-            $this->session->set_flashdata('success', 'Cobrança enviada para o email: '.$this->session->userdata('email'));
-        } else {
-            $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-        }
         redirect(site_url('mine/cobrancas/'));
     }
 
@@ -349,12 +307,10 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $this->load->model('pagamentos_model');
 
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
@@ -362,10 +318,6 @@ class Mine extends CI_Controller
             redirect('mine/painel');
         }
 
-        if ($data['pagamento']) {
-            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
-        }
-        
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
     }
@@ -374,7 +326,7 @@ class Mine extends CI_Controller
     {
         $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
         print_r(json_encode($json));
-        
+
         return;
     }
 
@@ -419,22 +371,18 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('vendas_model');
-        $this->load->model('pagamentos_model');
 
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
-        $data['pagamento'] = $this->pagamentos_model->getPagamentos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
         }
-        if ($data['pagamento']) {
-            $this->load->library('Gateways/MercadoPago', null, 'MercadoPago');
-        }
-        
+
         $data['output'] = 'conecte/visualizar_compra';
+
         $this->load->view('conecte/template', $data);
     }
 

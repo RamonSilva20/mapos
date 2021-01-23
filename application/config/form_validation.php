@@ -428,5 +428,27 @@ $config = [
             'label' => 'idOsServico',
             'rules' => 'trim|required|numeric',
         ],
-    ]
+    ],
+    'cobrancas' => [
+        [
+            'field' => 'id',
+            'label' => 'id',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'tipo',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'forma_pagamento',
+            'label' => 'forma_pagamento',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'gateway_de_pagamento',
+            'label' => 'gateway_de_pagamento',
+            'rules' => 'required|trim',
+        ],
+    ],
 ];

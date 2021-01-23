@@ -720,7 +720,7 @@
             echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
         }
         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-            echo '<a href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+            echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
         }
         ?>
     </div>
@@ -834,8 +834,16 @@
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
                 $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
-                $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
-                $('#modalIdExcluir').val(eventObj.id);
+                if (eventObj.editar) {
+                     $('#modalIdEditar').show();
+                     $('#linkExcluir').show();
+                     $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
+                     $('#modalIdExcluir').val(eventObj.id);
+                }
+                else {
+                     $('#modalIdEditar').hide();
+                     $('#linkExcluir').hide();
+                }
                 $('#modalCliente').html(eventObj.cliente);
                 $('#modalDataInicial').html(eventObj.dataInicial);
                 $('#modalDataFinal').html(eventObj.dataFinal);

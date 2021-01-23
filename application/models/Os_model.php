@@ -98,7 +98,7 @@ class Os_model extends CI_Model
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
-        
+
         return $this->db->get()->row();
     }
 
@@ -112,7 +112,7 @@ class Os_model extends CI_Model
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
-        
+
         return $this->db->get()->row();
     }
 
@@ -301,11 +301,11 @@ class Os_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function criarTextoWhats($textoBase,$troca)
+    public function criarTextoWhats($textoBase, $troca)
     {
+        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}","{OBS_OS}","{DEFEITO_OS}","{LAUDO_OS}","{DATA_FINAL}","{DATA_INICIAL}","{DATA_GARANTIA}"];
+        $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
-        $procura  = array("{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}","{OBS_OS}","{DEFEITO_OS}","{LAUDO_OS}","{DATA_FINAL}","{DATA_INICIAL}","{DATA_GARANTIA}");
-        $textoBase =  str_replace($procura, $troca, $textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
         return $textoBase;
     }

@@ -5,7 +5,7 @@
   <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png"/>
+  <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap-responsive.min.css" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/matrix-style.css" />
@@ -49,6 +49,7 @@
     shortcut.add("F10", function() {});
     shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
+    window.BaseUrl = "<?= base_url() ?>";
   </script>
 
 </head>

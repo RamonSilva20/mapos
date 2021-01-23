@@ -55,8 +55,6 @@
         <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'financeiro') {
         echo 'active';
     }; ?>"><a href="<?= site_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
-        </ul>
-        <ul>
         <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'cobrancas') {
         echo 'active';
     }; ?>"><a href="<?= site_url('cobrancas/cobrancas') ?>">Cobranças</a></li>
@@ -133,11 +131,6 @@
           <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
             <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
           <?php } ?>
-          <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPagamento')) { ?>
-            <li><a href="<?= site_url('pagamentos') ?>"><span>Pagamentos</span></a></li>
-          <?php
-          } ?>
-
         </ul>
       </li>
     <?php
