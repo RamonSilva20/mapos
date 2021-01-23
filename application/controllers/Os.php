@@ -219,6 +219,13 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
 
+            $currentOS = $this->os_model->getById($this->input->post('idOs'));
+            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+                $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
+
+                redirect(site_url('os'));
+            }
+
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -451,6 +458,16 @@ class Os extends MY_Controller
             }
         }
 
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                    log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                }
+            }
+        }
+
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
@@ -548,9 +565,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '-');
-                }
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -584,9 +599,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                if ($os->status != "Orçamento") {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '+');
-                }
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
@@ -801,6 +814,15 @@ class Os extends MY_Controller
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id'),
             ];
+
+            $currentOS = $this->os_model->getById($this->input->post('os_id'));
+            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+                
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['result' => false]));
+            }
 
             if ($this->os_model->add('lancamentos', $data) == true) {
                 $os = $this->input->post('os_id');

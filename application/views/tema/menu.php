@@ -55,8 +55,6 @@
         <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'financeiro') {
         echo 'active';
     }; ?>"><a href="<?= site_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
-        </ul>
-        <ul>
         <li class="<?php if (isset($menuFinanceiro) && $menuFinanceiro == 'cobrancas') {
         echo 'active';
     }; ?>"><a href="<?= site_url('cobrancas/cobrancas') ?>">Cobranças</a></li>

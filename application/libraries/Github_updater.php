@@ -86,7 +86,9 @@ class Github_updater
                     if (!$this->_is_ignored($file->filename)) {
                         // If the status is removed then delete the file
                         if ($file->status === 'removed') {
-                            unlink($file->filename);
+                            if (file_exists($file->filename)) {
+                                unlink($file->filename);
+                            }
                         }
                         // Otherwise copy the file from the update.
                         else {
