@@ -313,6 +313,17 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
+        $this->data['totalServico'] = 0;
+        $this->data['totalProdutos'] = 0; 
+        foreach ($this->data['produtos'] as $p) {
+            $this->data['totalProdutos'] = $this->data['totalProdutos'] + $p->subTotal;
+        }
+        foreach ($this->data['servicos'] as $s) {
+            $preco = $s->preco ?: $s->precoVenda;
+            $subtotal = $preco * ($s->quantidade ?: 1);
+            $this->data['totalServico'] = $this->data['totalServico'] + $subtotal;
+        }
+        
         return $this->layout();
     }
 

@@ -143,16 +143,6 @@
                                             <a title="Enviar por E-mail" class="btn btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                                                 $this->load->model('os_model');
-                                                $totalServico = 0;
-                                                $totalProdutos = 0; 
-                                                foreach ($produtos as $p) {
-                                                    $totalProdutos = $totalProdutos + $p->subTotal;
-                                                }
-                                                foreach ($servicos as $s) {
-                                                    $preco = $s->preco ?: $s->precoVenda;
-                                                    $subtotal = $preco * ($s->quantidade ?: 1);
-                                                    $totalServico = $totalServico + $subtotal;
-                                                }
                                                 $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
                                                 $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ '.number_format($totalServico + $totalProdutos, 2, ',', '.'), strip_tags($result->descricaoProduto),($emitente ? $emitente[0]->nome : ''),($emitente ? $emitente[0]->telefone : ''),$result->observacoes,$result->defeito,$result->laudoTecnico,date('d/m/Y', strtotime($result->dataFinal)),date('d/m/Y', strtotime($result->dataInicial)),$result->garantia];
                                                 $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
