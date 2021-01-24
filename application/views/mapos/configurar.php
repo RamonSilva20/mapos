@@ -147,7 +147,8 @@
         </div>
         <div class="modal-body">
             <h5 style="text-align: left">Deseja realmente fazer a atualização o banco de dados?</h5>
-            <h7 style="text-align: left">Recomendamos que faça um backup antes de prosseguir!</h7>
+            <h7 style="text-align: left">Recomendamos que faça um backup antes de prosseguir!  
+            <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mapos/backup">Fazer Backup</a></h7>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
