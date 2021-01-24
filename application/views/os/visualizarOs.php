@@ -225,6 +225,32 @@
                                 </tbody>
                             </table>
                         <?php } ?>
+
+                        <?php if ($anexos != null) { ?>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                     foreach ($anexos as $a) {
+                                        if ($a->thumb == null) {
+                                            $thumb = base_url() . 'assets/img/icon-file.png';
+                                            $link = base_url() . 'assets/img/icon-file.png';
+                                        } else {
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url .'/'. $a->anexo;
+                                        }
+                                        echo '<tr>';
+                                        echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                        echo '</tr>';
+                                    } ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
                             echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
@@ -240,3 +266,68 @@
 <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
 
 <?= $modalGerarPagamento ?>
+
+<!-- Modal visualizar anexo -->
+<div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Visualizar Anexo</h3>
+    </div>
+    <div class="modal-body">
+        <div class="span12" id="div-visualizar-anexo" style="text-align: center">
+            <div class='progress progress-info progress-striped active'>
+                <div class='bar' style='width: 100%'></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <a href="" id-imagem="" class="btn btn-inverse" id="download">Download</a>
+        <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on('click', '.anexo', function(event) {
+            event.preventDefault();
+            var link = $(this).attr('link');
+            var id = $(this).attr('imagem');
+            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
+            $("#excluir-anexo").attr('link', url + id);
+
+            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+
+        });
+
+        $(document).on('click', '#excluir-anexo', function(event) {
+            event.preventDefault();
+
+            var link = $(this).attr('link');
+            var idOS = "<?php echo $result->idOs; ?>"
+
+            $('#modal-anexo').modal('hide');
+            $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+
+            $.ajax({
+                type: "POST",
+                url: link,
+                dataType: 'json',
+                data: "idOs=" + idOS,
+                success: function(data) {
+                    if (data.result == true) {
+                        $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
+                    } else {
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: data.mensagem
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

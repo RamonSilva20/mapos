@@ -303,6 +303,7 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -323,7 +324,7 @@ class Os extends MY_Controller
             $subtotal = $preco * ($s->quantidade ?: 1);
             $this->data['totalServico'] = $this->data['totalServico'] + $subtotal;
         }
-        
+
         return $this->layout();
     }
 
