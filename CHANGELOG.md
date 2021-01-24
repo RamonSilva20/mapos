@@ -4,6 +4,24 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.29.0] - 2021-01-24
+
+### Added
+- Adiciona novas opções de unidades de medidas em produtos, seguindo modelo da SEFAZ-PA. [@seitbnao](https://github.com/seitbnao)
+- Adiciona BLOQUEIO em exclusão e edição de OS que esteja com status CANCELADO e/ou FATURADO. [@seitbnao](https://github.com/seitbnao)
+
+### Fixed
+- Corrigido quebra de código por Exception geradas nas APIs. [@willph](https://github.com/willph)
+- Atualizado lib MPDF. [@willph](https://github.com/willph)
+- Corrige uma possível falha na atualização do sistema usando API do GitHub. [@seitbnao](https://github.com/seitbnao)
+- Corrige o valor da OS na notificação do whatsapp. [@seitbnao](https://github.com/seitbnao)
+- Corrige a notificação do whatsapp para que a mesma não venha com tags HTML. [@seitbnao](https://github.com/seitbnao)
+- Algumas melhorias no controle de estoque, agora quando a OS é excluída os produtos voltam para o estoque. [@seitbnao](https://github.com/seitbnao)
+- Corrige o menu Financeiro em tablets e celulares. [@seitbnao](https://github.com/seitbnao)
+
+## Changed
+- Liberado edição do CPF na area administrativa, porem foi mantido o bloqueio no editar usuário. [@willph](https://github.com/willph)
+
 ## [4.28.0] - 2021-01-20
 
 ### Added
