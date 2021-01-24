@@ -159,7 +159,27 @@
                                 <?php } ?>
                             </tbody>
                         </table>
-
+                        <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Anotação</th>
+                                                <th>Data/Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($anotacoes as $a) {
+                                                echo '<tr>';
+                                                echo '<td>' . $a->anotacao . '</td>';
+                                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$anotacoes) {
+                                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
                         <?php if ($produtos != null) { ?>
                             <br />
                             <table class="table table-bordered table-condensed" id="tblProdutos">
