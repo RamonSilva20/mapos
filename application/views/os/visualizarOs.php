@@ -256,17 +256,17 @@
                                 <tbody>
                                     <?php
                                      foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                            $link = $a->url .'/'. $a->anexo;
-                                        }
-                                        echo '<tr>';
-                                        echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
-                                        echo '</tr>';
-                                    } ?>
+                                         if ($a->thumb == null) {
+                                             $thumb = base_url() . 'assets/img/icon-file.png';
+                                             $link = base_url() . 'assets/img/icon-file.png';
+                                         } else {
+                                             $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                             $link = $a->url .'/'. $a->anexo;
+                                         }
+                                         echo '<tr>';
+                                         echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                         echo '</tr>';
+                                     } ?>
                                 </tbody>
                             </table>
                         <?php } ?>
@@ -306,8 +306,6 @@
         <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
     </div>
 </div>
-
-
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).on('click', '.anexo', function(event) {

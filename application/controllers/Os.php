@@ -275,16 +275,12 @@ class Os extends MY_Controller
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
-        $this->data['totalServico'] = 0;
-        $this->data['totalProdutos'] = 0; 
-        foreach ($this->data['produtos'] as $p) {
-            $this->data['totalProdutos'] = $this->data['totalProdutos'] + $p->subTotal;
+
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+            $this->data['totalServico'] = $return['totalServico'];
+            $this->data['totalProdutos'] = $return['totalProdutos'];
         }
-        foreach ($this->data['servicos'] as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $this->data['totalServico'] = $this->data['totalServico'] + $subtotal;
-        }
+
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
@@ -324,15 +320,9 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
-        $this->data['totalServico'] = 0;
-        $this->data['totalProdutos'] = 0; 
-        foreach ($this->data['produtos'] as $p) {
-            $this->data['totalProdutos'] = $this->data['totalProdutos'] + $p->subTotal;
-        }
-        foreach ($this->data['servicos'] as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $this->data['totalServico'] = $this->data['totalServico'] + $subtotal;
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+            $this->data['totalServico'] = $return['totalServico'];
+            $this->data['totalProdutos'] = $return['totalProdutos'];
         }
 
         return $this->layout();
