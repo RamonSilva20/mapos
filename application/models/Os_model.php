@@ -310,19 +310,22 @@ class Os_model extends CI_Model
         return $textoBase;
     }
 
-    public function valorTotalOS($servicos, $produtos)
+    public function valorTotalOS($id = null)
     {
         $totalServico = 0;
-        $totalProdutos = 0; 
-        foreach ($produtos as $p) {
-            $totalProdutos = $totalProdutos + $p->subTotal;
+        $totalProdutos = 0;
+        if ($servicos = $this->getProdutos($id)) {
+            foreach ($servicos as $s) {
+                $preco = $s->preco ?: $s->precoVenda;
+                $totalServico = $totalServico + ($preco * ($s->quantidade ?: 1));
+            }
         }
-        foreach ($servicos as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $totalServico = $totalServico + $subtotal;
+        if ($produtos = $this->getServicos($id)) {
+            foreach ($produtos as $p) {
+                $totalProdutos = $totalProdutos + $p->subTotal;
+            }
         }
-
+        
         return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
     }
 }

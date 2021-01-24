@@ -276,7 +276,7 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -320,7 +320,7 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
