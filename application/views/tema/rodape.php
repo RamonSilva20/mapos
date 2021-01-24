@@ -11,6 +11,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tabela').dataTable( {
+            "ordering": false,
             "language": {
                 "url": "<?= base_url(); ?>assets/js/dataTable_pt-br.json"
             }
