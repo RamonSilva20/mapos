@@ -878,7 +878,9 @@ class Relatorios extends MY_Controller
 
         $templatePath = realpath(FCPATH . "assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx");
         if (!$templatePath) {
-            throw new Exception("Modelo de relatório faltante!");
+            $this->session->set_flashdata('error', 'Modelo de relatório não encontrado!');
+
+            return redirect('/relatorios/receitasBrutasMei');
         }
 
         $tempFilePath = FCPATH . "assets" . DIRECTORY_SEPARATOR . "relatorios" . DIRECTORY_SEPARATOR . "temp.docx";
@@ -923,7 +925,9 @@ class Relatorios extends MY_Controller
 
         $templatePath = realpath(FCPATH . "assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx");
         if (!$templatePath) {
-            throw new Exception("Modelo de relatório faltante!");
+            $this->session->set_flashdata('error', 'Modelo de relatório não encontrado!');
+
+            return redirect('/relatorios/receitasBrutasMei');
         }
 
         $tempFilePath = FCPATH . "assets" . DIRECTORY_SEPARATOR . "relatorios" . DIRECTORY_SEPARATOR . "temp.docx";
