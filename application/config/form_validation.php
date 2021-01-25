@@ -10,7 +10,7 @@ $config = [
         [
             'field' => 'documento',
             'label' => 'CPF/CNPJ',
-            'rules' => 'required|trim|verific_cpf_cnpj|unique[clientes.documento.' . $this->uri->segment(3) . '.idClientes]',
+            'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . $this->uri->segment(3) . '.idClientes]',
             'errors' => [
                 'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
             ],
@@ -18,42 +18,42 @@ $config = [
         [
             'field' => 'telefone',
             'label' => 'Telefone',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'email',
             'label' => 'Email',
-            'rules' => 'required|trim|valid_email',
+            'rules' => 'trim|valid_email',
         ],
         [
             'field' => 'rua',
             'label' => 'Rua',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'numero',
             'label' => 'Número',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'bairro',
             'label' => 'Bairro',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cidade',
             'label' => 'Cidade',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'estado',
             'label' => 'Estado',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cep',
             'label' => 'CEP',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ]
     ],
     'servicos' => [

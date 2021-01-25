@@ -47,14 +47,14 @@
                   } ?>
                <div id="home" class="tab-pane fade in active">
                   <div class="control-group">
-                     <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                     <label for="documento" class="control-label">CPF/CNPJ</label>
                      <div class="controls">
                         <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>"  />
                         <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar Informações (CNPJ)</button>
                      </div>
                   </div>
                   <div class="control-group">
-                     <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
+                     <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
                      <div class="controls">
                         <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo set_value('nomeCliente'); ?>" />
                      </div>
@@ -66,7 +66,7 @@
                      </div>
                   </div>
                   <div class="control-group">
-                     <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
+                     <label for="telefone" class="control-label">Telefone</label>
                      <div class="controls">
                         <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
                      </div>
@@ -78,7 +78,7 @@
                      </div>
                   </div>
                   <div class="control-group">
-                     <label for="email" class="control-label">Email<span class="required">*</span></label>
+                     <label for="email" class="control-label">Email</label>
                      <div class="controls">
                         <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
                      </div>
@@ -103,19 +103,19 @@
                <!-- Menu Endereços -->
                <div id="menu2" class="tab-pane fade">
                   <div class="control-group" class="control-label">
-                     <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                     <label for="cep" class="control-label">CEP</label>
                      <div class="controls">
                         <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
                      </div>
                   </div>
                   <div class="control-group" class="control-label">
-                     <label for="rua" class="control-label">Rua<span class="required">*</span></label>
+                     <label for="rua" class="control-label">Rua</label>
                      <div class="controls">
                         <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
                      </div>
                   </div>
                   <div class="control-group">
-                     <label for="numero" class="control-label">Número<span class="required">*</span></label>
+                     <label for="numero" class="control-label">Número</label>
                      <div class="controls">
                         <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>" />
                      </div>
@@ -127,19 +127,19 @@
                      </div>
                   </div>
                   <div class="control-group" class="control-label">
-                     <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
+                     <label for="bairro" class="control-label">Bairro</label>
                      <div class="controls">
                         <input id="bairro" type="text" name="bairro" value="<?php echo set_value('bairro'); ?>" />
                      </div>
                   </div>
                   <div class="control-group" class="control-label">
-                     <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
+                     <label for="cidade" class="control-label">Cidade</label>
                      <div class="controls">
                         <input id="cidade" type="text" name="cidade" value="<?php echo set_value('cidade'); ?>" />
                      </div>
                   </div>
                   <div class="control-group" class="control-label">
-                     <label for="estado" class="control-label">Estado<span class="required">*</span></label>
+                     <label for="estado" class="control-label">Estado</label>
                      <div class="controls">
                         <select id="estado" name="estado">
                            <option value="">Selecione...</option>
@@ -174,66 +174,11 @@
                nomeCliente: {
                    required: true
                },
-               documento: {
-                   required: true
-               },
-               telefone: {
-                   required: true
-               },
-               email: {
-                   required: true
-               },
-               rua: {
-                   required: true
-               },
-               numero: {
-                   required: true
-               },
-               bairro: {
-                   required: true
-               },
-               cidade: {
-                   required: true
-               },
-               estado: {
-                   required: true
-               },
-               cep: {
-                   required: true
-               }
            },
            messages: {
                nomeCliente: {
                    required: 'Campo Requerido.'
                },
-               documento: {
-                   required: 'Campo Requerido.'
-               },
-               telefone: {
-                   required: 'Campo Requerido.'
-               },
-               email: {
-                   required: 'Campo Requerido.'
-               },
-               rua: {
-                   required: 'Campo Requerido.'
-               },
-               numero: {
-                   required: 'Campo Requerido.'
-               },
-               bairro: {
-                   required: 'Campo Requerido.'
-               },
-               cidade: {
-                   required: 'Campo Requerido.'
-               },
-               estado: {
-                   required: 'Campo Requerido.'
-               },
-               cep: {
-                   required: 'Campo Requerido.'
-               }
-   
            },
    
            errorClass: "help-inline",
