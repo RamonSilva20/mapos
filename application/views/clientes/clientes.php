@@ -1,5 +1,5 @@
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a>
+    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente / Fornecedor</a>
 <?php } ?>
 
 <div class="widget-box">

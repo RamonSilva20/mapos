@@ -57,7 +57,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'nomeCliente' => set_value('nomeCliente'),
+                'nomeCliente' => strtoupper(et_value('nomeCliente')),
                 'contato' => set_value('contato'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
@@ -106,7 +106,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'nomeCliente' => $this->input->post('nomeCliente'),
+                'nomeCliente' => strtoupper($this->input->post('nomeCliente')),
                 'contato' => $this->input->post('contato'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
