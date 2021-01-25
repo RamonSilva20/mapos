@@ -18,6 +18,7 @@ class Financeiro extends MY_Controller
         $this->load->helper('codegen_helper');
         $this->data['menuFinanceiro'] = 'financeiro';
     }
+
     public function index()
     {
         $this->lancamentos();
@@ -364,7 +365,7 @@ class Financeiro extends MY_Controller
             $this->financeiro_model->autoCompleteClienteReceita($q);
         }
     }
-    
+
     protected function getThisYear()
     {
         $dias = date("z");
