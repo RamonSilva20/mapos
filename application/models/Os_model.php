@@ -309,4 +309,20 @@ class Os_model extends CI_Model
         $textoBase = htmlentities(urlencode($textoBase));
         return $textoBase;
     }
+
+    public function valorTotalOS($servicos, $produtos)
+    {
+        $totalServico = 0;
+        $totalProdutos = 0; 
+        foreach ($produtos as $p) {
+            $totalProdutos = $totalProdutos + $p->subTotal;
+        }
+        foreach ($servicos as $s) {
+            $preco = $s->preco ?: $s->precoVenda;
+            $subtotal = $preco * ($s->quantidade ?: 1);
+            $totalServico = $totalServico + $subtotal;
+        }
+
+        return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
+    }
 }

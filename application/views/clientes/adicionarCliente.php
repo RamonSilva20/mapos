@@ -97,7 +97,9 @@
                     <div class="control-group" class="control-label">
                         <label for="estado" class="control-label">Estado<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>" />
+                        <select id="estado" name="estado">
+                              <option value="">Selecione...</option>
+                        </select>
                         </div>
                     </div>
 
@@ -121,6 +123,13 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+            for (i in data.estados) {
+                   $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
+                   var curState = '<?php echo set_value('estado'); ?>';
+                   if (curState) { $("#estado option[value=" + curState + "]").prop("selected",true); }
+            }
+        });
         $('#formCliente').validate({
             rules: {
                 nomeCliente: {

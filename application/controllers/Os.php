@@ -276,6 +276,11 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+            $this->data['totalServico'] = $return['totalServico'];
+            $this->data['totalProdutos'] = $return['totalProdutos'];
+        }
+
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
@@ -303,6 +308,8 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -312,6 +319,11 @@ class Os extends MY_Controller
             true
         );
         $this->data['view'] = 'os/visualizarOs';
+
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+            $this->data['totalServico'] = $return['totalServico'];
+            $this->data['totalProdutos'] = $return['totalProdutos'];
+        }
 
         return $this->layout();
     }

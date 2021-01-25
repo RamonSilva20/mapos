@@ -108,8 +108,8 @@
                         <div class="span8">
                             <div class="span9">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Salvar Configurações</button>
-                                <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
-                                <button id="update-mapos" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Atualizar Mapos</button>
+                                <button href="#modal-confirmabanco" data-toggle="modal" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
+                                <button href="#modal-confirmaratualiza" data-toggle="modal" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Atualizar Mapos</button>
                             </div>
                         </div>
                     </div>
@@ -118,18 +118,51 @@
         </div>
     </div>
 </div>
-
+<!-- Modal -->
+<div id="modal-confirmaratualiza" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel">Atualização de sistema</h5>
+        </div>
+        <div class="modal-body">
+            <h5 style="text-align: left">Deseja realmente fazer a atualização de sistema?</h5>
+            <h7 style="text-align: left">Recomendamos que faça um backup antes de prosseguir!</h7>
+            <h7 style="text-align: left"><br>Faça o backup dos seguintes arquivos pois os mesmo serão excluídos:</h7>
+            <h7 style="text-align: left"><br>* ./assets/anexos</h7>
+            <h7 style="text-align: left"><br>* ./assets/arquivos</h7>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button id="update-mapos" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i>Atualizar</button>
+        </div>
+    </form>
+</div>
+<!-- Modal -->
+<div id="modal-confirmabanco" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel">Atualização de sistema</h5>
+        </div>
+        <div class="modal-body">
+            <h5 style="text-align: left">Deseja realmente fazer a atualização do banco de dados?</h5>
+            <h7 style="text-align: left">Recomendamos que faça um backup antes de prosseguir!  
+            <a target="_blank" title="Fazer Bakup" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mapos/backup">Fazer Backup</a></h7>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i>Atualizar</button>
+        </div>
+    </form>
+</div>
 <script>
     $('#update-database').click(function () {
-        if (confirm('Confirma a atualização do banco de dados?')) {
             window.location = "<?= site_url('mapos/atualizarBanco') ?>"
-        }
     });
 
     $('#update-mapos').click(function() {
-        if (confirm('Confirma a atualização do mapos?')) {
             window.location = "<?= site_url('mapos/atualizarMapos') ?>"
-        }
     });
 
     $(document).ready(function() {

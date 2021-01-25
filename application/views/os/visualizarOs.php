@@ -1,6 +1,4 @@
 <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
-<?php $totalServico = 0;
-$totalProdutos = 0; ?>
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
@@ -19,7 +17,7 @@ $totalProdutos = 0; ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
     $this->load->model('os_model');
     $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($result->valorTotal, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), $result->observacoes, $result->defeito, $result->laudoTecnico, date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
     $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
     echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
 } ?>
@@ -161,7 +159,27 @@ $totalProdutos = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-
+                        <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Anotação</th>
+                                                <th>Data/Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($anotacoes as $a) {
+                                                echo '<tr>';
+                                                echo '<td>' . $a->anotacao . '</td>';
+                                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$anotacoes) {
+                                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
                         <?php if ($produtos != null) { ?>
                             <br />
                             <table class="table table-bordered table-condensed" id="tblProdutos">
@@ -177,7 +195,6 @@ $totalProdutos = 0; ?>
                                     <?php
 
                                     foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
                                         echo '<tr>';
                                         echo '<td>' . $p->descricao . '</td>';
                                         echo '<td>' . $p->quantidade . '</td>';
@@ -211,7 +228,6 @@ $totalProdutos = 0; ?>
                                     foreach ($servicos as $s) {
                                         $preco = $s->preco ?: $s->precoVenda;
                                         $subtotal = $preco * ($s->quantidade ?: 1);
-                                        $totalServico = $totalServico + $subtotal;
                                         echo '<tr>';
                                         echo '<td>' . $s->nome . '</td>';
                                         echo '<td>' . ($s->quantidade ?: 1) . '</td>';
@@ -227,6 +243,32 @@ $totalProdutos = 0; ?>
                                 </tbody>
                             </table>
                         <?php } ?>
+
+                        <?php if ($anexos != null) { ?>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                     foreach ($anexos as $a) {
+                                         if ($a->thumb == null) {
+                                             $thumb = base_url() . 'assets/img/icon-file.png';
+                                             $link = base_url() . 'assets/img/icon-file.png';
+                                         } else {
+                                             $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                             $link = $a->url .'/'. $a->anexo;
+                                         }
+                                         echo '<tr>';
+                                         echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                         echo '</tr>';
+                                     } ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
                             echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
@@ -242,3 +284,66 @@ $totalProdutos = 0; ?>
 <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
 
 <?= $modalGerarPagamento ?>
+
+<!-- Modal visualizar anexo -->
+<div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Visualizar Anexo</h3>
+    </div>
+    <div class="modal-body">
+        <div class="span12" id="div-visualizar-anexo" style="text-align: center">
+            <div class='progress progress-info progress-striped active'>
+                <div class='bar' style='width: 100%'></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <a href="" id-imagem="" class="btn btn-inverse" id="download">Download</a>
+        <a href="" link="" class="btn btn-danger" id="excluir-anexo">Excluir Anexo</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on('click', '.anexo', function(event) {
+            event.preventDefault();
+            var link = $(this).attr('link');
+            var id = $(this).attr('imagem');
+            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
+            $("#excluir-anexo").attr('link', url + id);
+
+            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+
+        });
+
+        $(document).on('click', '#excluir-anexo', function(event) {
+            event.preventDefault();
+
+            var link = $(this).attr('link');
+            var idOS = "<?php echo $result->idOs; ?>"
+
+            $('#modal-anexo').modal('hide');
+            $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+
+            $.ajax({
+                type: "POST",
+                url: link,
+                dataType: 'json',
+                data: "idOs=" + idOS,
+                success: function(data) {
+                    if (data.result == true) {
+                        $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
+                    } else {
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: data.mensagem
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
