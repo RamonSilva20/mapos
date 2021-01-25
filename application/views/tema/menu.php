@@ -7,7 +7,7 @@
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
       <li class="<?php if (isset($menuClientes)) {
     echo 'active';
-}; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+}; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Cliente / Fornecedor</span></a></li>
     <?php
     } ?>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
