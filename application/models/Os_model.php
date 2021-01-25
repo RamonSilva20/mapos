@@ -313,7 +313,7 @@ class Os_model extends CI_Model
     public function valorTotalOS($servicos, $produtos)
     {
         $totalServico = 0;
-        $totalProdutos = 0; 
+        $totalProdutos = 0;
         foreach ($produtos as $p) {
             $totalProdutos = $totalProdutos + $p->subTotal;
         }
