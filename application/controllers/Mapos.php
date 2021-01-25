@@ -343,7 +343,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('control_estoque', 'Controle de Estoque', 'required|trim');
         $this->form_validation->set_rules('notifica_whats', 'Notificação Whatsapp', 'required|trim');
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
-        $this->form_validation->set_rules('control_editos', 'Controle de Baixa', 'required|trim');
+        $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
 
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
