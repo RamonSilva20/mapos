@@ -344,7 +344,8 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('notifica_whats', 'Notificação Whatsapp', 'required|trim');
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
         $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
-
+        $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
+        
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
@@ -357,6 +358,7 @@ class Mapos extends MY_Controller
                 'notifica_whats' => $this->input->post('notifica_whats'),
                 'control_baixa' => $this->input->post('control_baixa'),
                 'control_editos' => $this->input->post('control_editos'),
+                'control_datatable' => $this->input->post('control_datatable'),
             ];
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');

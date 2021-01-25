@@ -48,6 +48,16 @@
                         <span class="help-inline">Selecione quantos registros deseja exibir nas listas</span>
                      </div>
                   </div>
+                  <div class="control-group">
+                     <label for="control_datatable" class="control-label">Visualização em DataTables</label>
+                     <div class="controls">
+                        <select name="control_datatable" id="control_datatable">
+                           <option value="1">Sim</option>
+                           <option value="0" <?= $configuration['control_datatable'] == '0' ? 'selected' : ''; ?> >Não</option>
+                        </select>
+                        <span class="help-inline">Ativar ou desativar a visualização em tabelas dinâmicas</span>
+                     </div>
+                  </div>
                   <div class="form-actions">
                      <div class="span8">
                         <div class="span9">
