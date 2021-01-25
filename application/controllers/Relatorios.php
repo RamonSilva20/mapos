@@ -1,7 +1,6 @@
 <?php
 
 use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -952,7 +951,9 @@ class Relatorios extends MY_Controller
 
         return force_download(
             sprintf(
-                "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format", $dataInicial, $dataFinal
+                "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
+                $dataInicial,
+                $dataFinal
             ),
             $fileContents
         );

@@ -150,7 +150,6 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
         try {
-
             $this->load->model('cobrancas_model');
             $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
         } catch (Exception $e) {
@@ -166,7 +165,6 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
         try {
-
             $this->load->model('cobrancas_model');
             $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
         } catch (Exception $e) {
