@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f20296707d9858c7093ff0bdfc7f7279",
+    "content-hash": "e3f6a9a7a9acfde3069d8878e4322835",
     "packages": [
         {
             "name": "codeigniter/framework",
@@ -1230,6 +1230,69 @@
             "time": "2020-09-30T07:37:11+00:00"
         },
         {
+            "name": "laminas/laminas-escaper",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
+                "reference": "5e04bc5ae5990b17159d79d331055e2c645e5cc5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/5e04bc5ae5990b17159d79d331055e2c645e5cc5",
+                "reference": "5e04bc5ae5990b17159d79d331055e2c645e5cc5",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^7.3 || ~8.0.0"
+            },
+            "replace": {
+                "zendframework/zend-escaper": "^2.6.1"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "phpunit/phpunit": "^9.3",
+                "psalm/plugin-phpunit": "^0.12.2",
+                "vimeo/psalm": "^3.16"
+            },
+            "suggest": {
+                "ext-iconv": "*",
+                "ext-mbstring": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Escaper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "escaper",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-escaper/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-escaper/issues",
+                "rss": "https://github.com/laminas/laminas-escaper/releases.atom",
+                "source": "https://github.com/laminas/laminas-escaper"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-11-17T21:26:43+00:00"
+        },
+        {
             "name": "mercadopago/dx-php",
             "version": "2.2.1",
             "source": {
@@ -1582,6 +1645,136 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
+            "name": "phpoffice/phpword",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/map-os/PHPWord.git",
+                "reference": "a1e81d75ff26c55102cae6f61c64727edbfa4316"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/map-os/PHPWord/zipball/a1e81d75ff26c55102cae6f61c64727edbfa4316",
+                "reference": "a1e81d75ff26c55102cae6f61c64727edbfa4316",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "laminas/laminas-escaper": "^2.2",
+                "php": "^5.3.3 || ^7.0 || ^8.0"
+            },
+            "replace": {
+                "laminas/laminas-zendframework-bridge": "*"
+            },
+            "require-dev": {
+                "dompdf/dompdf": "0.8.* || 1.0.*",
+                "ext-gd": "*",
+                "ext-zip": "*",
+                "friendsofphp/php-cs-fixer": "^2.2",
+                "mpdf/mpdf": "5.7.4 || 6.* || 7.* || 8.*",
+                "php-coveralls/php-coveralls": "1.1.0 || ^2.0",
+                "phploc/phploc": "2.* || 3.* || 4.* || 5.* || 6.* || 7.*",
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "^4.8.36 || ^7.0",
+                "squizlabs/php_codesniffer": "^2.9 || ^3.5",
+                "tecnickcom/tcpdf": "6.*"
+            },
+            "suggest": {
+                "dompdf/dompdf": "Allows writing PDF",
+                "ext-gd2": "Allows adding images",
+                "ext-xmlwriter": "Allows writing OOXML and ODF",
+                "ext-xsl": "Allows applying XSL style sheet to headers, to main document part, and to footers of an OOXML template",
+                "ext-zip": "Allows writing OOXML and ODF"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.18-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpOffice\\PhpWord\\": "src/PhpWord"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit --color=always"
+                ],
+                "test-no-coverage": [
+                    "phpunit --color=always --no-coverage"
+                ],
+                "check": [
+                    "php-cs-fixer fix --ansi --dry-run --diff",
+                    "phpcs --report-width=200 --report-summary  --report-full samples/ src/ tests/ --ignore=src/PhpWord/Shared/PCLZip --standard=PSR2 -n",
+                    "phpmd src/,tests/ text ./phpmd.xml.dist --exclude pclzip.lib.php",
+                    "@test-no-coverage"
+                ],
+                "fix": [
+                    "php-cs-fixer fix --ansi"
+                ]
+            },
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Gabriel Bull",
+                    "email": "me@gabrielbull.com",
+                    "homepage": "http://gabrielbull.com/"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "https://rootslabs.net/blog/"
+                },
+                {
+                    "name": "Ivan Lanin",
+                    "homepage": "http://ivan.lanin.org"
+                },
+                {
+                    "name": "Roman Syroeshko",
+                    "homepage": "http://ru.linkedin.com/pub/roman-syroeshko/34/a53/994/"
+                },
+                {
+                    "name": "Antoine de Troostembergh"
+                }
+            ],
+            "description": "PHPWord - A pure PHP library for reading and writing word processing documents (OOXML, ODF, RTF, HTML, PDF)",
+            "homepage": "http://phpoffice.github.io",
+            "keywords": [
+                "HTML",
+                "ISO IEC 29500",
+                "ODF",
+                "OOXML",
+                "Office Open XML",
+                "OpenDocument",
+                "OpenXML",
+                "PDF",
+                "PHP",
+                "PHPOffice",
+                "PHPWord",
+                "RTF",
+                "Rich Text Format",
+                "WordprocessingML",
+                "doc",
+                "docx",
+                "odt",
+                "office",
+                "reader",
+                "template",
+                "template processor",
+                "word",
+                "writer"
+            ],
+            "support": {
+                "source": "https://github.com/map-os/PHPWord/tree/master"
+            },
+            "time": "2021-01-24T23:12:43+00:00"
         },
         {
             "name": "psr/http-message",
@@ -3823,7 +4016,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "phpoffice/phpword": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
