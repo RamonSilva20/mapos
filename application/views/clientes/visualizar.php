@@ -45,6 +45,12 @@
                                  <?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?>
                               </td>
                            </tr>
+                           <tr>
+                              <td style="text-align: right"><strong>Tipo do Cliente</strong></td>
+                              <td>
+                                 <?php echo $result->fornecedor == true ? 'Fornecedor' : 'Cliente'; ?>
+                              </td>
+                           </tr>
                         </tbody>
                      </table>
                   </div>

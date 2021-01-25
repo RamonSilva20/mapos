@@ -1,6 +1,29 @@
 <script src="<?php echo base_url()?>assets/js/jquery.mask.min.js"></script>
 <script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url()?>assets/js/funcoes.js"></script>
+<style>
+   /* Hiding the checkbox, but allowing it to be focused */
+   .badgebox {
+   opacity: 0;
+   }
+   .badgebox+.badge {
+   /* Move the check mark away when unchecked */
+   text-indent: -999999px;
+   /* Makes the badge's width stay the same checked and unchecked */
+   width: 27px;
+   }
+   .badgebox:focus+.badge {
+   /* Set something to make the badge looks focused */
+   /* This really depends on the application, in my case it was: */
+   /* Adding a light border */
+   box-shadow: inset 0px 0px 5px;
+   /* Taking the difference out of the padding */
+   }
+   .badgebox:checked+.badge {
+   /* Move the check mark back when checked */
+   text-indent: 0;
+   }
+</style>
 <div class="row-fluid" style="margin-top:0">
    <div class="span12">
       <div class="widget-box">
@@ -58,6 +81,15 @@
                      <label for="email" class="control-label">Email<span class="required">*</span></label>
                      <div class="controls">
                         <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
+                     </div>
+                  </div>
+                  <div class="control-group">
+                     <label class="control-label">Tipo de Cliente</label>
+                     <div class="controls">
+                        <label for="fornecedor" class="btn btn-default" style="margin-top: 5px;">Fornecedor
+                        <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="0">
+                        <span class="badge">&check;</span>
+                        </label>
                      </div>
                   </div>
                   <div class="form-actions">

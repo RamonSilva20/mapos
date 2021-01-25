@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `cep` VARCHAR(20) NULL DEFAULT NULL,
   `contato` varchar(45) DEFAULT NULL,
   `complemento` varchar(45) DEFAULT NULL,
+  `fornecedor` BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY (`idClientes`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
