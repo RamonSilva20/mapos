@@ -126,13 +126,16 @@
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                             echo '<td>' . $r->refGarantia . '</td>';
                             echo '<td>';
+
+                            $editavel = $this->os_model->isEditable($r->idOs);
+
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
                             }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && ($r->status != "Cancelado" && $r->status != "Faturado" && $r->faturado != 1)) {
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && $editavel) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
                             }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && ($r->status != "Cancelado" && $r->status != "Faturado" && $r->faturado != 1)) {
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
                                 echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
                             }
                             echo  '</td>';

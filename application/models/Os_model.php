@@ -328,4 +328,13 @@ class Os_model extends CI_Model
         
         return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
     }
+
+    public function isEditable($id = null)
+    {
+        if ($os = $this->getById($id)) {
+            return !(($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1) && $this->data['configuration']['control_editos']);
+        }
+
+        return false;
+    }
 }

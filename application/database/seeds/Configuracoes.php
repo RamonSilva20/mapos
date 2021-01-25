@@ -46,6 +46,11 @@ class Configuracoes extends Seeder
                 'config' => 'control_baixa',
                 'valor' => '0',
             ],
+            [
+                'idConfig' => 9,
+                'config' => 'control_editos',
+                'valor' => '1',
+            ],
         ];
 
         foreach ($configs as $config) {
