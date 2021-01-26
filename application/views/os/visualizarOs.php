@@ -8,7 +8,7 @@
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
-                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && $editavel) {
+                    <?php if ($editavel) {
                         echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
 
