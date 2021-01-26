@@ -77,7 +77,7 @@ class Clientes extends MY_Controller
             if ($this->clientes_model->add('clientes', $data) == true) {
                 $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
                 log_info('Adicionou um cliente.');
-                redirect(site_url('clientes/adicionar/'));
+                redirect(site_url('clientes/'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
