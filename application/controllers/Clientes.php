@@ -57,7 +57,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'nomeCliente' => set_value('nomeCliente'),
+                'nomeCliente' => strtoupper(set_value('nomeCliente')),
                 'contato' => set_value('contato'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
@@ -71,6 +71,7 @@ class Clientes extends MY_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
+                'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
             ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
@@ -105,7 +106,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'nomeCliente' => $this->input->post('nomeCliente'),
+                'nomeCliente' => strtoupper($this->input->post('nomeCliente')),
                 'contato' => $this->input->post('contato'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
@@ -118,6 +119,7 @@ class Clientes extends MY_Controller
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
+                'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
             ];
 
             if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
