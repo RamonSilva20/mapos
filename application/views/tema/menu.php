@@ -1,6 +1,6 @@
 <!--sidebar-menu-->
 <div id="sidebar"> <a href="#" class="visible-phone"><i class="fas fa-list"></i> Menu</a>
-    <ul>
+    <ul style="position: relative;">
         <li class="<?php if (isset($menuPainel)) {
             echo 'active';
         }; ?>"><a href="<?= base_url() ?>"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
@@ -96,8 +96,12 @@
                         <li><a href="<?= site_url('relatorios/financeiro') ?>">Financeiro</a></li>
                         <?php
                     } ?>
-                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda') && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
                         <li><a href="<?= site_url('relatorios/sku') ?>">SKU</a></li>
+                        <?php
+                    } ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
+                        <li><a href="<?= site_url('relatorios/receitasBrutasMei') ?>">Receitas Brutas - MEI</a></li>
                         <?php
                     } ?>
                 </ul>
