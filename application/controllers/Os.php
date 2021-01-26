@@ -276,7 +276,7 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
-        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -310,7 +310,6 @@ class Os extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
-        $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -321,7 +320,7 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
-        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
+        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -578,7 +577,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -612,7 +611,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
@@ -830,7 +829,6 @@ class Os extends MY_Controller
 
             $editavel = $this->os_model->isEditable($this->input->post('idOs'));
             if (!$editavel) {
-                
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(200)

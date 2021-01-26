@@ -325,6 +325,7 @@ class Os_model extends CI_Model
                 $totalProdutos = $totalProdutos + $p->subTotal;
             }
         }
+
         
         return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
     }
