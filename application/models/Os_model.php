@@ -1,4 +1,5 @@
 <?php
+
 class Os_model extends CI_Model
 {
 
@@ -303,7 +304,7 @@ class Os_model extends CI_Model
 
     public function criarTextoWhats($textoBase, $troca)
     {
-        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}","{OBS_OS}","{DEFEITO_OS}","{LAUDO_OS}","{DATA_FINAL}","{DATA_INICIAL}","{DATA_GARANTIA}"];
+        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}", "{EMITENTE}", "{TELEFONE_EMITENTE}", "{OBS_OS}", "{DEFEITO_OS}", "{LAUDO_OS}", "{DATA_FINAL}", "{DATA_INICIAL}", "{DATA_GARANTIA}"];
         $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
@@ -331,10 +332,15 @@ class Os_model extends CI_Model
 
     public function isEditable($id = null)
     {
-        if ($os = $this->getById($id)) {
-            return !(($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1) && $this->data['configuration']['control_editos']);
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            return false;
         }
-
-        return false;
+        if ($os = $this->getById($id)) {
+            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
+            if ($osT) {
+                return (bool) $this->data['configuration']['control_editos'];
+            }
+        }
+        return true;
     }
 }
