@@ -219,8 +219,8 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
 
-            $currentOS = $this->os_model->getById($this->input->post('idOs'));
-            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+            $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
+            if (!$this->data['editavel']) {
                 $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
 
                 redirect(site_url('os'));
@@ -276,7 +276,7 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -310,6 +310,7 @@ class Os extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+        $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -320,7 +321,7 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -827,8 +828,8 @@ class Os extends MY_Controller
                 'usuarios_id' => $this->session->userdata('id'),
             ];
 
-            $currentOS = $this->os_model->getById($this->input->post('os_id'));
-            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+            $editavel = $this->os_model->isEditable($this->input->post('idOs'));
+            if (!$editavel) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(200)

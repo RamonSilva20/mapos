@@ -310,19 +310,31 @@ class Os_model extends CI_Model
         return $textoBase;
     }
 
-    public function valorTotalOS($servicos, $produtos)
+    public function valorTotalOS($id = null)
     {
         $totalServico = 0;
         $totalProdutos = 0;
-        foreach ($produtos as $p) {
-            $totalProdutos = $totalProdutos + $p->subTotal;
+        if ($servicos = $this->getServicos($id)) {
+            foreach ($servicos as $s) {
+                $preco = $s->preco ?: $s->precoVenda;
+                $totalServico = $totalServico + ($preco * ($s->quantidade ?: 1));
+            }
         }
-        foreach ($servicos as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $totalServico = $totalServico + $subtotal;
+        if ($produtos = $this->getProdutos($id)) {
+            foreach ($produtos as $p) {
+                $totalProdutos = $totalProdutos + $p->subTotal;
+            }
         }
 
         return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
+    }
+
+    public function isEditable($id = null)
+    {
+        if ($os = $this->getById($id)) {
+            return !(($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1) && $this->data['configuration']['control_editos']);
+        }
+
+        return false;
     }
 }

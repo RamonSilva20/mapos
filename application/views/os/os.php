@@ -9,7 +9,7 @@
             <div class="span3">
                 <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
             </div>
-        <?php
+            <?php
         } ?>
 
         <div class="span3">
@@ -51,93 +51,96 @@
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
-                    <tr style="background-color: #2D335B">
-                        <th>N° OS</th>
-                        <th>Cliente</th>
-                        <th>Responsável</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Venc. Garantia</th>
-                        <th>Valor Total</th>
-                        <th>Valor Total (Faturado)</th>
-                        <th>Status</th>
-                        <th>T. Garantia</th>
-                        <th>Ações</th>
-                    </tr>
+                <tr style="background-color: #2D335B">
+                    <th>N° OS</th>
+                    <th>Cliente</th>
+                    <th>Responsável</th>
+                    <th>Data Inicial</th>
+                    <th>Data Final</th>
+                    <th>Venc. Garantia</th>
+                    <th>Valor Total</th>
+                    <th>Valor Total (Faturado)</th>
+                    <th>Status</th>
+                    <th>T. Garantia</th>
+                    <th>Ações</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <?php
+                <?php
 
-                        if (!$results) {
-                            echo '<tr>
+                if (!$results) {
+                    echo '<tr>
                                     <td colspan="10">Nenhuma OS Cadastrada</td>
                                   </tr>';
-                        }
-                        $this->load->model('os_model');
-                        foreach ($results as $r) {
-                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                            if ($r->dataFinal != null) {
-                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                            } else {
-                                $dataFinal = "";
-                            }
-                            switch ($r->status) {
-                                case 'Negociação':
-                                case 'Aberto':
-                                    $cor = '#00cd00';
-                                    break;
-                                case 'Em Andamento':
-                                    $cor = '#436eee';
-                                    break;
-                                case 'Orçamento':
-                                    $cor = '#CDB380';
-                                    break;
-                                case 'Cancelado':
-                                    $cor = '#CD0000';
-                                    break;
-                                case 'Finalizado':
-                                    $cor = '#256';
-                                    break;
-                                case 'Faturado':
-                                    $cor = '#B266FF';
-                                    break;
-                                case 'Aguardando Peças':
-                                    $cor = '#FF7F00';
-                                    break;
-                                default:
-                                    $cor = '#E0E4CC';
-                                    break;
-                            }
-                            $vencGarantia = '';
+                }
+                $this->load->model('os_model');
+                foreach ($results as $r) {
+                    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                    if ($r->dataFinal != null) {
+                        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                    } else {
+                        $dataFinal = "";
+                    }
+                    switch ($r->status) {
+                        case 'Negociação':
+                        case 'Aberto':
+                            $cor = '#00cd00';
+                            break;
+                        case 'Em Andamento':
+                            $cor = '#436eee';
+                            break;
+                        case 'Orçamento':
+                            $cor = '#CDB380';
+                            break;
+                        case 'Cancelado':
+                            $cor = '#CD0000';
+                            break;
+                        case 'Finalizado':
+                            $cor = '#256';
+                            break;
+                        case 'Faturado':
+                            $cor = '#B266FF';
+                            break;
+                        case 'Aguardando Peças':
+                            $cor = '#FF7F00';
+                            break;
+                        default:
+                            $cor = '#E0E4CC';
+                            break;
+                    }
+                    $vencGarantia = '';
 
-                            if ($r->garantia && is_numeric($r->garantia)) {
-                                $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
-                            }
+                    if ($r->garantia && is_numeric($r->garantia)) {
+                        $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
+                    }
 
-                            echo '<tr>';
-                            echo '<td>' . $r->idOs . '</td>';
-                            echo '<td>' . $r->nomeCliente . '</td>';
-                            echo '<td>' . $r->nome . '</td>';
-                            echo '<td>' . $dataInicial . '</td>';
-                            echo '<td>' . $dataFinal . '</td>';
-                            echo '<td>' . $vencGarantia. '</td>';
-                            echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
-                            echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                            echo '<td>' . $r->refGarantia . '</td>';
-                            echo '<td>';
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && ($r->status != "Cancelado" && $r->status != "Faturado" && $r->faturado != 1)) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && ($r->status != "Cancelado" && $r->status != "Faturado" && $r->faturado != 1)) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
-                            }
-                            echo  '</td>';
-                            echo '</tr>';
-                        } ?>
+                    echo '<tr>';
+                    echo '<td>' . $r->idOs . '</td>';
+                    echo '<td>' . $r->nomeCliente . '</td>';
+                    echo '<td>' . $r->nome . '</td>';
+                    echo '<td>' . $dataInicial . '</td>';
+                    echo '<td>' . $dataFinal . '</td>';
+                    echo '<td>' . $vencGarantia. '</td>';
+                    echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
+                    echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
+                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                    echo '<td>' . $r->refGarantia . '</td>';
+                    echo '<td>';
+
+                    $editavel = $this->os_model->isEditable($r->idOs);
+
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs') && $editavel) {
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
+                        echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                    }
+                    echo  '</td>';
+                    echo '</tr>';
+                } ?>
                 </tbody>
             </table>
         </div>
@@ -172,10 +175,10 @@
         $(document).on('click', '#excluir-notificacao', function(event) {
             event.preventDefault();
             $.ajax({
-                    url: '<?php echo site_url() ?>/os/excluir_notificacao',
-                    type: 'GET',
-                    dataType: 'json',
-                })
+                url: '<?php echo site_url() ?>/os/excluir_notificacao',
+                type: 'GET',
+                dataType: 'json',
+            })
                 .done(function(data) {
                     if (data.result == true) {
                         Swal.fire({
