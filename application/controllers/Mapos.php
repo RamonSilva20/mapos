@@ -423,7 +423,7 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
             redirect(base_url());
         }
-
+        $this->load->model('os_model');
         $status = $this->input->get('status') ?: null;
         $start = $this->input->get('start') ?: null;
         $end = $this->input->get('end') ?: null;
@@ -433,7 +433,7 @@ class Mapos extends MY_Controller
             $end,
             $status
         );
-
+        
         $events = array_map(function ($os) {
             switch ($os->status) {
                 case 'Aberto':
@@ -479,7 +479,7 @@ class Mapos extends MY_Controller
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
-                    'editar' => !(($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1) && $this->data['configuration']['control_editos']),
+                    'editar' => $this->os_model->isEditable($os->idOs),
                 ]
             ];
         }, $allOs);
