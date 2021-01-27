@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css"/>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css"/>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 
@@ -7,13 +7,15 @@
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
-                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
+                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i
+                            class="fas fa-plus"></i> Adicionar OS</a>
             </div>
             <?php
         } ?>
 
         <div class="span3">
-            <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
+            <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12"
+                   value="">
         </div>
         <div class="span2">
             <select name="status[]" id="status" class="span12" multiple>
@@ -31,11 +33,13 @@
         </div>
 
         <div class="span3">
-            <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="">
-            <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
+            <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial"
+                   class="span6 datepicker" value="">
+            <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final"
+                   class="span6 datepicker" value="">
         </div>
         <div class="span1">
-            <button class="span12 btn"> <i class="fas fa-search"></i> </button>
+            <button class="span12 btn"><i class="fas fa-search"></i></button>
         </div>
     </form>
 </div>
@@ -81,6 +85,11 @@
                     } else {
                         $dataFinal = "";
                     }
+
+                    if($this->input->get('pesquisa') !== '' && $r->status === "Finalizado") {
+                        continue;
+                    }
+                     
                     switch ($r->status) {
                         case 'Negociação':
                         case 'Aberto':
@@ -120,7 +129,7 @@
                     echo '<td>' . $r->nome . '</td>';
                     echo '<td>' . $dataInicial . '</td>';
                     echo '<td>' . $dataFinal . '</td>';
-                    echo '<td>' . $vencGarantia. '</td>';
+                    echo '<td>' . $vencGarantia . '</td>';
                     echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
                     echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                     echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
@@ -138,7 +147,7 @@
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
                         echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
                     }
-                    echo  '</td>';
+                    echo '</td>';
                     echo '</tr>';
                 } ?>
                 </tbody>
@@ -150,14 +159,15 @@
 <?php echo $this->pagination->create_links(); ?>
 
 <!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>
         </div>
         <div class="modal-body">
-            <input type="hidden" id="idOs" name="id" value="" />
+            <input type="hidden" id="idOs" name="id" value=""/>
             <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
         </div>
         <div class="modal-footer">
@@ -167,19 +177,19 @@
     </form>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
+    $(document).ready(function () {
+        $(document).on('click', 'a', function (event) {
             var os = $(this).attr('os');
             $('#idOs').val(os);
         });
-        $(document).on('click', '#excluir-notificacao', function(event) {
+        $(document).on('click', '#excluir-notificacao', function (event) {
             event.preventDefault();
             $.ajax({
                 url: '<?php echo site_url() ?>/os/excluir_notificacao',
                 type: 'GET',
                 dataType: 'json',
             })
-                .done(function(data) {
+                .done(function (data) {
                     if (data.result == true) {
                         Swal.fire({
                             type: "success",
