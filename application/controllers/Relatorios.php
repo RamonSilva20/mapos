@@ -872,6 +872,7 @@ class Relatorios extends MY_Controller
         }
 
         $this->load->helper('download');
+        $this->load->helper('file');
 
         $format = $this->input->get('format') ?: 'docx';
 
@@ -891,6 +892,11 @@ class Relatorios extends MY_Controller
 
         if ($format === 'docx') {
             $templateProcessor->saveAs($generatedFilePath);
+
+            $fileContents = file_get_contents($generatedFilePath);
+            unlink($generatedFilePath);
+
+            return force_download("relatorio_receitas_brutas_mei_rapido.$format", $fileContents);
         } else {
             Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
             Settings::setPdfRendererPath('.');
@@ -900,13 +906,17 @@ class Relatorios extends MY_Controller
             $pdfWriter = IOFactory::createWriter($template, 'PDF');
             $pdfWriter->save($generatedFilePath);
 
+            $fileContents = file_get_contents($generatedFilePath);
             unlink($tempFilePath);
+            unlink($generatedFilePath);
+
+            return $this->output
+                ->set_header("Content-disposition: inline;filename=" . "relatorio_receitas_brutas_mei_rapido.$format")
+                ->set_content_type(get_mime_by_extension($generatedFilePath))
+                ->set_status_header(200)
+                ->set_output($fileContents)
+                ->_display();
         }
-
-        $fileContents = file_get_contents($generatedFilePath);
-        unlink($generatedFilePath);
-
-        return force_download("relatorio_receitas_brutas_mei_rapido.$format", $fileContents);
     }
 
     public function receitasBrutasCustom()
@@ -917,6 +927,7 @@ class Relatorios extends MY_Controller
         }
 
         $this->load->helper('download');
+        $this->load->helper('file');
 
         $format = $this->input->get('format') ?: 'docx';
         $dataInicial = $this->input->get('dataInicial');
@@ -938,6 +949,18 @@ class Relatorios extends MY_Controller
 
         if ($format === 'docx') {
             $templateProcessor->saveAs($generatedFilePath);
+
+            $fileContents = file_get_contents($generatedFilePath);
+            unlink($generatedFilePath);
+
+            return force_download(
+                sprintf(
+                    "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
+                    $dataInicial,
+                    $dataFinal
+                ),
+                $fileContents
+            );
         } else {
             Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
             Settings::setPdfRendererPath('.');
@@ -947,19 +970,16 @@ class Relatorios extends MY_Controller
             $pdfWriter = IOFactory::createWriter($template, 'PDF');
             $pdfWriter->save($generatedFilePath);
 
+            $fileContents = file_get_contents($generatedFilePath);
             unlink($tempFilePath);
+            unlink($generatedFilePath);
+
+            return $this->output
+                ->set_header("Content-disposition: inline;filename=" . "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format")
+                ->set_content_type(get_mime_by_extension($generatedFilePath))
+                ->set_status_header(200)
+                ->set_output($fileContents)
+                ->_display();
         }
-
-        $fileContents = file_get_contents($generatedFilePath);
-        unlink($generatedFilePath);
-
-        return force_download(
-            sprintf(
-                "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
-                $dataInicial,
-                $dataFinal
-            ),
-            $fileContents
-        );
     }
 }
