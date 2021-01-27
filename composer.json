@@ -7,7 +7,8 @@
         "mpdf/mpdf" : "^8.0.10",
         "filp/whoops": "^2.7",
         "mk-j/php_xlsxwriter": "^0.38.0",
-        "mpdf/qrcode": "^1.1"
+        "mpdf/qrcode": "^1.1",
+        "phpoffice/phpword": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -25,5 +26,11 @@
         "psr-4": {
             "Libraries\\": "application/libraries"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/map-os/PHPWord"
+        }
+    ]
 }

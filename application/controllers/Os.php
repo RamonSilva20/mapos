@@ -577,7 +577,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
@@ -611,7 +611,7 @@ class Os extends MY_Controller
             $this->load->model('produtos_model');
 
             if ($this->data['configuration']['control_estoque']) {
-                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
@@ -829,7 +829,6 @@ class Os extends MY_Controller
 
             $currentOS = $this->os_model->getById($this->input->post('os_id'));
             if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
-                
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(200)

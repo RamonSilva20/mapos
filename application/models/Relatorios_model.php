@@ -370,9 +370,9 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id FROM vendas 
-        LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes 
-        LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios 
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id FROM vendas
+        LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
+        LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
         LEFT JOIN itens_de_vendas ON itens_de_vendas.vendas_id = vendas.idVendas
         WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
 
@@ -382,5 +382,117 @@ class Relatorios_model extends CI_Model
         }
 
         return $result->result();
+    }
+
+    public function receitasBrutasRapid()
+    {
+        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+
+        $inicio = (new DateTime())->modify('first day of this month');
+        $fim = (new DateTime())->modify('last day of this month');
+
+        $query = "
+            SELECT
+                SUM(valor) total,
+                SUM(case when descricao NOT LIKE '%Fatura de OS%' AND descricao NOT LIKE '%Fatura de Venda%' then valor else 0 end) as totalOutros,
+                SUM(case when descricao LIKE '%Fatura de OS%' then valor else 0 end) as totalServicos,
+                SUM(case when descricao LIKE '%Fatura de Venda%' then valor else 0 end) as totalVendas
+            FROM lancamentos
+                WHERE baixado = 1
+                AND tipo = 'receita'
+                AND data_vencimento >= ?
+                AND data_vencimento <= ?
+        ";
+
+        $relatorio = $this->db->query($query, [$inicio->format('c'), $fim->format('c')])->row_array();
+
+        $mercadoriasTotalSemNf = floatval($relatorio['totalVendas']);
+        $mercadoriasTotalComNf = 0;
+        $mercadoriasTotal = $mercadoriasTotalSemNf + $mercadoriasTotalComNf;
+
+        $industriaTotalSemNf = 0;
+        $industriaTotalComNf = 0;
+        $industriaTotal = $industriaTotalSemNf + $industriaTotalComNf;
+
+        $servicosTotalSemNf = floatval($relatorio['totalServicos']);
+        $servicosTotalComNf = 0;
+        $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
+
+        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+
+        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+
+        return [
+            'cnpj' => $emitente['cnpj'],
+            'emitente' => $emitente['nome'],
+            'periodo' => $periodo,
+            'mercadoriasTotalSemNf' => number_format($mercadoriasTotalSemNf, 2, ',', '.'),
+            'mercadoriasTotalComNf' => number_format($mercadoriasTotalComNf, 2, ',', '.'),
+            'mercadoriasTotal' => number_format($mercadoriasTotal, 2, ',', '.'),
+            'industriaTotalSemNf' => number_format($industriaTotalSemNf, 2, ',', '.'),
+            'industriaTotalComNf' => number_format($industriaTotalComNf, 2, ',', '.'),
+            'industriaTotal' => number_format($industriaTotal, 2, ',', '.'),
+            'servicosTotalSemNf' => number_format($servicosTotalSemNf, 2, ',', '.'),
+            'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
+            'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
+            'totalMes' => number_format($totalMes, 2, ',', '.'),
+            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+        ];
+    }
+
+    public function receitasBrutasCustom($dataInicial = null, $dataFinal = null)
+    {
+        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+
+        $query = "
+            SELECT
+                SUM(valor) total,
+                SUM(case when descricao NOT LIKE '%Fatura de OS%' AND descricao NOT LIKE '%Fatura de Venda%' then valor else 0 end) as totalOutros,
+                SUM(case when descricao LIKE '%Fatura de OS%' then valor else 0 end) as totalServicos,
+                SUM(case when descricao LIKE '%Fatura de Venda%' then valor else 0 end) as totalVendas
+            FROM lancamentos
+                WHERE baixado = 1
+                AND tipo = 'receita'
+                AND data_vencimento >= ?
+                AND data_vencimento <= ?
+        ";
+
+        $inicio = new DateTime($dataInicial);
+        $fim = new DateTime($dataFinal);
+
+        $relatorio = $this->db->query($query, [$inicio->format('c'), $fim->format('c')])->row_array();
+
+        $mercadoriasTotalSemNf = floatval($relatorio['totalVendas']);
+        $mercadoriasTotalComNf = 0;
+        $mercadoriasTotal = $mercadoriasTotalSemNf + $mercadoriasTotalComNf;
+
+        $industriaTotalSemNf = 0;
+        $industriaTotalComNf = 0;
+        $industriaTotal = $industriaTotalSemNf + $industriaTotalComNf;
+
+        $servicosTotalSemNf = floatval($relatorio['totalServicos']);
+        $servicosTotalComNf = 0;
+        $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
+
+        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+
+        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+
+        return [
+            'cnpj' => $emitente['cnpj'],
+            'emitente' => $emitente['nome'],
+            'periodo' => $periodo,
+            'mercadoriasTotalSemNf' => number_format($mercadoriasTotalSemNf, 2, ',', '.'),
+            'mercadoriasTotalComNf' => number_format($mercadoriasTotalComNf, 2, ',', '.'),
+            'mercadoriasTotal' => number_format($mercadoriasTotal, 2, ',', '.'),
+            'industriaTotalSemNf' => number_format($industriaTotalSemNf, 2, ',', '.'),
+            'industriaTotalComNf' => number_format($industriaTotalComNf, 2, ',', '.'),
+            'industriaTotal' => number_format($industriaTotal, 2, ',', '.'),
+            'servicosTotalSemNf' => number_format($servicosTotalSemNf, 2, ',', '.'),
+            'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
+            'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
+            'totalMes' => number_format($totalMes, 2, ',', '.'),
+            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+        ];
     }
 }
