@@ -193,13 +193,8 @@ class MercadoPago extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
-        $list = ['rua','numero','bairro','cep','cidade','complemento','estado','documento','telefone','nomeCliente','email'];
-        foreach ($entity as $key => $value) {
-            if (in_array($key, $list)) {
-                if ((empty($value) || strlen($value) < 4) && !is_numeric($value)) {
-                    throw new \Exception('Por favor preencha o(a) '.$key.' do seu cliente de forma correta');
-                }
-            }
+        if($err = $this->errosCadastro($entity)) {
+            throw new \Exception($err);
         }
 
         $clientNameParts = explode(' ', $entity->nomeCliente);
