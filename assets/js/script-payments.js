@@ -1,4 +1,4 @@
-$('#form-gerar-cobranca').submit(function (e) {
+$('#form-gerar-cobranca').submit(function(e) {
     e.preventDefault();
 
     $("#modal-gerar-pagamento").modal('hide');
@@ -8,7 +8,7 @@ $('#form-gerar-cobranca').submit(function (e) {
         url: form.attr('action'),
         type: form.attr('method'),
         data: form.serialize(),
-        beforeSend: function () {
+        beforeSend: function() {
             swal({
                 title: 'Processando',
                 text: 'Criando cobrança...',
@@ -19,20 +19,20 @@ $('#form-gerar-cobranca').submit(function (e) {
                 allowEscapeKey: false
             });
         },
-        success: function (response) {
+        success: function(response) {
             swal("Sucesso!", "Cobrança criada com sucesso!", "success");
             setTimeout(function() {
                 window.location.href = window.BaseUrl + 'index.php/cobrancas/visualizar/' + response.idCobranca;
             }, 5000);
         },
-        error: function (response) {
+        error: function(response) {
             var message = response.responseJSON.message || "Erro ao criar cobrança!";
-            swal("Erro!", message, "error");
+            swal("Erro!", message == 'Unauthorized' ? 'Por favor configurar os dados da API em Config/payment_gatways.php' : message, "error");
         }
     });
 });
 
-$("#gateway_de_pagamento").change(function (e) {
+$("#gateway_de_pagamento").change(function(e) {
     var gatewayDePagamento = $(this).val();
     $("#forma_pagamento").hide();
     $("#label_forma_pagamento").hide();
