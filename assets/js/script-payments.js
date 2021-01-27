@@ -27,7 +27,10 @@ $('#form-gerar-cobranca').submit(function(e) {
         },
         error: function(response) {
             var message = response.responseJSON.message || "Erro ao criar cobrança!";
-            swal("Erro!", message == 'Unauthorized' ? 'Por favor configurar os dados da API em Config/payment_gatways.php' : message, "error");
+            if (message == 'unauthorized: Must provide your access_token to proceed' || message == 'Unauthorized') {
+                message = 'Por favor configurar os dados da API em Config/payment_gatways.php';
+            }
+            swal("Erro!", message, "error");
         }
     });
 });
