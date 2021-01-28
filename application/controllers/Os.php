@@ -430,12 +430,11 @@ class Os extends MY_Controller
                     break;
             }
 
-            foreach($remetentes as $remetente) {
-                if(empty($remetente) || !strlen($remetente) < 4) {
-                    $this->session->set_flashdata('error', 'Por favor preencha o email de seus usuários e Cliente');
-                    redirect(site_url('os/visualizar/').$this->uri->segment(3));
-                }
+            if (empty($this->data['result']->email) || !strlen($this->data['result']->email) < 4) {
+                $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
+                redirect(site_url('os/visualizar/').$this->uri->segment(3));
             }
+           
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
