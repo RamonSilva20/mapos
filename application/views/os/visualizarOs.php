@@ -12,18 +12,29 @@
                         echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
                     } ?>
 
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse"
+                       href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i
+                                class="fas fa-print"></i> Imprimir A4</a>
+                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse"
+                       href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i
+                                class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
                         $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-                        echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+                        if (!empty($zapnumber)) {
+                            echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+                        }
                     } ?>
 
-                    <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php  } ?>
+                    <a title="Enviar por E-mail" class="btn btn-mini btn-warning"
+                       href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i
+                                class="fas fa-envelope"></i> Enviar por E-mail</a>
+                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia"
+                                                             class="btn btn-mini btn-inverse"
+                                                             href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i
+                                class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php } ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -35,12 +46,22 @@
                             <?php if ($emitente == null) { ?>
 
                                 <tr>
-                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                        <<<</td> </tr> <?php } else { ?> <tr>
-                                <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> " style="max-height: 100px"></td>
-                                <td> <span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br><span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ' - ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
-                                <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y') ?></span></td>
-                            </tr>
+                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a
+                                                href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                        <<<
+                                    </td>
+                                </tr> <?php } else { ?>
+                                <tr>
+                                    <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "
+                                                                style="max-height: 100px"></td>
+                                    <td><span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br>
+                                        <span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ' - ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br>
+                                        <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span>
+                                    </td>
+                                    <td style="width: 18%; text-align: center"><b>N° OS:</b>
+                                        <span><?php echo $result->idOs ?></span></br> </br>
+                                        <span>Emissão: <?php echo date('d/m/Y') ?></span></td>
+                                </tr>
 
                             <?php } ?>
                             </tbody>
@@ -54,7 +75,7 @@
                                         <li>
                                                 <span>
                                                     <h5><b>CLIENTE</b></h5>
-                                                    <span><?php echo $result->nomeCliente ?></span><br />
+                                                    <span><?php echo $result->nomeCliente ?></span><br/>
                                                     <span><?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?></span>,
                                                     <span><?php echo $result->cidade ?> - <?php echo $result->estado ?></span><br>
                                                     <span>E-mail: <?php echo $result->email ?></span><br>
@@ -68,8 +89,8 @@
                                                 <span>
                                                     <h5><b>RESPONSÁVEL</b></h5>
                                                 </span>
-                                            <span><?php echo $result->nome ?></span> <br />
-                                            <span>Contato: <?php echo $result->telefone_usuario ?></span><br />
+                                            <span><?php echo $result->nome ?></span> <br/>
+                                            <span>Contato: <?php echo $result->telefone_usuario ?></span><br/>
                                             <span>Email: <?php echo $result->email_usuario ?></span>
                                         </li>
                                     </ul>
@@ -171,7 +192,7 @@
                             foreach ($anotacoes as $a) {
                                 echo '<tr>';
                                 echo '<td>' . $a->anotacao . '</td>';
-                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora))  . '</td>';
+                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
                                 echo '</tr>';
                             }
                             if (!$anotacoes) {
@@ -181,7 +202,7 @@
                             </tbody>
                         </table>
                         <?php if ($produtos != null) { ?>
-                            <br />
+                            <br/>
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                 <tr>
@@ -206,7 +227,8 @@
                                 <tr>
                                     <td></td>
                                     <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
-                                    <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                    <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -238,7 +260,8 @@
 
                                 <tr>
                                     <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                    <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                    <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -259,7 +282,7 @@
                                         $link = base_url() . 'assets/img/icon-file.png';
                                     } else {
                                         $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                        $link = $a->url .'/'. $a->anexo;
+                                        $link = $a->url . '/' . $a->anexo;
                                     }
                                     echo '<tr>';
                                     echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
@@ -281,12 +304,14 @@
     </div>
 </div>
 
-<a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Gerar Pagamento</a>
+<a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i
+            class="fas fa-cash-register"></i> Gerar Pagamento</a>
 
 <?= $modalGerarPagamento ?>
 
 <!-- Modal visualizar anexo -->
-<div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Visualizar Anexo</h3>
@@ -305,8 +330,8 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', '.anexo', function(event) {
+    $(document).ready(function () {
+        $(document).on('click', '.anexo', function (event) {
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
@@ -318,7 +343,7 @@
 
         });
 
-        $(document).on('click', '#excluir-anexo', function(event) {
+        $(document).on('click', '#excluir-anexo', function (event) {
             event.preventDefault();
 
             var link = $(this).attr('link');
@@ -332,7 +357,7 @@
                 url: link,
                 dataType: 'json',
                 data: "idOs=" + idOS,
-                success: function(data) {
+                success: function (data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
