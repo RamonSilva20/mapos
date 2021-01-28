@@ -429,6 +429,13 @@ class Os extends MY_Controller
                     array_push($remetentes, $this->data['result']->email);
                     break;
             }
+
+            foreach($remetentes as $remetente) {
+                if(empty($remetente) || !strlen($remetente) < 4) {
+                    $this->session->set_flashdata('error', 'Por favor preencha o email de seus usuários e Cliente');
+                    redirect(site_url('os'));
+                }
+            }
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
@@ -476,7 +483,7 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
                 }
             }
         }
@@ -485,7 +492,7 @@ class Os extends MY_Controller
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
-        if ((int) $os->faturado === 1) {
+        if ((int)$os->faturado === 1) {
             $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
         }
 
