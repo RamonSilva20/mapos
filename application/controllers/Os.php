@@ -444,11 +444,11 @@ class Os extends MY_Controller
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
-                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
+                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve.');
                 log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
                 redirect(site_url('os'));
             } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail.');
                 redirect(site_url('os'));
             }
         }
