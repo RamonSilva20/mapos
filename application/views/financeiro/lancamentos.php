@@ -308,6 +308,7 @@ $periodo = $this->input->get('periodo');
               <option value="Boleto">Boleto</option>
               <option value="Depósito">Depósito</option>
               <option value="Débito">Débito</option>
+              <option value="Pix">Pix</option>
             </select>
           </div>
         </div>
