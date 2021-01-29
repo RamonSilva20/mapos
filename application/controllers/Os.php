@@ -218,10 +218,10 @@ class Os extends MY_Controller
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
-
+            $os = $this->os_model->getById($this->input->post('idOs'));
             $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
             if (!$this->data['editavel']) {
-                $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
+                $this->session->set_flashdata('error', 'Esta OS já foi '.$os->status.' e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
 
                 redirect(site_url('os'));
             }
