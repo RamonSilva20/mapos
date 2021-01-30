@@ -25,17 +25,14 @@ $('#form-gerar-cobranca').submit(function(e) {
                 window.location.href = window.BaseUrl + 'index.php/cobrancas/visualizar/' + response.idCobranca;
             }, 5000);
         },
-        error: function(response) {
+        error: function (response) {
             var message = response.responseJSON.message || "Erro ao criar cobrança!";
-            if (message == 'unauthorized: Must provide your access_token to proceed' || message == 'Unauthorized') {
-                message = 'Por favor configurar os dados da API em Config/payment_gatways.php';
-            }
             swal("Erro!", message, "error");
         }
     });
 });
 
-$("#gateway_de_pagamento").change(function(e) {
+$("#gateway_de_pagamento").change(function (e) {
     var gatewayDePagamento = $(this).val();
     $("#forma_pagamento").hide();
     $("#label_forma_pagamento").hide();
