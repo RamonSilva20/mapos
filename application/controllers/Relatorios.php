@@ -66,7 +66,7 @@ class Relatorios extends MY_Controller
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
-        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal,$this->input->get('tipocliente'));
+        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes Customizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
