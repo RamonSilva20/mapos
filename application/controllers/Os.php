@@ -408,7 +408,7 @@ class Os extends MY_Controller
         $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
 
         // Verificar configuração de notificação
-        $isCheck = false;
+        $ValidarEmail = false;
         if ($this->data['configuration']['os_notification'] != 'nenhum') {
             $remetentes = [];
             switch ($this->data['configuration']['os_notification']) {
@@ -416,11 +416,11 @@ class Os extends MY_Controller
                     array_push($remetentes, $this->data['result']->email);
                     array_push($remetentes, $tecnico->email);
                     array_push($remetentes, $emitente->email);
-                    $isCheck = true;
+                    $ValidarEmail = true;
                     break;
                 case 'cliente':
                     array_push($remetentes, $this->data['result']->email);
-                    $isCheck = true;
+                    $ValidarEmail = true;
                     break;
                 case 'tecnico':
                     array_push($remetentes, $tecnico->email);
@@ -430,11 +430,11 @@ class Os extends MY_Controller
                     break;
                 default:
                     array_push($remetentes, $this->data['result']->email);
-                    $isCheck = true;
+                    $ValidarEmail = true;
                     break;
             }
 
-            if ($isCheck) {
+            if ($ValidarEmail) {
                 if (empty($this->data['result']->email) || !filter_var($this->data['result']->email, FILTER_VALIDATE_EMAIL)) {
                     $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
                     redirect(site_url('os/visualizar/').$this->uri->segment(3));
