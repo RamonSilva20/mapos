@@ -433,7 +433,6 @@ class Mapos extends MY_Controller
             $end,
             $status
         );
-        
         $events = array_map(function ($os) {
             switch ($os->status) {
                 case 'Aberto':
