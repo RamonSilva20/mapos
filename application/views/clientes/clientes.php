@@ -33,7 +33,7 @@
             foreach ($results as $r) {
                 echo '<tr>';
                 echo '<td>' . $r->idClientes . '</td>';
-                echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' .strtoupper($r->nomeCliente) . '</a></td>';
+                echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' .$r->nomeCliente. '</a></td>';
                 echo '<td>' . $r->documento . '</td>';
                 echo '<td>' . $r->telefone . '</td>';
                 echo '<td>' . $r->email . '</td>';
