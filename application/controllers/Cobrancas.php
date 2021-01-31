@@ -72,10 +72,14 @@ class Cobrancas extends MY_Controller
                     ->set_status_header(200)
                     ->set_output(json_encode($cobranca));
             } catch (\Exception $e) {
+                $expMsg = $e->getMessage();
+                if ($expMsg == 'unauthorized: Must provide your access_token to proceed' || $expMsg == 'Unauthorized') {
+                    $expMsg = 'Por favor configurar os dados da API em Config/payment_gatways.php';
+                }
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(500)
-                    ->set_output(json_encode(['message' => $e->getMessage()]));
+                    ->set_output(json_encode(['message' => $expMsg]));
             }
         }
     }

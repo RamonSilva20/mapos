@@ -35,6 +35,31 @@ abstract class BasePaymentGateway implements PaymentGateway
         }
     }
 
+    public function errosCadastro($entity = null) 
+    {
+        if($entity == null) {
+
+            return null;
+        }
+        $error_list = "Por favor preencher os seguintes dados do(a) seu(ua) cliente!\n\n";
+        $check = false;
+        $list = ['rua','numero','bairro','cep','cidade','estado','documento','telefone','nomeCliente','email'];
+        foreach ($entity as $key => $value) {
+            if (in_array($key, $list)) {
+                if ((empty($value) || strlen($value) < 2) && !is_numeric($value)) {
+                    $error_list .= "-".$key."\n";
+                    $check = true;
+                }
+            }
+        }
+        if(!$check) {
+
+            return null;
+        }
+
+        return $error_list;
+    }
+
     public function enviarPorEmail($id)
     {
         throw new \Exception('Não implementado');

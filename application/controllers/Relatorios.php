@@ -66,7 +66,7 @@ class Relatorios extends MY_Controller
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
-        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal);
+        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes Customizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
@@ -941,7 +941,7 @@ class Relatorios extends MY_Controller
         }
 
         $tempFilePath = FCPATH . "assets" . DIRECTORY_SEPARATOR . "relatorios" . DIRECTORY_SEPARATOR . "temp.docx";
-        $generatedFilePath = FCPATH . "assets" . DIRECTORY_SEPARATOR ."relatorios" . DIRECTORY_SEPARATOR ."RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $generatedFilePath = FCPATH . "assets" . DIRECTORY_SEPARATOR . "relatorios" . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasCustom($dataInicial, $dataFinal);

@@ -218,10 +218,10 @@ class Os extends MY_Controller
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
-
-            $currentOS = $this->os_model->getById($this->input->post('idOs'));
-            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
-                $this->session->set_flashdata('error', 'Esta OS já foi cancelada e/ou faturada, seu status não pode ser alterado e nem suas informações atualizada, por favor abrir uma nova OS.');
+            $os = $this->os_model->getById($this->input->post('idOs'));
+            $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
+            if (!$this->data['editavel']) {
+                $this->session->set_flashdata('error', 'Esta OS já foi '.$os->status.' e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
 
                 redirect(site_url('os'));
             }
@@ -276,7 +276,7 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -310,6 +310,7 @@ class Os extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+        $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -320,7 +321,7 @@ class Os extends MY_Controller
         );
         $this->data['view'] = 'os/visualizarOs';
 
-        if ($return = $this->os_model->valorTotalOS($this->data['servicos'], $this->data['produtos'])) {
+        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
@@ -407,6 +408,7 @@ class Os extends MY_Controller
         $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
 
         // Verificar configuração de notificação
+        $ValidarEmail = false;
         if ($this->data['configuration']['os_notification'] != 'nenhum') {
             $remetentes = [];
             switch ($this->data['configuration']['os_notification']) {
@@ -414,9 +416,11 @@ class Os extends MY_Controller
                     array_push($remetentes, $this->data['result']->email);
                     array_push($remetentes, $tecnico->email);
                     array_push($remetentes, $emitente->email);
+                    $ValidarEmail = true;
                     break;
                 case 'cliente':
                     array_push($remetentes, $this->data['result']->email);
+                    $ValidarEmail = true;
                     break;
                 case 'tecnico':
                     array_push($remetentes, $tecnico->email);
@@ -426,16 +430,25 @@ class Os extends MY_Controller
                     break;
                 default:
                     array_push($remetentes, $this->data['result']->email);
+                    $ValidarEmail = true;
                     break;
             }
+
+            if ($ValidarEmail) {
+                if (empty($this->data['result']->email) || !filter_var($this->data['result']->email, FILTER_VALIDATE_EMAIL)) {
+                    $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
+                    redirect(site_url('os/visualizar/').$this->uri->segment(3));
+                }
+            }
+           
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
-                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve para o cliente.');
+                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve.');
                 log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
                 redirect(site_url('os'));
             } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail para o cliente.');
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail.');
                 redirect(site_url('os'));
             }
         }
@@ -475,7 +488,7 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id. ' teve baixa de estoque quantidade: '.$p->quantidade);
+                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
                 }
             }
         }
@@ -484,7 +497,7 @@ class Os extends MY_Controller
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
-        if ((int) $os->faturado === 1) {
+        if ((int)$os->faturado === 1) {
             $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
         }
 
@@ -827,8 +840,8 @@ class Os extends MY_Controller
                 'usuarios_id' => $this->session->userdata('id'),
             ];
 
-            $currentOS = $this->os_model->getById($this->input->post('os_id'));
-            if ($currentOS->status == "Cancelado" || $currentOS->status == "Faturado" || $currentOS->faturado == 1) {
+            $editavel = $this->os_model->isEditable($this->input->post('idOs'));
+            if (!$editavel) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(200)

@@ -121,7 +121,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($databaseResult == true) {
             $this->ci->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID' .  $id);
+            log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
             throw new \Exception('Erro ao atualizar cobrança!');
@@ -176,6 +176,10 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
+        if($err = $this->errosCadastro($entity)) {
+            throw new \Exception($err);
+        }
+        
         $address = [
             'street' => $entity->rua,
             'number' => $entity->numero,
@@ -298,6 +302,10 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
+        if($err = $this->errosCadastro($entity)) {
+            throw new \Exception($err);
+        }
+
         $response = $this->gerenciaNetApi->createCharge(
             [],
             [
@@ -354,6 +362,7 @@ class GerencianetSdk extends BasePaymentGateway
         } else {
             $data['vendas_id'] = $id;
         }
+        
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
