@@ -1,4 +1,4 @@
-$('#form-gerar-cobranca').submit(function (e) {
+$('#form-gerar-cobranca').submit(function(e) {
     e.preventDefault();
 
     $("#modal-gerar-pagamento").modal('hide');
@@ -8,7 +8,7 @@ $('#form-gerar-cobranca').submit(function (e) {
         url: form.attr('action'),
         type: form.attr('method'),
         data: form.serialize(),
-        beforeSend: function () {
+        beforeSend: function() {
             swal({
                 title: 'Processando',
                 text: 'Criando cobrança...',
@@ -19,7 +19,7 @@ $('#form-gerar-cobranca').submit(function (e) {
                 allowEscapeKey: false
             });
         },
-        success: function (response) {
+        success: function(response) {
             swal("Sucesso!", "Cobrança criada com sucesso!", "success");
             setTimeout(function() {
                 window.location.href = window.BaseUrl + 'index.php/cobrancas/visualizar/' + response.idCobranca;

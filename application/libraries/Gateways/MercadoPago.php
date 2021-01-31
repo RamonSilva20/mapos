@@ -133,7 +133,7 @@ class MercadoPago extends BasePaymentGateway
 
         if ($databaseResult == true) {
             $this->ci->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID' .  $id);
+            log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
             throw new \Exception('Erro ao atualizar cobrança!');
@@ -193,6 +193,10 @@ class MercadoPago extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
+        if($err = $this->errosCadastro($entity)) {
+            throw new \Exception($err);
+        }
+
         $clientNameParts = explode(' ', $entity->nomeCliente);
         $documento = preg_replace('/[^0-9]/', '', $entity->documento);
         $expirationDate = (new DateTime())->add(new DateInterval($this->mercadoPagoConfig['boleto_expiration']));
@@ -212,7 +216,7 @@ class MercadoPago extends BasePaymentGateway
                 'type' => strlen($documento) == 11 ? 'CPF' : 'CNPJ',
                 'number' => $documento
             ],
-            'address' =>  [
+            'address' => [
                 'zip_code' => preg_replace('/[^0-9]/', '', $entity->cep),
                 'street_name' => $entity->rua,
                 'street_number' => $entity->numero,

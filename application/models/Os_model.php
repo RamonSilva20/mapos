@@ -1,4 +1,5 @@
 <?php
+
 class Os_model extends CI_Model
 {
 
@@ -303,26 +304,43 @@ class Os_model extends CI_Model
 
     public function criarTextoWhats($textoBase, $troca)
     {
-        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}","{EMITENTE}","{TELEFONE_EMITENTE}","{OBS_OS}","{DEFEITO_OS}","{LAUDO_OS}","{DATA_FINAL}","{DATA_INICIAL}","{DATA_GARANTIA}"];
+        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}", "{EMITENTE}", "{TELEFONE_EMITENTE}", "{OBS_OS}", "{DEFEITO_OS}", "{LAUDO_OS}", "{DATA_FINAL}", "{DATA_INICIAL}", "{DATA_GARANTIA}"];
         $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
         return $textoBase;
     }
 
-    public function valorTotalOS($servicos, $produtos)
+    public function valorTotalOS($id = null)
     {
         $totalServico = 0;
         $totalProdutos = 0;
-        foreach ($produtos as $p) {
-            $totalProdutos = $totalProdutos + $p->subTotal;
+        if ($servicos = $this->getServicos($id)) {
+            foreach ($servicos as $s) {
+                $preco = $s->preco ?: $s->precoVenda;
+                $totalServico = $totalServico + ($preco * ($s->quantidade ?: 1));
+            }
         }
-        foreach ($servicos as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $totalServico = $totalServico + $subtotal;
+        if ($produtos = $this->getProdutos($id)) {
+            foreach ($produtos as $p) {
+                $totalProdutos = $totalProdutos + $p->subTotal;
+            }
         }
 
         return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
+    }
+
+    public function isEditable($id = null)
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            return false;
+        }
+        if ($os = $this->getById($id)) {
+            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
+            if ($osT) {
+                return !(bool)$this->data['configuration']['control_editos'];
+            }
+        }
+        return true;
     }
 }

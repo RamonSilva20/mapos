@@ -20,4 +20,6 @@ interface PaymentGateway
     public function cancelar($id);
 
     public function confirmarPagamento($id);
+
+    public function errosCadastro($entity);
 }

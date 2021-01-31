@@ -343,7 +343,9 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('control_estoque', 'Controle de Estoque', 'required|trim');
         $this->form_validation->set_rules('notifica_whats', 'Notificação Whatsapp', 'required|trim');
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
-        
+        $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
+        $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
+
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
@@ -355,6 +357,8 @@ class Mapos extends MY_Controller
                 'control_estoque' => $this->input->post('control_estoque'),
                 'notifica_whats' => $this->input->post('notifica_whats'),
                 'control_baixa' => $this->input->post('control_baixa'),
+                'control_editos' => $this->input->post('control_editos'),
+                'control_datatable' => $this->input->post('control_datatable'),
             ];
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
@@ -419,7 +423,7 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
             redirect(base_url());
         }
-
+        $this->load->model('os_model');
         $status = $this->input->get('status') ?: null;
         $start = $this->input->get('start') ?: null;
         $end = $this->input->get('end') ?: null;
@@ -429,7 +433,6 @@ class Mapos extends MY_Controller
             $end,
             $status
         );
-
         $events = array_map(function ($os) {
             switch ($os->status) {
                 case 'Aberto':
@@ -475,7 +478,7 @@ class Mapos extends MY_Controller
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
-                    'editar' => !($os->status == "Faturado" || $os->status == "Cancelado" || $os->faturado == 1),
+                    'editar' => $this->os_model->isEditable($os->idOs),
                 ]
             ];
         }, $allOs);
@@ -486,3 +489,4 @@ class Mapos extends MY_Controller
             ->set_output(json_encode($events));
     }
 }
+

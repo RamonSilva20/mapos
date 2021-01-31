@@ -1,4 +1,5 @@
 <?php
+
 class Relatorios_model extends CI_Model
 {
 
@@ -66,7 +67,7 @@ class Relatorios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function clientesCustom($dataInicial = null, $dataFinal = null)
+    public function clientesCustom($dataInicial = null, $dataFinal = null, $tipo = null)
     {
         $whereData = '';
         if ($dataInicial != null) {
@@ -75,7 +76,9 @@ class Relatorios_model extends CI_Model
         if ($dataFinal != null) {
             $whereData .= "AND dataCadastro <= " . $this->db->escape($dataFinal);
         }
-
+        if ($tipo != null) {
+            $whereData .= "AND fornecedor = " . $this->db->escape($tipo);
+        }
         $query = "SELECT * FROM clientes WHERE dataCadastro $whereData ORDER BY nomeCliente";
 
         return $this->db->query($query, [$dataInicial, $dataFinal])->result();
@@ -124,7 +127,7 @@ class Relatorios_model extends CI_Model
 
     public function produtosEtiquetas($de, $ate)
     {
-        $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN ".$this->db->escape($de)." AND ".$this->db->escape($ate)." ORDER BY idProdutos";
+        $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN " . $this->db->escape($de) . " AND " . $this->db->escape($ate) . " ORDER BY idProdutos";
 
         $this->db->order_by('descricao', 'asc');
 
