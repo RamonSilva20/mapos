@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.30.1] - 2021-01-31
+
+### Fixed
+- Adequação para não salvar nome do cliente como maiúsculo ao editar. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.30.0] - 2021-01-31
 
 ### Added
