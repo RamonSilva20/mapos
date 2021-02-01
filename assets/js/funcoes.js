@@ -1,5 +1,6 @@
 $(function () {
     $("#celular").mask("(00)00000-0000")
+    $("#telefone").mask("(00)0000-0000")
     $("#cep").mask("00000-000")
     $('.cpfUser').mask('000.000.000-00', { reverse: true });
     $('.cnpjEmitente').mask('00.000.000/0000-00', { reverse: true });
@@ -114,13 +115,13 @@ $(document).ready(function () {
 
         // Valida DVs
         tamanho = cnpj.length - 2
-        numeros = cnpj.substring(0, tamanho);
+        numeros = cnpj.substring(0,tamanho);
         digitos = cnpj.substring(tamanho);
         soma = 0;
         pos = tamanho - 7;
         for (i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
                 pos = 9;
         }
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
@@ -168,41 +169,28 @@ $(document).ready(function () {
                 success: function (dados) {
                     if (dados.status == "OK") {
                         //Atualiza os campos com os valores da consulta.
-                        if ($("#nomeCliente").val() != null) {
-                            $("#nomeCliente").val(capital_letter(dados.nome));
-                        }
-                        if ($("#nomeEmitente").val() != null) {
-                            $("#nomeEmitente").val(capital_letter(dados.nome));
-                        }
-                        $("#cep").val(dados.cep.replace(/\./g, ''));
+                        $("#nomeCliente").val(capital_letter(dados.nome));
+                        $("#cep").val(dados.cep.replace(/\D/g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
                         $("#numero").val(dados.numero);
-                        $("#complemento").val(capitalizeFirstLetter(dados.complemento));
-                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
-
-                        // Força uma atualizacao do endereco via cep
-                        document.getElementById("cep").focus();
-                        if ($("#nomeCliente").val() != null) {
-                            document.getElementById("nomeCliente").focus();
-                        }
-                        if ($("#nomeEmitente").val() != null) {
-                            document.getElementById("nomeEmitente").focus();
-                        }
+                        $("#complemento").val(capital_letter(dados.complemento));
+                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\D/g, ''));
+                        $("#estado option[value=" + dados.uf + "]").prop("selected", true);
+                        $("#bairro").val(capital_letter(dados.bairro));
+                        $("#rua").val(capital_letter(dados.logradouro));
+                        $("#cidade").val(capital_letter(dados.municipio));
                     } //end if.
                     else {
                         //CEP pesquisado não foi encontrado.
-                        if ($("#nomeCliente").val() != null) {
-                            $("#nomeCliente").val("");
-                        }
-                        if ($("#nomeEmitente").val() != null) {
-                            $("#nomeEmitente").val("");
-                        }
+                        $("#nomeCliente").val("");
                         $("#cep").val("");
                         $("#email").val("");
                         $("#numero").val("");
                         $("#complemento").val("");
                         $("#telefone").val("");
-
+                        $("#bairro").val("");
+                        $("#rua").val("");
+                        $("#cidade").val("");
                         Swal.fire({
                             type: "warning",
                             title: "Atenção",
@@ -210,7 +198,7 @@ $(document).ready(function () {
                         });
                     }
                 },
-                error: function () {
+                error: function() {
                     ///CEP pesquisado não foi encontrado.
                     if ($("#nomeCliente").val() != null) {
                         $("#nomeCliente").val("");
@@ -218,6 +206,7 @@ $(document).ready(function () {
                     if ($("#nomeEmitente").val() != null) {
                         $("#nomeEmitente").val("");
                     }
+                    $("#nomeCliente").val("");
                     $("#cep").val("");
                     $("#email").val("");
                     $("#numero").val("");
