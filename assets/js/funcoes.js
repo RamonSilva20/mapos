@@ -179,13 +179,17 @@ $(document).ready(function () {
                         }
                         $("#cep").val(dados.cep.replace(/\./g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
+                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
                         $("#rua").val(capital_letter(dados.logradouro));
                         $("#numero").val(dados.numero);
                         $("#bairro").val(capital_letter(dados.bairro));
                         $("#cidade").val(capital_letter(dados.municipio));
                         $("#estado").val(dados.uf);
-                        $("#complemento").val(capital_letter(dados.complemento));
-                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
+                        if (dados.complemento != "") {
+                            $("#complemento").val(capital_letter(dados.complemento));
+                        }else{
+                            $("#complemento").val("");
+                        }
 
                         // Força uma atualizacao do endereco via cep
                         document.getElementById("cep").focus();
