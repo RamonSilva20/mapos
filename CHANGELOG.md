@@ -4,6 +4,27 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.30.1] - 2021-01-31
+
+### Fixed
+- Adequação para não salvar nome do cliente como maiúsculo ao editar. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.30.0] - 2021-01-31
+
+### Added
+- Adicionado opção de pagamento PIX em receitas e despesas. [@cleytonasa](https://github.com/cleytonasa)
+- Adicionado o controle de edição de OS com status CANCELADO e/ou FATURADO. [@seitbnao](https://github.com/seitbnao)
+- Adicionado opção de cliente fornecedor em clientes. [@seitbnao](https://github.com/seitbnao)
+- Adiciona o controle de visualização de dataTables. [@seitbnao](https://github.com/seitbnao)
+
+### Changed
+- Adequação para renderizar PDF gerado de relatório MEI no navegador. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Alterado a tela de configurações do sistema para um formato com abas. [@seitbnao](https://github.com/seitbnao)
+- Alterado a tela de inclusão de clientes. [@seitbnao](https://github.com/seitbnao)
+- Alterado o nome cliente do Menu para Cliente / Fornecedor. [@seitbnao](https://github.com/seitbnao)
+- Separado as permissões por colapse. [@seitbnao](https://github.com/seitbnao)
+- Remove a obrigatoriedade dos campos em adicionar e editar um cliente, somente o nome é obrigatório no cadastro. [@seitbnao](https://github.com/seitbnao)
+
 ## [4.29.0] - 2021-01-24
 
 ### Added
