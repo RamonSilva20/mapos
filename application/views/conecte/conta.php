@@ -110,6 +110,12 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td style="text-align: right"><strong>Complemento</strong></td>
+                                        <td>
+                                            <?php echo $result->complemento ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td style="text-align: right"><strong>Bairro</strong></td>
                                         <td>
                                             <?php echo $result->bairro ?>
