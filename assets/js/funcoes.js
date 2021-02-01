@@ -153,12 +153,15 @@ $(document).ready(function () {
         if (validarCNPJ(ndocumento)) {
             //Preenche os campos com "..." enquanto consulta webservice.
             $("#nomeCliente").val("...");
-            $("#cep").val("...");
             $("#email").val("...");
+            $("#cep").val("...");
+            $("#rua").val("...");
             $("#numero").val("...");
+            $("#bairro").val("...");
+            $("#cidade").val("...");
+            $("#estado").val("...");
             $("#complemento").val("...");
             $("#telefone").val("...");
-
             //Consulta o webservice receitaws.com.br/
             $.ajax({
                 url: "https://www.receitaws.com.br/v1/cnpj/" + ndocumento,
@@ -176,8 +179,12 @@ $(document).ready(function () {
                         }
                         $("#cep").val(dados.cep.replace(/\./g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
+                        $("#rua").val(capital_letter(dados.logradouro));
                         $("#numero").val(dados.numero);
-                        $("#complemento").val(capitalizeFirstLetter(dados.complemento));
+                        $("#bairro").val(capital_letter(dados.bairro));
+                        $("#cidade").val(capital_letter(dados.municipio));
+                        $("#estado").val(dados.uf);
+                        $("#complemento").val(capital_letter(dados.complemento));
                         $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
 
                         // Força uma atualizacao do endereco via cep
