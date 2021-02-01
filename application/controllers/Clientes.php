@@ -106,7 +106,7 @@ class Clientes extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'nomeCliente' => strtoupper($this->input->post('nomeCliente')),
+                'nomeCliente' => $this->input->post('nomeCliente'),
                 'contato' => $this->input->post('contato'),
                 'documento' => $this->input->post('documento'),
                 'telefone' => $this->input->post('telefone'),
