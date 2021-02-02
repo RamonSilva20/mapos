@@ -45,7 +45,7 @@
 } ?>
                             <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                             <div class="controls">
-                                <input id="documento" class="cpfcnpjmine" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
+                                <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
                                 <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
