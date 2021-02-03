@@ -25,8 +25,8 @@ class Mapos extends MY_Controller
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['vendas_mes'] = $this->mapos_model->getEstatisticasVendasMes($this->input->get('year'));
-        $this->data['vendas_mesinadipl'] = $this->mapos_model->getEstatisticasVendasMesInadimplencia($this->input->get('year'));
+        $this->data['financeiro_mes'] = $this->mapos_model->getEstatisticasFinanceiroMes($this->input->get('year'));
+        $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         return $this->layout();
@@ -439,6 +439,8 @@ class Mapos extends MY_Controller
                     $cor = '#00cd00';
                     break;
                 case 'Negociação':
+                    $cor = '#AEB404';
+                    break;
                 case 'Em Andamento':
                     $cor = '#436eee';
                     break;
@@ -489,4 +491,3 @@ class Mapos extends MY_Controller
             ->set_output(json_encode($events));
     }
 }
-

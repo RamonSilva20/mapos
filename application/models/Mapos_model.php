@@ -164,7 +164,7 @@ class Mapos_model extends CI_Model
         $this->db->where('os.dataFinal <=', $end);
         $this->db->group_by('os.idOs');
 
-        if (! empty($status)) {
+        if (!empty($status)) {
             $this->db->where('os.status', $status);
         }
 
@@ -193,7 +193,7 @@ class Mapos_model extends CI_Model
         return $this->db->query($sql)->row();
     }
 
-    public function getEstatisticasVendasMes($year)
+    public function getEstatisticasFinanceiroMes($year)
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
@@ -234,7 +234,7 @@ class Mapos_model extends CI_Model
         return $this->db->query($sql, [intval($numbersOnly)])->row();
     }
 
-    public function getEstatisticasVendasMesInadimplencia($year)
+    public function getEstatisticasFinanceiroMesInadimplencia($year)
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
