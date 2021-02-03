@@ -72,7 +72,12 @@
                             <input id="numero" type="text" name="numero" value="<?php echo $result->numero; ?>" />
                         </div>
                     </div>
-
+                    <div class="control-group">
+                        <label for="complemento" class="control-label">Complmento</label>
+                        <div class="controls">
+                            <input id="complemento" type="text" name="complemento" value="<?php echo $result->complemento; ?>" />
+                        </div>
+                    </div>
                     <div class="control-group" class="control-label">
                         <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
                         <div class="controls">
