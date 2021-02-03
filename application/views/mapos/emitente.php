@@ -67,7 +67,7 @@
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Número*</span></label>
                     <div class="controls">
-                        <input type="text" name="numero" value="" />
+                        <input type="text" id="numero" name="numero" value="" />
                     </div>
                 </div>
                 <div class="control-group">
@@ -200,7 +200,7 @@
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Número*</span></label>
                     <div class="controls">
-                        <input type="text" name="numero" value="<?= $dados[0]->numero; ?>" />
+                        <input type="text" id="numero" name="numero" value="<?= $dados[0]->numero; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
