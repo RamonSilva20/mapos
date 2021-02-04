@@ -4,6 +4,22 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.30.2] - 2021-02-03
+
+### Changed
+- Alterado texto de grafico de Vendas para Financeiro, para adequar melhor a realidade do grafico. [@willph](https://github.com/willph)
+- Update: Highcharts V. 9.0.0. [@willph](https://github.com/willph)
+- Atualizado versão mínima do PHP em instalador. [@willph](https://github.com/willph)
+
+### Fixed
+- Corrigido erro onde ao clicar na lupa para pesquisar o cnpj o mesmo não preenchia o numero de forma automatica, pois faltava no input id="numero". [@willph](https://github.com/willph)
+- Correção de javascript onde quebrava o codigo impedindo carregamento dos graficos do financeiro>lançamento e do calendario. [@willph](https://github.com/willph)
+- Corrigido case "Negociação" onde faltava a cor e o break no codigo em os.php e Mapos.php. [@willph](https://github.com/willph)
+- Colocado cor e o break no case de "Negociação" na view os.php. [@willph](https://github.com/willph)
+- Adicionado o arquivo update_4.29.0_to_4.30.2.sql que estava faltando. [@seitbnao](https://github.com/seitbnao)
+- Correção do botão pesquisar cnpj onde não trazia todos os dados de endereço. [@willph](https://github.com/willph)
+- Corrigido cadastro (MIME). [@willph](https://github.com/willph)
+
 ## [4.30.1] - 2021-01-31
 
 ### Fixed

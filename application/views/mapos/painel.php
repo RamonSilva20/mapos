@@ -184,10 +184,10 @@
                                     </td>
 
                                     <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
+                                            echo date('d/m/Y', strtotime($o->dataFinal));
+                                        } else {
+                                            echo "";
+                                        } ?></td>
 
                                     <td>
                                         <?= $o->nomeCliente ?>
@@ -350,7 +350,7 @@
                             type: 'column'
                         },
                         title: {
-                            text: 'Vendas'
+                            text: 'Financeiro'
                         },
                         xAxis: {
                             categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
@@ -377,73 +377,78 @@
                             enabled: false
                         },
                         series: [{
-                            name: 'Receita Líquida',
-                            negativeColor: '#00CED1',
-                            data: [<?php echo($vendas_mes->VALOR_JAN_REC - $vendas_mes->VALOR_JAN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_FEV_REC - $vendas_mes->VALOR_FEV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAR_REC - $vendas_mes->VALOR_MAR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_ABR_REC - $vendas_mes->VALOR_ABR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAI_REC - $vendas_mes->VALOR_MAI_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUN_REC - $vendas_mes->VALOR_JUN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUL_REC - $vendas_mes->VALOR_JUL_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_AGO_REC - $vendas_mes->VALOR_AGO_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_SET_REC - $vendas_mes->VALOR_SET_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_OUT_REC - $vendas_mes->VALOR_OUT_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_NOV_REC - $vendas_mes->VALOR_NOV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_DEZ_REC - $vendas_mes->VALOR_DEZ_DES); ?>
-                            ]
-                        },
-                        {
-                            name: 'Receita Bruta',
-                            negativeColor: '#32CD32',
-                            data: [<?php echo($vendas_mes->VALOR_JAN_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_FEV_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_MAR_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_ABR_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_MAI_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_JUN_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_JUL_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_AGO_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_SET_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_OUT_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_NOV_REC); ?>,
-                                <?php echo($vendas_mes->VALOR_DEZ_REC); ?>
-                            ]
-                        },
-                        {
-                            name: 'Despesas',
-                            negativeColor: '#FF6347',
-                            data: [<?php echo($vendas_mes->VALOR_JAN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_FEV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_ABR_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_MAI_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUN_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_JUL_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_AGO_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_SET_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_OUT_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_NOV_DES); ?>,
-                                <?php echo($vendas_mes->VALOR_DEZ_DES); ?>
-                            ]
-                        },
-                        {
-                            name: 'Inadimplência',
-                            negativeColor: '#8B008B',
-                            data: [<?php echo($vendas_mesinadipl->VALOR_JAN_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_FEV_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_MAR_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_ABR_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_MAI_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_JUN_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_JUL_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_AGO_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_SET_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_OUT_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_NOV_REC); ?>,
-                                <?php echo($vendas_mesinadipl->VALOR_DEZ_REC); ?>
-                            ]
-                        }]
+                                name: 'Receita Líquida',
+                                negativeColor: '#00CED1',
+                                data: [
+                                    [<?php echo ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>]
+                                ]
+                            },
+                            {
+                                name: 'Receita Bruta',
+                                negativeColor: '#32CD32',
+                                data: [
+                                    [<?php echo ($financeiro_mes->VALOR_JAN_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_FEV_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAR_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_ABR_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAI_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUN_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUL_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_AGO_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_SET_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_OUT_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_NOV_REC); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_DEZ_REC); ?>]
+                                ]
+                            },
+                            {
+                                name: 'Despesas',
+                                negativeColor: '#FF6347',
+                                data: [
+                                    [<?php echo ($financeiro_mes->VALOR_JAN_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_FEV_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAR_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_ABR_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_MAI_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUN_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_JUL_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_AGO_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_SET_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_OUT_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_NOV_DES); ?>],
+                                    [<?php echo ($financeiro_mes->VALOR_DEZ_DES); ?>]
+                                ]
+                            },
+                            {
+                                name: 'Inadimplência',
+                                negativeColor: '#8B008B',
+                                data: [
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_JAN_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_FEV_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_MAR_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_ABR_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_MAI_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_JUN_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_JUL_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_AGO_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_SET_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_OUT_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_NOV_REC); ?>],
+                                    [<?php echo ($financeiro_mesinadipl->VALOR_DEZ_REC); ?>]
+                                ]
+                            }
+                        ]
                     });
                 });
             </script>
@@ -574,8 +579,8 @@
         $(document).ready(function() {
             var data = [
                 <?php foreach ($os as $o) {
-    echo "['" . $o->status . "', " . $o->total . "],";
-} ?>
+                    echo "['" . $o->status . "', " . $o->total . "],";
+                } ?>
 
             ];
             var plot1 = jQuery.jqplot('chart-os', [data], {
@@ -604,7 +609,7 @@
 
 <?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {
-        ?>
+?>
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -659,8 +664,8 @@
 
 
                 var data4 = [
-                    ['Total em Caixa', <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
-                    ['Total a Entrar', <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
+                    ['Total em Caixa', <?php echo ($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
+                    ['Total a Entrar', <?php echo ($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
                 ];
                 var plot4 = jQuery.jqplot('chart-financeiro-caixa', [data4], {
 
@@ -835,14 +840,13 @@
                 $('#modalId').html(eventObj.id);
                 $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
                 if (eventObj.editar) {
-                     $('#modalIdEditar').show();
-                     $('#linkExcluir').show();
-                     $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
-                     $('#modalIdExcluir').val(eventObj.id);
-                }
-                else {
-                     $('#modalIdEditar').hide();
-                     $('#linkExcluir').hide();
+                    $('#modalIdEditar').show();
+                    $('#linkExcluir').show();
+                    $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
+                    $('#modalIdExcluir').val(eventObj.id);
+                } else {
+                    $('#modalIdEditar').hide();
+                    $('#linkExcluir').hide();
                 }
                 $('#modalCliente').html(eventObj.cliente);
                 $('#modalDataInicial').html(eventObj.dataInicial);
