@@ -33,7 +33,7 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfUser" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
+                            <input class="" type="text" id="cpfUser" name="cpf" value="<?php echo set_value('cpf'); ?>" />
                         </div>
                     </div>
 
