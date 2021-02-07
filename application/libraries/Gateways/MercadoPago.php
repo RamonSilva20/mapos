@@ -238,7 +238,7 @@ class MercadoPago extends BasePaymentGateway
             'expire_at' => $payment->date_of_expiration,
             'charge_id' => $payment->id,
             'status' => $payment->status,
-            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
+            'total' => round(($totalProdutos + $totalServicos),2)*100,
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
             'payment_gateway' => 'MercadoPago',

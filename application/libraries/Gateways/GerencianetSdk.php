@@ -211,7 +211,7 @@ class GerencianetSdk extends BasePaymentGateway
                 'address' => $address,
             ];
         }
-
+        
         $expirationDate = (new DateTime())->add(new DateInterval($this->gerenciaNetConfig['boleto_expiration']));
         $expirationDate = ($expirationDate->format('Y-m-d'));
         $body = [
@@ -219,7 +219,7 @@ class GerencianetSdk extends BasePaymentGateway
                 [
                     'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                     'amount' => 1,
-                    'value' => getMoneyAsCents($totalProdutos + $totalServicos)
+                    'value' => round(($totalProdutos + $totalServicos),2)*100
                 ]
             ],
             'metadata' => [
@@ -246,7 +246,7 @@ class GerencianetSdk extends BasePaymentGateway
             'expire_at' => $result['data']['expire_at'],
             'charge_id' => $result['data']['charge_id'],
             'status' => $result['data']['status'],
-            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
+            'total' => round(($totalProdutos + $totalServicos),2)*100,
             'payment' => $result['data']['payment'],
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
@@ -313,7 +313,7 @@ class GerencianetSdk extends BasePaymentGateway
                     [
                         'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                         'amount' => 1,
-                        'value' => getMoneyAsCents($totalProdutos + $totalServicos)
+                        'value' => round(($totalProdutos + $totalServicos),2)*100
                     ]
                 ],
                 'metadata' => [
@@ -348,7 +348,7 @@ class GerencianetSdk extends BasePaymentGateway
             'expire_at' => $result['data']['expire_at'],
             'charge_id' => $result['data']['charge_id'],
             'status' => $result['data']['status'],
-            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
+            'total' => round(($totalProdutos + $totalServicos),2)*100,
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'link',
             'payment_gateway' => 'GerencianetSdk',
