@@ -250,7 +250,7 @@ class Financeiro extends MY_Controller
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
 
-        $this->form_validation->set_rules('descricao', '', 'trim|required');
+        $this->form_validation->set_rules('descricao', '', 'trim');
         $this->form_validation->set_rules('fornecedor', '', 'trim|required');
         $this->form_validation->set_rules('valor', '', 'trim|required');
         $this->form_validation->set_rules('vencimento', '', 'trim|required');

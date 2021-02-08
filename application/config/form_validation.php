@@ -251,7 +251,7 @@ $config = [
         [
             'field' => 'descricao',
             'label' => 'Descrição',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'valor',
@@ -279,7 +279,7 @@ $config = [
         [
             'field' => 'descricao',
             'label' => 'Descrição',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'valor',
