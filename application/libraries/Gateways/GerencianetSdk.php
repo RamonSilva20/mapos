@@ -211,7 +211,6 @@ class GerencianetSdk extends BasePaymentGateway
                 'address' => $address,
             ];
         }
-
         $expirationDate = (new DateTime())->add(new DateInterval($this->gerenciaNetConfig['boleto_expiration']));
         $expirationDate = ($expirationDate->format('Y-m-d'));
         $body = [

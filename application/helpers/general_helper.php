@@ -28,21 +28,12 @@ if (!function_exists('limitarTexto')) {
 if (!function_exists('getMoneyAsCents')) {
     function getMoneyAsCents($value)
     {
-        // strip out commas
-        $value = preg_replace("/\,/i", "", $value);
-
-        // strip out all but numbers, dash, and dot
-        $value = preg_replace('/[^0-9]/', '', $value);
-
         // make sure we are dealing with a proper number now, no +.4393 or 3...304 or 76.5895,94
         if (!is_numeric($value)) {
-            return 0.00;
+            throw new \InvalidArgumentException('A entrada deve ser numérica!');
         }
 
-        // convert to a float explicitly
-        $value = (float) $value;
-
-        return (int) round($value, 2) * 100;
+        return intval(round(floatval($value), 2) * 100);
     }
 }
 
