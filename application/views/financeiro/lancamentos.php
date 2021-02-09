@@ -228,7 +228,7 @@ $periodo = $this->input->get('periodo');
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento"/>
+                    <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"/>
                 </div>
 
             </div>
@@ -240,7 +240,7 @@ $periodo = $this->input->get('periodo');
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento"/>
+                        <input class="span12 datepicker" id="recebimento" type="text" name="recebimento"/>
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
@@ -485,6 +485,9 @@ $periodo = $this->input->get('periodo');
 
         $("#formReceita").validate({
             rules: {
+                descricao: {
+                    required: true
+                },
                 cliente: {
                     required: true
                 },
@@ -497,6 +500,9 @@ $periodo = $this->input->get('periodo');
 
             },
             messages: {
+                descricao: {
+                    required: 'Campo Requerido.'
+                },
                 cliente: {
                     required: 'Campo Requerido.'
                 },
@@ -512,6 +518,9 @@ $periodo = $this->input->get('periodo');
 
         $("#formDespesa").validate({
             rules: {
+                descricao: {
+                    required: true
+                },
                 fornecedor: {
                     required: true
                 },
@@ -524,6 +533,9 @@ $periodo = $this->input->get('periodo');
 
             },
             messages: {
+                descricao: {
+                    required: 'Campo Requerido.'
+                },
                 fornecedor: {
                     required: 'Campo Requerido.'
                 },
