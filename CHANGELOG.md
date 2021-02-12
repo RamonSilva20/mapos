@@ -4,6 +4,18 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.0] - 2021-02-11
+
+### Added
+- Implementado QR Code de PIX para pagamento de os e venda em imprimirOs e imprimirVenda. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed
+- Melhorado imprimir os e venda. [@Flexotron20](https://github.com/Flexotron20)
+
+### Fixed
+- Colocado "*" para mostrar que campos ao criar lançamento financeiro são obrigatórios. [@cleytonasa](https://github.com/cleytonasa)
+- Adicionado método de pagamento "PIX" nos lugares faltantes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.30.3] - 2021-02-07
 
 ### Fixed
