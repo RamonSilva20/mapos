@@ -141,6 +141,13 @@
                                 <span class="help-inline">Ativar ou desativar a permissão para alterar OS faturada e/ou cancelada.</span>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label for="pix_key" class="control-label">Chave Pix para Recebimento de Pagamentos</label>
+                            <div class="controls">
+                                <input type="text" name="pix_key" value="<?= $configuration['pix_key']?>">
+                                <span class="help-inline">Chave Pix para Recebimento de Pagamentos</span>
+                            </div>
+                        </div>
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">

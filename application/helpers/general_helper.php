@@ -1,5 +1,7 @@
 <?php
 
+use Piggly\Pix\Parser;
+
 if (!function_exists('convertUrlToUploadsPath')) {
     function convertUrlToUploadsPath($url)
     {
@@ -41,5 +43,28 @@ if (!function_exists('getCobrancaTransactionStatus')) {
     function getCobrancaTransactionStatus($paymentGatewaysConfig, $paymentGateway, $status)
     {
         return $paymentGatewaysConfig[$paymentGateway]['transaction_status'][$status];
+    }
+}
+
+if (!function_exists('getPixKeyType')) {
+    function getPixKeyType($value)
+    {
+        if (Parser::validateDocument($value)) {
+            return Parser::KEY_TYPE_DOCUMENT;
+        }
+
+        if (Parser::validateEmail($value)) {
+            return Parser::KEY_TYPE_EMAIL;
+        }
+
+        if (Parser::validatePhone($value)) {
+            return Parser::KEY_TYPE_PHONE;
+        }
+
+        if (Parser::validateRandom($value)) {
+            return Parser::KEY_TYPE_RANDOM;
+        }
+
+        return null;
     }
 }

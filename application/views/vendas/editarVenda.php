@@ -150,7 +150,7 @@
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idVendas; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
@@ -191,6 +191,7 @@
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Débito">Débito</option>
+                            <option value="Pix">Pix</option>
                         </select>
                     </div>
                 </div>

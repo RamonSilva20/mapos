@@ -1,5 +1,7 @@
 <?php
 
+use Piggly\Pix\Payload;
+
 class Os_model extends CI_Model
 {
 
@@ -342,5 +344,33 @@ class Os_model extends CI_Model
             }
         }
         return true;
+    }
+
+    public function getQrCode($id, $pixKey, $emitente)
+    {
+        if (empty($id) || empty($pixKey) || empty($emitente)) {
+            return;
+        }
+
+        $result = $this->valorTotalOS($id);
+        $amount = round(floatval($result['totalServico'] + $result['totalProdutos']), 2);
+
+        if ($amount <= 0) {
+            return;
+        }
+
+        $pix = (new Payload())
+            ->applyValidCharacters()
+            ->applyUppercase()
+            ->applyEmailWhitespace()
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade)
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf("%s - Pagamento - OS %s", $emitente->nome, $id))
+            ->setAsReusable(false);
+
+        return $pix->getQRCode();
     }
 }

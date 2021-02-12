@@ -1,4 +1,8 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+use Piggly\Pix\Payload;
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -16,7 +20,7 @@ class Vendas_model extends CI_Model
         parent::__construct();
     }
 
-    
+
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         $this->db->select($fields.', clientes.nomeCliente, clientes.idClientes');
@@ -27,9 +31,9 @@ class Vendas_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
+
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
@@ -75,7 +79,7 @@ class Vendas_model extends CI_Model
         $this->db->where('vendas_id', $id);
         return $this->db->get()->result();
     }
-    
+
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -85,10 +89,10 @@ class Vendas_model extends CI_Model
             }
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -97,10 +101,10 @@ class Vendas_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -108,7 +112,7 @@ class Vendas_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
 
@@ -161,6 +165,41 @@ class Vendas_model extends CI_Model
             }
             echo json_encode($row_set);
         }
+    }
+
+    public function getQrCode($id, $pixKey, $emitente)
+    {
+        if (empty($id) || empty($pixKey) || empty($emitente)) {
+            return;
+        }
+
+        $produtos = $this->getProdutos($id);
+        $totalProdutos = array_reduce(
+            $produtos,
+            function ($carry, $produto) {
+                return $carry + ($produto->quantidade * $produto->preco);
+            },
+            0
+        );
+        $amount = round(floatval($totalProdutos), 2);
+
+        if ($amount <= 0) {
+            return;
+        }
+
+        $pix = (new Payload())
+            ->applyValidCharacters()
+            ->applyUppercase()
+            ->applyEmailWhitespace()
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade)
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf("%s - Pagamento - Venda %s", $emitente->nome, $id))
+            ->setAsReusable(false);
+
+        return $pix->getQRCode();
     }
 }
 

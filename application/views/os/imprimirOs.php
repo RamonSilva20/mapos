@@ -34,21 +34,36 @@ $totalProdutos = 0; ?>
 
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> " style="max-height: 100px"></td>
-                                        <td> <span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br><span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ' - ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                            <<<</td> </tr> <?php } else { ?> <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> ">
+                                        </td>
+                                        <td> <span style="font-size: 17px;">
+                                                <?php echo $emitente[0]->nome; ?></span> </br>
+                                            <span style="font-size: 12px; ">
+                                                <span class="icon">
+                                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
+                                                    <?php echo $emitente[0]->cnpj; ?> </br>
+                                                    <span class="icon">
+                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
+                                                        <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?>
+                                                    </span> </br> <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-comments" style="margin:5px 1px"></i>
+                                                            E-mail:<?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?> </br>
+                                                            <span class="icon">
+                                                                <i class="fas fa-user-check"></i>
+                                                                Responsável: <?php echo $result->nome ?>
                                         <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y') ?></span></td>
+                                        </span>
+                                        </td>
                                     </tr>
 
                                 <?php } ?>
                             </tbody>
                         </table>
-
-
                         <table class="table table-condensend">
                             <tbody>
                                 <tr>
-                                    <td style="width: 50%; padding-left: 0">
+                                    <td style="width: 85%; padding-left: 0">
                                         <ul>
                                             <li>
                                                 <span>
@@ -61,18 +76,12 @@ $totalProdutos = 0; ?>
                                             </li>
                                         </ul>
                                     </td>
-                                    <td style="width: 50%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span>
-                                                    <h5><b>RESPONSÁVEL</b></h5>
-                                                </span>
-                                                <span><?php echo $result->nome ?></span> <br />
-                                                <span>Telefone: <?php echo $result->telefone_usuario ?></span><br />
-                                                <span>Email: <?php echo $result->email_usuario ?></span>
-                                            </li>
-                                        </ul>
-                                    </td>
+
+                                    <?php if ($qrCode): ?>
+                                        <td style="width: 15%; padding-left: 0">
+                                            <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                        </td>
+                                    <?php endif ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -155,14 +164,14 @@ $totalProdutos = 0; ?>
                         </table>
 
                         <?php if ($produtos != null) { ?>
-                            <br />
+
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
-                                        <th>Produto</th>
-                                        <th>Quantidade</th>
-                                        <th>Preço unit.</th>
-                                        <th>Sub-total</th>
+                                        <th>Produtos</th>
+                                        <th>Qt</th>
+                                        <th>V. UN R$</th>
+                                        <th>S.Total R$</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,14 +183,12 @@ $totalProdutos = 0; ?>
                                         echo '<td>' . $p->descricao . '</td>';
                                         echo '<td>' . $p->quantidade . '</td>';
                                         echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-
                                     <tr>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+
+                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                                     </tr>
                                 </tbody>
@@ -189,13 +196,14 @@ $totalProdutos = 0; ?>
                         <?php } ?>
 
                         <?php if ($servicos != null) { ?>
+
                             <table class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>
-                                        <th>Serviço</th>
-                                        <th>Quantidade</th>
-                                        <th>Preço unit.</th>
-                                        <th>Sub-total</th>
+                                        <th>Serviços</th>
+                                        <th>Qt</th>
+                                        <th>V. UN R$</th>
+                                        <th>S.Total R$</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -212,7 +220,6 @@ $totalProdutos = 0; ?>
                                         echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
@@ -222,7 +229,7 @@ $totalProdutos = 0; ?>
                         <?php } ?>
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
-                            echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                            echo "<h4 style='text-align: right'> Valor Total da OS: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
                         }
 
                         ?>

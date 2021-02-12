@@ -1,5 +1,7 @@
 <?php
 
+use Piggly\Pix\Parser;
+
 if (!function_exists('multiplica_cnpj')) {
     function multiplica_cnpj($cnpj, $posicao = 5)
     {
@@ -131,5 +133,28 @@ if (!function_exists('unique')) {
         } else {
             return true;
         }
+    }
+}
+
+if (!function_exists('valid_pix_key')) {
+    function valid_pix_key($value)
+    {
+        if (Parser::validateDocument($value)) {
+            return true;
+        }
+
+        if (Parser::validateEmail($value)) {
+            return true;
+        }
+
+        if (Parser::validatePhone($value)) {
+            return true;
+        }
+
+        if (Parser::validateRandom($value)) {
+            return true;
+        }
+
+        return false;
     }
 }

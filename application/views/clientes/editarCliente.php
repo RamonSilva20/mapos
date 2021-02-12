@@ -47,8 +47,8 @@
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <?php if ($custom_error != '') {
-                        echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                    } ?>
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
                     <div id="home" class="tab-pane fade in active">
                         <div class="control-group">
                             <label for="documento" class="control-label">CPF/CNPJ</label>

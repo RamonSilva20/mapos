@@ -56,6 +56,11 @@ class Configuracoes extends Seeder
                 'config' => 'control_datatable',
                 'valor' => '1',
             ],
+            [
+                'idConfig' => 11,
+                'config' => 'pix_key',
+                'valor' => '',
+            ],
         ];
 
         foreach ($configs as $config) {

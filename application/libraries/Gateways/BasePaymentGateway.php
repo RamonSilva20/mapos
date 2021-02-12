@@ -35,10 +35,9 @@ abstract class BasePaymentGateway implements PaymentGateway
         }
     }
 
-    public function errosCadastro($entity = null) 
+    public function errosCadastro($entity = null)
     {
-        if($entity == null) {
-
+        if ($entity == null) {
             return null;
         }
         $error_list = "Por favor preencher os seguintes dados do(a) seu(ua) cliente!\n\n";
@@ -52,8 +51,7 @@ abstract class BasePaymentGateway implements PaymentGateway
                 }
             }
         }
-        if(!$check) {
-
+        if (!$check) {
             return null;
         }
 

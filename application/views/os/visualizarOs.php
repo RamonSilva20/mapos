@@ -9,8 +9,8 @@
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
-                    } ?>
+    echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
+} ?>
 
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i
@@ -19,14 +19,14 @@
                        href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i
                                 class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        $this->load->model('os_model');
-                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
-                        $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-                        if (!empty($zapnumber)) {
-                            echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-                        }
-                    } ?>
+    $this->load->model('os_model');
+    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
+    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+    $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
+    if (!empty($zapnumber)) {
+        echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+    }
+} ?>
 
                     <a title="Enviar por E-mail" class="btn btn-mini btn-warning"
                        href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i
