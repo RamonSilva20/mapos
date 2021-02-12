@@ -203,7 +203,7 @@ $periodo = $this->input->get('periodo');
                 asterisco.
             </div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao"/>
                 <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
             </div>
@@ -228,7 +228,7 @@ $periodo = $this->input->get('periodo');
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" id="vencimento" type="text" name="vencimento"/>
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento"/>
                 </div>
 
             </div>
@@ -240,7 +240,7 @@ $periodo = $this->input->get('periodo');
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" id="recebimento" type="text" name="recebimento"/>
+                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento"/>
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
@@ -279,7 +279,7 @@ $periodo = $this->input->get('periodo');
                 asterisco.
             </div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao"/>
                 <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
             </div>
@@ -304,7 +304,7 @@ $periodo = $this->input->get('periodo');
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" type="text" name="vencimento"/>
+                    <input class="span12 datepicker" autocomplete="off" type="text" name="vencimento"/>
                 </div>
 
             </div>
@@ -316,7 +316,7 @@ $periodo = $this->input->get('periodo');
                 <div id="divPagamento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="pagamento">Data Pagamento</label>
-                        <input class="span12 datepicker" id="pagamento" type="text" name="pagamento"/>
+                        <input class="span12 datepicker" autocomplete="off" id="pagamento" type="text" name="pagamento"/>
                     </div>
 
                     <div class="span6">
@@ -357,7 +357,7 @@ $periodo = $this->input->get('periodo');
                 asterisco.
             </div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricaoEditar" type="text" name="descricao"/>
                 <input id="urlAtualEditar" type="hidden" name="urlAtual" value=""/>
             </div>
