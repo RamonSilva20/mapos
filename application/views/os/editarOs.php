@@ -493,7 +493,7 @@
                 asterisco.
             </div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao"
                        value="Fatura de OS - #<?php echo $result->idOs; ?> "/>
             </div>
