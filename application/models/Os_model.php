@@ -1,6 +1,5 @@
 <?php
 
-use Piggly\Pix\Parser;
 use Piggly\Pix\Payload;
 
 class Os_model extends CI_Model

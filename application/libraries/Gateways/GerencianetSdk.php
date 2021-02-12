@@ -176,7 +176,7 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
-        if($err = $this->errosCadastro($entity)) {
+        if ($err = $this->errosCadastro($entity)) {
             throw new \Exception($err);
         }
         
@@ -301,7 +301,7 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
-        if($err = $this->errosCadastro($entity)) {
+        if ($err = $this->errosCadastro($entity)) {
             throw new \Exception($err);
         }
 

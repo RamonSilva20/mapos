@@ -30,8 +30,8 @@
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
-                    } ?>
+    echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
+} ?>
                     <a title="Visualizar OS" class="btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>"><i
                                 class="fas fa-eye"></i> Visualizar OS</a>
@@ -42,14 +42,14 @@
                        href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i
                                 class="fas fa-print"></i> Imprimir Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        $this->load->model('os_model');
-                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
-                        $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-                        if (!empty($zapnumber)) {
-                            echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '" '.($zapnumber == '' ? 'disabled' : '').'><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-                        }
-                   } ?>
+    $this->load->model('os_model');
+    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
+    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+    $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
+    if (!empty($zapnumber)) {
+        echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '" '.($zapnumber == '' ? 'disabled' : '').'><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+    }
+} ?>
 
                     <a title="Enviar por E-mail" class="btn btn-mini btn-warning"
                        href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i
@@ -100,36 +100,36 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-                                                } ?> value="Orçamento">Orçamento
+    echo 'selected';
+} ?> value="Orçamento">Orçamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-                                                } ?> value="Aberto">Aberto
+    echo 'selected';
+} ?> value="Aberto">Aberto
                                                 </option>
                                                 <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-                                                } ?> value="Faturado">Faturado
+    echo 'selected';
+} ?> value="Faturado">Faturado
                                                 </option>
                                                 <option <?php if ($result->status == 'Negociação') {
-                                                    echo 'selected';
-                                                } ?> value="Negociação">Negociação
+    echo 'selected';
+} ?> value="Negociação">Negociação
                                                 </option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-                                                } ?> value="Em Andamento">Em Andamento
+    echo 'selected';
+} ?> value="Em Andamento">Em Andamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-                                                } ?> value="Finalizado">Finalizado
+    echo 'selected';
+} ?> value="Finalizado">Finalizado
                                                 </option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-                                                } ?> value="Cancelado">Cancelado
+    echo 'selected';
+} ?> value="Cancelado">Cancelado
                                                 </option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-                                                    echo 'selected';
-                                                } ?> value="Aguardando Peças">Aguardando Peças
+    echo 'selected';
+} ?> value="Aguardando Peças">Aguardando Peças
                                                 </option>
                                             </select>
                                         </div>
@@ -767,8 +767,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                echo 'estoque = 1000000';
-            }; ?>
+                                            echo 'estoque = 1000000';
+                                        }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
