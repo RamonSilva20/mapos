@@ -347,6 +347,11 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente'][0]
+        );
 
         $this->load->view('os/imprimirOs', $this->data);
     }
@@ -440,7 +445,7 @@ class Os extends MY_Controller
                     redirect(site_url('os/visualizar/').$this->uri->segment(3));
                 }
             }
-           
+
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
