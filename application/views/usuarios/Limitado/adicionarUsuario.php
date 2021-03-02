@@ -11,10 +11,10 @@
                 </span>
                 <h5>Cadastro de Usuário</h5>
             </div>
-            <div class="widget_content nopadding">
+            <div class="widget_box_Painel2">
                 <?php if ($custom_error != '') {
-                    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                } ?>
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
                 <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal">
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
@@ -33,19 +33,27 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfcnpj" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
+                            <input class="" type="text" id="cpfUser" name="cpf" value="<?php echo set_value('cpf'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" class="telefone1" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
+                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="email" class="control-label">Email</label>
+                        <label for="celular" class="control-label">Celular</label>
+                        <div class="controls">
+                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>" />
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
                             <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
                         </div>
@@ -61,19 +69,19 @@
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
+                            <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="rua" class="control-label">Endereço<span class="required">*</span></label>
+                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
                             <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="numero" class="control-label">Numero</label>
+                        <label for="numero" class="control-label">Numero<span class="required">*</span></label>
                         <div class="controls">
                             <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>" />
                         </div>
@@ -105,7 +113,7 @@
                     <div class="control-group">
                         <label for="dataExpiracao" class="control-label">Expira em <span class="required">*</span></label>
                         <div class="controls">
-                            <input id="dataExpiracao" disabled="disabled" type="date" name="dataExpiracao" value="<?php echo set_value('dataExpiracao'); ?>" />
+                            <input id="dataExpiracao" type="date" disabled="disabled" name="dataExpiracao" value="<?php echo set_value('dataExpiracao'); ?>" />
                         </div>
                     </div>
 
@@ -124,19 +132,15 @@
                         <div class="controls">
                             <select name="permissoes_id" id="permissoes_id">
                                 <?php foreach ($permissoes as $p) {
-                                    echo '<option value="' . $p->idPermissao . '">' . $p->nome . '</option>';
-                                } ?>
+    echo '<option value="' . $p->idPermissao . '">' . $p->nome . '</option>';
+} ?>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
-                            </div>
-                        </div>
+                    <div class="form_actions" align="center">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
+                    <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                     </div>
 
 
@@ -165,10 +169,16 @@
                 telefone: {
                     required: true
                 },
+                email: {
+                    required: true
+                },
                 senha: {
                     required: true
                 },
                 rua: {
+                    required: true
+                },
+                numero: {
                     required: true
                 },
                 bairro: {
@@ -197,10 +207,16 @@
                 telefone: {
                     required: 'Campo Requerido.'
                 },
+                email: {
+                    required: 'Campo Requerido.'
+                },
                 senha: {
                     required: 'Campo Requerido.'
                 },
                 rua: {
+                    required: 'Campo Requerido.'
+                },
+                numero: {
                     required: 'Campo Requerido.'
                 },
                 bairro: {
