@@ -34,14 +34,14 @@
                 </span>
                 <h5>Editar Produto</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget_box_Painel2">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
                         <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo $result->codDeBarra; ?>" />
+                            <input id="codDeBarra" maxlength="13" type="text" name="codDeBarra" value="<?php echo $result->codDeBarra; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
+                        <label for="precoCompra" class="control-label">Preço de Compra</label>
                         <div class="controls">
                             <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" />
                         </div>
@@ -82,14 +82,7 @@
                     <div class="control-group">
                         <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                         <div class="controls">
-                            <select id="unidade" name="unidade">
-                                <option value="UN" <?= ($result->unidade == 'UN') ? 'selected' : '' ?>>Unidade</option>
-                                <option value="KG" <?= ($result->unidade == 'KG') ? 'selected' : '' ?>>Kilograma</option>
-                                <option value="LT" <?= ($result->unidade == 'LT') ? 'selected' : '' ?>>Litro</option>
-                                <option value="CX" <?= ($result->unidade == 'CX') ? 'selected' : '' ?>>Caixa</option>
-                                <option value="M2" <?= ($result->unidade == 'M2') ? 'selected' : '' ?>>M²</option>
-                                <option value="OT" <?= ($result->unidade == 'OT') ? 'selected' : '' ?>>Outro</option>
-                            </select>
+                            <select id="unidade" name="unidade"></select>
                         </div>
                     </div>
 
@@ -107,13 +100,9 @@
                         </div>
                     </div>
 
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
-                            </div>
-                        </div>
+                    <div class="form_actions" align="center">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                     </div>
 
 
@@ -130,16 +119,18 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".money").maskMoney();
-
+        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+            for (i in data.medidas) {
+                   $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
+                   $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected",true);
+            }
+        });
         $('#formProduto').validate({
             rules: {
                 descricao: {
                     required: true
                 },
                 unidade: {
-                    required: true
-                },
-                precoCompra: {
                     required: true
                 },
                 precoVenda: {
@@ -154,9 +145,6 @@
                     required: 'Campo Requerido.'
                 },
                 unidade: {
-                    required: 'Campo Requerido.'
-                },
-                precoCompra: {
                     required: 'Campo Requerido.'
                 },
                 precoVenda: {

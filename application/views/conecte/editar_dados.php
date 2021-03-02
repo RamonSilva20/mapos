@@ -1,3 +1,7 @@
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -7,7 +11,7 @@
                 </span>
                 <h5>Editar Meus Dados</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget_box_Painel2">
 
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                     <div class="control-group">
@@ -18,22 +22,32 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="documento" class="control-label">CPF<span class="required">*</span></label>
+                        <?php if ($custom_error != '') {
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
+                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="documento" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                            <input name="documento"  type="text" class="cpfcnpj" id="documento" value="<?php echo $result->documento; ?>" readonly="readonly" />
+                            <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="senha" type="text" name="senha" value="<?php echo $result->senha; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
+                            <input id="telefone" type="text" class="telefone1" name="telefone" value="<?php echo $result->telefone; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="celular" class="control-label">Celular</label>
+                        <label for="celular" class="control-label">Telefone 2</label>
                         <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>" />
+                            <input id="celular" type="text" class="telefone1" name="celular" value="<?php echo $result->celular; ?>" />
                         </div>
                     </div>
 
@@ -64,7 +78,12 @@
                             <input id="numero" type="text" name="numero" value="<?php echo $result->numero; ?>" />
                         </div>
                     </div>
-
+                    <div class="control-group">
+                        <label for="complemento" class="control-label">Complmento</label>
+                        <div class="controls">
+                            <input id="complemento" type="text" name="complemento" value="<?php echo $result->complemento; ?>" />
+                        </div>
+                    </div>
                     <div class="control-group" class="control-label">
                         <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
                         <div class="controls">
@@ -91,7 +110,7 @@
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>

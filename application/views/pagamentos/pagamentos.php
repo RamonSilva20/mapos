@@ -9,8 +9,8 @@
         </span>
         <h5>Pagamentos</h5>
     </div>
-    <div class="widget-content nopadding">
-        <table class="table table-bordered ">
+    <div class="widget_content nopadding">
+        <table id="tabela" class="table table-bordered">
             <thead>
                 <tr style="background-color: #2D335B">
                     <th>#</th>
@@ -23,8 +23,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-                    if (!$results) {
+                <?php 
+                    if(!$results){
                         echo '<tr>
                                 <td colspan="6">Nenhum Pagamento Cadastrado</td>
                                 </tr>';
@@ -37,15 +37,15 @@
                         
 
                         echo '<tr>';
-                        echo '<td>' . $r->idPag . '</td>';
-                        echo '<td>' . $r->nome . '</td>';
-                        echo '<td>' . $textoClientIdShort . '</td>';
-                        echo '<td>' . $textoClientSecretShort . '</td>';
-                        echo '<td>' . $textoPublicKeyShort . '</td>';
-                        echo '<td>' . $textoAccessTokenShort . '</td>';
-                        echo '<td>';
+                        echo '<td><div align="center">' . $r->idPag . '</td>';
+                        echo '<td><div align="center">' . $r->nome . '</td>';
+                        echo '<td><div align="center">' . $textoClientIdShort . '</td>';
+                        echo '<td><div align="center">' . $textoClientSecretShort . '</td>';
+                        echo '<td><div align="center">' . $textoPublicKeyShort . '</td>';
+                        echo '<td><div align="center">' . $textoAccessTokenShort . '</td>';
+                        echo '<td><div align="center">';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPagamento')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/pagamentos/visualizar/' . $r->idPag . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/pagamentos/visualizar/' . $r->idPag . '" class="btn tip-top" title="Visualizar mais detalhes"><i class="fas fa-eye"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePagamento')) {
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/pagamentos/editar/' . $r->idPag . '" class="btn btn-info tip-top" title="Editar"><i class="fas fa-edit"></i></a>';
@@ -65,11 +65,11 @@
 <?php echo $this->pagination->create_links(); ?>
 
 <!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-excluir" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/pagamentos/excluir" method="post">
-        <div class="modal-header">
+        <div class="modal_header_anexos">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir Credencial de Pagamento</h5>
+            <h3 id="myModalLabel">Excluir Credencial de Pagamento</h3>
         </div>
         <div class="modal-body">
             <input type="hidden" id="idPag" name="idPag" value="" />
@@ -78,7 +78,7 @@
             <p style="text-align: center; margin-top: 4em;"><i><?php echo $r->nome ?></i></p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Cancelar</button>
             <button class="btn btn-danger">Excluir</button>
         </div>
     </form>

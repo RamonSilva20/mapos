@@ -1,20 +1,19 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-
 /**
  * App current version
  */
-$config['app_version'] = '4.5.3';
+$config['app_version'] = '10.1.1';
 
 /**
  * Nome do sistema
  */
-$config['app_name'] = 'Map-OS';
+$config['app_name'] = 'Master-OS';
 
 /**
  * Descrição do sistema
  */
-$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+$config['app_subname'] = 'Sistema de Gestão e controle de Estoque, Vendas, Ordens de Serviço e Banco de Arquivos';
 
 
 /*
@@ -496,3 +495,9 @@ $config['time_reference'] = 'local';
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+
+$config['modules_locations'] = [
+    APPPATH.'modules/' => '../modules/',
+];

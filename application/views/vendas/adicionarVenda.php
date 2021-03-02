@@ -1,6 +1,10 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -10,7 +14,7 @@
                 </span>
                 <h5>Cadastro de venda</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget_box_Painel2">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da venda</a></li>
@@ -31,6 +35,9 @@
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
+                                            <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
+    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a>
+<?php } ?></div>
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -41,7 +48,7 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <button class="btn btn-success" id="btnContinuar"><i class="fas fa-share"></i> Continuar</button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
@@ -56,11 +63,19 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.addclient').hide();
         $("#cliente").autocomplete({
             source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteCliente",
             minLength: 1,
+            close: function(ui) { if(ui.label == 'Adicionar cliente...')ui.target.value = '';},
             select: function(event, ui) {
-                $("#clientes_id").val(ui.item.id);
+                if(ui.item.label == 'Adicionar cliente...')
+                    $('.addclient').show();
+                else
+                    {
+                        $("#clientes_id").val(ui.item.id);
+                        $('.addclient').hide();
+                    }
             }
         });
         $("#tecnico").autocomplete({
@@ -106,5 +121,9 @@
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });
+        $('.editor').trumbowyg({
+            lang: 'pt_br'
+        });
+        $('.addclient').hide();
     });
 </script>

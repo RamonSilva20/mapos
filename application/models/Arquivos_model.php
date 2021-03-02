@@ -82,7 +82,7 @@ class Arquivos_model extends CI_Model
             $this->db->where('cadastro >=', $de);
             $this->db->where('cadastro <=', $ate);
         }
-        $this->db->limit(10);
+        $this->db->limit($this->data['configuration']['per_page']);
         return $this->db->get('documentos')->result();
     }
 }

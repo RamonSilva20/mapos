@@ -78,7 +78,7 @@ class Clientes_model extends CI_Model
     {
         $this->db->where('clientes_id', $id);
         $this->db->order_by('idOs', 'desc');
-        $this->db->limit(10);
+        $this->db->limit($this->data['configuration']['per_page']);
         return $this->db->get('os')->result();
     }
 

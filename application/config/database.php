@@ -23,3 +23,4 @@ $db['default'] = [
     'failover' => [],
     'save_queries' => true
 ];
+

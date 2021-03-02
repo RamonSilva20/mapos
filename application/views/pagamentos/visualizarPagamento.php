@@ -9,14 +9,14 @@
                 <h5>Credencial de Pagamento</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePagamento')) {
-    echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
-} ?>
+                        echo '<a title="Editar Credencial de Pagamento" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/pagamentos/editar/' . $pagamento->idPag . '"><i class="fas fa-edit"></i> Editar</a>';
+                    } ?>
                 </div>
             </div>
-            <div class="widget-content" id="printOs">
+            <div class="widget_content" id="printOs">
                 <div class="invoice-content">
                     <div class="invoice-head">
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
@@ -34,7 +34,7 @@
                                 } ?>
                             </tbody>
                         </table>
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 25%; padding-left: 0">

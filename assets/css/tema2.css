@@ -1,0 +1,433 @@
+/* ======================================*/
+/*  Thomas Lage - lage.thomas@gmail.com  */
+/*=======================================*/
+
+/* ===========================> FOCUS <=========================== */
+
+/* INPUT DE BUSCA NA PÁGINA */
+#search input:focus[type=text]{
+    border: 1px solid;
+    border-top:none;
+    border-bottom: none;
+    border-color: red;
+    background-color: #FFFFFF;
+    color:#000000;
+}
+
+/* ===========================> ACTIVE <=========================== */
+
+/* SUBMENU FINANCEIRO E OUTROS*/
+#sidebar > ul li ul li.active a {color: #fff; background-color: #33cc66;}
+
+
+/* MENUS LATERAIS*/ /*Cor dos Selecionados*/
+#sidebar > ul > li.active {background-color: #0099cc; border-bottom: 1px solid #0099cc;  border-top: 1px solid #0099cc;}
+
+
+/* ITENS ATIVOS */ /*Cor da letra do Selecionado*/
+#sidebar > ul > li.active a{ color:#ffffff; text-decoration:none;}
+
+
+/* ===========================> HOVERS <=========================== */
+
+/*MENUS LATERAIS*/ /*Cor com o Mouse Encima*/
+#sidebar > ul > li > a:hover {background-color: #0099cc; color:#000000;}
+
+
+/* ICONES DE VISUALIZAR */ /*???????????????*/
+.visualizar:hover{
+    background-color: #548B54;
+}
+
+/* INPUT DE BUSCA NA PÁGINA */
+#search input:hover[type=text]{
+    border: 1px solid;
+    border-top:none;
+    border-bottom: none;
+    border-color: red;
+    color:#000000;
+}
+
+/* LINHA */
+li:hover{color:#666;}
+
+/* SUBMENU FINANCEIRO E OUTROS*/ /*Cor do Mouse Encima*/
+#sidebar > ul li ul li a:hover{background-color: #33cc66; color:#000000}
+
+/* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/
+#user-nav > ul > li > a:hover{ background-color: #3399cc; color:#000000}
+
+/* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */ /*Quando Mouse Encima*/
+#sidebar > ul > li > a > .label:hover{background-color: #000;}
+
+/*ITENS DO DASHBOARD - ICONES*/
+.quick-actions li a:hover { border-radius: 5px;}
+
+a:hover, a:focus {text-decoration: none; color:#33cc66;} /*Verde*/
+
+/* ===========================> CSS NORMAL <=========================== */
+
+/* BORDAR REDONDA EM TODOS OS INPUTS */
+input {
+    border-radius: 5px !important;
+}
+/* REMOVER BORDAS ENTRE OS ITENS */
+#sidebar > ul > li {border-top: 1px solid #555555;}
+
+/* BORDA INFERIOR MENUS LATERAIS */
+#sidebar > ul {border-bottom: 1px solid #555555}
+
+/* COR DE FUNDO DOS CAMPOS DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul li ul {background-color: #444444;}
+
+/* COR DOS TEXTOS DENTRO DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul li ul li a{ color:#dddddd}
+
+/* ICONES DOS ITENS DO MENU LATERAL E OUTROS */
+#user-nav > ul > li > a > i, #sidebar li a i { opacity: .7; margin-top: 2px;}
+
+/* CORES DOS  TEXTOS DO MENU LATERAL */
+#sidebar > ul > li > a{ color:#dddddd;}
+
+/* COR DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
+#sidebar > ul > li > a > .label{background-color: #ff6666;}
+
+/* COR DOS ICONES MENU LATERAL E MENU SUPERIOR */
+#user-nav > ul > li > a > i, #sidebar li a i{color:#ffffff;}
+
+/*ITENS DO DASHBOARD - ICONES*/
+.bg_lb {border-radius: 5px;}	/*Clientes*/
+.bg_jj {border-radius: 5px;}	/*Produtos*/
+.bg_lg {border-radius: 5px;}	/*Serviços*/
+.bg_lo {border-radius: 5px;}	/*OS*/
+.bg_ls {border-radius: 5px;}	/*Vendas*/
+.bg_jk {border-radius: 5px;}	/*Lançamento Financeiro*/
+
+
+/* TEMPO DECARGA DA TELA */
+.tempo-carga{color: #787878; margin: 10px 0 0 20px;}
+
+/* ICONE RELÓGIO */
+.icon-time{color:#ffcc00 !important;}
+
+/* ESTATISTICAS DO SISTEMA*/
+.bg_lh{ border-radius: 5px;}
+
+/*CABEÇALHO E BARCUMB*/
+#header{background-color: #2e363f}
+body{background-color: #2e363f;} /*Cor de fundo do Sistema*/
+body{color:#555555;} /* Cor da fonte da escrtia interna das Tabelas */
+#breadcrumb{background-color: #dddddd} /* Cor de Fubdo da Barra Superior */
+#breadcrumb a{color: #333333;} /* Cor da fonte da escrita da Barra Superior */
+
+.view_table {border: 1px solid #bbbbb2;} /*Borda Geral da Tabela Interna*/
+.view_table tr td {border: 1px solid #bbbbb2;} /*Cor das Bordas da Tabela Interna*/
+.view_table th {border:1px solid #bbbbb2;}/*Cor das colunas do cabeçalho da Tabela Interna*/
+.view_table th {text-align:center padding: 5px 10px 2px;} /*Alinhamento da escrita do cabeçalho da Tabela Interna*/
+.view_table th {font-size: 10px;} /*Tamanho da escrita do cabeçalho da Tabela Interna*/
+.view_table th {color: #333;} /*Cor da escrita do cabeçalho da Tabela Interna*/
+.view_table th {background:#eeeeee;} /*Cor Cabeçalho da Tabela Interna*/
+
+/*.widget-box {background: none repeat scroll 0 0 #F9F9F9;}  /*Cor Interna*/
+.widget-box {border-top: 0px solid #CDCDCD;} /*Borda Superior*/
+.widget-box {border-bottom: 0px solid #CDCDCD;} /*Borda inferior*/
+.widget-box {border-left: 0px solid #CDCDCD;} /*Borda Lateral Esquerda*/
+.widget-box {border-right: 0px solid #CDCDCD;} /*Borda Lateral Direita*/
+
+.widget_box_Painel {border-top: 0px solid #CDCDCD;} /*Borda Superior*/
+.widget_box_Painel {border-bottom: 0px solid #CDCDCD;} /*Borda inferior*/
+.widget_box_Painel {border-left: 0px solid #CDCDCD;} /*Borda Lateral Esquerda*/
+.widget_box_Painel {border-right: 0px solid #CDCDCD;} /*Borda Lateral Direita*/
+/*.widget_box_Painel {border: 1px solid #CDCDCD;} /*Borda Lateral Direita*/
+
+.widget_box_Painel4 {border: 1px solid #777;}/**/
+
+.widget_box_Painel2 {border-top: 0px solid #CDCDCD;} /*Borda Superior*/
+.widget_box_Painel2 {border-bottom: 1px solid #777;} /*Borda inferior*/
+.widget_box_Painel2 {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_Painel2 {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_Painel2 {border-radius: 0px 0px 5px 5px;}
+
+/* Cor da borda menu interno de navegação */
+.nav-tabs{border-bottom:1px solid #777}
+.nav-tabs>li>a:hover,.nav-tabs>li>a:focus{border-color:#777 #777 #777}/**/
+.nav-tabs>.active>a,.nav-tabs>.active>a:hover,.nav-tabs>.active>a:focus{border:1px solid #777; border-bottom-color:transparent;}/**/
+.form-actions {border-top:1px solid #777;}/**/
+
+.form_actions {border-top:1px solid #777; padding:10px}/**/
+/* Fim Cor da borda menu interno de navegação */
+
+hr{border-top-color:#777;}
+
+.widget_box {
+	background: none repeat scroll 0 0 #f9f9f9;  /*Cor Interna*/
+	border: 1px solid #bbbbb2; /*Borda Geral*/
+	clear: both;
+	margin-top: 16px;
+	margin-bottom: 16px; /*Espaço inferior para a Proxima Tabela*/
+	position: relative;
+}
+
+.widget_estatisticas {padding: 1px;}
+
+.widget_box_master_os {border-bottom: 0px solid #bbbbb2;} /*Borda Geral*/
+.widget_box_master_os {border-top: 0px solid #bbbbb2;} /*Borda Superior*/
+.widget_box_master_os {border-bottom: 1px solid #777;} /*Borda inferior*/
+.widget_box_master_os {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_master_os {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_master_os {padding: 10px;}
+
+.widget_box_master_os {border-radius: 0px 0px 5px 5px;}
+
+.widget-title, .modal-header, div.dataTables_wrapper .ui-widget-header {background:#eeeeee; } /*Cor do Cabeçalho da Tabela Externa*/
+.widget-title, .modal-header, div.dataTables_wrapper .ui-widget-header {border: 1px solid #777; border-radius:1px;} /*Borda geral do Cabeçalho Tabela Externa*/
+.widget-title, .modal-header, div.dataTables_wrapper .ui-widget-header {height: 35px;} /*tamanho interno do cabeçalho*/
+.widget-title h5 {padding: 12px 10px 7px 11px; color: #555;} /*Cor da escrita do cabeçalho da Tabela Externa*/
+.widget-title span.icon {padding: 8px 10px 7px 11px; float: left; border-right:1px solid #777;} /*Separadores Tabela Externa*/
+
+.widget_box_pr {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_pr {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+
+.widget_box_pr2 {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_pr2 {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_pr2 {border-bottom: 1px solid #777;} /*Borda inferior*/
+
+.widget-content {padding: 0px;} /*Margem entre a tabela interna e externa*/
+.widget_content {padding: 0px;} /*Margem entre a tabela interna e externa*/
+.widget_content_vusualizar {padding: 10px;} /*Margem entre a tabela interna e externa*/
+.widget_content_permisao {padding: 0px 15px 0px 15px;} /**/
+/*tr:hover{ background:#e9e9e9;} span.icon .checker {margin-top: -5px; margin-right: 0;} /*Cor interna da linha da tabela com Mouse Sobre encima*/ 
+
+/* RELOGIO */
+.textoHora{color: #ffcc00;}
+
+/*Cor Interna do Sistema*/
+#content {background: none repeat scroll 0 0 #ffffff;}
+
+/* BORDA ENTRE OS ITENS DO MENU SUPERIOR */
+#user-nav > ul > li{
+    border-top:none;
+    border-bottom: none;
+    border-left: 1px solid;
+    border-right: none;
+    border-color: #2e363f;
+}
+
+/* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
+#user-nav > ul{
+    border-left:none;
+    border-right: 1px solid;
+    border-color: #2e363f;
+}
+
+/* TEXTOS DO MENU SUPERIOR */
+.navbar-inverse .brand, .navbar-inverse .nav>li>a{
+    color: #ffffff;
+    text-shadow:none;
+}
+
+/* PESQUISA */
+#search input[type=text]{
+    color:#000000;
+    background-color: #ffffff;
+}
+#search button{
+    border-radius:5px;
+    background-color: #20c07a;
+}
+#search button i{
+    color: #000000;
+}
+
+/* ICONES*/
+.btn{border-radius:5px;}
+.btn [class^="icon-"], .nav [class^="icon-"]{
+    color:#FFFFFF
+}
+
+/* ICONES DE VISUALIZAR */
+.visualizar{background-color: #7CCD7C;}
+
+
+/* Responsive design */
+@media (max-width: 480px) {
+    #user-nav {
+        border-top:1px solid #c0c0c0;
+        background:#FFF;
+    }
+    #sidebar > ul li span {
+        color:#000;
+    }
+}
+
+/*Cores dos Calendarios*/
+/* Interaction states
+----------------------------------*/
+
+/*.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	border: 1px solid #999999; background: #bbbbbb /*Cor dos dias*/
+	/*url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #000; } /*Cor dos numeros*/
+	
+/*.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+	border: 1px solid #bbbbb2; background: #ffffff /*Cor da borda do dia Selecionado*/
+	/*url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #bbbbb2; } /*Cor do numero do dia Selecionado*/
+
+/*.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+	border: 1px solid #ffcc00; background: #d7d7d7 /*Cor da borda do dia atual*/ 
+	/*url(images/ui-bg_glass_55_d7d7d7_1x400.png) 50% 50% repeat-x; color: #000000; } /*Cor do numero do dia atual*/
+
+
+/*----------------------------------*/
+/* Pag Visualizar */
+
+.widget_box_vizualizar {
+	background: none repeat scroll 0 0 #F9F9F9;  /*Cor Interna*/
+	border-left: 1px solid #777; /*Borda Lateral Esquerda*/
+	border-right: 1px solid #777; /*Borda Lateral Direita*/
+	border-top: 1px solid #777; /*Borda Superior*/
+	border-bottom: 1px solid #777; /*Borda inferior*/
+	border-radius: 0px 0px 5px 5px;
+	clear: both;
+	margin-top: 16px; /*Espaço para a Proxima Tabela*/
+	margin-bottom: 16px; /*Espaço para a Proxima Tabela*/
+	position: relative;
+}
+
+.widget_title_vizualizar .buttons {
+	float: right;
+	margin: 8px 10px 0 0;
+}
+
+.widget_box_vizualizar3 {
+	background: none repeat scroll 0 0 #F9F9F9;  /*Cor Interna*/
+	border-left: 0px solid #777; /*Borda Lateral Esquerda*/
+	border-right: 0px solid #777; /*Borda Lateral Direita*/
+	border-top: 0px solid #777; /*Borda Superior*/
+	border-bottom: 0px solid #777; /*Borda inferior*/
+	clear: both;
+	margin-top: 16px;
+	margin-bottom: 16px; /*Espaço inferior para a Proxima Tabela*/
+	position: relative;
+}
+
+.widget_box_vizualizar2 {border-bottom: 0px solid #777;} /*Borda Geral*/
+.widget_box_vizualizar2 {border-top: 0px solid #777;} /*Borda Superior*/
+.widget_box_vizualizar2 {border-bottom: 1px solid #777;} /*Borda inferior*/
+.widget_box_vizualizar2 {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_vizualizar2 {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_vizualizar2 {border-radius: 0px 0px 5px 5px;}
+
+.widget_box_vizualizar4 {border-bottom: 1px solid #777;} /*Borda Geral*/
+.widget_box_vizualizar4 {border-top: 1px solid #777;} /*Borda Superior*/
+.widget_box_vizualizar4 {border-bottom: 1px solid #777;} /*Borda inferior*/
+.widget_box_vizualizar4 {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_vizualizar4 {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_vizualizar4 {border-radius: 5px 5px 5px 5px;}
+
+.widget_box_vizualizar5 {border-bottom: 0px solid #777;} /*Borda Geral*/
+.widget_box_vizualizar5 {border-top: 0px solid #777;} /*Borda Superior*/
+.widget_box_vizualizar5 {border-bottom: 1px solid #777;} /*Borda inferior*/
+.widget_box_vizualizar5 {border-left: 1px solid #777;} /*Borda Lateral Esquerda*/
+.widget_box_vizualizar5 {border-right: 1px solid #777;} /*Borda Lateral Direita*/
+.widget_box_vizualizar5 {border-radius: 0px 0px 5px 5px;}
+.widget_box_vizualizar5 {background-color:#f5f5f5;}
+.widget_box_vizualizar5 {padding:20px;}
+
+.modal_header {border-bottom: 1px solid #777; height: auto; padding: 8px 15px 5px; background-color:#ccc} /*Borda inferior*/ 
+.modal_header {border-radius: 5px 5px 0px 0px;}
+.well {border-bottom: 1px solid #777; border-top: 1px solid #777; background-color:#eee}
+
+.well_i {padding:19px;}
+.well_i {margin:10px;}/**/
+.well_i {background-color:#ececec;}
+.well_i {border:1px solid #777;}
+.well_i {border-radius:5px;}
+
+.well_o {min-height:20px;}
+.well_o {padding:19px;}
+.well_o {margin-bottom:20px;}
+.well_o {background-color:#f5f5f5}
+.well_o {border-left: 1px solid #777;}
+.well_o {border-right: 1px solid #777;}
+.well_o {border-bottom: 1px solid #777;}
+.well_o {border-radius: 0px 0px 5px 5px;}
+
+.well_p {min-height:20px;}
+.well_p {padding:19px 19px;}
+.well_p {margin-bottom:20px;}
+.well_p {background-color:#f5f5f5}
+.well_p {border-top: 1px solid #777;}
+.well_p {border-bottom: 1px solid #777;}
+
+.table_per {width:100%;margin-bottom:20px}
+.table_per tr td {font-size:12px; padding: 5px;} /*Cor das Bordas da Tabela Interna*/
+.table_per tr td {border-bottom: 1px solid #777;}/**/
+.table_per tr td {border-top: 0px solid #777;}/**/
+.table_per tr td {border-left: 1px solid #777;}/**/
+.table_per tr td {border-right: 1px solid #777;}/**/
+
+/* Visualizar Vendas e OS */
+
+.table_r {width:100%;margin-bottom:25px}/**/
+.table_r tr td {font-size:12px; padding: 5px;} /*Cor das Bordas da Tabela Interna*/
+.table_r tr td {border-bottom: 1px solid #777;}/**/
+.table_r tr td {border-top: 1px solid #777;}/**/
+
+/* Fim Visualizar Vendas e OS */
+
+.table_p {width:100%;margin-bottom:20px}
+.table_p th  {border: 1px solid #777;} /*Cor das colunas do cabeçalho da Tabela Interna*/
+
+.table_p tr td {border: 1px solid #777; font-size:12px; padding: 8px;} /*Cor das Bordas da Tabela Interna*/
+.table_p th {text-align:center; padding: 5px;} /*Alinhamento da escrita do cabeçalho da Tabela Interna*/
+.table_p th {font-size: 11px;} /*Tamanho da escrita do cabeçalho da Tabela Interna*/
+.table_p th {color: #333;} /*Cor da escrita do cabeçalho da Tabela Interna*/
+.table_p th {background:#ffff;} /*Cor Cabeçalho da Tabela Interna*/
+
+.table_pr {width:100%;margin-bottom:20px}
+.table_pr th  {border: 1px solid #777;} /*Cor das colunas do cabeçalho da Tabela Interna*/
+
+.table_pr tr td {border: 1px solid #777; font-size:12px; padding: 8px;} /*Cor das Bordas da Tabela Interna*/
+.table_pr th {text-align:center; padding: 5px;} /*Alinhamento da escrita do cabeçalho da Tabela Interna*/
+.table_pr th {font-size: 11px;} /*Tamanho da escrita do cabeçalho da Tabela Interna*/
+.table_pr th {color: #333;} /*Cor da escrita do cabeçalho da Tabela Interna*/
+.table_pr th {background:#ffff;} /*Cor Cabeçalho da Tabela Interna*/
+
+.modal_header_anexos h3 {font-size: 15px; text-shadow: 0 1px 0 #ffffff; margin:0;line-height:30px;}
+.modal_header_anexos {height: auto; padding: 5px 15px 5px;}
+.modal_header_anexos {border-bottom: 1px solid #777;}
+.modal_header_anexos {background:#eee; height: 30px;}
+.modal_header_anexos {border-radius: 5px 5px 0px 0px;}
+
+.modal_footer {background:#ddd; border-top: 1px solid #aaa; border-radius: 0px 0px 5px 5px; height: 32px; text-align:right; padding: 7px 10px;}
+
+.modal-footer {background:#ddd; border-top: 1px solid #aaa; border-radius: 0px 0px 5px 5px; height: 32px; text-align:right; padding: 7px 10px;}
+
+.control_group {border-top: 1px solid #ffffff; border-bottom: 1px solid #777; margin-bottom: 0;}
+.control_group:last-child {border-bottom: 0;}
+
+.table_master_os td {vertical-align:top;}
+.table_master_os td {border-right: 1px solid #777;}
+.table_master_os td {border-left: 1px solid #777;}
+.table_master_os td {border-bottom: 1px solid #777;}
+
+.table {border: 1px solid #777;} /*Borda Geral da Tabela Interna*/
+.table {border-left: 1px solid #777;} /*Borda Esquerda da Tabela Interna*/
+.table {border-right: 1px solid #777;} /*Borda Direita da Tabela Interna*/
+.table {border-bottom: 1px solid #777;} /*Borda Inferior da Tabela Interna*/
+.table {border-top: 0px solid #777;} /*Borda Superior da Tabela Interna*/
+.table tr td {border: 1px solid #777;} /*Cor das Bordas da Tabela Interna*/
+.table th {border:1px solid #777;}/*Cor das colunas do cabeçalho da Tabela Interna*/
+.table th {text-align:center padding: 5px 10px 2px;} /*Alinhamento da escrita do cabeçalho da Tabela Interna*/
+.table th {font-size: 10px;} /*Tamanho da escrita do cabeçalho da Tabela Interna*/
+.table th {color: #333;} /*Cor da escrita do cabeçalho da Tabela Interna*/
+.table th {background:#ffff;} /*Cor Cabeçalho da Tabela Interna*/
+
+.well_box {margin-top: 16px;}
+.well_box {margin-bottom: 16px;}
+.well_box {min-height:20px;}
+.well_box {padding:19px 19px;}
+.well_box {margin-bottom:20px;}
+.well_box {background-color:#f5f5f5}
+.well_box {border-top: 1px solid #777;}
+.well_box {border-bottom: 1px solid #777;

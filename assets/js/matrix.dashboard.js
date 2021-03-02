@@ -139,7 +139,7 @@ maruti = {
 				strokeColour: "#BA1E20"
 			});	
 			$(".peity_line_neutral span").peity("line", {
-				colour: "#CCCCCC",
+				colour: "#bbbbbb",
 				strokeColour: "#757575"
 			});
 			$(".peity_bar_good span").peity("bar", {

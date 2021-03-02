@@ -16,14 +16,14 @@ if (!empty($_POST)) {
     $dbuser = $_POST["dbuser"];
     $dbpassword = $_POST["dbpassword"];
     $dbname = $_POST["dbname"];
-
-    $full_name = $_POST["full_name"];
+	$full_name = $_POST["full_name"];
+	$date_expiracao = $_POST["date_expiracao"];
     $email = $_POST["email"];
     $login_password = $_POST["password"] ? $_POST["password"] : "";
     $base_url = $_POST["base_url"];
 
     //check required fields
-    if (!($host && $dbuser && $dbname && $full_name && $email && $login_password && $base_url)) {
+    if (!($host && $dbuser && $dbname && $full_name && $date_expiracao && $email && $login_password && $base_url)) {
         echo json_encode(["success" => false, "message" => "Por favor insira todos os campos."]);
         exit();
     }
@@ -70,6 +70,7 @@ if (!empty($_POST)) {
     $sql = str_replace('admin_email', $email, $sql);
     $sql = str_replace('admin_password', password_hash($login_password, PASSWORD_DEFAULT), $sql);
     $sql = str_replace('admin_created_at', $now, $sql);
+	$sql = str_replace('admin_expiracao', $date_expiracao, $sql);
 
     //create tables in datbase
     $mysqli->multi_query($sql);

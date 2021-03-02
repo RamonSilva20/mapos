@@ -14,10 +14,10 @@
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>"><i class="fas fa-print"></i> Imprimir</a>
                 </div>
             </div>
-            <div class="widget-content" id="printOs">
+            <div class="widget_content" id="printOs">
                 <div class="invoice-content">
                     <div class="invoice-head">
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
@@ -44,7 +44,7 @@
                                 } ?>
                             </tbody>
                         </table>
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 40%; padding-left: 0">
@@ -87,7 +87,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 100%; padding-left: 0">

@@ -1,0 +1,448 @@
+{
+  "medidas": [
+    {
+      "id": "23",
+      "descricao": "UNIDADE",
+      "sigla": "UNID",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "25",
+      "descricao": "AMPOLA",
+      "sigla": "AMPOLA",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "1",
+      "descricao": "ARR",
+      "sigla": "ARR",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "26",
+      "descricao": "BALDE",
+      "sigla": "BALDE",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "27",
+      "descricao": "BANDEJA",
+      "sigla": "BANDEJ",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "28",
+      "descricao": "BARRA",
+      "sigla": "BARRA",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "29",
+      "descricao": "BISNAGA",
+      "sigla": "BISNAG",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "30",
+      "descricao": "BLOCO",
+      "sigla": "BLOCO",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "31",
+      "descricao": "BOBINA",
+      "sigla": "BOBINA",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "32",
+      "descricao": "BOMBONA",
+      "sigla": "BOMB",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "33",
+      "descricao": "CAPSULA",
+      "sigla": "CAPS",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "34",
+      "descricao": "CARTELA",
+      "sigla": "CART",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "2",
+      "descricao": "CB",
+      "sigla": "CB",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "35",
+      "descricao": "CENTO",
+      "sigla": "CENTO",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "36",
+      "descricao": "CONJUNTO",
+      "sigla": "CJ",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "37",
+      "descricao": "CENTIMETRO",
+      "sigla": "CM",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "38",
+      "descricao": "CENTIMETRO QUADRADO",
+      "sigla": "CM2",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "39",
+      "descricao": "CAIXA",
+      "sigla": "CX",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "3",
+      "descricao": "CX(360 UN)",
+      "sigla": "CX(360 UN)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "43",
+      "descricao": "CAIXA COM 10 UNIDADES",
+      "sigla": "CX10",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "48",
+      "descricao": "CAIXA COM 100 UNIDADES",
+      "sigla": "CX100",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "44",
+      "descricao": "CAIXA COM 15 UNIDADES",
+      "sigla": "CX15",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "40",
+      "descricao": "CAIXA COM 2 UNIDADES",
+      "sigla": "CX2",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "45",
+      "descricao": "CAIXA COM 20 UNIDADES",
+      "sigla": "CX20",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "46",
+      "descricao": "CAIXA COM 25 UNIDADES",
+      "sigla": "CX25",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "41",
+      "descricao": "CAIXA COM 3 UNIDADES",
+      "sigla": "CX3",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "42",
+      "descricao": "CAIXA COM 5 UNIDADES",
+      "sigla": "CX5",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "47",
+      "descricao": "CAIXA COM 50 UNIDADES",
+      "sigla": "CX50",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "49",
+      "descricao": "DISPLAY",
+      "sigla": "DISP",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "4",
+      "descricao": "DUZIA",
+      "sigla": "DUZIA",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "51",
+      "descricao": "EMBALAGEM",
+      "sigla": "EMBAL",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "52",
+      "descricao": "FARDO",
+      "sigla": "FARDO",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "5",
+      "descricao": "FD(10 KG)",
+      "sigla": "FD(10 KG)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "6",
+      "descricao": "FD(30 KG)",
+      "sigla": "FD(30 KG)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "7",
+      "descricao": "FD(48X1)",
+      "sigla": "FD(48X1)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "8",
+      "descricao": "FD(64X1)",
+      "sigla": "FD(64X1)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "53",
+      "descricao": "FOLHA",
+      "sigla": "FOLHA",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "54",
+      "descricao": "FRASCO",
+      "sigla": "FRASCO",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "55",
+      "descricao": "GALAO",
+      "sigla": "GALÃO",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "56",
+      "descricao": "GARRAFA",
+      "sigla": "GF",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "57",
+      "descricao": "GRAMAS",
+      "sigla": "GRAMAS",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "9",
+      "descricao": "HL",
+      "sigla": "HL",
+      "casasDecimais": "4"
+    },
+    {
+      "id": "10",
+      "descricao": "JOGO",
+      "sigla": "JOGO",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "69",
+      "descricao": "QUILATE",
+      "sigla": "K",
+      "casasDecimais": "4"
+    },
+    {
+      "id": "11",
+      "descricao": "QUILOGRAMA",
+      "sigla": "KG",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "60",
+      "descricao": "KIT",
+      "sigla": "KIT",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "13",
+      "descricao": "LATA",
+      "sigla": "LATA",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "12",
+      "descricao": "LITRO",
+      "sigla": "LITRO",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "61",
+      "descricao": "METRO",
+      "sigla": "M",
+      "casasDecimais": "2"
+    },
+    {
+      "id": "17",
+      "descricao": "MILHEIRO",
+      "sigla": "MILHEIRO",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "62",
+      "descricao": "MILILITRO",
+      "sigla": "ML",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "63",
+      "descricao": "MEGAWATT HORA",
+      "sigla": "MWH",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "15",
+      "descricao": "METRO QUADRADO",
+      "sigla": "M²",
+      "casasDecimais": "2"
+    },
+    {
+      "id": "16",
+      "descricao": "METRO CUBICO",
+      "sigla": "M³",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "0",
+      "descricao": "NAO DEFINIDA",
+      "sigla": "NAO DEFINIDA",
+      "casasDecimais": "4"
+    },
+    {
+      "id": "64",
+      "descricao": "PACOTE",
+      "sigla": "PACOTE",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "65",
+      "descricao": "PALETE",
+      "sigla": "PALETE",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "66",
+      "descricao": "PARES",
+      "sigla": "PARES",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "67",
+      "descricao": "PEÇA",
+      "sigla": "PC",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "68",
+      "descricao": "POTE",
+      "sigla": "POTE",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "70",
+      "descricao": "RESMA",
+      "sigla": "RESMA",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "71",
+      "descricao": "ROLO",
+      "sigla": "ROLO",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "72",
+      "descricao": "SACO",
+      "sigla": "SACO",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "73",
+      "descricao": "SACOLA",
+      "sigla": "SACOLA",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "18",
+      "descricao": "SC(25 KG)",
+      "sigla": "SC(25 KG)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "19",
+      "descricao": "SC(50 KG)",
+      "sigla": "SC(50 KG)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "20",
+      "descricao": "SC(60 KG)",
+      "sigla": "SC(60 KG)",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "74",
+      "descricao": "TAMBOR",
+      "sigla": "TAMBOR",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "75",
+      "descricao": "TANQUE",
+      "sigla": "TANQUE",
+      "casasDecimais": "1"
+    },
+    {
+      "id": "21",
+      "descricao": "TONELADA",
+      "sigla": "TON",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "79",
+      "descricao": "Tonel Metr Liquida",
+      "sigla": "TONEL",
+      "casasDecimais": "3"
+    },
+    {
+      "id": "76",
+      "descricao": "TUBO",
+      "sigla": "TUBO",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "77",
+      "descricao": "VASILHAME",
+      "sigla": "VASIL",
+      "casasDecimais": "0"
+    },
+    {
+      "id": "78",
+      "descricao": "VIDRO",
+      "sigla": "VIDRO",
+      "casasDecimais": "0"
+    }
+  ]
+}

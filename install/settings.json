@@ -1,5 +1,5 @@
 {
-	"title": "MAPOS - Sistema de Controle de Ordens de Serviço",
+	"title": "MasterOS - Sistema de Gestão e controle de Estoque, Vendas, Ordens de Serviço e Banco de Arquivos",
 	"extensions": [
 		"cURL",
 		"MySQLi",
@@ -7,7 +7,6 @@
 	],
   "database_file": "../banco.sql",
   "writeable_directories": {
-    "files": "/updates",
     "index": "/index.php",
     "config": "/application/config/config.php",
     "database": "/application/config/database.php"

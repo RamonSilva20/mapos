@@ -1,5 +1,7 @@
 <?php
 
+use Piggly\Pix\Parser;
+
 if (!function_exists('multiplica_cnpj')) {
     function multiplica_cnpj($cnpj, $posicao = 5)
     {
@@ -85,10 +87,10 @@ if (!function_exists('valid_cpf')) {
         // Faz o calculo para validar o CPF
         for ($t = 9; $t < 11; $t++) {
             for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf{$c} * (($t + 1) - $c);
+                $d += $cpf[$c] * (($t + 1) - $c);
             }
             $d = ((10 * $d) % 11) % 10;
-            if ($cpf{$c} != $d) {
+            if ($cpf[$c] != $d) {
                 return false;
             }
         }
@@ -108,6 +110,49 @@ if (!function_exists('verific_cpf_cnpj')) {
 
         if (strlen($cpfCnpj) === 14) {
             return valid_cnpj($cpfCnpj);
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('unique')) {
+    function unique($value, $params)
+    {
+        $CI = &get_instance();
+        $CI->load->database();
+
+        $CI->form_validation->set_message('unique', "O campo %s já está cadastrado.");
+
+        list($table, $field, $current_id, $key) = explode(".", $params);
+
+        $query = $CI->db->select()->from($table)->where($field, $value)->limit(1)->get();
+
+        if ($query->row() && $query->row()->{$key} != $current_id) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
+if (!function_exists('valid_pix_key')) {
+    function valid_pix_key($value)
+    {
+        if (Parser::validateDocument($value)) {
+            return true;
+        }
+
+        if (Parser::validateEmail($value)) {
+            return true;
+        }
+
+        if (Parser::validatePhone($value)) {
+            return true;
+        }
+
+        if (Parser::validateRandom($value)) {
+            return true;
         }
 
         return false;

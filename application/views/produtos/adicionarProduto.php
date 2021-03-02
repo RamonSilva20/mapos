@@ -34,13 +34,43 @@
                 </span>
                 <h5>Cadastro de Produto</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget_box_Painel2">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
+                        <?php function gerar_cod_barras($tamanho, $maiusculas, $minusculas, $numeros, $simbolos){
+  $ma = "ABCDEFGHIJKLMNOPQRSTUVYXWZ"; // $ma contem as letras maiúsculas
+  $mi = "abcdefghijklmnopqrstuvyxwz"; // $mi contem as letras minusculas
+  $nu = "0123456789"; // $nu contem os números
+  $si = "!@#$%¨&*()_+="; // $si contem os símbolos
+
+  if ($maiusculas){
+        // se $maiusculas for "true", a variável $ma é embaralhada e adicionada para a variável $cod_barras
+        $cod_barras .= str_shuffle($ma);
+  }
+
+    if ($minusculas){
+        // se $minusculas for "true", a variável $mi é embaralhada e adicionada para a variável $cod_barras
+        $cod_barras .= str_shuffle($mi);
+    }
+
+    if ($numeros){
+        // se $numeros for "true", a variável $nu é embaralhada e adicionada para a variável $cod_barras
+        $cod_barras .= str_shuffle($nu);
+    }
+
+    if ($simbolos){
+        // se $simbolos for "true", a variável $si é embaralhada e adicionada para a variável $cod_barras
+        $cod_barras .= str_shuffle($si);
+    }
+
+    // retorna a cod_barras embaralhada com "str_shuffle" com o tamanho definido pela variável $tamanho
+    return substr(str_shuffle($cod_barras),0,$tamanho);
+}
+?>
                         <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo set_value('codDeBarra'); ?>" />
+                            <input id="codDeBarra" type="text" name="codDeBarra" maxlength="13" value="<?php echo gerar_cod_barras(10, false, false, true, false); ?><?php echo gerar_cod_barras(2, false, false, true, false); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -63,7 +93,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
+                        <label for="precoCompra" class="control-label">Preço de Compra</label>
                         <div class="controls">
                             <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
                         </div>
@@ -77,15 +107,7 @@
                     <div class="control-group">
                         <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                         <div class="controls">
-                            <!--<input id="unidade" type="text" name="unidade" value="<?php echo set_value('unidade'); ?>"  />-->
-                            <select id="unidade" name="unidade">
-                                <option value="UN">Unidade</option>
-                                <option value="KG">Kilograma</option>
-                                <option value="LT">Litro</option>
-                                <option value="CX">Caixa</option>
-                                <option value="M2">M²</option>
-                                <option value="OT">Outro</option>
-                            </select>
+                            <select id="unidade" name="unidade"></select>
                         </div>
                     </div>
                     <div class="control-group">
@@ -100,13 +122,9 @@
                             <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo set_value('estoqueMinimo'); ?>" />
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
-                            </div>
-                        </div>
+                    <div class="form_actions" align="center">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
+                    <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                     </div>
                 </form>
             </div>
@@ -118,15 +136,17 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".money").maskMoney();
+        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+            for (i in data.medidas) {
+                   $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
+            }
+        });
         $('#formProduto').validate({
             rules: {
                 descricao: {
                     required: true
                 },
                 unidade: {
-                    required: true
-                },
-                precoCompra: {
                     required: true
                 },
                 precoVenda: {
@@ -141,9 +161,6 @@
                     required: 'Campo Requerido.'
                 },
                 unidade: {
-                    required: 'Campo Requerido.'
-                },
-                precoCompra: {
                     required: 'Campo Requerido.'
                 },
                 precoVenda: {

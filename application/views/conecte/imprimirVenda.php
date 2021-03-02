@@ -3,9 +3,9 @@
 <html lang="pt-br">
 
 <head>
-    <title><?php echo $this->config->item('app_name') ?></title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Map_OS_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
     <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -24,7 +24,7 @@
 
                 <div class="invoice-content">
                     <div class="invoice-head">
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
 
                                 <?php if ($emitente == null) { ?>
@@ -41,7 +41,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 50%; padding-left: 0">

@@ -10,50 +10,47 @@ $config = [
         [
             'field' => 'documento',
             'label' => 'CPF/CNPJ',
-            'rules' => 'required|trim|verific_cpf_cnpj',
-            'errors' => [
-                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
-            ],
+			'rules' => 'required|trim',
         ],
         [
             'field' => 'telefone',
             'label' => 'Telefone',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'email',
             'label' => 'Email',
-            'rules' => 'required|trim|valid_email',
+            'rules' => 'trim|valid_email',
         ],
         [
             'field' => 'rua',
             'label' => 'Rua',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'numero',
             'label' => 'Número',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'bairro',
             'label' => 'Bairro',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cidade',
             'label' => 'Cidade',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'estado',
             'label' => 'Estado',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cep',
             'label' => 'CEP',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ]
     ],
     'servicos' => [
@@ -86,12 +83,12 @@ $config = [
         ],
         [
             'field' => 'precoCompra',
-            'label' => 'Preo de Compra',
-            'rules' => 'required|trim',
+            'label' => 'Preço de Compra',
+            'rules' => 'trim',
         ],
         [
             'field' => 'precoVenda',
-            'label' => 'Preo de Venda',
+            'label' => 'Preço de Venda',
             'rules' => 'required|trim',
         ],
         [
@@ -101,7 +98,7 @@ $config = [
         ],
         [
             'field' => 'estoqueMinimo',
-            'label' => 'Estoque Mnimo',
+            'label' => 'Estoque Minimo',
             'rules' => 'trim',
         ]
     ],
@@ -184,15 +181,17 @@ $config = [
         [
             'field' => 'dataFinal',
             'label' => 'DataFinal',
-            'rules' => 'trim|required',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'dataSaida',
+            'label' => 'DataSaida',
+            'rules' => 'trim',
         ],
         [
             'field' => 'garantia',
             'label' => 'Garantia',
-            'rules' => 'trim|numeric',
-            'errors' => [
-                'numeric' => 'Por favor digite apenas número.'
-            ],
+            'rules' => 'trim',
         ],
         [
             'field' => 'termoGarantia',
@@ -228,6 +227,21 @@ $config = [
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
             'rules' => 'trim|required',
+        ],
+        [
+            'field' => 'rastreio',
+            'label' => 'Rastreio',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'marca',
+            'label' => 'Marca',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'serial',
+            'label' => 'Serial',
+            'rules' => 'trim',
         ],
         [
             'field' => 'laudoTecnico',
@@ -358,6 +372,16 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'observacoes',
+            'label' => 'Observacoes',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'obs',
+            'label' => 'Obs',
+            'rules' => 'trim',
+        ],
+        [
             'field' => 'clientes_id',
             'label' => 'clientes',
             'rules' => 'trim|required',
@@ -379,5 +403,103 @@ $config = [
             'label' => 'ID Os',
             'rules' => 'trim|required|integer',
         ]
+    ],
+    'equipamento_os' => [
+        [
+            'field' => 'equipamento',
+            'label' => 'Equipamento',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'modelo',
+            'label' => 'Modelo/Cor',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'num_serie',
+            'label' => 'Nº Série',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'voltagem',
+            'label' => 'Voltagem',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'observacao',
+            'label' => 'Observação',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'os_id',
+            'label' => 'ID Os',
+            'rules' => 'trim|required|integer',
+        ]
+    ],
+    'adicionar_produto_os' => [
+        [
+            'field' => 'idProduto',
+            'label' => 'idProduto',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'quantidade',
+            'label' => 'quantidade',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
+        ],
+        [
+            'field' => 'idOsProduto',
+            'label' => 'idOsProduto',
+            'rules' => 'trim|required|numeric',
+        ],
+    ],
+    'adicionar_servico_os' => [
+        [
+            'field' => 'idServico',
+            'label' => 'idServico',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'quantidade',
+            'label' => 'quantidade',
+            'rules' => 'trim|required|numeric|greater_than[0]',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
+        ],
+        [
+            'field' => 'idOsServico',
+            'label' => 'idOsServico',
+            'rules' => 'trim|required|numeric',
+        ],
+    ],
+    'cobrancas' => [
+        [
+            'field' => 'id',
+            'label' => 'id',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'tipo',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'forma_pagamento',
+            'label' => 'forma_pagamento',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'gateway_de_pagamento',
+            'label' => 'gateway_de_pagamento',
+            'rules' => 'required|trim',
+        ],
     ],
 ];

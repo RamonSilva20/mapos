@@ -54,7 +54,7 @@
                                 } ?>
                             </tbody>
                         </table>
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 50%; padding-left: 0">
@@ -69,7 +69,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="table">
+                        <table class="table_p">
                             <tbody>
                                 <tr>
                                     <td style="width: 100%; padding-left: 0">

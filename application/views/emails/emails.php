@@ -5,10 +5,10 @@
         </span>
         <h5>Lista de envio de e-mails</h5>
     </div>
-    <div class="widget-content nopadding">
-        <table class="table table-bordered ">
+    <div class="widget_box_Painel2">
+        <table id="tabela" class="table table-bordered">
             <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr>
                     <th>Código</th>
                     <th>Para</th>
                     <th>Status</th>
@@ -47,18 +47,18 @@
 </div>
 <?php echo $this->pagination->create_links(); ?>
 <!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-excluir" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?= site_url('mapos/excluirEmail') ?>" method="post">
-        <div class="modal-header">
+        <div class="modal_header_anexos">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir Email da Lista</h5>
+            <h3 id="myModalLabel">Excluir Email da Lista</h3>
         </div>
         <div class="modal-body">
             <input type="hidden" id="idEmail" name="id" value="" />
             <h5 style="text-align: center">Deseja realmente excluir este email da lista de envio?</h5>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Cancelar</button>
             <button class="btn btn-danger">Excluir</button>
         </div>
     </form>

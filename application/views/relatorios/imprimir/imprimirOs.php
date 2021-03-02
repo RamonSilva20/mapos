@@ -18,44 +18,58 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?=isset($topo) ? $topo : ''?>
-                        <div class="widget-title">
-                            <h4 style="text-align: center">
-                                <?=ucfirst($title)?>
-                            </h4>
-                        </div>
-                        <div class="widget-content nopadding">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="padding: 5px;">CLIENTE</th>
-                                        <th style="padding: 5px;">STATUS</th>
-                                        <th style="padding: 5px;">DATA</th>
-                                        <th style="padding: 5px;">DESCRIÇÃO</th>
-                                        <th style="padding: 5px;">TOTAL PRODUTOS</th>
-                                        <th style="padding: 5px;">TOTAL SERVIÇOS</th>
-                                        <th style="padding: 5px;">TOTAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                        foreach ($os as $c) {
-                                            echo '<tr>';
-                                            echo '<td><small>' . $c->nomeCliente . '</small></td>';
-                                            echo '<td><small>' . $c->status . '</small></td>';
-                                            echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
-                                            echo '<td><small>' . $c->descricaoProduto . '</small></td>';
-                                            echo '<td><small>R$ ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
-                                            echo '<td><small>R$ ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
-                                            echo '<td><small>R$ ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
-                                            echo '</tr>';
-                                        }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
+                    <?= $topo ?>
+                    <div class="widget-title">
+                        <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
+                            <?= ucfirst($title) ?>
+                        </h4>
+                    </div>
+                    <div class="widget_content nopadding">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="50" style="font-size: 12px">OS</th>
+                                    <th width="110" style="font-size: 12px">CLIENTE</th>
+                                    <th width="140" style="font-size: 12px">STATUS</th>
+                                    <th width="70" style="font-size: 12px">DATA</th>
+                                    <th width="400" style="font-size: 12px">DESCRIÇÃO</th>
+                                    <th width="100" style="font-size: 12px">TOTAL PRODUTOS</th>
+                                    <th width="100" style="font-size: 12px">TOTAL SERVIÇOS</th>
+                                    <th width="90" style="font-size: 12px">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($os as $c) {
+                                    echo '<tr>';
+                                    echo '<td><small>' . $c->idOs . '</small></td>';
+                                    echo '<td><small>' . $c->nomeCliente . '</small></td>';
+                                    echo '<td><small>' . $c->status . '</small></td>';
+                                    echo '<td><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
+                                    echo '<td><small>' . $c->descricaoProduto . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
+                                    echo '<td><small>R$ ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
+                                    echo '</tr>';
+                                }
+                                ?>
+
+                                <tr>
+                                    <td colspan="8"></td>
+                                </tr>
+
+                                <tr style="background-color: gainsboro;">
+                                    <td colspan="5"></td>
+                                    <td><small>R$ <?= number_format($total_produtos, 2, ',', '.') ?></small></td>
+                                    <td><small>R$ <?= number_format($total_servicos, 2, ',', '.') ?></small></td>
+                                    <td><small>R$ <?= number_format($total_geral, 2, ',', '.') ?></small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <p style="text-align: right">Data do Relatório: <?php echo date('d/m/Y'); ?>
+
+                <h5 style="text-align: right; font-size: 0.8em; padding: 5px;">Data do Relatório: <?php echo date('d/m/Y'); ?>
                 </p>
             </div>
         </div>

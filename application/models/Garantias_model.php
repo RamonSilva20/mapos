@@ -89,7 +89,7 @@ class Garantias_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
@@ -103,7 +103,7 @@ class Garantias_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
@@ -117,7 +117,7 @@ class Garantias_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');

@@ -49,16 +49,17 @@
     </div>
 
     <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
+    
+    <div id="notification" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal_header_login">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 id="myModalLabel">MapOS</h4>
+            <h8 id="myModalLabel"><?= $this->config->item('app_name') ?></h8>
         </div>
         <div class="modal-body">
             <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <div class="modal_footer_login">
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Fechar</button>
         </div>
     </div>
     

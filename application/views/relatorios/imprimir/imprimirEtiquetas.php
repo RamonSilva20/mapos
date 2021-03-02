@@ -16,18 +16,8 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="widget-box">
-					<div class="widget-content nopadding">
+					<div class="widget_box_Painel2">
 						<?php
-                        function limitarTexto($texto, $limite)
-                        {
-                            $contador = strlen($texto);
-                            if ($contador >= $limite) {
-                                $texto = substr($texto, 0, strrpos(substr($texto, 0, $limite), ' ')) . '...';
-                                return $texto;
-                            } else {
-                                return $texto;
-                            }
-                        }
                         if (
                             $this->input->get("etiquetaCode") !== "EAN13" && $this->input->get("etiquetaCode") !== "QR"
                             && $this->input->get("etiquetaCode") !== "UPCA"
@@ -36,27 +26,23 @@
                                 foreach ($produtos as $p) {
                                     for ($i = 0; $p->estoque >  $i++;) {
                                         ?>
-							<div class="detalheProdutoEtiqueta">
-								<div class="descricaoProdutoEtiqueta">
-									<?php $string = strtoupper($p->descricao); ?>
+							<div class="detalheProdutoEtiquetaEan13">
+                                <div class="descricaoProdutoEtiqueta">
+                                <table width="100%" class="table table-condensend">
+                                <tr>
+<td class="textoProdutoEtiqueta" align="left"><b>SKU: <?php echo $p->idProdutos; ?></b></td>
+<td class="textoProdutoEtiqueta" align="right"><b>R$ <?php $precoVenda = str_replace(".", ",", $p->precoVenda); echo $precoVenda; ?></b></td>
+								</tr>
+								</table>
+                                	<?php $string = strtoupper($p->descricao); ?>
 									<div>
-										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
-										</strong>
+                                    <strong>
+                                    <?php print(limitarTexto($string, $limite = 40)); ?>
+                                    </strong>
 									</div>
 								</div>
-								<div class="textoProdutoEtiqueta">Cod:
-									<b>
-										<?php echo $p->idProdutos; ?>
-									</b>
-									<br /> Preço: R$
-									<b>
-										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                        echo $precoVenda; ?>
-									</b>
-								</div>
-								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+                                <div class="barcodecell">
+		<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -66,28 +52,23 @@
                             } else {
                                 foreach ($produtos as $p) {
                                     ?>
-							<div class="detalheProdutoEtiqueta">
-								<div class="descricaoProdutoEtiqueta">
-									<?php $string = strtoupper($p->descricao); ?>
+							<div class="detalheProdutoEtiquetaEan13">
+                                <div class="descricaoProdutoEtiqueta">
+                                <table width="100%" class="table table-condensend">
+                                <tr>
+<td class="textoProdutoEtiqueta" align="left"><b>SKU: <?php echo $p->idProdutos; ?></b></td>
+<td class="textoProdutoEtiqueta" align="right"><b>R$ <?php $precoVenda = str_replace(".", ",", $p->precoVenda); echo $precoVenda; ?></b></td>
+								</tr>
+								</table>
+                                	<?php $string = strtoupper($p->descricao); ?>
 									<div>
-										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
-										</strong>
+                                    <strong>
+                                    <?php print(limitarTexto($string, $limite = 40)); ?>
+                                    </strong>
 									</div>
 								</div>
-								<div class="textoProdutoEtiqueta">Cod:
-									<b>
-										<?php echo $p->idProdutos; ?>
-									</b>
-									<br /> Preço: R$
-									<b>
-										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                    echo $precoVenda; ?>
-									</b>
-								</div>
-
-								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+                                <div class="barcodecell">
+		<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 
@@ -101,26 +82,22 @@
                                     for ($i = 0; $p->estoque >  $i++;) {
                                         ?>
 							<div class="detalheProdutoEtiquetaEan13">
-								<div class="descricaoProdutoEtiqueta">
-									<?php $string = strtoupper($p->descricao); ?>
+                                <div class="descricaoProdutoEtiqueta">
+                                <table width="100%" class="table table-condensend">
+                                <tr>
+<td class="textoProdutoEtiqueta" align="left"><b>SKU: <?php echo $p->idProdutos; ?></b></td>
+<td class="textoProdutoEtiqueta" align="right"><b>R$ <?php $precoVenda = str_replace(".", ",", $p->precoVenda); echo $precoVenda; ?></b></td>
+								</tr>
+								</table>
+                                	<?php $string = strtoupper($p->descricao); ?>
 									<div>
-										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
-										</strong>
+                                    <strong>
+                                    <?php print(limitarTexto($string, $limite = 40)); ?>
+                                    </strong>
 									</div>
 								</div>
-								<div class="textoProdutoEtiqueta">Cod:
-									<b>
-										<?php echo $p->idProdutos; ?>
-									</b>
-									<br /> Preço: R$
-									<b>
-										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                        echo $precoVenda; ?>
-									</b>
-								</div>
-								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+                                <div class="barcodecell">
+		<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -133,27 +110,22 @@
                                 foreach ($produtos as $p) {
                                     ?>
 							<div class="detalheProdutoEtiquetaEan13">
-								<div class="descricaoProdutoEtiqueta">
-									<?php $string = strtoupper($p->descricao); ?>
+                                <div class="descricaoProdutoEtiqueta">
+                                <table width="100%" class="table table-condensend">
+                                <tr>
+<td class="textoProdutoEtiqueta" align="left"><b>SKU: <?php echo $p->idProdutos; ?></b></td>
+<td class="textoProdutoEtiqueta" align="right"><b>R$ <?php $precoVenda = str_replace(".", ",", $p->precoVenda); echo $precoVenda; ?></b></td>
+								</tr>
+								</table>
+                                	<?php $string = strtoupper($p->descricao); ?>
 									<div>
-										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
-										</strong>
+                                    <strong>
+                                    <?php print(limitarTexto($string, $limite = 40)); ?>
+                                    </strong>
 									</div>
 								</div>
-								<div class="textoProdutoEtiqueta">Cod:
-									<b>
-										<?php echo $p->idProdutos; ?>
-									</b>
-									<br /> Preço: R$
-									<b>
-										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                    echo $precoVenda; ?>
-									</b>
-								</div>
-
-								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+                                <div class="barcodecell">
+		<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 

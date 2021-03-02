@@ -15,7 +15,7 @@
                 </span>
                 <h5>Cadastrar Credencial de Pagamento</h5>
             </div>
-            <div class="widget-content">
+            <div class="widget_content">
 
                 <?php if ($custom_error == true) { ?>
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco.</div>
@@ -53,7 +53,7 @@
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset3" style="text-align: center">
                             <button class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Adicionar</button>
-                            <a href="<?php echo base_url() ?>index.php/pagamentos" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                            <a href="<?php echo base_url() ?>index.php/pagamentos" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
                         </div>
                     </div>
                 </form>

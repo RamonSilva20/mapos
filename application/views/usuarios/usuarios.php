@@ -9,9 +9,12 @@
 
     </div>
     <div class="widget-content nopadding">
-        <table class="table table-bordered ">
+    <!--
+    <div class="widget_box_Painel2">
+    -->
+        <table id="tabela" width="100%" class="table_p">
             <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr>
                     <th>#</th>
                     <th>Nome</th>
                     <th>CPF</th>
@@ -30,14 +33,14 @@
                     }
                     foreach ($results as $r) {
                         echo '<tr>';
-                        echo '<td>' . $r->idUsuarios . '</td>';
-                        echo '<td>' . $r->nome . '</td>';
-                        echo '<td>' . $r->cpf . '</td>';
-                        echo '<td>' . $r->telefone . '</td>';
-                        echo '<td>' . $r->permissao . '</td>';
-                        echo '<td>' . $r->dataExpiracao . '</td>';
-                        echo '<td>
-                                <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn btn-info tip-top" title="Editar Usuário"><i class="fas fa-edit"></i></a>
+                        echo '<td><div align="center">' . $r->idUsuarios . '</td>';
+                        echo '<td><div align="center">' . $r->nome . '</td>';
+                        echo '<td><div align="center">' . $r->cpf . '</td>';
+                        echo '<td><div align="center">' . $r->telefone . '</td>';
+                        echo '<td><div align="center">' . $r->permissao . '</td>';
+                        echo '<td><div align="center">' . $r->dataExpiracao . '</td>';
+                        echo '<td><div align="center">
+						<a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn btn-info tip-top" title="Editar Usuário"><i class="fas fa-edit"></i></a>
                                 </td>';
                         echo '</tr>';
                     } ?>

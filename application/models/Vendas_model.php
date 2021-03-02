@@ -1,4 +1,8 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+use Piggly\Pix\Payload;
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -36,10 +40,23 @@ class Vendas_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone, usuarios.email as emailUser, usuarios.nome');
+        $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
+        $this->db->where('vendas.idVendas', $id);
+        $this->db->limit(1);
+        return $this->db->get()->row();
+    }
+
+    public function getByIdCobrancas($id)
+    {
+        $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome, usuarios.nome, cobrancas.vendas_id,cobrancas.idCobranca,cobrancas.status');
+        $this->db->from('vendas');
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('cobrancas', 'cobrancas.vendas_id = vendas.idVendas');
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
@@ -55,6 +72,13 @@ class Vendas_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function getCobrancas($id = null)
+    {
+        $this->db->select('cobrancas.*');
+        $this->db->from('cobrancas');
+        $this->db->where('vendas_id', $id);
+        return $this->db->get()->result();
+    }
     
     public function add($table, $data, $returnId = false)
     {
@@ -100,7 +124,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
@@ -114,7 +138,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
@@ -122,13 +146,16 @@ class Vendas_model extends CI_Model
                 $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
             }
             echo json_encode($row_set);
+        } else {
+            $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
+            echo json_encode($row_set);
         }
     }
 
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit($this->data['configuration']['per_page']);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
@@ -138,6 +165,41 @@ class Vendas_model extends CI_Model
             }
             echo json_encode($row_set);
         }
+    }
+
+    public function getQrCode($id, $pixKey, $emitente)
+    {
+        if (empty($id) || empty($pixKey) || empty($emitente)) {
+            return;
+        }
+
+        $produtos = $this->getProdutos($id);
+        $totalProdutos = array_reduce(
+            $produtos,
+            function ($carry, $produto) {
+                return $carry + ($produto->quantidade * $produto->preco);
+            },
+            0
+        );
+        $amount = round(floatval($totalProdutos), 2);
+
+        if ($amount <= 0) {
+            return;
+        }
+
+        $pix = (new Payload())
+            ->applyValidCharacters()
+            ->applyUppercase()
+            ->applyEmailWhitespace()
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade)
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf("%s - Pagamento - Venda %s", $emitente->nome, $id))
+            ->setAsReusable(false);
+
+        return $pix->getQRCode();
     }
 }
 

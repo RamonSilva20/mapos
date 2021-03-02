@@ -140,7 +140,7 @@ $totalProdutos = 0; ?>
                             <td style="text-align: right">
                                 <?= $emitente[0]->nome; ?> <br>
                                 Responsável: <?= $result->nome ?><br>
-                                <?= $result->email_responsavel ?>
+                                <?= $result->email_usuario ?>
                             </td>
                         </tr>
                     </table>
@@ -210,7 +210,7 @@ $totalProdutos = 0; ?>
             <?php if ($result->laudoTecnico) { ?>
                 <tr class="heading">
                     <td colspan="4">
-                        <b>Laudo Técnico</b>
+                        <b>Relatório Técnico</b>
                     </td>
                 </tr>
                 <tr>

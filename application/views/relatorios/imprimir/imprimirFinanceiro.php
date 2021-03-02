@@ -14,28 +14,29 @@
 </head>
 
 <body style="background-color: transparent">
-
     <div class="container-fluid">
-
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="widget-box">
+                    <?= $topo ?>
                     <div class="widget-title">
-                        <h4 style="text-align: center">Relatório Financeiro</h4>
+                        <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
+                            <?= ucfirst($title) ?>
+                        </h4>
                     </div>
-                    <div class="widget-content nopadding">
+                    <div class="widget_content nopadding">
 
-                        <table class="table table-bordered">
+                        <table width="1200" class="table_v">
                             <thead>
                                 <tr>
-                                    <th style="font-size: 1.2em; padding: 5px;">Cliente/Fornecedor</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Tipo</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Valor</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Vencimento</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Pagamento</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Forma de Pagamento</th>
-                                    <th style="font-size: 1.2em; padding: 5px;">Situação</th>
+                                	<th width="170" style="font-size: 15px">Cliente/Fornecedor</th>
+                                	<th width="355" style="font-size: 15px">Descrição</th>
+                                    <th width="80" style="font-size: 15px">Tipo</th>
+                                    <th width="110" style="font-size: 15px">Valor</th>
+                                    <th width="110" style="font-size: 15px">Entrada</th>
+                                    <th width="110" style="font-size: 15px">Pagamento</th>
+                                    <th width="180" style="font-size: 15px">Forma de Pagamento</th>
+                                    <th width="85" style="font-size: 15px">Situação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,9 +58,10 @@
                                             $totalDespesa += $l->valor;
                                         }
                                         echo '<tr>';
-                                        echo '<td>' . $l->cliente_fornecedor . '</td>';
+										echo '<td>' . $l->cliente_fornecedor . '</td>';
+                                        echo '<td>' . $l->descricao . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
-                                        echo '<td>' . $l->valor . '</td>';
+                                        echo '<td>R$: ' . $l->valor . '</td>';
                                         echo '<td>' . $vencimento . '</td>';
                                         echo '<td>' . $pagamento . '</td>';
                                         echo '<td>' . $l->forma_pgto . '</td>';
@@ -70,30 +72,30 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5" style="text-align: right; color: green">
+                                    <td colspan="6" style="text-align: right; color: green">
                                         <strong>Total Receitas:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left; color: green">
+                                    <td colspan="3" style="text-align: left; color: green">
                                         <strong>R$
                                             <?php echo number_format($totalReceita, 2, ',', '.') ?>
                                         </strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" style="text-align: right; color: red">
+                                    <td colspan="6" style="text-align: right; color: red">
                                         <strong>Total Despesas:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left; color: red">
+                                    <td colspan="3" style="text-align: left; color: red">
                                         <strong>R$
                                             <?php echo number_format($totalDespesa, 2, ',', '.') ?>
                                         </strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" style="text-align: right">
+                                    <td colspan="6" style="text-align: right">
                                         <strong>Saldo:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left;">
+                                    <td colspan="3" style="text-align: left;">
                                         <strong>R$
                                             <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?>
                                         </strong>
@@ -103,7 +105,7 @@
                         </table>
                     </div>
                 </div>
-                <h5 style="text-align: right">Data do Relatório:
+                <h5 style="text-align: right; font-size: 0.8em; padding: 5px;">Data do Relatório:
                     <?php echo date('d/m/Y'); ?>
                 </h5>
 

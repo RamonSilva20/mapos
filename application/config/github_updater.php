@@ -4,13 +4,14 @@
 
 /**
 * The user name of the git hub user who owns the repo
+* https://api.github.com/repos/hoshikawakun/MasterOS/releases
 */
-$config['github_user'] = 'RamonSilva20';
+$config['github_user'] = 'hoshikawakun';
 
 /**
 * The repo on GitHub we will be updating from
 */
-$config['github_repo'] = 'mapos';
+$config['github_repo'] = 'MasterOS';
 
 /**
 * The branch to update from
@@ -23,7 +24,7 @@ $config['github_branch'] = 'master';
 * NOTE: You should only need to set this initially it will be
 * automatically set by the library after subsequent updates.
 */
-$config['current_commit'] = '53d35385917658bab3e048622325429d993f00de';
+$config['current_commit'] = '9f7c50f0c410980be8db3d01e1825e963e081247';
 
 /**
 * A list of files or folders to never perform an update on.
@@ -36,7 +37,6 @@ $config['current_commit'] = '53d35385917658bab3e048622325429d993f00de';
 * and any other path with the term 'admin' in it.
 */
 $config['ignored_files'] = [
-    'application/config',
     'application/database',
     'application/email',
 ];

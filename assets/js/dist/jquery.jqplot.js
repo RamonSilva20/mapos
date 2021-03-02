@@ -1536,7 +1536,7 @@
         this.drawGridlines = true;
         // prop: gridLineColor
         // color of the grid lines.
-        this.gridLineColor = '#cccccc';
+        this.gridLineColor = '#bbbbbb';
         // prop: gridLineWidth
         // width of the grid lines.
         this.gridLineWidth = 1.0;
@@ -8186,7 +8186,7 @@
      * >     }],
      * >     grid: {
      * >         drawGridlines: true,
-     * >         gridLineColor: "#cccccc",
+     * >         gridLineColor: "#bbbbbb",
      * >         gridLineWidth: 1,
      * >         backgroundColor: "#fffdf6",
      * >         borderColor: "#999999",

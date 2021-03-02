@@ -27,6 +27,7 @@ class Pagamentos extends MY_Controller
 
     public function gerenciar()
     {
+
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPagamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar Credencial de Pagamento.');
             redirect(base_url());
@@ -46,6 +47,7 @@ class Pagamentos extends MY_Controller
 
     public function adicionar()
     {
+
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPagamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar Pagamentos.');
             redirect(base_url());
@@ -57,7 +59,8 @@ class Pagamentos extends MY_Controller
         if ($this->form_validation->run('pagamentos') == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
-            $data = [
+
+            $data = array(
                 'nome' => $this->input->post('nomePag'),
                 'public_key' => $this->input->post('publicKey'),
                 'access_token' => $this->input->post('accessToken'),
@@ -65,13 +68,14 @@ class Pagamentos extends MY_Controller
                 'client_secret' => $this->input->post('clientSecret'),
                 'default_pag' => (isset($_POST['default_pag'])) ? true : false,
 
-            ];
+            );
 
             if (is_numeric($id = $this->pagamentos_model->add('pagamento', $data, true))) {
                 log_info('Adicionou um pagamento');
                 $this->session->set_flashdata('success', 'Pagamento adicionado com sucesso.');
                 redirect('pagamentos/editar/' . $id);
             } else {
+
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
@@ -82,6 +86,7 @@ class Pagamentos extends MY_Controller
 
     public function editar()
     {
+
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -98,7 +103,8 @@ class Pagamentos extends MY_Controller
         if ($this->form_validation->run('pagamentos') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = [
+
+            $data = array(
                 'nome' => $this->input->post('nomePag'),
                 'client_id' => $this->input->post('clientId'),
                 'client_secret' => $this->input->post('clientSecret'),
@@ -106,7 +112,7 @@ class Pagamentos extends MY_Controller
                 'access_token' => $this->input->post('accessToken'),
                 'default_pag' => (isset($_POST['default_pag'])) ? true : false,
 
-            ];
+            );
 
             if ($this->pagamentos_model->edit('pagamento', $data, 'idPag', $this->input->post('idPag')) == true) {
                 $this->session->set_flashdata('success', 'Credencial de Pagamento editada com sucesso!');
@@ -124,6 +130,7 @@ class Pagamentos extends MY_Controller
 
     public function visualizar()
     {
+
         if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -144,6 +151,7 @@ class Pagamentos extends MY_Controller
 
     public function excluir()
     {
+
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dPagamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir Credencial de Pagamento');
             redirect(base_url());
@@ -152,15 +160,18 @@ class Pagamentos extends MY_Controller
         $ID = $this->input->post('idPag');
 
         if ($ID == null) {
+
             $this->session->set_flashdata('error', 'Erro ao tentar excluir credencial de pagamento.' . $ID);
             redirect(site_url('pagamentos/gerenciar/'));
         }
 
         if ($this->pagamentos_model->delete('pagamento', 'idPag', $ID) == true) {
+
             $this->pagamentos_model->delete('pagamento', 'idPag', $ID);
             $this->session->set_flashdata('success', 'Credencial de Pagamento excluída com sucesso!');
             log_info('Removeu uma credencial de pagamento. ID: ' . $ID);
         } else {
+
             $this->session->set_flashdata('error', 'Você não pode excluir essa Credencial de Pagamento.');
         }
 

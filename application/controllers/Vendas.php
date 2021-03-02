@@ -69,7 +69,7 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
-                'clientes_id' => $this->input->post('clientes_id'),
+				'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0,
             ];
@@ -116,6 +116,7 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
+				'observacoes' => $this->input->post('observacoes'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
@@ -152,10 +153,20 @@ class Vendas extends MY_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['modalGerarPagamento'] = $this->load->view(
+            'cobrancas/modalGerarPagamento',
+            [
+                'id' => $this->uri->segment(3),
+                'tipo' => 'venda',
+            ],
+            true
+        );
 
         $this->data['view'] = 'vendas/visualizarVenda';
+
         return $this->layout();
     }
+
 
     public function imprimir()
     {
@@ -174,6 +185,11 @@ class Vendas extends MY_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->vendas_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente'][0]
+        );
 
         $this->load->view('vendas/imprimirVenda', $this->data);
     }
@@ -195,7 +211,11 @@ class Vendas extends MY_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-
+		$this->data['qrCode'] = $this->vendas_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente'][0]
+        );
         $this->load->view('vendas/imprimirVendaTermica', $this->data);
     }
 
@@ -206,16 +226,33 @@ class Vendas extends MY_Controller
             redirect(base_url());
         }
 
+        $this->load->model('vendas_model');
+
         $id = $this->input->post('id');
-        if ($id == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
-            redirect(site_url('vendas/gerenciar/'));
+        $venda = $this->vendas_model->getByIdCobrancas($id);
+        if ($venda == null) {
+            $venda = $this->vendas_model->getById($id);
+            if ($venda == null) {
+                $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
+                redirect(site_url('vendas/gerenciar/'));
+            }
         }
 
-        $this->load->model('vendas_model');
+
+        if ($venda->idCobranca != null) {
+            if ($venda->status == "canceled") {
+                $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
+            } else {
+                $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta venda, deve cancelar e/ou excluir a cobrança primeiro!');
+                redirect(site_url('vendas/gerenciar/'));
+            }
+        }
 
         $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
         $this->vendas_model->delete('vendas', 'idVendas', $id);
+        if ((int) $venda->faturado === 1) {
+            $this->vendas_model->delete('lancamentos', 'descricao', "Fatura de Venda - #${id}");
+        }
 
         log_info('Removeu uma venda. ID: ' . $id);
 
@@ -276,7 +313,7 @@ class Vendas extends MY_Controller
 
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
                 $this->load->model('produtos_model');
-                
+
                 if ($this->data['configuration']['control_estoque']) {
                     $this->produtos_model->updateEstoque($produto, $quantidade, '-');
                 }
@@ -303,7 +340,7 @@ class Vendas extends MY_Controller
             $produto = $this->input->post('produto');
 
             $this->load->model('produtos_model');
-            
+
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
@@ -351,10 +388,11 @@ class Vendas extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
-                'baixado' => $this->input->post('recebido'),
+                'baixado' => $this->input->post('recebido') == 1 ? true : false,
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
             if ($this->vendas_model->add('lancamentos', $data) == true) {

@@ -17,32 +17,21 @@
 /* ===========================> ACTIVE <=========================== */
 
 /* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li.active a{
-    background-color: #7BCAE1;
-}
+#sidebar > ul li ul li.active a{background-color: #7BCAE1;}
 
 /* MENUS LATERAIS*/
-#sidebar > ul > li.active{
-    background-color: rgba(79, 176, 241, 0.548);
-}
+#sidebar > ul > li.active{background-color: rgba(79, 176, 241, 0.548);}
 
 /* ITENS ATIVOS */
-#sidebar > ul > li.active a{
-    color:black;
-}  
+#sidebar > ul > li.active a{color:black;}  
 
 /* ===========================> HOVERS <=========================== */
 
 /*MENUS LATERAIS*/
-#sidebar > ul > li > a:hover{
-    background-color: #27a9e3;
-    color: #fff;
-}
+#sidebar > ul > li > a:hover{background-color: #27a9e3;color: #fff;}
 
 /* ICONES DE VISUALIZAR */
-.visualizar:hover{
-    background-color: #548B54;
-}
+.visualizar:hover{background-color: #548B54;}
 
 /* INPUT DE BUSCA NA PÁGINA */
 #search input:hover[type=text]{
@@ -54,29 +43,19 @@
 }
 
 /* LINHA */
-li:hover{
-    color:#666;
-}
+li:hover{ color:#666;}
 
 /* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li a:hover{
-    background-color: #7BCAE1;
-}
+#sidebar > ul li ul li a:hover{background-color: #7BCAE1;}
 
 /* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/
-#user-nav > ul > li > a:hover{
-    background-color: #7BCAE1;
-}
+#user-nav > ul > li > a:hover{background-color: #7BCAE1;}
 
 /* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > a > .label:hover{
-    background-color: #ffffff;
-}
+#sidebar > ul > li > a > .label:hover{background-color: #ffffff;}
 
 /*ITENS DO DASHBOARD - ICONES*/
-.quick-actions li a:hover {
-    border-radius: 5px;
-}
+.quick-actions li a:hover {border-radius: 5px;}
 
 /* ===========================> CSS NORMAL <=========================== */
 
@@ -167,7 +146,7 @@ body{
     border-bottom: none;
     border-left: 1px solid;
     border-right: none;
-    border-color: #E8E8E8;
+    border-color: #D0D0D0;
 }
 
 /* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
@@ -207,3 +186,13 @@ body{
     background-color: #7CCD7C;
 }
 
+/* Responsive design */
+@media (max-width: 480px) {
+    #user-nav {
+        border-top:1px solid #D0D0D0;
+        background:#FFF;
+    }
+    #sidebar > ul li span {
+        color:#000;
+    }
+}

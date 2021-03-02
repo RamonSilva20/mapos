@@ -59,7 +59,7 @@ class Arquivos extends MY_Controller
             $this->data['results'] = $this->arquivos_model->search($pesquisa, $de, $ate);
         }
 
-        $this->data['view'] = 'arquivos/arquivos';
+        $this->data['view'] = $this->data['configuration']['gerenciador_arquivos'];
         return $this->layout();
     }
 
@@ -117,7 +117,7 @@ class Arquivos extends MY_Controller
             }
         }
 
-        $this->data['view'] = 'arquivos/adicionarArquivo';
+        $this->data['view'] = 'arquivos_old/adicionarArquivo';
         return $this->layout();
     }
 
@@ -164,7 +164,7 @@ class Arquivos extends MY_Controller
         }
 
         $this->data['result'] = $this->arquivos_model->getById($this->uri->segment(3));
-        $this->data['view'] = 'arquivos/editarArquivo';
+        $this->data['view'] = 'arquivos_old/editarArquivo';
         return $this->layout();
     }
 
@@ -223,11 +223,10 @@ class Arquivos extends MY_Controller
         $date = date('d-m-Y');
 
         $config['upload_path'] = './assets/arquivos/' . $date;
-        $config['allowed_types'] = 'txt|jpg|jpeg|gif|png|pdf|PDF|JPG|JPEG|GIF|PNG';
+        $config['allowed_types'] = '*';
         $config['max_size'] = 0;
-        $config['max_width'] = '3000';
-        $config['max_height'] = '2000';
-        $config['encrypt_name'] = true;
+        $config['remove_space'] = true;
+		$config['encrypt_name'] = false;
 
         if (!is_dir('./assets/arquivos/' . $date)) {
             mkdir('./assets/arquivos/' . $date, 0777, true);
