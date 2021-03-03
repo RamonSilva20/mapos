@@ -82,7 +82,7 @@
                             $dataFinal = "";
                         }
 
-                        if ($this->input->get('pesquisa') !== '' && $r->status === "Faturado") {
+                        if ($this->input->get('pesquisa') !== '' && $r->status === "Finalizado") {
                             continue;
                         }
 
