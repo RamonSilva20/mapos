@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.2] - 2021-02-13
+
+### Fixed
+- Alterado a listagem de OS para ocultar por padrão as finalizadas em vez das faturadas. [@bulfaitelo](https://github.com/bulfaitelo)
+
 ## [4.31.1] - 2021-02-13
 
 ### Fixed
