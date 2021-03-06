@@ -91,6 +91,11 @@
                             } else {
                                 $dataFinal = "";
                             }
+							/*
+							if ($this->input->get('pesquisa') === null && $r->status === "Faturado") {
+                            continue;
+							}
+							*/
                             switch ($r->status) {
 				case 'Orçamento':
                     $cor = '#CCCC00';
