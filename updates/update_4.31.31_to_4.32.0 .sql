@@ -1,0 +1,1 @@
+INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES (NULL, 'os_status_list', NULL);
