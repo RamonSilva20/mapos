@@ -189,7 +189,7 @@ class Mapos extends MY_Controller
             $telefone = $this->input->post('telefone');
             $email = $this->input->post('email');
             $image = $this->do_upload();
-            $logo = base_url() . 'assets/uploads/' . $image;
+            $logo = 'assets/uploads/' . $image;
 
             $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
@@ -266,7 +266,7 @@ class Mapos extends MY_Controller
         delete_files(FCPATH . 'assets/uploads/');
 
         $image = $this->do_upload();
-        $logo = base_url() . 'assets/uploads/' . $image;
+        $logo = 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
@@ -345,6 +345,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
         $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
         $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
+        $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required', array('required' => 'Selecione ao menos uma das opções!'));
         $this->form_validation->set_rules('pix_key', 'Chave Pix', 'trim|valid_pix_key', [
             'valid_pix_key' => 'Chave Pix inválida!',
         ]);
