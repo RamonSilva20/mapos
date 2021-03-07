@@ -189,7 +189,7 @@ class Mapos extends MY_Controller
             $telefone = $this->input->post('telefone');
             $email = $this->input->post('email');
             $image = $this->do_upload();
-            $logo = 'assets/uploads/' . $image;
+            $logo = base_url() . 'assets/uploads/' . $image;
 
             $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
@@ -266,7 +266,7 @@ class Mapos extends MY_Controller
         delete_files(FCPATH . 'assets/uploads/');
 
         $image = $this->do_upload();
-        $logo = 'assets/uploads/' . $image;
+        $logo = base_url() . 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
