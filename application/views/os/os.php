@@ -82,10 +82,9 @@
                             $dataFinal = "";
                         }
 
-                        if ($this->input->get('pesquisa') !== '' && $r->status === "Faturado") {
+                        if ($this->input->get('pesquisa') === null && $r->status === "Faturado") {
                             continue;
                         }
-
                         switch ($r->status) {
                             case 'Aberto':
                                 $cor = '#00cd00';
