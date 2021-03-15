@@ -345,6 +345,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
         $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
         $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
+        $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required|trim', array('required' => 'Selecione ao menos uma das opções!'));
         $this->form_validation->set_rules('pix_key', 'Chave Pix', 'trim|valid_pix_key', [
             'valid_pix_key' => 'Chave Pix inválida!',
         ]);
@@ -363,6 +364,7 @@ class Mapos extends MY_Controller
                 'control_editos' => $this->input->post('control_editos'),
                 'control_datatable' => $this->input->post('control_datatable'),
                 'pix_key' => $this->input->post('pix_key'),
+                'os_status_list' => json_encode($this->input->post('os_status_list')),                
             ];
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
