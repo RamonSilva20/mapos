@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.32.0] - 2021-03-07
+
+### Added
+- Criada uma forma configurável de como o padrão básico de exibição da listagem de OS.[@bulfaitelo](https://github.com/bulfaitelo)
 ## [4.31.1] - 2021-02-13
 
 ### Fixed
