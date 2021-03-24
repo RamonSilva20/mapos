@@ -261,7 +261,7 @@ $periodo = $this->input->get('periodo');
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success">Adicionar Receita</button>
+            <button class="btn btn-success" id="submitReceita">Adicionar Receita</button>
         </div>
     </form>
 </div>
@@ -338,7 +338,7 @@ $periodo = $this->input->get('periodo');
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Adicionar Despesa</button>
+            <button class="btn btn-danger" id="submitDespesa">Adicionar Despesa</button>
         </div>
     </form>
 </div>
@@ -512,6 +512,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitReceita").attr("disabled", true);
+                form.submit();
             }
         });
 
@@ -545,6 +549,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitDespesa").attr("disabled", true);
+                form.submit();
             }
         });
 
