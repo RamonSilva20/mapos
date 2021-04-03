@@ -8,6 +8,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 - Adequação para usar versão de PHP 7.4 fixa em docker e correção no comando de instalação do composer em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para usar submit handler para evitar que lançamentos financeiros sejam duplicados. [@bietez](https://github.com/bietez)
 
 ## [4.32.0] - 2021-03-23
 
