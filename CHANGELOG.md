@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.32.1] - 2021-03-27
+
+### Fixed
+- Adequação para usar versão de PHP 7.4 fixa em docker e correção no comando de instalação do composer em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.32.0] - 2021-03-23
 
 ### Added
