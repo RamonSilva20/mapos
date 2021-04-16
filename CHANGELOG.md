@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.32.2] - 2021-04-16
+### Changed
+- Alteradas as cores dos gráficos do painel para melhor entendimento e leitura dos gráficos e adicionado comentário nas linhas para que os usuários possam alterar as cores mais facilmente. [@mikxingu](https://github.com/mikxingu)
+
 ## [4.32.1] - 2021-03-27
 
 ### Fixed
