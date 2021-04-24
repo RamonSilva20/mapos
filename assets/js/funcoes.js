@@ -1,4 +1,5 @@
 $(function () {
+    $("#celular").mask("(00)00000-0000")
     $("#cep").mask("00000-000")
     $('#cpfUser').mask('000.000.000-00', { reverse: true });
     $('.cnpjEmitente').mask('00.000.000/0000-00', { reverse: true });
@@ -14,24 +15,28 @@ $(function () {
     if ($('.cpfUser').val() != null) {
         var cpfUser = $('.cpfUser').val().length;
         if (cpfUser == "14") {
-            $(".cpfUser").prop(true);
+            $(".cpfUser").prop('readonly', true);
         }
     }
 
 });
 
 $(function () {
-    // INICIO FUNÇÃO DE MASCARA TELEFONE
-    var telefoneMascara = function (val) {
-        return val.replace(/\D/g, '').length > 10 ? '(00) 00000-0000' : '(00) 0000-00009';
+    var telefoneN = function (val) {
+        return val.replace(/\D/g, '').length > 10 ? '(00)00000-0000' : '(00)0000-00009';
     },
         telefoneOptions = {
             onKeyPress: function (val, e, field, options) {
-                field.mask(telefoneMascara.apply({}, arguments), options);
-            }
+                field.mask(telefoneN.apply({}, arguments), options);
+            },
         };
-    $('.telefone1').mask(telefoneMascara, telefoneOptions);
-    // FIM FUNÇÃO DE MASCARA TELEFONE	
+    $('#telefone').mask(telefoneN, telefoneOptions);
+    $('#telefone').on('paste', function (e) {
+        e.preventDefault();
+        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+        $('#telefone').val(clipboardCurrentData);
+    });
+
 });
 
 $(function () {
@@ -271,7 +276,7 @@ $(document).ready(function () {
                 $("#estado").val("...");
 
                 //Consulta o webservice viacep.com.br/
-                $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                $.getJSON("https://viacep.com.br/ws/" + cep.replace(/\./g, '') + "/json/?callback=?", function (dados) {
 
                     if (!("erro" in dados)) {
                         //Atualiza os campos com os valores da consulta.

@@ -11,7 +11,7 @@
                 </span>
                 <h5>Editar Usuário</h5>
             </div>
-            <div class="widget_box_Painel2">
+            <div class="widget-content nopadding tab-content">
                 <?php if ($custom_error != '') {
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
@@ -30,25 +30,24 @@
                             <input id="rg" type="text" name="rg" value="<?php echo $result->rg; ?>" />
                         </div>
                     </div>
-                    
-                  <div class="control-group">
+
+                    <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input name="cpf" type="text" class="cpfcnpj" value="<?php echo $result->cpf; ?>" />
-                      </div>
+                            <input class="cpfUser" type="text" name="cpf" value="<?php echo $result->cpf; ?>"/>
+                        </div>
                     </div>
-                    
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" class="telefone1" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
+                            <input id="telefone" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="celular" class="control-label">Telefone 2</label>
+                        <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
-                            <input id="celular" class="telefone1" type="text" name="celular" value="<?php echo $result->celular; ?>" />
+                            <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>" />
                         </div>
                     </div>
 
@@ -152,9 +151,13 @@
                         </div>
                     </div>
 
-                    <div class="form_actions" align="center">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
+                    <div class="form-actions">
+                        <div class="span12">
+                            <div class="span6 offset3">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                            </div>
+                        </div>
                     </div>
 
 

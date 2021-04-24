@@ -71,8 +71,6 @@ class Clientes extends MY_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-				'foto_url' => set_value('foto_url'),
-				'senha' => set_value('senha'),
                 'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
             ];
 
@@ -121,8 +119,6 @@ class Clientes extends MY_Controller
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
-				'foto_url' => $this->input->post('foto_url'),
-				'senha' => $this->input->post('senha'),
                 'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
             ];
 

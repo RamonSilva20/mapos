@@ -11,7 +11,7 @@
                 </span>
                 <h5>Editar Meus Dados</h5>
             </div>
-            <div class="widget_box_Painel2">
+            <div class="widget-content nopadding tab-content">
 
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                     <div class="control-group">
@@ -27,27 +27,21 @@
 } ?>
                         <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
-                            <input name="documento"  type="text" class="cpfcnpj" id="documento" value="<?php echo $result->documento; ?>" readonly="readonly" />
+                            <input id="documento" class="cpfcnpjmine" type="text" name="documento" value="<?php echo $result->documento; ?>" />
                             <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="senha" type="text" name="senha" value="<?php echo $result->senha; ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" class="telefone1" name="telefone" value="<?php echo $result->telefone; ?>" />
+                            <input id="telefone" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="celular" class="control-label">Telefone 2</label>
+                        <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
-                            <input id="celular" type="text" class="telefone1" name="celular" value="<?php echo $result->celular; ?>" />
+                            <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>" />
                         </div>
                     </div>
 
@@ -110,7 +104,7 @@
                         <div class="span12">
                             <div class="span6 offset3">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
+                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                             </div>
                         </div>
                     </div>

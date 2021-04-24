@@ -26,7 +26,7 @@ $totalProdutos = 0; ?>
                 <div class="invoice-content">
                     <div class="invoice-head" style="margin-bottom: 0">
 
-                        <table class="table_p">
+                        <table class="table">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
 

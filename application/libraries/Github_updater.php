@@ -86,7 +86,9 @@ class Github_updater
                     if (!$this->_is_ignored($file->filename)) {
                         // If the status is removed then delete the file
                         if ($file->status === 'removed') {
-                            unlink($file->filename);
+                            if (file_exists($file->filename)) {
+                                unlink($file->filename);
+                            }
                         }
                         // Otherwise copy the file from the update.
                         else {
@@ -207,7 +209,9 @@ class Github_updater
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['User-Agent: Mapos']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'User-Agent: Mapos'
+        ]);
 
         $response = curl_exec($ch);
 
@@ -238,7 +242,7 @@ class Github_updater
         );
 
         if (!$branchToUpdateFrom) {
-            throw new Exception('O ramo a ser atualizado no GitHub não existe!');
+            throw new Exception('The branch to update from GitHub does not exist!');
         }
 
         return $branchToUpdateFrom->commit->sha;
@@ -255,10 +259,10 @@ class Github_updater
             $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/releases/latest')
         );
 
-        $version = $latestRelease->name;
+        $version = $latestRelease->tag_name;
 
         if (!$version) {
-            throw new Exception('Erro ao obter a versão do MasterOS no GitHub!');
+            throw new Exception('Error getting mapos version from GitHub!');
         }
 
         return str_replace("v", "", $version);
@@ -274,7 +278,8 @@ class Github_updater
     {
         $whereIsCommand = (PHP_OS == 'WINNT') ? 'where' : 'which';
 
-        $process = proc_open("$whereIsCommand $command",
+        $process = proc_open(
+            "$whereIsCommand $command",
             [
                 0 => ["pipe", "r"], //STDIN
                 1 => ["pipe", "w"], //STDOUT
@@ -311,8 +316,8 @@ class Github_updater
                 continue;
             }
 
-            if (!$this->deleteDirectory($dir/$item)) {
-                return true;
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
             }
         }
 

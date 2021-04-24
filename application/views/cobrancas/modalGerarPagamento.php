@@ -10,7 +10,7 @@
     <div class="modal-dialog" role="document">
         <form id="form-gerar-cobranca" name="cobranca" method="post" action="<?php echo base_url() . 'index.php/cobrancas/adicionar'; ?>">
             <div class="modal-content">
-                <div class="modal_header_anexos">
+                <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" >Escolher Forma de Pagamento</h4>
                 </div>

@@ -20,24 +20,22 @@
                 <div class="widget-box">
                     <?= $topo ?>
                     <div class="widget-title">
-                        <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
-                        </h4>
+                        <h4 style="text-align: center">Produtos</h4>
                     </div>
-                    <div class="widget_content nopadding">
-                        <table class="table_v">
+                    <div class="widget-content nopadding tab-content">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th width="80" style="font-size: 15px">ID Cliente</th>
-                                    <th width="170" style="font-size: 15px">Nome Cliente</th>
-                                    <th width="80" style="font-size: 15px">ID Produto</th>
-                                    <th width="355" style="font-size: 15px">Descrição Produto</th>
-                                    <th width="80" style="font-size: 15px">Quantidade</th>
-                                    <th width="80" style="font-size: 15px">ID Relacionado</th>
-                                    <th width="110" style="font-size: 15px">Data</th>
-                                    <th width="110" style="font-size: 15px">Preço Unitário</th>
-                                    <th width="110" style="font-size: 15px">Preço Total</th>
-                                    <th width="80" style="font-size: 15px">Origem</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">ID Cliente</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Nome Cliente</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">ID Produto</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Descrição Produto</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Quantidade</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">ID Relacionado</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Data</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Preço Unitário</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Preço Total</th>
+                                    <th style="font-size: 1.2em; padding: 5px;">Origem</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +60,7 @@
                     </div>
                 </div>
 
-                <h5 style="text-align: right; font-size: 0.8em; padding: 5px;">Data do Relatório: <?php echo date('d/m/Y'); ?>
+                <h5 style="text-align: right">Data do Relatório: <?php echo date('d/m/Y'); ?>
                 </h5>
             </div>
         </div>

@@ -120,10 +120,6 @@ class Os extends MY_Controller
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => set_value('defeito'),
-                'dataSaida' => set_value('dataSaida'),
-                'rastreio' => set_value('rastreio'),
-                'marca' => set_value('marca'),
-                'serial' => set_value('serial'),
                 'status' => set_value('status'),
                 'observacoes' => set_value('observacoes'),
                 'laudoTecnico' => set_value('laudoTecnico'),
@@ -216,10 +212,6 @@ class Os extends MY_Controller
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'dataSaida' => set_value('dataSaida'),
-                'rastreio' => set_value('rastreio'),
-                'marca' => set_value('marca'),
-                'serial' => set_value('serial'),
                 'status' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
@@ -278,8 +270,8 @@ class Os extends MY_Controller
         }
 
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
-		$this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
@@ -318,7 +310,6 @@ class Os extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
@@ -355,7 +346,6 @@ class Os extends MY_Controller
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['qrCode'] = $this->os_model->getQrCode(
             $this->uri->segment(3),
@@ -383,45 +373,10 @@ class Os extends MY_Controller
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-		$this->data['qrCode'] = $this->os_model->getQrCode(
-            $this->uri->segment(3),
-            $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
-        );
+
         $this->load->view('os/imprimirOsTermica', $this->data);
     }
-	
-	public function imprimirTermica2()
-    {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
-            redirect(base_url());
-        }
-
-        $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
-        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
-		$this->data['qrCode'] = $this->os_model->getQrCode(
-            $this->uri->segment(3),
-            $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
-        );
-
-        $this->load->view('os/imprimirOsTermica2', $this->data);
-    }
-
-    
 
     public function enviar_email()
     {
@@ -445,7 +400,6 @@ class Os extends MY_Controller
 
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$this->data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         if (!isset($this->data['emitente'][0]->email)) {
@@ -491,7 +445,7 @@ class Os extends MY_Controller
                     redirect(site_url('os/visualizar/').$this->uri->segment(3));
                 }
             }
-           
+
             $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
 
             if ($enviouEmail) {
@@ -578,14 +532,6 @@ class Os extends MY_Controller
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteCliente($q);
-        }
-    }
-
-    public function autoCompleteClienteOs()
-    {
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteClienteOs($q);
         }
     }
 
@@ -762,7 +708,7 @@ class Os extends MY_Controller
 
         $upload_conf = [
             'upload_path' => $directory,
-            'allowed_types' => '*', // formatos permitidos para anexos de os
+            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
             'max_size' => 0,
         ];
 
@@ -794,8 +740,8 @@ class Os extends MY_Controller
 
                         'source_image' => $upload_data['full_path'],
                         'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $upload_data['file_name'],
-                        'width' => 250,
-                        'height' => 175,
+                        'width' => 200,
+                        'height' => 125,
                     ];
 
                     $this->image_lib->initialize($resize_conf);
@@ -912,7 +858,7 @@ class Os extends MY_Controller
 
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $this->input->post('valor'));
-                $this->db->set('status', 'Entregue - Faturado');
+                $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
 
@@ -974,46 +920,7 @@ class Os extends MY_Controller
         return true;
     }
 
-    public function adicionarEquipamento()
-    {
-        $this->load->library('form_validation');
-        if ($this->form_validation->run('equipamento_os') == false) {
-            echo json_encode(validation_errors());
-        } else {
-            $data = array(
-                'equipamento' => $this->input->post('equipamento'),
-                'num_serie' => $this->input->post('num_serie'),
-                'modelo' => $this->input->post('modelo'),
-                'descricao' => $this->input->post('descricao'),
-                'voltagem' => $this->input->post('voltagem'),
-				'observacao' => $this->input->post('observacao'),
-                'os_id' => $this->input->post('os_id'),
-            );
-
-            if ($this->os_model->add('equipamento_os', $data) == true) {
-
-                log_info('Adicionou um equipamento a OS. ID (OS): ' . $this->input->post('os_id'));
-                echo json_encode(array('result' => true));
-            } else {
-                echo json_encode(array('result' => false));
-            }
-        }
-    }
-	
-	public function excluirEquipamento()
-    {
-        $id = $this->input->post('idEquipamento');
-		$idOs = $this->input->post('idOs');
-        if ($this->os_model->delete('equipamento_os', 'idEquipamento', $id) == true) {
-
-            log_info('Removeu um Equipamento de uma OS. ID (OS): ' . $idOs);
-            echo json_encode(array('result' => true));
-        } else {
-            echo json_encode(array('result' => false));
-        }
-    }
-	
-	public function adicionarAnotacao()
+    public function adicionarAnotacao()
     {
         $this->load->library('form_validation');
         if ($this->form_validation->run('anotacoes_os') == false) {

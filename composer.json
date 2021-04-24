@@ -9,7 +9,7 @@
         "mk-j/php_xlsxwriter": "^0.38.0",
         "mpdf/qrcode": "^1.1",
         "phpoffice/phpword": "^0.18.0",
-        "piggly/php-pix": "^1.1.2"
+        "piggly/php-pix": "^1.2.5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

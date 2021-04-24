@@ -23,44 +23,40 @@ class Mine extends CI_Controller
 
     public function login()
     {
-
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'Email', 'required|trim');
-        $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
+        $this->form_validation->set_rules('email', 'Email', 'valid_email|required|trim');
+        $this->form_validation->set_rules('documento', 'Documento', 'required|trim');
         $ajax = $this->input->get('ajax');
         if ($this->form_validation->run() == false) {
-
             if ($ajax == true) {
-                $json = array('result' => false);
+                $json = ['result' => false];
                 echo json_encode($json);
             } else {
                 $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
                 redirect('mine');
             }
         } else {
-
             $email = $this->input->post('email');
-            $senha = $this->input->post('senha');
+            $documento = $this->input->post('documento');
 
             $this->db->where('email', $email);
-            $this->db->where('senha', $senha);
+            $this->db->where('documento', $documento);
             $this->db->limit(1);
             $cliente = $this->db->get('clientes');
-            if($cliente->num_rows() > 0){
+            if ($cliente->num_rows() > 0) {
                 $cliente = $cliente->row();
-                $dados = array('nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true);
+                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
                 $this->session->set_userdata($dados);
 
                 if ($ajax == true) {
-                    $json = array('result' => true);
+                    $json = ['result' => true];
                     echo json_encode($json);
                 } else {
                     redirect(site_url() . '/mine');
                 }
             } else {
-
                 if ($ajax == true) {
-                    $json = array('result' => false);
+                    $json = ['result' => false];
                     echo json_encode($json);
                 } else {
                     $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
@@ -123,10 +119,6 @@ class Mine extends CI_Controller
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
                 'cep' => $this->input->post('cep'),
-				'foto_url' => $this->input->post('foto_url'),
-				'senha' => $this->input->post('senha'),
-				'foto_url' => $this->input->post('foto_url'),
-				'senha' => $this->input->post('senha'),
             ];
 
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
@@ -300,14 +292,7 @@ class Mine extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $data['results'] = $this->Conecte_model->getOs(
-		'os',
-		'*',
-		'COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		 COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',  
-		$config['per_page'], 
-		$this->uri->segment(3), '', '', 
-		$this->session->userdata('cliente_id'));
+        $data['results'] = $this->Conecte_model->getOs('os', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
 
         $data['output'] = 'conecte/os';
         $this->load->view('conecte/template', $data);
@@ -323,10 +308,10 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
+
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
@@ -367,7 +352,6 @@ class Mine extends CI_Controller
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-		$data['equipamento'] = $this->os_model->getEquipamento($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
@@ -449,7 +433,6 @@ class Mine extends CI_Controller
             } else {
                 $data['produtos'] = $this->os_model->getProdutos($id);
                 $data['servicos'] = $this->os_model->getServicos($id);
-                $data['equipamento'] = $this->os_model->getEquipamento($id);
                 $data['emitente'] = $this->mapos_model->getEmitente();
 
                 $this->load->view('conecte/minha_os', $data);
@@ -468,9 +451,6 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('descricaoProduto', 'Descrição', 'required');
         $this->form_validation->set_rules('defeito', 'Defeito');
         $this->form_validation->set_rules('observacoes', 'Observações');
-        $this->form_validation->set_rules('rastreio', 'Rastreio');
-        $this->form_validation->set_rules('marca', 'Marca');
-        $this->form_validation->set_rules('serial', 'Serial');
 
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
@@ -494,15 +474,12 @@ class Mine extends CI_Controller
 
             $data = [
                 'dataInicial' => date('Y-m-d'),
-				'dataFinal' => date('Y-m-d'),
                 'clientes_id' => $this->session->userdata('cliente_id'), //set_value('idCliente'),
                 'usuarios_id' => $id, //set_value('idUsuario'),
+                'dataFinal' => date('Y-m-d'),
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'rastreio' => $this->input->post('rastreio'),
-                'marca' => $this->input->post('marca'),
-                'serial' => $this->input->post('serial'),
-                'status' => 'Aguardando Envio',
+                'status' => 'Aberto',
                 'observacoes' => set_value('observacoes'),
                 'faturado' => 0,
             ];
@@ -528,7 +505,6 @@ class Mine extends CI_Controller
             $this->data['result'] = $this->os_model->getById($id);
             $this->data['produtos'] = $this->os_model->getProdutos($id);
             $this->data['servicos'] = $this->os_model->getServicos($id);
-			$this->data['equipamento'] = $this->os_model->getEquipamento($id);
             $this->data['anexos'] = $this->os_model->getAnexos($id);
 
             if ($this->data['result']->idClientes != $this->session->userdata('cliente_id')) {
@@ -567,8 +543,6 @@ class Mine extends CI_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-				'foto_url' => $this->input->post('foto_url'),
-				'senha' => $this->input->post('senha'),
             ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {

@@ -1087,7 +1087,7 @@
             var tr = $('<tr class="jqplot-legend jqplot-cursor-legend"></tr>').appendTo(this._elem);
             tr.data('seriesIndex', idx);
             $('<td class="jqplot-legend jqplot-cursor-legend-swatch" style="padding-top:'+rs+';">'+
-                '<div style="border:1px solid #bbbbbb;padding:0.2em;">'+
+                '<div style="border:1px solid #cccccc;padding:0.2em;">'+
                 '<div class="jqplot-cursor-legend-swatch" style="background-color:'+color+';"></div>'+
                 '</div></td>').appendTo(tr);
             var td = $('<td class="jqplot-legend jqplot-cursor-legend-label" style="vertical-align:middle;padding-top:'+rs+';"></td>');

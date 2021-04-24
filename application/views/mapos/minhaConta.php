@@ -1,12 +1,12 @@
 <div class="span6" style="margin-left: 0">
+    <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
                 <i class="fas fa-user"></i>
             </span>
             <h5>Minha Conta</h5>
         </div>
-        <div class="widget_box_master_os">
-        <div class="widget_content">
+        <div class="widget-content">
             <div class="row-fluid">
                 <div class="span12" style="min-height: 260px">
                     <ul class="site-stats">
@@ -29,15 +29,14 @@
 </div>
 
 <div class="span6">
-    
+    <div class="widget-box">
         <div class="widget-title">
             <span class="icon">
                 <i class="fas fa-lock"></i>
             </span>
             <h5>Alterar Minha Senha</h5>
         </div>
-        <div class="widget_box_master_os">
-        <div class="widget_content">
+        <div class="widget-content">
             <div class="row-fluid">
                 <div class="span12" style="min-height: 260px">
                     <form id="formSenha" action="<?= site_url('mapos/alterarSenha'); ?>" method="post">

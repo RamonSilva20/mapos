@@ -15,7 +15,7 @@
                 </span>
                 <h5>Editar Termo de Garantia</h5>
             </div>
-            <div class="widget_content">
+            <div class="widget-content">
 
                 <?php if ($custom_error) { ?>
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
@@ -49,7 +49,7 @@
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset5">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
+                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
                         </div>
                     </div>
                 </form>

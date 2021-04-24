@@ -10,7 +10,10 @@ $config = [
         [
             'field' => 'documento',
             'label' => 'CPF/CNPJ',
-			'rules' => 'required|trim',
+            'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . $this->uri->segment(3) . '.idClientes]',
+            'errors' => [
+                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
+            ],
         ],
         [
             'field' => 'telefone',
@@ -84,7 +87,7 @@ $config = [
         [
             'field' => 'precoCompra',
             'label' => 'Preço de Compra',
-            'rules' => 'trim',
+            'rules' => 'required|trim',
         ],
         [
             'field' => 'precoVenda',
@@ -181,17 +184,15 @@ $config = [
         [
             'field' => 'dataFinal',
             'label' => 'DataFinal',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'dataSaida',
-            'label' => 'DataSaida',
-            'rules' => 'trim',
+            'rules' => 'trim|required',
         ],
         [
             'field' => 'garantia',
             'label' => 'Garantia',
-            'rules' => 'trim',
+            'rules' => 'trim|numeric',
+            'errors' => [
+                'numeric' => 'Por favor digite apenas número.'
+            ],
         ],
         [
             'field' => 'termoGarantia',
@@ -227,21 +228,6 @@ $config = [
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
             'rules' => 'trim|required',
-        ],
-        [
-            'field' => 'rastreio',
-            'label' => 'Rastreio',
-            'rules' => 'trim',
-        ],
-        [
-            'field' => 'marca',
-            'label' => 'Marca',
-            'rules' => 'trim',
-        ],
-        [
-            'field' => 'serial',
-            'label' => 'Serial',
-            'rules' => 'trim',
         ],
         [
             'field' => 'laudoTecnico',
@@ -377,11 +363,6 @@ $config = [
             'rules' => 'trim',
         ],
         [
-            'field' => 'obs',
-            'label' => 'Obs',
-            'rules' => 'trim',
-        ],
-        [
             'field' => 'clientes_id',
             'label' => 'clientes',
             'rules' => 'trim|required',
@@ -397,38 +378,6 @@ $config = [
             'field' => 'anotacao',
             'label' => 'Anotação',
             'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'os_id',
-            'label' => 'ID Os',
-            'rules' => 'trim|required|integer',
-        ]
-    ],
-    'equipamento_os' => [
-        [
-            'field' => 'equipamento',
-            'label' => 'Equipamento',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'modelo',
-            'label' => 'Modelo/Cor',
-            'rules' => 'trim',
-        ],
-        [
-            'field' => 'num_serie',
-            'label' => 'Nº Série',
-            'rules' => 'trim',
-        ],
-        [
-            'field' => 'voltagem',
-            'label' => 'Voltagem',
-            'rules' => 'trim',
-        ],
-        [
-            'field' => 'observacao',
-            'label' => 'Observação',
-            'rules' => 'trim',
         ],
         [
             'field' => 'os_id',

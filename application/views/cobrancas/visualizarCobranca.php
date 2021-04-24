@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="collapse in accordion-body">
-            <div class="widget_content">
+            <div class="widget-content">
                 <table class="table table-bordered">
                     <tbody>
                         <tr>

@@ -7,7 +7,7 @@
                 </span>
                 <h5>Relatórios Rápidos</h5>
             </div>
-            <div class="widget_box_vizualizar2" style="background-color:#f5f5f5">
+            <div class="widget-content">
                 <ul class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapid"><i class="fas fa-shopping-bag"></i> <small>Todos os Produtos</small></a></li>
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapidMin"><i class="fas fa-shopping-bag"></i> <small>Com Estoque Mínimo</small></a></li>
@@ -23,15 +23,12 @@
                 </span>
                 <h5>Relatórios Customizáveis</h5>
             </div>
-            
-            <div class="span12 widget_box_vizualizar5" style="margin-left: 0">
-
-<div class="span12 alert alert-info">Deixe em branco caso não deseje utilizar o parâmetro.</div>
-<form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/produtosCustom" method="get">
-
-<div class="span12 well_i" style="margin-left: 0">
-						
-                        <div class="span6">
+            <div class="widget-content">
+                <div class="span12 well">
+                    <div class="span12 alert alert-info">Deixe em branco caso não deseje utilizar o parâmetro.</div>
+                    <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/produtosCustom" method="get">
+                        <div class="span12 well">
+                            <div class="span6">
                                 <label for="">Preço de Venda de:</label>
                                 <input type="text" name="precoInicial" class="span12 money" />
                             </div>
@@ -39,12 +36,9 @@
                                 <label for="">até:</label>
                                 <input type="text" name="precoFinal" class="span12 money" />
                             </div>
-                        
-</div>
-
-<div class="span12 well_i" style="margin-left: 0">
-						
-                        <div class="span6">
+                        </div>
+                        <div class="span12 well" style="margin-left: 0">
+                            <div class="span6">
                                 <label for="">Estoque de:</label>
                                 <input type="text" name="estoqueInicial" class="span12" />
                             </div>
@@ -52,19 +46,15 @@
                                 <label for="">até:</label>
                                 <input type="text" name="estoqueFinal" class="span12" />
                             </div>
-                        
-</div>
-
-
-<div class="span12" style="margin-left: 0; text-align: center">
-
-<input type="reset" class="btn" value="Limpar" />
-                        <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>
-
-</div>
-</form>
-</div>
-            
+                        </div>
+                        <div class="span12" style="margin-left: 0; text-align: center">
+                            <input type="reset" class="btn" value="Limpar" />
+                            <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>
+                        </div>
+                    </form>
+                </div>
+                .
+            </div>
         </div>
     </div>
 </div>

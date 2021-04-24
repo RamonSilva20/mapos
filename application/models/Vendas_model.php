@@ -1,6 +1,6 @@
 <?php
 
-use Piggly\Pix\Payload;
+use Piggly\Pix\StaticPayload;
 
 if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
@@ -20,7 +20,7 @@ class Vendas_model extends CI_Model
         parent::__construct();
     }
 
-    
+
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         $this->db->select($fields.', clientes.nomeCliente, clientes.idClientes');
@@ -31,9 +31,9 @@ class Vendas_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
+
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
     }
@@ -79,7 +79,7 @@ class Vendas_model extends CI_Model
         $this->db->where('vendas_id', $id);
         return $this->db->get()->result();
     }
-    
+
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -89,10 +89,10 @@ class Vendas_model extends CI_Model
             }
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -101,10 +101,10 @@ class Vendas_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -112,7 +112,7 @@ class Vendas_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
 
@@ -124,7 +124,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(5);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
@@ -138,7 +138,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(5);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
@@ -155,7 +155,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(5);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
@@ -187,17 +187,15 @@ class Vendas_model extends CI_Model
             return;
         }
 
-        $pix = (new Payload())
+        $pix = (new StaticPayload())
             ->applyValidCharacters()
             ->applyUppercase()
-            ->applyEmailWhitespace()
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
-            ->setMerchantName($emitente->nome)
-            ->setMerchantCity($emitente->cidade)
+            ->setMerchantName($emitente->nome, true)
+            ->setMerchantCity($emitente->cidade, true)
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s - Pagamento - Venda %s", $emitente->nome, $id))
-            ->setAsReusable(false);
+            ->setDescription(sprintf("%s Venda %s", $emitente->nome, $id), true);
 
         return $pix->getQRCode();
     }

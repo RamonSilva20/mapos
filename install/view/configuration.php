@@ -55,12 +55,6 @@
           <input type="password" value="" id="password" name="password" class="form-control" placeholder="Senha de login" />
         </div>
       </div>
-      <div class="form-group clearfix">
-        <label for="date_expiracao" class=" col-md-3">Data de Vencimento</label>
-        <div class="col-md-9">
-          <input type="date" value="" id="date_expiracao" name="date_expiracao" class="form-control" placeholder="Data de Vencimento" />
-        </div>
-      </div>
     </div>
   </div>
 

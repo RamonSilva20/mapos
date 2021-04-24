@@ -210,7 +210,7 @@ $totalProdutos = 0; ?>
             <?php if ($result->laudoTecnico) { ?>
                 <tr class="heading">
                     <td colspan="4">
-                        <b>Relatório Técnico</b>
+                        <b>Laudo Técnico</b>
                     </td>
                 </tr>
                 <tr>

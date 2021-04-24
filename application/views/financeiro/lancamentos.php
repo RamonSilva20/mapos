@@ -95,17 +95,21 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <div class="span12" style="margin-left: 0;">
-<div class="widget-box">
-<div class="widget-title">
-<span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
-<h5>Lançamentos Financeiros</h5>
-</div>
-<div class="widget_content_vusualizar widget_box_vizualizar2">
-<div class="widget_content">
+    <div class="widget-box">
+        <div class="widget-title">
+      <span class="icon">
+        <i class="fas fa-hand-holding-usd"></i>
+      </span>
+            <h5>Lançamentos Financeiros</h5>
 
-<table width="100%" class="table_p" id="divLancamentos">
+        </div>
+
+        <div class="widget-content nopadding tab-content">
+
+
+            <table class="table table-bordered " id="divLancamentos">
                 <thead>
-                <tr>
+                <tr style="backgroud-color: #2D335B">
                     <th>#</th>
                     <th>Tipo</th>
                     <th>Cliente / Fornecedor</th>
@@ -122,7 +126,7 @@ $periodo = $this->input->get('periodo');
 
                 if (!$results) {
                     echo '<tr>
-              <td colspan="9" >Nenhum lançamento encontrado</td>
+              <td colspan="8" >Nenhum lançamento encontrado</td>
             </tr>';
                 }
                 foreach ($results as $r) {
@@ -160,39 +164,38 @@ $periodo = $this->input->get('periodo');
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="7" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
+                    <td colspan="6" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
                     <td colspan="3" style="text-align: left; color: green">
                         <strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong></td>
                 </tr>
                 <tr>
-                    <td colspan="7" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
+                    <td colspan="6" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
                     <td colspan="3" style="text-align: left; color: red">
                         <strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong></td>
                 </tr>
                 <tr>
-                    <td colspan="7" style="text-align: right"><strong>Saldo:</strong></td>
+                    <td colspan="6" style="text-align: right"><strong>Saldo:</strong></td>
                     <td colspan="3" style="text-align: left;">
                         <strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
                     </td>
                 </tr>
                 </tfoot>
             </table>
+        </div>
+    </div>
 
-</div>
-</div>
-</div>
 </div>
 
 <?php echo $this->pagination->create_links(); ?>
 
 
 <!-- Modal nova receita -->
-<div id="modalReceita" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="modalReceita" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <form id="formReceita" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita" method="post">
-        <div class="modal_header_anexos">
+        <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Adicionar Receita</h3>
+            <h3 id="myModalLabel">MapOS - Adicionar Receita</h3>
         </div>
         <div class="modal-body">
 
@@ -200,8 +203,8 @@ $periodo = $this->input->get('periodo');
                 asterisco.
             </div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao*"/>
+                <label for="descricao">Descrição*</label>
+                <input class="span12" id="descricao" type="text" name="descricao"/>
                 <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -244,6 +247,7 @@ $periodo = $this->input->get('periodo');
                         <select name="formaPgto" id="formaPgto" class="span12">
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cheque">Cheque</option>
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Débito">Débito</option>
@@ -256,19 +260,19 @@ $periodo = $this->input->get('periodo');
 
         </div>
         <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success">Adicionar Receita</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-success" id="submitReceita">Adicionar Receita</button>
         </div>
     </form>
 </div>
 
 <!-- Modal nova despesa -->
-<div id="modalDespesa" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <form id="formDespesa" action="<?php echo base_url() ?>index.php/financeiro/adicionarDespesa" method="post">
-        <div class="modal_header_anexos">
+        <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Adicionar Despesa</h3>
+            <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com
@@ -320,6 +324,7 @@ $periodo = $this->input->get('periodo');
                         <select name="formaPgto" class="span12">
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cheque">Cheque</option>
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Débito">Débito</option>
@@ -332,20 +337,20 @@ $periodo = $this->input->get('periodo');
 
         </div>
         <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Adicionar Despesa</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-danger" id="submitDespesa">Adicionar Despesa</button>
         </div>
     </form>
 </div>
 
 
 <!-- Modal editar lançamento -->
-<div id="modalEditar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <form id="formEditar" action="<?php echo base_url() ?>index.php/financeiro/editar" method="post">
-        <div class="modal_header_anexos">
+        <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Editar Lançamento</h3>
+            <h3 id="myModalLabel">MapOS - Editar Lançamento</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com
@@ -403,6 +408,7 @@ $periodo = $this->input->get('periodo');
                         <select name="formaPgto" id="formaPgtoEditar" class="span12">
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cheque">Cheque</option>
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Débito">Débito</option>
@@ -416,7 +422,7 @@ $periodo = $this->input->get('periodo');
         </div>
         <div class="modal-footer">
             Modificado:<input disabled id="usuarioEditar" value=""/>
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar">Cancelar</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar">Cancelar</button>
             <button class="btn btn-primary">Salvar Alterações</button>
         </div>
     </form>
@@ -424,18 +430,18 @@ $periodo = $this->input->get('periodo');
 
 
 <!-- Modal Excluir lançamento-->
-<div id="modalExcluir" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="modalExcluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
-    <div class="modal_header_anexos">
+    <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Excluir Lançamento</h3>
+        <h3 id="myModalLabel">MapOS - Excluir Lançamento</h3>
     </div>
     <div class="modal-body">
         <h5 style="text-align: center">Deseja realmente excluir esse lançamento?</h5>
         <input name="id" id="idExcluir" type="hidden" value=""/>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
         <button class="btn btn-danger" id="btnExcluir">Excluir Lançamento</button>
     </div>
 </div>
@@ -506,6 +512,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitReceita").attr("disabled", true);
+                form.submit();
             }
         });
 
@@ -539,6 +549,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitDespesa").attr("disabled", true);
+                form.submit();
             }
         });
 

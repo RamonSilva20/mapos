@@ -17,7 +17,18 @@
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
     <!-- Script webeddy.com.br -->
-    
+    <script>
+        function formatar(mascara, documento) {
+            var i = documento.value.length;
+            var saida = mascara.substring(0, 1);
+            var texto = mascara.substring(i)
+
+            if (texto.substring(0, 1) != saida) {
+                documento.value += texto.substring(0, 1);
+            }
+
+        }
+    </script>
 </head>
 <?php
    $parse_email = $this->input->get('e');
@@ -42,7 +53,7 @@
                 </div>
             <?php } ?>
             <div class="control-group normal_text">
-                <h3><img src="<?= base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
+                <h3><img src="<?php echo base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
             </div>
             <div class="control-group">
                 <div class="controls">
@@ -54,9 +65,7 @@
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
-                        <span class="add-on bg_lb"><i class="fas fa-lock"></i></span><input name="senha" type="password" value="<?php if (isset($_GET['c'])) { echo $_GET['c']; ?>
-                            <?php } ?>
-                         "/>
+                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" value="<?php echo trim($parse_cpfcnpj); ?>"/>
                     </div>
                 </div>
             </div>
@@ -70,8 +79,8 @@
 
     <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
 
-    <div id="notification" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal_header_anexos">
+    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h4 id="myModalLabel">.:: <?php echo $this->config->item('app_name') ?> ::.</h4>
         </div>
@@ -79,7 +88,7 @@
             <h5 style="text-align: center">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">Fechar</button>
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
 
         </div>
     </div>

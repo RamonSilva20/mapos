@@ -134,7 +134,7 @@ table.jqplot-table-legend {
 
 table.jqplot-table-legend, table.jqplot-cursor-legend {
     background-color: rgba(255,255,255,0.6);
-    border: 1px solid #bbbbbb;
+    border: 1px solid #cccccc;
     position: absolute;
     font-size: 0.75em;
 }
@@ -168,7 +168,7 @@ td.jqplot-seriesToggle:hover, td.jqplot-seriesToggle:active {
 }
 
 div.jqplot-table-legend-swatch-outline {
-    border: 1px solid #bbbbbb;
+    border: 1px solid #cccccc;
     padding:1px;
 }
 
@@ -193,13 +193,13 @@ div.jqplot-table-legend-swatch {
 }
 
 table.jqplot-cursor-tooltip {
-    border: 1px solid #bbbbbb;
+    border: 1px solid #cccccc;
     font-size: 0.75em;
 }
 
 
 .jqplot-cursor-tooltip {
-    border: 1px solid #bbbbbb;
+    border: 1px solid #cccccc;
     font-size: 0.75em;
     white-space: nowrap;
     background: rgba(208,208,208,0.5);
@@ -207,7 +207,7 @@ table.jqplot-cursor-tooltip {
 }
 
 .jqplot-highlighter-tooltip, .jqplot-canvasOverlay-tooltip {
-    border: 1px solid #bbbbbb;
+    border: 1px solid #cccccc;
     font-size: 0.75em;
     white-space: nowrap;
     background: rgba(208,208,208,0.5);

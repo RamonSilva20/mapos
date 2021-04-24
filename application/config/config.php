@@ -1,19 +1,20 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
+
 /**
  * App current version
  */
-$config['app_version'] = '10.1.1';
+$config['app_version'] = '4.32.1';
 
 /**
  * Nome do sistema
  */
-$config['app_name'] = 'Master-OS';
+$config['app_name'] = 'Map-OS';
 
 /**
  * Descrição do sistema
  */
-$config['app_subname'] = 'Sistema de Gestão e controle de Estoque, Vendas, Ordens de Serviço e Banco de Arquivos';
+$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 
 
 /*

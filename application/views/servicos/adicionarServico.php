@@ -7,7 +7,7 @@
                 </span>
                 <h5>Cadastro de Serviço</h5>
             </div>
-            <div class="widget_box_Painel2">
+            <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formServico" method="post" class="form-horizontal">
                     <div class="control-group">
@@ -28,9 +28,13 @@
                             <input id="descricao" type="text" name="descricao" value="<?php echo set_value('descricao'); ?>" />
                         </div>
                     </div>
-                    <div class="form_actions" align="center">
-                    <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
-                    <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn btn-warning"><i class="fas fa-backward"></i> Voltar</a>
+                    <div class="form-actions">
+                        <div class="span12">
+                            <div class="span6 offset3">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar</button>
+                                <a href="<?php echo base_url() ?>index.php/servicos" id="btnAdicionar" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -40,7 +40,6 @@
                                 class="fas fa-arrow-left"></i> Voltar</a>
                 </div>
             </div>
-            <div class="widget_box_Painel2">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#home">Informações Pessoais</a></li>
                 <li><a data-toggle="tab" href="#menu2">Endereço</a></li>
@@ -48,8 +47,8 @@
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <?php if ($custom_error != '') {
-                        echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                    } ?>
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
                     <div id="home" class="tab-pane fade in active">
                         <div class="control-group">
                             <label for="documento" class="control-label">CPF/CNPJ</label>
@@ -63,67 +62,31 @@
                         </div>
                         <div class="control-group">
                             <?php echo form_hidden('idClientes', $result->idClientes) ?>
-                            <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
+                            <label for="nomeCliente" class="control-label">Nome/Razão Social<span
+                                        class="required">*</span></label>
                             <div class="controls">
                                 <input id="nomeCliente" type="text" name="nomeCliente"
                                        value="<?php echo $result->nomeCliente; ?>"/>
                             </div>
                         </div>
                         <div class="control-group">
-                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="senha" class="senha" type="text" name="senha" value="<?php echo $result->senha; ?>" />
-                      </div>
-                    </div>
-                    <!--    <div class="control-group">
-                    <label for="senha" class="control-label">Senha<span class="required">*</span></label>
-					<?php function gerar_senha($tamanho, $maiusculas, $minusculas, $numeros, $simbolos){
-  $ma = "ABCDEFGHIJKLMNOPQRSTUVYXWZ"; // $ma contem as letras maiúsculas
-  $mi = "abcdefghijklmnopqrstuvyxwz"; // $mi contem as letras minusculas
-  $nu = "0123456789"; // $nu contem os números
-  $si = "!@#$%¨&*()_+="; // $si contem os símbolos
-
-  if ($maiusculas){
-        // se $maiusculas for "true", a variável $ma é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($ma);
-  }
-
-    if ($minusculas){
-        // se $minusculas for "true", a variável $mi é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($mi);
-    }
-
-    if ($numeros){
-        // se $numeros for "true", a variável $nu é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($nu);
-    }
-
-    if ($simbolos){
-        // se $simbolos for "true", a variável $si é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($si);
-    }
-
-    // retorna a senha embaralhada com "str_shuffle" com o tamanho definido pela variável $tamanho
-    return substr(str_shuffle($senha),0,$tamanho);
-}
-?>
-                        <div class="controls">
-                        
-                            <input id="senha" class="senha" type="text" name="senha" value="<?php echo gerar_senha(10, true, true, true, false); ?>" />
-                      </div>
-                  </div>
-                  -->
-                        <div class="control-group">
-                            <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
+                            <label for="contato" class="control-label">Contato:</label>
                             <div class="controls">
-                                <input id="telefone" class="telefone1" type="text" name="telefone"
+                                <input class="nomeCliente" type="text" name="contato"
+                                       value="<?php echo $result->contato; ?>"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="telefone" class="control-label">Telefone</label>
+                            <div class="controls">
+                                <input id="telefone" type="text" name="telefone"
                                        value="<?php echo $result->telefone; ?>"/>
                             </div>
                         </div>
                         <div class="control-group">
-                          <label for="celular" class="control-label">Telefone 2</label>
-                          <div class="controls">
-                                <input id="celular" class="telefone1" type="text" name="celular" value="<?php echo $result->celular; ?>"/>
+                            <label for="celular" class="control-label">Celular</label>
+                            <div class="controls">
+                                <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>"/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -132,7 +95,6 @@
                                 <input id="email" type="text" name="email" value="<?php echo $result->email; ?>"/>
                             </div>
                         </div>
-                  
                         <div class="control-group">
                             <label class="control-label">Tipo de Cliente</label>
                             <div class="controls">
@@ -143,14 +105,20 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form_actions" align="center">
-	<button type="submit" class="btn btn-primary">Salvar Alterações</button>
-					</div>
+                        <div class="form-actions">
+                            <div class="span12">
+                                <div class="span6 offset3">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i>
+                                        Atualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- Menu Endereços -->
                     <div id="menu2" class="tab-pane fade">
                         <div class="control-group" class="control-label">
-                            <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                            <label for="cep" class="control-label">CEP</label>
                             <div class="controls">
                                 <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>"/>
                             </div>
@@ -181,25 +149,30 @@
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
-                            <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
+                            <label for="cidade" class="control-label">Cidade</label>
                             <div class="controls">
                                 <input id="cidade" type="text" name="cidade" value="<?php echo $result->cidade; ?>"/>
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
-                            <label for="estado" class="control-label">Estado<span class="required">*</span></label>
+                            <label for="estado" class="control-label">Estado</label>
                             <div class="controls">
                                 <select id="estado" name="estado">
                                     <option value="">Selecione...</option>
                                 </select>
                             </div>
                         </div>
-                       <div class="form_actions" align="center">
-	<button type="submit" class="btn btn-primary">Salvar Alterações</button>
-					</div>
-				</div>
+                        <div class="form-actions">
+                            <div class="span12">
+                                <div class="span6 offset3">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i>
+                                        Atualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </form>
-            </div>
         </div>
     </div>
 </div>
@@ -221,51 +194,9 @@
                 nomeCliente: {
                     required: true
                 },
-                documento: {
-                    required: true
-                },
-                telefone: {
-                    required: true
-                },
-                senha: {
-                    required: true
-                },
-                email: {
-                    required: true
-                },
-                cidade: {
-                    required: true
-                },
-                estado: {
-                    required: true
-                },
-                cep: {
-                    required: true
-                },
             },
             messages: {
                 nomeCliente: {
-                    required: 'Campo Requerido.'
-                },
-                documento: {
-                    required: 'Campo Requerido.'
-                },
-                telefone: {
-                    required: 'Campo Requerido.'
-                },
-                senha: {
-                    required: 'Campo Requerido.'
-                },
-                email: {
-                    required: 'Campo Requerido.'
-                },
-                cidade: {
-                    required: 'Campo Requerido.'
-                },
-                estado: {
-                    required: 'Campo Requerido.'
-                },
-                cep: {
                     required: 'Campo Requerido.'
                 },
             },

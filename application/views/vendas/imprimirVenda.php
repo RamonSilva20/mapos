@@ -3,7 +3,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Venda Nº: <?php echo $result->idVendas ?> - <?php echo $this->config->item('app_name') ?></title>
+    <title>Map OS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -15,122 +15,138 @@
 </head>
 
 <body>
-    <div class="invoice-content">
-    <table width="100%" class="table_r">
-  <?php if ($emitente == null) { ?>
-  <tr>
-    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<
-    </td>
-    </tr>
-    <?php } else { ?>
-  <tr>
-    <td style="width: 25%"><br><img src=" <?php echo $emitente[0]->url_logo; ?> " style="max-height: 100px"></td>
-    <td>
-<span style="font-size: 15px"><b><?php echo $emitente[0]->nome; ?></b></span></br>
-<span style="font-size: 13px"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente[0]->cnpj; ?></span></br>
-<span style="font-size: 13px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ' - ' . $emitente[0]->bairro; ?></span></br>
-<span style="font-size: 13px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?></br>
-<span style="font-size: 13px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?= 'CEP: ' . $emitente[0]->cep; ?></span><br>
-<span style="font-size: 13px"><i class="fas fa-envelope" style="margin:5px 1px"></i>  <?php echo $emitente[0]->email; ?></span></br>
-<span style="font-size: 13px"><i class="fas fa-phone-alt" style="margin:5px 1px"></i>  <?php echo $emitente[0]->telefone; ?></span>
-</td>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="invoice-content">
+                    <div class="invoice-head">
+                        <table class="table">
+                            <tbody>
+                                <?php if ($emitente == null) { ?>
+                                    <tr>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <<<</td> </tr> <?php
+                                                        } else { ?> <tr>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
 
-    
-    <td style="text-align: center">
-        <span style="font-size: 12px"><b>Venda Nº: </b><?php echo $result->idVendas ?></span></br>
-        <span style="font-size: 12px"><b>Data Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?></span></br>
-        <span style="font-size: 12px"><b>Emissão: </b><?php echo date('d/m/Y'); ?></span></br>
-        <!--
-        <?php if ($result->faturado) : ?><br>
-        <span style="font-size: 12px"><b>Vencimento: </b><?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?><?php endif; ?></span></br>
-        -->
-        </td>
-  </tr>
-  <?php } ?>
-  <tr>
-    <td colspan="2">
-            <span style="font-size: 13px"><b>Cliente</b></span><br>
-            <span style="font-size: 12px"><i class="fas fa-user-check"></i> <?php echo $result->nomeCliente ?></span><br>
-            <span style="font-size: 12px"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $result->documento ?></span><br>
-            <span style="font-size: 12px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $result->rua ?>,
+                                        <td> <span style="font-size: 17px;">
+
+                                                <?php echo $emitente[0]->nome; ?></span> </br>
+                                            <span style="font-size: 12px; ">
+                                                <span class="icon">
+                                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
+                                                    <?php echo $emitente[0]->cnpj; ?> </br>
+                                                    <span class="icon">
+                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
+                                                        <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?>
+
+                                                    </span> </br> <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-comments" style="margin:5px 1px"></i>
+                                                            E-mail:
+                                                            <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?> </br>
+                                                            <span class="icon">
+                                                                <i class="fas fa-user-check"></i>
+                                                                Vendedor: <?php echo $result->nome ?>
+                                                            </span>
+                                        </td>
+                                        <td style="width: 18%; text-align: center">#Venda: <span>
+                                                <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
+                                                <?php echo date('d/m/Y'); ?></span>
+
+                                            <?php if ($result->faturado) : ?>
+                                                <br>
+                                                Vencimento:
+                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php
+                                                        } ?>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 85%; padding-left: 0">
+                                        <ul>
+                                            <li>
+                                                <span>
+                                                    <h5>Cliente</h5>
+                                                    <?php echo $result->nomeCliente ?> -
+                                                    <?php echo $result->documento ?></br>
+                                                    <?php echo $result->rua ?>,
                                                     <?php echo $result->numero ?>,
-                                                    <?php echo $result->bairro ?></span><br>
-            <span style="font-size: 12px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $result->cidade ?> - <?php echo $result->estado ?></span><br> 
-            <span style="font-size: 12px"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> CEP: <?php echo $result->cep ?></span><br>
-            <span style="font-size: 12px"><i class="fas fa-phone-alt" style="margin:5px 1px"></i>  <?php echo $result->telefone ?></span>
-                          </td>
-                          <td>
-			<span style="font-size: 13px"><b>Vendedor</b></span><br>
-            <span style="font-size: 12px"><i class="fas fa-user-check"></i> <?php echo $result->nome ?></span><br>
-            <span style="font-size: 12px"><i class="fas fa-phone-alt" style="margin:5px 1px"></i> <?php echo $result->telefone_usuario ?></span>
-            </td>
-  </tr>
-  <?php if ($produtos != null) { ?>
-                                    <tr>
-                                        <td colspan="3"><br>
-                            <table width="100%" class="table_p" id="tblProdutos">
+                                                    <?php echo $result->bairro ?>,
+                                                    <?php echo $result->cidade ?> -
+                                                    <?php echo $result->estado ?>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                    <?php if ($qrCode) : ?>
+                                        <td style="width: 15%; padding-left: 0">
+                                            <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                        </td>
+                                    <?php endif ?>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                    <div style="margin-top: 0; padding-top: 0">
+                        <?php if ($produtos != null) { ?>
+                            <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
-                                    <tr>
-                                        <th width="10%">Cod. Produto</th>
-                                        <th width="10%">Cod. Barras</th>
-                                        <th>Produto</th>
-                                        <th width="8%">Quantidade</th>
-                                        <th width="10%">Preço unit.</th>
-                                        <th width="10%">Sub-total</th>
+                                    <tr style="background-color: #2D335B">
+                                        <th style="font-size: 12px">Cód</th>
+                                        <th style="font-size: 12px">Produto</th>
+                                        <th style="font-size: 12px">Qt</th>
+                                        <th style="font-size: 12px">V. UN R$</th>
+                                        <th style="font-size: 12px">S.Total R$</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-
                                     foreach ($produtos as $p) {
-
                                         $totalProdutos = $totalProdutos + $p->subTotal;
                                         echo '<tr>';
-										echo '<td><div align="center">' . $p->idProdutos . '</div></td>';
-                                        echo '<td><div align="center">' . $p->codDeBarra . '</td>';
+                                        echo '<td>' . $p->codDeBarra . '</td>';
                                         echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td><div align="center">' . $p->quantidade . '</div></td>';
-                                        echo '<td><div align="center">R$: ' . $p->preco ?: $p->precoVenda . '</div></td>';
-										echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</div></td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                        echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
                                     <tr>
-                                        <td colspan="5" style="text-align: right"><strong>Total: </strong></td>
-                                        <td><div align="center"><strong>R$: <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></div></td>
+                                        <td colspan="4" style="text-align: right"><strong>Total R$:</strong></td>
+                                        <td><strong>
+                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            
-                            </td>
-                                    </tr>
-                                <?php } ?>
+                        <?php
+                        } ?>
+                        <h5 style="text-align: left">Observações:</h5>
+                        <table class="table">
+                            <tbody>
                                 <tr>
-    	<td colspan="3">
-        					<!-- QR Code PIX -->
-                            <table width="100%" class="table_x">
-                                		<tr>
-                                        <th><div align="center">
-                                        <table width="200">
-                                            <tr>
-                                              <td>
-                                                <div align="center">
-                                                  <?php if ($qrCode): ?>
-                                                  <img src="../../../assets/img/logo_pix.png" width="150px">
-                                                  <img src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
-                                              </div></td>
-                                              <?php endif ?>
-                                              
-                                          </table>
-                                          </div></th>
-                                          </tr>
-                                          </table>
-									<!-- Fim QR Code PIX -->
-	</td>
-    </tr>
-</table>
-
-
-                             </div>
+                                    <td style="width: 100%; padding-left: 0">
+                                        <ul>
+                                            <li>
+                                                <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
     <script>

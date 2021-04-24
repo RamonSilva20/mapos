@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Área do Cliente - <?php echo $this->config->item('app_name') ?></title>
+    <title>Mine - Área do Cliente - <?php echo $this->config->item('app_name') ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
@@ -30,7 +30,7 @@
                     </span>
                     <h5>Cadastre-se no sistema</h5>
                 </div>
-                <div class="widget_box_Painel2">
+                <div class="widget-content nopadding tab-content">
 
                     <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                         <div class="control-group">
@@ -49,43 +49,6 @@
                                 <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
-                        
-                        <div class="control-group">
-                    <label for="senha" class="control-label">Senha</label><?php function gerar_senha($tamanho, $maiusculas, $minusculas, $numeros, $simbolos){
-  $ma = "ABCDEFGHIJKLMNOPQRSTUVYXWZ"; // $ma contem as letras maiúsculas
-  $mi = "abcdefghijklmnopqrstuvyxwz"; // $mi contem as letras minusculas
-  $nu = "0123456789"; // $nu contem os números
-  $si = "!@#$%¨&*()_+="; // $si contem os símbolos
-
-  if ($maiusculas){
-        // se $maiusculas for "true", a variável $ma é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($ma);
-  }
-
-    if ($minusculas){
-        // se $minusculas for "true", a variável $mi é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($mi);
-    }
-
-    if ($numeros){
-        // se $numeros for "true", a variável $nu é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($nu);
-    }
-
-    if ($simbolos){
-        // se $simbolos for "true", a variável $si é embaralhada e adicionada para a variável $senha
-        $senha .= str_shuffle($si);
-    }
-
-    // retorna a senha embaralhada com "str_shuffle" com o tamanho definido pela variável $tamanho
-    return substr(str_shuffle($senha),0,$tamanho);
-}
-?>
-                        <div class="controls">
-                        
-                            <input id="senha" class="senha" type="password" name="senha" value="<?php echo gerar_senha(10, true, true, true, false); ?>" />
-                      </div>
-                  </div>
 
                         <div class="control-group">
                             <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>

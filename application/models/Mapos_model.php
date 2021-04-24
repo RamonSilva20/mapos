@@ -57,26 +57,24 @@ class Mapos_model extends CI_Model
         $this->db->like('nomeCliente', $termo);
         $this->db->or_like('telefone', $termo);
         $this->db->or_like('celular', $termo);
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(15);
         $data['clientes'] = $this->db->get('clientes')->result();
 
         // buscando os
         $this->db->like('idOs', $termo);
         $this->db->or_like('descricaoProduto', $termo);
-        $this->db->or_like('serial', $termo);
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(15);
         $data['os'] = $this->db->get('os')->result();
 
         // buscando produtos
         $this->db->like('codDeBarra', $termo);
-        $this->db->or_like('idProdutos', $termo);
         $this->db->or_like('descricao', $termo);
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(50);
         $data['produtos'] = $this->db->get('produtos')->result();
 
         //buscando serviços
         $this->db->like('nome', $termo);
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(15);
         $data['servicos'] = $this->db->get('servicos')->result();
 
         return $data;
@@ -120,125 +118,43 @@ class Mapos_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-		public function getOsOrcamento()
+    public function getOsAbertas()
     {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id', 'emitente', 'emitente.telefone');
-		$this->db->where('os.status', 'Orçamento');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
-    }
-
-    public function getOsOrcamentoConcluido()
-    {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
- 		$this->db->where('os.status', 'Orçamento Concluido');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
-    }
-
-    public function getOsOrcamentoAprovado()
-    {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-		$this->db->where('os.status', 'Orçamento Aprovado');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
-    }
-
-    public function getOsEmAndamento()
-    {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-		$this->db->where('os.status', 'Em Andamento');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Aberto');
+        $this->db->limit(10);
+        return $this->db->get()->result();
     }
 
     public function getOsAguardandoPecas()
     {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-		$this->db->where('os.status', 'Aguardando Peças');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Aguardando Peças');
+        $this->db->limit(10);
+        return $this->db->get()->result();
     }
 
-    public function getOsConcluido()
+    public function getOsAndamento()
     {
-		$this->db->select('
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-		$this->db->where('os.status', 'Serviço Concluido');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Em Andamento');
+        $this->db->limit(10);
+        return $this->db->get()->result();
     }
 
-    public function getOsEntregueAReceber()
-    {
-		$this->db->select('os.*,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos');
-		$this->db->select('os.*, clientes.nomeCliente');
-		$this->db->select('os.*, clientes.telefone');
-		$this->db->select('os.*, clientes.senha');
-		$this->db->from('os');
-		$this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-		$this->db->where('os.status', 'Entregue - A Receber');
-		$this->db->limit($this->data['configuration']['per_page']);
-		$this->db->order_by('idOs', 'desc');
-				return $this->db->get()->result();
-    }
-	
-	public function calendario($start, $end, $status = null)
+    public function calendario($start, $end, $status = null)
     {
         $this->db->select(
             'os.*,
             clientes.nomeCliente,
-		COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-		COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
+            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
         );
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
@@ -418,13 +334,6 @@ class Mapos_model extends CI_Model
      * @param array $data
      * @return boolean
      */
-    public function editLogoTermica($id, $logotermica)
-    {
-        $this->db->set('url_termica', $logotermica);
-        $this->db->where('id', $id);
-        return $this->db->update('emitente');
-    }
-
     public function saveConfiguracao($data)
     {
         try {

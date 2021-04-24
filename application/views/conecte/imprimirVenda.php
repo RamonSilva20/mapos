@@ -24,7 +24,7 @@
 
                 <div class="invoice-content">
                     <div class="invoice-head">
-                        <table class="table_p">
+                        <table class="table">
                             <tbody>
 
                                 <?php if ($emitente == null) { ?>
@@ -41,7 +41,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table_p">
+                        <table class="table">
                             <tbody>
                                 <tr>
                                     <td style="width: 50%; padding-left: 0">

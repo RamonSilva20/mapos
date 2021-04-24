@@ -12,7 +12,7 @@ class Configuracoes extends Seeder
             [
                 'idConfig' => 2,
                 'config' => 'app_name',
-                'valor' => 'Master-OS',
+                'valor' => 'Map-OS',
             ],
             [
                 'idConfig' => 3,

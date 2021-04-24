@@ -4,6 +4,22 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.32.1] - 2021-03-27
+
+### Fixed
+- Adequação para usar versão de PHP 7.4 fixa em docker e correção no comando de instalação do composer em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para usar submit handler para evitar que lançamentos financeiros sejam duplicados. [@bietez](https://github.com/bietez)
+
+## [4.32.0] - 2021-03-23
+
+### Added
+- Criada uma forma configurável de como o padrão básico de exibição da listagem de OS.[@bulfaitelo](https://github.com/bulfaitelo)
+
+### Fixed
+- Corrigido problema ao gerar qr code de PIX. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido erro ao selecionar filtro faturado e nome do cliente, não vinha os dados existentes. [@willph](https://github.com/willph)
+- Corrigido autocomplete de CEP do viacep. [@douglascoe](https://github.com/douglascoe)
+
 ## [4.31.1] - 2021-02-13
 
 ### Fixed

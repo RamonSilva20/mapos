@@ -103,7 +103,7 @@ class Financeiro_model extends CI_Model
     public function autoCompleteClienteFornecedor($q)
     {
         $this->db->select('DISTINCT(cliente_fornecedor) as cliente_fornecedor');
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(5);
         $this->db->like('cliente_fornecedor', $q);
         $query = $this->db->get('lancamentos');
         if ($query->num_rows() > 0) {
@@ -117,7 +117,7 @@ class Financeiro_model extends CI_Model
     public function autoCompleteClienteReceita($q)
     {
         $this->db->select('idClientes, nomeCliente');
-        $this->db->limit($this->data['configuration']['per_page']);
+        $this->db->limit(5);
         $this->db->like('nomeCliente', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {

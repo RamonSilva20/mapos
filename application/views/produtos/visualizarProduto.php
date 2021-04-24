@@ -9,8 +9,8 @@
             </div>
         </div>
         <div class="collapse in accordion-body">
-            <div class="widget_content_vusualizar widget_box_vizualizar2">
-                <table class="table_p">
+            <div class="widget-content">
+                <table class="table table-bordered">
                     <tbody>
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>

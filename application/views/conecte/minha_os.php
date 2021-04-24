@@ -36,7 +36,7 @@
                                 <a id="imprimir" title="Imprimir" class="btn btn-mini btn-inverse" href=""><i class="fas fa-print"></i> Imprimir</a>
                             </div>
                         </div>
-                        <div class="widget_content" id="printOs">
+                        <div class="widget-content" id="printOs">
                             <div class="invoice-content">
                                 <div class="invoice-head" style="margin-bottom: 0">
 
