@@ -26,7 +26,6 @@
                 <option value="Finalizado">Finalizado</option>
                 <option value="Cancelado">Cancelado</option>
                 <option value="Aguardando Peças">Aguardando Peças</option>
-				<option value="Aprovado">Aprovado</option>
             </select>
 
         </div>
@@ -112,9 +111,6 @@
                                 break;
                             case 'Aguardando Peças':
                                 $cor = '#FF7F00';
-                                break;
-								case 'Aprovado':
-                                $cor = '#808080';
                                 break;
                             default:
                                 $cor = '#E0E4CC';
