@@ -131,6 +131,10 @@
     echo 'selected';
 } ?> value="Aguardando Peças">Aguardando Peças
                                                 </option>
+												<option <?php if ($result->status == 'Aprovado') {
+    echo 'selected';
+} ?> value="Aprovado">Aprovado
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="span3">
