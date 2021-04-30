@@ -757,8 +757,8 @@ class Relatorios extends MY_Controller
             ];
 
             $writer = new XLSXWriter();
-			$writer->writeSheetRow(null, []);
-			$writer->writeSheetHeader('Sheet1', $cabecalho);
+$writer->writeSheetRow(null, []);
+$writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
                 $writer->writeSheetRow('Sheet1', $venda);
             }
