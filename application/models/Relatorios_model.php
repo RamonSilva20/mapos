@@ -376,12 +376,6 @@ class Relatorios_model extends CI_Model
         LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
         LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
         WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.idVendas";
-		
-		//$query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id FROM vendas
-        //LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
-       // LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
-       // LEFT JOIN itens_de_vendas ON itens_de_vendas.vendas_id = vendas.idVendas
-       // WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
 
         $result = $this->db->query($query);
         if ($array) {
