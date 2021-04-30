@@ -4,11 +4,9 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.32.2] - 2021-04-29
+## [4.32.2] - 2021-04-16
 ### Changed
 - Alteradas as cores dos gráficos do painel para melhor entendimento e leitura dos gráficos e adicionado comentário nas linhas para que os usuários possam alterar as cores mais facilmente. [@mikxingu](https://github.com/mikxingu)
-- Melhorias nos relatorios de Clientes, OS, Serviços, Vendas. [@hoshikawakun] (https://github.com/hoshikawakun)
-- Em Relatorios de Produtos - Add a coluna Valor Estoque que mostra o valor em estoque do referio item, Add campo para mostrar a quantidade de intens em estoque, Add campo que mostra o valor Total do estoque. [@hoshikawakun] (https://github.com/hoshikawakun)
 
 ## [4.32.1] - 2021-03-27
 
