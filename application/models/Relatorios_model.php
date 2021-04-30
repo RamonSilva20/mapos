@@ -339,11 +339,10 @@ class Relatorios_model extends CI_Model
 
     public function vendasRapid($array = false)
     {
-        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome'); //,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id');
+        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-        //$this->db->join('itens_de_vendas', 'itens_de_vendas.vendas_id = vendas.idVendas');
         $this->db->order_by('vendas.idVendas', 'ASC');
 
         $result = $this->db->get();
