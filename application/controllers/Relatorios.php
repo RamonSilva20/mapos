@@ -741,7 +741,7 @@ class Relatorios extends MY_Controller
             $vendasFormatadas = array_map(function ($item) {
                 return [
                     '#' => $item['idVendas'],
-					'cliente' => $item['nomeCliente'],
+		'cliente' => $item['nomeCliente'],
                     'vendedor' => $item['nome'],
                     'data' => $item['dataVenda'],
                     'total' => $item['valorTotal'] ?: 0,
