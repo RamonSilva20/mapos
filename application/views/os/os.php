@@ -17,16 +17,16 @@
         </div>
         <div class="span2">
             <select name="status[]" id="status" class="span12" multiple>
-                <option value="">Selecione status</option>
-                <option value="Aberto">Aberto</option>
-                <option value="Faturado">Faturado</option>
-                <option value="Negociação">Negociação</option>
-                <option value="Em Andamento">Em Andamento</option>
-                <option value="Orçamento">Orçamento</option>
-                <option value="Finalizado">Finalizado</option>
-                <option value="Cancelado">Cancelado</option>
-                <option value="Aguardando Peças">Aguardando Peças</option>
-		  <option value="Aprovado">Aprovado</option>
+                	<option value="">Selecione status</option>
+                	<option value="Aberto">Aberto</option>
+                	<option value="Faturado">Faturado</option>
+                	<option value="Negociação">Negociação</option>
+                	<option value="Em Andamento">Em Andamento</option>
+                	<option value="Orçamento">Orçamento</option>
+               	<option value="Finalizado">Finalizado</option>
+                	<option value="Cancelado">Cancelado</option>
+                	<option value="Aguardando Peças">Aguardando Peças</option>
+			<option value="Aprovado">Aprovado</option>
             </select>
 
         </div>
