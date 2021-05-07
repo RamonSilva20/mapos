@@ -113,7 +113,7 @@
                             case 'Aguardando Peças':
                                 $cor = '#FF7F00';
                                 break;
-								case 'Aprovado':
+                            case 'Aprovado':
                                 $cor = '#808080';
                                 break;
                             default:
