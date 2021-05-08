@@ -920,7 +920,46 @@ class Os extends MY_Controller
         return true;
     }
 
-    public function adicionarAnotacao()
+    public function adicionarEquipamento()
+    {
+        $this->load->library('form_validation');
+        if ($this->form_validation->run('equipamento_os') == false) {
+            echo json_encode(validation_errors());
+        } else {
+            $data = array(
+                'equipamento' => $this->input->post('equipamento'),
+                'num_serie' => $this->input->post('num_serie'),
+                'modelo' => $this->input->post('modelo'),
+                'descricao' => $this->input->post('descricao'),
+                'voltagem' => $this->input->post('voltagem'),
+				'observacao' => $this->input->post('observacao'),
+                'os_id' => $this->input->post('os_id'),
+            );
+
+            if ($this->os_model->add('equipamento_os', $data) == true) {
+
+                log_info('Adicionou um equipamento a OS. ID (OS): ' . $this->input->post('os_id'));
+                echo json_encode(array('result' => true));
+            } else {
+                echo json_encode(array('result' => false));
+            }
+        }
+    }
+	
+	public function excluirEquipamento()
+    {
+        $id = $this->input->post('idEquipamento');
+		$idOs = $this->input->post('idOs');
+        if ($this->os_model->delete('equipamento_os', 'idEquipamento', $id) == true) {
+
+            log_info('Removeu um Equipamento de uma OS. ID (OS): ' . $idOs);
+            echo json_encode(array('result' => true));
+        } else {
+            echo json_encode(array('result' => false));
+        }
+    }
+	
+	public function adicionarAnotacao()
     {
         $this->load->library('form_validation');
         if ($this->form_validation->run('anotacoes_os') == false) {
