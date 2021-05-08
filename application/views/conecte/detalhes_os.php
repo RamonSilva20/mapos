@@ -31,6 +31,7 @@
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
+                        <li id="tabEquipamentos"><a href="#tab6" data-toggle="tab">Equipamentos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -221,6 +222,42 @@
 
                             </div>
                         </div>
+                        
+                        <!--Equipamentos-->
+                       	<div class="tab-pane" id="tab6">
+                            <div class="widget-box" id="divEquipamento">
+                            <div class="widget_content nopadding">
+                                    <table  width="100%" class="table_p">
+                                        <thead>
+                                            <tr>
+                                                <th>Equipamento</th>
+                                                <th>Modelo/Cor</th>
+                                                <th>Nº Série</th>
+                                                <th>Voltagem</th>
+                                                <th>Observação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($equipamento as $a) {
+                                                echo '<tr>';
+                                                echo '<td><div align="center">' . $a->equipamento . '</div></td>';
+                                                echo '<td><div align="center">' . $a->modelo . '</div></td>';
+                                                echo '<td><div align="center">' . $a->num_serie . '</div></td>';
+                                                echo '<td><div align="center">' . $a->voltagem . '</div></td>';
+                                                echo '<td><div align="center">' . $a->observacao . '</div></td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$equipamento) {
+                                                echo '<tr><td colspan="5">Nenhum Equipamento cadastrado</td></tr>';
+                                            }
+
+                                            ?>
+                                        </tbody>
+                                    </table>
+                 </div>
+                 </div>
+                 </div>
 
 
 
