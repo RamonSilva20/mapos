@@ -198,6 +198,7 @@
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Pix">Pix</option>
+                            <option value="Cheque">Cheque</option>
                         </select>
                     </div>
                 </div>
@@ -213,15 +214,15 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcular(){
-    var desconto = Number(document.getElementById("valor").value);
-    var num2 = Number(document.getElementById("num2").value);
-    var elemResult = document.getElementById("resultado");
-	
+    	var desconto = Number(document.getElementById("valor").value);
+    	var num2 = Number(document.getElementById("num2").value);
+    	var elemResult = document.getElementById("resultado");
+    	
     if (elemResult.textContent === undefined) {
-       elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
-    }
+    	elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
+    	}
     else { // IE
-       elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
+    	elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
     }
 	}
 	
