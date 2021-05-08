@@ -468,6 +468,23 @@ CREATE TABLE IF NOT EXISTS `marcas` (
 ENGINE = InnoDB;
 
 
+-- ----------------------------
+-- Table `equipamento_os`
+-- ----------------------------
+CREATE TABLE `equipamento_os` (
+  `idEquipamento` int(11) NOT NULL AUTO_INCREMENT,
+  `equipamento` text NOT NULL,
+  `num_serie` text DEFAULT NULL,
+  `modelo` text DEFAULT NULL,
+  `voltagem` text DEFAULT NULL,
+  `descricao` text DEFAULT NULL,
+  `observacao` text DEFAULT NULL,
+  `os_id` int(11) NOT NULL,
+  PRIMARY KEY (`idEquipamento`),
+  KEY `fk_equipamento_os` (`os_id`),
+  CONSTRAINT `fk_equipamento_os_os1` FOREIGN KEY (`os_id`) REFERENCES `os` (`idOs`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- -----------------------------------------------------
 -- Table `equipamentos`
 -- -----------------------------------------------------
