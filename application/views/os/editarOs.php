@@ -253,11 +253,11 @@
                                 <table width="100%" class="table table-bordered" id="tblProdutos">
                                     <thead>
                                     <tr>
-                                       		<th>Produto</th>
-                                            <th width="8%">Quantidade</th>
-                                            <th width="10%">Preço unit.</th>
-                                            <th width="6%">Ações</th>
-                                            <th width="10%">Sub-total</th>
+                                    	<th>Produto</th>
+                                    	<th width="8%">Quantidade</th>
+                                    	<th width="10%">Preço unit.</th>
+                                    	<th width="6%">Ações</th>
+                                    	<th width="10%">Sub-total</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -266,12 +266,12 @@
                                     foreach ($produtos as $p) {
                                         $total = $total + $p->subTotal;
                                         echo '<tr>';
-											echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
-                                            echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
-                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
-                                            echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td><div align="center">' . $p->quantidade . '</td>';
+                                        echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
+                                        echo '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                        echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
                                     } ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
@@ -348,7 +348,8 @@
                                     </table>
                           </div>
                           </div>
-                      </div>
+                          </div>
+                          
                         <!--Anexos-->
                         <div class="tab-pane" id="tab4">
                             <div class="span12" style="padding: 1%; margin-left: 0">
@@ -533,14 +534,14 @@
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
-                        <select name="formaPgto" id="formaPgto" class="span12">
-
+                            <select name="formaPgto" id="formaPgto" class="span12">
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
                             <option value="Débito">Débito</option>
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Pix">Pix</option>
+                            <option value="Cheque">Cheque</option>
                         </select>
                     </div>
                 </div>
@@ -563,10 +564,10 @@
     var elemResult = document.getElementById("resultado");
 	
     if (elemResult.textContent === undefined) {
-       elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
-    }
+    	elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
+    	}
     else { // IE
-       elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
+    	elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
     }
 	}
 	
@@ -702,7 +703,7 @@
             minLength: 2,
             select: function(event, ui) {
                 $("#codDeBarra").val(ui.item.codbar);
-				$("#idProduto").val(ui.item.id);
+                $("#idProduto").val(ui.item.id);
                 $("#estoque").val(ui.item.estoque);
                 $("#preco").val(ui.item.preco);
                 $("#quantidade").focus();
@@ -848,12 +849,24 @@
             rules: {
                 servico: {
                     required: true
-                }
+                },
+                preco: {
+                    required: true
+                },
+                quantidade: {
+                    required: true
+                },
             },
             messages: {
                 servico: {
                     required: 'Insira um serviço'
-                }
+                },
+                preco: {
+                    required: 'Insira o preço'
+                },
+                quantidade: {
+                    required: 'Insira a quantidade'
+                },
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
@@ -875,45 +888,6 @@
                                 type: "error",
                                 title: "Atenção",
                                 text: "Ocorreu um erro ao tentar adicionar serviço."
-                            });
-                        }
-                    }
-                });
-                return false;
-            }
-        });
-
-        $("#formEquipamento").validate({
-            rules: {
-                equipamento: {
-                    required: true
-                }
-            },
-            messages: {
-                equipamento: {
-                    required: 'Insira o Equipamento'
-                }
-            },
-            submitHandler: function(form) {
-                var dados = $(form).serialize();
-                $("#divFormEquipamento").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
-
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/adicionarEquipamento",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            $("#divEquipamento").load("<?php echo current_url(); ?> #divEquipamento");
-                            $("#equipamento").val('');
-                            $('#btn-close-equipamento').trigger('click');
-                            $("#divFormEquipamento").html('');
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar adicionar Equipamento."
                             });
                         }
                     }
@@ -1031,11 +1005,11 @@
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/excluirServico",
+					url: "<?php echo base_url(); ?>index.php/os/excluirServico",
 					data: "idServico=" + idServico + "&idOs=" + idOS,
-                    data: "idServico=" + idServico,
-                    dataType: 'json',
-                    success: function(data) {
+					data: "idServico=" + idServico,
+					dataType: 'json',
+					success: function(data) {
                         if (data.result == true) {
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
 
@@ -1066,7 +1040,7 @@
 
         $(document).on('click', '#excluir-anexo', function(event) {
             event.preventDefault();            
-			var link = $(this).attr('link');
+            var link = $(this).attr('link');
             var idOS = "<?php echo $result->idOs ?>"
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -1074,9 +1048,9 @@
             $.ajax({
                 type: "POST",
                 url: link,
-                dataType: 'json',
+				dataType: 'json',
 				data: "idOs=" + idOS,
-                success: function(data) {
+				success: function(data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
@@ -1090,44 +1064,17 @@
             });
         });
 
-        $(document).on('click', '.equipamento', function(event) {
-            var idEquipamento = $(this).attr('idAcao');
-			var idOS = "<?php echo $result->idOs ?>"
-            if ((idEquipamento % 1) == 0) {
-                $("#divEquipamento").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/excluirEquipamento",
-					data: "idEquipamento=" + idEquipamento + "&idOs=" + idOS,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            $("#divEquipamento").load("<?php echo current_url(); ?> #divEquipamento");
-
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar excluir Equipamento."
-                            });
-                        }
-                    }
-                });
-                return false;
-            }
-        });
-
         $(document).on('click', '.anotacao', function(event) {
             var idAnotacao = $(this).attr('idAcao');
-			var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idOs ?>"
             if ((idAnotacao % 1) == 0) {
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/excluirAnotacao",
+					url: "<?php echo base_url(); ?>index.php/os/excluirAnotacao",
 					data: "idAnotacao=" + idAnotacao + "&idOs=" + idOS,
-                    dataType: 'json',
-                    success: function(data) {
+					dataType: 'json',
+					success: function(data) {
                         if (data.result == true) {
                             $("#divAnotacoes").load("<?php echo current_url(); ?> #divAnotacoes");
 
