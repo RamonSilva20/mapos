@@ -109,15 +109,15 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcular(){
-    var precoCompra = Number(document.getElementById("precoCompra").value);
-    var num2 = Number(document.getElementById("num2").value);
-    var elemResult = document.getElementById("resultado");
-	
+    	var precoCompra = Number(document.getElementById("precoCompra").value);
+    	var num2 = Number(document.getElementById("num2").value);
+    	var elemResult = document.getElementById("resultado");
+    	
     if (elemResult.textContent === undefined) {
-       elemResult.textContent = "Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra ) + ".	";
-    }
+    	elemResult.textContent = "Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra ) + ".	";
+    	}
     else { // IE
-       elemResult.innerText = "(Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ")";
+    	elemResult.innerText = "(Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ")";
     }
 	}
 	
