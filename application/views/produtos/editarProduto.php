@@ -68,7 +68,7 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" /> Margem <input style="width: 3em;" id="num2"  type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2"/><br /><strong><span style="color: red" id="resultado"></span><strong>
+                            <input id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" /> Margem <input style="width: 3em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" /><br /><strong><span style="color: red" id="resultado"></span><strong>
                         </div>
                     </div>
 
@@ -121,25 +121,24 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcular(){
-    var precoCompra = Number(document.getElementById("precoCompra").value);
-    var num2 = Number(document.getElementById("num2").value);
-    var elemResult = document.getElementById("resultado");
-	
-    if (elemResult.textContent === undefined) {
-       elemResult.textContent = "Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra ) + ".	";
+    function calcular() {
+        var precoCompra = Number(document.getElementById("precoCompra").value);
+        var num2 = Number(document.getElementById("num2").value);
+        var elemResult = document.getElementById("resultado");
+
+        if (elemResult.textContent === undefined) {
+            elemResult.textContent = "Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ".	";
+        } else { // IE
+            elemResult.innerText = "(Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ")";
+        }
     }
-    else { // IE
-       elemResult.innerText = "(Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ")";
-    }
-	}
-	
-	$(document).ready(function() {
+
+    $(document).ready(function() {
         $(".money").maskMoney();
         $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
-                   $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
-                   $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected",true);
+                $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
+                $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected", true);
             }
         });
         $('#formProduto').validate({
