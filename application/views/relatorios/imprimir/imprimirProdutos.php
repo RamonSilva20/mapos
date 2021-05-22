@@ -39,17 +39,17 @@
                       <tbody>
                           <?php
                           foreach ($produtos as $p) {
-							  $preco = $p->preco ?: $p->precoVenda;
-							  $subtotals = $preco * ($p->estoque ?: 1);
-							  $totals = $totals + $subtotals;
-							  $totalestoque = $totalestoque + $p->estoque;
-							  echo '<tr>';
+                              $preco = $p->preco ?: $p->precoVenda;
+                              $subtotals = $preco * ($p->estoque ?: 1);
+                              $totals = $totals + $subtotals;
+                              $totalestoque = $totalestoque + $p->estoque;
+                              echo '<tr>';
                               echo '<td>' . $p->descricao. '</td>';
                               echo '<td align="center">' . $p->unidade . '</td>';
                               echo '<td align="center">R$: ' . $p->precoCompra . '</td>' ;
-							  echo '<td align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>' ;
+                              echo '<td align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>' ;
                               echo '<td align="center">' . $p->estoque . '</td>';
-							  echo '<td align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</td>';
+                              echo '<td align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</td>';
                               echo '</tr>';
                           }
                           ?>
