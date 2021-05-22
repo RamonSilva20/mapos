@@ -22,6 +22,7 @@ application/vendor/
 vendor/
 .idea/
 .php_cs.cache
+.php-cs-fixer.cache
 application/logs/*
 ci_sessions/
 
