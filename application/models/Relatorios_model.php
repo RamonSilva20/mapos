@@ -97,17 +97,27 @@ class Relatorios_model extends CI_Model
 
     public function produtosRapid()
     {
-        $this->db->order_by('descricao', 'asc');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosRapidMin()
     {
-        $this->db->order_by('descricao', 'asc');
-        $this->db->where('estoque <= estoqueMinimo');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque <= estoqueMinimo
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
@@ -120,7 +130,13 @@ class Relatorios_model extends CI_Model
         if ($estoqueInicial != null) {
             $whereEstoque = "AND estoque BETWEEN " . $this->db->escape($estoqueInicial) . " AND " . $this->db->escape($estoqueFinal);
         }
-        $query = "SELECT * FROM produtos WHERE estoque >= 0 $wherePreco $whereEstoque ORDER BY descricao";
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque >= 0 $wherePreco $whereEstoque
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
         return $this->db->query($query)->result();
     }
