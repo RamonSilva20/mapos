@@ -40,18 +40,18 @@
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($os as $c) {
-                                    echo '<tr>';
-                                    echo '<td align="center"><small>' . $c->idOs . '</small></td>';
-                                    echo '<td><small>' . $c->nomeCliente . '</small></td>';
-                                    echo '<td align="center"><small>' . $c->status . '</small></td>';
-                                    echo '<td align="center"><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
-                                    echo '<td><small>' . $c->descricaoProduto . '</small></td>';
-                                    echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
-                                    echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
-                                    echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
-                                    echo '</tr>';
-                                }
+                                    foreach ($os as $c) {
+                                        echo '<tr>';
+                                        echo '<td align="center"><small>' . $c->idOs . '</small></td>';
+                                        echo '<td><small>' . $c->nomeCliente . '</small></td>';
+                                        echo '<td align="center"><small>' . $c->status . '</small></td>';
+                                        echo '<td align="center"><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
+                                        echo '<td><small>' . $c->descricaoProduto . '</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
+                                        echo '</tr>';
+                                    }
                                 ?>
 
                                 <tr style="background-color: gainsboro;">
@@ -66,7 +66,6 @@
                 </div>
 
                 <h5 style="text-align: right; font-size: 0.8em; padding: 5px;">Data do Relatório: <?php echo date('d/m/Y'); ?>
-                </p>
             </div>
         </div>
     </div>
