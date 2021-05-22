@@ -87,6 +87,7 @@
                                 <option value="Finalizado">Finalizado</option>
                                 <option value="Cancelado">Cancelado</option>
                                 <option value="Aguardando Peças">Aguardando Peças</option>
+                                <option value="Aprovado">Aprovado</option>
                             </select>
                             <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
                         </form>
