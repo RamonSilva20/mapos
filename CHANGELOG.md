@@ -237,6 +237,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [4.17.0] - 2020-10-04
 
 ## Added
+
 - Modificado filtros de lançamentos para permitir período arbitrário de data e adicionado filtro de status. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.16.0] - 2020-10-04
