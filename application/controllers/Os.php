@@ -188,6 +188,13 @@ class Os extends MY_Controller
         $this->data['custom_error'] = '';
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
 
+        $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
+        if (!$this->data['editavel']) {
+            $this->session->set_flashdata('error', 'Esta OS já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
+
+            redirect(site_url('os'));
+        }
+
         if ($this->form_validation->run('os') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -219,12 +226,6 @@ class Os extends MY_Controller
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
             $os = $this->os_model->getById($this->input->post('idOs'));
-            $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
-            if (!$this->data['editavel']) {
-                $this->session->set_flashdata('error', 'Esta OS já foi '.$os->status.' e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
-
-                redirect(site_url('os'));
-            }
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');

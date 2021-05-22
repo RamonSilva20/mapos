@@ -86,7 +86,7 @@
                                 continue;
                             }
                         }
-                                                
+
                         switch ($r->status) {
                             case 'Aberto':
                                 $cor = '#00cd00';
