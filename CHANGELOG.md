@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.33.1] - 2021-05-24
+
+### Fixed
+- Corrigido valor incorreto em banco.sql. [@willph](https://github.com/willph)
+
 ## [4.33.0] - 2021-05-23
 
 ### Added
