@@ -118,7 +118,7 @@ function calcLucro(precoCompra, margemLucro) {
 
 }
     $("#precoCompra").focusout(function() {
-        if ($("#precoCompra").val() == '' && $('#precoVenda').val() != '') {
+        if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
             $("#precoCompra").focus();
@@ -149,7 +149,9 @@ function calcLucro(precoCompra, margemLucro) {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
-            $('#precoVenda').focus('');
+            if($("#margemLucro").val() != "" || $("#margemLucro").val() != null){
+                $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
+            }
         }
 
     });
