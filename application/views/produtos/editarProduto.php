@@ -164,7 +164,6 @@
                 $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
             }
         }
-
     });
 
     $(document).ready(function() {
