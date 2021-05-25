@@ -127,7 +127,7 @@ function calcLucro(precoCompra, margemLucro) {
         }
     });
 
-   $("#margemLucro").keyup(function() {
+   $("#margemLucro").keyup(function () {
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
             $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
