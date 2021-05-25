@@ -197,7 +197,7 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">Preço</label>
-                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
+                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
                                     </div>
                                     <div class="span2">
                                         <label for="">Quantidade</label>
@@ -260,7 +260,7 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">Preço</label>
-                                        <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" />
+                                        <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
                                     </div>
                                     <div class="span2">
                                         <label for="">Quantidade</label>
@@ -465,7 +465,7 @@
                 <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($totals + $total, 2); ?>" />
+                    <input class="span12 money" id="valor" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2); ?>" />
                     <strong><span style="color: red" id="resultado"></span></strong>
                 </div>
                 <div class="span4">

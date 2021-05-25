@@ -224,7 +224,7 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita"/>
-                    <input class="span12 money" id="valor" type="text" name="valor"/>
+                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -300,7 +300,7 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" name="tipo" value="despesa"/>
-                    <input class="span12 money" type="text" name="valor"/>
+                    <input class="span12 money" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -377,7 +377,7 @@ $periodo = $this->input->get('periodo');
                     <label for="valor">Valor*</label>
                     <input type="hidden" name="tipo" value="despesa"/>
                     <input type="hidden" id="idEditar" name="id" value=""/>
-                    <input class="span12 money" type="text" name="valor" id="valorEditar"/>
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
