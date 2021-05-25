@@ -143,7 +143,6 @@
     });
 
     $('#precoVenda').focusout(function() {
-
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
