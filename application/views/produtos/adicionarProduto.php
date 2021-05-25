@@ -65,7 +65,9 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input style="width: 9em;" id="precoCompra" class="money" type="text" name="precoCompra" onblur="calcular()" value="<?php echo set_value('precoCompra'); ?>" /> Margem <input style="width: 3em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" /><br /><strong><span style="color: red" id="resultado"></span><strong>
+                            <input style="width: 9em;" id="precoCompra" class="money" type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
+                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text" placeholder="%" maxlength="3" size="2" />
+                            <strong><span style="color: red" id="errorAlert"></span><strong>
                         </div>
                     </div>
                     <div class="control-group">
@@ -105,20 +107,52 @@
         </div>
     </div>
 </div>
+
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcular() {
-        var precoCompra = Number(document.getElementById("precoCompra").value);
-        var num2 = Number(document.getElementById("num2").value);
-        var elemResult = document.getElementById("resultado");
 
-        if (elemResult.textContent === undefined) {
-            elemResult.textContent = "Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ".	";
-        } else { // IE
-            elemResult.innerText = "(Preço de venda: R$ " + String(precoCompra * num2 / 100 + precoCompra) + ")";
+function calcLucro(precoCompra, margemLucro) {
+    var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
+    return precoVenda;
+
+}
+    $("#precoCompra").focusout(function() {
+        if ($("#precoCompra").val() == '' && $('#precoVenda').val() != '') {
+            $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
+            $('#precoVenda').val('');
+            $("#precoCompra").focus();
+        } else {
+            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
         }
-    }
+    });
+
+   $("#margemLucro").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+        if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
+            $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
+            $('#margemLucro').val('');
+            $('#precoVenda').val('');
+            $("#precoCompra").focus();
+
+        } else if (Number($("#margemLucro").val()) >= 0) {
+            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
+        } else {
+            $('#errorAlert').text('Não é permitido número negativo.').css("display", "inline").fadeOut(5000);
+            $('#margemLucro').val('');
+            $('#precoVenda').val('');
+        }
+    });
+
+    $('#precoVenda').focusout(function() {
+
+        if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
+            $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
+            $('#precoVenda').val('');
+            $('#precoVenda').focus('');
+        }
+
+    });
 
     $(document).ready(function() {
         $(".money").maskMoney();
