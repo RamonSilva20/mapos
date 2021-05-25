@@ -111,12 +111,10 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-
-function calcLucro(precoCompra, margemLucro) {
-    var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
-    return precoVenda;
-
-}
+    function calcLucro(precoCompra, margemLucro) {
+        var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
+        return precoVenda;
+    }
     $("#precoCompra").focusout(function() {
         if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
@@ -127,7 +125,7 @@ function calcLucro(precoCompra, margemLucro) {
         }
     });
 
-   $("#margemLucro").keyup(function() {
+    $("#margemLucro").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
             $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
@@ -149,7 +147,7 @@ function calcLucro(precoCompra, margemLucro) {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
-            if($("#margemLucro").val() != "" || $("#margemLucro").val() != null){
+            if ($("#margemLucro").val() != "" || $("#margemLucro").val() != null) {
                 $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
             }
         }
