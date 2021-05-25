@@ -128,7 +128,7 @@
     return precoVenda;
 
 }
-    $("#precoCompra").focusout(function() {
+    $("#precoCompra").focusout(function () {
         if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
