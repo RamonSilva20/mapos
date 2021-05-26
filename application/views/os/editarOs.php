@@ -63,6 +63,7 @@
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab5" data-toggle="tab">Anotações</a></li>
+                        <li id="tabEquipamentos"><a href="#tab6" data-toggle="tab">Equipamentos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -390,7 +391,60 @@
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
+                        
+                        <!--Equipamentos-->
+                        <div class="tab-pane" id="tab6">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+
+                                <div class="span12" id="divEquipamento" style="margin-left: 0">
+
+                                    <a href="#modal-equipamento" id="btn-equipamento" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Equipamento</a>
+                                    <hr>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Equipamento</th>
+                                                <th>Marca</th>
+                                                <th>Tipo</th>
+                                                <th>Nº Serie</th>
+                                                <th>Modelo</th>
+                                                <th>Cor</th>
+                                                <th>Voltagem</th>
+                                                <th>Potência</th>
+                                                <th>Obs:</th>
+                                                <th>Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($equipamentos as $a) {
+                                                echo '<tr>';
+                                                echo '<td><div align="center">' . $a->equipamento . '</div></td>';
+                                                echo '<td><div align="center">' . $a->marca . '</div></td>';
+                                                echo '<td><div align="center">' . $a->tipo . '</div></td>';
+                                                echo '<td><div align="center">' . $a->num_serie . '</div></td>';
+                                                echo '<td><div align="center">' . $a->modelo . '</div></td>';
+                                                echo '<td><div align="center">' . $a->cor . '</div></td>';
+                                                echo '<td><div align="center">' . $a->voltagem . '</div></td>';
+                                                echo '<td><div align="center">' . $a->potencia . '</div></td>';
+                                                echo '<td><div align="center">' . $a->observacao . '</div></td>';
+                                                echo '<td><div align="center"><span idAcao="' . $a->idEquipamento . '" title="Excluir Equipamento" class="btn btn-danger equipamento"><i class="fas fa-trash-alt"></i></span></div></td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$equipamentos) {
+                                                echo '<tr><td colspan="10">Nenhum Equipamento cadastrado</td></tr>';
+                                            }
+
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Fim tab Equipamentos -->
                     </div>
+
                 </div>
                 &nbsp
             </div>
@@ -439,6 +493,60 @@
         </div>
     </form>
 </div>
+
+<!-- Modal cadastro Equipamentos -->
+          <div id="modal-equipamento" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <form action="#" method="POST" id="formEquipamento">
+          <div class="modal_header_anexos">
+            <button type="button" class="close" style="color:#f00" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Adicionar Equipamento</h3>
+          </div>
+          <div class="modal-body">
+          <div class="span6" style="margin-left: 0">
+                <label for="equipamentos">Equipamento<span class="required">*</span></label>
+                <input name="equipamento" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6">
+                <label for="marca">Marca</label>
+                <input name="marca" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="modelo">Modelo</label>
+          		<input name="modelo" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="cor">Cor</label>
+          		<input name="cor" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="tipo">Tipo</label>
+          		<input name="tipo" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="num_serie">Nº Serie</label>
+          		<input name="num_serie" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="voltagem">Voltagem</label>
+          		<input name="voltagem" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="potencia">Potência</label>
+          		<input name="potencia" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span12" style="margin-left: 0">
+              <label for="observacao">Observação</label>
+              <input name="observacao" type="text" class="span12" id="equipamento" value="" />
+              <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+          </div>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-close-equipamento">Fechar</button>
+              <button class="btn btn-primary">Adicionar</button>
+          </div>
+          </form>
+          </div>
+<!-- Fim Modal cadastro Equipamentos -->
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

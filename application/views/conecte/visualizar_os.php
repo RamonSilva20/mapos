@@ -137,8 +137,42 @@ $totalProdutos = 0; ?>
 
                         <?php
                         } ?>
+                        
+                        <?php if ($equipamentos != null) { ?>
+                            <table width="100%" class="table table-condensed" id="tblEquipamento">
+                                <thead>
+                                    <tr>
+                                        <th>Equipamento</th>
+                                        <th>Marca</th>
+                                        <th>Tipo</th>
+                                        <th>Nº Serie</th>
+                                        <th>Modelo</th>
+                                        <th>Cor</th>
+                                        <th>Voltagem</th>
+                                        <th>Potência</th>
+                                        <th>Obs:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
+                                    foreach ($equipamentos as $e) {
 
+                                        echo '<tr>';
+                                        echo '<td><div align="center">' . $e->equipamento . '</div></td>';
+                                        echo '<td><div align="center">' . $e->marca . '</div></td>';
+                                        echo '<td><div align="center">' . $e->tipo . '</div></td>';
+                                        echo '<td><div align="center">' . $e->num_serie . '</div></td>';
+                                        echo '<td><div align="center">' . $e->modelo . '</div></td>';
+                                        echo '<td><div align="center">' . $e->cor . '</div></td>';
+                                        echo '<td><div align="center">' . $e->voltagem . '</div></td>';
+                                        echo '<td><div align="center">' . $e->potencia . '</div></td>';
+                                        echo '<td><div align="center">' . $e->observacao . '</div></td>';
+                                        echo '</tr>';} ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+                        
                         <?php if ($produtos != null || $servicos != null) { ?>
                             <br />
                             <table class="table table-condensed" id="tblProdutos">

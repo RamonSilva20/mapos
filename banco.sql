@@ -559,6 +559,26 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
+-- ----------------------------
+-- Table `equipamento_os`
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `equipamento_os` (
+  `idEquipamento` int(11) NOT NULL AUTO_INCREMENT,
+  `equipamento` text NOT NULL,
+  `marca` text DEFAULT '',
+  `tipo` text DEFAULT '\'\'',
+  `num_serie` text DEFAULT NULL,
+  `modelo` text DEFAULT NULL,
+  `cor` text DEFAULT '',
+  `voltagem` text DEFAULT NULL,
+  `potencia` text DEFAULT '',
+  `observacao` text DEFAULT NULL,
+  `os_id` int(11) NOT NULL,
+  PRIMARY KEY (`idEquipamento`),
+  KEY `fk_equipamento_os` (`os_id`),
+  CONSTRAINT `fk_equipamento_os_os1` FOREIGN KEY (`os_id`) REFERENCES `os` (`idOs`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- -----------------------------------------------------
 -- Table `email_queue`
 -- -----------------------------------------------------
