@@ -231,7 +231,8 @@
                                         echo '<td><div align="center">' . $x->voltagem . '</div></td>';
                                         echo '<td><div align="center">' . $x->potencia . '</div></td>';
                                         echo '<td><div align="center">' . $x->observacao . '</div></td>';
-                                        echo '</tr>';} ?>
+                                        echo '</tr>';
+                                    } ?>
                                 </tbody>
                             </table>
                         <?php } ?>

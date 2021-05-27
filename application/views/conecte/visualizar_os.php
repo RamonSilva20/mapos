@@ -157,7 +157,6 @@ $totalProdutos = 0; ?>
                                     <?php
 
                                     foreach ($equipamentos as $e) {
-
                                         echo '<tr>';
                                         echo '<td><div align="center">' . $e->equipamento . '</div></td>';
                                         echo '<td><div align="center">' . $e->marca . '</div></td>';
@@ -168,7 +167,8 @@ $totalProdutos = 0; ?>
                                         echo '<td><div align="center">' . $e->voltagem . '</div></td>';
                                         echo '<td><div align="center">' . $e->potencia . '</div></td>';
                                         echo '<td><div align="center">' . $e->observacao . '</div></td>';
-                                        echo '</tr>';} ?>
+                                        echo '</tr>';
+                                    } ?>
                                 </tbody>
                             </table>
                         <?php } ?>

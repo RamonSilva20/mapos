@@ -294,7 +294,7 @@ class Os_model extends CI_Model
         return $this->db->get('equipamento_os')->result();
     }
 
-   public function getAnotacoes($os)
+    public function getAnotacoes($os)
     {
         $this->db->where('os_id', $os);
         $this->db->order_by('idAnotacoes', 'desc');

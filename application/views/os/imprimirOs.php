@@ -182,17 +182,18 @@ $totalProdutos = 0; ?>
                             <?php
                                 
                                 foreach ($equipamentos as $x) {
-                                        echo '<tr>';
-                                        echo '<td><div align="center">' . $x->equipamento . '</div></td>';
-                                        echo '<td><div align="center">' . $x->marca . '</div></td>';
-                                        echo '<td><div align="center">' . $x->tipo . '</div></td>';
-                                        echo '<td><div align="center">' . $x->num_serie . '</div></td>';
-                                        echo '<td><div align="center">' . $x->modelo . '</div></td>';
-                                        echo '<td><div align="center">' . $x->cor . '</div></td>';
-                                        echo '<td><div align="center">' . $x->voltagem . '</div></td>';
-                                        echo '<td><div align="center">' . $x->potencia . '</div></td>';
-                                        echo '<td><div align="center">' . $x->observacao . '</div></td>';
-                                        echo '</tr>';} ?>
+                                    echo '<tr>';
+                                    echo '<td><div align="center">' . $x->equipamento . '</div></td>';
+                                    echo '<td><div align="center">' . $x->marca . '</div></td>';
+                                    echo '<td><div align="center">' . $x->tipo . '</div></td>';
+                                    echo '<td><div align="center">' . $x->num_serie . '</div></td>';
+                                    echo '<td><div align="center">' . $x->modelo . '</div></td>';
+                                    echo '<td><div align="center">' . $x->cor . '</div></td>';
+                                    echo '<td><div align="center">' . $x->voltagem . '</div></td>';
+                                    echo '<td><div align="center">' . $x->potencia . '</div></td>';
+                                    echo '<td><div align="center">' . $x->observacao . '</div></td>';
+                                    echo '</tr>';
+                                } ?>
                                 </tbody>
                             </table>
                         <?php } ?>
