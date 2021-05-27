@@ -500,7 +500,27 @@ CREATE TABLE IF NOT EXISTS `equipamentos` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
+-- ----------------------------
+-- Table `equipamento_os`
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `equipamento_os` (
+  `idEquipamento` int(11) NOT NULL AUTO_INCREMENT,
+  `equipamento` varchar(500) NOT NULL,
+  `marca` varchar(500) DEFAULT NULL,
+  `tipo` varchar(500) DEFAULT NULL,
+  `num_serie` varchar(500) DEFAULT NULL,
+  `modelo` varchar(500) DEFAULT NULL,
+  `cor` varchar(500) DEFAULT NULL,
+  `voltagem` varchar(500) DEFAULT NULL,
+  `potencia` varchar(500) DEFAULT NULL,
+  `observacao` varchar(500) DEFAULT NULL,
+  `os_id` int(11) NOT NULL,
+  PRIMARY KEY (`idEquipamento`),
+  KEY `fk_equipamento_os` (`os_id`),
+  CONSTRAINT `fk_equipamento_os_os1` FOREIGN KEY (`os_id`) REFERENCES `os` (`idOs`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
 -- Table `equipamentos_os`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `equipamentos_os` (

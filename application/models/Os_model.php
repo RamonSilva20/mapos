@@ -287,11 +287,17 @@ class Os_model extends CI_Model
         return $this->db->get('anexos')->result();
     }
 
-    public function getAnotacoes($os)
+    public function getEquipamentos($os)
+    {
+        $this->db->where('os_id', $os);
+        $this->db->order_by('idEquipamento', 'desc');
+        return $this->db->get('equipamento_os')->result();
+    }
+
+   public function getAnotacoes($os)
     {
         $this->db->where('os_id', $os);
         $this->db->order_by('idAnotacoes', 'desc');
-
         return $this->db->get('anotacoes_os')->result();
     }
 
@@ -300,7 +306,6 @@ class Os_model extends CI_Model
         $this->db->select('cobrancas.*');
         $this->db->from('cobrancas');
         $this->db->where('os_id', $id);
-
         return $this->db->get()->result();
     }
 
