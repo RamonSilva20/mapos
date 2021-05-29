@@ -180,8 +180,7 @@
                             <?php } ?>
                             </tbody>
                         </table>
-                        <?php if ($anotacoes != null) { ?>
-                        <table width="100%" class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Anotação</th>
@@ -196,50 +195,15 @@
                                 echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
                                 echo '</tr>';
                             }
+                            if (!$anotacoes) {
+                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                            }
                             ?>
                             </tbody>
                         </table>
-                        <?php } ?>
-                        
-                        <?php if ($equipamentos != null) { ?>
-                            <br/>
-                            <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
-                                <thead>
-                                <tr>
-                                    <th>Equipamento</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Nº Serie</th>
-                                    <th>Modelo</th>
-                                    <th>Cor</th>
-                                    <th>Voltagem</th>
-                                    <th>Potência</th>
-                                    <th>Obs:</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-
-                                foreach ($equipamentos as $x) {
-                                    echo '<tr>';
-                                    echo '<td><div align="center">' . $x->equipamento . '</div></td>';
-                                    echo '<td><div align="center">' . $x->marca . '</div></td>';
-                                    echo '<td><div align="center">' . $x->tipo . '</div></td>';
-                                    echo '<td><div align="center">' . $x->num_serie . '</div></td>';
-                                    echo '<td><div align="center">' . $x->modelo . '</div></td>';
-                                    echo '<td><div align="center">' . $x->cor . '</div></td>';
-                                    echo '<td><div align="center">' . $x->voltagem . '</div></td>';
-                                    echo '<td><div align="center">' . $x->potencia . '</div></td>';
-                                    echo '<td><div align="center">' . $x->observacao . '</div></td>';
-                                    echo '</tr>';
-                                } ?>
-                                </tbody>
-                            </table>
-                        <?php } ?>
-                        
                         <?php if ($produtos != null) { ?>
                             <br/>
-                            <table width="100%" class="table table-bordered table-condensed" id="tblProdutos">
+                            <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                 <tr>
                                     <th>Produto</th>
@@ -271,7 +235,7 @@
                         <?php } ?>
 
                         <?php if ($servicos != null) { ?>
-                            <table width="100%" class="table table-bordered table-condensed">
+                            <table class="table table-bordered table-condensed">
                                 <thead>
                                 <tr>
                                     <th>Serviço</th>
@@ -303,20 +267,15 @@
                             </table>
                         <?php } ?>
 
-                        <!-- ANEXOS -->
-                        <div class"span12">
-						<?php if ($anexos != null) { ?>
-                            <table width="100%" class="table table-bordered table-condensed">
+                        <?php if ($anexos != null) { ?>
+                            <table class="table table-bordered table-condensed">
                                 <thead>
-                                    <tr>
-                                        <th>Anexo</th>
-                                    </tr>
+                                <tr>
+                                    <th>Anexo</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    
-                                    <tr>
-                                        <td>
-							<?php
+                                <?php
                                 foreach ($anexos as $a) {
                                     if ($a->thumb == null) {
                                         $thumb = base_url() . 'assets/img/icon-file.png';
@@ -325,17 +284,13 @@
                                         $thumb = $a->url . '/thumbs/' . $a->thumb;
                                         $link = $a->url . '/' . $a->anexo;
                                     }
-                                    echo '<div class="span3" style="min-height: 200px; margin-left: 0; padding: 5px;">
-									<a style="min-height: 180px; border: 1px solid #bbbbbb;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
+                                    echo '<tr>';
+                                    echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                    echo '</tr>';
                                 } ?>
-                                
-                                </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         <?php } ?>
-                        </div>
-                    <!-- Fim ANEXOS -->
 
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
@@ -375,7 +330,8 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).on('click', '.anexo', function(event) {
+    $(document).ready(function () {
+        $(document).on('click', '.anexo', function (event) {
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
@@ -387,10 +343,12 @@
 
         });
 
-        $(document).on('click', '#excluir-anexo', function(event) {
+        $(document).on('click', '#excluir-anexo', function (event) {
             event.preventDefault();
+
             var link = $(this).attr('link');
-            var idOS = "<?php echo $result->idOs ?>"
+            var idOS = "<?php echo $result->idOs; ?>"
+
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -399,7 +357,7 @@
                 url: link,
                 dataType: 'json',
                 data: "idOs=" + idOS,
-                success: function(data) {
+                success: function (data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
@@ -412,6 +370,5 @@
                 }
             });
         });
-
-        
+    });
 </script>
