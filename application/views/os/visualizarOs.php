@@ -201,6 +201,42 @@
                         </table>
                         <?php } ?>
                         
+                        <?php if ($equipamentos != null) { ?>
+                            <br/>
+                            <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
+                                <thead>
+                                <tr>
+                                    <th>Equipamento</th>
+                                    <th>Marca</th>
+                                    <th>Tipo</th>
+                                    <th>Nº Serie</th>
+                                    <th>Modelo</th>
+                                    <th>Cor</th>
+                                    <th>Voltagem</th>
+                                    <th>Potência</th>
+                                    <th>Obs:</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+
+                                foreach ($equipamentos as $x) {
+                                    echo '<tr>';
+                                    echo '<td><div align="center">' . $x->equipamento . '</div></td>';
+                                    echo '<td><div align="center">' . $x->marca . '</div></td>';
+                                    echo '<td><div align="center">' . $x->tipo . '</div></td>';
+                                    echo '<td><div align="center">' . $x->num_serie . '</div></td>';
+                                    echo '<td><div align="center">' . $x->modelo . '</div></td>';
+                                    echo '<td><div align="center">' . $x->cor . '</div></td>';
+                                    echo '<td><div align="center">' . $x->voltagem . '</div></td>';
+                                    echo '<td><div align="center">' . $x->potencia . '</div></td>';
+                                    echo '<td><div align="center">' . $x->observacao . '</div></td>';
+                                    echo '</tr>';
+                                } ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+                        
                         <?php if ($produtos != null) { ?>
                             <br/>
                             <table width="100%" class="table table-bordered table-condensed" id="tblProdutos">
@@ -339,8 +375,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on('click', '.anexo', function (event) {
+    $(document).on('click', '.anexo', function(event) {
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
@@ -352,12 +387,10 @@
 
         });
 
-        $(document).on('click', '#excluir-anexo', function (event) {
+        $(document).on('click', '#excluir-anexo', function(event) {
             event.preventDefault();
-
             var link = $(this).attr('link');
-            var idOS = "<?php echo $result->idOs; ?>"
-
+            var idOS = "<?php echo $result->idOs ?>"
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -366,7 +399,7 @@
                 url: link,
                 dataType: 'json',
                 data: "idOs=" + idOS,
-                success: function (data) {
+                success: function(data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
@@ -379,5 +412,6 @@
                 }
             });
         });
-    });
+
+        
 </script>
