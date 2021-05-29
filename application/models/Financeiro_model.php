@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -19,7 +19,7 @@ class Financeiro_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', usuarios.*');
+        $this->db->select($fields . ', usuarios.*');
         $this->db->from($table);
         $this->db->join('usuarios', 'usuarios.idUsuarios = usuarios_id', 'left');
         $this->db->order_by('data_vencimento', 'asc');

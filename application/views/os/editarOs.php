@@ -577,9 +577,9 @@
             $('#resultado').val('');
         }
         if ($("#desconto").val() != "" || $("#desconto").val() != null) {
-                $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
-                $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
-            }
+            $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
+        }
     });
 
     $(document).ready(function() {
