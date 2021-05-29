@@ -835,6 +835,8 @@ class Os extends MY_Controller
             $data = [
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
+                'desconto' => $this->input->post('desconto'),
+                'valor_desconto' => $this->input->post('resultado'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -859,6 +861,8 @@ class Os extends MY_Controller
 
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('desconto', $this->input->post('desconto'));
+                $this->db->set('valor_desconto', $this->input->post('resultado'));
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');

@@ -34,27 +34,28 @@ $totalProdutos = 0; ?>
 
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php } else { ?> <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> ">
-                                        </td>
-                                        <td> <span style="font-size: 17px;">
-                                                <?php echo $emitente[0]->nome; ?></span> </br>
-                                            <span style="font-size: 12px; ">
+                                            <<<< /td>
+                                    </tr> <?php } else { ?> <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> ">
+                                    </td>
+                                    <td> <span style="font-size: 17px;">
+                                            <?php echo $emitente[0]->nome; ?></span> </br>
+                                        <span style="font-size: 12px; ">
+                                            <span class="icon">
+                                                <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
+                                                <?php echo $emitente[0]->cnpj; ?> </br>
                                                 <span class="icon">
-                                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
-                                                    <?php echo $emitente[0]->cnpj; ?> </br>
+                                                    <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
+                                                    <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?>
+                                                </span> </br> <span>
                                                     <span class="icon">
-                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
-                                                        <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?>
-                                                    </span> </br> <span>
+                                                        <i class="fas fa-comments" style="margin:5px 1px"></i>
+                                                        E-mail:<?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?> </br>
                                                         <span class="icon">
-                                                            <i class="fas fa-comments" style="margin:5px 1px"></i>
-                                                            E-mail:<?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?> </br>
-                                                            <span class="icon">
-                                                                <i class="fas fa-user-check"></i>
-                                                                Responsável: <?php echo $result->nome ?>
-                                        <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y') ?></span></td>
-                                        </span>
-                                        </td>
+                                                            <i class="fas fa-user-check"></i>
+                                                            Responsável: <?php echo $result->nome ?>
+                                    <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y') ?></span></td>
+                                    </span>
+                                    </td>
                                     </tr>
 
                                 <?php } ?>
@@ -77,7 +78,7 @@ $totalProdutos = 0; ?>
                                         </ul>
                                     </td>
 
-                                    <?php if ($qrCode): ?>
+                                    <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0">
                                             <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                         </td>
@@ -230,6 +231,10 @@ $totalProdutos = 0; ?>
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
                             echo "<h4 style='text-align: right'> Valor Total da OS: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                            if ($result->valor_desconto != null && $result->desconto != '') {
+                                echo "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto - ($totalProdutos + $totalServico), 2, ',', '.') . "</h4>";
+                                echo "<h4 style='text-align: right'> Total com Desconto: R$" . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
+                            }
                         }
 
                         ?>

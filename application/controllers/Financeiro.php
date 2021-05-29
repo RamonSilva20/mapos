@@ -39,7 +39,7 @@ class Financeiro extends MY_Controller
         $status = $this->input->get('status');
         $periodo = $this->input->get('periodo');
 
-        if (! empty($vencimento_de)) {
+        if (!empty($vencimento_de)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
 
             if (empty($where)) {
@@ -49,7 +49,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($vencimento_ate)) {
+        if (!empty($vencimento_ate)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_ate)->format('Y-m-d');
 
             if (empty($where)) {
@@ -67,7 +67,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($cliente)) {
+        if (!empty($cliente)) {
             if (empty($where)) {
                 $where = "cliente_fornecedor LIKE '%${cliente}%'";
             } else {
@@ -75,7 +75,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($tipo)) {
+        if (!empty($tipo)) {
             if (empty($where)) {
                 $where = "tipo = '$tipo'";
             } else {

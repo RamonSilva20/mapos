@@ -9,8 +9,8 @@
                 <h5>Venda</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-    echo '<a title="Editar Venda" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '"><i class="fas fa-edit"></i> Editar</a>';
-} ?>
+                        echo '<a title="Editar Venda" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '"><i class="fas fa-edit"></i> Editar</a>';
+                    } ?>
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>"><i class="fas fa-print"></i> Imprimir</a>
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
                 </div>
@@ -23,8 +23,9 @@
                                 <?php if ($emitente == null) { ?>
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php
-                                                        } else { ?> <tr>
+                                            <<<< /td>
+                                    </tr> <?php
+                                        } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
@@ -42,7 +43,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                                        } ?>
+                                        } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -111,6 +112,7 @@
                                         echo '</tr>';
                                     } ?>
                                     <tr>
+                                        <td></td>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$
                                                 <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
@@ -120,8 +122,13 @@
                         <?php
                         } ?>
                         <hr />
+                        <?php if ($result->desconto && $result->valor_desconto) { ?>
+                            <h4 style="text-align: right">Desconto:
+                                <?php echo $result->desconto, '%'; ?>
+                            </h4>
+                        <?php } ?>
                         <h4 style="text-align: right">Valor Total: R$
-                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                            <?php echo number_format($result->desconto && $result->valor_desconto ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
                         </h4>
                     </div>
                     <hr />

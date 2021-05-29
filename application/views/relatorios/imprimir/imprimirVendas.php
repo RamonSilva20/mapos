@@ -33,6 +33,8 @@
                                     <th width="150" align="center" style="font-size: 15px">Vendedor</th>
                                     <th width="140" align="center" style="font-size: 15px">Data</th>
                                     <th width="140" align="center" style="font-size: 15px">Total</th>
+                                    <th width="140" align="center" style="font-size: 15px">Desconto</th>
+                                    <th width="140" align="center" style="font-size: 15px">Total Com Desconto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,11 +46,15 @@
                                         echo '<td align="center">' . $v->nome . '</td>';
                                         echo '<td align="center">' . date('d/m/Y', strtotime($v->dataVenda)) . '</td>';
                                         echo '<td align="center">R$: ' . number_format($v->valorTotal, 2, ',', '.') . '</td>';
+                                        echo '<td align="center">' . $v->desconto . '%</td>';
+                                        echo '<td align="center">R$: ' . number_format($v->valor_desconto ? : $v->valorTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
                                 ?>
                                 <tr>
                                     <td colspan="3"></td>
+                                    <td align="right"></td>
+                                    <td align="right"></td>
                                     <td align="right"><b>TOTAL: </b></td>
                                     <td align="center"><b>R$: <?php echo number_format(array_sum(array_column($vendas, 'valorTotal')), 2, ',', '.'); ?></b></td>
                                 </tr>

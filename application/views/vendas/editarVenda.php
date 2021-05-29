@@ -166,12 +166,13 @@
                 <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
-                    <strong><span style="color: red" id="resultado"></span></strong>
+                    <input class="span12 money" id="valor" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2); ?>" />
+                    <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" hidden />
+                    <strong><span style="color: red" id="errorAlert"></span></strong>
                 </div>
                 <div class="span4">
                     <label>Desconto</label>
-                    <input style="width: 4em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" />
+                    <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -214,17 +215,71 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcular() {
-        var desconto = Number(document.getElementById("valor").value);
-        var num2 = Number(document.getElementById("num2").value);
-        var elemResult = document.getElementById("resultado");
+    function calcDesconto(valor, desconto) {
 
-        if (elemResult.textContent === undefined) {
-            elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
-        } else { // IE
-            elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
+        var resultado = (valor - desconto * valor / 100).toFixed(2);
+        return resultado;
+    }
+
+    function validarDesconto(resultado, valor) {
+        if (resultado == valor) {
+            return resultado = "";
+        } else {
+            return resultado.toFixed(2);
         }
     }
+    var valorBackup = $("#valor").val();
+
+    $("#desconto").keyup(function() {
+
+        this.value = this.value.replace(/[^0-9.]/g, '');
+        if ($('#desconto').val() > 100) {
+            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $("#desconto").focus();
+        }
+        if ($("#valor").val() == null || $("#valor").val() == '') {
+            $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+            $("#valor").val(valorBackup);
+            $("#desconto").focus();
+
+        } else if (Number($("#desconto").val()) >= 0) {
+            $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
+        } else {
+            $('#errorAlert').text('Erro desconhecido.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+        }
+    });
+
+    $("#valor").focusout(function() {
+        $("#valor").val(valorBackup);
+        if ($("#valor").val() == '0.00' && $('#resultado').val() != '') {
+            $('#errorAlert').text('Você não pode apagar o valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+            $("#valor").val(valorBackup);
+            $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
+            $("#desconto").focus();
+        } else {
+            $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
+        }
+    });
+
+    $('#resultado').focusout(function() {
+        if (Number($('#resultado').val()) > Number($("#valor").val())) {
+            $('#errorAlert').text('Desconto não pode ser maior que o Valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+        }
+        if ($("#desconto").val() != "" || $("#desconto").val() != null) {
+            $('#resultado').val(calcDesconto(Number($("#valor").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valor").val())));
+        }
+    });
 
     $(document).ready(function() {
         $(".money").maskMoney();
@@ -368,8 +423,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

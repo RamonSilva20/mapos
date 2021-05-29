@@ -384,6 +384,8 @@ class Vendas extends MY_Controller
                 'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
+                'desconto' => $this->input->post('desconto'),
+                'valor_desconto' => $this->input->post('resultado'),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -399,6 +401,8 @@ class Vendas extends MY_Controller
 
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('desconto', $this->input->post('desconto'));
+                $this->db->set('valor_desconto', $this->input->post('resultado'));
                 $this->db->where('idVendas', $venda);
                 $this->db->update('vendas');
 

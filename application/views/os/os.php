@@ -60,6 +60,7 @@
                         <th>Data Final</th>
                         <th>Venc. Garantia</th>
                         <th>Valor Total</th>
+                        <th>Valor com Desconto</th>
                         <th>Valor Total (Faturado)</th>
                         <th>Status</th>
                         <th>T. Garantia</th>
@@ -134,7 +135,8 @@
                         echo '<td>' . $dataFinal . '</td>';
                         echo '<td>' . $vencGarantia . '</td>';
                         echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
-                        echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
+                        echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
+                        echo '<td>R$ ' . number_format($r->valor_desconto ? : $r->valorTotal, 2, ',', '.') . '</td>';
                         echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
                         echo '<td>' . $r->refGarantia . '</td>';
                         echo '<td>';
