@@ -180,7 +180,6 @@
                             <?php } ?>
                             </tbody>
                         </table>
-                        <?php if ($anotacoes != null) { ?>
                         <table width="100%" class="table table-bordered">
                             <thead>
                             <tr>
@@ -202,7 +201,6 @@
                             ?>
                             </tbody>
                         </table>
-                        <?php } ?>
                         <?php if ($equipamentos != null) { ?>
                             <br/>
                             <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
@@ -304,7 +302,39 @@
                                 </tbody>
                             </table>
                         <?php } ?>
-                        
+                        <!-- Anexo -->
+                        <?php if ($anexos != null) { ?>
+                        <div class"span12">
+                            <table width="100%" class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>
+							<?php
+                                foreach ($anexos as $a) {
+                                    if ($a->thumb == null) {
+                                        $thumb = base_url() . 'assets/img/icon-file.png';
+                                        $link = base_url() . 'assets/img/icon-file.png';
+                                    } else {
+                                        $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                        $link = $a->url . '/' . $a->anexo;
+                                    }
+                                    echo '<div class="span3" style="min-height: 200px; margin-left: 0; padding: 5px;">
+									<a style="min-height: 180px; border: 1px solid #bbbbbb;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
+                                } ?>
+                                
+                                </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        <?php } ?>
+                        <!-- Fim Anexo -->
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
                             echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
