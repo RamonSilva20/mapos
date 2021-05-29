@@ -180,7 +180,29 @@
                             <?php } ?>
                             </tbody>
                         </table>
-                        
+                        <?php if ($anotacoes != null) { ?>
+                        <table width="100%" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Anotação</th>
+                                <th>Data/Hora</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($anotacoes as $a) {
+                                echo '<tr>';
+                                echo '<td>' . $a->anotacao . '</td>';
+                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
+                                echo '</tr>';
+                            }
+                            if (!$anotacoes) {
+                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                        <?php } ?>
                         <?php if ($equipamentos != null) { ?>
                             <br/>
                             <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
@@ -282,9 +304,8 @@
                                 </tbody>
                             </table>
                         <?php } ?>
-
-
-						<?php if ($anexos != null) { ?>
+                        <!-- Anexo -->
+                        <?php if ($anexos != null) { ?>
                         <div class"span12">
                             <table width="100%" class="table table-bordered table-condensed">
                                 <thead>
@@ -315,8 +336,7 @@
                             </table>
                             </div>
                         <?php } ?>
-                        
-
+                        <!-- Fim Anexo -->
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
                             echo "<h4 style='text-align: right'>Valor Total: R$" . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
