@@ -181,7 +181,7 @@
                             </tbody>
                         </table>
                         <?php if ($anotacoes != null) { ?>
-                        <table class="table table-bordered">
+                        <table width="100%" class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Anotação</th>
@@ -205,7 +205,7 @@
                         <?php } ?>
                         <?php if ($equipamentos != null) { ?>
                             <br/>
-                            <table class="table table-bordered table-condensed" id="tblEquipamento">
+                            <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
                                 <thead>
                                 <tr>
                                     <th>Equipamento</th>
@@ -241,7 +241,7 @@
                         
                         <?php if ($produtos != null) { ?>
                             <br/>
-                            <table class="table table-bordered table-condensed" id="tblProdutos">
+                            <table width="100%" class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                 <tr>
                                     <th>Produto</th>
@@ -273,7 +273,7 @@
                         <?php } ?>
 
                         <?php if ($servicos != null) { ?>
-                            <table class="table table-bordered table-condensed">
+                            <table width="100%" class="table table-bordered table-condensed">
                                 <thead>
                                 <tr>
                                     <th>Serviço</th>
@@ -305,9 +305,9 @@
                             </table>
                         <?php } ?>
 
-                        <!-- ANEXOS -->
-                        <div class"span12">
+
 						<?php if ($anexos != null) { ?>
+                        <div class"span12">
                             <table width="100%" class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>
@@ -335,9 +335,9 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         <?php } ?>
-                        </div>
-                    <!-- Fim ANEXOS -->
+                        
 
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
