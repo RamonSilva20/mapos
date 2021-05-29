@@ -180,7 +180,8 @@
                             <?php } ?>
                             </tbody>
                         </table>
-                        <table class="table table-bordered">
+                        <?php if ($anotacoes != null) { ?>
+                        <table width="100%" class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Anotação</th>
@@ -201,6 +202,7 @@
                             ?>
                             </tbody>
                         </table>
+                        <?php } ?>
                         
                         <?php if ($equipamentos != null) { ?>
                             <br/>
