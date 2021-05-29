@@ -4,9 +4,8 @@ class Migration_add_desconto_lancamento extends CI_Migration
 {
     public function up()
     {
-        $sql = "ALTER TABLE `lancamentos` ADD `desconto` INT NULL;";
-        $sql += "ALTER TABLE `lancamentos` ADD `valor_desconto` VARCHAR NULL;";
-        $this->db->query($sql);
+        $this->db->query("ALTER TABLE `lancamentos` ADD `desconto` INT NULL DEFAULT 0;");
+        $this->db->query("ALTER TABLE `lancamentos` ADD `valor_desconto` VARCHAR(55) NULL;");
     }
 
     public function down()
