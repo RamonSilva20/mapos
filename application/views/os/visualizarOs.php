@@ -306,7 +306,6 @@
                         <?php } ?>
                         <!-- Anexo -->
                         <?php if ($anexos != null) { ?>
-                        <div class"span12">
                             <table width="100%" class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>
@@ -334,7 +333,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            </div>
                         <?php } ?>
                         <!-- Fim Anexo -->
                         <?php
