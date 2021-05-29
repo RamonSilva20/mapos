@@ -181,7 +181,7 @@
                             </tbody>
                         </table>
                         <?php if ($anotacoes != null) { ?>
-                        <table width="100%" class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Anotação</th>
@@ -205,7 +205,7 @@
                         <?php } ?>
                         <?php if ($equipamentos != null) { ?>
                             <br/>
-                            <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
+                            <table class="table table-bordered table-condensed" id="tblEquipamento">
                                 <thead>
                                 <tr>
                                     <th>Equipamento</th>
@@ -241,7 +241,7 @@
                         
                         <?php if ($produtos != null) { ?>
                             <br/>
-                            <table width="100%" class="table table-bordered table-condensed" id="tblProdutos">
+                            <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                 <tr>
                                     <th>Produto</th>
@@ -273,7 +273,7 @@
                         <?php } ?>
 
                         <?php if ($servicos != null) { ?>
-                            <table width="100%" class="table table-bordered table-condensed">
+                            <table class="table table-bordered table-condensed">
                                 <thead>
                                 <tr>
                                     <th>Serviço</th>
