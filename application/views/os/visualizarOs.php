@@ -203,7 +203,6 @@
                             </tbody>
                         </table>
                         <?php } ?>
-                        
                         <?php if ($equipamentos != null) { ?>
                             <br/>
                             <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
