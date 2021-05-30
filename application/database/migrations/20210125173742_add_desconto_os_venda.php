@@ -4,10 +4,10 @@ class Migration_add_desconto_os_venda extends CI_Migration
 {
     public function up()
     {
-        $this->db->query("ALTER TABLE `os` ADD `desconto` INT NULL DEFAULT 0;");
-        $this->db->query("ALTER TABLE `os` ADD `valor_desconto` VARCHAR(55) NULL;");
-        $this->db->query("ALTER TABLE `vendas` ADD `desconto` INT NULL DEFAULT 0;");
-        $this->db->query("ALTER TABLE `vendas` ADD `valor_desconto` VARCHAR(55) NULL;");
+        $this->db->query("ALTER TABLE `os` ADD `desconto` DECIMAL(10, 2) NULL DEFAULT 0;");
+        $this->db->query("ALTER TABLE `os` ADD `valor_desconto` DECIMAL(10, 2) NULL;");
+        $this->db->query("ALTER TABLE `vendas` ADD `desconto` DECIMAL(10, 2) NULL DEFAULT 0;");
+        $this->db->query("ALTER TABLE `vendas` ADD `valor_desconto` DECIMAL(10, 2) NULL;");
     }
 
     public function down()

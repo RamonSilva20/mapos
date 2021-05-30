@@ -52,9 +52,7 @@
                                     }
                                 ?>
                                 <tr>
-                                    <td colspan="3"></td>
-                                    <td align="right"></td>
-                                    <td align="right"></td>
+                                    <td colspan="5"></td>
                                     <td align="right"><b>TOTAL: </b></td>
                                     <td align="center"><b>R$: <?php echo number_format(array_sum(array_column($vendas, 'valorTotal')), 2, ',', '.'); ?></b></td>
                                 </tr>

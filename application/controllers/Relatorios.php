@@ -579,7 +579,7 @@ class Relatorios extends MY_Controller
 
             $arquivo = $writer->writeToString();
             $this->load->helper('download');
-            force_download('relatorio_os.xlsx', $arquivo);
+            force_download('relatorio_os_custom.xlsx', $arquivo);
 
             return;
         }
