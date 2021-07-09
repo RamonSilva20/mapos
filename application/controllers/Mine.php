@@ -485,6 +485,22 @@ class Mine extends CI_Controller
             ];
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
+                
+                $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
+                
+                $idOs = $id;
+                $os = $this->Conecte_model->getById($id);
+                
+                $remetentes = [];
+                $allusers = $this->usuarios_model->getAll();
+
+                foreach ($allusers as $user) {
+                    array_push($remetentes, $user->email);
+                }             
+                array_push($remetentes, $os->email);
+ 
+                $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #'.$idOs.' - Criada pelo Cliente');
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
                 redirect('mine/detalhesOs/' . $id);
             } else {
@@ -567,6 +583,46 @@ class Mine extends CI_Controller
             $this->zip->read_file($path . '/' . $file->anexo);
             $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
         }
+    }
+    
+    private function enviarOsPorEmail($idOs, $remetentes, $assunto)
+    {
+        $dados = [];
+
+        $this->load->model('mapos_model');
+        $this->load->model('os_model');
+        $dados['result'] = $this->os_model->getById($idOs);
+        if (!isset($dados['result']->email)) {
+            return false;
+        }
+
+        $dados['produtos'] = $this->os_model->getProdutos($idOs);
+        $dados['servicos'] = $this->os_model->getServicos($idOs);
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+
+        $emitente = $dados['emitente'][0]->email;
+        if (!isset($emitente)) {
+            return false;
+        }
+
+        $html = $this->load->view('os/emails/os', $dados, true);
+
+        $this->load->model('email_model');
+
+        $remetentes = array_unique($remetentes);
+        foreach ($remetentes as $remetente) {
+            $headers = ['From' => $emitente, 'Subject' => $assunto, 'Return-Path' => ''];
+            $email = [
+                'to' => $remetente,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            ];
+            $this->email_model->add('email_queue', $email);
+        }
+
+        return true;
     }
 }
 
