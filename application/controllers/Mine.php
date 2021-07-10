@@ -566,6 +566,7 @@ class Mine extends CI_Controller
 
             if ($id > 0) {
                 $this->enviarEmailBoasVindas($id);
+                $this->enviarEmailTecnicoNotificaClienteNovo($id);
                 $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um 
                     e-mail de boas vindas será enviado para '.$data['email']);
                 redirect(base_url() . 'index.php/mine');
@@ -659,6 +660,42 @@ class Mine extends CI_Controller
         ];
         
         return $this->email_model->add('email_queue', $email);
+    }
+
+    //Notifica time técnico que um novo cliente se cadastrou no sistema
+    private function enviarEmailTecnicoNotificaClienteNovo($id)
+    {
+        $dados = [];
+        $this->load->model('mapos_model');
+        $this->load->model('clientes_model', '', true);
+        $this->load->model('usuarios_model');
+
+        
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+        $dados['cliente'] = $this->clientes_model->getById($id);
+
+        $emitente = $dados['emitente'][0]->email;
+        $emitenteNome = $dados['emitente'][0]->nome;
+        $assunto = 'Novo Cliente Cadastrado no Sistema';
+        
+
+        $usuarios = [];
+        $usuarios = $this->usuarios_model->getAll();
+
+        foreach ($usuarios as $usuario) {
+            $dados['usuario'] = $usuario;
+            $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
+            $headers = ['From' => "\"$emitenteNome\" <$emitente>", 'Subject' => $assunto, 'Return-Path' => ''];
+            $email = [
+                'to' => $usuario->email,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            ];
+            $this->email_model->add('email_queue', $email);
+        }
+        
     }
 }
 
