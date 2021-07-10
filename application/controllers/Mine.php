@@ -541,6 +541,7 @@ class Mine extends CI_Controller
         $this->load->model('clientes_model', '', true);
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
+        $id = 0;
 
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -561,9 +562,14 @@ class Mine extends CI_Controller
                 'dataCadastro' => date('Y-m-d'),
             ];
 
-            if ($this->clientes_model->add('clientes', $data) == true) {
-                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso!');
+            $id = $this->clientes_model->add('clientes', $data);
+
+            if ($id > 0) {
+                $this->enviarEmailBoasVindas($id);
+                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um 
+                    e-mail de boas vindas será enviado para '.$data['email']);
                 redirect(base_url() . 'index.php/mine');
+                
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
             }
@@ -623,6 +629,36 @@ class Mine extends CI_Controller
         }
 
         return true;
+    }
+
+    private function enviarEmailBoasVindas($id)
+    {
+        $dados = [];
+        $this->load->model('mapos_model');
+        $this->load->model('clientes_model', '', true);
+        
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+        $dados['cliente'] = $this->clientes_model->getById($id);
+
+        $emitente = $dados['emitente'][0]->email;
+        $emitenteNome = $dados['emitente'][0]->nome;
+        $remetente = $dados['cliente']->email;
+        $assunto = 'Bem-vindo!';
+
+        $html = $this->load->view('os/emails/clientenovo', $dados, true);
+
+        $this->load->model('email_model');
+        
+        $headers = ['From' => "\"$emitenteNome\" <$emitente>", 'Subject' => $assunto, 'Return-Path' => ''];
+        $email = [
+            'to' => $remetente,
+            'message' => $html,
+            'status' => 'pending',
+            'date' => date('Y-m-d H:i:s'),
+            'headers' => serialize($headers),
+        ];
+        
+        return $this->email_model->add('email_queue', $email);
     }
 }
 
