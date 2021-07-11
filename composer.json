@@ -9,7 +9,8 @@
         "mk-j/php_xlsxwriter": "^0.38.0",
         "mpdf/qrcode": "^1.1",
         "phpoffice/phpword": "^0.18.0",
-        "piggly/php-pix": "^1.2.5"
+        "piggly/php-pix": "^1.2.5",
+        "codephix/asaas-sdk": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
@@ -27,5 +28,11 @@
         "psr-4": {
             "Libraries\\": "application/libraries"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/map-os/asaas-sdk"
+        }
+    ]
 }
