@@ -4,6 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.34.0] - 2021-07-11
+
+### Added
+- Envio de email para o cliente e técnicos após cadastro da OS pelo cliente. [@tutibueno](https://github.com/tutibueno)
+- Envia de email de boas vindas quando o cliente se cadastra na área do cliente. [@tutibueno](https://github.com/tutibueno)
+- Notifica o time técnico que um novo cliente se cadastrou pela área do cliente. [@tutibueno](https://github.com/tutibueno)
+
+### Fixed
+- Corrigido versão do PHP em dockerfile. [@mikxingu](https://github.com/mikxingu)
+
 ## [4.33.1] - 2021-05-24
 
 ### Fixed
