@@ -62,6 +62,7 @@
                                                 <option value="Finalizado">Finalizado</option>
                                                 <option value="Cancelado">Cancelado</option>
                                                 <option value="Aguardando Peças">Aguardando Peças</option>
+                                                <option value="Aprovado">Aprovado</option>
                                             </select>
                                         </div>
                                         <div class="span3">

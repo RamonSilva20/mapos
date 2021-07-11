@@ -20,7 +20,7 @@
                     <div class="control-group">
                         <label for="preco" class="control-label"><span class="required">Preço*</span></label>
                         <div class="controls">
-                            <input id="preco" class="money" type="text" name="preco" value="<?php echo $result->preco ?>" />
+                            <input id="preco" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="preco" value="<?php echo $result->preco ?>" />
                         </div>
                     </div>
                     <div class="control-group">
