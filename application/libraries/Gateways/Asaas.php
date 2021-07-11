@@ -1,8 +1,8 @@
 <?php
 
+use CodePhix\Asaas\Asaas as AsaasSdk;
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
-use CodePhix\Asaas\Asaas as AsaasSdk;
 
 class Asaas extends BasePaymentGateway
 {
