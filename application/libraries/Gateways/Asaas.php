@@ -1,15 +1,15 @@
 <?php
 
-use Gerencianet\Gerencianet;
+use CodePhix\Asaas\Asaas as AsaasSdk;
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
 
-class GerencianetSdk extends BasePaymentGateway
+class Asaas extends BasePaymentGateway
 {
-    /** @var Gerencianet $gerenciaNetApi */
-    private $gerenciaNetApi;
+    /** @var AsaasSdk $asaasApi */
+    private $asaasApi;
 
-    private $gerenciaNetConfig;
+    private $asaasConfig;
 
     public function __construct()
     {
@@ -20,15 +20,14 @@ class GerencianetSdk extends BasePaymentGateway
         $this->ci->load->model('cobrancas_model');
         $this->ci->load->model('mapos_model');
         $this->ci->load->model('email_model');
+        $this->ci->load->model('clientes_model');
 
-        $gerenciaNetConfig = $this->ci->config->item('payment_gateways')['GerencianetSdk'];
-        $this->gerenciaNetConfig = $gerenciaNetConfig;
-        $this->gerenciaNetApi = new Gerencianet([
-            'client_id' => $gerenciaNetConfig['credentials']['client_id'],
-            'client_secret' => $gerenciaNetConfig['credentials']['client_secret'],
-            'sandbox' => $gerenciaNetConfig['production'] !== true,
-            'timeout' => $gerenciaNetConfig['timeout'],
-        ]);
+        $asaasConfig = $this->ci->config->item('payment_gateways')['Asaas'];
+        $this->asaasConfig = $asaasConfig;
+        $this->asaasApi = new AsaasSdk(
+            $asaasConfig['credentials']['api_key'],
+            $asaasConfig['production'] === true ? 'producao' : 'homologacao'
+        );
     }
 
     public function cancelar($id)
@@ -38,9 +37,10 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('Cobrança não existe!');
         }
 
-        $response = $this->gerenciaNetApi->cancelCharge(['id' => $cobranca->charge_id], []);
-        if (intval($response['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
+        if ($cobranca->payment_method == 'boleto') {
+            $this->asaasApi->Cobranca()->delete($cobranca->charge_id);
+        } else {
+            $this->asaasApi->LinkPagamento()->delete($cobranca->charge_id);
         }
 
         return $this->atualizarDados($id);
@@ -100,20 +100,21 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('Cobrança não existe!');
         }
 
-        $result = $this->gerenciaNetApi->detailCharge(['id' => $cobranca->charge_id], []);
-        if (intval($result['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
+        if ($cobranca->payment_method == 'boleto') {
+            $result = $this->asaasApi->Cobranca()->getById($cobranca->charge_id);
+        } else {
+            throw new Exception('Devido à limitação da Asaas, somente é possível atualizar cobranças com boletos!');
         }
 
         // Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
-        if ($result['data']['status'] == "paid" || $result['data']['status'] == "settled") {
+        if ($result->status == "RECEIVED" || $result->status == "CONFIRMED" || $result->status == "DUNNING_RECEIVED") {
             // TODO: dar baixa no lançamento caso exista
         }
 
         $databaseResult = $this->ci->cobrancas_model->edit(
             'cobrancas',
             [
-                'status' => $result['data']['status']
+                'status' => $result->status
             ],
             'idCobranca',
             $id
@@ -135,9 +136,19 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception('Cobrança não existe!');
         }
 
-        $response = $this->gerenciaNetApi->settleCharge(['id' => $cobranca->charge_id], []);
-        if (intval($response['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
+        if ($cobranca->payment_method == 'boleto') {
+            $result = $this->asaasApi->Cobranca()->confirmacao(
+                $cobranca->charge_id,
+                [
+                    'paymentDate' => (new DateTime())->format('Y-m-d'),
+                    'value' => round($cobranca->total / 100, 2)
+                ]
+            );
+            if (! $result || $result->errors) {
+                throw new \Exception('Erro ao chamar Asaas!');
+            }
+        } else {
+            throw new Exception('Devido à limitação da Asaas, somente é possível confirmar cobranças com boletos!');
         }
 
         return $this->atualizarDados($id);
@@ -180,76 +191,38 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception($err);
         }
 
-        $address = [
-            'street' => $entity->rua,
-            'number' => $entity->numero,
-            'neighborhood' => $entity->bairro,
-            'zipcode' => preg_replace('/[^0-9]/', '', $entity->cep),
-            'city' => $entity->cidade,
-            'complement' => $entity->complemento,
-            'state' => $entity->estado,
-        ];
-
-        $documento = preg_replace('/[^0-9]/', '', $entity->documento);
-        $telefone = preg_replace('/[^0-9]/', '', $entity->telefone);
-        if (strlen($documento) == 11) {
-            $customer = [
-                'name' => $entity->nomeCliente,
-                'cpf' => $documento,
-                'phone_number' => $telefone,
-                'email' => $entity->email,
-                'address' => $address,
-            ];
-        } else {
-            $customer = [
-                "juridical_person" => [
-                    "corporate_name" => $entity->nomeCliente,
-                    "cnpj" => $documento,
-                ],
-                'phone_number' => $telefone,
-                'email' => $entity->email,
-                'address' => $address,
-            ];
-        }
-        $expirationDate = (new DateTime())->add(new DateInterval($this->gerenciaNetConfig['boleto_expiration']));
+        $expirationDate = (new DateTime())->add(new DateInterval($this->asaasConfig['boleto_expiration']));
         $expirationDate = ($expirationDate->format('Y-m-d'));
         $body = [
-            'items' => [
-                [
-                    'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
-                    'amount' => 1,
-                    'value' => getMoneyAsCents($totalProdutos + $totalServicos)
-                ]
-            ],
-            'metadata' => [
-                'notification_url' => 'http://mapos.com.br/'
-            ],
-            'payment' => [
-                'banking_billet' => [
-                    'expire_at' => $expirationDate,
-                    'message' => 'Pago em qualquer loterica\nPagar até o vencimento\nCaixa após vencimento não aceitar',
-                    'customer' => $customer,
-                ],
-            ]
+            'customer' => $this->criarOuRetornarClienteAsaasId($entity->clientes_id),
+            'billingType' => 'BOLETO',
+            'dueDate' => $expirationDate,
+            'value' => $totalProdutos + $totalServicos,
+            'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
+            'externalReference' => $id,
+            'postalService' => false,
         ];
 
-        $result = $this->gerenciaNetApi->oneStep([], $body);
-        if (intval($result['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
+        $result = $this->asaasApi->Cobranca()->create($body);
+        if (! $result || $result->errors) {
+            throw new \Exception('Erro ao chamar Asaas!');
         }
 
+        $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
         $data = [
-            'barcode' => $result['data']['barcode'],
-            'link' => $result['data']['link'],
-            'pdf' => $result['data']['pdf']['charge'],
-            'expire_at' => $result['data']['expire_at'],
-            'charge_id' => $result['data']['charge_id'],
-            'status' => $result['data']['status'],
+            'barcode' => '',
+            'link' => $result->invoiceUrl,
+            'payment_url' => $result->invoiceUrl,
+            'pdf' => $result->bankSlipUrl,
+            'expire_at' => $result->dueDate,
+            'charge_id' => $result->id,
+            'status' => $result->status,
             'total' => getMoneyAsCents($totalProdutos + $totalServicos),
-            'payment' => $result['data']['payment'],
+            'payment' => $result->billingType,
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
-            'payment_gateway' => 'GerencianetSdk',
+            'payment_gateway' => 'Asaas',
+            'message' => 'Pagamento referente a ' . $title,
         ];
 
         if ($tipo === PaymentGateway::PAYMENT_TYPE_OS) {
@@ -260,7 +233,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: ' . $result['data']['charge_id']);
+            log_info('Cobrança criada com successo. ID: ' . $result->id);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }
@@ -305,52 +278,38 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception($err);
         }
 
-        $response = $this->gerenciaNetApi->createCharge(
-            [],
-            [
-                'items' => [
-                    [
-                        'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
-                        'amount' => 1,
-                        'value' => getMoneyAsCents($totalProdutos + $totalServicos)
-                    ]
-                ],
-            ]
-        );
-        if (intval($response['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
-        }
-
-        $expirationDate = (new DateTime())->add(new DateInterval('P3D'));
+        $expirationDate = (new DateTime())->add(new DateInterval($this->asaasConfig['boleto_expiration']));
         $expirationDate = ($expirationDate->format('Y-m-d'));
-        $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
+        $body = [
+            'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
+            'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
+            'endDate' => $expirationDate,
+            'value' => $totalProdutos + $totalServicos,
+            'billingType' => 'UNDEFINED',
+            'chargeType' => 'DETACHED',
+            'dueDateLimitDays' => preg_replace('/[^0-9]/', '', $this->asaasConfig['boleto_expiration']),
+            'subscriptionCycle' => null,
+            'maxInstallmentCount' => 1,
+        ];
 
-        $result = $this->gerenciaNetApi->linkCharge(
-            [
-                'id' => $response['data']['charge_id']
-            ],
-            [
-                'message' => 'Pagamento referente a ' . $title,
-                'expire_at' => $expirationDate,
-                'request_delivery_address' => false,
-                'payment_method' => 'all'
-            ]
-        );
-        if (intval($result['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
+        $result = $this->asaasApi->LinkPagamento()->create($body);
+        if (! $result || $result->errors) {
+            throw new \Exception('Erro ao chamar Asaas!');
         }
 
+        $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
         $data = [
-            'expire_at' => $result['data']['expire_at'],
-            'charge_id' => $result['data']['charge_id'],
-            'status' => $result['data']['status'],
+            'expire_at' => $result->endDate,
+            'charge_id' => $result->id,
+            'status' => 'PENDING',
             'total' => getMoneyAsCents($totalProdutos + $totalServicos),
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'link',
-            'payment_gateway' => 'GerencianetSdk',
-            'payment_url' => $result['data']['payment_url'],
-            'link' => $result['data']['payment_url'],
-            'message' => $result['data']['message'],
+            'payment_gateway' => 'Asaas',
+            'payment_url' => $result->url,
+            'link' => $result->url,
+            'message' => $result->description,
+            'message' => 'Pagamento referente a ' . $title,
         ];
 
         if ($tipo === PaymentGateway::PAYMENT_TYPE_OS) {
@@ -361,11 +320,54 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: ' . $result['data']['charge_id']);
+            log_info('Cobrança criada com successo. ID: ' . $result->id);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }
 
         return $data;
+    }
+
+    private function criarOuRetornarClienteAsaasId($clienteId)
+    {
+        $cliente = (array) $this->ci->clientes_model->getById($clienteId);
+        if (! $cliente) {
+            throw new Exception('Cliente não encontrado: ' . $clienteId);
+        }
+
+        if (isset($cliente['asaas_id'])) {
+            return $cliente['asaas_id'];
+        }
+
+        $result = $this->asaasApi->Cliente()->create([
+            'name' => $cliente['nomeCliente'],
+            'email' => $cliente['email'],
+            'phone' => preg_replace('/[^0-9]/', '', $cliente['telefone']),
+            'mobilePhone' => preg_replace('/[^0-9]/', '', $cliente['celular']),
+            'cpfCnpj' => preg_replace('/[^0-9]/', '', $cliente['documento']),
+            'postalCode' => $cliente['cep'],
+            'address' => $cliente['rua'],
+            'addressNumber' => $cliente['numero'],
+            'complement' => $cliente['complemento'],
+            'province' => $cliente['bairro'],
+            'externalReference' => $clienteId,
+            'notificationDisabled' => $this->asaasConfig['notify'] === false,
+            'groupName' => 'mapos',
+        ]);
+
+        $success = $this->ci->clientes_model->edit(
+            'clientes',
+            [
+                'asaas_id' => $result->id
+            ],
+            'idClientes',
+            $clienteId
+        );
+
+        if ($success) {
+            return $result->id;
+        } else {
+            throw new Exception('Erro ao criar cliente na Asaas!');
+        }
     }
 }

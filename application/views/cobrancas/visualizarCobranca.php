@@ -119,14 +119,18 @@
                         <tr>
                             <td style="text-align: right"><strong>Link</strong></td>
                             <td>
-                                <a href="<?php echo $result->link; ?>" target="_blank">Abrir em nova aba</a>
+                                <?php if ($result->link) { ?>
+                                    <a href="<?php echo $result->link; ?>" target="_blank">Abrir em nova aba</a>
+                                <?php } ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>PDF</strong></td>
                             <td>
-                                <a href="<?php echo $result->pdf; ?>" target="_blank">Abrir em nova aba</a>
+                                <?php if ($result->pdf) { ?>
+                                    <a href="<?php echo $result->pdf; ?>" target="_blank">Abrir em nova aba</a>
+                                <?php } ?>
                             </td>
                         </tr>
 

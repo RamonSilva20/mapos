@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `dataCadastro` DATE NOT NULL,
   `permissoes_id` INT NOT NULL,
   `dataExpiracao` date DEFAULT NULL,
+  `asaas_id` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
   CONSTRAINT `fk_usuarios_permissoes1`
@@ -363,8 +364,8 @@ ENGINE = InnoDB;
 -- Estrutura da tabela `cobrancas`
 --
 CREATE TABLE `cobrancas` (
-    `idCobranca` INT(11) NOT NULL AUTO_INCREMENT,
-  `charge_id` int(11) DEFAULT NULL,
+  `idCobranca` INT(11) NOT NULL AUTO_INCREMENT,
+  `charge_id` varchar(255) DEFAULT NULL,
   `conditional_discount_date` date DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `custom_id` int(11) DEFAULT NULL,
@@ -616,7 +617,7 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`,`dataExpiracao`) VALUES
 (1, 'admin_name', 'MG-25.502.560', '600.021.520-87', '70005-115', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin_email', 'admin_password', '000000-0000', '', 1, 'admin_created_at', 1, '3000-01-01');
 
-INSERT INTO `migrations`(`version`) VALUES ('20210125173740');
+INSERT INTO `migrations`(`version`) VALUES ('20210125173741');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

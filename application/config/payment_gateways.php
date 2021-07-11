@@ -69,5 +69,40 @@ $config['payment_gateways'] = [
             'refunded' => 'O pagamento foi reembolsado ao usuário',
             'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador'
         ]
+    ],
+    'Asaas' => [
+        'name' => 'Asaas',
+        'library_name' => 'Asaas',
+        'production' => false,
+        'notify' => false,
+        'credentials' => [
+            'api_key' => '',
+        ],
+        'boleto_expiration' => 'P3D',
+        'payment_methods' => [
+            [
+                'name' => 'Boleto',
+                'value' => 'boleto',
+            ],
+            [
+                'name' => 'Link',
+                'value' => 'link'
+            ]
+        ],
+        'transaction_status' => [
+            'PENDING' => 'Aguardando pagamento',
+            'RECEIVED' => 'Recebida (saldo já creditado na conta)',
+            'CONFIRMED' => 'Pagamento confirmado (saldo ainda não creditado)',
+            'OVERDUE' => 'Vencida',
+            'REFUNDED' => 'Estornada',
+            'RECEIVED_IN_CASH' => 'Recebida em dinheiro (não gera saldo na conta)',
+            'REFUND_REQUESTED' => 'Estorno Solicitado',
+            'CHARGEBACK_REQUESTED' => 'Recebido chargeback',
+            'CHARGEBACK_DISPUTE' => 'Em disputa de chargeback (caso sejam apresentados documentos para contestação)',
+            'AWAITING_CHARGEBACK_REVERSAL' => 'Disputa vencida, aguardando repasse da adquirente',
+            'DUNNING_REQUESTED' => 'Em processo de recuperação',
+            'DUNNING_RECEIVED' => 'Recuperada',
+            'AWAITING_RISK_ANALYSIS' => 'Pagamento em análise',
+        ]
     ]
 ];
