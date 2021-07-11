@@ -235,6 +235,53 @@ $config = [
             'rules' => 'trim',
         ]
     ],
+    'equipamento_os' => [
+        [
+            'field' => 'equipamento',
+            'label' => 'Equipamento',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'marca',
+            'label' => 'Marca',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'Tipo',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'num_serie',
+            'label' => 'Nº Serie',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'modelo',
+            'label' => 'Modelo',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'cor',
+            'label' => 'Cor',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'voltagem',
+            'label' => 'Voltagem',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'potencia',
+            'label' => 'Potência',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'observacao',
+            'label' => 'Observação',
+            'rules' => 'trim',
+        ]
+    ],
     'tiposUsuario' => [
         [
             'field' => 'nomeTipo',

@@ -57,6 +57,7 @@ class Os_model extends CI_Model
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
         $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
         $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+        $this->db->join('equipamento_os', 'equipamento_os.os_id = os.idOs', 'left');
 
         // condicionais da pesquisa
 
@@ -285,6 +286,13 @@ class Os_model extends CI_Model
     {
         $this->db->where('os_id', $os);
         return $this->db->get('anexos')->result();
+    }
+
+    public function getEquipamentos($os)
+    {
+        $this->db->where('os_id', $os);
+        $this->db->order_by('idEquipamento', 'desc');
+        return $this->db->get('equipamento_os')->result();
     }
 
     public function getAnotacoes($os)

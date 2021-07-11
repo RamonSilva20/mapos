@@ -162,10 +162,46 @@ $totalProdutos = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
+                        
+						<?php if ($equipamentos != null) { ?>
 
-                        <?php if ($produtos != null) { ?>
+                            <table width="100%" class="table table-bordered table-condensed" id="tblEquipamento">
+                                <thead>
+                                    <tr>
+                                        <th>Equipamento</th>
+                                        <th>Marca</th>
+                                        <th>Tipo</th>
+                                        <th>Nº Serie</th>
+                                        <th>Modelo</th>
+                                        <th>Cor</th>
+                                        <th>Voltagem</th>
+                                        <th>Potência</th>
+                                        <th>Obs:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                            <table class="table table-bordered table-condensed" id="tblProdutos">
+                                    foreach ($equipamentos as $x) {
+                                        echo '<tr>';
+                                        echo '<td><div align="center">' . $x->equipamento . '</div></td>';
+                                        echo '<td><div align="center">' . $x->marca . '</div></td>';
+                                        echo '<td><div align="center">' . $x->tipo . '</div></td>';
+                                        echo '<td><div align="center">' . $x->num_serie . '</div></td>';
+                                        echo '<td><div align="center">' . $x->modelo . '</div></td>';
+                                        echo '<td><div align="center">' . $x->cor . '</div></td>';
+                                        echo '<td><div align="center">' . $x->voltagem . '</div></td>';
+                                        echo '<td><div align="center">' . $x->potencia . '</div></td>';
+                                        echo '<td><div align="center">' . $x->observacao . '</div></td>';
+                                        echo '</tr>';
+                                    } ?>
+                                </tbody>
+                            </table>
+                        <?php } ?>
+                        
+						<?php if ($produtos != null) { ?>
+
+                            <table width="100%" class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
                                         <th>Produtos</th>
@@ -197,7 +233,7 @@ $totalProdutos = 0; ?>
 
                         <?php if ($servicos != null) { ?>
 
-                            <table class="table table-bordered table-condensed">
+                            <table width="100%" class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>
                                         <th>Serviços</th>

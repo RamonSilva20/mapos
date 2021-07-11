@@ -63,6 +63,7 @@
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab5" data-toggle="tab">Anotações</a></li>
+                        <li id="tabEquipamentos"><a href="#tab6" data-toggle="tab">Equipamentos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -390,6 +391,58 @@
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
+                        <!--Equipamentos-->
+                        <div class="tab-pane" id="tab6">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+
+                                <div class="span12" id="divEquipamento" style="margin-left: 0">
+
+                                    <a href="#modal-equipamento" id="btn-equipamento" role="button" data-toggle="modal"
+                                       class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Equipamento</a>
+                                    <hr>
+                                    <table width="100%" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Equipamento</th>
+                                                <th>Marca</th>
+                                                <th>Tipo</th>
+                                                <th>Nº Serie</th>
+                                                <th>Modelo</th>
+                                                <th>Cor</th>
+                                                <th>Voltagem</th>
+                                                <th>Potência</th>
+                                                <th>Obs:</th>
+                                                <th>Ação</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        foreach ($equipamentos as $x) {
+                                            echo '<tr>';
+                                            echo '<td><div align="center">' . $x->equipamento . '</div></td>';
+                                            echo '<td><div align="center">' . $x->marca . '</div></td>';
+                                            echo '<td><div align="center">' . $x->tipo . '</div></td>';
+                                            echo '<td><div align="center">' . $x->num_serie . '</div></td>';
+                                            echo '<td><div align="center">' . $x->modelo . '</div></td>';
+                                            echo '<td><div align="center">' . $x->cor . '</div></td>';
+                                            echo '<td><div align="center">' . $x->voltagem . '</div></td>';
+                                            echo '<td><div align="center">' . $x->potencia . '</div></td>';
+                                            echo '<td><div align="center">' . $x->observacao . '</div></td>';
+                                            echo '<td><div align="center"><span idAcao="' . $x->idEquipamento . '" title="Excluir Equipamento" class="btn btn-danger equipamento"><i class="fas fa-trash-alt"></i></span></div></td>';
+                                            echo '</tr>';
+                                        }
+                                        if (!$equipamentos) {
+                                            echo '<tr><td colspan="10">Nenhum Equipamento cadastrado</td></tr>';
+                                        }
+
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--Fim Equipamentos-->
                     </div>
                 </div>
                 &nbsp
@@ -439,6 +492,61 @@
         </div>
     </form>
 </div>
+
+<!-- Modal cadastro Equipamentos -->
+<div id="modal-equipamento" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <form action="#" method="POST" id="formEquipamento">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Adicionar Equipamento</h3>
+        </div>
+        <div class="modal-body">
+          <div class="span6" style="margin-left: 0">
+                <label for="equipamentos">Equipamento<span class="required">*</span></label>
+                <input name="equipamento" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6">
+                <label for="marca">Marca</label>
+                <input name="marca" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="modelo">Modelo</label>
+          		<input name="modelo" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="cor">Cor</label>
+          		<input name="cor" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="tipo">Tipo</label>
+          		<input name="tipo" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="num_serie">Nº Serie</label>
+          		<input name="num_serie" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span6" style="margin-left: 0">
+          		<label for="voltagem">Voltagem</label>
+          		<input name="voltagem" type="text" class="span12" id="equipamento" value="" />      
+          </div>
+          <div class="span6">
+          		<label for="potencia">Potência</label>
+          		<input name="potencia" type="text" class="span12" id="equipamento" value="" />
+          </div>
+          <div class="span12" style="margin-left: 0">
+              <label for="observacao">Observação</label>
+              <input name="observacao" type="text" class="span12" id="equipamento" value="" />
+              <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
+          </div>
+          </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-close-equipamento">Fechar</button>
+            <button class="btn btn-primary">Adicionar</button>
+        </div>
+    </form>
+</div>
+<!-- Fim Modal cadastro Equipamentos -->
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -764,8 +872,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                                            echo 'estoque = 1000000';
+                                        }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
@@ -844,6 +952,45 @@
                                 type: "error",
                                 title: "Atenção",
                                 text: "Ocorreu um erro ao tentar adicionar serviço."
+                            });
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+
+        $("#formEquipamento").validate({
+            rules: {
+                equipamento: {
+                    required: true
+                }
+            },
+            messages: {
+                equipamento: {
+                    required: 'Insira o Equipamento'
+                }
+            },
+            submitHandler: function(form) {
+                var dados = $(form).serialize();
+                $("#divFormEquipamento").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/adicionarEquipamento",
+                    data: dados,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result == true) {
+                            $("#divEquipamento").load("<?php echo current_url(); ?> #divEquipamento");
+                            $("#equipamento").val('');
+                            $('#btn-close-equipamento').trigger('click');
+                            $("#divFormEquipamento").html('');
+                        } else {
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar adicionar Equipamento."
                             });
                         }
                     }
@@ -1018,6 +1165,33 @@
                     }
                 }
             });
+        });
+
+        $(document).on('click', '.equipamento', function(event) {
+            var idEquipamento = $(this).attr('idAcao');
+			var idOS = "<?php echo $result->idOs ?>"
+            if ((idEquipamento % 1) == 0) {
+                $("#divEquipamento").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/excluirEquipamento",
+					data: "idEquipamento=" + idEquipamento + "&idOs=" + idOS,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result == true) {
+                            $("#divEquipamento").load("<?php echo current_url(); ?> #divEquipamento");
+
+                        } else {
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao tentar excluir Equipamento."
+                            });
+                        }
+                    }
+                });
+                return false;
+            }
         });
 
         $(document).on('click', '.anotacao', function(event) {

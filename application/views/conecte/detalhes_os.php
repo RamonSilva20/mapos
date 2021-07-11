@@ -31,6 +31,7 @@
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
+                        <li id="tabEquipamentos"><a href="#tab6" data-toggle="tab">Equipamentos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -222,14 +223,59 @@
                             </div>
                         </div>
 
+<!-- Equipamentos -->
+                        <div class="tab-pane" id="tab6">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
 
+                                <div class="span12" id="divEquipamento" style="margin-left: 0">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Equipamento</th>
+                                                <th>Marca</th>
+                                                <th>Tipo</th>
+                                                <th>Nº Serie</th>
+                                                <th>Modelo</th>
+                                                <th>Cor</th>
+                                                <th>Voltagem</th>
+                                                <th>Potência</th>
+                                                <th>Obs:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $total = 0;
+                                            foreach ($equipamentos as $x) {
+                                                echo '<tr>';
+                                                echo '<td><div align="center">' . $x->equipamento . '</div></td>';
+                                                echo '<td><div align="center">' . $x->marca . '</div></td>';
+                                                echo '<td><div align="center">' . $x->tipo . '</div></td>';
+                                                echo '<td><div align="center">' . $x->num_serie . '</div></td>';
+                                                echo '<td><div align="center">' . $x->modelo . '</div></td>';
+                                                echo '<td><div align="center">' . $x->cor . '</div></td>';
+                                                echo '<td><div align="center">' . $x->voltagem . '</div></td>';
+                                                echo '<td><div align="center">' . $x->potencia . '</div></td>';
+                                                echo '<td><div align="center">' . $x->observacao . '</div></td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$equipamentos) {
+                                                echo '<tr><td colspan="9">Nenhum Equipamento cadastrado</td></tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Fim Equipamentos -->
 
                     </div>
 
                 </div>
 
 
-                .
+                &nbsp
 
             </div>
 
