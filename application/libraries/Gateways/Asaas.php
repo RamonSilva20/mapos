@@ -351,7 +351,7 @@ class Asaas extends BasePaymentGateway
             'complement' => $cliente['complemento'],
             'province' => $cliente['bairro'],
             'externalReference' => $clienteId,
-            'notificationDisabled' => false,
+            'notificationDisabled' => $this->asaasConfig['notify'] === false,
             'groupName' => 'mapos',
         ]);
 

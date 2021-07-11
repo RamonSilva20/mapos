@@ -74,6 +74,7 @@ $config['payment_gateways'] = [
         'name' => 'Asaas',
         'library_name' => 'Asaas',
         'production' => false,
+        'notify' => false,
         'credentials' => [
             'api_key' => '',
         ],
