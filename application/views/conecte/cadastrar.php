@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <?php if (isset($custom_error) && $custom_error != '') {
+                            <?php if ($custom_error != '') {
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
                             <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>

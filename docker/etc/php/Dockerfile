@@ -1,4 +1,4 @@
-FROM nanoninja/php-fpm:7.4.0
+FROM nanoninja/php-fpm:latest
 
 # Permission for PHP to write in volumes
 RUN usermod -u 1000 www-data
