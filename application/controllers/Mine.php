@@ -485,21 +485,20 @@ class Mine extends CI_Controller
             ];
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
-                
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
-                
+
                 $idOs = $id;
                 $os = $this->Conecte_model->getById($id);
-                
-                $remetentes = [];
-                $allusers = $this->usuarios_model->getAll();
 
-                foreach ($allusers as $user) {
-                    array_push($remetentes, $user->email);
-                }             
+                $remetentes = [];
+                $usuarios = $this->usuarios_model->getAll();
+
+                foreach ($usuarios as $usuario) {
+                    array_push($remetentes, $usuario->email);
+                }
                 array_push($remetentes, $os->email);
- 
+
                 $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #'.$idOs.' - Criada pelo Cliente');
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
                 redirect('mine/detalhesOs/' . $id);
@@ -567,10 +566,8 @@ class Mine extends CI_Controller
             if ($id > 0) {
                 $this->enviarEmailBoasVindas($id);
                 $this->enviarEmailTecnicoNotificaClienteNovo($id);
-                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um 
-                    e-mail de boas vindas será enviado para '.$data['email']);
+                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para '.$data['email']);
                 redirect(base_url() . 'index.php/mine');
-                
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
             }
@@ -591,7 +588,7 @@ class Mine extends CI_Controller
             $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
         }
     }
-    
+
     private function enviarOsPorEmail($idOs, $remetentes, $assunto)
     {
         $dados = [];
@@ -618,7 +615,11 @@ class Mine extends CI_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente, 'Subject' => $assunto, 'Return-Path' => ''];
+            $headers = [
+                'From' => $emitente,
+                'Subject' => $assunto,
+                'Return-Path' => ''
+            ];
             $email = [
                 'to' => $remetente,
                 'message' => $html,
@@ -637,7 +638,7 @@ class Mine extends CI_Controller
         $dados = [];
         $this->load->model('mapos_model');
         $this->load->model('clientes_model', '', true);
-        
+
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
@@ -649,8 +650,12 @@ class Mine extends CI_Controller
         $html = $this->load->view('os/emails/clientenovo', $dados, true);
 
         $this->load->model('email_model');
-        
-        $headers = ['From' => "\"$emitenteNome\" <$emitente>", 'Subject' => $assunto, 'Return-Path' => ''];
+
+        $headers = [
+            'From' => "\"$emitenteNome\" <$emitente>",
+            'Subject' => $assunto,
+            'Return-Path' => ''
+        ];
         $email = [
             'to' => $remetente,
             'message' => $html,
@@ -658,11 +663,10 @@ class Mine extends CI_Controller
             'date' => date('Y-m-d H:i:s'),
             'headers' => serialize($headers),
         ];
-        
+
         return $this->email_model->add('email_queue', $email);
     }
 
-    //Notifica time técnico que um novo cliente se cadastrou no sistema
     private function enviarEmailTecnicoNotificaClienteNovo($id)
     {
         $dados = [];
@@ -670,14 +674,12 @@ class Mine extends CI_Controller
         $this->load->model('clientes_model', '', true);
         $this->load->model('usuarios_model');
 
-        
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
         $emitente = $dados['emitente'][0]->email;
         $emitenteNome = $dados['emitente'][0]->nome;
         $assunto = 'Novo Cliente Cadastrado no Sistema';
-        
 
         $usuarios = [];
         $usuarios = $this->usuarios_model->getAll();
@@ -685,7 +687,11 @@ class Mine extends CI_Controller
         foreach ($usuarios as $usuario) {
             $dados['usuario'] = $usuario;
             $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
-            $headers = ['From' => "\"$emitenteNome\" <$emitente>", 'Subject' => $assunto, 'Return-Path' => ''];
+            $headers = [
+                'From' => "\"$emitenteNome\" <$emitente>",
+                'Subject' => $assunto,
+                'Return-Path' => ''
+            ];
             $email = [
                 'to' => $usuario->email,
                 'message' => $html,
@@ -695,7 +701,6 @@ class Mine extends CI_Controller
             ];
             $this->email_model->add('email_queue', $email);
         }
-        
     }
 }
 
