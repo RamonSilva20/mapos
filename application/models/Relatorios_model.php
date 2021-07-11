@@ -97,17 +97,27 @@ class Relatorios_model extends CI_Model
 
     public function produtosRapid()
     {
-        $this->db->order_by('descricao', 'asc');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosRapidMin()
     {
-        $this->db->order_by('descricao', 'asc');
-        $this->db->where('estoque <= estoqueMinimo');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque <= estoqueMinimo
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
@@ -120,7 +130,13 @@ class Relatorios_model extends CI_Model
         if ($estoqueInicial != null) {
             $whereEstoque = "AND estoque BETWEEN " . $this->db->escape($estoqueInicial) . " AND " . $this->db->escape($estoqueFinal);
         }
-        $query = "SELECT * FROM produtos WHERE estoque >= 0 $wherePreco $whereEstoque ORDER BY descricao";
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque >= 0 $wherePreco $whereEstoque
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
         return $this->db->query($query)->result();
     }
@@ -339,12 +355,11 @@ class Relatorios_model extends CI_Model
 
     public function vendasRapid($array = false)
     {
-        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id');
+        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-        $this->db->join('itens_de_vendas', 'itens_de_vendas.vendas_id = vendas.idVendas');
-        $this->db->order_by('vendas.dataVenda', 'DESC');
+        $this->db->order_by('vendas.idVendas', 'ASC');
 
         $result = $this->db->get();
         if ($array) {
@@ -373,11 +388,10 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome,itens_de_vendas.subTotal as valorTotal, itens_de_vendas.vendas_id FROM vendas
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas
         LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
         LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
-        LEFT JOIN itens_de_vendas ON itens_de_vendas.vendas_id = vendas.idVendas
-        WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
+        WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.idVendas";
 
         $result = $this->db->query($query);
         if ($array) {

@@ -224,7 +224,7 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita"/>
-                    <input class="span12 money" id="valor" type="text" name="valor"/>
+                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -261,7 +261,7 @@ $periodo = $this->input->get('periodo');
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success">Adicionar Receita</button>
+            <button class="btn btn-success" id="submitReceita">Adicionar Receita</button>
         </div>
     </form>
 </div>
@@ -300,7 +300,7 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" name="tipo" value="despesa"/>
-                    <input class="span12 money" type="text" name="valor"/>
+                    <input class="span12 money" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -338,7 +338,7 @@ $periodo = $this->input->get('periodo');
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Adicionar Despesa</button>
+            <button class="btn btn-danger" id="submitDespesa">Adicionar Despesa</button>
         </div>
     </form>
 </div>
@@ -377,7 +377,7 @@ $periodo = $this->input->get('periodo');
                     <label for="valor">Valor*</label>
                     <input type="hidden" name="tipo" value="despesa"/>
                     <input type="hidden" id="idEditar" name="id" value=""/>
-                    <input class="span12 money" type="text" name="valor" id="valorEditar"/>
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -512,6 +512,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitReceita").attr("disabled", true);
+                form.submit();
             }
         });
 
@@ -545,6 +549,10 @@ $periodo = $this->input->get('periodo');
                 vencimento: {
                     required: 'Campo Requerido.'
                 }
+            },
+            submitHandler: function(form) {
+                $("#submitDespesa").attr("disabled", true);
+                form.submit();
             }
         });
 

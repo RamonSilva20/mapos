@@ -26,6 +26,7 @@
                 <option value="Finalizado">Finalizado</option>
                 <option value="Cancelado">Cancelado</option>
                 <option value="Aguardando Peças">Aguardando Peças</option>
+                <option value="Aprovado">Aprovado</option>
             </select>
 
         </div>
@@ -86,7 +87,7 @@
                                 continue;
                             }
                         }
-                                                
+
                         switch ($r->status) {
                             case 'Aberto':
                                 $cor = '#00cd00';
@@ -111,6 +112,9 @@
                                 break;
                             case 'Aguardando Peças':
                                 $cor = '#FF7F00';
+                                break;
+                            case 'Aprovado':
+                                $cor = '#808080';
                                 break;
                             default:
                                 $cor = '#E0E4CC';
