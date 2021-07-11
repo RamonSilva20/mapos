@@ -34,7 +34,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - "../:/app"
-        command: install --ignore-platform-reqs --no-scripts
+        command: install
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin

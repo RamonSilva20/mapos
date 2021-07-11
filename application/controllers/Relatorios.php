@@ -105,7 +105,6 @@ class Relatorios extends MY_Controller
                 'CEP' => 'string',
                 'Contato' => 'string',
                 'Complemento' => 'string',
-                'Fornecedor' => 'string',
             ];
 
             $writer = new XLSXWriter();
@@ -741,36 +740,28 @@ class Relatorios extends MY_Controller
         if ($format == 'xls') {
             $vendasFormatadas = array_map(function ($item) {
                 return [
-                    '#' => $item['idVendas'],
                     'cliente' => $item['nomeCliente'],
-                    'vendedor' => $item['nome'],
-                    'data' => $item['dataVenda'],
                     'total' => $item['valorTotal'] ?: 0,
+                    'data' => $item['dataVenda'],
+                    'vendedor' => $item['nome'],
                 ];
             }, $vendas);
 
             $cabecalho = [
-                '#' => 'string',
                 'Cliente' => 'string',
-                'Vendedor' => 'string',
-                'Data' => 'DD-MM-YYYY',
                 'Total' => 'price',
+                'Data' => 'YYYY-MM-DD',
+                'Vendedor' => 'string',
             ];
 
             $writer = new XLSXWriter();
-            $writer->writeSheetRow(null, []);
+
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
                 $writer->writeSheetRow('Sheet1', $venda);
             }
-            $writer->writeSheetRow(null, []);
-            $writer->writeSheetRow(null, []);
-            $writer->writeSheetRow(null, []);
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
-                null,
-                null,
-                null,
                 null,
                 $totalVendas,
             ]);
@@ -817,35 +808,28 @@ class Relatorios extends MY_Controller
         if ($format == 'xls') {
             $vendasFormatadas = array_map(function ($item) {
                 return [
-                    '#' => $item['idVendas'],
                     'cliente' => $item['nomeCliente'],
-                    'vendedor' => $item['nome'],
-                    'data' => $item['dataVenda'],
                     'total' => $item['valorTotal'] ?: 0,
+                    'data' => $item['dataVenda'],
+                    'vendedor' => $item['nome'],
                 ];
             }, $vendas);
 
             $cabecalho = [
-                '#' => 'string',
                 'Cliente' => 'string',
-                'Vendedor' => 'string',
-                'Data' => 'DD-MM-YYYY',
                 'Total' => 'price',
+                'Data' => 'YYYY-MM-DD',
+                'Vendedor' => 'string',
             ];
 
             $writer = new XLSXWriter();
+
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
                 $writer->writeSheetRow('Sheet1', $venda);
             }
-            $writer->writeSheetRow(null, []);
-            $writer->writeSheetRow(null, []);
-            $writer->writeSheetRow(null, []);
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
-                null,
-                null,
-                null,
                 null,
                 $totalVendas,
             ]);

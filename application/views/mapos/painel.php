@@ -87,7 +87,6 @@
                                 <option value="Finalizado">Finalizado</option>
                                 <option value="Cancelado">Cancelado</option>
                                 <option value="Aguardando Peças">Aguardando Peças</option>
-                                <option value="Aprovado">Aprovado</option>
                             </select>
                             <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
                         </form>
@@ -379,8 +378,7 @@
                         },
                         series: [{
                                 name: 'Receita Líquida',
-                                color: '#98CE00', //COR DO LADO POSITIVO DA BARRA "RECEITA LIQUIDA"
-                                negativeColor: '#00CED1', //COR DO LADO NEGATIVO DA BARRA "RECEITA LIQUIDA"
+                                negativeColor: '#00CED1',
                                 data: [
                                     [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>],
                                     [<?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>],
@@ -398,8 +396,7 @@
                             },
                             {
                                 name: 'Receita Bruta',
-                                color: '#5EB1BF',//COR DO LADO NEGATIVO DA BARRA "RECEITA BRUTA"
-                                negativeColor: '#D32D41',//COR DO LADO NEGATIVO DA BARRA "RECEITA BRUTA"
+                                negativeColor: '#32CD32',
                                 data: [
                                     [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>],
                                     [<?php echo($financeiro_mes->VALOR_FEV_REC); ?>],
@@ -417,8 +414,7 @@
                             },
                             {
                                 name: 'Despesas',
-                                color: '#D84727', //COR DO LADO POSITIVO DA BARRA "DESPESAS"
-                                negativeColor: '#5EB1BF', //COR DO LADO NEGATIVO DA BARRA "DESPESAS"
+                                negativeColor: '#FF6347',
                                 data: [
                                     [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>],
                                     [<?php echo($financeiro_mes->VALOR_FEV_DES); ?>],
@@ -436,8 +432,7 @@
                             },
                             {
                                 name: 'Inadimplência',
-                                color: '#EF7B45',//COR DO LADO POSITIVO DA BARRA "INADIMPLENCIA"
-                                negativeColor: '#D84727',//COR DO LADO NEGATIVO DA BARRA "INADIMPLENCIA"
+                                negativeColor: '#8B008B',
                                 data: [
                                     [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>],
                                     [<?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>],
@@ -591,7 +586,6 @@
             var plot1 = jQuery.jqplot('chart-os', [data], {
                 seriesDefaults: {
                     // Make this a pie chart.
-                    seriesColors: ['#ffb703','#fb8500','#219ebc','#023047','#8ecae6','#e76f51'], //COR DE CADA BARRA DO GRAFICO DE PIZZA "ESTATISTICAS DE OS", ALTERAR CONFORME ORDEM DE EXIBICAO
                     renderer: jQuery.jqplot.PieRenderer,
                     rendererOptions: {
                         // Put data labels on the pie slices.
@@ -625,7 +619,7 @@
                 ];
                 var plot2 = jQuery.jqplot('chart-financeiro', [data2], {
 
-                    seriesColors: ["#98CE00", "#e76f51", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"], //COR DAS BARRAS DO GRAFICO "ESTATISTICAS FINANCEIRAS REALIZADAS"
+                    seriesColors: ["#9ACD32", "#FF8C00", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
                     seriesDefaults: {
                         // Make this a pie chart.
                         renderer: jQuery.jqplot.PieRenderer,
@@ -649,7 +643,7 @@
                 ];
                 var plot3 = jQuery.jqplot('chart-financeiro2', [data3], {
 
-                        seriesColors: ["#90be6d", "#f94144", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],//COR DAS BARRAS DO GRAFICO "ESTATISTICAS FINANCEIRAS PENDENTE"
+                        seriesColors: ["#90EE90", "#FF0000", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],
                         seriesDefaults: {
                             // Make this a pie chart.
                             renderer: jQuery.jqplot.PieRenderer,
@@ -675,7 +669,7 @@
                 ];
                 var plot4 = jQuery.jqplot('chart-financeiro-caixa', [data4], {
 
-                        seriesColors: ["#2D3E00", "#58355E", "#d8b83f", "#ff5800", "#0085cc"], //COR DAS BARRAS DO GRAFICO "TOTAL EM CAIXA"
+                        seriesColors: ["#839557", "#d8b83f", "#d8b83f", "#ff5800", "#0085cc"],
                         seriesDefaults: {
                             // Make this a pie chart.
                             renderer: jQuery.jqplot.PieRenderer,
