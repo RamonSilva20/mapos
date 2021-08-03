@@ -128,7 +128,7 @@
 
                         echo '<tr>';
                         echo '<td>' . $r->idOs . '</td>';
-                        echo '<td>' . $r->nomeCliente . '</td>';
+                        echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' .$r->nomeCliente. '</a></td>';
                         echo '<td>' . $r->nome . '</td>';
                         echo '<td>' . $dataInicial . '</td>';
                         echo '<td>' . $dataFinal . '</td>';
