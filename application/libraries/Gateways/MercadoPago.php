@@ -7,7 +7,7 @@ use MercadoPago\SDK;
 
 class MercadoPago extends BasePaymentGateway
 {
-    /** SDK $mercadoPagoApi */
+    /** @var SDK $mercadoPagoApi */
     private $mercadoPagoApi;
 
     private $mercadoPagoConfig;
