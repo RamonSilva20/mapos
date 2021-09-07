@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.35.0] - 2021-09-04
+
+### Added
+- Integração com gateway de pagamento asaas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Link para acessar cadastro do cliente de dentro da OS. [@tutibueno](https://github.com/tutibueno)
+
 ## [4.34.0] - 2021-07-11
 
 ### Added
