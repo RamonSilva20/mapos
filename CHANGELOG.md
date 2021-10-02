@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.35.1] - 2021-10-02
+
+### Fixed
+- Correção de bug que faturava OS/Venda incorretamente com valores superiores a R$ 1000,00. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido configuração de controle de edição de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.35.0] - 2021-09-04
 
 ### Added
