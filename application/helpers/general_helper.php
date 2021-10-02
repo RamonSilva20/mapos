@@ -68,3 +68,18 @@ if (!function_exists('getPixKeyType')) {
         return null;
     }
 }
+
+if (!function_exists('getAmount')) {
+    function getAmount($money)
+    {
+        $cleanString = preg_replace('/([^0-9\.,])/i', '', $money);
+        $onlyNumbersString = preg_replace('/([^0-9])/i', '', $money);
+
+        $separatorsCountToBeErased = strlen($cleanString) - strlen($onlyNumbersString) - 1;
+
+        $stringWithCommaOrDot = preg_replace('/([,\.])/', '', $cleanString, $separatorsCountToBeErased);
+        $removedThousandSeparator = preg_replace('/(\.|,)(?=[0-9]{3,}$)/', '', $stringWithCommaOrDot);
+
+        return floatval(str_replace(',', '.', $removedThousandSeparator));
+    }
+}

@@ -834,7 +834,7 @@ class Os extends MY_Controller
 
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => $this->input->post('valor'),
+                'valor' => getAmount($this->input->post('valor')),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
