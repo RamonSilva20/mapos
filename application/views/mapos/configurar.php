@@ -136,7 +136,7 @@
                             <label for="control_editos" class="control-label">Controle de edição de OS</label>
                             <div class="controls">
                                 <select name="control_editos" id="control_editos">
-                                    <option value="1">Sim</option>
+                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Sim</option>
                                     <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?> >Não</option>
                                 </select>
                                 <span class="help-inline">Ativar ou desativar a permissão para alterar OS faturada e/ou cancelada.</span>
