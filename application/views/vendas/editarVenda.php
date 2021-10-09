@@ -274,25 +274,34 @@
             submitHandler: function(form) {
                 var dados = $(form).serialize();
                 $('#btn-cancelar-faturar').trigger('click');
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/vendas/faturar",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            window.location.reload(true);
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar venda."
-                            });
-                            $('#progress-fatura').hide();
+                if (valor <= 0) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: "Inserir Produtos"
+                    });
+                } else if (valor > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/vendas/faturar",
+                        data: dados,
+                        dataType: 'json',
+
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar faturar venda."
+                                });
+                                $('#progress-fatura').hide();
+                            }
                         }
-                    }
-                });
-                return false;
+                    });
+                    return false;
+                }
             }
         });
         $("#produto").autocomplete({
