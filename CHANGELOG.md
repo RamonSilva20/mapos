@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.35.2] - 2021-10-10
+
+### Fixed
+- Adequação para exibir mensagem de erro ao tentar faturar venda sem produtos e OS sem produtos e/ou serviços. [@visaotec](https://github.com/visaotec)
+
 ## [4.35.1] - 2021-10-02
 
 ### Fixed
