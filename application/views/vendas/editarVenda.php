@@ -123,13 +123,15 @@
                                             echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
                                         } ?>
+                                    </tbody>
+                                    <tfoot>
                                         <tr>
                                             <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td>
                                                 <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
                                             </td>
                                         </tr>
-                                    </tbody>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -273,20 +275,22 @@
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
+                var qtdProdutos = $('#tblProdutos >tbody >tr').length;
+
                 $('#btn-cancelar-faturar').trigger('click');
-                if (valor <= 0) {
+
+                if (qtdProdutos <= 0) {
                     Swal.fire({
                         type: "error",
                         title: "Atenção",
-                        text: "Inserir Produtos"
+                        text: "Não é possível faturar uma venda sem produtos"
                     });
-                } else if (valor > 0) {
+                } else if (qtdProdutos > 0) {
                     $.ajax({
                         type: "POST",
                         url: "<?php echo base_url(); ?>index.php/vendas/faturar",
                         data: dados,
                         dataType: 'json',
-
                         success: function(data) {
                             if (data.result == true) {
                                 window.location.reload(true);
@@ -300,6 +304,7 @@
                             }
                         }
                     });
+
                     return false;
                 }
             }

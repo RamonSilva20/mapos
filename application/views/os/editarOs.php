@@ -235,14 +235,15 @@
                                                 echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
+                                        </tbody>
+                                        <tfoot>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$
-                                                            <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></div>
+                                                    <div align="center"><strong>R$ <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></div>
                                                 </td>
                                             </tr>
-                                        </tbody>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -274,7 +275,7 @@
                             </div>
                             <div class="widget-box" id="divServicos">
                                 <div class="widget_content nopadding">
-                                    <table width="100%" class="table table-bordered">
+                                    <table width="100%" class="table table-bordered" id="tblServicos">
                                         <thead>
                                             <tr>
                                                 <th>Serviço</th>
@@ -299,15 +300,15 @@
                                                 echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
                                                 echo '</tr>';
                                             } ?>
+                                        </tbody>
+                                        <tfoot>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$
-                                                            <?php echo number_format($totals, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="
-												<?php echo number_format($totals, 2); ?>"></strong></div>
+                                                    <div align="center"><strong>R$ <?php echo number_format($totals, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="<?php echo number_format($totals, 2); ?>"></strong></div>
                                                 </td>
                                             </tr>
-                                        </tbody>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -572,28 +573,40 @@
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
+                var qtdProdutos = $('#tblProdutos >tbody >tr').length;
+                var qtdServicos = $('#tblServicos >tbody >tr').length;
+                var qtdTotalProdutosServicos = qtdProdutos + qtdServicos;
+
                 $('#btn-cancelar-faturar').trigger('click');
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/faturar",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
 
-                            window.location.reload(true);
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar OS."
-                            });
-                            $('#progress-fatura').hide();
+                if (qtdTotalProdutosServicos <= 0) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: "Não é possível faturar uma OS sem serviços e/ou produtos"
+                    });
+                } else if (qtdTotalProdutosServicos > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/os/faturar",
+                        data: dados,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar faturar OS."
+                                });
+                                $('#progress-fatura').hide();
+                            }
                         }
-                    }
-                });
+                    });
 
-                return false;
+                    return false;
+                }
             }
         });
 
