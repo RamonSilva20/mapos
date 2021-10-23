@@ -18,6 +18,7 @@ class Financeiro extends MY_Controller
         $this->load->helper('codegen_helper');
         $this->data['menuFinanceiro'] = 'financeiro';
     }
+
     public function index()
     {
         $this->lancamentos();
@@ -31,110 +32,60 @@ class Financeiro extends MY_Controller
         }
 
         $where = '';
+        $vencimento_de = $this->input->get('vencimento_de') ?: date('d/m/Y');
+        $vencimento_ate = $this->input->get('vencimento_ate') ?: date('d/m/Y');
+        $cliente = $this->input->get('cliente');
+        $tipo = $this->input->get('tipo');
+        $status = $this->input->get('status');
         $periodo = $this->input->get('periodo');
-        $situacao = $this->input->get('situacao');
 
-        // busca todos os lançamentos
-        if ($periodo == 'todos') {
-            if ($situacao == 'previsto') {
-                $where = 'data_vencimento > "' . date('Y-m-d') . '" AND baixado = "0"';
+        if (! empty($vencimento_de)) {
+            $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
+
+            if (empty($where)) {
+                $where = "data_vencimento >= '$date'";
             } else {
-                if ($situacao == 'atrasado') {
-                    $where = 'data_vencimento < "' . date('Y-m-d') . '" AND baixado = "0"';
-                } else {
-                    if ($situacao == 'realizado') {
-                        $where = 'baixado = "1"';
-                    }
-
-                    if ($situacao == 'pendente') {
-                        $where = 'baixado = "0"';
-                    }
-                }
+                $where .= " AND data_vencimento >= '$date'";
             }
-        } else {
+        }
 
-            // busca lançamentos do dia
-            if ($periodo == null || $periodo == 'dia') {
-                $where = 'data_vencimento = "' . date('Y-m-d' . '"');
-            } // fim lançamentos dia
+        if (! empty($vencimento_ate)) {
+            $date = DateTime::createFromFormat('d/m/Y', $vencimento_ate)->format('Y-m-d');
 
-            else {
+            if (empty($where)) {
+                $where = "data_vencimento <= '$date'";
+            } else {
+                $where .= " AND data_vencimento <= '$date'";
+            }
+        }
 
-                // busca lançamentos da semana
-                if ($periodo == 'semana') {
-                    $semana = $this->getThisWeek();
+        if (isset($status) && $status != '') {
+            if (empty($where)) {
+                $where = "baixado = '$status'";
+            } else {
+                $where .= " AND baixado = '$status'";
+            }
+        }
 
-                    if (!isset($situacao) || $situacao == 'todos') {
-                        $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                    } else {
-                        if ($situacao == 'previsto') {
-                            $where = 'data_vencimento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                        } else {
-                            if ($situacao == 'atrasado') {
-                                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'realizado') {
-                                    $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                } else {
-                                    $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                }
-                            }
-                        }
-                    }
-                } // fim lançamentos dia
-                else {
+        if (! empty($cliente)) {
+            if (empty($where)) {
+                $where = "cliente_fornecedor LIKE '%${cliente}%'";
+            } else {
+                $where .= " AND cliente_fornecedor LIKE '%${cliente}%'";
+            }
+        }
 
-                    // busca lançamento do mês
-
-                    if ($periodo == 'mes') {
-                        $mes = $this->getThisMonth();
-
-                        if (!isset($situacao) || $situacao == 'todos') {
-                            $where = 'data_vencimento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '"';
-                        } else {
-                            if ($situacao == 'previsto') {
-                                $where = 'data_vencimento BETWEEN "' . date('Y-m-d') . '" AND "' . $mes[1] . '" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'atrasado') {
-                                    $where = 'data_vencimento BETWEEN "' . $mes[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'realizado') {
-                                        $where = 'data_vencimento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '" AND baixado = "1"';
-                                    } else {
-                                        $where = 'data_vencimento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '" AND baixado = "0"';
-                                    }
-                                }
-                            }
-                        }
-                    } // busca lançamentos do ano
-                    else {
-                        $ano = $this->getThisYear();
-
-                        if (!isset($situacao) || $situacao == 'todos') {
-                            $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '"';
-                        } else {
-                            if ($situacao == 'previsto') {
-                                $where = 'data_vencimento BETWEEN "' . date('Y-m-d') . '" AND "' . $ano[1] . '" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'atrasado') {
-                                    $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'realizado') {
-                                        $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '" AND baixado = "1"';
-                                    } else {
-                                        $where = 'data_vencimento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '" AND baixado = "0"';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+        if (! empty($tipo)) {
+            if (empty($where)) {
+                $where = "tipo = '$tipo'";
+            } else {
+                $where .= " AND tipo = '$tipo'";
             }
         }
 
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?periodo=$periodo&situacao=$situacao");
+        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?vencimento_de=$vencimento_de&vencimento_ate=$vencimento_ate&cliente=$cliente&tipo=$tipo&status=$status&periodo=$periodo");
         $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $this->data['configuration']['page_query_string'] = true;
 
@@ -194,8 +145,16 @@ class Financeiro extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
+                'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Receita adicionada com sucesso!');
                 log_info('Adicionou uma receita');
@@ -256,8 +215,16 @@ class Financeiro extends MY_Controller
                 'cliente_fornecedor' => set_value('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
+                'observacoes' => set_value('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Despesa adicionada com sucesso!');
                 log_info('Adicionou uma despesa');
@@ -307,15 +274,23 @@ class Financeiro extends MY_Controller
 
             $data = [
                 'descricao' => $this->input->post('descricao'),
-                'valor' => $this->input->post('valor'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
+                'valor' => $this->input->post('valor'),
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
+                'observacoes' => $this->input->post('observacoes'),
+                'usuarios_id' => $this->session->userdata('id'),
             ];
 
+            if (set_value('idFornecedor')) {
+                $data['clientes_id'] =  set_value('idFornecedor');
+            }
+            if (set_value('idCliente')) {
+                $data['clientes_id'] =  set_value('idCliente');
+            }
             if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
                 log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
@@ -331,14 +306,22 @@ class Financeiro extends MY_Controller
 
         $data = [
             'descricao' => $this->input->post('descricao'),
-            'valor' => $this->input->post('valor'),
             'data_vencimento' => $this->input->post('vencimento'),
-            'data_pagamento' => $this->input->post('pagamento'),
+            'data_pagamento' => $pagamento,
+            'valor' => $this->input->post('valor'),
             'baixado' => $this->input->post('pago'),
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
             'tipo' => $this->input->post('tipo'),
+            'usuarios_id' => $this->session->userdata('id'),
         ];
+        if (set_value('idFornecedor')) {
+            $data['clientes_id'] =  set_value('idFornecedor');
+        }
+        if (set_value('idCliente')) {
+            $data['clientes_id'] =  set_value('idCliente');
+        }
+
         print_r($data);
     }
 
@@ -364,6 +347,22 @@ class Financeiro extends MY_Controller
                 $json = ['result' => false];
                 echo json_encode($json);
             }
+        }
+    }
+
+    public function autoCompleteClienteFornecedor()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteClienteFornecedor($q);
+        }
+    }
+
+    public function autoCompleteClienteAddReceita()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteClienteReceita($q);
         }
     }
 

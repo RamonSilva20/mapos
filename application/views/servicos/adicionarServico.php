@@ -7,7 +7,7 @@
                 </span>
                 <h5>Cadastro de Serviço</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formServico" method="post" class="form-horizontal">
                     <div class="control-group">
@@ -19,7 +19,7 @@
                     <div class="control-group">
                         <label for="preco" class="control-label"><span class="required">Preço*</span></label>
                         <div class="controls">
-                            <input id="preco" class="money" type="text" name="preco" value="<?php echo set_value('preco'); ?>" />
+                            <input id="preco" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="preco" value="<?php echo set_value('preco'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">

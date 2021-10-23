@@ -1,59 +1,51 @@
 <?php $permissoes = unserialize($result->permissoes);?>
 <div class="span12" style="margin-left: 0">
     <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
-
-    <div class="span12" style="margin-left: 0">
-        
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-lock"></i>
-                </span>
-                <h5>Editar Permissão</h5>
-            </div>
-            <div class="widget-content">
-                
-                <div class="span4">
-                    <label>Nome da Permissão</label>
-                    <input name="nome" type="text" id="nome" class="span12" value="<?php echo $result->nome; ?>" />
-                    <input type="hidden" name="idPermissao" value="<?php echo $result->idPermissao; ?>">
-
+        <div class="span12" style="margin-left: 0">
+            <div class="widget-box">
+                <div class="widget-title">
+               <span class="icon">
+               <i class="fas fa-lock"></i>
+               </span>
+                    <h5>Editar Permissão</h5>
+                    <div class="buttons">
+                        <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/permissoes"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    </div>
                 </div>
-
-                <div class="span3">
-                    <label>Situação</label>
-                    
-                    <select name="situacao" id="situacao" class="span12">
-                        <?php if ($result->situacao == 1) {
+                <div class="widget-content">
+                    <div class="span4">
+                        <label>Nome da Permissão</label>
+                        <input name="nome" type="text" id="nome" class="span12" value="<?php echo $result->nome; ?>" />
+                        <input type="hidden" name="idPermissao" value="<?php echo $result->idPermissao; ?>">
+                    </div>
+                    <div class="span3">
+                        <label>Situação</label>
+                        <select name="situacao" id="situacao" class="span12">
+                            <?php if ($result->situacao == 1) {
     $sim = 'selected';
     $nao ='';
 } else {
     $sim = '';
     $nao ='selected';
 }?>
-                        <option value="1" <?php echo $sim;?>>Ativo</option>
-                        <option value="0" <?php echo $nao;?>>Inativo</option>
-                    </select>
-
-                </div>
-                <div class="span4">
-                    <br/>
-                    <label>
-                        <input name="" type="checkbox" value="1" id="marcarTodos" />
-                        <span class="lbl"> Marcar Todos</span>
-
-                    </label>
-                    <br/>
-                </div>
-
-                <div class="control-group">
-                    <label for="documento" class="control-label"></label>
-                    <div class="controls">
-
-                        <table class="table table-bordered">
-                            <tbody>
+                            <option value="1" <?php echo $sim;?>>Ativo</option>
+                            <option value="0" <?php echo $nao;?>>Inativo</option>
+                        </select>
+                    </div>
+                    <div class="span4">
+                        <br/>
+                        <label>
+                            <input name="" type="checkbox" value="1" id="marcarTodos" />
+                            <span class="lbl"> Marcar Todos</span>
+                        </label>
+                        <br/>
+                    </div>
+                    <div class="control-group">
+                        <label for="documento" class="control-label"></label>
+                        <div class="controls">
+                            <table class="table table-bordered">
+                                <tbody>
                                 <tr>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vCliente'])) {
@@ -64,7 +56,6 @@
                                             <span class="lbl"> Visualizar Cliente</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aCliente'])) {
@@ -75,7 +66,6 @@
                                             <span class="lbl"> Adicionar Cliente</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eCliente'])) {
@@ -96,12 +86,11 @@
                                             <span class="lbl"> Excluir Cliente</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-
-                                <tr><td colspan="4"></td></tr>
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vProduto'])) {
@@ -112,7 +101,6 @@
                                             <span class="lbl"> Visualizar Produto</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aProduto'])) {
@@ -123,7 +111,6 @@
                                             <span class="lbl"> Adicionar Produto</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eProduto'])) {
@@ -134,7 +121,6 @@
                                             <span class="lbl"> Editar Produto</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dProduto'])) {
@@ -145,12 +131,11 @@
                                             <span class="lbl"> Excluir Produto</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-                                <tr><td colspan="4"></td></tr>
-                                
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vServico'])) {
@@ -161,7 +146,6 @@
                                             <span class="lbl"> Visualizar Serviço</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aServico'])) {
@@ -172,7 +156,6 @@
                                             <span class="lbl"> Adicionar Serviço</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eServico'])) {
@@ -183,7 +166,6 @@
                                             <span class="lbl"> Editar Serviço</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dServico'])) {
@@ -194,12 +176,11 @@
                                             <span class="lbl"> Excluir Serviço</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-                                
-                                <tr><td colspan="4"></td></tr>
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vOs'])) {
@@ -210,7 +191,6 @@
                                             <span class="lbl"> Visualizar OS</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aOs'])) {
@@ -221,7 +201,6 @@
                                             <span class="lbl"> Adicionar OS</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eOs'])) {
@@ -232,7 +211,6 @@
                                             <span class="lbl"> Editar OS</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dOs'])) {
@@ -243,12 +221,11 @@
                                             <span class="lbl"> Excluir OS</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-                                <tr><td colspan="4"></td></tr>
-                                
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vVenda'])) {
@@ -259,7 +236,6 @@
                                             <span class="lbl"> Visualizar Venda</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aVenda'])) {
@@ -270,7 +246,6 @@
                                             <span class="lbl"> Adicionar Venda</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eVenda'])) {
@@ -281,7 +256,6 @@
                                             <span class="lbl"> Editar Venda</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dVenda'])) {
@@ -292,13 +266,56 @@
                                             <span class="lbl"> Excluir Venda</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-
-                                <tr><td colspan="4"></td></tr>
-                                
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['vCobranca'])) {
+    if ($permissoes['vCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="vCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Cobranças</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aCobranca'])) {
+    if ($permissoes['aCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="aCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Cobranças</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['eCobranca'])) {
+    if ($permissoes['eCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="eCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Cobranças</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dCobranca'])) {
+    if ($permissoes['dCobranca'] == '1') {
+        echo 'checked';
+    }
+}?> name="dCobranca" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Cobranças</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vGarantia'])) {
@@ -309,7 +326,6 @@
                                             <span class="lbl"> Visualizar Garantia</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aGarantia'])) {
@@ -320,7 +336,6 @@
                                             <span class="lbl"> Adicionar Garantia</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eGarantia'])) {
@@ -331,7 +346,6 @@
                                             <span class="lbl"> Editar Garantia</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dGarantia'])) {
@@ -342,13 +356,11 @@
                                             <span class="lbl"> Excluir Garantia</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-                                
-                                <tr><td colspan="4"></td></tr>
-
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vArquivo'])) {
@@ -359,7 +371,6 @@
                                             <span class="lbl"> Visualizar Arquivo</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aArquivo'])) {
@@ -370,7 +381,6 @@
                                             <span class="lbl"> Adicionar Arquivo</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eArquivo'])) {
@@ -381,7 +391,6 @@
                                             <span class="lbl"> Editar Arquivo</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dArquivo'])) {
@@ -392,63 +401,11 @@
                                             <span class="lbl"> Excluir Arquivo</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-                                
-                                <tr><td colspan="4"></td></tr>
-
                                 <tr>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['vPagamento'])) {
-    if ($permissoes['vPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="vPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Visualizar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['aPagamento'])) {
-    if ($permissoes['aPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="aPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Adicionar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['ePagamento'])) {
-    if ($permissoes['ePagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="ePagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Editar Pagamento</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['dPagamento'])) {
-    if ($permissoes['dPagamento'] == '1') {
-        echo 'checked';
-    }
-}?> name="dPagamento" class="marcar" type="checkbox" value="1" />
-                                            <span class="lbl"> Excluir Pagamento</span>
-                                        </label>
-                                    </td>
-                                 
+                                    <td colspan="4"></td>
                                 </tr>
-
-                                <tr><td colspan="4"></td></tr>
-
                                 <tr>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['vLancamento'])) {
@@ -459,7 +416,6 @@
                                             <span class="lbl"> Visualizar Lançamento</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['aLancamento'])) {
@@ -470,7 +426,6 @@
                                             <span class="lbl"> Adicionar Lançamento</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['eLancamento'])) {
@@ -481,7 +436,6 @@
                                             <span class="lbl"> Editar Lançamento</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['dLancamento'])) {
@@ -492,13 +446,11 @@
                                             <span class="lbl"> Excluir Lançamento</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-
-                                <tr><td colspan="4"></td></tr>
-
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rCliente'])) {
@@ -509,7 +461,6 @@
                                             <span class="lbl"> Relatório Cliente</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rServico'])) {
@@ -520,7 +471,6 @@
                                             <span class="lbl"> Relatório Serviço</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rOs'])) {
@@ -531,7 +481,6 @@
                                             <span class="lbl"> Relatório OS</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rProduto'])) {
@@ -542,11 +491,8 @@
                                             <span class="lbl"> Relatório Produto</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-
                                 <tr>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rVenda'])) {
@@ -557,7 +503,6 @@
                                             <span class="lbl"> Relatório Venda</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rFinanceiro'])) {
@@ -569,12 +514,11 @@
                                         </label>
                                     </td>
                                     <td colspan="2"></td>
-                                 
                                 </tr>
-                                <tr><td colspan="4"></td></tr>
-
                                 <tr>
-
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['cUsuario'])) {
@@ -585,7 +529,6 @@
                                             <span class="lbl"> Configurar Usuário</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['cEmitente'])) {
@@ -596,7 +539,6 @@
                                             <span class="lbl"> Configurar Emitente</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['cPermissao'])) {
@@ -607,7 +549,6 @@
                                             <span class="lbl"> Configurar Permissão</span>
                                         </label>
                                     </td>
-
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['cBackup'])) {
@@ -618,9 +559,7 @@
                                             <span class="lbl"> Backup</span>
                                         </label>
                                     </td>
-                                 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label>
@@ -642,53 +581,34 @@
                                     </td>
                                     <td></td>
                                 </tr>
-
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="span12">
+                            <div class="span6 offset3">
+                                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-              
-    
-            <div class="form-actions">
-                <div class="span12">
-                    <div class="span6 offset3">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                        <a href="<?php echo base_url() ?>index.php/permissoes" id="" class="btn"><i class="fas fa-backward"></i> Voltar</a>
-                    </div>
-                </div>
-            </div>
-           
             </div>
         </div>
-
-                   
-    </div>
-
-</form>
-
+    </form>
 </div>
-
-
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-
-    $("#marcarTodos").change(function () {
-        $("input:checkbox").prop('checked', $(this).prop("checked"));
-    });   
-
- 
-    $("#formPermissao").validate({
-        rules :{
-            nome: {required: true}
-        },
-        messages:{
-            nome: {required: 'Campo obrigatório'}
-        }
-    });     
-
-        
-
+        $("#marcarTodos").change(function () {
+            $("input:checkbox").prop('checked', $(this).prop("checked"));
+        });
+        $("#formPermissao").validate({
+            rules :{
+                nome: {required: true}
+            },
+            messages:{
+                nome: {required: 'Campo obrigatório'}
+            }});
     });
 </script>

@@ -27,6 +27,11 @@ class MY_Controller extends CI_Controller
             'app_theme' => 'default',
             'os_notification' => 'cliente',
             'control_estoque' => '1',
+            'notifica_whats' => '',
+            'control_baixa' => '0',
+            'control_editos' => '1',
+            'control_datatable' => '1',
+            'pix_key' => '',
         ],
     ];
 

@@ -4,6 +4,311 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.35.2] - 2021-10-10
+
+### Fixed
+- Adequação para exibir mensagem de erro ao tentar faturar venda sem produtos e OS sem produtos e/ou serviços. [@visaotec](https://github.com/visaotec)
+
+## [4.35.1] - 2021-10-02
+
+### Fixed
+- Correção de bug que faturava OS/Venda incorretamente com valores superiores a R$ 1000,00. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido configuração de controle de edição de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.35.0] - 2021-09-04
+
+### Added
+- Integração com gateway de pagamento asaas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Link para acessar cadastro do cliente de dentro da OS. [@tutibueno](https://github.com/tutibueno)
+
+## [4.34.0] - 2021-07-11
+
+### Added
+- Envio de email para o cliente e técnicos após cadastro da OS pelo cliente. [@tutibueno](https://github.com/tutibueno)
+- Envia de email de boas vindas quando o cliente se cadastra na área do cliente. [@tutibueno](https://github.com/tutibueno)
+- Notifica o time técnico que um novo cliente se cadastrou pela área do cliente. [@tutibueno](https://github.com/tutibueno)
+
+### Fixed
+- Corrigido versão do PHP em dockerfile. [@mikxingu](https://github.com/mikxingu)
+
+## [4.33.1] - 2021-05-24
+
+### Fixed
+- Corrigido valor incorreto em banco.sql. [@willph](https://github.com/willph)
+
+## [4.33.0] - 2021-05-23
+
+### Added
+- Adicionado status "Aprovado" em OS. [@fwsund](https://github.com/fwsund)
+- Sugestão de valor de desconto ao faturar OS/Vendar de acordo com percentual. [@hoshikawakun](https://github.com/hoshikawakun)
+- Sugestão de valor do produto ao editar/adicionar produto de acordo com margem. [@hoshikawakun](https://github.com/hoshikawakun)
+
+### Changed
+- Melhorias gerais em relatórios. [@hoshikawakun](https://github.com/hoshikawakun)
+- Melhora em cores de gráficos do painel. [@mikxingu](https://github.com/mikxingu)
+
+## [4.32.2] - 2021-04-16
+
+### Changed
+- Alteradas as cores dos gráficos do painel para melhor entendimento e leitura dos gráficos e adicionado comentário nas linhas para que os usuários possam alterar as cores mais facilmente. [@mikxingu](https://github.com/mikxingu)
+
+## [4.32.1] - 2021-03-27
+
+### Fixed
+- Adequação para usar versão de PHP 7.4 fixa em docker e correção no comando de instalação do composer em docker. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para usar submit handler para evitar que lançamentos financeiros sejam duplicados. [@bietez](https://github.com/bietez)
+
+## [4.32.0] - 2021-03-23
+
+### Added
+- Criada uma forma configurável de como o padrão básico de exibição da listagem de OS.[@bulfaitelo](https://github.com/bulfaitelo)
+
+### Fixed
+- Corrigido problema ao gerar qr code de PIX. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido erro ao selecionar filtro faturado e nome do cliente, não vinha os dados existentes. [@willph](https://github.com/willph)
+- Corrigido autocomplete de CEP do viacep. [@douglascoe](https://github.com/douglascoe)
+
+## [4.31.1] - 2021-02-13
+
+### Fixed
+- Atualizado dependências. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.31.0] - 2021-02-11
+
+### Added
+- Implementado QR Code de PIX para pagamento de os e venda em imprimirOs e imprimirVenda. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed
+- Melhorado imprimir os e venda. [@Flexotron20](https://github.com/Flexotron20)
+
+### Fixed
+- Colocado "*" para mostrar que campos ao criar lançamento financeiro são obrigatórios. [@cleytonasa](https://github.com/cleytonasa)
+- Adicionado método de pagamento "PIX" nos lugares faltantes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.30.3] - 2021-02-07
+
+### Fixed
+- Corrigido bug onde ao ter valor de centavos o valor do boleto vinha errado. Ex: 5,50 vinha no boleto 55,00 reais. [@willph](https://github.com/willph)
+- Corrido o valor que era salvo para o banco de dados que ocasionava o erro nas views cobranças e vizualizar cobrança. [@willph](https://github.com/willph)
+
+## [4.30.2] - 2021-02-03
+
+### Changed
+- Alterado texto de grafico de Vendas para Financeiro, para adequar melhor a realidade do grafico. [@willph](https://github.com/willph)
+- Update: Highcharts V. 9.0.0. [@willph](https://github.com/willph)
+- Atualizado versão mínima do PHP em instalador. [@willph](https://github.com/willph)
+
+### Fixed
+- Corrigido erro onde ao clicar na lupa para pesquisar o cnpj o mesmo não preenchia o numero de forma automatica, pois faltava no input id="numero". [@willph](https://github.com/willph)
+- Correção de javascript onde quebrava o codigo impedindo carregamento dos graficos do financeiro>lançamento e do calendario. [@willph](https://github.com/willph)
+- Corrigido case "Negociação" onde faltava a cor e o break no codigo em os.php e Mapos.php. [@willph](https://github.com/willph)
+- Colocado cor e o break no case de "Negociação" na view os.php. [@willph](https://github.com/willph)
+- Adicionado o arquivo update_4.29.0_to_4.30.2.sql que estava faltando. [@seitbnao](https://github.com/seitbnao)
+- Correção do botão pesquisar cnpj onde não trazia todos os dados de endereço. [@willph](https://github.com/willph)
+- Corrigido cadastro (MIME). [@willph](https://github.com/willph)
+
+## [4.30.1] - 2021-01-31
+
+### Fixed
+- Adequação para não salvar nome do cliente como maiúsculo ao editar. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.30.0] - 2021-01-31
+
+### Added
+- Adicionado opção de pagamento PIX em receitas e despesas. [@cleytonasa](https://github.com/cleytonasa)
+- Adicionado o controle de edição de OS com status CANCELADO e/ou FATURADO. [@seitbnao](https://github.com/seitbnao)
+- Adicionado opção de cliente fornecedor em clientes. [@seitbnao](https://github.com/seitbnao)
+- Adiciona o controle de visualização de dataTables. [@seitbnao](https://github.com/seitbnao)
+
+### Changed
+- Adequação para renderizar PDF gerado de relatório MEI no navegador. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Alterado a tela de configurações do sistema para um formato com abas. [@seitbnao](https://github.com/seitbnao)
+- Alterado a tela de inclusão de clientes. [@seitbnao](https://github.com/seitbnao)
+- Alterado o nome cliente do Menu para Cliente / Fornecedor. [@seitbnao](https://github.com/seitbnao)
+- Separado as permissões por colapse. [@seitbnao](https://github.com/seitbnao)
+- Remove a obrigatoriedade dos campos em adicionar e editar um cliente, somente o nome é obrigatório no cadastro. [@seitbnao](https://github.com/seitbnao)
+
+## [4.29.0] - 2021-01-24
+
+### Added
+- Adiciona novas opções de unidades de medidas em produtos, seguindo modelo da SEFAZ-PA. [@seitbnao](https://github.com/seitbnao)
+- Adiciona BLOQUEIO em exclusão e edição de OS que esteja com status CANCELADO e/ou FATURADO. [@seitbnao](https://github.com/seitbnao)
+
+### Fixed
+- Corrigido quebra de código por Exception geradas nas APIs. [@willph](https://github.com/willph)
+- Atualizado lib MPDF. [@willph](https://github.com/willph)
+- Corrige uma possível falha na atualização do sistema usando API do GitHub. [@seitbnao](https://github.com/seitbnao)
+- Corrige o valor da OS na notificação do whatsapp. [@seitbnao](https://github.com/seitbnao)
+- Corrige a notificação do whatsapp para que a mesma não venha com tags HTML. [@seitbnao](https://github.com/seitbnao)
+- Algumas melhorias no controle de estoque, agora quando a OS é excluída os produtos voltam para o estoque. [@seitbnao](https://github.com/seitbnao)
+- Corrige o menu Financeiro em tablets e celulares. [@seitbnao](https://github.com/seitbnao)
+
+## Changed
+- Liberado edição do CPF na area administrativa, porem foi mantido o bloqueio no editar usuário. [@willph](https://github.com/willph)
+
+## [4.28.0] - 2021-01-20
+
+### Added
+- Habilitar ou desabilitar a edição de data de pagamento retroativa ou futura na edição de lançamentos. [@seitbnao](https://github.com/seitbnao)
+
+### Fixed
+- Atualizado lib de QR code. [@seitbnao](https://github.com/seitbnao)
+- Corrigido alerts gerais. [@seitbnao](https://github.com/seitbnao)
+- Refatorado módulo de pagamentos. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.27.0] - 2021-01-13
+
+### Added
+- Implementado notificação whatsapp personalizada e sweetalert. [@seitbnao](https://github.com/seitbnao)
+
+## [4.26.2] - 2021-01-09
+
+### Fixed
+- Corrigindo erro nos lancamentos, onde após update não eram listados os lancamentos sem usuarios_id. [@bulfaitelo](https://github.com/bulfaitelo)
+
+## [4.26.1] - 2021-01-09
+
+## Fixed
+- Corrige um erro que bloqueava o preenchimento do cliente em adicionar vendas. [@seitbnao](https://github.com/seitbnao)
+
+## [4.26.0] - 2021-01-05
+
+## Added
+- Adiciona a cobrança ao lado do cliente. [@seitbnao](https://github.com/seitbnao)
+- Permite reenviar a cobrança por email. [@seitbnao](https://github.com/seitbnao)
+- Permite visualizar o boleto de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Permite atualizar o status de cobrança. [@seitbnao](https://github.com/seitbnao)
+- Bloqueia o cliente de gerar uma cobrança, sendo restrito apenas para o administrador. [@seitbnao](https://github.com/seitbnao)
+- Faz uma alteração na tabela cobrancas, para que a mesma receba o id do cliente. [@seitbnao](https://github.com/seitbnao)
+
+## [4.25.1] - 2021-01-04
+
+## Fixed
+- Corrigido as permissões para que não ocorra erros após a instalação. [@seitbnao](https://github.com/seitbnao)
+- Corrigido o erro ao emitir o alerta de erro caso uma cobrança já esteja viculada a alguma venda/os. [@seitbnao](https://github.com/seitbnao)
+
+## [4.25.0] - 2020-12-30
+
+## Added
+- Adicionado módulo para gerenciar as cobranças emitidas por boleto/link. [@seitbnao](https://github.com/seitbnao)
+
+## Fixed
+- Corrigido problema na geração da cobrança a partir da ordem de serviço. [@seitbnao](https://github.com/seitbnao)
+
+## [4.24.0] - 2020-12-27
+
+## Added
+- Máscara em CNPJ no menu adicionar e editar emitente. [@willph](https://github.com/willph)
+- Adicionado campo CEP em Emitente para facilitar preenchimento e organizado controller, model e bd para aceitar novo campo. [@willph](https://github.com/willph)
+- Adaptado função javascript para buscar dados do CNPJ em Cliente e Emitente. [@willph](https://github.com/willph)
+- Adicionado botão para pesquisar e preencher os dados da empresa automaticamente em cadastro/editar do emitente. [@willph](https://github.com/willph)
+
+## Fixed
+- Correção de bug na area do cliente nos campos telefone e email em visualizarOs e visualizarVenda. [@willph](https://github.com/willph)
+
+## [4.23.0] - 2020-12-17
+
+## Added
+- Adicionado a opção de gerar o PDF do Boleto. [@willph](https://github.com/willph)
+- Adicionado cor na Agenda OS. [@willph](https://github.com/willph)
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido do form os client id e secret em OS e vendas. [@willph](https://github.com/willph)
+- Corrigido bug que quebrava a exibição da pagina por causa de um erro de exception ao clicar gerar etiqueta. [@willph](https://github.com/willph)
+- Corrigido observações e observações para cliente em vendas e melhorado visualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido exibição de modal de conformação de exclusão de credenciais de pagamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.22.0] - 2020-12-13
+
+## Added
+- Adicionado a opção de link de pagamento em OS e Vendas, com a possibilidade de enviar por Whatsapp. [@willph](https://github.com/willph)
+
+## [4.21.0] - 2020-12-10
+
+## Added
+- Implementado pagamento via gerencianet. [@willph](https://github.com/willph)
+
+## [4.20.2] - 2020-12-06
+
+## Fixed
+- Adequação para permitir editar observações de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.20.1] - 2020-11-10
+
+## Fixed
+- Correção de filtro de cliente/fornecedor que não funcionava com caracteres especiais. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.20.0] - 2020-11-08
+
+## Added
+- Adicionado observações em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado autocomplete de cliente/fornecedor em listagem de lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Fixed
+- Adequação para excluir os lançamentos financeiros ao excluir uma OS/Venda faturada. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adequação para permitir adicionar produtos/serviços na OS com preço zerado. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.19.0] - 2020-10-26
+
+## Added
+- Implementado possibilidade de visualizar/editar/excluir OS pelo calendário de OS. [@willph](https://github.com/willph)
+
+## Fixed
+- Removido SDK de PayPal abandonada. [@willph](https://github.com/willph)
+- Atualizado SDK de mercado pago. [@willph](https://github.com/willph)
+
+## [4.18.1] - 2020-10-18
+
+## Fixed
+- Corrigido exibição de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
+## [4.18.0] - 2020-10-17
+
+## Fixed
+- Corrigido bug de visualização de sidebar em mobile. [@visaotec](https://github.com/visaotec)
+- Corrigido exibição de ícones em mobile. [@visaotec](https://github.com/visaotec)
+
+## Added
+- Implementado relatório de vendas (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado campo de observações para cliente em vendas. [@Flexotron20](https://github.com/Flexotron20)
+
+## [4.17.1] - 2020-10-05
+
+## Fixed
+- Corrigido filtro de status de lançamento. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.17.0] - 2020-10-04
+
+## Added
+
+- Modificado filtros de lançamentos para permitir período arbitrário de data e adicionado filtro de status. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.16.0] - 2020-10-04
+
+## Added
+- Adicionado filtro por nome de cliente/fornecedor e filtro de tipo de lançamento em lançamentos financeiros. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado totais (produtos, serviços e geral) no final do relatório de os (rápido e custom). [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Implementado relatório de OS (rápido e custom) em XLS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.15.1] - 2020-09-26
+
+## Fixed
+- Corrigido colar texto em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## Changed
+- Adicionado regra de validação unique em campo CPF/CNPJ (documento) em clientes. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.15.0] - 2020-09-21
+
+## Added
+- Adicionado observacões em vendas. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+## [4.14.1] - 2020-09-21
+
+## Fixed
+- Corrigido busca de calendário de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.14.0] - 2020-09-20
 
 ## Fixed

@@ -15,24 +15,13 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12">
-          <?php if ($this->session->flashdata('error') != null) { ?>
-            <div class="alert alert-danger">
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <?= $this->session->flashdata('error'); ?>
-            </div>
-          <?php
-          } ?>
-          <?php if ($this->session->flashdata('success') != null) { ?>
-            <div class="alert alert-success">
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <?= $this->session->flashdata('success'); ?>
-            </div>
-          <?php
-          } ?>
+          <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
+          <?php if ($var = $this->session->flashdata('error')): ?><script>swal("Falha!", "<?php echo str_replace('"', '', $var); ?>", "error");</script><?php endif; ?>
           <?php if (isset($view)) {
-              echo $this->load->view($view, null, true);
-          } ?>
+    echo $this->load->view($view, null, true);
+} ?>
         </div>
       </div>
     </div>
   </div>
+

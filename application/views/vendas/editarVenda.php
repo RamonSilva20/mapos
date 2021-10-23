@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -12,10 +14,11 @@
                 </span>
                 <h5>Editar Venda</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Venda</a></li>
+                        <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -42,10 +45,25 @@
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
                                     </div>
+
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes">
+                                            <h4>Observações</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                    </div>
+
+                                    <div class="span6" style="padding: 1%; margin-left: 0">
+                                        <label for="observacoes_cliente">
+                                            <h4>Observações para o Cliente</h4>
+                                        </label>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
+                                    </div>
+
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
-                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-cash-register"></i> Faturar</a>
+                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-danger"><i class="fas fa-cash-register"></i> Faturar</a>
                                             <?php
                                             } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
@@ -54,62 +72,67 @@
                                         </div>
                                     </div>
                                 </form>
-                                <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
-                                        <div class="span6">
-                                            <input type="hidden" name="idProduto" id="idProduto" />
-                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
-                                            <input type="hidden" name="estoque" id="estoque" value="" />
-                                            <label for="">Produto</label>
-                                            <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">Preço</label>
-                                            <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">Quantidade</label>
-                                            <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
-                                        </div>
-                                        <div class="span2">
-                                            <label for="">&nbsp</label>
-                                            <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="span12" id="divProdutos" style="margin-left: 0">
-                                    <table class="table table-bordered" id="tblProdutos">
-                                        <thead>
-                                            <tr>
-                                                <th>Produto</th>
-                                                <th>Quantidade</th>
-                                                <th>Preço</th>
-                                                <th>Ações</th>
-                                                <th>Sub-total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $total = 0;
-                                            foreach ($produtos as $p) {
-                                                $preco = $p->preco ?: $p->precoVenda;
-                                                $total = $total + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td>' . $p->quantidade . '</td>';
-                                                echo '<td>' . $preco . '</td>';
-                                                echo '<td><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
-                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
-                                            <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                                <td><strong>R$
-                                                        <?php echo number_format($total, 2, ',', '.'); ?></strong> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+                                <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                    <div class="span6">
+                                        <input type="hidden" name="idProduto" id="idProduto" />
+                                        <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
+                                        <input type="hidden" name="estoque" id="estoque" value="" />
+                                        <label for="">Produto</label>
+                                        <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Preço</label>
+                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Quantidade</label>
+                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">&nbsp</label>
+                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="span12" id="divProdutos" style="margin-left: 0">
+                                <table class="table table-bordered" id="tblProdutos">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th width="8%">Quantidade</th>
+                                            <th width="10%">Preço</th>
+                                            <th width="6%">Ações</th>
+                                            <th width="10%">Sub-total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $total = 0;
+                                        foreach ($produtos as $p) {
+                                            $preco = $p->preco ?: $p->precoVenda;
+                                            $total = $total + $p->subTotal;
+                                            echo '<tr>';
+                                            echo '<td>' . $p->descricao . '</td>';
+                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
+                                            echo '<td><div align="center">R$: ' . $preco . '</td>';
+                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                            echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                            echo '</tr>';
+                                        } ?>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                            <td>
+                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -131,7 +154,7 @@
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idVendas; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda Nº: <?php echo $result->idVendas; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -142,13 +165,20 @@
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
-                <div class="span4" style="margin-left: 0">
+                <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
+                    <strong><span style="color: red" id="resultado"></span></strong>
                 </div>
                 <div class="span4">
-                    <label for="vencimento">Data Vencimento*</label>
+                    <label>Desconto</label>
+                    <input style="width: 4em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" />
+                </div>
+            </div>
+            <div class="span12" style="margin-left: 0">
+                <div class="span4" style="margin-left: 0">
+                    <label for="vencimento">Data Entrada*</label>
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
@@ -167,17 +197,18 @@
                         <select name="formaPgto" id="formaPgto" class="span12">
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
-                            <option value="Cheque">Cheque</option>
+                            <option value="Débito">Débito</option>
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
-                            <option value="Débito">Débito</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Cheque">Cheque</option>
                         </select>
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
             <button class="btn btn-primary">Faturar</button>
         </div>
     </form>
@@ -185,6 +216,18 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
+    function calcular() {
+        var desconto = Number(document.getElementById("valor").value);
+        var num2 = Number(document.getElementById("num2").value);
+        var elemResult = document.getElementById("resultado");
+
+        if (elemResult.textContent === undefined) {
+            elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
+        } else { // IE
+            elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
+        }
+    }
+
     $(document).ready(function() {
         $(".money").maskMoney();
         $('#recebido').click(function(event) {
@@ -232,26 +275,38 @@
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
+                var qtdProdutos = $('#tblProdutos >tbody >tr').length;
+
                 $('#btn-cancelar-faturar').trigger('click');
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/vendas/faturar",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            window.location.reload(true);
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar venda."
-                            });
-                            $('#progress-fatura').hide();
+
+                if (qtdProdutos <= 0) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: "Não é possível faturar uma venda sem produtos"
+                    });
+                } else if (qtdProdutos > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/vendas/faturar",
+                        data: dados,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar faturar venda."
+                                });
+                                $('#progress-fatura').hide();
+                            }
                         }
-                    }
-                });
-                return false;
+                    });
+
+                    return false;
+                }
             }
         });
         $("#produto").autocomplete({
@@ -327,9 +382,9 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
-                
+                                            echo 'estoque = 1000000';
+                                        }; ?>
+
                 if (estoque < quantidade) {
                     Swal.fire({
                         type: "warning",
@@ -391,6 +446,9 @@
         });
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
+        });
+        $('.editor').trumbowyg({
+            lang: 'pt_br'
         });
     });
 </script>

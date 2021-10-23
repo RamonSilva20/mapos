@@ -1,8 +1,41 @@
 $(function () {
     $("#celular").mask("(00)00000-0000")
-    $("#telefone").mask("(00)0000-0000")
     $("#cep").mask("00000-000")
-    $('.cpfUser').mask('000.000.000-00', {reverse: true});
+    $('#cpfUser').mask('000.000.000-00', { reverse: true });
+    $('.cnpjEmitente').mask('00.000.000/0000-00', { reverse: true });
+});
+
+
+$(function () {
+    if ($('.cpfcnpjmine').val() != null) {
+        if ($('.cpfcnpjmine').val() != "") {
+            $(".cpfcnpjmine").prop('readonly', true);
+        }
+    }
+    if ($('.cpfUser').val() != null) {
+        var cpfUser = $('.cpfUser').val().length;
+        if (cpfUser == "14") {
+            $(".cpfUser").prop('readonly', true);
+        }
+    }
+
+});
+
+$(function () {
+    var telefoneN = function (val) {
+        return val.replace(/\D/g, '').length > 10 ? '(00)00000-0000' : '(00)0000-00009';
+    },
+        telefoneOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(telefoneN.apply({}, arguments), options);
+            },
+        };
+    $('#telefone').mask(telefoneN, telefoneOptions);
+    $('#telefone').on('paste', function (e) {
+        e.preventDefault();
+        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+        $('#telefone').val(clipboardCurrentData);
+    });
 
 });
 
@@ -14,9 +47,14 @@ $(function () {
         cpfOptions = {
             onKeyPress: function (val, e, field, options) {
                 field.mask(cpfMascara.apply({}, arguments), options);
-            }
+            },
         };
     $('.cpfcnpj').mask(cpfMascara, cpfOptions);
+    $('.cpfcnpj').on('paste', function (e) {
+        e.preventDefault();
+        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+        $('.cpfcnpj').val(clipboardCurrentData);
+    });
     // FIM FUNÇÃO DE MASCARA CPF/CNPJ
 });
 
@@ -36,7 +74,7 @@ $(document).ready(function () {
     }
 
     function capitalizeFirstLetter(string) {
-        if (typeof string === 'undefined'){
+        if (typeof string === 'undefined') {
             return;
         }
 
@@ -44,7 +82,7 @@ $(document).ready(function () {
     }
 
     function capital_letter(str) {
-        if (typeof str === 'undefined'){ return; }
+        if (typeof str === 'undefined') { return; }
         str = str.toLocaleLowerCase().split(" ");
 
         for (var i = 0, x = str.length; i < x; i++) {
@@ -55,9 +93,9 @@ $(document).ready(function () {
     }
 
     function validarCNPJ(cnpj) {
-        cnpj = cnpj.replace(/[^\d]+/g,'');
+        cnpj = cnpj.replace(/[^\d]+/g, '');
 
-        if(cnpj == '') return false;
+        if (cnpj == '') return false;
 
         if (cnpj.length != 14) return false;
 
@@ -76,13 +114,13 @@ $(document).ready(function () {
 
         // Valida DVs
         tamanho = cnpj.length - 2
-        numeros = cnpj.substring(0,tamanho);
+        numeros = cnpj.substring(0, tamanho);
         digitos = cnpj.substring(tamanho);
         soma = 0;
         pos = tamanho - 7;
         for (i = tamanho; i >= 1; i--) {
-        soma += numeros.charAt(tamanho - i) * pos--;
-        if (pos < 2)
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
                 pos = 9;
         }
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
@@ -90,14 +128,14 @@ $(document).ready(function () {
             return false;
 
         tamanho = tamanho + 1;
-        numeros = cnpj.substring(0,tamanho);
+        numeros = cnpj.substring(0, tamanho);
         soma = 0;
         pos = tamanho - 7;
 
         for (i = tamanho; i >= 1; i--) {
             soma += numeros.charAt(tamanho - i) * pos--;
             if (pos < 2)
-                    pos = 9;
+                pos = 9;
         }
 
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
@@ -115,12 +153,15 @@ $(document).ready(function () {
         if (validarCNPJ(ndocumento)) {
             //Preenche os campos com "..." enquanto consulta webservice.
             $("#nomeCliente").val("...");
-            $("#cep").val("...");
             $("#email").val("...");
+            $("#cep").val("...");
+            $("#rua").val("...");
             $("#numero").val("...");
+            $("#bairro").val("...");
+            $("#cidade").val("...");
+            $("#estado").val("...");
             $("#complemento").val("...");
             $("#telefone").val("...");
-
             //Consulta o webservice receitaws.com.br/
             $.ajax({
                 url: "https://www.receitaws.com.br/v1/cnpj/" + ndocumento,
@@ -130,20 +171,43 @@ $(document).ready(function () {
                 success: function (dados) {
                     if (dados.status == "OK") {
                         //Atualiza os campos com os valores da consulta.
-                        $("#nomeCliente").val(capital_letter(dados.nome));
-                        $("#cep").val(dados.cep.replace(/\D/g, ''));
+                        if ($("#nomeCliente").val() != null) {
+                            $("#nomeCliente").val(capital_letter(dados.nome));
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            $("#nomeEmitente").val(capital_letter(dados.nome));
+                        }
+                        $("#cep").val(dados.cep.replace(/\./g, ''));
                         $("#email").val(dados.email.toLocaleLowerCase());
+                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
+                        $("#rua").val(capital_letter(dados.logradouro));
                         $("#numero").val(dados.numero);
-                        $("#complemento").val(capitalizeFirstLetter(dados.complemento));
-                        $("#telefone").val(dados.telefone.split("/")[0].replace(/\D/g, ''));
+                        $("#bairro").val(capital_letter(dados.bairro));
+                        $("#cidade").val(capital_letter(dados.municipio));
+                        $("#estado").val(dados.uf);
+                        if (dados.complemento != "") {
+                            $("#complemento").val(capital_letter(dados.complemento));
+                        } else{
+                            $("#complemento").val("");
+                        }
 
                         // Força uma atualizacao do endereco via cep
                         document.getElementById("cep").focus();
-                        document.getElementById("nomeCliente").focus();
+                        if ($("#nomeCliente").val() != null) {
+                            document.getElementById("nomeCliente").focus();
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            document.getElementById("nomeEmitente").focus();
+                        }
                     } //end if.
                     else {
                         //CEP pesquisado não foi encontrado.
-                        $("#nomeCliente").val("");
+                        if ($("#nomeCliente").val() != null) {
+                            $("#nomeCliente").val("");
+                        }
+                        if ($("#nomeEmitente").val() != null) {
+                            $("#nomeEmitente").val("");
+                        }
                         $("#cep").val("");
                         $("#email").val("");
                         $("#numero").val("");
@@ -157,9 +221,14 @@ $(document).ready(function () {
                         });
                     }
                 },
-                error: function() {
+                error: function () {
                     ///CEP pesquisado não foi encontrado.
-                    $("#nomeCliente").val("");
+                    if ($("#nomeCliente").val() != null) {
+                        $("#nomeCliente").val("");
+                    }
+                    if ($("#nomeEmitente").val() != null) {
+                        $("#nomeEmitente").val("");
+                    }
                     $("#cep").val("");
                     $("#email").val("");
                     $("#numero").val("");
@@ -207,7 +276,7 @@ $(document).ready(function () {
                 $("#estado").val("...");
 
                 //Consulta o webservice viacep.com.br/
-                $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                $.getJSON("https://viacep.com.br/ws/" + cep.replace(/\./g, '') + "/json/?callback=?", function (dados) {
 
                     if (!("erro" in dados)) {
                         //Atualiza os campos com os valores da consulta.

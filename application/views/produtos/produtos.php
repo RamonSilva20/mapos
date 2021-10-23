@@ -12,8 +12,8 @@
         </span>
         <h5>Produtos</h5>
     </div>
-    <div class="widget-content nopadding">
-        <table class="table table-bordered ">
+    <div class="widget-content nopadding tab-content">
+        <table id="tabela" class="table table-bordered ">
             <thead>
             <tr style="backgroud-color: #2D335B">
                 <th>Cod. Produto</th>
@@ -193,4 +193,3 @@
         });
     });
 </script>
-

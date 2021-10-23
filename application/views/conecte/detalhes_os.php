@@ -22,7 +22,7 @@
                 </span>
                 <h5>Detalhes OS</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
 
 
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
@@ -275,7 +275,7 @@
 
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
 
             </div>
@@ -293,7 +293,7 @@
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
@@ -321,6 +321,7 @@
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Débito">Débito</option>
+                            <option value="Pix">Pix</option>
                         </select>
                     </div>
 

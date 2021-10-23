@@ -11,7 +11,7 @@
                 </span>
                 <h5>Cadastro de Usuário</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <?php if ($custom_error != '') {
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
@@ -33,7 +33,7 @@
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfUser" type="text" name="cpf" value="<?php echo set_value('cpf'); ?>" />
+                            <input class="" type="text" id="cpfUser" name="cpf" value="<?php echo set_value('cpf'); ?>" />
                         </div>
                     </div>
 

@@ -20,11 +20,13 @@
                 <option value="">Selecione status</option>
                 <option value="Aberto">Aberto</option>
                 <option value="Faturado">Faturado</option>
+                <option value="Negociação">Negociação</option>
                 <option value="Em Andamento">Em Andamento</option>
                 <option value="Orçamento">Orçamento</option>
                 <option value="Finalizado">Finalizado</option>
                 <option value="Cancelado">Cancelado</option>
                 <option value="Aguardando Peças">Aguardando Peças</option>
+                <option value="Aprovado">Aprovado</option>
             </select>
 
         </div>
@@ -34,7 +36,7 @@
             <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
         </div>
         <div class="span1">
-            <button class="span12 btn"> <i class="fas fa-search"></i> </button>
+            <button class="span12 btn"><i class="fas fa-search"></i></button>
         </div>
     </form>
 </div>
@@ -46,7 +48,7 @@
         </span>
         <h5>Ordens de Serviço</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding tab-content">
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
@@ -67,80 +69,90 @@
                 <tbody>
                     <?php
 
-                        if (!$results) {
-                            echo '<tr>
+                    if (!$results) {
+                        echo '<tr>
                                     <td colspan="10">Nenhuma OS Cadastrada</td>
                                   </tr>';
+                    }
+                    $this->load->model('os_model');
+                    foreach ($results as $r) {
+                        $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                        if ($r->dataFinal != null) {
+                            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                        } else {
+                            $dataFinal = "";
                         }
-                        foreach ($results as $r) {
-                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                            if ($r->dataFinal != null) {
-                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                            } else {
-                                $dataFinal = "";
+                        if ($this->input->get('pesquisa') === null && is_array(json_decode($configuration['os_status_list']))) {
+                            if (in_array($r->status, json_decode($configuration['os_status_list'])) != true) {
+                                continue;
                             }
-                            switch ($r->status) {
-                                case 'Aberto':
-                                    $cor = '#00cd00';
-                                    break;
-                                case 'Em Andamento':
-                                    $cor = '#436eee';
-                                    break;
-                                case 'Orçamento':
-                                    $cor = '#CDB380';
-                                    break;
-                                case 'Cancelado':
-                                    $cor = '#CD0000';
-                                    break;
-                                case 'Finalizado':
-                                    $cor = '#256';
-                                    break;
-                                case 'Faturado':
-                                    $cor = '#B266FF';
-                                    break;
-                                case 'Aguardando Peças':
-                                    $cor = '#FF7F00';
-                                    break;
-                                default:
-                                    $cor = '#E0E4CC';
-                                    break;
-                            }
-                            $vencGarantia = '';
+                        }
 
-                            if ($r->garantia && is_numeric($r->garantia)) {
-                                $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
-                            }
+                        switch ($r->status) {
+                            case 'Aberto':
+                                $cor = '#00cd00';
+                                break;
+                            case 'Em Andamento':
+                                $cor = '#436eee';
+                                break;
+                            case 'Orçamento':
+                                $cor = '#CDB380';
+                                break;
+                            case 'Negociação':
+                                $cor = '#AEB404';
+                                break;
+                            case 'Cancelado':
+                                $cor = '#CD0000';
+                                break;
+                            case 'Finalizado':
+                                $cor = '#256';
+                                break;
+                            case 'Faturado':
+                                $cor = '#B266FF';
+                                break;
+                            case 'Aguardando Peças':
+                                $cor = '#FF7F00';
+                                break;
+                            case 'Aprovado':
+                                $cor = '#808080';
+                                break;
+                            default:
+                                $cor = '#E0E4CC';
+                                break;
+                        }
+                        $vencGarantia = '';
 
-                            echo '<tr>';
-                            echo '<td>' . $r->idOs . '</td>';
-                            echo '<td>' . $r->nomeCliente . '</td>';
-                            echo '<td>' . $r->nome . '</td>';
-                            echo '<td>' . $dataInicial . '</td>';
-                            echo '<td>' . $dataFinal . '</td>';
-                            echo '<td>' . $vencGarantia. '</td>';
-                            echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
-                            echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                            echo '<td>' . $r->refGarantia . '</td>';
-                            echo '<td>';
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Normal A4"><i class="fas fa-print"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a>';
+                        if ($r->garantia && is_numeric($r->garantia)) {
+                            $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
+                        }
 
-                                $zapnumber = preg_replace("/[^0-9]/", "", $r->celular_cliente);
-                                echo '<a class="btn btn-success tip-top" style="margin-right: 1%" title="Enviar Por WhatsApp" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=Prezado(a)%20*' . $r->nomeCliente . '*.%0d%0a%0d%0aSua%20*O.S%20' . $r->idOs . '*%20referente%20ao%20equipamento%20*' . strip_tags($r->descricaoProduto) . '*%20foi%20atualizada%20para%20*' . $r->status . '*.%0d%0aFavor%20entrar%20em%20contato%20para%20saber%20mais%20detalhes.%0d%0a%0d%0aAtenciosamente,%20_' . ($emitente ? $emitente[0]->nome : '') . '%20' . ($emitente ? $emitente[0]->telefone : '') . '_"><i class="fab fa-whatsapp" style="font-size:16px;"></i></a>';
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/enviar_email/' . $r->idOs . '" class="btn btn-warning tip-top" title="Enviar por E-mail"><i class="fas fa-envelope"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
-                            }
-                            echo  '</td>';
-                            echo '</tr>';
-                        } ?>
+                        echo '<tr>';
+                        echo '<td>' . $r->idOs . '</td>';
+                        echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' .$r->nomeCliente. '</a></td>';
+                        echo '<td>' . $r->nome . '</td>';
+                        echo '<td>' . $dataInicial . '</td>';
+                        echo '<td>' . $dataFinal . '</td>';
+                        echo '<td>' . $vencGarantia . '</td>';
+                        echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
+                        echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
+                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                        echo '<td>' . $r->refGarantia . '</td>';
+                        echo '<td>';
+
+                        $editavel = $this->os_model->isEditable($r->idOs);
+
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                        }
+                        if ($editavel) {
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                        }
+                        echo '</td>';
+                        echo '</tr>';
+                    } ?>
                 </tbody>
             </table>
         </div>

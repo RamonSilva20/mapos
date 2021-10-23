@@ -4,7 +4,7 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.14.0';
+$config['app_version'] = '4.35.2';
 
 /**
  * Nome do sistema

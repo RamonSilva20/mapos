@@ -39,6 +39,7 @@ $config['ignored_files'] = [
     'application/config',
     'application/database',
     'application/email',
+    'index.php',
 ];
 
 /**

@@ -21,10 +21,10 @@ if (!$results) {
 
             </div>
 
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
 
 
-                <table class="table table-bordered ">
+                <table id="tabela" class="table table-bordered ">
                     <thead>
                         <tr style="backgroud-color: #2D335B">
                             <th>#</th>
@@ -60,7 +60,7 @@ if (!$results) {
 
             </div>
 
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
 
 
                 <table class="table table-bordered ">
@@ -88,6 +88,8 @@ if (!$results) {
             $status = '<span class="label label-inverse">Cancelado</span>';
         } elseif ($r->status == "Faturado") {
             $status = '<span class="label">Faturado</span>';
+        } elseif ($r->status == "Negociação") {
+            $status = '<span class="label">Negociação / Inadimplente</span>';
         } else {
             $status = '<span class="label">Em Andamento</span>';
         }
@@ -101,13 +103,10 @@ if (!$results) {
 
         echo '<td><a href="' . base_url() . 'index.php/mine/visualizarOs/' . $r->idOs . '" class="btn tip-top" title="Visualizar e Imprimir"><i class="fas fa-eye"></i></a>
                                   <a href="' . base_url() . 'index.php/mine/imprimirOs/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>
-                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="fas fa-bars"></i></a>  
+                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="fas fa-bars"></i></a>
                               </td>';
         echo '</tr>';
     } ?>
-                        <tr>
-
-                        </tr>
                     </tbody>
                 </table>
             </div>

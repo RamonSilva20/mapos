@@ -1,3 +1,7 @@
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?php echo base_url()?>assets/js/sweetalert2.all.min.js"></script>
+
 <?php if (!isset($dados) || $dados == null) { ?>
     <div class="row-fluid" style="margin-top:0">
         <div class="span12">
@@ -31,13 +35,14 @@
                 <div class="control-group">
                     <label for="nome" class="control-label">Razão Social<span class="required">*</span></label>
                     <div class="controls">
-                        <input id="nome" type="text" name="nome" value="" />
+                        <input id="nomeEmitente" type="text" name="nome" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cnpj" class="control-label"><span class="required">CNPJ*</span></label>
                     <div class="controls">
-                        <input class="" type="text" name="cnpj" value="" />
+                        <input class="cnpjEmitente" id="documento" type="text" name="cnpj" value="" />
+                        <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="control-group">
@@ -47,45 +52,52 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label for="cep" class="control-label"><span class="required">CEP*</span></label>
+                    <div class="controls">
+                        <input id="cep" type="text" name="cep" value="" />
+                    </div>
+                </div>
+
+                <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Logradouro*</span></label>
                     <div class="controls">
-                        <input type="text" name="logradouro" value="" />
+                        <input id="rua" type="text" name="logradouro" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Número*</span></label>
                     <div class="controls">
-                        <input type="text" name="numero" value="" />
+                        <input type="text" id="numero" name="numero" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Bairro*</span></label>
                     <div class="controls">
-                        <input type="text" name="bairro" value="" />
+                        <input id="bairro" type="text" name="bairro" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Cidade*</span></label>
                     <div class="controls">
-                        <input type="text" name="cidade" value="" />
+                        <input id="cidade" type="text" name="cidade" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">UF*</span></label>
                     <div class="controls">
-                        <input type="text" name="uf" value="" />
+                        <input id="estado" type="text" name="uf" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Telefone*</span></label>
                     <div class="controls">
-                        <input type="text" name="telefone" value="" />
+                        <input id="telefone" type="text" name="telefone" value="" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
                     <div class="controls">
-                        <input type="text" name="email" value="" />
+                        <input id="email" type="text" name="email" value="" />
                     </div>
                 </div>
 
@@ -126,8 +138,10 @@
                                 <td> <span style="font-size: 20px; ">
                                         <?= $dados[0]->nome; ?> </span> </br><span>
                                         <?= $dados[0]->cnpj; ?> </br>
-                                        <?= $dados[0]->rua . ', nº:' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' - ' . $dados[0]->uf; ?> </span> </br> <span> E-mail:
-                                        <?= $dados[0]->email . ' - Fone: ' . $dados[0]->telefone; ?></span></td>
+                                        <?= $dados[0]->rua . ', nº: ' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' - ' . $dados[0]->uf; ?><br />
+                                        <?= 'CEP: ' . $dados[0]->cep; ?>
+                                    </span> </br>
+                                    <span> E-mail: <?= $dados[0]->email . ' - Fone: ' . $dados[0]->telefone; ?></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -154,14 +168,15 @@
                 <div class="control-group">
                     <label for="nome" class="control-label">Razão Social<span class="required">*</span></label>
                     <div class="controls">
-                        <input id="nome" type="text" name="nome" value="<?= $dados[0]->nome; ?>" />
+                        <input id="nomeEmitente" type="text" name="nome" value="<?= $dados[0]->nome; ?>" />
                         <input id="nome" type="hidden" name="id" value="<?= $dados[0]->id; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cnpj" class="control-label"><span class="required">CNPJ*</span></label>
                     <div class="controls">
-                        <input class="" type="text" name="cnpj" value="<?= $dados[0]->cnpj; ?>" />
+                        <input class="cnpjEmitente" type="text" id="documento" name="cnpj" value="<?= $dados[0]->cnpj; ?>" />
+                        <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="control-group">
@@ -171,45 +186,51 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label for="cep" class="control-label"><span class="required">CEP*</span></label>
+                    <div class="controls">
+                        <input id="cep" type="text" name="cep" value="<?= $dados[0]->cep; ?>" />
+                    </div>
+                </div>
+                <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Logradouro*</span></label>
                     <div class="controls">
-                        <input type="text" name="logradouro" value="<?= $dados[0]->rua; ?>" />
+                        <input type="text" id="rua" name="logradouro" value="<?= $dados[0]->rua; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Número*</span></label>
                     <div class="controls">
-                        <input type="text" name="numero" value="<?= $dados[0]->numero; ?>" />
+                        <input type="text" id="numero" name="numero" value="<?= $dados[0]->numero; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Bairro*</span></label>
                     <div class="controls">
-                        <input type="text" name="bairro" value="<?= $dados[0]->bairro; ?>" />
+                        <input type="text" id="bairro" name="bairro" value="<?= $dados[0]->bairro; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Cidade*</span></label>
                     <div class="controls">
-                        <input type="text" name="cidade" value="<?= $dados[0]->cidade; ?>" />
+                        <input type="text" id="cidade" name="cidade" value="<?= $dados[0]->cidade; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">UF*</span></label>
                     <div class="controls">
-                        <input type="text" name="uf" value="<?= $dados[0]->uf; ?>" />
+                        <input type="text" id="estado" name="uf" value="<?= $dados[0]->uf; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">Telefone*</span></label>
                     <div class="controls">
-                        <input type="text" name="telefone" value="<?= $dados[0]->telefone; ?>" />
+                        <input type="text" id="telefone" name="telefone" value="<?= $dados[0]->telefone; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
                     <div class="controls">
-                        <input type="text" name="email" value="<?= $dados[0]->email; ?>" />
+                        <input id="email" type="text" name="email" value="<?= $dados[0]->email; ?>" />
                     </div>
                 </div>
             </div>

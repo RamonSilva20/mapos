@@ -26,7 +26,7 @@
                 </span>
                 <h5>Cadastro de OS</h5>
             </div>
-            <div class="widget-content nopadding">
+            <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
 
                     <ul class="nav nav-tabs">
@@ -62,6 +62,7 @@
                                                 <option value="Finalizado">Finalizado</option>
                                                 <option value="Cancelado">Cancelado</option>
                                                 <option value="Aguardando Peças">Aguardando Peças</option>
+                                                <option value="Aprovado">Aprovado</option>
                                             </select>
                                         </div>
                                         <div class="span3">

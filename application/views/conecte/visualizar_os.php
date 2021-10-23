@@ -73,9 +73,9 @@ $totalProdutos = 0; ?>
                                                 <span>
                                                     <?php echo $result->nome ?></span> <br />
                                                 <span>Telefone:
-                                                    <?php echo $result->telefone ?></span><br />
+                                                    <?php echo $result->telefone_usuario ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email ?></span>
+                                                    <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -186,11 +186,6 @@ $totalProdutos = 0; ?>
                         <?php
                         } ?>
                     </div>
-
-
-
-
-
                 </div>
             </div>
         </div>
@@ -226,16 +221,13 @@ $totalProdutos = 0; ?>
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-style.css' />");
             mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-media.css' />");
 
-
             mywindow.document.write("</head><body >");
             mywindow.document.write(data);
             mywindow.document.write("</body></html>");
 
             mywindow.document.close(); // necessary for IE >= 10
 
-
             return true;
         }
-
     });
 </script>

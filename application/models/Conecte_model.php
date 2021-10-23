@@ -64,7 +64,22 @@ class Conecte_model extends CI_Model
         return $result;
     }
 
+    public function getCobrancas($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
+    {
+        $this->db->select($fields);
+        $this->db->from($table);
+        $this->db->join('clientes', 'cobrancas.clientes_id = clientes.idClientes', 'left');
+        $this->db->where('clientes_id', $cliente);
+        $this->db->limit($perpage, $start);
+        if ($where) {
+            $this->db->where($where);
+        }
 
+        $query = $this->db->get();
+
+        $result =  !$one  ? $query->result() : $query->row();
+        return $result;
+    }
     public function getOs($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
     {
         $this->db->select($fields);
@@ -81,6 +96,19 @@ class Conecte_model extends CI_Model
 
         $result =  !$one  ? $query->result() : $query->row();
         return $result;
+    }
+    
+    public function getById($id)
+    {
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
+        $this->db->where('os.idOs', $id);
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
     }
 
     public function count($table, $cliente)

@@ -10,7 +10,7 @@ $config = [
         [
             'field' => 'documento',
             'label' => 'CPF/CNPJ',
-            'rules' => 'required|trim|verific_cpf_cnpj',
+            'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . $this->uri->segment(3) . '.idClientes]',
             'errors' => [
                 'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
             ],
@@ -18,42 +18,42 @@ $config = [
         [
             'field' => 'telefone',
             'label' => 'Telefone',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'email',
             'label' => 'Email',
-            'rules' => 'required|trim|valid_email',
+            'rules' => 'trim|valid_email',
         ],
         [
             'field' => 'rua',
             'label' => 'Rua',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'numero',
             'label' => 'Número',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'bairro',
             'label' => 'Bairro',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cidade',
             'label' => 'Cidade',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'estado',
             'label' => 'Estado',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ],
         [
             'field' => 'cep',
             'label' => 'CEP',
-            'rules' => 'required|trim',
+            'rules' => 'trim',
         ]
     ],
     'servicos' => [
@@ -358,6 +358,11 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
+            'field' => 'observacoes',
+            'label' => 'Observacoes',
+            'rules' => 'trim',
+        ],
+        [
             'field' => 'clientes_id',
             'label' => 'clientes',
             'rules' => 'trim|required',
@@ -394,7 +399,7 @@ $config = [
         [
             'field' => 'preco',
             'label' => 'preco',
-            'rules' => 'trim|required|numeric|greater_than[0]',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
         ],
         [
             'field' => 'idOsProduto',
@@ -416,12 +421,34 @@ $config = [
         [
             'field' => 'preco',
             'label' => 'preco',
-            'rules' => 'trim|required|numeric|greater_than[0]',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
         ],
         [
             'field' => 'idOsServico',
             'label' => 'idOsServico',
             'rules' => 'trim|required|numeric',
         ],
-    ]
+    ],
+    'cobrancas' => [
+        [
+            'field' => 'id',
+            'label' => 'id',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'tipo',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'forma_pagamento',
+            'label' => 'forma_pagamento',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'gateway_de_pagamento',
+            'label' => 'gateway_de_pagamento',
+            'rules' => 'required|trim',
+        ],
+    ],
 ];

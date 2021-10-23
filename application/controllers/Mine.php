@@ -45,7 +45,7 @@ class Mine extends CI_Controller
             $cliente = $this->db->get('clientes');
             if ($cliente->num_rows() > 0) {
                 $cliente = $cliente->row();
-                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'conectado' => true];
+                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
                 $this->session->set_userdata($dados);
 
                 if ($ajax == true) {
@@ -114,6 +114,7 @@ class Mine extends CI_Controller
                 'email' => $this->input->post('email'),
                 'rua' => $this->input->post('rua'),
                 'numero' => $this->input->post('numero'),
+                'complemento' => $this->input->post('complemento'),
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
                 'estado' => $this->input->post('estado'),
@@ -172,6 +173,92 @@ class Mine extends CI_Controller
         $this->load->view('conecte/template', $data);
     }
 
+    public function cobrancas()
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        $this->load->library('pagination');
+        $this->load->config('payment_gateways');
+
+        $data['menuCobrancas'] = 'cobrancas';
+
+        $config['base_url'] = base_url() . 'index.php/mine/cobrancas/';
+        $config['total_rows'] = $this->Conecte_model->count('cobrancas', $this->session->userdata('cliente_id'));
+        $config['per_page'] = 10;
+        $config['next_link'] = 'Próxima';
+        $config['prev_link'] = 'Anterior';
+        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
+        $config['full_tag_close'] = '</ul></div>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['first_link'] = 'Primeira';
+        $config['last_link'] = 'Última';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        $this->pagination->initialize($config);
+
+        $data['results'] = $this->Conecte_model->getCobrancas('cobrancas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
+        $data['output'] = 'conecte/cobrancas';
+
+        $this->load->view('conecte/template', $data);
+    }
+
+    public function atualizarcobranca($id = null)
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
+            redirect(base_url());
+        }
+
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
+
+        redirect(site_url('mine/cobrancas/'));
+    }
+
+    public function enviarcobranca()
+    {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
+
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
+            redirect(base_url());
+        }
+
+        $this->load->model('cobrancas_model');
+        $this->cobrancas_model->enviarEmail($this->uri->segment(3));
+        $this->session->set_flashdata('success', 'Email adicionado na fila.');
+
+        redirect(site_url('mine/cobrancas/'));
+    }
+
     public function os()
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
@@ -221,6 +308,7 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
+
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -233,6 +321,22 @@ class Mine extends CI_Controller
 
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
+    }
+
+    public function gerarPagamentoGerencianetBoleto()
+    {
+        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        print_r(json_encode($json));
+
+        return;
+    }
+
+    public function gerarPagamentoGerencianetLink()
+    {
+        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        print_r(json_encode($json));
+
+        return;
     }
 
     public function imprimirOs($id = null)
@@ -268,6 +372,7 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('vendas_model');
+
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
@@ -278,6 +383,7 @@ class Mine extends CI_Controller
         }
 
         $data['output'] = 'conecte/visualizar_compra';
+
         $this->load->view('conecte/template', $data);
     }
 
@@ -379,6 +485,21 @@ class Mine extends CI_Controller
             ];
 
             if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
+                $this->load->model('mapos_model');
+                $this->load->model('usuarios_model');
+
+                $idOs = $id;
+                $os = $this->Conecte_model->getById($id);
+
+                $remetentes = [];
+                $usuarios = $this->usuarios_model->getAll();
+
+                foreach ($usuarios as $usuario) {
+                    array_push($remetentes, $usuario->email);
+                }
+                array_push($remetentes, $os->email);
+
+                $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #'.$idOs.' - Criada pelo Cliente');
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
                 redirect('mine/detalhesOs/' . $id);
             } else {
@@ -419,6 +540,7 @@ class Mine extends CI_Controller
         $this->load->model('clientes_model', '', true);
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
+        $id = 0;
 
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
@@ -430,6 +552,7 @@ class Mine extends CI_Controller
                 'celular' => $this->input->post('celular'),
                 'email' => set_value('email'),
                 'rua' => set_value('rua'),
+                'complemento' => set_value('complemento'),
                 'numero' => set_value('numero'),
                 'bairro' => set_value('bairro'),
                 'cidade' => set_value('cidade'),
@@ -438,8 +561,12 @@ class Mine extends CI_Controller
                 'dataCadastro' => date('Y-m-d'),
             ];
 
-            if ($this->clientes_model->add('clientes', $data) == true) {
-                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso!');
+            $id = $this->clientes_model->add('clientes', $data);
+
+            if ($id > 0) {
+                $this->enviarEmailBoasVindas($id);
+                $this->enviarEmailTecnicoNotificaClienteNovo($id);
+                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para '.$data['email']);
                 redirect(base_url() . 'index.php/mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
@@ -459,6 +586,120 @@ class Mine extends CI_Controller
             $path = $file->path;
             $this->zip->read_file($path . '/' . $file->anexo);
             $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        }
+    }
+
+    private function enviarOsPorEmail($idOs, $remetentes, $assunto)
+    {
+        $dados = [];
+
+        $this->load->model('mapos_model');
+        $this->load->model('os_model');
+        $dados['result'] = $this->os_model->getById($idOs);
+        if (!isset($dados['result']->email)) {
+            return false;
+        }
+
+        $dados['produtos'] = $this->os_model->getProdutos($idOs);
+        $dados['servicos'] = $this->os_model->getServicos($idOs);
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+
+        $emitente = $dados['emitente'][0]->email;
+        if (!isset($emitente)) {
+            return false;
+        }
+
+        $html = $this->load->view('os/emails/os', $dados, true);
+
+        $this->load->model('email_model');
+
+        $remetentes = array_unique($remetentes);
+        foreach ($remetentes as $remetente) {
+            $headers = [
+                'From' => $emitente,
+                'Subject' => $assunto,
+                'Return-Path' => ''
+            ];
+            $email = [
+                'to' => $remetente,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            ];
+            $this->email_model->add('email_queue', $email);
+        }
+
+        return true;
+    }
+
+    private function enviarEmailBoasVindas($id)
+    {
+        $dados = [];
+        $this->load->model('mapos_model');
+        $this->load->model('clientes_model', '', true);
+
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+        $dados['cliente'] = $this->clientes_model->getById($id);
+
+        $emitente = $dados['emitente'][0]->email;
+        $emitenteNome = $dados['emitente'][0]->nome;
+        $remetente = $dados['cliente']->email;
+        $assunto = 'Bem-vindo!';
+
+        $html = $this->load->view('os/emails/clientenovo', $dados, true);
+
+        $this->load->model('email_model');
+
+        $headers = [
+            'From' => "\"$emitenteNome\" <$emitente>",
+            'Subject' => $assunto,
+            'Return-Path' => ''
+        ];
+        $email = [
+            'to' => $remetente,
+            'message' => $html,
+            'status' => 'pending',
+            'date' => date('Y-m-d H:i:s'),
+            'headers' => serialize($headers),
+        ];
+
+        return $this->email_model->add('email_queue', $email);
+    }
+
+    private function enviarEmailTecnicoNotificaClienteNovo($id)
+    {
+        $dados = [];
+        $this->load->model('mapos_model');
+        $this->load->model('clientes_model', '', true);
+        $this->load->model('usuarios_model');
+
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+        $dados['cliente'] = $this->clientes_model->getById($id);
+
+        $emitente = $dados['emitente'][0]->email;
+        $emitenteNome = $dados['emitente'][0]->nome;
+        $assunto = 'Novo Cliente Cadastrado no Sistema';
+
+        $usuarios = [];
+        $usuarios = $this->usuarios_model->getAll();
+
+        foreach ($usuarios as $usuario) {
+            $dados['usuario'] = $usuario;
+            $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
+            $headers = [
+                'From' => "\"$emitenteNome\" <$emitente>",
+                'Subject' => $assunto,
+                'Return-Path' => ''
+            ];
+            $email = [
+                'to' => $usuario->email,
+                'message' => $html,
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+                'headers' => serialize($headers),
+            ];
+            $this->email_model->add('email_queue', $email);
         }
     }
 }

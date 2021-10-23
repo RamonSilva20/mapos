@@ -1,4 +1,5 @@
 <?php
+
 class Relatorios_model extends CI_Model
 {
 
@@ -66,7 +67,7 @@ class Relatorios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function clientesCustom($dataInicial = null, $dataFinal = null)
+    public function clientesCustom($dataInicial = null, $dataFinal = null, $tipo = null)
     {
         $whereData = '';
         if ($dataInicial != null) {
@@ -75,7 +76,9 @@ class Relatorios_model extends CI_Model
         if ($dataFinal != null) {
             $whereData .= "AND dataCadastro <= " . $this->db->escape($dataFinal);
         }
-
+        if ($tipo != null) {
+            $whereData .= "AND fornecedor = " . $this->db->escape($tipo);
+        }
         $query = "SELECT * FROM clientes WHERE dataCadastro $whereData ORDER BY nomeCliente";
 
         return $this->db->query($query, [$dataInicial, $dataFinal])->result();
@@ -94,17 +97,27 @@ class Relatorios_model extends CI_Model
 
     public function produtosRapid()
     {
-        $this->db->order_by('descricao', 'asc');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosRapidMin()
     {
-        $this->db->order_by('descricao', 'asc');
-        $this->db->where('estoque <= estoqueMinimo');
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque <= estoqueMinimo
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
-        return $this->db->get('produtos')->result();
+        return $this->db->query($query)->result();
     }
 
     public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
@@ -117,14 +130,20 @@ class Relatorios_model extends CI_Model
         if ($estoqueInicial != null) {
             $whereEstoque = "AND estoque BETWEEN " . $this->db->escape($estoqueInicial) . " AND " . $this->db->escape($estoqueFinal);
         }
-        $query = "SELECT * FROM produtos WHERE estoque >= 0 $wherePreco $whereEstoque ORDER BY descricao";
+        $query = "
+            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            FROM produtos
+            WHERE estoque >= 0 $wherePreco $whereEstoque
+            GROUP BY produtos.idProdutos
+            ORDER BY descricao
+        ";
 
         return $this->db->query($query)->result();
     }
 
     public function produtosEtiquetas($de, $ate)
     {
-        $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN ".$this->db->escape($de)." AND ".$this->db->escape($ate)." ORDER BY idProdutos";
+        $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN " . $this->db->escape($de) . " AND " . $this->db->escape($ate) . " ORDER BY idProdutos";
 
         $this->db->order_by('descricao', 'asc');
 
@@ -221,7 +240,7 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query, [$precoInicial, $precoFinal])->result();
     }
 
-    public function osRapid()
+    public function osRapid($array = false)
     {
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
@@ -236,10 +255,15 @@ class Relatorios_model extends CI_Model
         $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs', 'left');
         $this->db->order_by('os.dataInicial', 'DESC');
 
-        return $this->db->get()->result();
+        $result = $this->db->get();
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
-    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null)
+    public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null, $array = false)
     {
         $whereData = "";
         $whereCliente = "";
@@ -273,7 +297,12 @@ class Relatorios_model extends CI_Model
                    WHERE idOs != 0 $whereData $whereCliente $whereResponsavel $whereStatus
                    ORDER BY os.dataInicial";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
     }
 
     public function financeiroRapid($array = false)
@@ -324,19 +353,23 @@ class Relatorios_model extends CI_Model
         return $result->result();
     }
 
-    public function vendasRapid()
+    public function vendasRapid($array = false)
     {
         $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->order_by('vendas.idVendas', 'ASC');
 
-        $this->db->order_by('vendas.dataVenda', 'DESC');
+        $result = $this->db->get();
+        if ($array) {
+            return $result->result_array();
+        }
 
-        return $this->db->get()->result();
+        return $result->result();
     }
 
-    public function vendasCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null)
+    public function vendasCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $array = false)
     {
         $whereData = "";
         $whereCliente = "";
@@ -355,8 +388,128 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.dataVenda";
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas
+        LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
+        LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
+        WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.idVendas";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
+    }
+
+    public function receitasBrutasRapid()
+    {
+        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+
+        $inicio = (new DateTime())->modify('first day of this month');
+        $fim = (new DateTime())->modify('last day of this month');
+
+        $query = "
+            SELECT
+                SUM(valor) total,
+                SUM(case when descricao NOT LIKE '%Fatura de OS%' AND descricao NOT LIKE '%Fatura de Venda%' then valor else 0 end) as totalOutros,
+                SUM(case when descricao LIKE '%Fatura de OS%' then valor else 0 end) as totalServicos,
+                SUM(case when descricao LIKE '%Fatura de Venda%' then valor else 0 end) as totalVendas
+            FROM lancamentos
+                WHERE baixado = 1
+                AND tipo = 'receita'
+                AND data_vencimento >= ?
+                AND data_vencimento <= ?
+        ";
+
+        $relatorio = $this->db->query($query, [$inicio->format('c'), $fim->format('c')])->row_array();
+
+        $mercadoriasTotalSemNf = floatval($relatorio['totalVendas']);
+        $mercadoriasTotalComNf = 0;
+        $mercadoriasTotal = $mercadoriasTotalSemNf + $mercadoriasTotalComNf;
+
+        $industriaTotalSemNf = 0;
+        $industriaTotalComNf = 0;
+        $industriaTotal = $industriaTotalSemNf + $industriaTotalComNf;
+
+        $servicosTotalSemNf = floatval($relatorio['totalServicos']);
+        $servicosTotalComNf = 0;
+        $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
+
+        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+
+        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+
+        return [
+            'cnpj' => $emitente['cnpj'],
+            'emitente' => $emitente['nome'],
+            'periodo' => $periodo,
+            'mercadoriasTotalSemNf' => number_format($mercadoriasTotalSemNf, 2, ',', '.'),
+            'mercadoriasTotalComNf' => number_format($mercadoriasTotalComNf, 2, ',', '.'),
+            'mercadoriasTotal' => number_format($mercadoriasTotal, 2, ',', '.'),
+            'industriaTotalSemNf' => number_format($industriaTotalSemNf, 2, ',', '.'),
+            'industriaTotalComNf' => number_format($industriaTotalComNf, 2, ',', '.'),
+            'industriaTotal' => number_format($industriaTotal, 2, ',', '.'),
+            'servicosTotalSemNf' => number_format($servicosTotalSemNf, 2, ',', '.'),
+            'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
+            'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
+            'totalMes' => number_format($totalMes, 2, ',', '.'),
+            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+        ];
+    }
+
+    public function receitasBrutasCustom($dataInicial = null, $dataFinal = null)
+    {
+        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+
+        $query = "
+            SELECT
+                SUM(valor) total,
+                SUM(case when descricao NOT LIKE '%Fatura de OS%' AND descricao NOT LIKE '%Fatura de Venda%' then valor else 0 end) as totalOutros,
+                SUM(case when descricao LIKE '%Fatura de OS%' then valor else 0 end) as totalServicos,
+                SUM(case when descricao LIKE '%Fatura de Venda%' then valor else 0 end) as totalVendas
+            FROM lancamentos
+                WHERE baixado = 1
+                AND tipo = 'receita'
+                AND data_vencimento >= ?
+                AND data_vencimento <= ?
+        ";
+
+        $inicio = new DateTime($dataInicial);
+        $fim = new DateTime($dataFinal);
+
+        $relatorio = $this->db->query($query, [$inicio->format('c'), $fim->format('c')])->row_array();
+
+        $mercadoriasTotalSemNf = floatval($relatorio['totalVendas']);
+        $mercadoriasTotalComNf = 0;
+        $mercadoriasTotal = $mercadoriasTotalSemNf + $mercadoriasTotalComNf;
+
+        $industriaTotalSemNf = 0;
+        $industriaTotalComNf = 0;
+        $industriaTotal = $industriaTotalSemNf + $industriaTotalComNf;
+
+        $servicosTotalSemNf = floatval($relatorio['totalServicos']);
+        $servicosTotalComNf = 0;
+        $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
+
+        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+
+        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+
+        return [
+            'cnpj' => $emitente['cnpj'],
+            'emitente' => $emitente['nome'],
+            'periodo' => $periodo,
+            'mercadoriasTotalSemNf' => number_format($mercadoriasTotalSemNf, 2, ',', '.'),
+            'mercadoriasTotalComNf' => number_format($mercadoriasTotalComNf, 2, ',', '.'),
+            'mercadoriasTotal' => number_format($mercadoriasTotal, 2, ',', '.'),
+            'industriaTotalSemNf' => number_format($industriaTotalSemNf, 2, ',', '.'),
+            'industriaTotalComNf' => number_format($industriaTotalComNf, 2, ',', '.'),
+            'industriaTotal' => number_format($industriaTotal, 2, ',', '.'),
+            'servicosTotalSemNf' => number_format($servicosTotalSemNf, 2, ',', '.'),
+            'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
+            'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
+            'totalMes' => number_format($totalMes, 2, ',', '.'),
+            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+        ];
     }
 }

@@ -9,8 +9,8 @@
         </span>
         <h5>Vendas</h5>
     </div>
-    <div class="widget-content nopadding">
-        <table class="table table-bordered ">
+    <div class="widget-content nopadding tab-content">
+        <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr style="background-color: #2D335B">
                     <th>#</th>
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <?php
-                
+
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="5">Nenhuma Venda Cadastrada</td>
@@ -55,8 +55,6 @@
                         echo '</td>';
                         echo '</tr>';
                     } ?>
-                <tr>
-                </tr>
             </tbody>
         </table>
     </div>

@@ -72,9 +72,9 @@
                                                 <span>
                                                     <?php echo $result->nome ?></span> <br />
                                                 <span>Telefone:
-                                                    <?php echo $result->telefone ?></span><br />
+                                                    <?php echo $result->telefone_usuario ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email_user ?></span>
+                                                    <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -100,15 +100,15 @@
                                 <tbody>
                                     <?php
 
-                                        foreach ($produtos as $p) {
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
+                                    foreach ($produtos as $p) {
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
 
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
                                     <tr>
                                         <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
@@ -120,19 +120,12 @@
                         <?php
                         } ?>
 
-
                         <hr />
 
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
-
                     </div>
-
-
-
-
-
                 </div>
             </div>
         </div>

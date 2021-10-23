@@ -139,8 +139,10 @@ $totalProdutos = 0; ?>
 
                             <td style="text-align: right">
                                 <?= $emitente[0]->nome; ?> <br>
+                                <?= $emitente[0]->rua ?>, <?= $emitente[0]->numero ?>, <?= $emitente[0]->bairro ?><br>
+                                <?= $emitente[0]->cidade ?> - <?= $emitente[0]->uf ?> CEP: <?= $emitente[0]->cep ?> <br>
                                 Responsável: <?= $result->nome ?><br>
-                                <?= $result->email_responsavel ?>
+                                <?= $result->email_usuario ?>
                             </td>
                         </tr>
                     </table>

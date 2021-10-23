@@ -10,10 +10,10 @@ if (!$results) { ?>
 
         </div>
 
-        <div class="widget-content nopadding">
+        <div class="widget-content nopadding tab-content">
 
 
-            <table class="table table-bordered ">
+            <table id="tabela" class="table table-bordered ">
                 <thead>
                     <tr style="backgroud-color: #2D335B">
                         <th>#</th>
@@ -45,10 +45,10 @@ if (!$results) { ?>
 
         </div>
 
-        <div class="widget-content nopadding">
+        <div class="widget-content nopadding tab-content">
 
 
-            <table class="table table-bordered ">
+            <table id="tabela" class="table table-bordered ">
                 <thead>
                     <tr style="backgroud-color: #2D335B">
                         <th>#</th>
@@ -74,13 +74,10 @@ if (!$results) { ?>
 
     echo '<td><a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $r->idVendas . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>
                       <a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $r->idVendas . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>
-                      
+
                   </td>';
     echo '</tr>';
 } ?>
-                    <tr>
-
-                    </tr>
                 </tbody>
             </table>
         </div>
