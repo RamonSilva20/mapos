@@ -123,13 +123,15 @@
                                             echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
                                         } ?>
+                                    </tbody>
+                                    <tfoot>
                                         <tr>
                                             <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td>
                                                 <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
                                             </td>
                                         </tr>
-                                    </tbody>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -166,7 +168,7 @@
                 <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
                     <strong><span style="color: red" id="resultado"></span></strong>
                 </div>
                 <div class="span4">
@@ -273,26 +275,38 @@
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
+                var qtdProdutos = $('#tblProdutos >tbody >tr').length;
+
                 $('#btn-cancelar-faturar').trigger('click');
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/vendas/faturar",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
-                            window.location.reload(true);
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar venda."
-                            });
-                            $('#progress-fatura').hide();
+
+                if (qtdProdutos <= 0) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: "Não é possível faturar uma venda sem produtos"
+                    });
+                } else if (qtdProdutos > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/vendas/faturar",
+                        data: dados,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar faturar venda."
+                                });
+                                $('#progress-fatura').hide();
+                            }
                         }
-                    }
-                });
-                return false;
+                    });
+
+                    return false;
+                }
             }
         });
         $("#produto").autocomplete({
