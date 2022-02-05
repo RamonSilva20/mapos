@@ -595,7 +595,9 @@ hr{ border-top-color:#dadada;}
 	margin-right: 190px;
 }
 .widget-content {
-	padding:15px;
+	padding-top:35px;
+	padding-left: 10px;
+	padding-right: 10px;
 	border-bottom: 1px solid #cdcdcd;
 }
 .widget-box.widget-plain .widget-content {
@@ -1536,7 +1538,7 @@ body {
 }
 @media (max-width: 600px) {
 .widget-title .buttons {
-	float: left;
+	float: right;
 }
 .panel-left {
 	margin-right: 0;
