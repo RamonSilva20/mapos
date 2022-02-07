@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <title><?= $this->config->item('app_name') ?> </title>
+<title><?= $this->config->item('app_name') ?> </title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
@@ -11,83 +10,132 @@
     <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
-
 <body>
-<div id="loginbox">
-        <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
-            <?php if ($this->session->flashdata('error') != null) { ?>
-                <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <?= $this->session->flashdata('error'); ?>
-                </div>
-            <?php } ?>
-            <div class="control-group normal_text">
-                <h3><img src="<?= base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <div class="main_input_box">
-                        <span class="add-on bg_lg"><i class="fas fa-user"></i></span><input id="email" name="email" type="text" placeholder="Email" />
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <div class="main_input_box">
-                        <span class="add-on bg_lb"><i class="fas fa-lock"></i></span><input name="senha" type="password" placeholder="Senha" />
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions" style="text-align: center">
-                <div id="progress-acessar" class='hide progress progress-info progress-striped active'>
-                    <div class='bar' style='width: 100%'></div>
-                </div>
-                <button id="btn-acessar" class="btn btn-success btn-large" /> Acessar</button>
-            </div>
-        </form>
+<div class="main-login"> 
+<div class="left-login">
 
+<!-- Saudação -->
+<h1 class="h-one"> 
+    <?php
+    function saudacao( $nome = '' ) {
+	date_default_timezone_set('America/Sao_Paulo');
+	$hora = date('H');
+	if( $hora >= 6 && $hora <= 12 ) return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+	else if ( $hora > 12 && $hora <=18  ) return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+	else return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+}
+$login = 'bem-vindos';
+echo saudacao( $login );
+
+// Irá retornar conforme o horário:
+?></h1>
+
+<h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
+<a href="https://storyset.com/business">
+    <img src="<?php echo base_url() ?>assets/img/business-plan-animate.svg"class="left-login-image" alt="Map-OS 5.0"></a>
+</div>
+
+<div id="loginbox">
+    <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
+    <?php if ($this->session->flashdata('error') != null) { ?>
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <?= $this->session->flashdata('error'); ?>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <div class="d-flex flex-column justify-content-center w-100 h-100">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="right-login">
+                <div class="container">
+                    <div class="card">
+                        <div class="content">
+                            <div id="newlog">
+                                <div class="icon2">
+        <img src="<?php echo base_url() ?>assets/img/logo.png"></div>
+        <div class="title01">MAP-</div>
+        <div class="title02">OS</div>
     </div>
 
-    <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 id="myModalLabel">MapOS</h4>
-        </div>
-        <div class="modal-body">
-            <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-        </div>
+<div id="mcell">Map-OS - Versão: <?= $this->config->item('app_version'); ?></div>
+
+<form action="index.html" method="post">
+    <div class="input-field">
+        <label class="fas fa-user" for="nome"></label>
+        <input id="email" name="email" type="text" placeholder="Email">
     </div>
     
-    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?= base_url() ?>assets/js/validate.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
+    <div class="input-field">
+        <label class="fas fa-lock" for="senha"></label>
+        <input name="senha" type="password" placeholder="Senha">
+    </div>
+    <div class="center"><button id="btn-acessar">Acessar</button>
+    </div>
+    <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a>
+</div>
 
-            $('#email').focus();
-            $("#formLogin").validate({
-                rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    senha: {
-                        required: true
-                    }
-                },
-                messages: {
-                    email: {
-                        required: 'Campo Requerido.',
-                        email: 'Insira Email válido'
-                    },
-                    senha: {
-                        required: 'Campo Requerido.'
-                    }
-                },
-                submitHandler: function(form) {
+<a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+    <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<div class="modal-header">
+    <h4 id="myModalLabel">Map-OS</h4>
+</div>
+
+<div class="modal-body">
+    <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+<div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h4 id="myModalLabel">Map-OS</h4>
+    </div>
+    <div class="modal-body">
+        <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+    </div>
+</div>
+    
+<script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
+<script src="<?= base_url() ?>assets/js/validate.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('#email').focus();
+    $("#formLogin").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            senha: {
+                required: true
+            }
+        },
+        messages: {
+            email: {
+                required: '',
+                email: 'Insira Email válido'
+            },
+            senha: {
+                required: 'Campos Requeridos.'
+            }
+        },
+        submitHandler: function(form) {
                     var dados = $(form).serialize();
                     $('#btn-acessar').addClass('disabled');
                     $('#progress-acessar').removeClass('hide');
@@ -125,10 +173,13 @@
                     $(element).parents('.control-group').addClass('success');
                 }
             });
-
         });
-    </script>
-
+        
+</script>
+    
+<!-- scripts -->
+<script src="http://localhost/mapos/assets/js/app.js"></script>
+<script type="text/javascript"></script>
+  
 </body>
-
 </html>
