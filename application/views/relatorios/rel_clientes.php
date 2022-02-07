@@ -8,7 +8,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a href="<?php echo base_url() ?>index.php/relatorios/clientesRapid" target="_blank"><i
                                     class="fas fa-users"></i> <small>Todos os Clientes - pdf</small></a></li>
                     <li><a href="<?php echo base_url() ?>index.php/relatorios/clientesRapid?format=xls" target="_blank"><i
