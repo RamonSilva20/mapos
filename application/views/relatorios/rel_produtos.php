@@ -8,7 +8,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapid"><i class="fas fa-shopping-bag"></i> <small>Todos os Produtos</small></a></li>
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/produtosRapidMin"><i class="fas fa-shopping-bag"></i> <small>Com Estoque Mínimo</small></a></li>
                 </ul>
