@@ -19,9 +19,9 @@ $totalProdutos = 0; ?>
 
   @font-face {
   font-family: 'RobotoCondensed-Regular';
-  src: url('http://mcell.rf.gd/assets/font-awesome/webfonts/RobotoCondensed-Regular.woff2') format('woff2'),
-       url('http://mcell.rf.gd/assets/font-awesome/webfonts/RobotoCondensed-Regular.woff') format('woff'),
-       url('http://mcell.rf.gd/assets/font-awesome/webfonts/RobotoCondensed-Regular.ttf')  format('truetype');
+  src: url('http://localhost/mapos/assets/font-awesome/webfonts/RobotoCondensed-Regular.woff2') format('woff2'),
+       url('http://localhost/mapos/assets/font-awesome/webfonts/RobotoCondensed-Regular.woff') format('woff'),
+       url('http://localhost/mapos/assets/font-awesome/webfonts/RobotoCondensed-Regular.ttf')  format('truetype');
 }
 body 
 {
