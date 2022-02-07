@@ -31,8 +31,8 @@
                             <label for="app_theme" class="control-label">Tema do Sistema</label>
                             <div class="controls">
                                 <select name="app_theme" id="app_theme">
-                                    <option value="default">Padrão</option>
-                                    <option value="white" <?= $configuration['app_theme'] == 'white' ? 'selected' : ''; ?> >Neve</option>
+                                    <option value="default">Escuro</option>
+                                    <option value="white" <?= $configuration['app_theme'] == 'white' ? 'selected' : ''; ?> >Claro</option>
                                 </select>
                                 <span class="help-inline">Selecione o tema que que deseja usar no sistema</span>
                             </div>
