@@ -10,7 +10,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/receitasBrutasRapid?format=docx"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - docx</small></a></li>
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/receitasBrutasRapid?format=pdf"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - pdf</small></a></li>
                 </ul>
