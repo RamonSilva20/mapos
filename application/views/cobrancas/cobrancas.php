@@ -1,4 +1,5 @@
- <div class="widget-box">
+<div class="new122">
+<div class="widget-box">
     <div class="widget-title">
         <span class="icon">
             <i class="fas fa-cash-register"></i>
@@ -8,7 +9,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="background-color: #2D335B">
+                <tr>
                     <th>#</th>
                     <th>Gateway</th>
                     <th>Tipo</th>
