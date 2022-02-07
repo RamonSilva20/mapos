@@ -10,7 +10,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
                 </ul>
