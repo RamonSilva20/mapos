@@ -6,7 +6,20 @@
             </span>
             <h5>Minha Conta</h5>
         </div>
-        <div class="widget-content">
+        <div class="widget-contentMC">
+            <div id="userMC">
+                <section>
+                    <div class="profileMC">
+                        <div class="profile-img">
+                            <img src="http://localhost/mapos/assets/img/User.png" alt="">
+                        </div>
+                    </div>
+                </section>
+                <div class="control-group">
+                    <label for="user" class=""><span class="">Upar Imagem</span></label>
+                </div>
+            </div>
+                
             <div class="row-fluid">
                 <div class="span12" style="min-height: 260px">
                     <ul class="site-stats">
