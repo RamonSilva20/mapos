@@ -36,8 +36,7 @@
             </span>
                 <h5>Cadastro de Cliente</h5>
                 <div class="buttons">
-                    <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/clientes"><i
-                                class="fas fa-arrow-left"></i> Voltar</a>
+                    <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/clientes"><i class="fas fa-arrow-left"></i> Voltar</a>
                 </div>
             </div>
             <ul class="nav nav-tabs">
