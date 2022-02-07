@@ -1,7 +1,6 @@
 
 .fc {
-    direction: ltr;
-    text-align: left; border:1px solid #dadada;
+    display: none;
 }
 .fc table {
     border-collapse: collapse;
