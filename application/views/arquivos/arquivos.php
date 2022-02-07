@@ -1,3 +1,4 @@
+<div class="new122" style="margin-top: 0; min-height: 100vh">
 <link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
@@ -5,10 +6,7 @@
     <form method="get" action="<?= current_url(); ?>">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
             <div class="span3">
-                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="btn btn-success span12">
-                    <i class="fas fa-plus"></i>
-                    Adicionar Arquivo
-                </a>
+                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="btn btn-success span12"> Adicionar Arquivo</a>
             </div>
         <?php endif ?>
 
@@ -126,3 +124,5 @@
         });
     });
 </script>
+
+</div>
