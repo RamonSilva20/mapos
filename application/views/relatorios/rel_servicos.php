@@ -8,7 +8,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/servicosRapid"><i class="fas fa-wrench"></i> <small>Todos os Serviços</small></a></li>
                 </ul>
             </div>
