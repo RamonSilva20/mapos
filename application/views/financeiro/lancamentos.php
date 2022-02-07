@@ -25,21 +25,21 @@ $periodo = $this->input->get('periodo');
     }
 </style>
 
+<div class="new122" style="margin-top: 0; min-height: 100vh">
 
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
     <div class="span5" style="margin-left: 0">
         <a href="#modalReceita" data-toggle="modal" role="button" class="btn btn-success tip-bottom"
-           title="Cadastrar nova receita"><i class="fas fa-plus"></i> Nova Receita</a>
+           title="Cadastrar nova receita">Adicionar Receita</a>
         <a href="#modalDespesa" data-toggle="modal" role="button" class="btn btn-danger tip-bottom"
-           title="Cadastrar nova despesa"><i class="fas fa-plus"></i> Nova Despesa</a>
+           title="Cadastrar nova despesa">Adicionar Despesa</a>
     </div>
 <?php } ?>
 
 <div class="span12" style="margin-left: 0;margin-top: 1rem;">
     <form action="<?php echo current_url(); ?>" method="get">
         <div class="span2" style="margin-left: 0">
-            <label>Período <i class="fas fa-calendar-day tip-top"
-                              title="Lançamentos com vencimento no período."></i></label>
+            <label>Período</label>
             <select id="periodo" name="periodo" class="span12">
                 <option value="dia" <?= $this->input->get('periodo') === 'dia' ? 'selected' : '' ?>>Dia</option>
                 <option value="semana" <?= $this->input->get('periodo') === 'semana' ? 'selected' : '' ?>>Semana
@@ -50,19 +50,19 @@ $periodo = $this->input->get('periodo');
         </div>
 
         <div class="span2">
-            <label>Vencimento (de) <i class="fas fa-calendar-day tip-top" title="Vencimento (de)"></i></label>
+            <label>Vencimento (de)</label>
             <input id="vencimento_de" type="text" class="span12 datepicker" name="vencimento_de"
                    value="<?= $this->input->get('vencimento_de') ? $this->input->get('vencimento_de') : date('d/m/Y') ?>">
         </div>
 
         <div class="span2">
-            <label>Vencimento (até) <i class="fas fa-calendar-day tip-top" title="Vencimento (até)"></i></label>
+            <label>Vencimento (até)</label>
             <input id="vencimento_ate" type="text" class="span12 datepicker" name="vencimento_ate"
                    value="<?= $this->input->get('vencimento_ate') ? $this->input->get('vencimento_ate') : date('d/m/Y') ?>">
         </div>
 
         <div class="span2">
-            <label>Tipo <i class="fas fa-hand-holding-usd tip-top" title="Tipo."></i></label>
+            <label>Tipo</label>
             <select name="tipo" class="span12">
                 <option value="">Todos</option>
                 <option value="receita" <?= $this->input->get('tipo') === 'receita' ? 'selected' : '' ?>>Receita
@@ -73,7 +73,7 @@ $periodo = $this->input->get('periodo');
         </div>
 
         <div class="span2">
-            <label>Status <i class="fa fa-file-signature tip-top" title="Tipo."></i></label>
+            <label>Status</label>
             <select name="status" class="span12">
                 <option value="">Todos</option>
                 <option value="0" <?= $this->input->get('status') === '0' ? 'selected' : '' ?>>Pendente</option>
@@ -82,7 +82,7 @@ $periodo = $this->input->get('periodo');
         </div>
 
         <div class="span2">
-            <label>Cliente/Fornecedor <i class="fas fa-user tip-top" title="Cliente."></i></label>
+            <label>Cliente/Fornecedor</label>
             <input id="cliente_fornecedor" type="text" class="span12" name="cliente"
                    value="<?= $this->input->get('cliente') ?>">
         </div>
@@ -152,10 +152,11 @@ $periodo = $this->input->get('periodo');
                     echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" usuario="' . $r->nome . '" class="btn btn-info tip-top editar" title="Editar Lançamento"><i class="fas fa-edit"></i></a>';
+                        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" usuario="' . $r->nome . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger tip-top excluir" title="Excluir Lançamento"><i class="fas fa-trash-alt"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
                     }
 
                     echo '</td>';
@@ -183,11 +184,10 @@ $periodo = $this->input->get('periodo');
             </table>
         </div>
     </div>
-
 </div>
 
 <?php echo $this->pagination->create_links(); ?>
-
+</div>
 
 <!-- Modal nova receita -->
 <div id="modalReceita" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -428,7 +428,6 @@ $periodo = $this->input->get('periodo');
     </form>
 </div>
 
-
 <!-- Modal Excluir lançamento-->
 <div id="modalExcluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -445,7 +444,6 @@ $periodo = $this->input->get('periodo');
         <button class="btn btn-danger" id="btnExcluir">Excluir Lançamento</button>
     </div>
 </div>
-
 
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
