@@ -3,11 +3,12 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 
+<div class="new122">
 <div class="span12" style="margin-left: 0">
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
-                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
+                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"> Adicionar Ordem de Serviço</a>
             </div>
         <?php
         } ?>
@@ -41,7 +42,7 @@
     </form>
 </div>
 
-<div class="widget-box">
+<div class="widget-box" style="margin-top: 8px">
     <div class="widget-title">
         <span class="icon">
             <i class="fas fa-diagnoses"></i>
@@ -52,17 +53,17 @@
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
-                    <tr style="background-color: #2D335B">
-                        <th>N° OS</th>
+                    <tr>
+                        <th>N°</th>
                         <th>Cliente</th>
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Venc. Garantia</th>
                         <th>Valor Total</th>
-                        <th>Valor Total (Faturado)</th>
+                        <th>V.T (Faturado)</th>
                         <th>Status</th>
-                        <th>T. Garantia</th>
+                        <th>Garantia</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -142,13 +143,13 @@
                         $editavel = $this->os_model->isEditable($r->idOs);
 
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
                         }
                         if ($editavel) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -178,6 +179,8 @@
         </div>
     </form>
 </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).on('click', 'a', function(event) {
