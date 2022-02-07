@@ -68,7 +68,7 @@
                                             } ?>
                                             <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="fas fa-eye"></i> Visualizar Venda</a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-arrow-left"></i> Voltar</a>
                                         </div>
                                     </div>
                                 </form>
