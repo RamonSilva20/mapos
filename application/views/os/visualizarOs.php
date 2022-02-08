@@ -14,10 +14,10 @@
 
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i
-                                class="fas fa-print"></i> Imprimir A4</a>
+                                class="fas fa-print"></i>&nbsp Papel A4</a>
                     <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i
-                                class="fas fa-print"></i> Imprimir Não Fiscal</a>
+                                class="fas fa-print"></i>&nbsp CP Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
     $this->load->model('os_model');
     $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);

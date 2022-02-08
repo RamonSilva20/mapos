@@ -34,13 +34,9 @@
                             <i class="fas fa-cash-register"></i> Faturar</a>
                     <?php
                     } ?>
-
-                    <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i>&nbsp Editar</a>';
-                    } ?>
                     <a title="Visualizar OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>"><i class="fas fa-eye"></i>&nbsp Visualizar OS</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i>&nbsp Via Cliente</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i>&nbsp Via Assistência</a>
+                    <a target="_blank" title="Imprimir OS Papel A4" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i>&nbsp Papel A4</a>
+                    <a target="_blank" title="Imprimir OS Cupom Não Fiscal" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i>&nbsp CP Não Fiscal</a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
