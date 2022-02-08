@@ -156,7 +156,7 @@
                         <div class="control-group" class="control-label">
                             <label for="estado" class="control-label">Estado</label>
                             <div class="controls">
-                                <select id="estado" name="estado">
+                                <select id="estado" name="estado" class="span3">
                                     <option value="">Selecione...</option>
                                 </select>
                             </div>

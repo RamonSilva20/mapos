@@ -84,7 +84,7 @@
                     <div class="control-group">
                         <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                         <div class="controls">
-                            <select id="unidade" name="unidade"></select>
+                            <select id="unidade" name="unidade" style="width: 15em;"></select>
                         </div>
                     </div>
 
