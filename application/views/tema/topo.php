@@ -63,7 +63,7 @@
   <div id="user-nav" class="navbar navbar-inverse">
     
     <ul class="nav">
-  <li class="dropdown">
+      <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Meu Perfil" class="tip-bottom"><i class='bx bx-user-circle iconN'></i><span class="text"> Meu Perfil</span></a>
         <ul class="dropdown-menu">
         <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine"> <span class="text">Área do Cliente</span></a></li>
@@ -104,27 +104,24 @@
   </div>
 
 <!-- New User -->
-<div id="userr">
-  <div class="user-names userT0">
-    <?php
-    function saudacao( $nome = '' ) { date_default_timezone_set('America/Sao_Paulo'); $hora = date('H');
+<div id="userr" style="padding-right:48px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
+  <div class="user-names userT0"> <?php function saudacao( $nome = '' ) { date_default_timezone_set('America/Sao_Paulo'); $hora = date('H');
       if( $hora >= 6 && $hora <= 12 ) return 'Bom dia' . (empty($nome) ? '' : ', ' . $nome);
       else if ( $hora > 12 && $hora <=18  ) return 'Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
       else return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
     } $login = ''; 
-    echo saudacao( $login ); // Irá retornar conforme o horário:?></div>
-    <div class="userT"><?= $this->session->userdata('nome') ?></div>
+    echo saudacao( $login ); // Irá retornar conforme o horário:?>
   </div>
-
-<section>
+  <div class="userT"><?= $this->session->userdata('nome') ?></div>
+  
+  <section style="display:block;position:absolute;right:10px">
   <div class="profile">
     <div class="profile-img">
-      <a href="<?= site_url('mapos/minhaConta'); ?>">
-      <img src="<?php echo base_url() ?>assets/img/User.png" alt="">
-      </a>
+      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?php echo base_url() ?>assets/img/User.png" alt=""></a>
     </div>
   </div>
 </section>
+
 </div>
 </div>
 <!-- End User -->
