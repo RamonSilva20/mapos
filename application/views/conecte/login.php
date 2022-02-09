@@ -39,7 +39,7 @@
 <body>
 <div class="main-login"> 
     <div class="left-login">
-    <h1 class="h-one">Cadastre-se no Sistema</h1>
+    <h1 class="h-one">Área do Cliente</h1>
         <a href="https://storyset.com/technology">
             <img src="<?php echo base_url() ?>assets/img/forms-animate.svg"class="left-login-imagec" alt="Map-OS 5.0"></a>
         </div>
