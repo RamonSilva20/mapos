@@ -17,6 +17,7 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -28,12 +29,11 @@
 <!--close-Header-part-->
 
 <!--top-Header-menu-->
+<div class="navebarn" style="margin-top: -60px;height: 25px;margin-bottom: 15px">
 <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
-      <li class="pull-right"><a href="https://github.com/RamonSilva20/mapos" target="_blank"><i class="fas fa-asterisk"></i> <span class="text">Versão:
-            <?= $this->config->item('app_version'); ?></span></a></li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user-cog"></i> <?= $this->session->userdata('nome') ?> <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='bx bx-user-circle iconN'></i> <?= $this->session->userdata('nome') ?> </a>
         <ul class="dropdown-menu">
           <li class=""><a title="Meu Perfil"  href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user"></i> <span class="text">Meu Perfil</span></a></li>
           <li class="divider"></li>
@@ -42,31 +42,48 @@
       </li>
     </ul>
 </div>
+</div>
 
-<div id="sidebar"><a href="#" class="visible-phone"><i class="icon fas fa-bars"></i> Menu</a>
+<nav style="top: 10px" id="sidebar"><a href="#" class="visible-phone"><i class='bx bx-menu'></i> Menu</a>
+  <div id="newlog">
+      <div class="icon2">
+          <img src="<?php echo base_url() ?>assets/img/logo.png"></div>
+  <h1 class="title1">MAP-OS</h1>
+  </div>
+
+<div class="menu-bar">
+        <div class="menu">
     <ul>
         <li class="<?php if (isset($menuPainel)) {
     echo 'active';
-}; ?>"><a href="<?php echo base_url() ?>index.php/mine/painel"><i class="icon fas fa-home"></i> <span>Painel</span></a></li>
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/painel"><i class='bx bx-home-alt iconX'></i> <span class="title">Painel</span></a></li>
         <li class="<?php if (isset($menuConta)) {
     echo 'active';
-}; ?>"><a href="<?php echo base_url() ?>index.php/mine/conta"><i class="icon fas fa-user"></i> <span>Minha Conta</span></a></li>
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/conta"><i class="bx bx-user-circle iconX"></i> <span class="title">Minha Contas</span></a></li>
         <li class="<?php if (isset($menuOs)) {
     echo 'active';
-}; ?>"><a href="<?php echo base_url() ?>index.php/mine/os"><i class="icon fas fa-diagnoses"></i> <span>Ordens de Serviço</span></a></li>
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconX'></i> <span class="title">Ordens de Serviço</span></a></li>
         <li class="<?php if (isset($menuVendas)) {
     echo 'active';
-}; ?>"><a href="<?php echo base_url() ?>index.php/mine/compras"><i class="icon fas fa-shopping-cart"></i> <span>Compras</span></a></li>
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconX'></i> <span class="title">Compras</span></a></li>
         <li class="<?php if (isset($menuCobrancas)) {
     echo 'active';
-}; ?>"><a href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class="icon fas fa-barcode"></i> <span>Cobranças</span></a></li>
-        <li class=""><a href="<?php echo base_url() ?>index.php/mine/sair"><i class="icon fas fa-sign-out-alt"></i> <span>Sair</span></a></li>
-
+}; ?>"><a href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class='bx bx-credit-card-front iconX'></i> <span class="title">Cobranças</span></a></li>
     </ul>
+  </div>
+
+  <div style="margin-bottom: 40px" class="botton-content">
+    <li class="">
+      <a href="<?= site_url('login/sair'); ?>">
+        <i class='bx bx-log-out-circle iconX'></i>
+        <span class="title">Sair</span></a>
+      </li>
+    </div>
+
 </div>
+</nav>
 
-
-<div id="content">
+<div style="background: #f3f4f6" id="content">
     <div id="content-header">
         <div id="breadcrumb"><a href="<?php echo base_url(); ?>index.php/mine/painel" title="Painel" class="tip-bottom"><i class="fas fa-home"></i> Painel</a></div>
     </div>
