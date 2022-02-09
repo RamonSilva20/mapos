@@ -201,7 +201,7 @@ input:focus {
   flex-direction: column;
 }
 .left-login-image {
-  width: 34vw;
+  width: 26vw;
 }
 .left-login-imagec {
   width: 25vw;
@@ -216,6 +216,7 @@ input:focus {
   color: var(--cinza);
   font-weight: 500;
   margin-top: -23px;
+  margin-bottom: -10px;
 }
 .right-login {
   width: 50vw;
