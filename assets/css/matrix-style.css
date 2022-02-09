@@ -798,7 +798,6 @@ section .profile .profile-img {
   width        : 28px;
   border-radius: 50%;
   background   : #fff;
-  margin       : 0 10px;
   border       : 2px solid var(--laranja1);
   padding      : 1px;
 }
@@ -819,27 +818,14 @@ section .profile .profile-img {
 }
 
 #userr .userT0 {
-  position   : absolute;
   color      : var(--cinza0);
   font-size  : 1.3em;
   font-weight: 500;
-  top        : 0.9%;
-  right      : 47px;
 }
 
 #userr .userT {
-  position   : absolute;
   color      : var(--cinza0);
   font-size  : 1.05em;
-  top        : 2.9%;
-  right      : 47px;
-}
-
-#userr .userT2 {
-  color      : #4d619f;
-  font-size  : 1.3em;
-  font-weight: 500;
-  top        : 68px;
 }
 
 /* Content */
