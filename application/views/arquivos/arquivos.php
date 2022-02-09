@@ -50,7 +50,7 @@
 
                     if (!$results) {
                         echo '<tr>
-                                <td colspan="5">Nenhum Arquivo Encontrado</td>
+                                <td colspan="8">Nenhum Arquivo Encontrado</td>
                             </tr>';
                     }
                     foreach ($results as $r) : ?>
