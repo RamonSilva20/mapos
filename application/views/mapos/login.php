@@ -32,7 +32,7 @@ echo saudacao( $login );
 
 <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
 <a href="https://storyset.com/business">
-    <img src="<?php echo base_url() ?>assets/img/business-plan-animate.svg"class="left-login-image" alt="Map-OS 5.0"></a>
+    <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg"class="left-login-image" alt="Map-OS 5.0"></a>
 </div>
 
 <div id="loginbox">
