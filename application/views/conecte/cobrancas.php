@@ -1,4 +1,4 @@
- <div class="widget-box">
+<div class="widget-box">
     <div class="widget-title">
         <span class="icon">
             <i class="fas fa-cash-register"></i>
@@ -8,7 +8,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="background-color: #2D335B">
+                <tr>
                     <th>#</th>
                     <th>Data de Vencimento</th>
                     <th>Referência</th>
@@ -52,8 +52,8 @@
                         }
 
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-                            echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn btn-info tip-top" title="Visualizar boleto"><i class="fas fa-barcode"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->idCobranca . '" class="btn btn-info tip-top" title="Reenviar por email"><i class="fas fa-envelope-open-text"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . $r->link . '" class="btn-new" title="Visualizar boleto"><i class="bx bx-barcode"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->idCobranca . '" class="btn-new3" title="Reenviar por email"><i class="bx bx-message-square-minus" ></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';
