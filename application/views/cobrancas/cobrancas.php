@@ -24,7 +24,7 @@
                 <?php
                     if (!$results) {
                         echo '<tr>
-                                <td colspan="5">Nenhuma cobrança Cadastrada</td>
+                                <td colspan="8">Nenhuma cobrança Cadastrada</td>
                             </tr>';
                     }
                     foreach ($results as $r) {

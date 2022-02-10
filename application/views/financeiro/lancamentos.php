@@ -126,7 +126,7 @@ $periodo = $this->input->get('periodo');
 
                 if (!$results) {
                     echo '<tr>
-              <td colspan="8" >Nenhum lançamento encontrado</td>
+              <td colspan="9" >Nenhum lançamento encontrado</td>
             </tr>';
                 }
                 foreach ($results as $r) {
