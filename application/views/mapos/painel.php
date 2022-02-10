@@ -127,7 +127,7 @@
 
  <!-- New widget right -->
 <div class="new-statisc">
-    <div class="widget-box-new">
+    <div class="widget-box-new" style="height:100%">
         <div>
             <h5 class="cardHeader">Estatísticas do Sistema</h5>
         </div>
