@@ -2,7 +2,7 @@
 <div class="flexxn" style="display: flex;">
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
     <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="btn btn-success"> Adicionar Produto</a>
-    <a href="#modal-etiquetas" role="button" data-toggle="modal" class="btn btn-success span2" style="float: right; width: 50%;
+    <a href="#modal-etiquetas" role="button" data-toggle="modal" class="btn btn-success span2" style="float: right; width: 150px;
     margin-left: 10px">
         <i class="fas fa-barcode"></i> Gerar Etiquetas</a>
 </div>
