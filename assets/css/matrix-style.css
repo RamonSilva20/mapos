@@ -167,11 +167,11 @@ input[type="color"],
 }
 
 #footer {
-  padding   : 10px;
-  text-align: center;
-  color     : #f7bc4d;
-  background: var(--bodycolor);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding    : 10px 0 10px 250px;
+  text-align : center;
+  color      : #f7bc4d;
+  background : var(--bodycolor);
+  border-top : 1px solid rgba(0, 0, 0, 0.1);
 }
 
 hr {
@@ -462,8 +462,6 @@ select {
   padding-top    : 5px;
   border-radius  : 6px;
   font-size      : 2rem;
-  /* background  : #f5f7f7;
-  box-shadow     : 0 3px 6px rgba(0, 0, 0, 0.1);*/
 }
 
 .cardBox .card-cl .clock-card .colun {
@@ -514,23 +512,20 @@ select {
 #newlog {
   position       : relative;
   display        : flex;
-  top            : 5px;
-  padding        : 0px 46px;
+  top            : 15px;
+  padding        : 0 45px;
   align-items    : center;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   z-index        : 99;
 }
 
 #newlog .icon2 {
-  position: absolute;
   width   : 34px;
 }
 
 #newlog .title1 {
-  font-size   : 2.2em;
   color       : var(--title);
-  padding-left: 30px;
-  font-weight : 500;
+  width       : 110px;
 }
 
 /* Sidebar Navigation */
@@ -661,7 +656,7 @@ select {
 #sidebar .search-box {
   background   : #484c64;
   border-radius: 6px;
-  margin       : 20px 20px 0 20px;
+  margin       : 30px 20px 0 20px;
 }
 
 #sidebar .botton-content {
@@ -762,9 +757,7 @@ body.dark .switch::before {
 .bemv {
   font-size  : 2.1em;
   font-weight: 500;
-  float      : right;
   color      : var(--cinza0);
-  margin     : 10px 20px 20px 0;
 }
 
 .navebarn {
@@ -842,16 +835,13 @@ section .profile .profile-img {
   transition : var(--tran-03);
 }
 
-.container-fluid {
-  padding-right: 15px;
-  padding-left : 15px;
-}
-
 #content-header {
-  width      : 100%;
-  margin-top : 0;
-  z-index    : 20;
-  margin-left: 15px;
+  margin         : 15px 20px;
+  z-index        : 20;
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+  flex-direction: row-reverse;
 }
 
 #content-header h1 {
@@ -886,10 +876,7 @@ section .profile .profile-img {
 
 /* Breadcrumb */
 #breadcrumb {
-  margin-top   : 15px;
-  margin-bottom: 20px;
   float        : left;
-  margin-left  : 5px;
 }
 
 #breadcrumb a {
@@ -1266,13 +1253,13 @@ section .profile .profile-img {
 }
 
 .btn-success:hover {
-  color           : #ffffff;
-  background-color: #1db3a4;
+  color           : #fff;
+  background-color: #3cd391;
 }
 
 .btn-success {
-  color           : #fff;
-  background-color: #04395b;
+  color           : #090909;
+  background-color: #54c795;
 }
 
 .btn-danger {
@@ -2675,8 +2662,12 @@ form {
 /* Responsive design */
 @media (max-width: 480px) {
 
+  #footer {
+    padding: 10px;
+  }
+
   .new122 {
-    margin-top: 30px !important;
+    margin-top: 10px !important;
   }
 
   .fc-direction-ltr {
@@ -2873,7 +2864,6 @@ form {
   }
 
   #user-nav {
-    margin-left: 30px;
     width      : 100px;
   }
 
@@ -2901,10 +2891,9 @@ form {
   }
 
   #user-nav>ul {
-    position   : absolute;
-    margin-top : -17px;
     font-size  : 1.3em;
-    margin-left: -20px !important;
+    margin-left: -25px !important;
+    top        : -5px;
   }
 
   #user-nav>ul>li {
@@ -2933,10 +2922,6 @@ form {
     padding: 12px !important;
   }
 
-  #content-header {
-    margin-left: 1px;
-  }
-
   #content-header h1,
   #content-header .btn-group {
     float: none;
@@ -2958,19 +2943,12 @@ form {
     left         : 30%;
   }
 
-  #content-header .bemv {
-    padding-top   : 10px;
-    padding-bottom: 4px;
-    font-size     : 1.9em;
-    font-weight   : 500;
-    color         : #46435f;
-    margin-left   : -10px;
+  #content-header {
+    margin: 5px;
   }
 
-  #breadcrumb {
-    margin-top   : 0;
-    margin-bottom: 17px;
-    margin-right : 0;
+  #content-header .bemv {
+    font-size     : 1.9em;
   }
 
   #breadcrumb a {
@@ -2981,7 +2959,6 @@ form {
 
   .navebarn {
     margin-left  : 0;
-    margin-bottom: 8px;
   }
 
   .bemv {
@@ -2993,6 +2970,7 @@ form {
     float  : none;
     width  : 0;
     z-index: 55;
+    opacity: 0.5;
   }
 
   #sidebar.open {
@@ -3000,6 +2978,7 @@ form {
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
     border-right: #4b4d60 solid 0px;
+    opacity     : 1;
   }
 
   #sidebar.open .icon2,
@@ -3014,6 +2993,10 @@ form {
 
   #sidebar li {
     margin-top: 8px;
+    opacity   : 0;
+  }
+  #sidebar.open li {
+    opacity: 1;
   }
 
   #sidebar .menu-bar {
@@ -3022,15 +3005,18 @@ form {
 
   #sidebar #newlog {
     margin-left: -200px;
+    opacity    : 0;
   }
 
   #sidebar .search-box {
     margin-left: -150px;
+    opacity    : 0;
   }
 
   #sidebar.open #newlog {
     margin-left: 0;
     transition : var(--tran-03);
+    opacity    : 1;
   }
 
   #sidebar.open .menu-bar {
@@ -3041,6 +3027,7 @@ form {
   #sidebar.open .search-box {
     margin-left: 20px;
     transition : var(--tran-03);
+    opacity    : 1;
   }
 
   #sidebar.open .title {
@@ -3136,6 +3123,14 @@ form {
     margin-left: 82px;
   }
 
+  #footer {
+    padding: 10px 0 10px 83px;
+  }
+
+  #content-header {
+    margin: 10px 10px;
+  }
+
   .container-fluid {
     padding-right: 5px;
     padding-left : 5px;
@@ -3174,13 +3169,15 @@ form {
   }
 
   #newlog {
-    padding: 15px 21px;
+    padding: 0 21px;
   }
 
-  #newlog,
-  .title01,
-  .title02 {
-    font-size: 0em;
+  #newlog .title1 {
+    display: none;
+  }
+
+  #sidebar.open #newlog .title1 {
+    display: block;
   }
 
   .navebarn {
