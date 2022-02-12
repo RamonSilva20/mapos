@@ -27,7 +27,6 @@
             if (texto.substring(0, 1) != saida) {
                 documento.value += texto.substring(0, 1);
             }
-
         }
     </script>
 </head>
@@ -37,7 +36,7 @@
 ?>
 
 <body>
-<div class="main-login"> 
+<div class="main-login">
     <div class="left-login">
     <h1 class="h-one">Área do Cliente</h1>
             <img src="<?php echo base_url() ?>assets/img/forms-animate.svg"class="left-login-imagec" alt="Map-OS 5.0">
@@ -57,8 +56,8 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <?php echo $this->session->flashdata('success'); ?>
                 </div>
-            <?php } ?>               
-    
+            <?php } ?>
+
     <div class="d-flex flex-column justify-content-center w-100 h-100">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <div class="right-login">
@@ -66,16 +65,15 @@
                     <div class="card card-cad">
                         <div class="content">
                             <div id="newlog">
-
-                                <div class="icon2">
-                                    <img src="<?php echo base_url() ?>assets/img/logo.png"></div>
-                                    <div class="title01">MAP-</div>
-                                    <div class="title02">OS</div>
-                                </div>
-                                
-                                <div id="mcell">Map-OS - Versão: <?= $this->config->item('app_version'); ?></div>
-                                
-                                <div class="control-group">
+                              <div class="icon2">
+                                <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                              </div>
+                              <div class="title01">
+                                <?= $configuration['app_theme'] == 'white' ? '<img src="'. base_url() .'assets/img/logo-mapos.png">' : '<img src="'. base_url() .'assets/img/logo-mapos-branco.png">'; ?>
+                              </div>
+                              </div>
+                              <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
+                              <div class="control-group">
                                     <div class="controls">
                                         <div class="main_input_box">
                                             <span class="add-on bg_lg"><i class='bx bx-user-plus iconU'></i></span>
@@ -83,7 +81,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="control-group">
                                     <div class="controls">
                                         <div class="main_input_box">
@@ -92,7 +90,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
                                 <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
                                 <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a></div>
