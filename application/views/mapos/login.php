@@ -11,11 +11,11 @@
     <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
 <body>
-<div class="main-login"> 
-<div class="left-login">
+<div class="main-login">
+  <div class="left-login">
 
 <!-- Saudação -->
-<h1 class="h-one"> 
+<h1 class="h-one">
     <?php
     function saudacao( $nome = '' ) {
 	date_default_timezone_set('America/Sao_Paulo');
@@ -33,7 +33,6 @@ echo saudacao( $login );
 <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
     <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
 </div>
-
 <div id="loginbox">
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
     <?php if ($this->session->flashdata('error') != null) { ?>
@@ -42,73 +41,65 @@ echo saudacao( $login );
             <?= $this->session->flashdata('error'); ?>
         </div>
     </div>
-    <?php } ?>
-    
-    <div class="d-flex flex-column justify-content-center w-100 h-100">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <div class="right-login">
-                <div class="container">
-                    <div class="card">
-                        <div class="content">
-                            <div id="newlog">
-                                <div class="icon2">
-        <img src="<?php echo base_url() ?>assets/img/logo.png"></div>
-        <div class="title01">MAP-</div>
-        <div class="title02">OS</div>
+  <?php } ?>
+  <div class="d-flex flex-column justify-content-center w-100 h-100">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <div class="right-login">
+        <div class="container">
+          <div class="card">
+            <div class="content">
+              <div id="newlog">
+                <div class="icon2">
+                  <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                </div>
+                <div class="title01">
+                  <?= $configuration['app_theme'] == 'white' ? '<img src="'. base_url() .'assets/img/logo-mapos.png">' : '<img src="'. base_url() .'assets/img/logo-mapos-branco.png">'; ?>
+                </div>
+              </div>
+              <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
+              <form action="index.html" method="post">
+                <div class="input-field">
+                  <label class="fas fa-user" for="nome"></label>
+                  <input id="email" name="email" type="text" placeholder="Email">
+                </div>
+                <div class="input-field">
+                  <label class="fas fa-lock" for="senha"></label>
+                <input name="senha" type="password" placeholder="Senha">
+              </div>
+              <div class="center"><button id="btn-acessar">Acessar</button>
+              </div>
+              <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a>
+              </div>
+              <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+              <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                  <h4 id="myModalLabel">Map-OS</h4>
+                </div>
+                <div class="modal-body">
+                  <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-<div id="mcell">Map-OS - Versão: <?= $this->config->item('app_version'); ?></div>
-
-<form action="index.html" method="post">
-    <div class="input-field">
-        <label class="fas fa-user" for="nome"></label>
-        <input id="email" name="email" type="text" placeholder="Email">
-    </div>
-    
-    <div class="input-field">
-        <label class="fas fa-lock" for="senha"></label>
-        <input name="senha" type="password" placeholder="Senha">
-    </div>
-    <div class="center"><button id="btn-acessar">Acessar</button>
-    </div>
-    <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a>
-</div>
-
-<a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
+    <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
     <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-<div class="modal-header">
-    <h4 id="myModalLabel">Map-OS</h4>
-</div>
-
-<div class="modal-body">
-    <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-<div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
+      <div class="modal-header">
         <h4 id="myModalLabel">Map-OS</h4>
-    </div>
-    <div class="modal-body">
+      </div>
+      <div class="modal-body">
         <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-    </div>
-    
-    <div class="modal-footer">
+      </div>
+      <div class="modal-footer">
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+      </div>
     </div>
-</div>
-    
+
 <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
 <script src="<?= base_url() ?>assets/js/validate.js"></script>
 <script type="text/javascript">
@@ -152,7 +143,7 @@ $(document).ready(function() {
 
                                 $('#btn-acessar').removeClass('disabled');
                                 $('#progress-acessar').addClass('hide');
-                                
+
                                 $('#message').text(data.message || 'Os dados de acesso estão incorretos, por favor tente novamente!');
                                 $('#call-modal').trigger('click');
                             }
@@ -173,12 +164,12 @@ $(document).ready(function() {
                 }
             });
         });
-        
+
 </script>
-    
+
 <!-- scripts -->
 <script src="http://localhost/mapos/assets/js/app.js"></script>
 <script type="text/javascript"></script>
-  
+
 </body>
 </html>
