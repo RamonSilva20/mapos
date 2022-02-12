@@ -820,7 +820,7 @@ section .profile .profile-img {
 
 #userr .userT {
   color      : var(--cinza0);
-  font-size  : 1.05em;
+  font-size  : 1em;
 }
 
 /* Content */
