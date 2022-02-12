@@ -1,8 +1,8 @@
 <div id="content">
-  <!-- New Bem-vindos -->
-<div class="bemv">Dashboard</div>
 <!--start-top-serch-->
-    <div id="content-header">
+  <div id="content-header">  
+<!-- New Bem-vindos -->
+   <div class="bemv">Dashboard</div>
       <div id="breadcrumb">
         <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"> Início</a>
         <?php if ($this->uri->segment(1) != null) { ?>
@@ -21,9 +21,7 @@
         <div class="span12">
           <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
           <?php if ($var = $this->session->flashdata('error')): ?><script>swal("Falha!", "<?php echo str_replace('"', '', $var); ?>", "error");</script><?php endif; ?>
-          <?php if (isset($view)) {
-    echo $this->load->view($view, null, true);
-} ?>
+          <?php if (isset($view)) { echo $this->load->view($view, null, true); } ?>
         </div>
       </div>
     </div>
