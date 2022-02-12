@@ -103,7 +103,7 @@
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                    <li class="<?php if (isset($menuFinanceiro)) {
+                    <li class="<?php if (isset($menuLancamentos)) {
                                     echo 'active';
                                 }; ?>">
                         <a href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-square iconX"></i>
