@@ -17,7 +17,7 @@ class Cobrancas extends MY_Controller
 
         $this->load->helper('form');
         $this->load->model('cobrancas_model');
-        $this->data['menuFinanceiro'] = 'cobrancas';
+        $this->data['menuCobrancas'] = 'financeiro';
     }
 
     public function index()
