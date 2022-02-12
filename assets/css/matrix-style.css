@@ -877,6 +877,7 @@ section .profile .profile-img {
 /* Breadcrumb */
 #breadcrumb {
   float        : left;
+  margin-top: 10px;
 }
 
 #breadcrumb a {
