@@ -457,10 +457,9 @@ select {
   height         : 60px;
   display        : flex;
   flex-direction : column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items    : center;
-  padding-top    : 5px;
-  border-radius  : 6px;
+  border-radius  : 10px;
   font-size      : 2rem;
 }
 
@@ -472,7 +471,7 @@ select {
 
 .cardBox .card-cl .clock-card .clock-flex .num {
   font-family: "Orbitron", sans-serif;
-  font-size  : 1.8rem;
+  font-size  : 1.9rem;
   font-weight: 600;
 }
 
@@ -488,9 +487,9 @@ select {
   font-size     : 1em;
   font-weight   : 600;
   letter-spacing: 1px;
-  top           : 9px;
+  top           : 10px;
   position      : absolute;
-  right         : 10px;
+  right         : 15px;
 }
 
 /* End hora certa */
@@ -513,19 +512,19 @@ select {
   position       : relative;
   display        : flex;
   top            : 15px;
-  padding        : 0 45px;
+  padding        : 0 30px;
   align-items    : center;
   justify-content: space-evenly;
   z-index        : 99;
 }
 
 #newlog .icon2 {
-  width   : 34px;
+  width   : 38px;
 }
 
 #newlog .title1 {
   color       : var(--title);
-  width       : 110px;
+  width       : 125px;
 }
 
 /* Sidebar Navigation */
@@ -835,6 +834,11 @@ section .profile .profile-img {
   transition : var(--tran-03);
 }
 
+.container-fluid {
+  padding-right: 8px;
+  padding-left : 8px;
+}
+
 #content-header {
   margin         : 15px 20px;
   z-index        : 20;
@@ -877,6 +881,7 @@ section .profile .profile-img {
 /* Breadcrumb */
 #breadcrumb {
   float        : left;
+  margin-top: 10px;
 }
 
 #breadcrumb a {
@@ -1333,42 +1338,42 @@ section .profile .profile-img {
 
 .new-bottons .card .iconBx {
   color      : #4db4f8;
-  text-shadow: 0 14px 17px #4db4f8ab;
+  text-shadow: 0 14px 17px #4db4f870;
 }
 
 .new-bottons .card .iconBx2 {
   color      : #ffc359;
-  text-shadow: 0 14px 17px #ffc359ab;
+  text-shadow: 0 14px 17px #ffc35970;
 }
 
 .new-bottons .card .iconBx3 {
   color      : #4cc3c3;
-  text-shadow: 0 14px 17px #4cc3c3ab;
+  text-shadow: 0 14px 17px #4cc3c370;
 }
 
 .new-bottons .card .iconBx4 {
   color      : #ff6988;
-  text-shadow: 0 14px 17px #ff6988ad;
+  text-shadow: 0 14px 17px #ff698870;
 }
 
 .new-bottons .card .iconBx5 {
   color      : #15b698;
-  text-shadow: 0 14px 17px #3db3a3ab;
+  text-shadow: 0 14px 17px #3db3a370;
 }
 
 .new-bottons .card .iconBx6 {
   color      : #976abe;
-  text-shadow: 0 14px 17px #b083dbad;
+  text-shadow: 0 14px 17px #b083db70;
 }
 
 .new-bottons .card .iconBx7 {
   color      : #06da81;
-  text-shadow: 0 14px 17px #61dbacad;
+  text-shadow: 0 14px 17px #61dbac70;
 }
 
 .new-bottons .card .iconBx8 {
   color      : #fa7575;
-  text-shadow: 0 14px 17px #df8686ad;
+  text-shadow: 0 14px 17px #df868670;
 }
 
 /* News icons status */
