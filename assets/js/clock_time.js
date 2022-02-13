@@ -3,8 +3,8 @@ setInterval(() => {
 
     let date = new Date(),
         hour = date.getHours(),
-        min = date.getMinutes(),
-        sec = date.getSeconds();
+        min = date.getMinutes();
+    // sec = date.getSeconds();
 
     let d;
     d = hour < 12 ? "AM" : "PM";
@@ -14,13 +14,13 @@ setInterval(() => {
     // adicionar 0 a esquerda das unidades Exp: h:m:s antes 2:5:7, depois 02:05:07
     hour = hour < 10 ? "0" + hour : hour;
     min = min < 10 ? "0" + min : min;
-    sec = sec < 10 ? "0" + sec : sec;
+    // sec = sec < 10 ? "0" + sec : sec;
 
     console.log(min);
 
     document.querySelector(".hour_num").innerText = hour;
     document.querySelector(".min_num").innerText = min;
-    document.querySelector(".sec_num").innerText = sec;
+    // document.querySelector(".sec_num").innerText = sec;
     document.querySelector(".am_pm").innerText = d;
 
 }, 1000); // 1000 milésimos é que vale a 1 segundo
