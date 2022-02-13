@@ -457,7 +457,7 @@ var myChart = new Chart(statusOS, {
                             <?php endforeach ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="3">Nenhum produto com estoque baixo.</td>
+                                <td colspan="6">Nenhum produto com estoque baixo.</td>
                             </tr>
                         <?php endif ?>
                     </tbody>
@@ -513,7 +513,7 @@ var myChart = new Chart(statusOS, {
                             <?php endforeach ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="3">Nenhuma OS em aberto.</td>
+                                <td colspan="5">Nenhuma OS em aberto.</td>
                             </tr>
                         <?php endif ?>
                     </tbody>
@@ -563,7 +563,7 @@ var myChart = new Chart(statusOS, {
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="3">Nenhuma OS Aguardando Peças.</td>
+                            <td colspan="5">Nenhuma OS Aguardando Peças.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
@@ -612,7 +612,7 @@ var myChart = new Chart(statusOS, {
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="3">Nenhuma OS em Andamento.</td>
+                            <td colspan="5">Nenhuma OS em Andamento.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
