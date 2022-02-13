@@ -166,10 +166,5 @@ $(document).ready(function() {
         });
 
 </script>
-
-<!-- scripts -->
-<script src="http://localhost/mapos/assets/js/app.js"></script>
-<script type="text/javascript"></script>
-
 </body>
 </html>
