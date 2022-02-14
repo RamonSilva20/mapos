@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
     <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
     <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
 <body>
