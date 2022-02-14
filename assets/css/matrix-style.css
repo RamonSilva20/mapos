@@ -211,13 +211,6 @@ hr {
   background: #f74d4d;
 }
 
-select {
-  width           : 74px;
-  background-color: #fff;
-  border          : 1px solid #ccc;
-  margin-top      : -2px;
-}
-
 .fc .fc-button-primary {
   background-color: violet;
 }
@@ -1212,7 +1205,7 @@ section .profile .profile-img {
 }
 
 .span5 {
-  display        : flex;
+  display        : flex !important;
   justify-content: flex-start;
   grid-gap       : 10px;
 }
