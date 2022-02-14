@@ -65,10 +65,6 @@
   border-radius: 5px;
 }
 
-input {
-  border-radius: 7px !important;
-}
-
 body {
   background: var(--bodycolor-w);
 }
