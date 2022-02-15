@@ -553,7 +553,7 @@ hr {
   left           : 0;
   top            : 0;
   height         : 100vh;
-  width          : 230px;
+  width          : 240px;
   float          : left;
   background     : var(--funSider);
   justify-content: space-between;
@@ -564,7 +564,7 @@ hr {
 }
 
 #sidebar.open {
-  width: 230px;
+  width: 240px;
 }
 
 #content.open {
@@ -782,7 +782,7 @@ body.dark .switch::before {
   display         : flex;
   justify-content : space-between;
   align-items     : center;
-  margin-left     : 232px;
+  margin-left     : 242px;
   margin-top      : 3px;
   background-color: var(--bodycolor);
 }
@@ -845,7 +845,7 @@ section .profile .profile-img {
 #content {
   background : none repeat scroll 0 0 var(--bodycolor);
   border-top : 0px solid #4b4d60;
-  margin-left: 230px;
+  margin-left: 240px;
   margin-top : -10px;
   min-height : 100%;
   padding    : 0 1rem 0 1rem;
@@ -3002,7 +3002,7 @@ form {
   }
 
   #sidebar.open {
-    width       : 230px;
+    width       : 240px;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
     border-right: #4b4d60 solid 0px;
@@ -3028,7 +3028,7 @@ form {
   }
 
   #sidebar .menu-bar {
-    margin-left: -230px;
+    margin-left: -240px;
   }
 
   #sidebar #newlog {
