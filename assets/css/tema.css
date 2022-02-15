@@ -253,6 +253,7 @@ body {
 .cardBox .card-cl {
   box-shadow: 0 5px 10px rgb(0 0 0 / 8%);
 }
+
 .cardBox .card .numbers {
   position   : relative;
   font-weight: 500;
@@ -260,12 +261,6 @@ body {
   color      : #0d0d10;
 }
 
-.cardBox .card .cardName {
-  color      : #0d0d10;
-  font-size  : 1.5em;
-  font-weight: 600;
-  padding    : 3px;
-}
 .cardBox .card .iconBx {
   font-size: 3.3em;
   color: #292929;
