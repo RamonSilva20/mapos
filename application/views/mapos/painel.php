@@ -134,56 +134,56 @@
 
         <div class="new-bottons">
         <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
-        <div class="iconBx"><i class='bx bxs-group'></i></div>
+        <div><i class='bx bxs-group iconBx'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
             <div class="cardName">Clientes</div>
         </div></a>
 
         <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
-        <div class="iconBx2"><i class='bx bxs-package'></i></div>
+        <div><i class='bx bxs-package iconBx2'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
             <div class="cardName">Produtos</div>
         </div></a>
 
         <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
-        <div class="iconBx3"><i class='bx bxs-stopwatch'></i></div>
+        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
             <div class="cardName">Serviços</div>
         </div></a>
 
         <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
-        <div class="iconBx4"><i class='bx bxs-spreadsheet'></i></div>
+        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
             <div class="cardName">Ordens</div>
         </div></a>
 
         <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
-        <div class="iconBx6"><i class='bx bxs-receipt'></i></div>
+        <div><i class='bx bxs-receipt iconBx6'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
             <div class="cardName">Garantias</div>
         </div></a>
 
         <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
-        <div class="iconBx5"><i class='bx bxs-cart-alt iconBx3'></i></div>
+        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
         <div>
             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
             <div class="cardName">Vendas</div>
         </div></a>
 
         <a href="" title="Cadastrar nova receita" class="card">
-        <div class="iconBx7"><i class='bx bxs-upvote'></i></div>
+        <div><i class='bx bxs-upvote iconBx7'></i></div>
         <div>
             <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?></div>
             <div class="cardName">Receita Hoje</div>
         </div></a>
 
         <a href="" title="Cadastrar nova despesa" class="card">
-            <div class="iconBx8"><i class='bx bxs-downvote'></i></div>
+            <div><i class='bx bxs-downvote iconBx8'></i></div>
             <div>
                 <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo($financeiro_mes->VALOR_FEV_DES); ?></div>
                 <div class="cardName">Despesa Hoje</div>
