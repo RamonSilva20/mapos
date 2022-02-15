@@ -435,7 +435,7 @@ hr {
 }
 
 .cardBox .card .cardName {
-  font-size  : 1.8em;
+  font-size  : 1.5em;
   font-weight: 600;
   padding    : 3px;
 }
@@ -553,7 +553,7 @@ hr {
   left           : 0;
   top            : 0;
   height         : 100vh;
-  width          : 250px;
+  width          : 230px;
   float          : left;
   background     : var(--funSider);
   justify-content: space-between;
@@ -564,7 +564,7 @@ hr {
 }
 
 #sidebar.open {
-  width: 250px;
+  width: 230px;
 }
 
 #content.open {
@@ -773,7 +773,7 @@ body.dark .switch::before {
 
 /* New bem-vindos */
 .bemv {
-  font-size  : 2.1em;
+  font-size  : 2em;
   font-weight: 500;
   color      : var(--cinza0);
 }
@@ -782,8 +782,8 @@ body.dark .switch::before {
   display         : flex;
   justify-content : space-between;
   align-items     : center;
-  margin-left     : 255px;
-  height          : 6%;
+  margin-left     : 232px;
+  margin-top      : 3px;
   background-color: var(--bodycolor);
 }
 
@@ -845,7 +845,7 @@ section .profile .profile-img {
 #content {
   background : none repeat scroll 0 0 var(--bodycolor);
   border-top : 0px solid #4b4d60;
-  margin-left: 250px;
+  margin-left: 230px;
   margin-top : -10px;
   min-height : 100%;
   padding    : 0 1rem 0 1rem;
@@ -859,7 +859,7 @@ section .profile .profile-img {
 }
 
 #content-header {
-  margin         : 15px 20px;
+  margin         : 20px 10px 10px;
   z-index        : 20;
   display        : flex;
   align-items    : center;
@@ -898,17 +898,13 @@ section .profile .profile-img {
 }
 
 /* Breadcrumb */
-#breadcrumb {
-  float        : left;
-  margin-top: 10px;
-}
-
 #breadcrumb a {
-  background   : var(--);
-  border-radius: 6px;
+  background   : transparent;
+  border-radius: 4px;
   font-size    : 1.2em;
   color        : var(--cinza0);
-  padding      : 3px 7px;
+  padding      : 2px 7px;
+  margin-right : 2px;
   border       : 1px solid #76818da3;
 }
 
@@ -2791,7 +2787,8 @@ form {
   }
 
   .cardBox .card .cardName {
-    font-size: 1.2em;
+    font-size  : 1.1em;
+    font-weight: 400;
   }
 
   .cardBox .card .iconBx {
@@ -2809,7 +2806,7 @@ form {
   }
 
   .cardBox .card {
-    padding   : 17px;
+    padding   : 13px;
     box-shadow: none;
   }
 
@@ -2861,20 +2858,23 @@ form {
     padding-left: 42px;
   }
 
+  #userr {
+    padding-right : 44px !important;
+    align-items   : center !important;
+    flex-direction: row !important;
+  }
+
   #userr .userT0 {
-    right    : 46px;
-    top      : 8px;
-    font-size: 1.2em;
+    font-size    : 1.2em;
+    padding-right: 4px;
   }
 
   #userr .userT {
-    top      : 22px;
-    right    : 46px;
-    font-size: 1em;
+    font-size: 1.2em;
   }
 
   .cardHeader {
-    font-size: 1.4em;
+    font-size: 1.35em;
   }
 
   #header {
@@ -2895,6 +2895,7 @@ form {
 
   #user-nav {
     width      : 100px;
+    margin-left: 7px;
   }
 
   .navbar>.nav {
@@ -2912,6 +2913,7 @@ form {
   section .profile .profile-img {
     height: 26px;
     width : 26px;
+    border: 0 solid var(--laranja1);
   }
 
   #user-nav>ul>li>a>i {
@@ -2974,26 +2976,22 @@ form {
   }
 
   #content-header {
-    margin: 5px;
-  }
-
-  #content-header .bemv {
-    font-size     : 1.9em;
+    margin: 10px 5px 10px;
   }
 
   #breadcrumb a {
     font-weight: 400;
-    padding    : 3px 4px;
+    padding    : 2px 5px;
     font-size  : 1em;
   }
 
   .navebarn {
-    margin-left  : 0;
+    align-items: flex-start;
+    margin     : 8px 0 20px;
   }
 
   .bemv {
-    font-size: 1.6em;
-    margin   : 0;
+    font-size: 1.5em;
   }
 
   #sidebar {
@@ -3004,7 +3002,7 @@ form {
   }
 
   #sidebar.open {
-    width       : 250px;
+    width       : 230px;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
     border-right: #4b4d60 solid 0px;
@@ -3030,7 +3028,7 @@ form {
   }
 
   #sidebar .menu-bar {
-    margin-left: -250px;
+    margin-left: -230px;
   }
 
   #sidebar #newlog {
@@ -3140,7 +3138,7 @@ form {
 
   .dataTables_paginate .ui-button,
   .pagination.alternate li a {
-    padding: 4px 4px !important;
+    padding: 4px 9px !important;
   }
 
   .table th {
@@ -3155,10 +3153,6 @@ form {
 
   #footer {
     padding: 10px 0 10px 83px;
-  }
-
-  #content-header {
-    margin: 10px 10px;
   }
 
   .container-fluid {
@@ -3191,11 +3185,11 @@ form {
   }
 
   .row-fluid .Sspan12 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr 1.2fr !important;
   }
 
-  .widget-box2 {
-    grid-row-end: 3;
+  .cardHeader {
+    font-size: 1.5em;
   }
 
   #newlog {
@@ -3280,7 +3274,8 @@ form {
 
 @media (max-width: 600px) {
   .widget-title .buttons {
-    float: left;
+    float : left;
+    margin: 0 8px;
   }
 
   .panel-left {
@@ -3337,7 +3332,52 @@ form {
   }
 }
 
-@media (min-width: 768px) and (max-width: 979px) {
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  #sidebar, #sidebar>ul {
+    width  : 82px;
+    z-index: 1;
+  }
+
+  .cardBox .card {
+    padding: 15px 10px;
+  }
+
+  .cardBox .card-cl .clock-card .colun {
+    padding: 0 0px 15px 0px;
+  }
+
+  .navebarn {
+    margin-left: 85px;
+  }
+
+  #content {
+    margin-left: 82px;
+  }
+
+  #newlog {
+    padding: 0 21px;
+  }
+
+  .row-fluid .Sspan12 {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  #sidebar ul li a .title, .title1, .title2 {
+    font-size: 0px;
+  }
+
+  #sidebar li .title {
+    font-size: 0;
+  }
+
+  #newlog .title1 {
+    display: none;
+  }
+
+  #sidebar li .iconX {
+    min-width: 41px;
+  }
 
   [class*="span"],
   .row-fluid [class*="span"] {
