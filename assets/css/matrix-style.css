@@ -43,6 +43,32 @@ body {
   --tran-05: all 0.5s ease;
 }
 
+.button {
+  display: flex;
+  height: 30px;
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.button__text,
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  color: #fff;
+  height: 100%;
+}
+
+.button__icon {
+  font-size: 1.5em;
+  background: rgba(0, 0, 0, 0.08);
+}
+
 /*Bootstrap-overlay*/
 body {
   font-family: "Roboto", sans-serif;
@@ -1240,9 +1266,15 @@ section .profile .profile-img {
 }
 
 /* new botôes Estatísticas */
+.btn {
+  border-radius: 5px;
+  margin       : 3px 2px;
+  min-width    : 140px;
+}
+
 .btn-danger {
   color           : #090909;
-  background-color: #ff839c;
+  background-color: #e56982;
 }
 
 .btn-danger:hover {
@@ -1670,11 +1702,10 @@ section .profile .profile-img {
 .modal-header,
 .table th,
 div.dataTables_wrapper .ui-widget-header {
-  height         : 36px;
-  line-height    : 20px;
   text-align     : left;
   border-collapse: collapse;
   vertical-align : top;
+  margin         : -20px 0 0;
 }
 
 .widget-title .nav-tabs {
@@ -1716,19 +1747,19 @@ div.dataTables_wrapper .ui-widget-header {
 }
 
 .widget-title h5 {
-  float       : left;
   font-weight : 500;
   padding     : 12px;
   padding-left: 18px;
   line-height : 12px;
-  margin      : 0;
+  margin      : -15 0 0 !important;
   font-size   : 1.7em;
   color       : var(--violeta1);
 }
 
 .widget-title .buttons {
-  float : right;
-  margin: 8px 10px 0 0;
+  display  : flex;
+  flex-wrap: wrap;
+  margin   : 8px;
 }
 
 .widget-title .label {
@@ -2728,16 +2759,17 @@ form {
     padding: 10px 15px;
   }
 
-  .span12 #divProdutosServicos {
-    margin-top: 35px;
-  }
-
   .widget-title .buttons>.btn {
-    width      : 11px;
+    width      : 32px !important;
+    min-width  : 32px;
     white-space: nowrap;
     overflow   : hidden;
     position   : relative;
-    left       : 10px;
+    left       : 3px;
+  }
+
+  .button__text{
+    font-size: 0;
   }
 
   .row-fluid select[class*="span"] {
