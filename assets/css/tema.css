@@ -213,10 +213,6 @@ body {
   background: #c5d1d6;
 }
 
-.btn {
-  border-radius: 5px;
-}
-
 .btn [class^="icon-"],
 .nav [class^="icon-"] {
   color: #ffffff;
@@ -287,7 +283,7 @@ body {
     background: #ffffff30 !important;
     color     : #51576c !important;
   }
-  
+
   #sidebar > ul li span {
     color: #000;
   }
