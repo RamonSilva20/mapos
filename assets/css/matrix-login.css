@@ -267,8 +267,9 @@ input:focus {
     margin-top: -28px;
   }
   .left-login {
-    width : 100%;
-    height: auto;
+    width  : 100%;
+    height : auto;
+    display: none;
   }
   .right-login {
     width : 100%;
