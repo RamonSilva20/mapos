@@ -806,7 +806,7 @@ section .profileMC .profile-img {
   width        : 80px;
   border-radius: 50%;
   background   : #fff;
-  margin       : 3px 10px;
+  margin       : 3px auto;
   border       : 1px solid var(--laranja1);
   padding      : 1px;
 }

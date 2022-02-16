@@ -11,15 +11,19 @@
                 <section>
                     <div class="profileMC">
                         <div class="profile-img">
-                            <img src="http://localhost/mapos/assets/img/User.png" alt="">
+                            <img src="<?= !$usuario->url_image_user ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt="">
                         </div>
                     </div>
                 </section>
                 <div class="control-group">
-                    <label for="user" class=""><span class="">Upar Imagem</span></label>
+                    <label for="user" class="">
+                        <span class="">
+                            <a href="#modalImageUser" data-toggle="modal" role="button" class="btn btn-inverse">Mudar Foto</a>
+                        </span>
+                    </label>
                 </div>
             </div>
-                
+
             <div class="row-fluid">
                 <div class="span12" style="min-height: 260px">
                     <ul class="site-stats">
@@ -77,10 +81,56 @@
     </div>
 </div>
 
+<div id="modalImageUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?= site_url('mapos/uploadUserImage'); ?>" id="formImageUser" enctype="multipart/form-data" method="post" class="form-horizontal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="">MapOS - Atualizar Imagem do Usuario</h3>
+        </div>
+        <div class="modal-body">
+            <div class="span12 alert alert-info">Selecione uma nova imagem do usuario. Tamanho indicado (130 X 130).</div>
+            <div class="control-group">
+                <label for="userfile" class="control-label"><span class="required">Foto*</span></label>
+                <div class="controls">
+                    <input type="file" name="userfile" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
+            <button class="btn btn-primary">Atualizar</button>
+        </div>
+    </form>
+</div>
+
 
 <script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $("#formImageUser").validate({
+            rules: {
+                userfile: {
+                    required: true
+                }
+            },
+            messages: {
+                userfile: {
+                    required: 'Campo Requerido.'
+                }
+            },
+
+            errorClass: "help-inline",
+            errorElement: "span",
+            highlight: function(element, errorClass, validClass) {
+                $(element).parents('.control-group').addClass('error');
+                $(element).parents('.control-group').removeClass('success');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.control-group').removeClass('error');
+                $(element).parents('.control-group').addClass('success');
+            }
+        });
 
         $('#formSenha').validate({
             rules: {
