@@ -23,21 +23,18 @@
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($result->faturado == 0) { ?>
-                      <button class="button btn btn-mini btn btn-primary" id="btnContinuar">
-                        <span class="button__icon"><i class="bx bx-sync"></i></span>
-                        <span class="button__text">Atualizar</span></button>
                         <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-mini btn-danger">
                             <span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text">Faturar</span></a>
                     <?php
                     } ?>
-                    <a title="Visualizar OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>">
+                    <a title="Visualizar OS" class="button btn btn-primary" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>">
                       <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text">Visualizar OS</span></a>
                     <a target="_blank" title="Imprimir OS Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
@@ -177,7 +174,8 @@
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
-                                          <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar
+                                          <button class="button btn btn-primary" id="btnContinuar">
+                                            <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span>
                                           </button>
                                         </div>
                                     </div>
@@ -205,8 +203,8 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
-                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar
-                                        </button>
+                                        <button class="button btn btn-success" id="btnAdicionarProduto">
+                                          <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -269,7 +267,8 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
-                                        <button class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar</button>
+                                        <button class="button btn btn-success">
+                                          <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -326,9 +325,8 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">.</label>
-                                            <button class="btn btn-success span12"><i class="fas fa-paperclip"></i>
-                                                Anexar
-                                            </button>
+                                            <button class="button btn btn-success">
+                                              <span class="button__icon"><i class='bx bx-paperclip'></i></span><span class="button__text2">Anexar</span></button>
                                         </div>
                                     </form>
                                 </div>
@@ -360,7 +358,8 @@
 
                                 <div class="span12" id="divAnotacoes" style="margin-left: 0">
 
-                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar anotação</a>
+                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="button btn btn-success" style="max-width: 160px">
+                                      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar anotação</span></a>
                                     <hr>
                                     <table class="table table-bordered">
                                         <thead>

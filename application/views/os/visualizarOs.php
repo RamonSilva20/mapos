@@ -306,8 +306,8 @@
     </div>
 </div>
 
-<a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="btn btn-success"><i
-            class="fas fa-cash-register"></i> Gerar Pagamento</a>
+<a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info" style="max-width: 150px">
+  <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text2">Gerar Pagamento</span></a></i>
 
 <?= $modalGerarPagamento ?>
 

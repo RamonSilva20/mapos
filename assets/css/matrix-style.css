@@ -158,37 +158,40 @@ input[type="color"],
   background-image: none;
 }
 
+/* New buttons */
 .button {
-  display: flex;
-  height: 30px;
-  padding: 0;
-  border: none;
-  outline: none;
+  display      : flex;
+  height       : 30px;
+  padding      : 0;
+  border       : none;
+  outline      : none;
   border-radius: 5px;
-  overflow: hidden;
-  font-size: 1em;
-  cursor: pointer;
+  margin       : 3px;
+  min-width    : 140px;
+  overflow     : hidden;
+  font-size    : 1em;
+  cursor       : pointer;
 }
 
 .button__text,
 .button__icon {
-  display: inline-flex;
+  display    : inline-flex;
   align-items: center;
-  padding: 0 7px;
-  color: #fff;
-  height: 100%;
+  padding    : 0 7px;
+  color      : #fff;
+  height     : 100%;
 }
 
 .button__text2 {
-    display: inline-flex;
+    display    : inline-flex;
     align-items: center;
-    padding: 0 7px;
-    color: #fff;
-    height: 100%;
+    padding    : 0 7px;
+    color      : #fff;
+    height     : 100%;
 }
 
 .button__icon {
-  font-size: 1.5em;
+  font-size : 1.5em;
   background: rgba(0, 0, 0, 0.08);
 }
 
@@ -234,10 +237,6 @@ hr {
 .row-fluid .uneditable-input[class*="span"] {
   margin-top: 0;
 }
-
-New visualizar clientes
-
-border-left: 1px solid #ddd
 
 #btn-calendar .iconX2 {
   position: absolute;
@@ -1275,12 +1274,6 @@ section .profile .profile-img {
 }
 
 /* new botôes Estatísticas */
-.btn {
-  border-radius: 5px;
-  margin       : 3px 2px;
-  min-width    : 140px;
-}
-
 .btn-danger {
   color           : #090909;
   background-color: #e56982;
@@ -2876,7 +2869,7 @@ form {
     text-align: center;
   }
 
-  #.open #newlog .title01 {
+  #sidebar.open #newlog .title01 {
     opacity: 1;
   }
 
