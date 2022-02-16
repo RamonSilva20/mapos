@@ -6,7 +6,8 @@
     <form method="get" action="<?= current_url(); ?>">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
             <div class="span3">
-                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="btn btn-success span12"> Adicionar Arquivo</a>
+                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="button btn btn-mini btn-success" style="max-width:150px">
+                  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Arquivo</span></a>
             </div>
         <?php endif ?>
 
@@ -18,14 +19,14 @@
             <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= $this->input->get('data2') ?>">
         </div>
         <div class="span1">
-            <button class="span12 btn"> <i class="fas fa-search"></i> </button>
+            <button class="span12 btn" style="min-width: 40px"> <i class="fas fa-search"></i> </button>
         </div>
     </form>
 </div>
 
 <div class="span12" style="margin-left: 0">
     <div class="widget-box">
-        <div class="widget-title">
+        <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-hdd"></i>
             </span>
