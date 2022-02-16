@@ -561,6 +561,7 @@ hr {
   align-items    : stretch;
   transition     : var(--tran-05);
   border-right   : #4b4d60 solid 1px;
+  z-index        : 99999;
 }
 
 #sidebar.open {
