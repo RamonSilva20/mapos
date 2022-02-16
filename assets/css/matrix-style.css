@@ -43,32 +43,6 @@ body {
   --tran-05: all 0.5s ease;
 }
 
-.button {
-  display: flex;
-  height: 30px;
-  padding: 0;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  overflow: hidden;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.button__text,
-.button__icon {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 7px;
-  color: #fff;
-  height: 100%;
-}
-
-.button__icon {
-  font-size: 1.5em;
-  background: rgba(0, 0, 0, 0.08);
-}
-
 /*Bootstrap-overlay*/
 body {
   font-family: "Roboto", sans-serif;
@@ -184,6 +158,40 @@ input[type="color"],
   background-image: none;
 }
 
+.button {
+  display: flex;
+  height: 30px;
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.button__text,
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  color: #fff;
+  height: 100%;
+}
+
+.button__text2 {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 7px;
+    color: #fff;
+    height: 100%;
+}
+
+.button__icon {
+  font-size: 1.5em;
+  background: rgba(0, 0, 0, 0.08);
+}
+
 .accordion-heading h5 {
   width: 70%;
 }
@@ -218,7 +226,7 @@ hr {
 
 .trumbowyg-editor,
 .trumbowyg-textarea {
-  min-height: 200px !important;
+  min-height: 170px !important;
 }
 
 .row-fluid select[class*="span"],
@@ -226,6 +234,10 @@ hr {
 .row-fluid .uneditable-input[class*="span"] {
   margin-top: 0;
 }
+
+New visualizar clientes
+
+border-left: 1px solid #ddd
 
 #btn-calendar .iconX2 {
   position: absolute;
@@ -1702,7 +1714,6 @@ div.dataTables_wrapper .ui-widget-header {
   text-align     : left;
   border-collapse: collapse;
   vertical-align : top;
-  margin         : -20px 0 0;
 }
 
 .widget-title .nav-tabs {
@@ -2229,11 +2240,9 @@ span.icon .checker {
 
 .dataTables_length {
   color   : #878787;
-  margin  : 7px 5px 0;
+  margin  : 2px 8px;
   position: relative;
-  left    : 5px;
   width   : 50%;
-  top     : -2px;
 }
 
 .dataTables_info {
@@ -2325,9 +2334,8 @@ div.dataTables_wrapper .ui-widget-header {
 .dataTables_filter {
   color     : #878787;
   font-size : 11px;
-  right     : 0;
-  top       : 37px;
-  margin    : 4px 8px 2px 10px;
+  right     : 8px;
+  top       : 50px;
   position  : absolute;
   text-align: left;
 }
@@ -2688,6 +2696,23 @@ form {
 /* Responsive design */
 @media (max-width: 480px) {
 
+  .form-horizontal .controls {
+    margin-left: 0 !important;
+  }
+
+  .new-bottons .card .cardName2 {
+    font-size: 2em;
+  }
+
+  h4 {
+    font-size  : 1.2em;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+
   #footer {
     padding: 10px;
   }
@@ -2851,7 +2876,7 @@ form {
     text-align: center;
   }
 
-  #sidebar.open #newlog .title01 {
+  #.open #newlog .title01 {
     opacity: 1;
   }
 
@@ -2942,10 +2967,6 @@ form {
     color: #606772;
   }
 
-  #sidebar .content {
-    display: none;
-  }
-
   #content {
     margin-left           : 0 !important;
     border-top-left-radius: 0;
@@ -2995,7 +3016,7 @@ form {
     font-size: 1.5em;
   }
 
-  #sidebar {
+  # {
     float  : none;
     width  : 0;
     z-index: 55;
@@ -3003,6 +3024,7 @@ form {
   }
 
   #sidebar.open {
+    margin-left : 0;
     width       : 240px;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
@@ -3029,6 +3051,10 @@ form {
   }
 
   #sidebar .menu-bar {
+    margin-left: -240px;
+  }
+
+  #sidebar {
     margin-left: -240px;
   }
 
@@ -3257,7 +3283,6 @@ form {
   #sidebar,
   #sidebar>ul {
     width  : 82px;
-    z-index: 1;
   }
 
   #sidebar li .title {
@@ -3468,7 +3493,6 @@ fieldset[disabled] .btn-info.active {
   background-color: #ffffff;
 }
 
-.table-bordered th,
-.table-bordered td {
+.table th, .table td{
   border-left: 0px solid #ddd;
 }
