@@ -29,10 +29,10 @@ $periodo = $this->input->get('periodo');
 
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
     <div class="span5" style="margin-left: 0">
-        <a href="#modalReceita" data-toggle="modal" role="button" class="btn btn-success tip-bottom"
-           title="Cadastrar nova receita">Adicionar Receita</a>
-        <a href="#modalDespesa" data-toggle="modal" role="button" class="btn btn-danger tip-bottom"
-           title="Cadastrar nova despesa">Adicionar Despesa</a>
+        <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success">
+          <span class="button__icon"><i class='bx bx-upvote' ></i></span><span class="button__text2" title="Cadastrar nova receita">Nova Receita</span></a>
+        <a href="#modalDespesa" data-toggle="modal" role="button" class="button btn btn-mini btn-danger">
+          <span class="button__icon"><i class='bx bx-downvote' ></i></span><span class="button__text2" title="Cadastrar nova despesa">Nova Despesa</span></a>
     </div>
 <?php } ?>
 
@@ -88,8 +88,8 @@ $periodo = $this->input->get('periodo');
         </div>
 
         <div class="span2 pull-right">
-            &nbsp
-            <button type="submit" class="span12 btn btn-primary btn-sm" style="margin-top: 0.3rem;">Filtrar</button>
+            <button type="submit" class="button btn btn-primary btn-sm" style="min-width: 120px">
+              <span class="button__icon"><i class='bx bx-filter-alt' ></i></span><span class="button__text2">Filtrar</span></a></button>
         </div>
     </form>
 </div>
