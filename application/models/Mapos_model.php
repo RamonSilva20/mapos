@@ -321,6 +321,13 @@ class Mapos_model extends CI_Model
         return $this->db->update('emitente');
     }
 
+    public function editImageUser($id, $imageUserPath)
+    {
+        $this->db->set('url_image_user', $imageUserPath);
+        $this->db->where('idUsuarios', $id);
+        return $this->db->update('usuarios');
+    }
+
     public function check_credentials($email)
     {
         $this->db->where('email', $email);

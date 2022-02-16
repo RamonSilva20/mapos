@@ -153,6 +153,41 @@ class Mapos extends MY_Controller
         }
     }
 
+    public function do_upload_user()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+        $this->load->library('upload');
+
+        $image_upload_folder = FCPATH . 'assets/userImage/';
+
+        if (!file_exists($image_upload_folder)) {
+            mkdir($image_upload_folder, DIR_WRITE_MODE, true);
+        }
+
+        $this->upload_config = [
+            'upload_path' => $image_upload_folder,
+            'allowed_types' => 'png|jpg|jpeg|bmp',
+            'max_size' => 2048,
+            'remove_space' => true,
+            'encrypt_name' => true,
+        ];
+
+        $this->upload->initialize($this->upload_config);
+
+        if (!$this->upload->do_upload()) {
+            $upload_error = $this->upload->display_errors();
+            print_r($upload_error);
+            exit();
+        } else {
+            $file_info = [$this->upload->data()];
+            return $file_info[0]['file_name'];
+        }
+    }
+
     public function cadastrarEmitente()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
@@ -276,6 +311,38 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
         }
         redirect(site_url('mapos/emitente'));
+    }
+
+    public function uploadUserImage()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para mudar a foto.');
+            redirect(base_url());
+        }
+
+        $id = $this->session->userdata('id');
+        if ($id == null || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
+            redirect(site_url('mapos/minhaConta'));
+        }
+
+        $usuario = $this->mapos_model->getById($id);
+
+        if (file_exists(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
+            unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
+        }
+
+        $image = $this->do_upload_user();
+        $imageUserPath = $image;
+        $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
+        
+        if ($retorno) {
+            $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
+            log_info('Alterou a Imagem do Usuario.');
+        } else {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
+        }
+        redirect(site_url('mapos/minhaConta'));
     }
 
     public function emails()

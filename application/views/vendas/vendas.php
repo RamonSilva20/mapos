@@ -1,28 +1,31 @@
 <div class="new122">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aVenda')) { ?>
-    <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="btn btn-success"> Adicionar Venda</a>
-<?php } ?>
+        <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="button btn btn-mini btn-success" style="max-width: 140px">
+            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2"> Venda
+            </span>
+        </a>
+    <?php } ?>
 
-<div class="widget-box">
-    <div class="widget-title">
-        <span class="icon">
-            <i class="fas fa-cash-register"></i>
-        </span>
-        <h5>Vendas</h5>
-    </div>
-    <div class="widget-content nopadding tab-content">
-        <table id="tabela" class="table table-bordered ">
-            <thead>
-                <tr>
-                    <th>Nº</th>
-                    <th>Data</th>
-                    <th>Cliente</th>
-                    <th>Faturado</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon">
+                <i class="fas fa-cash-register"></i>
+            </span>
+            <h5>Vendas</h5>
+        </div>
+        <div class="widget-content nopadding tab-content">
+            <table id="tabela" class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Faturado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 
                     if (!$results) {
                         echo '<tr>
@@ -56,10 +59,10 @@
                         echo '</td>';
                         echo '</tr>';
                     } ?>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </div>
 <?php echo $this->pagination->create_links(); ?>
 

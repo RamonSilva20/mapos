@@ -117,7 +117,7 @@
   <section style="display:block;position:absolute;right:10px">
   <div class="profile">
     <div class="profile-img">
-      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?php echo base_url() ?>assets/img/User.png" alt=""></a>
+      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !$usuario->url_image_user ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt=""></a>
     </div>
   </div>
 </section>
