@@ -19,7 +19,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-            <tr style="backgroud-color: #2D335B">
+            <tr>
                 <th>Cod.</th>
                 <th>Cod. Barra</th>
                 <th>Nome</th>
