@@ -1,10 +1,11 @@
 <div class="new122">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) { ?>
-    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="btn btn-success"> Adicionar Serviço</a>
+    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Serviço</span></a>
 <?php } ?>
 
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-wrench"></i>
         </span>
@@ -13,7 +14,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr>
                     <th>Cod.</th>
                     <th>Nome</th>
                     <th>Preço</th>
