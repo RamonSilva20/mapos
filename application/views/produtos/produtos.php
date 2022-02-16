@@ -1,16 +1,16 @@
 <div class="new122" style="margin-top: 0; min-height: 100vh">
 <div class="flexxn" style="display: flex;">
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
-    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="btn btn-success"> Adicionar Produto</a>
-    <a href="#modal-etiquetas" role="button" data-toggle="modal" class="btn btn-success span2" style="float: right; width: 150px;
-    margin-left: 10px">
-        <i class="fas fa-barcode"></i> Gerar Etiquetas</a>
+    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Produtos</span></a>
+    <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning" style="max-width: 160px">
+      <span class="button__icon"><i class='bx bx-barcode-reader' ></i></span><span class="button__text2">Gerar Etiquetas</span></a>
 </div>
 
 <?php } ?>
 
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-shopping-bag"></i>
         </span>
