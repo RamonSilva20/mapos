@@ -327,8 +327,8 @@ class Mapos extends MY_Controller
         }
 
         $usuario = $this->mapos_model->getById($id);
-
-        if (file_exists(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
+        
+        if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
             unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
         }
 
