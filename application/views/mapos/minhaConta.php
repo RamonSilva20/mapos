@@ -11,7 +11,7 @@
                 <section>
                     <div class="profileMC">
                         <div class="profile-img">
-                            <img src="<?= !$usuario->url_image_user ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt="">
+                            <img src="<?= !is_file( FCPATH . "assets/userImage/" . $usuario->url_image_user) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $usuario->url_image_user ?>" alt="">
                         </div>
                     </div>
                 </section>
