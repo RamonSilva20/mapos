@@ -68,7 +68,7 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" /> 
+                            <input id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo $result->precoCompra; ?>" />
                             Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text" placeholder="%" maxlength="3" size="2" />
                             <strong><span style="color: red" id="errorAlert"></span><strong>
                         </div>
@@ -104,9 +104,11 @@
 
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="btn"><i class="fas fa-arrow-left"></i> Voltar</a>
+                            <div class="span6 offset3" style="display: flex">
+                                <button type="submit" class="button btn btn-primary" style="max-width: 160px">
+                                  <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
+                                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text">Voltar</span></a>
                             </div>
                         </div>
                     </div>
