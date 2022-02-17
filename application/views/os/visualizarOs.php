@@ -2,11 +2,11 @@
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Ordem de Serviço</h5>
+                <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
     echo '<a title="Editar OS" class="button btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
@@ -32,11 +32,11 @@
 
                     <a title="Enviar por E-mail" class="button btn btn-mini btn-warning"
                        href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
-                       <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Enviar por E-mail</span></a>
+                       <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Via E-mail</span></a>
                     <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia"
                                                              class="button btn btn-mini btn-inverse"
                                                              href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
-                                                             <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Termo de Garantia</span></a> <?php } ?>
+                                                             <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
