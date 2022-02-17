@@ -137,10 +137,6 @@ body {
   color: #000000 !important;
 }
 
-.bg_lh {
-  border-radius: 5px;
-}
-
 .navebarn {
   background-color: var(--bodycolor-w);
 }
