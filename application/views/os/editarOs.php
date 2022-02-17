@@ -27,7 +27,7 @@
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Ordem de Serviço</h5>
+                <h5>Editar Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($result->faturado == 0) { ?>
                         <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-mini btn-danger">
@@ -54,7 +54,7 @@
                     <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
                       <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Via E-mail</span></a>
                     <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
-                      <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Garantia</span></a> <?php } ?>
+                      <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
                     <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning">
                       <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
                 </div>
