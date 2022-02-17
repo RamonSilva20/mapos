@@ -44,7 +44,7 @@
 </div>
 
 <div class="widget-box" style="margin-top: 8px">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-diagnoses"></i>
         </span>
@@ -60,11 +60,9 @@
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Venc. Garantia</th>
                         <th>Valor Total</th>
                         <th>V.T (Faturado)</th>
                         <th>Status</th>
-                        <th>Garantia</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -134,11 +132,9 @@
                         echo '<td>' . $r->nome . '</td>';
                         echo '<td>' . $dataInicial . '</td>';
                         echo '<td>' . $dataFinal . '</td>';
-                        echo '<td>' . $vencGarantia . '</td>';
                         echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
                         echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
                         echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                        echo '<td>' . $r->refGarantia . '</td>';
                         echo '<td>';
 
                         $editavel = $this->os_model->isEditable($r->idOs);
