@@ -8,7 +8,7 @@
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-cash-register"></i>
                 </span>
@@ -26,7 +26,7 @@
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <?php echo form_hidden('idVendas', $result->idVendas) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>#Venda:
+                                        <h3>Venda:
                                             <?php echo $result->idVendas ?>
                                         </h3>
                                         <div class="span2" style="margin-left: 0">
@@ -61,14 +61,17 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span8 offset2" style="text-align: center">
+                                        <div class="span8 offset2" style="text-align: center;display:flex">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-danger"><i class="fas fa-cash-register"></i> Faturar</a>
                                             <?php
                                             } ?>
-                                            <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar</button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="btn btn-inverse"><i class="fas fa-eye"></i> Visualizar Venda</a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="btn"><i class="fas fa-arrow-left"></i> Voltar</a>
+                                            <button class="button btn btn-primary" id="btnContinuar">
+                                              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
+                                              <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text">Visualizar</span></a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning">
+                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>

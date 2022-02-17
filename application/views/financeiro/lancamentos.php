@@ -28,11 +28,11 @@ $periodo = $this->input->get('periodo');
 <div class="new122" style="margin-top: 0; min-height: 100vh">
 
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-    <div class="span5" style="margin-left: 0">
-        <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success">
-          <span class="button__icon"><i class='bx bx-upvote' ></i></span><span class="button__text2" title="Cadastrar nova receita">Nova Receita</span></a>
-        <a href="#modalDespesa" data-toggle="modal" role="button" class="button btn btn-mini btn-danger">
-          <span class="button__icon"><i class='bx bx-downvote' ></i></span><span class="button__text2" title="Cadastrar nova despesa">Nova Despesa</span></a>
+    <div class="span5" style="display:flex" >
+        <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="width: 150px">
+          <span class="button__icon"><i class='bx bx-plus-circle' ></i></span><span class="button__text2" title="Cadastrar nova receita">Nova Receita</span></a>
+        <a href="#modalDespesa" data-toggle="modal" role="button" class="button btn btn-mini btn-danger" style="width: 150px">
+          <span class="button__icon"><i class='bx bx-plus-circle' ></i></span><span class="button__text2" title="Cadastrar nova despesa">Nova Despesa</span></a>
     </div>
 <?php } ?>
 
