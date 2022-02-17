@@ -15,7 +15,7 @@
                         </div>
                     </div>
                 </section>
-                <div class="control-group">
+                <div class="control-group" style="margin-bottom: 5px">
                     <label for="user" class="">
                         <span class="">
                             <a href="#modalImageUser" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="max-width: 140px">
