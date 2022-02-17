@@ -800,6 +800,10 @@ body.dark .switch::before {
 }
 
 /* New User Perfil */
+.profileMC {
+  margin: 15px;
+}
+
 section .profileMC .profile-img {
   height       : 80px;
   width        : 80px;
@@ -835,11 +839,21 @@ section .profile .profile-img {
 }
 
 .widget-contentMC {
-  display: flex;
+  display       : flex;
+  align-items   : center;
+  flex-direction: column;
+  padding       : 18px;
 }
 
 .widget-contentMC #userMC {
-  padding: 20px 25px;
+  border-top-left-radius : 9px;
+  border-top-right-radius: 9px;
+  border                 : 1px solid #dbdde5;
+  display                : grid;
+  justify-items          : center;
+  width                  : 100%;
+  float                  : left;
+  margin-left            : 0px;
 }
 
 #userr .userT0 {
@@ -1230,7 +1244,7 @@ section .profile .profile-img {
 }
 
 .site-stats {
-  margin        : 0 15px 0 0;
+  margin        : 0;
   padding       : 0;
   text-align    : center;
   list-style    : none;
@@ -1544,16 +1558,14 @@ section .profile .profile-img {
 
 /* Fim Botoes calendar*/
 .site-stats li {
-  cursor       : pointer;
-  display      : inline-block;
-  margin       : 0 5px 10px;
-  text-align   : center;
-  width        : 42%;
-  padding      : 10px 0;
-  color        : #67748a;
-  position     : relative;
-  border       : #dbdde5 solid 1px;
-  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  width: 42%;
+  padding: 10px 0;
+  color: #67748a;
+  position: relative;
+  border: #dbdde5 solid 1px;
 }
 
 .site-stats li i {
