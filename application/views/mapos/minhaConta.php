@@ -1,6 +1,6 @@
 <div class="span6" style="margin-left: 0">
     <div class="widget-box">
-        <div class="widget-title">
+        <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-user"></i>
             </span>
@@ -11,21 +11,22 @@
                 <section>
                     <div class="profileMC">
                         <div class="profile-img">
-                            <img src="<?= !is_file( FCPATH . "assets/userImage/" . $usuario->url_image_user) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $usuario->url_image_user ?>" alt="">
+                            <img src="<?= !$usuario->url_image_user ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt="">
                         </div>
                     </div>
                 </section>
                 <div class="control-group">
                     <label for="user" class="">
                         <span class="">
-                            <a href="#modalImageUser" data-toggle="modal" role="button" class="btn btn-inverse">Mudar Foto</a>
+                            <a href="#modalImageUser" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="max-width: 140px">
+                              <span class="button__icon"><i class='bx bx-upload'></i></span> <span class="button__text2">Alterar Foto</span></a>
                         </span>
                     </label>
                 </div>
             </div>
 
             <div class="row-fluid">
-                <div class="span12" style="min-height: 260px">
+                <div class="span12">
                     <ul class="site-stats">
                         <li class="bg_ls span12"><strong>Nome:
                                 <?= $usuario->nome ?></strong></li>
@@ -35,7 +36,7 @@
                                 <?= $usuario->email ?></strong></li>
                         <li class="bg_lo span12" style="margin-left: 0"><strong>Nível:
                                 <?= $usuario->permissao; ?></strong></li>
-                        <li class="bg_lh span12" style="margin-left: 0"><strong>Acesso expira em:
+                        <li class="bg_lh span12" style="margin-left: 0; border-bottom-left-radius: 9px;border-bottom-right-radius: 9px"><strong>Acesso expira em:
                                 <?= date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
                     </ul>
                 </div>
@@ -47,7 +48,7 @@
 
 <div class="span6">
     <div class="widget-box">
-        <div class="widget-title">
+        <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-lock"></i>
             </span>
@@ -70,9 +71,8 @@
                             <label for="">Confirmar Senha</label>
                             <input type="password" name="confirmarSenha" class="span12" />
                         </div>
-                        <div class="span12" style="margin-left: 0; text-align: center">
-                            <button class="btn btn-primary">Alterar Senha</button>
-                        </div>
+                            <button class="button btn btn-primary" style="max-width: 140px;text-align: center">
+                              <span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Alterar Senha</span></button>
                     </form>
                 </div>
 
