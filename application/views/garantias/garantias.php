@@ -1,33 +1,30 @@
 <div class="new122">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aGarantia')) { ?>
-        <a href="<?php echo base_url(); ?>index.php/garantias/adicionar" class="button btn btn-mini btn-success" style="max-width: 150px">
-            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">
-                Termo de Garantia
-            </span>
-        </a>
-    <?php } ?>
+    <a href="<?php echo base_url(); ?>index.php/garantias/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Termo Garantia</span></a>
+<?php } ?>
 
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon">
-                <i class="fas fa-book"></i>
-            </span>
-            <h5>Termo de Garantia</h5>
-        </div>
-        <div class="widget-content nopadding tab-content">
-            <table id="tabela" class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Data</th>
-                        <th>Ref. Garantia</th>
-                        <th>Termo de Garantia</th>
-                        <th>Usuario</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
+<div class="widget-box">
+    <div class="widget-title"  style="margin: -20px 0 0">
+        <span class="icon">
+            <i class="fas fa-book"></i>
+        </span>
+        <h5>Termo de Garantia</h5>
+    </div>
+    <div class="widget-content nopadding tab-content">
+        <table id="tabela" class="table table-bordered ">
+            <thead>
+                <tr style="backgroud-color: #2D335B">
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Ref. Garantia</th>
+                    <th>Termo de Garantia</th>
+                    <th>Usuario</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
                     if (!$results) {
                         echo '<tr>
                                 <td colspan="6">Nenhum Termo de Garantia Cadastrada</td>
@@ -57,10 +54,10 @@
                         echo '</td>';
                         echo '</tr>';
                     } ?>
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>
 </div>
 <?php echo $this->pagination->create_links(); ?>
 
