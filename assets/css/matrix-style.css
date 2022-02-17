@@ -827,7 +827,7 @@ section .profile .profile-img {
   width        : 28px;
   border-radius: 50%;
   background   : #fff;
-  border       : 2px solid var(--laranja1);
+  border       : 1px solid var(--laranja1);
   padding      : 1px;
 }
 
@@ -1553,13 +1553,13 @@ section .profile .profile-img {
 
 /* Fim Botoes calendar*/
 .site-stats li {
-  cursor    : pointer;
-  display   : inline-block;
+  cursor: pointer;
+  display: inline-block;
   text-align: center;
-  padding   : 5px 0;
-  color     : #67748a;
-  position  : relative;
-  border    : #dbdde5 solid 1px;
+  padding: 5px 0;
+  color: #67748a;
+  position: relative;
+  border: #dbdde5 solid 1px;
 }
 
 .site-stats li i {
@@ -1691,7 +1691,7 @@ section .profile .profile-img {
 .accordion .widget-box {
   margin-top   : -2px;
   margin-bottom: 0;
-  border-radius: 0;
+  border-radius: 12px;
 }
 
 .widget-box.widget-plain {
@@ -1751,6 +1751,14 @@ div.dataTables_wrapper .ui-widget-header {
 
 .widget-title span.icon {
   font-size: 0;
+}
+
+.icon-cli {
+  color      : #239683;
+  margin-top : 10px;
+  margin-left: 5px;
+  position   : absolute;
+  font-size  : 18px;
 }
 
 .widget-title h5 {
