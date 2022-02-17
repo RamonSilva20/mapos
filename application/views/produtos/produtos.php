@@ -2,7 +2,7 @@
 <div class="flexxn" style="display: flex;">
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
     <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
-      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Produtos</span></a>
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Add. Produtos</span></a>
     <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-barcode-reader' ></i></span><span class="button__text2">Gerar Etiquetas</span></a>
 </div>
