@@ -801,7 +801,7 @@ body.dark .switch::before {
 
 /* New User Perfil */
 .profileMC {
-  margin: 15px;
+  margin: 12px;
 }
 
 section .profileMC .profile-img {
@@ -843,6 +843,7 @@ section .profile .profile-img {
   align-items   : center;
   flex-direction: column;
   padding       : 18px;
+  margin-top    : -15px;
 }
 
 .widget-contentMC #userMC {
@@ -1252,12 +1253,6 @@ section .profile .profile-img {
   flex-direction: column;
 }
 
-.span5 {
-  display        : flex !important;
-  justify-content: flex-start;
-  grid-gap       : 10px;
-}
-
 .site-stats2 {
   margin        : 0;
   padding       : 0;
@@ -1558,14 +1553,13 @@ section .profile .profile-img {
 
 /* Fim Botoes calendar*/
 .site-stats li {
-  cursor: pointer;
-  display: inline-block;
+  cursor    : pointer;
+  display   : inline-block;
   text-align: center;
-  width: 42%;
-  padding: 10px 0;
-  color: #67748a;
-  position: relative;
-  border: #dbdde5 solid 1px;
+  padding   : 5px 0;
+  color     : #67748a;
+  position  : relative;
+  border    : #dbdde5 solid 1px;
 }
 
 .site-stats li i {
