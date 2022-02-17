@@ -337,6 +337,7 @@ class Mapos extends MY_Controller
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
         
         if ($retorno) {
+            $this->session->set_userdata('url_image_user', $imageUserPath);
             $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
             log_info('Alterou a Imagem do Usuario.');
         } else {

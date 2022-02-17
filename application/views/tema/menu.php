@@ -64,6 +64,15 @@
                     </li>
                 <?php } ?>
 
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
+                    <li class="<?php if (isset($menuVendas)) {
+                                    echo 'active';
+                                }; ?>">
+                        <a href="<?= site_url('vendas') ?>"><i class='bx bx-cart-alt iconX'></i></span>
+                            <span class="title">Vendas</span></a>
+                    </li>
+                <?php } ?>
+
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                     <li class="<?php if (isset($menuOs)) {
                                     echo 'active';
@@ -79,15 +88,6 @@
                                 }; ?>">
                         <a href="<?= site_url('garantias') ?>"><i class='bx bx-receipt iconX'></i>
                             <span class="title">Termos de Garantias</span></a>
-                    </li>
-                <?php } ?>
-
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
-                    <li class="<?php if (isset($menuVendas)) {
-                                    echo 'active';
-                                }; ?>">
-                        <a href="<?= site_url('vendas') ?>"><i class='bx bx-cart-alt iconX'></i></span>
-                            <span class="title">Vendas</span></a>
                     </li>
                 <?php } ?>
 
