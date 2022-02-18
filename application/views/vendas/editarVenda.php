@@ -63,15 +63,16 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span8 offset2" style="text-align: center;display:flex">
                                             <?php if ($result->faturado == 0) { ?>
-                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-danger"><i class="fas fa-cash-register"></i> Faturar</a>
+                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
+                                                  <span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text2">Faturar</span></a>
                                             <?php
                                             } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
                                               <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
-                                              <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text">Visualizar</span></a>
+                                              <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
                                             <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning">
-                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
+                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
@@ -97,7 +98,8 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">&nbsp</label>
-                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar</button>
+                                        <button class="button btn btn-success" id="btnAdicionarProduto">
+                                          <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -122,7 +124,7 @@
                                             echo '<td>' . $p->descricao . '</td>';
                                             echo '<td><div align="center">' . $p->quantidade . '</td>';
                                             echo '<td><div align="center">R$: ' . $preco . '</td>';
-                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
                                             echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
                                         } ?>
@@ -210,9 +212,10 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
-            <button class="btn btn-primary">Faturar</button>
+        <div class="modal-footer" style="display:flex">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
+              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text2">Faturar</span></button>
         </div>
     </form>
 </div>

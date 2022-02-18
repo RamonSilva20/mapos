@@ -38,7 +38,8 @@
             <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="">
         </div>
         <div class="span1">
-            <button class="span12 btn"><i class="fas fa-search"></i></button>
+          <button class="button btn btn-mini btn-warning" style="min-width: 30px">
+            <span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
         </div>
     </form>
 </div>

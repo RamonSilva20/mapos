@@ -19,7 +19,8 @@
             <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= $this->input->get('data2') ?>">
         </div>
         <div class="span1">
-            <button class="span12 btn" style="min-width: 40px"> <i class="fas fa-search"></i> </button>
+          <button class="button btn btn-mini btn-warning" style="min-width: 30px">
+            <span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
         </div>
     </form>
 </div>
