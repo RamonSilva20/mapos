@@ -1,7 +1,7 @@
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-wrench"></i>
                 </span>
@@ -62,7 +62,8 @@
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                    <button type="submit" class="button btn btn-primary">
+                                    <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text">Salvar Alterações</span></button>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +116,8 @@
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text">Salvar Alterações</span></button>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +154,8 @@
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text">Salvar Alterações</span></button>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +175,8 @@
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text">Salvar Alterações</span></button>
                                 </div>
                             </div>
                         </div>
@@ -181,9 +185,11 @@
                     <div id="menu4" class="tab-pane fade">
                         <div class="form-actions">
                             <div class="span8">
-                                <div class="span9">
-                                    <button href="#modal-confirmabanco" data-toggle="modal" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i> Atualizar Banco de Dados</button>
-                                    <button href="#modal-confirmaratualiza" data-toggle="modal" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Atualizar Mapos</button>
+                                <div class="span9" style="display:flex">
+                                    <button href="#modal-confirmabanco" data-toggle="modal" type="button" class="button btn btn-warning">
+                                      <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar Banco de Dados</span></button>
+                                    <button href="#modal-confirmaratualiza" data-toggle="modal" type="button" class="button btn btn-danger">
+                                      <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar Mapos</span></button>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +215,8 @@
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text">Salvar Alterações</span></button>
                                 </div>
                             </div>
                         </div>
@@ -233,9 +240,11 @@
             <h7 style="text-align: left"><br>* ./assets/anexos</h7>
             <h7 style="text-align: left"><br>* ./assets/arquivos</h7>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button id="update-mapos" type="button" class="btn btn-danger"><i class="fas fa-sync-alt"></i>Atualizar</button>
+        <div class="modal-footer" style="display:flex">
+          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true">
+            <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text">Cancelar</span></button>
+            <button id="update-mapos" type="button" class="button btn btn-warning">
+              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
         </div>
     </form>
 </div>
@@ -252,9 +261,11 @@
                 <a target="_blank" title="Fazer Bakup" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mapos/backup">Fazer Backup</a>
             </h7>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button id="update-database" type="button" class="btn btn-warning"><i class="fas fa-sync-alt"></i>Atualizar</button>
+        <div class="modal-footer" style="display:flex">
+          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true">
+            <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text">Cancelar</span></button>
+            <button id="update-database" type="button" class="button btn btn-warning">
+              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
         </div>
     </form>
 </div>
