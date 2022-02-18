@@ -234,6 +234,22 @@ class Mapos_model extends CI_Model
         return $this->db->query($sql, [intval($numbersOnly)])->row();
     }
 
+    public function getEstatisticasFinanceiroDia($year)
+    {
+        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
+        if (!$numbersOnly) {
+            $numbersOnly = date('Y');
+        }
+        $sql = "
+            SELECT
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = " . date('d') . ") AND baixado = 1 AND tipo = 'receita' THEN valor END) AS VALOR_" . date('m') . "_REC,
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = " . date('d') . ") AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_" . date('m') . "_DES
+            FROM lancamentos
+            WHERE EXTRACT(YEAR FROM data_pagamento) = ?
+        ";
+        return $this->db->query($sql, [intval($numbersOnly)])->row();
+    }
+
     public function getEstatisticasFinanceiroMesInadimplencia($year)
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
