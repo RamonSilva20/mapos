@@ -159,11 +159,11 @@ input[type="color"],
 }
 
 .new-bottons .card:nth-child(7) {
-  display: none;
+  display: flex;
 }
 
 .new-bottons .card:nth-child(8) {
-  display: none;
+  display: flex;
 }
 
 /* New buttons */
@@ -2032,7 +2032,6 @@ div.dataTables_wrapper .ui-widget-header {
 
 #chat-messages-inner p img {
   display       : inline-block;
-  float         : left;
   vertical-align: middle;
   width         : 28px;
   height        : 28px;
@@ -2779,11 +2778,11 @@ form {
   }
 
   .new-bottons .card:nth-child(7) {
-    display: none;
+    display: flex;
   }
 
   .new-bottons .card:nth-child(8) {
-    display: none;
+    display: flex;
   }
 
   .new-bottons .card {
@@ -3023,13 +3022,6 @@ form {
 
   .bemv {
     font-size: 1.5em;
-  }
-
-  # {
-    float  : none;
-    width  : 0;
-    z-index: 55;
-    opacity: 0.5;
   }
 
   #sidebar.open {
