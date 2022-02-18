@@ -150,7 +150,7 @@
                       <a href="#modalAlterar" data-toggle="modal" role="button" class="button btn btn-primary">
                       <span class="button__icon"><i class='bx bx-edit' ></i></span><span class="button__text2">Atualizar Dados</span></a>
                     <a href="#modalLogo" data-toggle="modal" role="button" class="button btn btn-inverse">
-                      <span class="button__icon"><i class='bx bx-upload' ></i></span> <span class="button__text">Alterar Logo</span></a>
+                      <span class="button__icon"><i class='bx bx-upload' ></i></span> <span class="button__text2">Alterar Logo</span></a>
                       </div>
                 </div>
             </div>
@@ -240,7 +240,7 @@
             </div>
             <div class="modal-footer" style="display:flex">
                 <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                  <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text">Cancelar</span></button>
+                  <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
                   <button class="button btn btn-primary">
                     <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
             </div>
@@ -265,7 +265,7 @@
             </div>
             <div class="modal-footer" style="display:flex">
               <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text">Cancelar</span></button>
+                <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
                 <button class="button btn btn-primary">
                   <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
             </div>

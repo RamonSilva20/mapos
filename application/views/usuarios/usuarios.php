@@ -1,6 +1,6 @@
 <div class="new122">
   <a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
-  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text">Adicionar Usuário</span></a>
+  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Usuário</span></a>
 
 <div class="widget-box">
     <div class="widget-title" style="margin: -20px 0 0">
