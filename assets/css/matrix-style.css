@@ -163,13 +163,13 @@ input[type="color"],
   display      : flex;
   height       : 30px;
   padding      : 0;
+  margin       : 0 6px 15px 0;
   border       : none;
   outline      : none;
   border-radius: 5px;
-  margin       : 3px;
   min-width    : 140px;
   overflow     : hidden;
-  font-size    : 1em;
+  font-size    : 1.05em;
   cursor       : pointer;
 }
 
@@ -2262,13 +2262,7 @@ span.icon .checker {
 }
 
 .dataTables_paginate {
-  line-height : 16px;
-  text-align  : right;
-  margin-top  : 5px;
-  margin-right: 10px;
-}
-
-.dataTables_paginate {
+  display     : none;
   line-height : 16px;
   text-align  : right;
   margin-top  : -14px;
@@ -3219,7 +3213,7 @@ form {
   }
 
   .row-fluid .Sspan12 {
-    grid-template-columns: 2fr 1.2fr !important;
+    grid-template-columns: 2fr 1fr !important;
   }
 
   .cardHeader {
@@ -3393,7 +3387,7 @@ form {
   }
 
   .row-fluid .Sspan12 {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 1fr;
   }
 
   #sidebar ul li a .title, .title1, .title2 {

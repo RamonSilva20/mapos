@@ -18,7 +18,7 @@
             <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
         </div>
         <div class="span2">
-            <select name="status[]" id="status" class="span12" multiple>
+            <select name="status" id="" class="span12">
                 <option value="">Selecione status</option>
                 <option value="Aberto">Aberto</option>
                 <option value="Faturado">Faturado</option>
@@ -50,7 +50,7 @@
         </span>
         <h5>Ordens de Serviço</h5>
     </div>
-    <div class="widget-content nopadding tab-content">
+    <div class="widget-content nopadding">
         <div class="table-responsive">
             <table class="table table-bordered ">
                 <thead>
