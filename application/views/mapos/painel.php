@@ -25,9 +25,10 @@
                 <div class="cardName">F1</div>
             </div>
             <a href="<?= site_url('clientes') ?>">
-            <div class="iconBx">
-                <i class='bx bx-group bx-border-circle'></i>
-            </div></a>
+                <div class="iconBx">
+                    <i class='bx bx-group bx-border-circle'></i>
+                </div>
+            </a>
         </li>
     <?php endif ?>
 
@@ -38,9 +39,10 @@
                 <div class="cardName">F2</div>
             </div>
             <a href="<?= site_url('produtos') ?>">
-            <div class="iconBx">
-                <i class='bx bx-package bx-border-circle'></i>
-            </div></a>
+                <div class="iconBx">
+                    <i class='bx bx-package bx-border-circle'></i>
+                </div>
+            </a>
         </li>
     <?php endif ?>
 
@@ -51,9 +53,10 @@
                 <div class="cardName">F3</div>
             </div>
             <a href="<?= site_url('servicos') ?>">
-            <div class="iconBx">
-                <i class='bx bx-stopwatch bx-border-circle'></i>
-            </div></a>
+                <div class="iconBx">
+                    <i class='bx bx-stopwatch bx-border-circle'></i>
+                </div>
+            </a>
         </li>
     <?php endif ?>
 
@@ -64,15 +67,16 @@
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
-            <div class="iconBx">
-                <i class='bx bx-spreadsheet bx-border-circle'></i>
-            </div></a>
+                <div class="iconBx">
+                    <i class='bx bx-spreadsheet bx-border-circle'></i>
+                </div>
+            </a>
         </li>
-     <?php endif ?>
+    <?php endif ?>
 
-<script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
 
-        <div Class="card-cl">
+    <div Class="card-cl">
         <div class="clock-card">
             <div class="clock-flex">
                 <span class="num hour_num">00</span>
@@ -125,88 +129,99 @@
             </div>
         </div>
 
- <!-- New widget right -->
-<div class="new-statisc">
-    <div class="widget-box-new" style="height:100%">
-        <div>
-            <h5 class="cardHeader">Estatísticas do Sistema</h5>
-        </div>
+        <!-- New widget right -->
+        <div class="new-statisc">
+            <div class="widget-box-new" style="height:100%">
+                <div>
+                    <h5 class="cardHeader">Estatísticas do Sistema</h5>
+                </div>
 
-        <div class="new-bottons">
-        <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
-        <div><i class='bx bxs-group iconBx'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-            <div class="cardName">Clientes</div>
-        </div></a>
+                <div class="new-bottons">
+                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
+                        <div><i class='bx bxs-group iconBx'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
+                            <div class="cardName">Clientes</div>
+                        </div>
+                    </a>
 
-        <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
-        <div><i class='bx bxs-package iconBx2'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-            <div class="cardName">Produtos</div>
-        </div></a>
+                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
+                        <div><i class='bx bxs-package iconBx2'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
+                            <div class="cardName">Produtos</div>
+                        </div>
+                    </a>
 
-        <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
-        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-            <div class="cardName">Serviços</div>
-        </div></a>
+                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
+                        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
+                            <div class="cardName">Serviços</div>
+                        </div>
+                    </a>
 
-        <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
-        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-            <div class="cardName">Ordens</div>
-        </div></a>
+                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
+                        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
+                            <div class="cardName">Ordens</div>
+                        </div>
+                    </a>
 
-        <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
-        <div><i class='bx bxs-receipt iconBx6'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-            <div class="cardName">Garantias</div>
-        </div></a>
+                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
+                        <div><i class='bx bxs-receipt iconBx6'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
+                            <div class="cardName">Garantias</div>
+                        </div>
+                    </a>
 
-        <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
-        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
-        <div>
-            <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-            <div class="cardName">Vendas</div>
-        </div></a>
+                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
+                        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
+                            <div class="cardName">Vendas</div>
+                        </div>
+                    </a>
 
-        <a href="" title="Cadastrar nova receita" class="card">
-        <div><i class='bx bxs-upvote iconBx7'></i></div>
-        <div>
-            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?></div>
-            <div class="cardName">Receita Hoje</div>
-        </div></a>
+                    <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
+                    <?php $diaRec = "VALOR_".date('m')."_REC"; $diaDes = "VALOR_".date('m')."_DES"; ?>
 
-        <a href="" title="Cadastrar nova despesa" class="card">
-            <div><i class='bx bxs-downvote iconBx8'></i></div>
-            <div>
-                <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo($financeiro_mes->VALOR_FEV_DES); ?></div>
-                <div class="cardName">Despesa Hoje</div>
-            </div></a>
+                    <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
+                        <div><i class='bx bxs-upvote iconBx7'></i></div>
+                        <div>
+                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo ($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes); ?></div>
+                            <div class="cardName">Receita Hoje</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
+                        <div><i class='bx bxs-downvote iconBx8'></i></div>
+                        <div>
+                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo ($financeiro_mes_dia->$diaDes); ?></div>
+                            <div class="cardName">Despesa Hoje</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 <!-- Fim new widget right -->
 
 <!-- Start Charts -->
 <div class="new-balance">
-         <div class="widget-box0">
-             <div class="widget-title2">
-                 <h5 class="cardHeader">Balanço Mensal do Ano</h5>
-                 <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                     <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
-                     <button type="submit" class="btn-xsx"><i class='bx bx-search iconX' ></i></button>
-                 </form>
-                </div>
-                <div class="widget-content" style="padding:10px 25px 5px 25px">
-                <div class="row-fluid" style="margin-top:-35px;">
+    <div class="widget-box0">
+        <div class="widget-title2">
+            <h5 class="cardHeader">Balanço Mensal do Ano</h5>
+            <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
+                <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
+            </form>
+        </div>
+        <div class="widget-content" style="padding:10px 25px 5px 25px">
+            <div class="row-fluid" style="margin-top:-35px;">
                 <div class="span12">
                     <canvas id="myChart" style="overflow-x: scroll;margin-left: -14px"></canvas>
                 </div>
@@ -214,182 +229,187 @@
         </div>
     </div>
 
-<div class="widget-box-statist">
+    <div class="widget-box-statist">
         <h5 class="cardHeader">Estatísticas Financeira</h5>
         <div class="widget-content" style="padding:10px;margin:25px 0 0">
-           <canvas id="statusOS"> </canvas>
+            <canvas id="statusOS"> </canvas>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-var ctx = document.getElementById('myChart').getContext('2d');
-var StatusOS = document.getElementById('statusOS').getContext('2d');
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var StatusOS = document.getElementById('statusOS').getContext('2d');
 
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-        datasets:
-        [{
-            label: 'Receita Líquida',
-            data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>],
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            datasets: [{
+                    label: 'Receita Líquida',
+                    data: [<?php echo ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
+                    ],
 
-            backgroundColor: 'rgba(75, 192, 192, 1)',
-            borderRadius: 15,
-            },
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderRadius: 15,
+                },
 
-            {
-            label: 'Receita Bruta',
-            data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
-            <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>],
+                {
+                    label: 'Receita Bruta',
+                    data: [<?php echo ($financeiro_mes->VALOR_JAN_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_FEV_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAR_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_ABR_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAI_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUN_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUL_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_AGO_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_SET_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_OUT_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_NOV_REC); ?>,
+                        <?php echo ($financeiro_mes->VALOR_DEZ_REC); ?>
+                    ],
 
-            backgroundColor: 'rgba(255, 206, 86, 1)',
-            borderRadius: 15,
-            },
+                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                    borderRadius: 15,
+                },
 
-            {
-            label: 'Despesas',
-            data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
-            <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>],
+                {
+                    label: 'Despesas',
+                    data: [<?php echo ($financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo ($financeiro_mes->VALOR_DEZ_DES); ?>
+                    ],
 
-            backgroundColor: 'rgba(255, 99, 132, 1)',
-            borderRadius: 15,
-            },
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    borderRadius: 15,
+                },
 
-            {
-            label: 'Inadimplência',
-            data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
-            <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>],
+                {
+                    label: 'Inadimplência',
+                    data: [<?php echo ($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_SET_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
+                        <?php echo ($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
+                    ],
 
-            backgroundColor: 'rgba(54, 162, 235, 1)',
-            borderRadius: 15,
-            }]
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderRadius: 15,
+                }
+            ]
 
         },
         options: {
             plugins: {
                 legend: {
-                position: "bottom",
-                labels: {
-                    usePointStyle: true,
-                    font: {
-                        size: 9
-                    },
-                }
-            },
-        scales: {
-            xAxes: [{
-                display: true,
-                acaleLabel: {
-                    display: true,
-                    labelString: 'Meses',
-                    fontColor: '#000000',
-                    fontSize: 10
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            size: 9
+                        },
+                    }
                 },
-                ticks: {
-                    fontColor: "red",
-                    fontSize: 20
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        acaleLabel: {
+                            display: true,
+                            labelString: 'Meses',
+                            fontColor: '#000000',
+                            fontSize: 10
+                        },
+                        ticks: {
+                            fontColor: "red",
+                            fontSize: 20
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Reais',
+                            fontColor: '#000000',
+                            fontSize: 10
+                        },
+                        ticks: {
+                            fontColor: "red",
+                            fontSize: 20
+                        }
+                    }]
                 }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Reais',
-                    fontColor: '#000000',
-                    fontSize: 10
-                },
-                ticks: {
-                    fontColor: "red",
-                    fontSize: 20
-                }
-            }]
+
+            }
         }
-
-      }
-    }
-});
+    });
 
 
-var myChart = new Chart(statusOS, {
-    type: 'polarArea',
-    data: {
-        labels: [
-            'Receita total','Receita pendente',
-            'Previsto em caixa','Despesa total',
-            'Despesa pendente','Previsto a entrar'
-        ],
-        datasets: [{
-            label: 'Total',
-            data: [
-                <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
-                <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
-                <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
-                <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
-                <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
-                <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>],
-
-            backgroundColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(153, 102, 255, 1)'
+    var myChart = new Chart(statusOS, {
+        type: 'polarArea',
+        data: {
+            labels: [
+                'Receita total', 'Receita pendente',
+                'Previsto em caixa', 'Despesa total',
+                'Despesa pendente', 'Previsto a entrar'
             ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                position: "bottom",
-                labels: {
-                    usePointStyle: true,
-                    font: {
-                        size: 9
+            datasets: [{
+                label: 'Total',
+                data: [
+                    <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
+                    <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
+                ],
+
+                backgroundColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            size: 9
                         },
                         scales: {
                             y: {
@@ -401,13 +421,13 @@ var myChart = new Chart(statusOS, {
                 }
             }
         }
-});
+    });
 </script>
 </div>
 </div>
 
 <!-- Start Staus OS -->
-    <div class="span12A" style="margin-left: 0">
+<div class="span12A" style="margin-left: 0">
     <div class="AAA">
         <div class="widget-box0">
             <div>
@@ -447,10 +467,10 @@ var myChart = new Chart(statusOS, {
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
                                             <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
-                                            <i class="bx bx-edit"></i>
+                                                <i class="bx bx-edit"></i>
                                             </a>
                                             <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
-                                            <i class="bx bx-plus-circle"></i></a>
+                                                <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -469,57 +489,57 @@ var myChart = new Chart(statusOS, {
 
 
     <div class="widget-box0">
-            <div>
-                <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
-            </div>
-            <div class="widget-content">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>Data Inicial</th>
-                            <th>Data Final</th>
-                            <th>Cliente</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($ordens != null) : ?>
-                            <?php foreach ($ordens as $o) : ?>
-                                <tr>
-                                    <td>
-                                        <?= $o->idOs ?>
-                                    </td>
-                                    <td>
-                                        <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                    </td>
-
-                                    <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
-
-                                    <td>
-                                        <?= $o->nomeCliente ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                            <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
-                                        <?php endif ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        <?php else : ?>
-                            <tr>
-                                <td colspan="5">Nenhuma OS em aberto.</td>
-                            </tr>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-            </div>
+        <div>
+            <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
         </div>
+        <div class="widget-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Cliente</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($ordens != null) : ?>
+                        <?php foreach ($ordens as $o) : ?>
+                            <tr>
+                                <td>
+                                    <?= $o->idOs ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                </td>
+
+                                <td><?php if ($o->dataFinal != null) {
+                                        echo date('d/m/Y', strtotime($o->dataFinal));
+                                    } else {
+                                        echo "";
+                                    } ?></td>
+
+                                <td>
+                                    <?= $o->nomeCliente ?>
+                                </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5">Nenhuma OS em aberto.</td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
     <div class="widget-box0">
@@ -556,7 +576,7 @@ var myChart = new Chart(statusOS, {
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                                         <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                        <i class="bx bx-show"></i> </a>
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -605,7 +625,7 @@ var myChart = new Chart(statusOS, {
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                                         <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                        <i class="bx bx-show"></i> </a>
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
