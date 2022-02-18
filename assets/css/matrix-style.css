@@ -158,6 +158,14 @@ input[type="color"],
   background-image: none;
 }
 
+.new-bottons .card:nth-child(7) {
+  display: none;
+}
+
+.new-bottons .card:nth-child(8) {
+  display: none;
+}
+
 /* New buttons */
 .button {
   display      : flex;
@@ -2705,10 +2713,6 @@ form {
     font-size: 2em;
   }
 
-  [class*="span"], .uneditable-input[class*="span"], .row-fluid [class*="span"] {
-    display: block;
-  }
-
   h4 {
     font-size  : 1.2em;
     font-weight: 500;
@@ -2896,12 +2900,12 @@ form {
   }
 
   #userr .userT0 {
-    font-size    : 1.2em;
+    font-size    : 1.1em;
     padding-right: 4px;
   }
 
   #userr .userT {
-    font-size: 1.2em;
+    font-size: 1.1em;
   }
 
   .cardHeader {
