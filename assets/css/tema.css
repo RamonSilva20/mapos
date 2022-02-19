@@ -181,6 +181,7 @@ body {
 
 .search-box input {
   background: var(--widget-box-w);
+  color: var(--widget-box-c);
 }
 
 #search input[type="text"] {

@@ -709,6 +709,7 @@ hr {
   border       : none;
   background   : #484c64;
   border-radius: 6px;
+  color: #e6e2e2;
 }
 
 #sidebar.open li a {
