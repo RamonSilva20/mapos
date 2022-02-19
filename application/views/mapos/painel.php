@@ -191,7 +191,7 @@
                     <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
                         <div><i class='bx bxs-upvote iconBx7'></i></div>
                         <div>
-                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo ($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes); ?></div>
+                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
                             <div class="cardName">Receita Hoje</div>
                         </div>
                     </a>
@@ -199,7 +199,7 @@
                     <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
                         <div><i class='bx bxs-downvote iconBx8'></i></div>
                         <div>
-                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo ($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0); ?></div>
+                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
                             <div class="cardName">Despesa Hoje</div>
                         </div>
                     </a>
