@@ -3033,7 +3033,7 @@ form {
   #sidebar.open {
     margin-left : 0;
     width       : 240px;
-    background  : #242634;
+    background  : #303244;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
     border-right: #4b4d60 solid 0px;
@@ -3383,7 +3383,6 @@ form {
 
   #sidebar, #sidebar>ul {
     width  : 82px;
-    z-index: 1;
   }
 
   .search-box input {
