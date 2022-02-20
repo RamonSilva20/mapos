@@ -31,7 +31,7 @@
                 <div class="buttons">
                     <?php if ($result->faturado == 0) { ?>
                         <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-mini btn-danger">
-                            <span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text">Faturar</span></a>
+                            <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text">Faturar</span></a>
                     <?php
                     } ?>
                     <a title="Visualizar OS" class="button btn btn-primary" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>">
@@ -55,8 +55,6 @@
                       <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Via E-mail</span></a>
                     <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
-                    <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning">
-                      <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
                 </div>
             </div>
             <div class="widget-content nopadding tab-content">
@@ -173,10 +171,9 @@
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
-                                        <div class="span6 offset3" style="text-align: center">
-                                          <button class="button btn btn-primary" id="btnContinuar">
-                                            <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span>
-                                          </button>
+                                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                                          <button class="button btn btn-primary" id="btnContinuar"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                          <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
@@ -433,7 +430,7 @@
                 <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
             </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="display:flex;justify-content: center">
             <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
             <button class="btn btn-primary">Adicionar</button>
         </div>
@@ -504,9 +501,9 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
-            <button class="btn btn-primary">Faturar</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+          <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
         </div>
     </form>
 </div>

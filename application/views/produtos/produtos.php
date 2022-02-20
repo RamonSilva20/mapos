@@ -76,9 +76,10 @@
             <input type="hidden" id="idProduto" class="idProduto" name="id" value=""/>
             <h5 style="text-align: center">Deseja realmente excluir este produto?</h5>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Excluir</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
+              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
@@ -106,9 +107,9 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-primary">Atualizar</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-primary" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+          <button class="button btn btn-warning"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
         </div>
     </form>
 </div>
@@ -154,9 +155,9 @@
 
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success">Gerar</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+          <button class="button btn btn-success"><span class="button__icon"><i class='bx bx-barcode'></i></span><span class="button__text2">Gerar</span></button>
         </div>
     </form>
 </div>

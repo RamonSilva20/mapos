@@ -240,11 +240,9 @@
             <h7 style="text-align: left"><br>* ./assets/anexos</h7>
             <h7 style="text-align: left"><br>* ./assets/arquivos</h7>
         </div>
-        <div class="modal-footer" style="display:flex">
-          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true">
-            <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
-            <button id="update-mapos" type="button" class="button btn btn-warning">
-              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
+          <button id="update-mapos" type="button" class="button btn btn-warning"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
         </div>
     </form>
 </div>
@@ -261,11 +259,9 @@
                 <a target="_blank" title="Fazer Bakup" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mapos/backup">Fazer Backup</a>
             </h7>
         </div>
-        <div class="modal-footer" style="display:flex">
-          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true">
-            <span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
-            <button id="update-database" type="button" class="button btn btn-warning">
-              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
+          <button id="update-database" type="button" class="button btn btn-warning"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
         </div>
     </form>
 </div>

@@ -141,7 +141,7 @@
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-                            <div class="cardName">Clientes</div>
+                            <div class="cardName">Add Clientes</div>
                         </div>
                     </a>
 
@@ -149,7 +149,7 @@
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-                            <div class="cardName">Produtos</div>
+                            <div class="cardName">Add Produtos</div>
                         </div>
                     </a>
 
@@ -157,7 +157,7 @@
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-                            <div class="cardName">Serviços</div>
+                            <div class="cardName">Add Serviços</div>
                         </div>
                     </a>
 
@@ -165,7 +165,7 @@
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-                            <div class="cardName">Ordens</div>
+                            <div class="cardName">Add Ordens</div>
                         </div>
                     </a>
 
@@ -173,7 +173,7 @@
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-                            <div class="cardName">Garantias</div>
+                            <div class="cardName">Add Garantias</div>
                         </div>
                     </a>
 
@@ -181,7 +181,7 @@
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-                            <div class="cardName">Vendas</div>
+                            <div class="cardName">Add Vendas</div>
                         </div>
                     </a>
 
@@ -189,18 +189,18 @@
                     <?php $diaRec = "VALOR_".date('m')."_REC"; $diaDes = "VALOR_".date('m')."_DES"; ?>
 
                     <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
-                        <div><i class='bx bxs-upvote iconBx7'></i></div>
+                        <div><i class='bx bxs-up-arrow-circle iconBx7' ></i></div>
                         <div>
-                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
-                            <div class="cardName">Receita Hoje</div>
+                            <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
+                            <div class="cardName">Receita do dia</div>
                         </div>
                     </a>
 
                     <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
-                        <div><i class='bx bxs-downvote iconBx8'></i></div>
+                        <div><i class='bx bxs-down-arrow-circle iconBx8' ></i></div>
                         <div>
-                            <div class="cardName2" style="font-size: 1.5em; font-weight: 600">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
-                            <div class="cardName">Despesa Hoje</div>
+                            <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
+                            <div class="cardName">Despesa do dia</div>
                         </div>
                     </a>
                 </div>

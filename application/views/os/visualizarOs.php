@@ -9,9 +9,9 @@
                 <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-    echo '<a title="Editar OS" class="button btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+    echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-} ?>
+  } ?>
 
                     <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
@@ -27,16 +27,16 @@
     if (!empty($zapnumber)) {
         echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
         <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
-    }
-} ?>
+      }
+    } ?>
 
-                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning"
-                       href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
+                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
                        <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Via E-mail</span></a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia"
-                                                             class="button btn btn-mini btn-inverse"
-                                                             href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
-                                                             <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
+                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse"
+                    href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
+                    <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
+                    <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
+                      <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text">Gerar Pagamento</span></a></i>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -123,6 +123,7 @@
                                         <b>DATA FINAL: </b>
                                         <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                     </td>
+                                    </tr>
 
                                     <td>
                                         <b>GARANTIA: </b>
@@ -142,8 +143,8 @@
                                             <?php echo $result->refGarantia; ?>
                                         </td>
                                     <?php } ?>
-                                </tr>
-                            <?php } ?>
+                                  </tr>
+                                <?php } ?>
 
                             <?php if ($result->descricaoProduto != null) { ?>
                                 <tr>
@@ -305,9 +306,6 @@
         </div>
     </div>
 </div>
-
-<a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info" style="max-width: 150px">
-  <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text2">Gerar Pagamento</span></a></i>
 
 <?= $modalGerarPagamento ?>
 

@@ -1,4 +1,4 @@
-<div class="span12" style="margin-left: 0; margin-top: 0">
+ <div class="span12" style="margin-left: 0; margin-top: 0">
     <div class="span12" style="margin-left: 0">
         <form action="<?php echo current_url() ?>">
             <div class="span10" style="margin-left: 0">

@@ -19,7 +19,8 @@
 <div class="span12" style="margin-left: 0">
 
     <div class="widget-box">
-        <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span>
+        <div class="widget-title" style="margin: -20px 0 0">
+          <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Ordens de Serviço</h5>
         </div>
         <div class="widget-content">
@@ -58,7 +59,8 @@
     </div>
 
     <div class="widget-box">
-        <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span>
+        <div class="widget-title" style="margin: -20px 0 0">
+          <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Compras</h5>
         </div>
         <div class="widget-content">

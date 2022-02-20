@@ -40,7 +40,7 @@
                         </div>
                         <div class="span4">
                             <label for="">.</label>
-                            <button class="btn btn-inverse span12"><i class="fas fa-print"></i> Imprimir</button>
+                            <button class="button btn btn-inverse"><span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text2">Imprimir</span></button>
                         </div>
                         <div class="span12 well" style="margin-left: 0">
                         <div class="span12">

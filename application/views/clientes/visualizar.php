@@ -3,14 +3,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab1">Dados do Cliente</a></li>
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
-            <div class="buttons" style="justify-content: flex-end">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-    echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
-    <span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
-} ?>
-                <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
-                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
-            </div>
+
         </ul>
     </div>
     <div class="widget-content tab-content">
@@ -220,5 +213,13 @@
                 <?php
             } ?>
         </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content: center">
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
+<span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
+} ?>
+        <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
+          <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
     </div>
 </div>

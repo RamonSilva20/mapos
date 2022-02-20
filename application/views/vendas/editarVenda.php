@@ -64,7 +64,7 @@
                                         <div class="span8 offset2" style="text-align: center;display:flex">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
-                                                  <span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text2">Faturar</span></a>
+                                                  <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
                                             <?php
                                             } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
@@ -215,7 +215,7 @@
         <div class="modal-footer" style="display:flex">
             <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
               <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class="bx bx-money-withdraw"></i></span> <span class="button__text2">Faturar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
         </div>
     </form>
 </div>

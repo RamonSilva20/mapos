@@ -29,7 +29,7 @@ body {
 
   --white   : #676779;
   --cinza   : #a2a6ae;
-  --cinza0  : #8b97a5;
+  --cinza0  : #9aa6b3;
   --laranja : #fd5e33;
   --laranja1: #fc9d0f;
   --laranja0: #faead2ee;
@@ -158,12 +158,8 @@ input[type="color"],
   background-image: none;
 }
 
-.new-bottons .card:nth-child(7) {
-  display: flex;
-}
-
-.new-bottons .card:nth-child(8) {
-  display: flex;
+h3 {
+  margin: 10px;
 }
 
 /* New buttons */
@@ -694,7 +690,7 @@ hr {
 #sidebar .search-box {
   background   : #484c64;
   border-radius: 6px;
-  margin       : 30px 20px 0 20px;
+  margin       : 35px 20px 8px 20px;
 }
 
 #sidebar .botton-content {
@@ -709,7 +705,7 @@ hr {
   border       : none;
   background   : #484c64;
   border-radius: 6px;
-  color: #e6e2e2;
+  color        : #e6e2e2;
 }
 
 #sidebar.open li a {
@@ -903,6 +899,12 @@ section .profile .profile-img {
   flex-direction: row-reverse;
 }
 
+.content-header {
+  padding       : 20px 0 15px;
+  margin        : 12px 10px 5px !important;
+  flex-direction: row !important;
+}
+
 #content-header h1 {
   color      : #555555;
   font-size  : 28px;
@@ -1011,11 +1013,12 @@ section .profile .profile-img {
 
 /* Stat boxes and quick actions */
 .quick-actions_homepage {
-  width     : 100%;
-  text-align: center;
-  position  : relative;
-  float     : left;
-  margin-top: 10px;
+  width        : 100%;
+  text-align   : center;
+  position     : relative;
+  float        : left;
+  margin-top   : 10px;
+  margin-bottom: 15px;
 }
 
 .stat-boxes,
@@ -1362,7 +1365,16 @@ section .profile .profile-img {
 .new-bottons .card .cardName2 {
   position   : relative;
   top        : 5px;
-  font-size  : 2.3em;
+  font-size  : 2.1em;
+  text-align : center;
+  font-weight: 600;
+  color      : var(--subtitle);
+}
+
+.new-bottons .card .cardName1 {
+  position   : relative;
+  top        : 5px;
+  font-size  : 1.3em;
   text-align : center;
   font-weight: 600;
   color      : var(--subtitle);
@@ -1685,6 +1697,8 @@ section .profile .profile-img {
 .widget-box-new,
 .widget-box-statist {
   background: var(--widget-box);
+  border    : 1px solid rgb(0 0 0 / 8%);
+  box-shadow: 0 0 10px rgb(0 0 0 / 4%);
 }
 
 .fc .fc-toolbar-title {
@@ -2710,7 +2724,11 @@ form {
   }
 
   .new-bottons .card .cardName2 {
-    font-size: 2em;
+    font-size: 1.9em;
+  }
+
+  .new-bottons .card .cardName1 {
+    font-size: 1.5em;
   }
 
   h4 {
@@ -2770,24 +2788,11 @@ form {
     grid-template-columns: 1fr;
   }
 
-  .new-bottons .card:nth-child(3) {
-    display: flex;
-  }
-
-  .new-bottons .card:nth-child(6) {
-    display: flex;
-  }
-
-  .new-bottons .card:nth-child(7) {
-    display: flex;
-  }
-
-  .new-bottons .card:nth-child(8) {
-    display: flex;
-  }
-
   .new-bottons .card {
-    padding: 10px 15px;
+    flex-direction : row;
+    justify-content: flex-start;
+    align-items    : center;
+    grid-column-gap: 10px;
   }
 
   .widget-title .buttons>.btn {
@@ -2809,8 +2814,8 @@ form {
   }
 
   .new-bottons {
-    grid-template-columns: repeat(3, 2fr);
-    padding              : 20px 15px;
+    grid-template-columns: repeat(2, 2fr);
+    padding              : 15px 18px;
   }
 
   .cardBox .card-cl {
@@ -2818,7 +2823,7 @@ form {
   }
 
   .cardBox .card .numbers {
-    font-size: 1.4em;
+    font-size: 1.4em !important;
   }
 
   .cardBox .card .cardName {
@@ -2900,12 +2905,12 @@ form {
   }
 
   #userr .userT0 {
-    font-size    : 1.1em;
+    font-size    : 1.13em;
     padding-right: 4px;
   }
 
   #userr .userT {
-    font-size: 1.1em;
+    font-size: 1.13em;
   }
 
   .cardHeader {
@@ -3028,6 +3033,7 @@ form {
   #sidebar.open {
     margin-left : 0;
     width       : 240px;
+    background  : #242634;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
     border-right: #4b4d60 solid 0px;
@@ -3213,6 +3219,19 @@ form {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .new-bottons .card .cardName1 {
+    font-size: 1.2em;
+  }
+
+  .new-bottons {
+    padding: 20px 0;
+    grid-gap: 0;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1.5em!important;
+  }
+
   .row-fluid .Sspan12 {
     grid-template-columns: 2fr 1fr !important;
   }
@@ -3367,6 +3386,15 @@ form {
     z-index: 1;
   }
 
+  .search-box input {
+    background: none;
+  }
+
+  .new-bottons {
+    padding: 20px 0;
+    grid-gap: 0;
+  }
+
   .cardBox .card {
     padding: 15px 10px;
   }
@@ -3411,7 +3439,6 @@ form {
   .row-fluid [class*="span"] {
     float      : none;
     margin-left: 0;
-    width      : auto;
   }
 
   .span12A {

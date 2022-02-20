@@ -1,5 +1,5 @@
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-cash-register"></i>
         </span>

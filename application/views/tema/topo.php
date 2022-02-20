@@ -59,9 +59,9 @@
 
 <body>
 <!--top-Header-menu-->
-<div class="navebarn">   
+<div class="navebarn">
   <div id="user-nav" class="navbar navbar-inverse">
-    
+
     <ul class="nav">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Meu Perfil" class="tip-bottom"><i class='bx bx-user-circle iconN'></i><span class="text"> Meu Perfil</span></a>
@@ -81,13 +81,12 @@
           <li><a href="<?= site_url('relatorios/servicos') ?>">Serviços</a></li>
           <li><a href="<?= site_url('relatorios/os') ?>">Ordens de Serviço</a></li>
           <li><a href="<?= site_url('relatorios/vendas') ?>">Vendas</a></li>
-          <li><a href="<?= site_url('relatorios/Garantias') ?>">Termo Garantia</a></li>
           <li><a href="<?= site_url('relatorios/financeiro') ?>">Financeiro</a></li>
           <li><a href="<?= site_url('relatorios/sku') ?>">SKU</a></li>
           <li><a href="<?= site_url('relatorios/receitasBrutasMei') ?>">Receitas Brutas - MEI</a></li>
         </ul>
       </li>
-     
+
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Configurações" class="tip-bottom"><i class='bx bx-cog iconN'></i><span class="text"> Configurações</span></a>
         <ul class="dropdown-menu">
@@ -109,11 +108,11 @@
       if( $hora >= 6 && $hora <= 12 ) return 'Bom dia' . (empty($nome) ? '' : ', ' . $nome);
       else if ( $hora > 12 && $hora <=18  ) return 'Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
       else return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
-    } $login = ''; 
+    } $login = '';
     echo saudacao( $login ); // Irá retornar conforme o horário:?>
   </div>
   <div class="userT"><?= $this->session->userdata('nome') ?></div>
-  
+
   <section style="display:block;position:absolute;right:10px">
   <div class="profile">
     <div class="profile-img">

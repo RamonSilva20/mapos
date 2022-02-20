@@ -96,11 +96,9 @@
                     </div>
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3" style="display: flex">
-                                <button type="submit" class="button btn btn-mini btn-success" style="max-width: 160px">
-                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
-                                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                            <div class="span6 offset3" style="display: flex;justify-content: center">
+                                <button type="submit" class="button btn btn-mini btn-success" style="max-width: 160px"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
+                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>

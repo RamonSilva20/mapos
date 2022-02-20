@@ -35,10 +35,7 @@
             <i class="fas fa-user"></i>
             </span>
                 <h5>Editar Cliente</h5>
-                <div class="buttons">
-                    <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px" href="<?php echo site_url() ?>/clientes">
-                      <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
-                </div>
+
             </div>
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#home">Informações Pessoais</a></li>
@@ -107,9 +104,9 @@
                         </div>
                         <div class="form-actions">
                             <div class="span12">
-                                <div class="span6 offset3">
-                                    <button type="submit" class="button btn btn-primary" style="max-width: 160px">
-                                      <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                <div class="span6 offset3" style="display:flex;justify-content: center">
+                                    <button type="submit" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                    <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                 </div>
                             </div>
                         </div>

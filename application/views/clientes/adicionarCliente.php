@@ -35,10 +35,7 @@
             <i class="fas fa-user"></i>
             </span>
                 <h5>Cadastro de Cliente</h5>
-                <div class="buttons">
-                    <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px" href="<?php echo site_url() ?>/clientes">
-                      <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
-                </div>
+
             </div>
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#home">Informações Pessoais</a></li>
@@ -106,9 +103,9 @@
                         </div>
                         <div class="form-actions">
                             <div class="span12">
-                                <div class="span6 offset3">
-                                    <button type="submit" class="button btn btn-mini btn-success">
-                                    <span class="button__icon"><i class='bx bx-save' ></i></span> <span class="button__text2">Salvar</span></a></button>
+                                <div class="span6 offset3" style="display:flex;justify-content: center">
+                                    <button type="submit" class="button btn btn-mini btn-success"><span class="button__icon"><i class='bx bx-save' ></i></span> <span class="button__text2">Salvar</span></a></button>
+                                      <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -165,8 +162,8 @@
                         </div>
                         <div class="form-actions">
                             <div class="span12">
-                                <div class="span6 offset3">
-                                    <button type="submit" class="btn btn-success">Salvar</button>
+                                <div class="span6 offset3" style="display:flex;justify-content: center">
+                                    <button type="submit" class="button btn btn-mini btn-success"><span class="button__icon"><i class='bx bx-save' ></i></span> <span class="button__text2">Salvar</span></a></button>
                                 </div>
                             </div>
                         </div>

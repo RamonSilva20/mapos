@@ -259,9 +259,9 @@ $periodo = $this->input->get('periodo');
             </div>
 
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success" id="submitReceita">Adicionar Receita</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-success" id="submitReceita"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Receita</span></button>
         </div>
     </form>
 </div>
@@ -336,9 +336,9 @@ $periodo = $this->input->get('periodo');
             </div>
 
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger" id="submitDespesa">Adicionar Despesa</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger" id="submitDespesa"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Despesa</span></button>
         </div>
     </form>
 </div>
@@ -420,10 +420,10 @@ $periodo = $this->input->get('periodo');
             </div>
 
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="display:flex;justify-content: space-between">
             Modificado:<input disabled id="usuarioEditar" value=""/>
-            <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar">Cancelar</button>
-            <button class="btn btn-primary">Salvar Alterações</button>
+            <button style="min-width:80px" class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button style="min-width:80px" class="button btn btn-primary"><span class="button__icon"><i class='bx bx-save' ></i></span><span class="button__text2">Salvar</span></button>
         </div>
     </form>
 </div>
@@ -439,9 +439,9 @@ $periodo = $this->input->get('periodo');
         <h5 style="text-align: center">Deseja realmente excluir esse lançamento?</h5>
         <input name="id" id="idExcluir" type="hidden" value=""/>
     </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
-        <button class="btn btn-danger" id="btnExcluir">Excluir Lançamento</button>
+    <div class="modal-footer" style="display:flex;justify-content:center;">
+        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+        <button class="button btn btn-danger" id="btnExcluir"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
     </div>
 </div>
 

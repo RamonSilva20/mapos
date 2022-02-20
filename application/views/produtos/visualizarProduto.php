@@ -13,7 +13,7 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>
+                            <td style="text-align: center; width: 30%"><strong>Código de Barra</strong></td>
                             <td>
                                 <?php echo $result->codDeBarra ?>
                             </td>

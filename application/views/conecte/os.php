@@ -3,7 +3,8 @@
 if (!$this->session->userdata('cadastra_os')) { ?>
     <div class="span12" style="margin-left: 0">
         <div class="span3">
-            <a href="<?php echo base_url(); ?>index.php/mine/adicionarOs" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
+            <a href="<?php echo base_url(); ?>index.php/mine/adicionarOs" class="button btn btn-success" style="max-width: 150px">
+              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
         </div>
     </div>
 <?php
@@ -13,7 +14,7 @@ if (!$results) {
     ?>
     <div class="span12" style="margin-left: 0">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
@@ -26,7 +27,7 @@ if (!$results) {
 
                 <table id="tabela" class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr>
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
@@ -65,7 +66,7 @@ if (!$results) {
 
                 <table class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr>
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>

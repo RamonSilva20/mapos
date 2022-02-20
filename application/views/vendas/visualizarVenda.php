@@ -9,13 +9,15 @@
                 <h5>Dados da Venda</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-    echo '<a title="Editar Venda" class="button btn btn-mini btn-info" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
+    echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
   } ?>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
+                      <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
+                        <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text">Gerar Pagamento</span></a></i>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -147,10 +149,6 @@
                 </div>
             </div>
         </div>
-
-        <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info" style="max-width: 150px">
-          <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text2">Gerar Pagamento</span></a></i>
-
 
         <?= $modalGerarPagamento ?>
     </div>

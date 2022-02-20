@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="span12" style="padding: 1%; margin-left: 0">
-                        <div class="span6 offset3" style="text-align: center;display:flex">
+                        <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button class="button btn btn-success" id="btnContinuar">
                               <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                             <a href="<?php echo base_url() ?>index.php/garantias" class="button btn btn-mini btn-warning">
