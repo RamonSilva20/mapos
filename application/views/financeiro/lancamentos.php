@@ -337,8 +337,10 @@ $periodo = $this->input->get('periodo');
 
         </div>
         <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger" id="submitDespesa"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Despesa</span></button>
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
+              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger" id="submitDespesa">
+              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Despesa</span></button>
         </div>
     </form>
 </div>
@@ -421,8 +423,12 @@ $periodo = $this->input->get('periodo');
 
         </div>
         <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-primary"><span class="button__icon"><i class='bx bx-save' ></i></span><span class="button__text2">Salvar</span></button>
+          Modificado:<input disabled id="usuarioEditar" value=""/ style="background-color: #f5f5f5;
+    border-color: transparent">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar" style="min-width: 110px">
+              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-primary" style="min-width: 110px">
+              <span class="button__icon"><i class='bx bx-save' ></i></span><span class="button__text2">Salvar</span></button>
         </div>
     </form>
 </div>
