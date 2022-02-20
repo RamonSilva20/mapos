@@ -132,9 +132,9 @@
                                 $dataGarantia = explode('/', $vencGarantia);
                                 $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
                                 if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#008000';
+                                    $corGarantia = '#4d9c79';
                                 } else {
-                                    $corGarantia = '#DC143C';
+                                    $corGarantia = '#f24c6f';
                                 }
                             } elseif ($r->garantia == "0") {
                                 $vencGarantia = 'Sem Garantia';
