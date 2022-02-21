@@ -108,14 +108,14 @@
                             <span class="title">Lançamentos</span></a>
                     </li>
                 <?php } ?>
-
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                 <li class="<?php if (isset($menuCobrancas)) {
                                 echo 'active';
                             }; ?>">
                     <a href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
                         <span class="title">Cobranças</span></a>
                 </li>
-
+                <?php } ?>
             </ul>
         </div>
 
