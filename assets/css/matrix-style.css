@@ -247,11 +247,6 @@ hr {
   bottom  : 2px;
 }
 
-.label-important,
-.badge-important {
-  background: #f74d4d;
-}
-
 .fc .fc-button-primary {
   background-color: violet;
 }
