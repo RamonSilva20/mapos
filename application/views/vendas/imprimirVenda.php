@@ -99,7 +99,7 @@
                         <?php if ($produtos != null) { ?>
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
-                                    <tr style="background-color: #2D335B">
+                                    <tr>
                                         <th style="font-size: 12px">Cód</th>
                                         <th style="font-size: 12px">Produto</th>
                                         <th style="font-size: 12px">Qt</th>
