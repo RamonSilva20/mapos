@@ -186,23 +186,32 @@
                     </a>
 
                     <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
-                    <?php $diaRec = "VALOR_".date('m')."_REC"; $diaDes = "VALOR_".date('m')."_DES"; ?>
+                    <?php if ($estatisticas_financeiro != null) {
+                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
-                    <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
-                        <div><i class='bx bxs-up-arrow-circle iconBx7' ></i></div>
-                        <div>
-                            <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
-                            <div class="cardName">Receita do dia</div>
-                        </div>
-                    </a>
+                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+                                <?php $diaRec = "VALOR_" . date('m') . "_REC";
+                                $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                    <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
-                        <div><i class='bx bxs-down-arrow-circle iconBx8' ></i></div>
-                        <div>
-                            <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
-                            <div class="cardName">Despesa do dia</div>
-                        </div>
-                    </a>
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
+                                    <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
+                                    <div>
+                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
+                                        <div class="cardName">Receita do dia</div>
+                                    </div>
+                                </a>
+
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
+                                    <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
+                                    <div>
+                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
+                                        <div class="cardName">Despesa do dia</div>
+                                    </div>
+                                </a>
+                            <?php endif ?>
+
+                    <?php  }
+                    } ?>
                 </div>
             </div>
         </div>
@@ -210,33 +219,40 @@
 </div>
 <!-- Fim new widget right -->
 
-<!-- Start Charts -->
-<div class="new-balance">
-    <div class="widget-box0">
-        <div class="widget-title2">
-            <h5 class="cardHeader">Balanço Mensal do Ano</h5>
-            <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
-                <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
-            </form>
-        </div>
-        <div class="widget-content" style="padding:10px 25px 5px 25px">
-            <div class="row-fluid" style="margin-top:-35px;">
-                <div class="span12">
-                    <canvas id="myChart" style="overflow-x: scroll;margin-left: -14px"></canvas>
+<?php if ($estatisticas_financeiro != null) {
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+            <!-- Start Charts -->
+            <div class="new-balance">
+                <div class="widget-box0">
+                    <div class="widget-title2">
+                        <h5 class="cardHeader">Balanço Mensal do Ano</h5>
+                        <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
+                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                            <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
+                        </form>
+                    </div>
+                    <div class="widget-content" style="padding:10px 25px 5px 25px">
+                        <div class="row-fluid" style="margin-top:-35px;">
+                            <div class="span12">
+                                <canvas id="myChart" style="overflow-x: scroll;margin-left: -14px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-box-statist">
+                    <h5 class="cardHeader">Estatísticas Financeira</h5>
+                    <div class="widget-content" style="padding:10px;margin:25px 0 0">
+                        <canvas id="statusOS"> </canvas>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        <?php endif ?>
 
-    <div class="widget-box-statist">
-        <h5 class="cardHeader">Estatísticas Financeira</h5>
-        <div class="widget-content" style="padding:10px;margin:25px 0 0">
-            <canvas id="statusOS"> </canvas>
-        </div>
-    </div>
-</div>
-
+<?php  }
+} ?>
 <script type="text/javascript">
     var ctx = document.getElementById('myChart').getContext('2d');
     var StatusOS = document.getElementById('statusOS').getContext('2d');
