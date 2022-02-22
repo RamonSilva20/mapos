@@ -111,7 +111,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
+                <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
                 <button class="btn btn-success">Cadastrar</button>
             </div>
         </form>
@@ -123,7 +123,7 @@
     <div class="row-fluid" style="margin-top:0">
         <div class="span12">
             <div class="widget-box">
-                <div class="widget-title">
+                <div class="widget-title" style="margin: -20px 0 0">
                     <span class="icon">
                         <i class="fas fa-align-justify"></i>
                     </span>
@@ -146,8 +146,10 @@
                         </tbody>
                     </table>
 
-                    <a href="#modalAlterar" data-toggle="modal" role="button" class="btn btn-primary">Atualizar Dados</a>
-                    <a href="#modalLogo" data-toggle="modal" role="button" class="btn btn-inverse">Atualizar Logo</a>
+                    <div style="display:flex">
+                      <a href="#modalAlterar" data-toggle="modal" role="button" class="button btn btn-success"><span class="button__icon"><i class='bx bx-edit' ></i></span><span class="button__text2">Atualizar Dados</span></a>
+                      <a href="#modalLogo" data-toggle="modal" role="button" class="button btn btn-inverse"><span class="button__icon"><i class='bx bx-upload' ></i></span> <span class="button__text2">Alterar Logo</span></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -234,9 +236,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
-                <button class="btn btn-primary">Atualizar</button>
+            <div class="modal-footer" style="display:flex;justify-content: center">
+                <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
+                <button class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
             </div>
         </form>
     </div>
@@ -257,9 +259,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">Cancelar</button>
-                <button class="btn btn-primary">Atualizar</button>
+            <div class="modal-footer" style="display:flex;justify-content: center">
+              <button class="button btn btn-mini btn-danger" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><span class="button__icon"><i class='bx bx-x' ></i></span> <span class="button__text2">Cancelar</span></button>
+              <button class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
             </div>
         </form>
     </div>

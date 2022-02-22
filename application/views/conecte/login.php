@@ -16,6 +16,7 @@
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/fav.png">
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <!-- Script webeddy.com.br -->
     <script>
         function formatar(mascara, documento) {
@@ -26,7 +27,6 @@
             if (texto.substring(0, 1) != saida) {
                 documento.value += texto.substring(0, 1);
             }
-
         }
     </script>
 </head>
@@ -34,11 +34,15 @@
    $parse_email = $this->input->get('e');
    $parse_cpfcnpj = $this->input->get('c');
 ?>
-<!-- particles.js container -->
-<div id="particles-js"><canvas class="particles-js-canvas-el" width="842" height="913" style="width: 100%; height: 100%;"></canvas></div>
 
 <body>
-    <div id="loginbox">
+<div class="main-login">
+    <div class="left-login">
+    <h1 class="h-one">Área do Cliente</h1>
+            <img src="<?php echo base_url() ?>assets/img/forms-animate.svg"class="left-login-imagec" alt="Map-OS 5.0">
+        </div>
+
+<div id="loginbox">
         <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
             <?php if ($this->session->flashdata('error') != null) { ?>
                 <div class="alert alert-danger">
@@ -46,36 +50,58 @@
                     <?php echo $this->session->flashdata('error'); ?>
                 </div>
             <?php } ?>
+
             <?php if ($this->session->flashdata('success') != null) { ?>
                 <div class="alert alert-success">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <?php echo $this->session->flashdata('success'); ?>
                 </div>
             <?php } ?>
-            <div class="control-group normal_text">
-                <h3><img src="<?php echo base_url() ?>assets/img/logo.png" alt="Logo" /></h3>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <div class="main_input_box">
-                        <span class="add-on bg_lg"><i class="fas fa-user"></i></span><input id="email" name="email" type="text" placeholder="Email" value="<?php echo trim($parse_email); ?>"/>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <div class="main_input_box">
-                        <span class="add-on bg_ly"><i class="fas fa-id-card"></i></span><input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" value="<?php echo trim($parse_cpfcnpj); ?>"/>
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions" style="text-align: center">
-                <button class="btn btn-info btn-large"> Acessar</button>
-                <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
-            </div>
-        </form>
 
+    <div class="d-flex flex-column justify-content-center w-100 h-100">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="right-login">
+                <div class="container">
+                    <div class="card card-cad">
+                        <div class="content">
+                            <div id="newlog">
+                              <div class="icon2">
+                                <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                              </div>
+                              <div class="title01">
+                                <?= $configuration['app_theme'] == 'white' ? '<img src="'. base_url() .'assets/img/logo-mapos.png">' : '<img src="'. base_url() .'assets/img/logo-mapos-branco.png">'; ?>
+                              </div>
+                              </div>
+                              <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
+                              <div class="control-group">
+                                    <div class="controls">
+                                        <div class="main_input_box">
+                                            <span class="add-on bg_lg"><i class='bx bx-user-plus iconU'></i></span>
+                                            <input id="email" name="email" type="text" placeholder="Email" value="<?php echo trim($parse_email); ?>"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div class="main_input_box">
+                                            <span class="add-on bg_ly"><i class='bx bx-id-card iconU'></i></span>
+                                            <input class="cpfcnpj" maxlength="18" size="18" name="documento" type="text" placeholder="CPF/CNPJ" OnKeyPress="formatar('000.000.000/0000-00', this)" value="<?php echo trim($parse_cpfcnpj); ?>"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
+                                <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
+                                <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
     <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
 
@@ -155,9 +181,5 @@
 
         });
     </script>
-    <!-- scripts -->
-    <script src="<?php echo base_url() ?>assets/js/particles.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/app.js"></script>
 </body>
-
 </html>

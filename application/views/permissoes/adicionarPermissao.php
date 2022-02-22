@@ -2,14 +2,11 @@
     <form action="<?php echo base_url(); ?>index.php/permissoes/adicionar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">
             <div class="widget-box">
-                <div class="widget-title">
+                <div class="widget-title" style="margin: -20px 0 0">
                <span class="icon">
                <i class="fas fa-lock"></i>
                </span>
                     <h5>Cadastro de Permissão</h5>
-                    <div class="buttons">
-                        <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/permissoes"><i class="fas fa-arrow-left"></i> Voltar</a>
-                    </div>
                 </div>
                 <div class="widget-content">
                     <div class="span6">
@@ -29,8 +26,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Clientes</h5>
+                                      <span><i class='bx bx-group icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Clientes</h5>
                                     </a>
                                 </div>
                             </div>
@@ -73,8 +70,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Produtos</h5>
+                                      <span><i class='bx bx-package icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Produtos</h5>
                                     </a>
                                 </div>
                             </div>
@@ -117,8 +114,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Serviços</h5>
+                                      <span><i class='bx bx-stopwatch icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Serviços</h5>
                                     </a>
                                 </div>
                             </div>
@@ -161,8 +158,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree3" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Ordem de Serviços - OS</h5>
+                                      <span><i class='bx bx-spreadsheet icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Ordem de Serviços - OS</h5>
                                     </a>
                                 </div>
                             </div>
@@ -205,8 +202,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree33" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Vendas</h5>
+                                      <span><i class='bx bx-cart-alt icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Vendas</h5>
                                     </a>
                                 </div>
                             </div>
@@ -249,8 +246,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree333" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Cobranças</h5>
+                                      <span><i class='bx bx-credit-card-front icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Cobranças</h5>
                                     </a>
                                 </div>
                             </div>
@@ -293,8 +290,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree3333" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Garantias</h5>
+                                      <span><i class='bx bx-receipt icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Garantias</h5>
                                     </a>
                                 </div>
                             </div>
@@ -337,8 +334,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree33333" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Arquivos</h5>
+                                      <span><i class='bx bx-box icon-cli'></i></span>
+                                      <h5 style="padding-left: 28px">Arquivos</h5>
                                     </a>
                                 </div>
                             </div>
@@ -381,8 +378,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree333343" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Financeiro</h5>
+                                      <span><i class="bx bx-bar-chart-square icon-cli"></i></span>
+                                      <h5 style="padding-left: 28px">Financeiro</h5>
                                     </a>
                                 </div>
                             </div>
@@ -451,8 +448,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree333335" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Relatórios</h5>
+                                      <span><i class="bx bx-chart icon-cli"></i></span>
+                                      <h5 style="padding-left: 28px">Relatórios</h5>
                                     </a>
                                 </div>
                             </div>
@@ -509,8 +506,8 @@
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGThree333338" data-toggle="collapse">
-                                        <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Configurações e Sistema</h5>
+                                      <span><i class="bx bx-cog icon-cli"></i></span>
+                                      <h5 style="padding-left: 28px">Configurações e Sistema</h5>
                                     </a>
                                 </div>
                             </div>
@@ -572,8 +569,10 @@
                     </div>
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Confirmar</button>
+                            <div class="span6 offset3" style="display:flex;justify-content: center">
+                                <button type="submit" class="button btn btn-success"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Confirmar</span></button>
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                  <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>

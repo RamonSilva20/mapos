@@ -109,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `permissoes_id` INT NOT NULL,
   `dataExpiracao` date DEFAULT NULL,
   `asaas_id` VARCHAR(255) DEFAULT NULL,
+  `url_image_user` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
   CONSTRAINT `fk_usuarios_permissoes1`

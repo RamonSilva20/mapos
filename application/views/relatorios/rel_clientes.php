@@ -8,7 +8,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a href="<?php echo base_url() ?>index.php/relatorios/clientesRapid" target="_blank"><i
                                     class="fas fa-users"></i> <small>Todos os Clientes - pdf</small></a></li>
                     <li><a href="<?php echo base_url() ?>index.php/relatorios/clientesRapid?format=xls" target="_blank"><i
@@ -40,7 +40,7 @@
                         </div>
                         <div class="span4">
                             <label for="">.</label>
-                            <button class="btn btn-inverse span12"><i class="fas fa-print"></i> Imprimir</button>
+                            <button class="button btn btn-inverse"><span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text2">Imprimir</span></button>
                         </div>
                         <div class="span12 well" style="margin-left: 0">
                         <div class="span12">
