@@ -104,19 +104,26 @@
 
 <!-- New User -->
 <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
-  <div class="user-names userT0"> <?php function saudacao( $nome = '' ) { date_default_timezone_set('America/Sao_Paulo'); $hora = date('H');
-      if( $hora >= 6 && $hora <= 12 ) return 'Bom dia' . (empty($nome) ? '' : ', ' . $nome);
-      else if ( $hora > 12 && $hora <=18  ) return 'Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
-      else return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
-    } $login = '';
-    echo saudacao( $login ); // Irá retornar conforme o horário:?>
+  <div class="user-names userT0"> <?php function saudacao($nome = '')
+{
+    date_default_timezone_set('America/Sao_Paulo');
+    $hora = date('H');
+    if ($hora >= 6 && $hora <= 12) {
+        return 'Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+    } elseif ($hora > 12 && $hora <=18) {
+        return 'Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+    } else {
+        return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+    }
+} $login = '';
+    echo saudacao($login); // Irá retornar conforme o horário:?>
   </div>
   <div class="userT"><?= $this->session->userdata('nome') ?></div>
 
   <section style="display:block;position:absolute;right:10px">
   <div class="profile">
     <div class="profile-img">
-      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file( FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user') ?>" alt=""></a>
+      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user') ?>" alt=""></a>
     </div>
   </div>
 </section>
