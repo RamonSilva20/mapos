@@ -292,7 +292,7 @@
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
                                                 echo '<td><div align="center">R$ ' . $preco  . '</div></td>';
-                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4"><i class="bx bx-trash-alt"></i></span></div></td>';
+                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
                                                 echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
                                                 echo '</tr>';
                                             } ?>
@@ -372,11 +372,11 @@
                                                 echo '<tr>';
                                                 echo '<td>' . $a->anotacao . '</td>';
                                                 echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4"><i class="bx bx-trash-alt"></i></span></td>';
+                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
                                                 echo '</tr>';
                                             }
                                             if (!$anotacoes) {
-                                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                                echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
                                             }
 
                                             ?>

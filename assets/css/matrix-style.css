@@ -1460,6 +1460,7 @@ section .profile .profile-img {
 .btn-nwe4 {
   color      : #585a5f;
   text-shadow: 0 0 3px rgba(243, 11, 11, 0.8);
+  cursor: pointer;
 }
 
 .btn-nwe5 {
