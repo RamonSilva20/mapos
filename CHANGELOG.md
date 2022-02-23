@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.36.1] - 2022-02-23
+
+### Fixed
+- Não funcionamento do botão "excluir serviço" na aba serviço em editarOS.php. [@Wilmerson](https://github.com/willph)
+
 ## [4.36.0] - 2022-02-20
 
 ### Added
