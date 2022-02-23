@@ -98,12 +98,13 @@ $totalProdutos = 0; ?>
                                             <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
                                         <?php if ($result->garantia) {
-                                        ?>
+    ?>
                                             <td>
                                                 <b>GARANTIA: </b>
                                                 <?php echo $result->garantia . ' dias'; ?>
                                             </td>
-                                        <?php } ?>
+                                        <?php
+} ?>
                                         <td>
                                             <b>
                                                 <?php if ($result->status == 'Finalizado') { ?>
