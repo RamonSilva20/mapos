@@ -11,7 +11,7 @@
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
     echo '<a title="Editar Termo de Garantia" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/garantias/editar/' . $result->idGarantias . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-  } ?>
+} ?>
                     <a target="_blank" title="Imprimir" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir</span></a>
                 </div>
