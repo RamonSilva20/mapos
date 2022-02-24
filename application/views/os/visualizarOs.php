@@ -11,7 +11,7 @@
                     <?php if ($editavel) {
     echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-  } ?>
+} ?>
 
                     <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse"
                        href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
@@ -27,8 +27,8 @@
     if (!empty($zapnumber)) {
         echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
         <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
-      }
-    } ?>
+    }
+} ?>
 
                     <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
                        <span class="button__icon"><i class="bx bx-envelope" ></i></span> <span class="button__text">Via E-mail</span></a>
