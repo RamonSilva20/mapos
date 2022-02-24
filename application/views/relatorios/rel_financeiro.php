@@ -8,7 +8,7 @@
                 <h5>Relatórios Rápidos</h5>
             </div>
             <div class="widget-content">
-                <ul class="site-stats">
+                <ul style="flex-direction: row;" class="site-stats">
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - pdf</small></a></li>
                     <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/financeiroRapid?format=xls"><i class="fas fa-hand-holding-usd"></i> <small>Relatório do mês - xls</small></a></li>
                 </ul>
@@ -68,9 +68,9 @@
                         </div>
                     </div>
 
-                    <div class="span12" style="margin-left: 0; text-align: center">
-                        <input type="reset" class="btn" value="Limpar" />
-                        <button class="btn btn-inverse"><i class="fas fa-print"></i> Imprimir</button>
+                    <div class="span12" style="display:flex;justify-content: center">
+                        <input type="reset" class="button btn btn-warning" value="Limpar" / style="justify-content: center">
+                        <button class="button btn btn-inverse"><span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text2">Imprimir</span></button>
                     </div>
                 </form>
                 &nbsp

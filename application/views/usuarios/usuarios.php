@@ -1,7 +1,9 @@
-<a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar Usuário</a>
+<div class="new122">
+  <a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
+  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Usuário</span></a>
 
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-user"></i>
         </span>
@@ -11,7 +13,7 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="backgroud-color: #2D335B">
+                <tr>
                     <th>#</th>
                     <th>Nome</th>
                     <th>CPF</th>
@@ -37,13 +39,14 @@
                         echo '<td>' . $r->permissao . '</td>';
                         echo '<td>' . $r->dataExpiracao . '</td>';
                         echo '<td>
-                                <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn btn-info tip-top" title="Editar Usuário"><i class="fas fa-edit"></i></a>
+                                <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
                                 </td>';
                         echo '</tr>';
                     } ?>
             </tbody>
         </table>
     </div>
+</div>
 </div>
 
 <?php echo $this->pagination->create_links(); ?>

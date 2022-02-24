@@ -1,22 +1,26 @@
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
 <div class="quick-actions_homepage">
-    <ul class="quick-actions">
-        <li class="bg_lo span3"> <a href="<?php echo base_url() ?>index.php/mine/os"> <i class="fas fa-diagnoses" style="font-size:36px"></i>
-                <div>Ordens de Serviço</div>
+    <ul class="cardBox">
+        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconBx'></i>
+          <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
+        </a>
+        </li>
+
+        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconBx'></i>
+                <div style="font-size: 1.2em" class="numbers">Compras</div>
             </a></li>
-        <li class="bg_ls span3"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class="fas fa-shopping-cart" style="font-size:36px"></i>
-                <div>Compras</div>
-            </a></li>
-        <li class="bg_lg span3"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user"  style="font-size:36px"></i>
-                <div>Minha Conta</div>
+        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class='bx bx-user-circle iconBx'></i>
+                <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
             </a></li>
     </ul>
 </div>
 
-
 <div class="span12" style="margin-left: 0">
 
     <div class="widget-box">
-        <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span>
+        <div class="widget-title" style="margin: -20px 0 0">
+          <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Ordens de Serviço</h5>
         </div>
         <div class="widget-content">
@@ -55,7 +59,8 @@
     </div>
 
     <div class="widget-box">
-        <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span>
+        <div class="widget-title" style="margin: -20px 0 0">
+          <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Compras</h5>
         </div>
         <div class="widget-content">
@@ -95,5 +100,4 @@
             </table>
         </div>
     </div>
-
 </div>
