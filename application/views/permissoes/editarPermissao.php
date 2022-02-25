@@ -8,9 +8,6 @@
                <i class="fas fa-lock"></i>
                </span>
                     <h5>Editar Permissão</h5>
-                    <div class="buttons">
-                        <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/permissoes"><i class="fas fa-arrow-left"></i> Voltar</a>
-                    </div>
                 </div>
                 <div class="widget-content">
                     <div class="span4">
@@ -587,8 +584,11 @@
                     </div>
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                            <div class="span6 offset3" style="display:flex;justify-content: center">
+                              <button type="submit" class="button btn btn-primary">
+                              <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                  <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>

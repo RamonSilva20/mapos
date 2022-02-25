@@ -4,6 +4,26 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.36.1] - 2022-02-23
+
+### Fixed
+- Corrigido deleção de anotações e serviços da OS. [@Wilmerson](https://github.com/willph)
+
+## [4.36.0] - 2022-02-20
+
+### Added
+- Adicionado novo layout referente a área do usuário e do cliente. Sendo o mesmo também responsivo. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado novo tema claro e tema escuro referente a área do usuário. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado nova logomarca. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado função em os.php para facilitar a visualização da OS em garantia, sem garantia e garantia vencida. [Luccas Woiciechoski] e [@Wilmerson](https://github.com/willph)
+
+- Adicionado função em painel.php mostrando receita dia e despesa dia. [@MilsonElias](https://github.com/MilsonElias) e [@Wilmerson](https://github.com/willph)
+
+- Adicionado função de adicionar e alterar imagem do usuário (foto do perfil). [@MilsonElias](https://github.com/MilsonElias) e [@Wilmerson](https://github.com/willph)
+
 ## [4.35.2] - 2021-10-10
 
 ### Fixed

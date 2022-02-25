@@ -1,63 +1,105 @@
-body {
-	background:#2E363F;
+:root {
+	--funSider-w: #ffffff;
+	--bodycolor-w: #f3f4f6;
+	--widget-box-w: #ffffff;
+	--widget-box-c: #42484e;
+	--title-w: #42484e;
+	--subtitle-w: #42484e;
 }
-
+body {
+	background-color: var(--bodycolor);
+}
 #header {
-	background-color: #1f262d;
-   margin-top:10px;
+    margin-top:-10px;
 }
 #search input[type=text], #search button {
-	background-color: #28b779;
+	border: #fff;
 }
 #search input[type=text]:focus {
 	color: #777777;
 }
-#sidebar > ul{border-bottom: 1px solid #37414b}
-#sidebar > ul > li {
-	border-top: 1px solid #37414b; border-bottom: 1px solid #1f262d;
-}
 #sidebar > ul > li.active {
-    background-color: #27a9e3; border-bottom: 1px solid #27a9e3;  border-top: 1px solid #27a9e3;
+	background-color: transparent;
 }
-#sidebar > ul > li.active a{ color:#fff; text-decoration:none;}
-
+#sidebar > ul > li.active a {
+	text-decoration:none;
+}
 #sidebar > ul > li > a > .label {
-	background-color:#F66;
+	background-color: transparent; transition: 0.6s; color: #87909d;
+}
+#sidebar > ul > li > a:hover .label {
+	transform: rotate(0.25turn);
 }
 #sidebar > ul > li > a:hover {
-	background-color: #27a9e3; color:#fff;
+	background-color: transparent; color: var(--funCont); text-shadow: 0 -1px 0 rgb(0 0 0 / 25%);
 }
 #sidebar > ul li ul {
-	background-color: #1e242b;
+    position: absolute;
+    left: 235px;
+    width: 100%;
+    bottom: 15px;
+    background-color: rgb(248 249 250 / 95%);
+    border-radius: 6px;
+    box-shadow: 5px 5px 15px rgb(0 0 0 / 25%);
 }
-#sidebar > ul li ul li a{ color:#939da8}
-#sidebar > ul li ul li a:hover, #sidebar > ul li ul li.active a {
-	color: #fff;
-	background-color: #28b779;
+#sidebar > ul li ul li a {
+	color: #25233c;
+    font-weight: 400;
+    padding-left: 20px;
+    font-size: 1.05em;
 }
-
-
+#sidebar > ul li ul li a:hover, 
+#sidebar > ul li ul li.active a {
+	color: #f5a907;
+}
 #search input[type=text] {
-	background-color: #47515b; color: #fff; 
+	background-color: #47515b; color: #f89b37; 
 }
 #search input[type=text]:focus {
 	color: #2e363f; color: #fff; box-shadow:none;
 }
 .dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover {
-    color: #eeeeee;
-	background:#666;
+    color: #eeeeee; background:#666;
    
 }
-.top_message{ float:right; padding:20px 12px; position:relative; top:-13px; border-left:1px solid #3D3A37; font-size:14px; line-height:20px; *line-height:20px; color:#333; text-align:center;  vertical-align:middle; cursor:pointer; }
+.top_message{ 
+	float:right; 
+	padding:20px 12px; 
+	position:relative; top:-13px; 
+	border-left:1px solid #3D3A37; 
+	font-size:14px; line-height:20px; 
+	*line-height:20px; color:#333; 
+	text-align:center;  
+	vertical-align:middle; cursor:pointer; 
+}
 .top_message:hover{ background:#000}
 .rightzero{ right:0px; display:none;}
+
 @media (max-width: 480px) {
-	#sidebar > a {
-		background:#27a9e3;
-		
-	}
-	.quick-actions_homepage .quick-actions li{ min-width:100%;}
+.cardBox {
+	grid-template-columns: repeat(2,1fr);
+	grid-gap: 13px;
+	margin-bottom: 0;
 }
+.cardHeader h6 {
+font-size: 16px; }
+
+.navigation {
+width: 100%;
+left: -100%;
+z-index: 1000;
+}
+.navigation.active {
+width: 100%;
+left: 0;
+}
+.toggle {
+z-index: 10001;
+}
+.main.active .toggle {
+color: #fff;
+}	
+
 @media (min-width: 768px) and (max-width: 970px) {.quick-actions_homepage .quick-actions li{ min-width:20.5%;}}
 @media (min-width: 481px) and (max-width: 767px) {
 	#sidebar > ul ul:before {
@@ -74,3 +116,4 @@ div.tagsinput input { width:80px; margin:0px; font-family: helvetica; font-size:
 div.tagsinput div { display:block; float: left; } 
 .tags_clear { clear: both; width: 100%; height: 0px; }
 .not_valid {background: #FBD8DB !important; color: #90111A !important;}
+}

@@ -1,3 +1,4 @@
+<div class="new122" style="margin-top: 0; min-height: 100vh">
 <link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
@@ -5,10 +6,8 @@
     <form method="get" action="<?= current_url(); ?>">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
             <div class="span3">
-                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="btn btn-success span12">
-                    <i class="fas fa-plus"></i>
-                    Adicionar Arquivo
-                </a>
+                <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="button btn btn-mini btn-success" style="max-width:150px">
+                  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Arquivo</span></a>
             </div>
         <?php endif ?>
 
@@ -20,14 +19,14 @@
             <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= $this->input->get('data2') ?>">
         </div>
         <div class="span1">
-            <button class="span12 btn"> <i class="fas fa-search"></i> </button>
+          <button class="button btn btn-mini btn-warning" style="min-width: 30px"><span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
         </div>
     </form>
 </div>
 
 <div class="span12" style="margin-left: 0">
     <div class="widget-box">
-        <div class="widget-title">
+        <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-hdd"></i>
             </span>
@@ -52,7 +51,7 @@
 
                     if (!$results) {
                         echo '<tr>
-                                <td colspan="5">Nenhum Arquivo Encontrado</td>
+                                <td colspan="8">Nenhum Arquivo Encontrado</td>
                             </tr>';
                     }
                     foreach ($results as $r) : ?>
@@ -71,20 +70,15 @@
                             <td><?= $r->tamanho ?> KB</td>
                             <td><?= $r->tipo ?></td>
                             <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                    <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn tip-top" style="margin-right: 1%" title="Download">
-                                        <i class="fas fa-download"></i>
-                                    </a>
+                                    <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
                                 <?php endif ?>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                    <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn btn-info tip-top" style="margin-right: 1%" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
                                 <?php endif ?>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
-                                    <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn btn-danger tip-top" title="Excluir Arquivo">
-                                        <i class="fas fa-trash-alt"></i>
+                                    <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
                                     </a>
                                 <?php endif ?>
                             </td>
@@ -108,9 +102,10 @@
             <input type="hidden" id="idDocumento" name="id" value="" />
             <h5 style="text-align: center">Deseja realmente excluir este arquivo?</h5>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Excluir</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
+              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
@@ -126,3 +121,5 @@
         });
     });
 </script>
+
+</div>

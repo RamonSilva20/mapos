@@ -1,7 +1,6 @@
 <?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
-
 class Mapos extends MY_Controller
 {
 
@@ -25,6 +24,7 @@ class Mapos extends MY_Controller
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
+        $this->data['financeiro_mes_dia'] = $this->mapos_model->getEstatisticasFinanceiroDia($this->input->get('year'));
         $this->data['financeiro_mes'] = $this->mapos_model->getEstatisticasFinanceiroMes($this->input->get('year'));
         $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
@@ -128,6 +128,41 @@ class Mapos extends MY_Controller
         $this->load->library('upload');
 
         $image_upload_folder = FCPATH . 'assets/uploads';
+
+        if (!file_exists($image_upload_folder)) {
+            mkdir($image_upload_folder, DIR_WRITE_MODE, true);
+        }
+
+        $this->upload_config = [
+            'upload_path' => $image_upload_folder,
+            'allowed_types' => 'png|jpg|jpeg|bmp',
+            'max_size' => 2048,
+            'remove_space' => true,
+            'encrypt_name' => true,
+        ];
+
+        $this->upload->initialize($this->upload_config);
+
+        if (!$this->upload->do_upload()) {
+            $upload_error = $this->upload->display_errors();
+            print_r($upload_error);
+            exit();
+        } else {
+            $file_info = [$this->upload->data()];
+            return $file_info[0]['file_name'];
+        }
+    }
+
+    public function do_upload_user()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+        $this->load->library('upload');
+
+        $image_upload_folder = FCPATH . 'assets/userImage/';
 
         if (!file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
@@ -276,6 +311,39 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
         }
         redirect(site_url('mapos/emitente'));
+    }
+
+    public function uploadUserImage()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para mudar a foto.');
+            redirect(base_url());
+        }
+
+        $id = $this->session->userdata('id');
+        if ($id == null || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
+            redirect(site_url('mapos/minhaConta'));
+        }
+
+        $usuario = $this->mapos_model->getById($id);
+        
+        if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
+            unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
+        }
+
+        $image = $this->do_upload_user();
+        $imageUserPath = $image;
+        $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
+        
+        if ($retorno) {
+            $this->session->set_userdata('url_image_user', $imageUserPath);
+            $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
+            log_info('Alterou a Imagem do Usuario.');
+        } else {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
+        }
+        redirect(site_url('mapos/minhaConta'));
     }
 
     public function emails()

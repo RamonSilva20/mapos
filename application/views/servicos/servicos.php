@@ -1,9 +1,11 @@
-<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) { ?>
-    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Serviço</a>
+<div class="new122">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) { ?>
+    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Add. Serviços</span></a>
 <?php } ?>
 
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-wrench"></i>
         </span>
@@ -12,8 +14,8 @@
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>
-                <tr style="backgroud-color: #2D335B">
-                    <th>Cod. Serviço</th>
+                <tr>
+                    <th>Cod.</th>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>
@@ -35,10 +37,10 @@
                         echo '<td>' . $r->descricao . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="fas fa-edit"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn-nwe3" title="Editar Serviço"><i class="bx bx-edit bx-xs"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" servico="' . $r->idServicos . '" class="btn btn-danger tip-top" title="Excluir Serviço"><i class="fas fa-trash-alt"></i></a>  ';
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" servico="' . $r->idServicos . '" class="btn-nwe4" title="Excluir Serviço"><i class="bx bx-trash-alt bx-xs"></i></a>  ';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -46,6 +48,7 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 <?php echo $this->pagination->create_links(); ?>
 
@@ -60,9 +63,9 @@
             <input type="hidden" id="idServico" name="id" value="" />
             <h5 style="text-align: center">Deseja realmente excluir este serviço?</h5>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Excluir</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+          <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+          <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
