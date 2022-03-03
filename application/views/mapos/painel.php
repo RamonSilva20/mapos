@@ -15,8 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.min.js"
- integrity="sha512-R/QOHLpV1Ggq22vfDAWYOaMd5RopHrJNMxi8/lJu8Oihwi4Ho4BRFeiMiCefn9rasajKjnx9/fTQ/xkWnkDACg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!--Action boxes-->
 <ul class="cardBox">
@@ -65,7 +63,7 @@
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
             <div>
-                <div class="numbers N-tittle">Ordens de Serviço</div>
+                <div class="numbers">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
@@ -189,7 +187,7 @@
 
                     <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
                     <?php if ($estatisticas_financeiro != null) {
-                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
@@ -211,8 +209,9 @@
                                     </div>
                                 </a>
                             <?php endif ?>
-                            <?php  }
-                        } ?>
+
+                    <?php  }
+} ?>
                 </div>
             </div>
         </div>
@@ -255,24 +254,11 @@
 <?php  }
 } ?>
 <script type="text/javascript">
-
-        if(window.outerWidth > 2000) {
-            Chart.defaults.font.size = 15;
-        };
-        if(window.outerWidth < 2000 && window.outerWidth > 1367) {
-            Chart.defaults.font.size = 11;
-        };
-        if(window.outerWidth < 1367 && window.outerWidth > 480 ) {
-            Chart.defaults.font.size = 9.5;
-        };
-        if(window.outerWidth < 480 ) {
-            Chart.defaults.font.size = 8.5;
-        };
-
     var ctx = document.getElementById('myChart').getContext('2d');
     var StatusOS = document.getElementById('statusOS').getContext('2d');
 
     var myChart = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
@@ -357,80 +343,53 @@
             ]
 
         },
-
-        // configuração
-        type: 'bar',
         options: {
-            locale: 'pt-BR',
-            scales: {
-                y: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }). format(value);
-                        }
-                    },
-                    beginAtZero: true,
-                    /*title: {
-                        display: true,
-                        text: 'Reais'
-                    } */
-                },
-                x: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Meses'
-                    }
-                }
-            },
-
             plugins: {
-                tooltip: {
-                    callbacks: {
-                        beforeTitle: function(context) {
-                            return 'Referente ao mês de';
-                        }
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            size: 9
+                        },
                     }
                 },
-               /* datalabels: {
-                   anchor: (context) => {
-                       const anchor = [];
-                       if (context.dataset.data[context.dataIndex] >= 0) {
-                           anchor.push('end');
-                       } else {
-                           anchor.push('start');
-                       }
-                       return anchor;
-                       },
-
-                       align: (context) => {
-                           const align = [];
-                           if (context.dataset.data[context.dataIndex] >= 0) {
-                               align.push('top');
-                            } else {
-                                align.push('bottom');
-                            }
-                            return align;
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        acaleLabel: {
+                            display: true,
+                            labelString: 'Meses',
+                            fontColor: '#000000',
+                            fontSize: 10
                         },
-                    }, */
-
-                    legend: {
-                        position: "bottom",
-                        labels: {
-                            usePointStyle: true,
-
+                        ticks: {
+                            fontColor: "red",
+                            fontSize: 20
                         }
-                    }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Reais',
+                            fontColor: '#000000',
+                            fontSize: 10
+                        },
+                        ticks: {
+                            fontColor: "red",
+                            fontSize: 20
+                        }
+                    }]
                 }
-            },
-        /*  plugins: [ChartDataLabels] */
+
+            }
+        }
     });
 
+
     var myChart = new Chart(statusOS, {
+        type: 'polarArea',
         data: {
             labels: [
                 'Receita total', 'Receita pendente',
@@ -459,41 +418,26 @@
                 borderWidth: 1
             }]
         },
-         // configuração
-        type: 'polarArea',
         options: {
-            locale: 'pt-BR',
-            scales: {
-                r: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }). format(value);
-                        }
-                    },
-                    beginAtZero: true,
-                }
-            },
             plugins: {
                 legend: {
                     position: "bottom",
                     labels: {
                         usePointStyle: true,
+                        font: {
+                            size: 9
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
 
                     }
                 }
             }
         }
-    }
-    );
-
-    function responsiveFonts(){
-        myChart.update();
-    }
-
+    });
 </script>
 </div>
 </div>
@@ -513,7 +457,7 @@
                             <th>Produto</th>
                             <th>Preço de Venda</th>
                             <th>Estoque</th>
-                            <th class="ph3">Estoque Mínimo</th>
+                            <th>Estoque Mínimo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -524,7 +468,7 @@
                                     <td>
                                         <?= $p->idProdutos ?>
                                     </td>
-                                    <td class="cli1">
+                                    <td>
                                         <?= $p->descricao ?>
                                     </td>
                                     <td>R$
@@ -533,15 +477,16 @@
                                     <td>
                                         <?= $p->estoque ?>
                                     </td>
-                                    <td class="ph3">
+                                    <td>
                                         <?= $p->estoqueMinimo ?>
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3" title="Editar Estoque">
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
                                                 <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque"><i class="bx bx-plus-circle"></i></a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                                <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -585,21 +530,19 @@
                                     <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
                                 </td>
 
-                                <td>
-                                    <?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } 
-                                else {
-                                    echo "";
-                                    } ?>
-                                </td>
+                                <td><?php if ($o->dataFinal != null) {
+    echo date('d/m/Y', strtotime($o->dataFinal));
+} else {
+    echo "";
+} ?></td>
 
-                                <td class="cli1">
+                                <td>
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe" title="Visualizar Ordem em Aberto"><i class="bx bx-show"></i></a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -643,12 +586,13 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td class="cli1">
+                                <td>
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe" title="Visualizar Ordem Aguardando Peça"><i class="bx bx-show"></i></a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -691,12 +635,13 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td class="cli1">
+                                <td>
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe" title="Visualizar Ordem em Andamento"><i class="bx bx-show"></i></a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>

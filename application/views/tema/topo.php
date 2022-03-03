@@ -56,7 +56,8 @@
   </script>
 
 </head>
-<body onresize="responsiveFonts()">
+
+<body>
 <!--top-Header-menu-->
 <div class="navebarn">
   <div id="user-nav" class="navbar navbar-inverse">
@@ -115,7 +116,7 @@
         return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
     }
 } $login = '';
-    echo saudacao($login); // Irá retornar conforme o horário:?>,
+    echo saudacao($login); // Irá retornar conforme o horário:?>
   </div>
   <div class="userT"><?= $this->session->userdata('nome') ?></div>
 

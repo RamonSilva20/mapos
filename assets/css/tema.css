@@ -82,7 +82,7 @@ body {
 }
 
 #sidebar {
-  background  : var(--bodycolor-w);
+  background  : var(--funSider-w);
   border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -175,12 +175,12 @@ body {
 }
 
 #sidebar .search-box {
-  background: var(--bodycolor-w);
+  background: var(--widget-box-w);
   border    : 1px solid rgb(0 0 0 / 20%);
 }
 
 .search-box input {
-  background: var(--bodycolor-w);
+  background: var(--widget-box-w);
   color: var(--widget-box-c);
 }
 
@@ -266,13 +266,6 @@ body {
 }
 
 /* Responsive design */
-@media (min-width: 481px) and (max-width: 768px) {
-  #sidebar .mode {
-    background: #ffffff30 !important;
-    color     : #51576c !important;
-  }
-}
-
 @media (max-width: 480px) {
   #sidebar.open .toggle {
     background: var(--funSider-w);
