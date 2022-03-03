@@ -14,6 +14,7 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
@@ -122,9 +123,9 @@
 
                         <div class="form-actions">
                             <div class="span12">
-                                <div class="span6 offset3">
-                                    <button type="submit" class="btn btn-success btn-large"><i class="fas fa-plus"></i> Cadastrar</button>
-                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="btn btn-large"><i class="fas fa-lock"></i> Acessar</a>
+                                <div class="span6 offset3" style="display:flex;justify-content: center">
+                                    <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
+                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt' ></i></span><span class="button__text2">Acessar</span></a>
                                 </div>
                             </div>
                         </div>
