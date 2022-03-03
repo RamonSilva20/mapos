@@ -478,7 +478,7 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade. '. Motivo: Cancelamento/Exclusão');
                 }
             }
         }
@@ -518,7 +518,7 @@ class Os extends MY_Controller
                 if ($this->data['configuration']['control_estoque']) {
                     foreach ($produtos as $p) {
                         $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                        log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
+                        log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade. '. Motivo: Cancelamento/Exclusão');
                     }
                 }
             }
