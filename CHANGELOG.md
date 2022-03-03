@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.36.2] - 2022-03-02
+
+### Fixed
+
+- Corrigido ícones em ações de detalhes/visualizar/atualizar cobranças. [@Wilmerson](https://github.com/willph)
+
 ## [4.36.1] - 2022-02-23
 
 ### Fixed
