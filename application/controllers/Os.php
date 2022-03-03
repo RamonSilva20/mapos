@@ -510,15 +510,20 @@ class Os extends MY_Controller
             }
         }
 
-        if ($produtos = $this->os_model->getProdutos($id)) {
-            $this->load->model('produtos_model');
-            if ($this->data['configuration']['control_estoque']) {
-                foreach ($produtos as $p) {
-                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
+        $osStockRefund = $this->os_model->getById($id);
+        //Verifica para poder fazer a devolução do produto para o estoque caso OS seja excluida.
+        if (strtolower($osStockRefund->status) != "cancelado") {
+            if ($produtos = $this->os_model->getProdutos($id)) {
+                $this->load->model('produtos_model');
+                if ($this->data['configuration']['control_estoque']) {
+                    foreach ($produtos as $p) {
+                        $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                        log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
+                    }
                 }
             }
         }
+
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
