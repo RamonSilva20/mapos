@@ -18,15 +18,20 @@
 <!-- Saudação -->
 <h1 class="h-one">
     <?php
-    function saudacao( $nome = '' ) {
-	date_default_timezone_set('America/Sao_Paulo');
-	$hora = date('H');
-	if( $hora >= 6 && $hora <= 12 ) return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
-	else if ( $hora > 12 && $hora <=18  ) return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
-	else return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
-}
+    function saudacao($nome = '')
+    {
+        date_default_timezone_set('America/Sao_Paulo');
+        $hora = date('H');
+        if ($hora >= 6 && $hora <= 12) {
+            return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+        } elseif ($hora > 12 && $hora <=18) {
+            return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+        } else {
+            return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+        }
+    }
 $login = 'bem-vindos';
-echo saudacao( $login );
+echo saudacao($login);
 
 // Irá retornar conforme o horário:
 ?></h1>
