@@ -1,6 +1,6 @@
 <div id="content">
 <!--start-top-serch-->
-  <div id="content-header">  
+  <div id="content-header">
 <!-- New Bem-vindos -->
    <div class="bemv">Dashboard</div>
       <div id="breadcrumb">
@@ -16,7 +16,7 @@
           <?php } ?>
       </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-flu">
       <div class="row-fluid">
         <div class="span12">
           <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
@@ -28,4 +28,3 @@
       </div>
     </div>
   </div>
-

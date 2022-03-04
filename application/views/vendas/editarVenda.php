@@ -71,8 +71,8 @@
                                               <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
                                               <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning">
-                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning" style="width: 32px !important;min-width: 32px">
+                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>

@@ -47,7 +47,7 @@
                             <button class="button btn btn-success" id="btnContinuar">
                               <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                             <a href="<?php echo base_url() ?>index.php/garantias" class="button btn btn-mini btn-warning">
-                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
+                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </form>
