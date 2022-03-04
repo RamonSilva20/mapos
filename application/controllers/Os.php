@@ -228,10 +228,13 @@ class Os extends MY_Controller
             $os = $this->os_model->getById($this->input->post('idOs'));
 
             //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
-            if (strtolower($os->status) != "cancelado") {
-                if (strtolower($this->input->post('status')) == "cancelado") {
-                    $this->devolucaoEstoque($this->input->post('idOs'));
-                }
+
+            if (strtolower($this->input->post('status')) == "cancelado" && strtolower($os->status) != "cancelado") {
+                $this->devolucaoEstoque($this->input->post('idOs'));
+            }
+
+            if (strtolower($os->status) == "cancelado" && strtolower($this->input->post('status')) != "cancelado") {
+                $this->debitarEstoque($this->input->post('idOs'));
             }
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
@@ -478,7 +481,20 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade. '. Motivo: Cancelamento/Exclusão');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade . '. Motivo: Cancelamento/Exclusão');
+                }
+            }
+        }
+    }
+
+    private function debitarEstoque($id)
+    {
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' baixa do estoque. Quantidade: ' . $p->quantidade . '. Motivo: Mudou status que já estava Cancelado para outro');
                 }
             }
         }
@@ -513,17 +529,8 @@ class Os extends MY_Controller
         $osStockRefund = $this->os_model->getById($id);
         //Verifica para poder fazer a devolução do produto para o estoque caso OS seja excluida.
         if (strtolower($osStockRefund->status) != "cancelado") {
-            if ($produtos = $this->os_model->getProdutos($id)) {
-                $this->load->model('produtos_model');
-                if ($this->data['configuration']['control_estoque']) {
-                    foreach ($produtos as $p) {
-                        $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                        log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade. '. Motivo: Cancelamento/Exclusão');
-                    }
-                }
-            }
+            $this->devolucaoEstoque($id);
         }
-
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
