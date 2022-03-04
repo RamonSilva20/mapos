@@ -634,7 +634,7 @@ hr {
 #sidebar .mode {
   position       : absolute;
   top            : 17px;
-  right          : -35px;
+  right          : -32px;
   transform      : translateY(-50%) rotate(180deg);
   display        : flex;
   align-items    : center;
@@ -1551,8 +1551,9 @@ section .profile .profile-img {
 .fc-event.fc-event-draggable,
 .fc-event[href] {
   border-radius: 8px;
-  color        : #333649;
-  background   : #c5d1d6;
+  color        : #76818d;
+  background   : #f3f4f6;
+  border-color : #76818d;
 }
 
 .fc .fc-daygrid-day-top {
@@ -1803,7 +1804,7 @@ div.dataTables_wrapper .ui-widget-header {
 }
 
 .widget-content {
-  padding: 16px 8px;
+  padding: 16px 15px;
 }
 
 .widget-box.widget-plain .widget-content {
@@ -2975,7 +2976,7 @@ form {
 
   #content {
     margin-left: 80px;
-    padding    : 0 1.2rem 0 1.2rem;
+    padding    : 0 1.6rem 0 1.6em;
   }
 
   #userr .userT0 {
@@ -3343,7 +3344,7 @@ form {
   }
 
   #sidebar.open .mode {
-    right: -45px;
+    right: -41px;
   }
 
   .navebarn {
