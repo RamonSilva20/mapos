@@ -61,7 +61,7 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span8 offset2" style="text-align: center;display:flex">
+                                        <div class="span8 offset2" style="text-align: center;display:flex; flex-wrap: wrap">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
                                                   <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
@@ -71,8 +71,8 @@
                                               <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
                                               <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning" style="width: 32px !important;min-width: 32px">
-                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
+                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
