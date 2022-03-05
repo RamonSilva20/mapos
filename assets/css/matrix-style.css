@@ -2925,7 +2925,7 @@ form {
   }
 
   .navebarn {
-    margin-left: 110px;
+    margin-left: 105px;
   }
 
   #newlog {
@@ -2974,6 +2974,11 @@ form {
     margin: 0 20px 5px 20px;
   }
 
+  #sidebar.open #newlog .title1 {
+    width: 100px !important;
+    display: inherit;
+  }
+
   #content {
     margin-left: 80px;
     padding    : 0 1.6rem 0 1.6rem;
@@ -2990,11 +2995,6 @@ form {
 
   #newlog .title1 {
     display: none;
-  }
-
-  #sidebar.open #newlog .title1 {
-    width: 100px !important;
-    display: inherit;
   }
 
   section .profile .profile-img {
@@ -3033,6 +3033,18 @@ form {
     font-size: 0.67em;
   }
 
+  .cardBox {
+    margin-bottom: 0;
+  }
+
+  .cardBox .card {
+    padding: 15px 10px;
+  }
+
+  .cardBox .card-cl .clock-card .colun {
+    padding: 0 0px 15px 0px;
+  }
+
   .cardBox .card-cl .clock-card .clock-flex .num {
     font-size: 1.5rem;
   }
@@ -3042,22 +3054,79 @@ form {
     padding  : 0 0 0 12px;
   }
 
-  #newlog .icon2 {
-    width: 35px;
-  }
-
   section .profile .profile-img {
     height: 23px;
     width: 23px;
   }
 
-  #sidebar, #sidebar>ul {
-    width  : 82px;
+  #sidebar.open {
+    width: 200px;
   }
 
-  #sidebar li .title {
-    font-size: 0;
+  #sidebar {
+    width: 82px;
   }
+
+  #sidebar li {
+    margin-top: 1px;
+  }
+
+  #sidebar li .iconX {
+    min-width: 41px;
+  }
+
+  #sidebar .title {
+    opacity: 0 !important;
+  }
+
+  #sidebar.open .title {
+    opacity: 1 !important;
+  }
+
+  #sidebar .mode {
+    top: 16px;
+  }
+
+  #sidebar.open .mode {
+      right  : -6px;
+      z-index: 999999;
+  }
+
+  #sidebar .search-box {
+    margin: 35px 20px 8px 20px;
+  }
+
+  #sidebar .botton-content {
+    margin: 0 20px 5px 20px;
+  }
+
+  #sidebar.open #newlog .title1 {
+    width: 100px !important;
+    display: inherit;
+  }
+
+  #content {
+    margin-left: 80px;
+    padding    : 0 1.6rem 0 1.6rem;
+  }
+
+  #userr .userT0 {
+    font-size: 1.2em;
+  }
+
+  .navebarn {
+    margin-left: 105px;
+  }
+
+  #newlog {
+    padding: 0 21px;
+  }
+
+  #newlog .icon2 {
+    width     : 33px !important;
+    transition: var(--tran-05);
+  }
+
   #newlog .title1 {
     display: none;
   }
@@ -3071,40 +3140,19 @@ form {
     grid-gap: 0;
   }
 
-  .cardBox .card {
-    padding: 15px 10px;
-  }
-
-  .cardBox .card-cl .clock-card .colun {
-    padding: 0 0px 15px 0px;
-  }
-
-  .navebarn {
-    margin-left: 85px;
-  }
-
-  #content {
-    margin-left: 82px;
-    padding: 0 1rem 0 1rem !important;
-  }
-
-  #newlog {
-    padding: 0 21px;
-  }
-
   .row-fluid .Sspan12 {
     grid-template-columns: 3fr 1fr;
     grid-gap: 12px;
   }
 
-  #sidebar li .iconX {
-    min-width: 41px;
-  }
-
   [class*="span"],
   .row-fluid [class*="span"] {
     float      : left;
-    /*margin-left: 0;*/
+  }
+
+  .new-balance {
+    grid-gap: 12px;
+    margin-top: 12px;
   }
 
   .span12A {
@@ -3574,8 +3622,15 @@ form {
     padding-left : 0 !important;
   }
 
+  .N-tittle {
+    max-width    : 64px;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+  }
+
   .cardBox .card {
-    padding        : 15px;
+    padding        : 15px 20px;
     box-shadow     : none;
     justify-content: space-between;
   }
@@ -3657,7 +3712,11 @@ form {
   }
 
   #userr .userT {
-    font-size: 1.13em;
+    font-size    : 1.13em;
+    max-width    : 115px;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
   }
 
   .cardHeader {
