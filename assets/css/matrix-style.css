@@ -684,7 +684,7 @@ hr {
 }
 
 #sidebar .botton-content {
-  margin: 0 20px 20px 20px;
+  margin: 0 20px 35px 20px;
 }
 
 .search-box input {
@@ -2955,10 +2955,12 @@ form {
 
   #sidebar .title {
     opacity: 0 !important;
+    display: none;
   }
 
   #sidebar.open .title {
     opacity: 1 !important;
+    display: block;
   }
 
   #sidebar.open .mode {
@@ -2968,10 +2970,6 @@ form {
 
   #sidebar .search-box {
     margin: 35px 20px 8px 20px;
-  }
-
-  #sidebar .botton-content {
-    margin: 0 20px 5px 20px;
   }
 
   #sidebar.open #newlog .title1 {
@@ -3077,10 +3075,12 @@ form {
 
   #sidebar .title {
     opacity: 0 !important;
+    display: none;
   }
 
   #sidebar.open .title {
     opacity: 1 !important;
+    display: block;
   }
 
   #sidebar .mode {
@@ -3094,10 +3094,6 @@ form {
 
   #sidebar .search-box {
     margin: 35px 20px 8px 20px;
-  }
-
-  #sidebar .botton-content {
-    margin: 0 20px 5px 20px;
   }
 
   #sidebar.open #newlog .title1 {
@@ -3196,6 +3192,11 @@ form {
   }
 
   #sidebar .content {
+    display: none;
+  }
+
+  #sidebar .title {
+    opacity: 0 !important;
     display: none;
   }
 }
@@ -3376,9 +3377,10 @@ form {
   }
 
   #sidebar.open .title {
-    opacity   : 1;
+    opacity   : 1 !important;
     font-size : 1.05em;
     transition: var(--tran-03);
+    display: block;
   }
 
   #sidebar .mode {
@@ -3912,7 +3914,8 @@ form {
   }
 
   #sidebar.open .title {
-    opacity    : 1;
+    opacity    : 1 !important;
+    display    : block;
     transition : var(--tran-04);
     font-size  : 1.2em;
     font-weight: 400;

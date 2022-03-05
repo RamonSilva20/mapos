@@ -14,8 +14,6 @@ setInterval(() => {
     hour = hour < 10 ? "0" + hour : hour;
     min = min < 10 ? "0" + min : min;
 
-    console.log(min);
-
     document.querySelector(".hour_num").innerText = hour;
     document.querySelector(".min_num").innerText = min;
     document.querySelector(".am_pm").innerText = d;
