@@ -41,6 +41,7 @@ body * {
   align-items    : center;
   justify-content: center;
   margin-bottom  : 7px;
+  grid-column-gap: 5px;
 }
 
 #newlog .icon2 {
@@ -260,20 +261,12 @@ input:focus {
   text-align: center;
 }
 
-@media only screen and (max-width: 600px) {
+@media (min-width: 375px) and (max-width: 800px) {
   .main-login {
     flex-direction: column;
   }
-  .left-login > h1 {
-    font-size: 2em;
-  }
-  .left-login > h2 {
-    font-size : 1.1em;
-    margin-top: -28px;
-  }
+
   .left-login {
-    width  : 100%;
-    height : auto;
     display: none;
   }
   .right-login {
@@ -294,5 +287,21 @@ input:focus {
   }
   .main-login {
     justify-content: center;
+  }
+}
+
+@media (max-width: 374px) {
+  .main-login {
+    background: var(--violeta0);
+  }
+
+  .left-login {
+    display: none;
+  }
+
+  .container .card {
+    background: transparent;
+    border-radius: none;
+    box-shadow: none;
   }
 }

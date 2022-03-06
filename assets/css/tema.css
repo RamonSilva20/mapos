@@ -83,7 +83,7 @@ body {
 
 #sidebar {
   background  : var(--bodycolor-w);
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 #sidebar > ul {
@@ -203,11 +203,11 @@ body {
 }
 
 .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
-  background: #c5d1d6;
+  background: #f3f4f6;
 }
 
 .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
-  background: #c5d1d6;
+  background: #f3f4f6;
 }
 
 .btn [class^="icon-"],

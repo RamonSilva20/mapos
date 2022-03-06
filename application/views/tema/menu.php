@@ -19,7 +19,7 @@
     <!-- Start Pesquisar-->
     <li class="search-box">
         <form style="display: flex" action="<?= site_url('mapos/pesquisar') ?>">
-            <button style="background: transparent;border: transparent" type="submit" class="tip-bottom" title="Pesquisar">
+            <button style="background: transparent;border: transparent" type="submit" class="tip-bottom" title="">
                 <i class='bx bx-search iconX'></i></button>
             <input type="search" name="termo" placeholder="Pesquise aqui...">
         </form>
@@ -33,7 +33,7 @@
                 <li class="<?php if (isset($menuPainel)) {
     echo 'active';
 }; ?>">
-                    <a href="<?= base_url() ?>"><i class='bx bx-home-alt iconX'></i>
+                    <a class="tip-bottom" title="" href="<?= base_url() ?>"><i class='bx bx-home-alt iconX'></i>
                         <span class="title nav-title">Início</span></a>
                 </li>
 
@@ -41,7 +41,7 @@
                     <li class="<?php if (isset($menuClientes)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('clientes') ?>"><i class='bx bx-group iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('clientes') ?>"><i class='bx bx-group iconX'></i>
                             <span class="title">Cliente / Fornecedor</span></a>
                     </li>
                 <?php } ?>
@@ -50,7 +50,7 @@
                     <li class="<?php if (isset($menuProdutos)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('produtos') ?>"><i class='bx bx-package iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('produtos') ?>"><i class='bx bx-package iconX'></i>
                             <span class="title">Produtos</span></a>
                     </li>
                 <?php } ?>
@@ -59,7 +59,7 @@
                     <li class="<?php if (isset($menuServicos)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('servicos') ?>"><i class='bx bx-stopwatch iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('servicos') ?>"><i class='bx bx-stopwatch iconX'></i>
                             <span class="title">Serviços</span></a>
                     </li>
                 <?php } ?>
@@ -68,7 +68,7 @@
                     <li class="<?php if (isset($menuVendas)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('vendas') ?>"><i class='bx bx-cart-alt iconX'></i></span>
+                        <a class="tip-bottom" title="" href="<?= site_url('vendas') ?>"><i class='bx bx-cart-alt iconX'></i></span>
                             <span class="title">Vendas</span></a>
                     </li>
                 <?php } ?>
@@ -77,7 +77,7 @@
                     <li class="<?php if (isset($menuOs)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('os') ?>"><i class='bx bx-spreadsheet iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('os') ?>"><i class='bx bx-spreadsheet iconX'></i>
                             <span class="title">Ordens de Serviço</span></a>
                     </li>
                 <?php } ?>
@@ -86,7 +86,7 @@
                     <li class="<?php if (isset($menuGarantia)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('garantias') ?>"><i class='bx bx-receipt iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('garantias') ?>"><i class='bx bx-receipt iconX'></i>
                             <span class="title">Termos de Garantias</span></a>
                     </li>
                 <?php } ?>
@@ -95,7 +95,7 @@
                     <li class="<?php if (isset($menuArquivos)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('arquivos') ?>"><i class='bx bx-box iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('arquivos') ?>"><i class='bx bx-box iconX'></i>
                             <span class="title">Arquivos</span></a>
                     </li>
                 <?php } ?>
@@ -104,7 +104,7 @@
                     <li class="<?php if (isset($menuLancamentos)) {
     echo 'active';
 }; ?>">
-                        <a href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-square iconX"></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-square iconX"></i>
                             <span class="title">Lançamentos</span></a>
                     </li>
                 <?php } ?>
@@ -112,7 +112,7 @@
                 <li class="<?php if (isset($menuCobrancas)) {
     echo 'active';
 }; ?>">
-                    <a href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
+                    <a class="tip-bottom" title="" href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
                         <span class="title">Cobranças</span></a>
                 </li>
                 <?php } ?>
@@ -121,7 +121,7 @@
 
         <div class="botton-content">
             <li class="">
-                <a href="<?= site_url('login/sair'); ?>">
+                <a class="tip-bottom" title="" href="<?= site_url('login/sair'); ?>">
                     <i class='bx bx-log-out-circle iconX'></i>
                     <span class="title">Sair</span></a>
             </li>
