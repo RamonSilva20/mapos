@@ -58,8 +58,7 @@
                 </div>
             <?php } ?>
 
-    <div class="d-flex flex-column justify-content-center w-100 h-100">
-        <div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column">
             <div class="right-login">
                 <div class="container">
                     <div class="card card-cad">
@@ -100,7 +99,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
     <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
