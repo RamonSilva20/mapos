@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `telefone` VARCHAR(20) NOT NULL,
   `celular` VARCHAR(20) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
   `dataCadastro` DATE NULL DEFAULT NULL,
   `rua` VARCHAR(70) NULL DEFAULT NULL,
   `numero` VARCHAR(15) NULL DEFAULT NULL,
@@ -43,7 +44,16 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
-
+CREATE TABLE `resets_de_senha` ( 
+  `id` INT(11) NOT NULL ,
+  `email` VARCHAR(200) NOT NULL , 
+  `token` VARCHAR(255) NOT NULL , 
+  `data_expiracao` DATETIME NOT NULL, 
+  `token_utilizado` TINYINT NOT NULL 
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = latin1;
 
 -- -----------------------------------------------------
 -- Table `categorias`

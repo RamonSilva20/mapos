@@ -21,49 +21,95 @@ class Mine extends CI_Controller
         redirect('mine');
     }
 
-    public function login()
+    public function resetarSenha()
     {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'Email', 'valid_email|required|trim');
-        $this->form_validation->set_rules('documento', 'Documento', 'required|trim');
-        $ajax = $this->input->get('ajax');
-        if ($this->form_validation->run() == false) {
-            if ($ajax == true) {
-                $json = ['result' => false];
+        $this->load->view('conecte/resetar_senha');
+    }
+
+    public function verifyTokenSenha()
+    {
+        $token = $this->uri->uri_to_assoc(3);
+        $tokenGet = $this->check_token($token["token"]);
+
+        if ($tokenGet == null || $tokenGet == "") {
+            $json = ['result' => false, 'message' => 'Token invalido'];
+            echo json_encode($json);
+        } else {
+            $dateStart = new \DateTime($tokenGet->created_forgot_at);
+            $dateNow   = new \DateTime(date('Y-m-d'));
+
+            $dateDiff = $dateStart->diff($dateNow);
+
+            if ($dateDiff->days >= 1) {
+                $json = ['result' => false, 'message' => 'Token expirado'];
                 echo json_encode($json);
             } else {
-                $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
-                redirect('mine');
+                return $this->load->view('conecte/nova_senha');
             }
+        }
+    }
+
+    public function gerarTokenResetarSenha()
+    {
+        if (!$cliente = $this->check_credentials($this->input->post('email'))) {
+            $json = ['error' => 'Os dados de acesso estão incorretos.'];
+            $this->session->set_flashdata($json);
+            redirect($_SERVER['HTTP_REFERER']);
+        } else {
+            $this->load->helper('string');
+            $this->load->model('resetSenhas_model', '', true);
+            $data = [
+                'email' => $cliente->email,
+                'token' => random_string('alnum', 32),
+                'data_expiracao' => date("Y-m-d H:i:s"),
+            ];
+            if ($this->resetSenhas_model->add('resets_de_senha', $data) == true) {
+                $this->enviarRecuperarSenha($cliente->idClientes, $cliente->email, "Recuperar Senha");
+                $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $cliente->email);
+                redirect(base_url() . 'index.php/mine');
+            } else {
+                $this->session->set_flashdata('error', 'Falha ao realizar solicitação!');
+                redirect(current_url());
+            }
+        }
+    }
+
+    public function login()
+    {
+        header('Access-Control-Allow-Origin: ' . base_url());
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        header('Access-Control-Max-Age: 1000');
+        header('Access-Control-Allow-Headers: Content-Type');
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
+        $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
+        if ($this->form_validation->run() == false) {
+            $json = ['result' => false, 'message' => validation_errors()];
+            echo json_encode($json);
         } else {
             $email = $this->input->post('email');
-            $documento = $this->input->post('documento');
+            $password = $this->input->post('senha');
+            $cliente = $this->check_credentials($email);
 
-            $this->db->where('email', $email);
-            $this->db->where('documento', $documento);
-            $this->db->limit(1);
-            $cliente = $this->db->get('clientes');
-            if ($cliente->num_rows() > 0) {
-                $cliente = $cliente->row();
-                $dados = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
-                $this->session->set_userdata($dados);
-
-                if ($ajax == true) {
+            if ($cliente) {
+                // Verificar credenciais do usuário
+                if (password_verify($password, $cliente->senha)) {
+                    $session_data = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
+                    $this->session->set_userdata($session_data);
+                    log_info($_SERVER['HTTP_CLIENT_IP'] . 'Efetuou login no sistema');
                     $json = ['result' => true];
                     echo json_encode($json);
                 } else {
-                    redirect(site_url() . '/mine');
+                    $json = ['result' => false, 'message' => 'Os dados de acesso estão incorretos.'];
+                    echo json_encode($json);
                 }
             } else {
-                if ($ajax == true) {
-                    $json = ['result' => false];
-                    echo json_encode($json);
-                } else {
-                    $this->session->set_flashdata('error', 'Os dados de acesso estão incorretos.');
-                    redirect(site_url() . '/mine');
-                }
+                $json = ['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.'];
+                echo json_encode($json);
             }
         }
+        die();
     }
 
     public function painel()
@@ -106,20 +152,40 @@ class Mine extends CI_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = [
-                'nomeCliente' => $this->input->post('nomeCliente'),
-                'documento' => $this->input->post('documento'),
-                'telefone' => $this->input->post('telefone'),
-                'celular' => $this->input->post('celular'),
-                'email' => $this->input->post('email'),
-                'rua' => $this->input->post('rua'),
-                'numero' => $this->input->post('numero'),
-                'complemento' => $this->input->post('complemento'),
-                'bairro' => $this->input->post('bairro'),
-                'cidade' => $this->input->post('cidade'),
-                'estado' => $this->input->post('estado'),
-                'cep' => $this->input->post('cep'),
-            ];
+            $senha = $this->input->post('senha');
+            if ($senha != null) {
+                $senha = password_hash($senha, PASSWORD_DEFAULT);
+                $data = [
+                    'nomeCliente' => $this->input->post('nomeCliente'),
+                    'documento' => $this->input->post('documento'),
+                    'telefone' => $this->input->post('telefone'),
+                    'celular' => $this->input->post('celular'),
+                    'email' => $this->input->post('email'),
+                    'senha' => $senha,
+                    'rua' => $this->input->post('rua'),
+                    'numero' => $this->input->post('numero'),
+                    'complemento' => $this->input->post('complemento'),
+                    'bairro' => $this->input->post('bairro'),
+                    'cidade' => $this->input->post('cidade'),
+                    'estado' => $this->input->post('estado'),
+                    'cep' => $this->input->post('cep'),
+                ];
+            } else {
+                $data = [
+                    'nomeCliente' => $this->input->post('nomeCliente'),
+                    'documento' => $this->input->post('documento'),
+                    'telefone' => $this->input->post('telefone'),
+                    'celular' => $this->input->post('celular'),
+                    'email' => $this->input->post('email'),
+                    'rua' => $this->input->post('rua'),
+                    'numero' => $this->input->post('numero'),
+                    'complemento' => $this->input->post('complemento'),
+                    'bairro' => $this->input->post('bairro'),
+                    'cidade' => $this->input->post('cidade'),
+                    'estado' => $this->input->post('estado'),
+                    'cep' => $this->input->post('cep'),
+                ];
+            }
 
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
@@ -325,7 +391,7 @@ class Mine extends CI_Controller
 
     public function gerarPagamentoGerencianetBoleto()
     {
-        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        $json = ['code' => 4001, 'error' => 'Erro interno', 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
         print_r(json_encode($json));
 
         return;
@@ -333,7 +399,7 @@ class Mine extends CI_Controller
 
     public function gerarPagamentoGerencianetLink()
     {
-        $json = ['code' => 4001, 'error' => 'Erro interno' , 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
+        $json = ['code' => 4001, 'error' => 'Erro interno', 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente'];
         print_r(json_encode($json));
 
         return;
@@ -499,7 +565,7 @@ class Mine extends CI_Controller
                 }
                 array_push($remetentes, $os->email);
 
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #'.$idOs.' - Criada pelo Cliente');
+                $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #' . $idOs . ' - Criada pelo Cliente');
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
                 redirect('mine/detalhesOs/' . $id);
             } else {
@@ -551,6 +617,7 @@ class Mine extends CI_Controller
                 'telefone' => set_value('telefone'),
                 'celular' => $this->input->post('celular'),
                 'email' => set_value('email'),
+                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
                 'rua' => set_value('rua'),
                 'complemento' => set_value('complemento'),
                 'numero' => set_value('numero'),
@@ -566,7 +633,7 @@ class Mine extends CI_Controller
             if ($id > 0) {
                 $this->enviarEmailBoasVindas($id);
                 $this->enviarEmailTecnicoNotificaClienteNovo($id);
-                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para '.$data['email']);
+                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para ' . $data['email']);
                 redirect(base_url() . 'index.php/mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
@@ -587,6 +654,54 @@ class Mine extends CI_Controller
             $this->zip->read_file($path . '/' . $file->anexo);
             $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
         }
+    }
+
+    private function check_credentials($email)
+    {
+        $this->db->where('email', $email);
+        $this->db->limit(1);
+        return $this->db->get('clientes')->row();
+    }
+
+    private function check_token($token)
+    {
+        $this->db->where('token', $token);
+        $this->db->limit(1);
+        return $this->db->get('resets_de_senha')->row();
+    }
+
+    private function enviarRecuperarSenha($idClientes, $clienteEmail, $assunto)
+    {
+        $dados = [];
+        $this->load->model('mapos_model');
+        $this->load->model('clientes_model', '', true);
+
+        $dados['emitente'] = $this->mapos_model->getEmitente();
+        $dados['cliente'] = $this->clientes_model->getById($idClientes);
+        $dados['resets_de_senha'] = $this->resetSenhas_model->getById($clienteEmail);
+
+        $emitente = $dados['emitente'][0]->email;
+        $emitenteNome = $dados['emitente'][0]->nome;
+        $remetente = $clienteEmail;
+
+        $html = $this->load->view('conecte/emails/clientenovasenha', $dados, true);
+
+        $this->load->model('email_model');
+
+        $headers = [
+            'From' => "\"$emitenteNome\" <$emitente>",
+            'Subject' => $assunto,
+            'Return-Path' => ''
+        ];
+        $email = [
+            'to' => $remetente,
+            'message' => $html,
+            'status' => 'pending',
+            'date' => date('Y-m-d H:i:s'),
+            'headers' => serialize($headers),
+        ];
+
+        return $this->email_model->add('email_queue', $email);
     }
 
     private function enviarOsPorEmail($idOs, $remetentes, $assunto)

@@ -52,6 +52,13 @@
                         </div>
                     </div>
 
+                    <div class="control-group">
+                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar."/>
+                        </div>
+                    </div>
+
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
