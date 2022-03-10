@@ -1,4 +1,4 @@
-<?php  0;
+<?php 0;
 0; ?>
 
 <!doctype html>
@@ -118,7 +118,7 @@
                             <td style="text-align: right">
                                 <br>
                                 <br>
-                                
+
                             </td>
                         </tr>
                     </table>
@@ -143,18 +143,26 @@
             </tr>
 
             <tr class="details">
-            
+
                 <td colspan="4" style="text-align: left">
-                    Caro(a) <b><?= $cliente->nomeCliente ?></b>, 
-                    bem-vindo à <?= $emitente[0]->nome; ?>! <br>
+                    Caro(a) <b><?= $cliente->nomeCliente ?></b>,
+                    <br>
 
                 </td>
 
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Por favor leia as instruções abaixo para mudar sua senha. <br><br>
-                    Clique <a class="btn btn-default" href="<?= base_url() . "index.php/mine/verifyTokenSenha/token/".$resets_de_senha->token ?>">Aqui</a> e nos informe que vai nos enviar seu aparelho; <br>
+                    Por favor, para mudar sua senha. <br><br>
+                    Clique <a class="btn btn-primary stretched-link" href="<?= base_url() . "index.php/mine/verifyTokenSenha/token/" . $resets_de_senha->token ?>">Aqui</a> <br>
+                    Ao carregar a pagina você devera digitar a nova senha.
+                </td>
+            </tr>
+            <tr class="details">
+                <td colspan="4" style="text-align: left">
+                    Caso não funcione o link, por favor acessar <br><br>
+                    <?= base_url() . "index.php/mine/tokenManual"?> <br>
+                    Ao carregar a pagina você devera digitar <strong><?= $resets_de_senha->token ?></strong>
                 </td>
             </tr>
             <tr class="details">
@@ -163,7 +171,7 @@
                     Equipe <?= $emitente[0]->nome; ?>
                 </td>
             </tr>
-            
+
         </table>
     </div>
 </body>

@@ -122,8 +122,6 @@ $parse_cpfcnpj = $this->input->get('c');
     <script type="text/javascript">
         $(document).ready(function() {
 
-
-            $('#email').focus();
             $("#formLogin").validate({
                 rules: {
                     email: {

@@ -29,27 +29,27 @@
                     <span class="icon">
                         <i class="fas fa-user"></i>
                     </span>
-                    <h5>Cadastra Nova Senha</h5>
+                    <h5>Token</h5>
+                </div>
+                <div class="span8 offset2">
+                    <h5>
+                        <span class="required">Digite ou copie e cole o token enviado para seu email.</span>
+                    </h5>
                 </div>
                 <div class="widget-content nopadding tab-content">
+                    <form action="<?php echo base_url() . 'index.php/mine/tokenManual' ?>" id="formCliente" method="post" class="form-horizontal">
 
-                    <form action="" id="formCliente" method="post" class="form-horizontal">
-                        <div class="span8 offset4">
-                            <h5>
-                                <span class="required">Digite sua nova senha.</span>
-                            </h5>
-                        </div>
                         <div class="control-group">
-                            <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                            <label for="token" class="control-label">Token<span class="required">*</span></label>
                             <div class="controls">
-                                <input id="senha" type="password" name="senha" value="" />
+                                <input id="token" type="text" name="token" value="" />
                             </div>
                         </div>
 
                         <div class="form-actions">
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
-                                    <button name="senhaClient" id="senhaClient" type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-lock-open'></i></span><span class="button__text2">Alterar</span></button>
+                                    <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-certification'></i></span><span class="button__text2">Validar</span></button>
                                     <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                                 </div>
                             </div>
@@ -60,51 +60,31 @@
         </div>
     </div>
 
+
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
+    <?php if ($this->session->flashdata('success') != null) { ?>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: '<?php echo $this->session->flashdata('success'); ?>',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        </script>
+    <?php } ?>
 
-            $(document).on('click', '#senhaClient', function(event) {
-                event.preventDefault();
-                var senha = $("input[name='senha']").val();
-                var token = "<?= $token ?>";
-
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url() ?>index.php/mine/senhaSalvar",
-                    dataType: 'json',
-                    data: {
-                        token: token,
-                        senha: senha
-                    },
-                    success: function(data) {
-                        if (data.result == true) {
-                            Swal.fire({
-                                type: "success",
-                                title: "Salvo com Sucesso",
-                                text: data.message
-                            });
-                            window.location.replace("<?php echo base_url() ?>index.php/mine/");
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: data.message
-                            });
-                        }
-                    },
-                    error: function(data) {
-                        Swal.fire({
-                            type: "error",
-                            title: "Atenção",
-                            text: data.message
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-
+    <?php if ($this->session->flashdata('error') != null) { ?>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: '<?php echo $this->session->flashdata('error'); ?>',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        </script>
+    <?php } ?>
 
     <!--Footer-part-->
     <div class="row-fluid">
