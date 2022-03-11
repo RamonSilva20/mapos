@@ -227,6 +227,16 @@ class Os extends MY_Controller
             ];
             $os = $this->os_model->getById($this->input->post('idOs'));
 
+            //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
+
+            if (strtolower($this->input->post('status')) == "cancelado" && strtolower($os->status) != "cancelado") {
+                $this->devolucaoEstoque($this->input->post('idOs'));
+            }
+
+            if (strtolower($os->status) == "cancelado" && strtolower($this->input->post('status')) != "cancelado") {
+                $this->debitarEstoque($this->input->post('idOs'));
+            }
+
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -261,6 +271,7 @@ class Os extends MY_Controller
                     }
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
                 }
+
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
                 log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
@@ -443,7 +454,7 @@ class Os extends MY_Controller
             if ($ValidarEmail) {
                 if (empty($this->data['result']->email) || !filter_var($this->data['result']->email, FILTER_VALIDATE_EMAIL)) {
                     $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
-                    redirect(site_url('os/visualizar/').$this->uri->segment(3));
+                    redirect(site_url('os/visualizar/') . $this->uri->segment(3));
                 }
             }
 
@@ -461,6 +472,32 @@ class Os extends MY_Controller
 
         $this->session->set_flashdata('success', 'O sistema está com uma configuração ativada para não notificar. Entre em contato com o administrador.');
         redirect(site_url('os'));
+    }
+
+    private function devolucaoEstoque($id)
+    {
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade . '. Motivo: Cancelamento/Exclusão');
+                }
+            }
+        }
+    }
+
+    private function debitarEstoque($id)
+    {
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' baixa do estoque. Quantidade: ' . $p->quantidade . '. Motivo: Mudou status que já estava Cancelado para outro');
+                }
+            }
+        }
     }
 
     public function excluir()
@@ -489,14 +526,10 @@ class Os extends MY_Controller
             }
         }
 
-        if ($produtos = $this->os_model->getProdutos($id)) {
-            $this->load->model('produtos_model');
-            if ($this->data['configuration']['control_estoque']) {
-                foreach ($produtos as $p) {
-                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
-                }
-            }
+        $osStockRefund = $this->os_model->getById($id);
+        //Verifica para poder fazer a devolução do produto para o estoque caso OS seja excluida.
+        if (strtolower($osStockRefund->status) != "cancelado") {
+            $this->devolucaoEstoque($id);
         }
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
