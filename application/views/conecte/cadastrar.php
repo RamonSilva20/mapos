@@ -22,18 +22,48 @@
 </head>
 
 <body>
-    <div class="row-fluid" style="margin-top:0">
-        <div class="span6 offset3">
+    <style>
+    .form-horizontal .control-group {
+        border-bottom: 1px solid #ffffff;
+    }
+    .form-horizontal .controls {
+        margin        : 0;
+        padding-bottom: 8px;
+    }
+    .form-horizontal .control-label {
+        text-align : left;
+        padding-top: 0;
+    }
+    .nopadding {
+        padding: 0 20px !important;
+    }
+    .widget-title h5 {
+        padding-bottom : 15px;
+        text-align-last: center;
+    }
+    @media (max-width: 480px) {
+        form {
+            display: block !important;
+        }
+        .widget-box {
+            width        : 100%;
+            border-radius: 0;
+            margin-top   : 210px;
+        }
+        .form-horizontal .control-label {
+            margin-bottom: -6px;
+        }
+    }
+    </style>
+
+    <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
             <div class="widget-box">
                 <div class="widget-title">
-                    <span class="icon">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    <h5>Cadastre-se no sistema</h5>
+                    <h5>Cadastre-se no Sistema</h5>
                 </div>
                 <div class="widget-content nopadding tab-content">
 
-                    <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+                    <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
                         <div class="control-group">
                             <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
                             <div class="controls">
@@ -126,9 +156,8 @@
                                 <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>" />
                             </div>
                         </div>
-
-
-                        <div class="form-actions">
+                        </div>
+                        <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-bottom: 0">
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
                                     <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
@@ -140,7 +169,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
@@ -230,8 +258,8 @@
 
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12">
-            <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name') ?>
+        <div id="footer" class="span12"style="padding: 10px"> <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
+            <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
         </div>
     </div>
 

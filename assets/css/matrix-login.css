@@ -86,9 +86,15 @@ body * {
   pointer-events: none;
 }
 
+.control-group.success .help-inline {
+  display: flex;
+  color  : #f2bc9b;
+}
+
 .help-block,
 .help-inline {
-  color: #f2bc9b;
+  display: flex;
+  color  : #f2bc9b;
 }
 
 form {
