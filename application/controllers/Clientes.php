@@ -106,7 +106,6 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            
             $senha = $this->input->post('senha');
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
@@ -128,7 +127,7 @@ class Clientes extends MY_Controller
                     'cep' => $this->input->post('cep'),
                     'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
                 ];
-            } else{
+            } else {
                 $data = [
                     'nomeCliente' => $this->input->post('nomeCliente'),
                     'contato' => $this->input->post('contato'),
