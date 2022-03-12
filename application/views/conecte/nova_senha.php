@@ -22,31 +22,27 @@
 </head>
 
 <body>
-    <div class="row-fluid" style="margin-top:0">
-        <div class="span6 offset3">
-            <div class="widget-box">
+  <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
+          <div class="widget-box" style="align-items: center;padding: 0 15px">
                 <div class="widget-title">
-                    <span class="icon">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    <h5>Cadastra Nova Senha</h5>
+                    <h5 style="padding-left: 10px">Cadastra Nova Senha</h5>
+                </div>
+                <div style="font-size:1.1em;font-weight: 500">
+                  <span class="required">Digite sua nova senha.</span>
                 </div>
                 <div class="widget-content nopadding tab-content">
 
                     <form action="" id="formCliente" method="post" class="form-horizontal">
-                        <div class="span8 offset4">
-                            <h5>
-                                <span class="required">Digite sua nova senha.</span>
-                            </h5>
-                        </div>
-                        <div class="control-group">
-                            <label for="senha" class="control-label">Senha<span class="required">*</span></label>
-                            <div class="controls">
+
+                        <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly">
+                            <label style="width: auto" for="senha" class="control-label">Senha<span class="required">*</span></label>
+                            <div class="controls" style="margin: 0">
                                 <input id="senha" type="password" name="senha" value="" />
                             </div>
                         </div>
 
-                        <div class="form-actions">
+                    </div>
+                        <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-top: 5px;margin-bottom:0">
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
                                     <button name="senhaClient" id="senhaClient" type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-lock-open'></i></span><span class="button__text2">Alterar</span></button>
@@ -56,9 +52,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
+              </div>
 
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript">
@@ -108,9 +102,9 @@
 
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12">
-            <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name') ?>
-        </div>
+        <div id="footer" class="span12" style="padding: 10px"> <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
+            <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+        </a></div>
     </div>
 
     <!-- javascript

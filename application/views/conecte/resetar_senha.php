@@ -23,25 +23,22 @@
 
 <body>
     <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
-            <div class="widget-box" style="align-items: center">
+            <div class="widget-box" style="align-items: center;padding: 0 15px">
                 <div class="widget-title">
-                    <span class="icon">
-                        <i class="fas fa-user"></i>
-                    </span>
                     <h5 style="padding-left: 10px">Recuperar Senha do Sistema</h5>
                 </div>
                 <div class="widget-content nopadding tab-content">
 
                     <form action="<?php echo base_url() . "index.php/mine/gerarTokenResetarSenha" ?>" id="formCliente" method="post" class="form-horizontal">
 
-                        <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly">
+                        <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly;border-bottom: 0px">
                             <label style="width: auto" for="email" class="control-label">Email<span class="required">*</span></label>
                             <div class="controls" style="margin: 0">
                                 <input id="email" type="text" name="email" value="" />
                             </div>
                         </div>
 
-                        <div class="form-actions" style="background-color:transparent;border:none">
+                        <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-top: 15px">
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
                                     <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-mail-send'></i></span><span class="button__text2">Enviar</span></button>

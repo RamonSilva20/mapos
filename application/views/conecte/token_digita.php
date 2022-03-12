@@ -22,34 +22,29 @@
 </head>
 
 <body>
-    <div class="row-fluid" style="margin-top:0">
-        <div class="span6 offset3">
-            <div class="widget-box">
+  <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
+    <div class="widget-box" style="align-items: center;padding: 0 15px;">
                 <div class="widget-title">
-                    <span class="icon">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    <h5>Token</h5>
+                    <h5 style="padding-left: 10px">Token</h5>
                 </div>
-                <div class="span8 offset2">
-                    <h5>
-                        <span class="required">Digite ou copie e cole o token enviado para seu email.</span>
-                    </h5>
+                <div style="font-size:1.1em;font-weight: 500">
+                  <span class="required">Digite ou copie e cole o token enviado para seu email.</span>
                 </div>
                 <div class="widget-content nopadding tab-content">
                     <form action="<?php echo base_url() . 'index.php/mine/tokenManual' ?>" id="formCliente" method="post" class="form-horizontal">
 
-                        <div class="control-group">
-                            <label for="token" class="control-label">Token<span class="required">*</span></label>
-                            <div class="controls">
+                        <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly">
+                            <label style="width: auto" for="token" class="control-label">Token<span class="required">*</span></label>
+                            <div class="controls" style="margin: 0">
                                 <input id="token" type="text" name="token" value="" />
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-actions">
+                        <div class="form-actions" style="background-color:transparent;border:none;padding: 10px 15px;margin: 0">
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
-                                    <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-certification'></i></span><span class="button__text2">Validar</span></button>
+                                    <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-check-shield'></i></span><span class="button__text2">Validar</span></button>
                                     <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                                 </div>
                             </div>
@@ -57,8 +52,6 @@
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
 
 
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
@@ -88,9 +81,9 @@
 
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12">
-            <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name') ?>
-        </div>
+        <div id="footer" class="span12" style="padding: 10px"> <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
+            <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+        </a></div>
     </div>
 
     <!-- javascript
