@@ -188,7 +188,7 @@
 
                     <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
                     <?php if ($estatisticas_financeiro != null) {
-                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
@@ -212,7 +212,7 @@
                             <?php endif ?>
 
                     <?php  }
-                    } ?>
+} ?>
                 </div>
             </div>
         </div>
@@ -274,18 +274,18 @@
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
                     label: 'Receita Líquida',
-                    data: [<?php echo ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
                     backgroundColor: 'rgba(75, 192, 192, 1)',
@@ -294,18 +294,18 @@
 
                 {
                     label: 'Receita Bruta',
-                    data: [<?php echo ($financeiro_mes->VALOR_JAN_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_FEV_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAR_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_ABR_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAI_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUN_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUL_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_AGO_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_SET_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_OUT_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_NOV_REC); ?>,
-                        <?php echo ($financeiro_mes->VALOR_DEZ_REC); ?>
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
                     ],
 
                     backgroundColor: 'rgba(255, 206, 86, 1)',
@@ -314,18 +314,18 @@
 
                 {
                     label: 'Despesas',
-                    data: [<?php echo ($financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo ($financeiro_mes->VALOR_DEZ_DES); ?>
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
                     backgroundColor: 'rgba(255, 99, 132, 1)',
@@ -334,18 +334,18 @@
 
                 {
                     label: 'Inadimplência',
-                    data: [<?php echo ($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_SET_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
-                        <?php echo ($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
+                    data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
                     ],
 
                     backgroundColor: 'rgba(54, 162, 235, 1)',
@@ -410,10 +410,10 @@
                 data: [
                     <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
                     <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
+                    <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
                     <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
                     <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
+                    <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
                 ],
 
                 backgroundColor: [
@@ -556,10 +556,10 @@
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
-                                        echo date('d/m/Y', strtotime($o->dataFinal));
-                                    } else {
-                                        echo "";
-                                    } ?></td>
+    echo date('d/m/Y', strtotime($o->dataFinal));
+} else {
+    echo "";
+} ?></td>
 
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>
