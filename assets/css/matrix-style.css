@@ -571,9 +571,9 @@ hr {
   background     : var(--funSider);
   justify-content: space-between;
   flex-direction : column;
-  align-items    : stretch;
   transition     : var(--tran-01);
   border-right   : #4b4d60 solid 1px;
+  /* overflow-x     : hidden; */
   z-index        : 99999;
 }
 
@@ -684,7 +684,7 @@ hr {
 }
 
 #sidebar .botton-content {
-  margin: 0 20px 35px 20px;
+  margin: 20px 20px 0;
 }
 
 .search-box input {
@@ -736,7 +736,7 @@ hr {
   height         : calc(100% - 50px);
   display        : flex;
   flex-direction : column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .menu-bar .mode .toggle-switch {
@@ -777,13 +777,6 @@ body.dark .switch::before {
 }
 
 /* End Sidebar*/
-
-/* New bem-vindos */
-.bemv {
-  font-size  : 2em;
-  font-weight: 500;
-  color      : var(--cinza0);
-}
 
 .navebarn {
   display         : flex;
@@ -887,6 +880,25 @@ section .profile .profile-img {
   align-items    : center;
   justify-content: space-between;
   flex-direction: row-reverse;
+}
+
+/* New bem-vindos */
+#content-bemv {
+  margin: 20px 10px 10px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  top: 22px;
+  right: 25px;
+  position: absolute;
+}
+
+.bemv {
+  font-size  : 2em;
+  font-weight: 500;
+  color      : var(--cinza0);
 }
 
 .content-header {
@@ -1781,7 +1793,6 @@ div.dataTables_wrapper .ui-widget-header {
   padding     : 12px;
   padding-left: 18px;
   line-height : 12px;
-  margin      : -15 0 0 !important;
   font-size   : 1.7em;
   color       : var(--violeta1);
 }
@@ -3461,6 +3472,10 @@ form {
   #sidebar>ul {
     padding: 20px 25px 0px 18px;
   }
+
+  #content-bemv {
+    right : 15px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -3715,7 +3730,7 @@ form {
 
   #userr .userT {
     font-size    : 1.13em;
-    max-width    : 115px;
+    max-width    : 70px;
     white-space  : nowrap;
     overflow     : hidden;
     text-overflow: ellipsis;
@@ -3835,6 +3850,11 @@ form {
     margin: 10px 5px 10px;
   }
 
+  #content-bemv {
+    margin: 16px 5px 0px;
+    right : 15px;
+  }
+
   #breadcrumb a {
     font-weight: 400;
     padding    : 2px 5px;
@@ -3867,11 +3887,11 @@ form {
   }
 
   #sidebar ul {
-    padding: 10px 20px;
+    padding: 2px 20px;
   }
 
   #sidebar li {
-    margin-top: 8px;
+    margin-top: 2px;
     opacity   : 0;
   }
   #sidebar.open li {

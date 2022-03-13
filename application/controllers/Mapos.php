@@ -412,6 +412,7 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('notifica_whats', 'Notificação Whatsapp', 'required|trim');
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
         $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
+        $this->form_validation->set_rules('control_edit_vendas', 'Controle de Edição de Vendas', 'required|trim');
         $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
         $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required|trim', ['required' => 'Selecione ao menos uma das opções!']);
         $this->form_validation->set_rules('pix_key', 'Chave Pix', 'trim|valid_pix_key', [
@@ -430,6 +431,7 @@ class Mapos extends MY_Controller
                 'notifica_whats' => $this->input->post('notifica_whats'),
                 'control_baixa' => $this->input->post('control_baixa'),
                 'control_editos' => $this->input->post('control_editos'),
+                'control_edit_vendas' => $this->input->post('control_edit_vendas'),
                 'control_datatable' => $this->input->post('control_datatable'),
                 'pix_key' => $this->input->post('pix_key'),
                 'os_status_list' => json_encode($this->input->post('os_status_list')),

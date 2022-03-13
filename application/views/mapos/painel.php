@@ -16,6 +16,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
+<!-- New Bem-vindos -->
+<div id="content-bemv">
+    <div class="bemv">Dashboard</div>
+    <div></div>
+</div>
+
 <!--Action boxes-->
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
@@ -63,7 +69,7 @@
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
             <div>
-                <div class="numbers N-tittle">Ordens de Serviço</div>
+                <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">

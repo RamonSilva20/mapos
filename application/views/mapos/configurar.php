@@ -141,7 +141,17 @@
                                     <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Ativar</option>
                                     <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Desativar</option>
                                 </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar OS faturada e/ou cancelada.</span>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir OS faturada e/ou cancelada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="control_edit_vendas" class="control-label">Controle de edição de Vendas</label>
+                            <div class="controls">
+                                <select name="control_edit_vendas" id="control_edit_vendas">
+                                    <option value="1" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Ativar</option>
+                                    <option value="0" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir vendas faturada.</span>
                             </div>
                         </div>
                         <div class="control-group">

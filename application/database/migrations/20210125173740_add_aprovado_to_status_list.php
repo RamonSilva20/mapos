@@ -7,7 +7,7 @@ class Migration_add_aprovado_to_status_list extends CI_Migration
         $configurationSql = "
             SELECT valor
             FROM configuracoes
-            WHERE idConfig = 12
+            WHERE idConfig = 13
             LIMIT 1
         ";
         $result = $this->db->query($configurationSql)->row();
@@ -19,12 +19,12 @@ class Migration_add_aprovado_to_status_list extends CI_Migration
             $osStatus[] = 'Aprovado';
         }
 
-        $sql = "UPDATE `configuracoes` SET valor = ? WHERE idConfig = 12";
+        $sql = "UPDATE `configuracoes` SET valor = ? WHERE idConfig = 13";
         $this->db->query($sql, [json_encode($osStatus)]);
     }
 
     public function down()
     {
-        $this->db->query("UPDATE `configuracoes` SET valor = '[\"Aberto\",\"Faturado\",\"Negocia\\u00e7\\u00e3o\",\"Em Andamento\",\"Or\\u00e7amento\",\"Finalizado\",\"Cancelado\",\"Aguardando Pe\\u00e7as\"]' WHERE idConfig = 12");
+        $this->db->query("UPDATE `configuracoes` SET valor = '[\"Aberto\",\"Faturado\",\"Negocia\\u00e7\\u00e3o\",\"Em Andamento\",\"Or\\u00e7amento\",\"Finalizado\",\"Cancelado\",\"Aguardando Pe\\u00e7as\"]' WHERE idConfig = 13");
     }
 }
