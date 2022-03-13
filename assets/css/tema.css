@@ -44,6 +44,11 @@
   color: var(--subtitle-w);
 }
 
+#sidebar li .title-tooltip {
+  background   : #6c6e78;
+  color        : #fff;
+}
+
 #sidebar li .icon,
 #sidebar li .title {
   color     : var(--title-w);
@@ -97,10 +102,6 @@ body {
 
 #sidebar > ul > li > a {
   color: #72737a;
-}
-
-#user-nav > ul > li > a > i,
-#sidebar li a i {
 }
 
 #sidebar li a:hover {

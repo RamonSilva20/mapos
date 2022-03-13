@@ -22,6 +22,7 @@
             <button style="background: transparent;border: transparent" type="submit" class="tip-bottom" title="">
                 <i class='bx bx-search iconX'></i></button>
             <input type="search" name="termo" placeholder="Pesquise aqui...">
+            <span class="title-tooltip">Pesquisar</span>
         </form>
     </li>
     <!-- End Pesquisar-->
@@ -31,90 +32,110 @@
 
             <ul class="menu-links" style="position: relative;">
                 <li class="<?php if (isset($menuPainel)) {
-    echo 'active';
-}; ?>">
+                                echo 'active';
+                            }; ?>">
                     <a class="tip-bottom" title="" href="<?= base_url() ?>"><i class='bx bx-home-alt iconX'></i>
-                        <span class="title nav-title">Início</span></a>
+                        <span class="title nav-title">Home</span>
+                        <span class="title-tooltip">Início</span>
+                    </a>
                 </li>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                     <li class="<?php if (isset($menuClientes)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('clientes') ?>"><i class='bx bx-group iconX'></i>
-                            <span class="title">Cliente / Fornecedor</span></a>
+                            <span class="title">Cliente / Fornecedor</span>
+                            <span class="title-tooltip">Clientes</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                     <li class="<?php if (isset($menuProdutos)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('produtos') ?>"><i class='bx bx-package iconX'></i>
-                            <span class="title">Produtos</span></a>
+                            <span class="title">Produtos</span>
+                            <span class="title-tooltip">Produtos</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                     <li class="<?php if (isset($menuServicos)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('servicos') ?>"><i class='bx bx-stopwatch iconX'></i>
-                            <span class="title">Serviços</span></a>
+                            <span class="title">Serviços</span>
+                            <span class="title-tooltip">Serviços</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                     <li class="<?php if (isset($menuVendas)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('vendas') ?>"><i class='bx bx-cart-alt iconX'></i></span>
-                            <span class="title">Vendas</span></a>
+                            <span class="title">Vendas</span>
+                            <span class="title-tooltip">Vendas</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                     <li class="<?php if (isset($menuOs)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('os') ?>"><i class='bx bx-spreadsheet iconX'></i>
-                            <span class="title">Ordens de Serviço</span></a>
+                            <span class="title">Ordens de Serviço</span>
+                            <span class="title-tooltip">Ordens</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) { ?>
                     <li class="<?php if (isset($menuGarantia)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('garantias') ?>"><i class='bx bx-receipt iconX'></i>
-                            <span class="title">Termos de Garantias</span></a>
+                            <span class="title">Termos de Garantias</span>
+                            <span class="title-tooltip">Garantias</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                     <li class="<?php if (isset($menuArquivos)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('arquivos') ?>"><i class='bx bx-box iconX'></i>
-                            <span class="title">Arquivos</span></a>
+                            <span class="title">Arquivos</span>
+                            <span class="title-tooltip">Arquivos</span>
+                        </a>
                     </li>
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                     <li class="<?php if (isset($menuLancamentos)) {
-    echo 'active';
-}; ?>">
+                                    echo 'active';
+                                }; ?>">
                         <a class="tip-bottom" title="" href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-square iconX"></i>
-                            <span class="title">Lançamentos</span></a>
+                            <span class="title">Lançamentos</span>
+                            <span class="title-tooltip">Lançamentos</span>
+                        </a>
                     </li>
                 <?php } ?>
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                <li class="<?php if (isset($menuCobrancas)) {
-    echo 'active';
-}; ?>">
-                    <a class="tip-bottom" title="" href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
-                        <span class="title">Cobranças</span></a>
-                </li>
+                    <li class="<?php if (isset($menuCobrancas)) {
+                                    echo 'active';
+                                }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
+                            <span class="title">Cobranças</span>
+                            <span class="title-tooltip">Cobranças</span>
+                        </a>
+                    </li>
                 <?php } ?>
             </ul>
         </div>
@@ -123,7 +144,9 @@
             <li class="">
                 <a class="tip-bottom" title="" href="<?= site_url('login/sair'); ?>">
                     <i class='bx bx-log-out-circle iconX'></i>
-                    <span class="title">Sair</span></a>
+                    <span class="title">Sair</span>
+                    <span class="title-tooltip">Sair</span>
+                </a>
             </li>
         </div>
     </div>
