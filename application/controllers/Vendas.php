@@ -305,7 +305,7 @@ class Vendas extends MY_Controller
         if (!$editavel) {
             return $this->output
                 ->set_content_type('application/json')
-                ->set_status_header(200)
+                ->set_status_header(422)
                 ->set_output(json_encode(['result' => false, 'messages'=> '<br /><br /> <strong>Motivo:</strong> Venda já faturada']));
         }
 
@@ -351,7 +351,7 @@ class Vendas extends MY_Controller
         if (!$editavel) {
             return $this->output
                 ->set_content_type('application/json')
-                ->set_status_header(200)
+                ->set_status_header(422)
                 ->set_output(json_encode(['result' => false, 'messages'=> '<br /><br /> <strong>Motivo:</strong> Venda já faturada']));
         }
 
