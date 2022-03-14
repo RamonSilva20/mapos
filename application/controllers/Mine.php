@@ -264,7 +264,7 @@ class Mine extends CI_Controller
         $this->load->view('conecte/template', $data);
     }
 
-    public function editarDados($id = null)
+    public function editarDados()
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
