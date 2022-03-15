@@ -16,6 +16,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
+<!-- New Bem-vindos -->
+<div id="content-bemv">
+    <div class="bemv">Dashboard</div>
+    <div></div>
+</div>
+
 <!--Action boxes-->
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
@@ -63,7 +69,7 @@
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
             <div>
-                <div class="numbers N-tittle">Ordens de Serviço</div>
+                <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
@@ -246,20 +252,17 @@
             </div>
         <?php endif ?>
 
-<?php  }
-} ?>
 <script type="text/javascript">
-
-    if(window.outerWidth > 2000) {
+    if (window.outerWidth > 2000) {
         Chart.defaults.font.size = 15;
     };
-    if(window.outerWidth < 2000 && window.outerWidth > 1367) {
+    if (window.outerWidth < 2000 && window.outerWidth > 1367) {
         Chart.defaults.font.size = 11;
     };
-    if(window.outerWidth < 1367 && window.outerWidth > 480 ) {
+    if (window.outerWidth < 1367 && window.outerWidth > 480) {
         Chart.defaults.font.size = 9.5;
     };
-    if(window.outerWidth < 480 ) {
+    if (window.outerWidth < 480) {
         Chart.defaults.font.size = 8.5;
     };
 
@@ -285,7 +288,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -305,7 +308,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -325,7 +328,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -345,7 +348,7 @@
                         <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderRadius: 15,
                 }
             ]
@@ -363,7 +366,7 @@
                                 style: 'currency',
                                 currency: 'BRL',
                                 maximumSignificantDidits: 1
-                            }). format(value);
+                            }).format(value);
                         }
                     }
                 },
@@ -386,15 +389,14 @@
                 },
 
                 legend: {
-                  position: "bottom",
-                  labels: {
-                    usePointStyle: true,
-                  }
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                    }
                 }
             }
         }
-    }
-);
+    });
 
     var myChart = new Chart(statusOS, {
         data: {
@@ -415,12 +417,12 @@
                 ],
 
                 backgroundColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
                 ],
                 borderWidth: 1
             }]
@@ -438,7 +440,7 @@
                                 style: 'currency',
                                 currency: 'BRL',
                                 maximumSignificantDidits: 1
-                            }). format(value);
+                            }).format(value);
                         }
                     },
                     beginAtZero: true,
@@ -454,14 +456,14 @@
                 }
             }
         }
-    }
-);
+    });
 
-function responsiveFonts(){
+    function responsiveFonts() {
         myChart.update();
     }
-
 </script>
+<?php  }
+} ?>
 </div>
 </div>
 
@@ -728,8 +730,8 @@ function responsiveFonts(){
             <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
         </div>
         <div class="modal-footer" style="display:flex;justify-content: center">
-          <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-          <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
@@ -768,6 +770,12 @@ function responsiveFonts(){
 <!-- Modal Estoque-->
 <script type="text/javascript">
     $(document).ready(function() {
+        $(window).bind('resize', function(e) {
+            if (window.RT) clearTimeout(window.RT);
+            window.RT = setTimeout(function() {
+                this.location.reload(false); /* false to get page from cache */
+            }, 100);
+        });
         $(document).on('click', 'a', function(event) {
             var produto = $(this).attr('produto');
             var estoque = $(this).attr('estoque');
