@@ -95,7 +95,7 @@
                         <div class="control-group">
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
-                                <input id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>"/>
+                                <input id="senha" type="text" name="senha" value="<?php echo set_value('senha'); ?>"/>
                             </div>
                         </div>
                         <div class="control-group">

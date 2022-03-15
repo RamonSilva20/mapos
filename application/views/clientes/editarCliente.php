@@ -95,7 +95,7 @@
                         <div class="control-group">
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
-                                <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar."/>
+                                <input id="senha" type="text" name="senha" value="" placeholder="Não preencha se não quiser alterar."/>
                             </div>
                         </div>
                         <div class="control-group">
