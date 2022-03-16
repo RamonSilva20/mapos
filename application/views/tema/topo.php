@@ -56,7 +56,7 @@
   </script>
 
 </head>
-<body onresize="responsiveFonts()">
+<body>
 <!--top-Header-menu-->
 <div class="navebarn">
   <div id="user-nav" class="navbar navbar-inverse">

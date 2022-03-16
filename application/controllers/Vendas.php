@@ -228,6 +228,13 @@ class Vendas extends MY_Controller
         $this->load->model('vendas_model');
 
         $id = $this->input->post('id');
+
+        $editavel = $this->vendas_model->isEditable($id);
+        if (!$editavel) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir. Venda já faturada');
+            redirect(site_url('vendas/gerenciar/'));
+        }
+
         $venda = $this->vendas_model->getByIdCobrancas($id);
         if ($venda == null) {
             $venda = $this->vendas_model->getById($id);
@@ -236,7 +243,6 @@ class Vendas extends MY_Controller
                 redirect(site_url('vendas/gerenciar/'));
             }
         }
-
 
         if ($venda->idCobranca != null) {
             if ($venda->status == "canceled") {
@@ -295,6 +301,14 @@ class Vendas extends MY_Controller
         $this->form_validation->set_rules('idProduto', 'Produto', 'trim|required');
         $this->form_validation->set_rules('idVendasProduto', 'Vendas', 'trim|required');
 
+        $editavel = $this->vendas_model->isEditable($this->input->post('idVendasProduto'));
+        if (!$editavel) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(422)
+                ->set_output(json_encode(['result' => false, 'messages'=> '<br /><br /> <strong>Motivo:</strong> Venda já faturada']));
+        }
+
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false]);
         } else {
@@ -331,6 +345,14 @@ class Vendas extends MY_Controller
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar Vendas');
             redirect(base_url());
+        }
+
+        $editavel = $this->vendas_model->isEditable($this->input->post('idVendas'));
+        if (!$editavel) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(422)
+                ->set_output(json_encode(['result' => false, 'messages'=> '<br /><br /> <strong>Motivo:</strong> Venda já faturada']));
         }
 
         $ID = $this->input->post('idProduto');
