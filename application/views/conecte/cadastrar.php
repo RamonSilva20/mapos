@@ -84,8 +84,8 @@
                     </div>
                     <div class="control-group">
                         <?php if (isset($custom_error) && $custom_error != '') {
-                            echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                        } ?>
+    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+} ?>
                         <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
                         <div class="controls">
                             <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
