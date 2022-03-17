@@ -94,6 +94,8 @@ class Financeiro extends MY_Controller
         $this->data['results'] = $this->financeiro_model->get('lancamentos', '*', $where, $this->data['configuration']['per_page'], $this->input->get('per_page'));
         $this->data['totals'] = $this->financeiro_model->getTotals($where);
 
+        $this->data['estatisticas_financeiro'] = $this->financeiro_model->getEstatisticasFinanceiro2();
+
         $this->data['view'] = 'financeiro/lancamentos';
         return $this->layout();
     }
@@ -156,15 +158,164 @@ class Financeiro extends MY_Controller
                 $data['clientes_id'] =  set_value('idCliente');
             }
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
-                $this->session->set_flashdata('success', 'Receita adicionada com sucesso!');
-                log_info('Adicionou uma receita');
+                $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
+                log_info('Adicionou um lançamento em Financeiro');
                 redirect($urlAtual);
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
 
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar receita.');
+        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento.');
+        redirect($urlAtual);
+    }
+
+    function adicionarReceita_parc()
+    {
+
+
+        //$this->load->library('form_validation');
+        //$this->data['custom_error'] = '';
+        $urlAtual = $this->input->post('urlAtual');
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
+            redirect(base_url());
+        } else {
+
+            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc');
+            $entrada = $this->input->post('entrada');
+            $valor_parc = $this->input->post('valor_parc');
+            $valorparcelas = ($valor_parc - $entrada) / $qtdparcelas_parc;
+
+            if ($entrada >= $valor_parc) {
+                $this->session->set_flashdata('error', 'O valor da entrada não pode ser maior ou igual ao valor total da receita!');
+                redirect($urlAtual);
+            }
+
+            $dia_pgto = $this->input->post('dia_pgto');
+            $dia_base_pgto = $this->input->post('dia_base_pgto');
+
+            try {
+                $dia_pgto = explode('/', $dia_pgto);
+                $dia_pgto = $dia_pgto[2] . '-' . $dia_pgto[1] . '-' . $dia_pgto[0];
+
+                $dia_base_pgto = explode('/', $dia_base_pgto);
+                $dia_base_pgto = $dia_base_pgto[2] . '-' . $dia_base_pgto[1] . '-' . $dia_base_pgto[0];
+            } catch (Exception $e) {
+                $dia_pgto = date('Y/m/d');
+                $dia_base_pgto = date('Y/m/d');
+            }
+
+            $comissao = $this->input->post('comissao');
+
+            if (!validate_money($comissao)) {
+                $comissao = str_replace(array(',', '.'), array('', ''), $comissao);
+            }
+
+            if ($entrada == 0) {
+                $loops = 1;
+                while ($loops <= $qtdparcelas_parc) {
+
+                    $myDateTimeISO = $dia_base_pgto;
+                    $loopsmes = $loops - 1;
+                    $addThese = $loopsmes;
+                    $myDateTime = new DateTime($myDateTimeISO);
+                    $myDayOfMonth = date_format($myDateTime, 'j');
+                    date_modify($myDateTime, "+$addThese months");
+
+                    //Find out if the day-of-month has dropped
+                    $myNewDayOfMonth = date_format($myDateTime, 'j');
+                    if ($myDayOfMonth > 28 && $myNewDayOfMonth < 4) {
+                        //If so, fix by going back the number of days that have spilled over
+                        date_modify($myDateTime, "-$myNewDayOfMonth days");
+                    }
+                    $data = array(
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcela [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'valor' => $valorparcelas,
+                        'data_vencimento' => date_format($myDateTime, "Y-m-d"),
+                        'data_pagamento' => $recebimento != null ? $recebimento : date_format($myDateTime, "Y-m-d"),
+                        'baixado' => 0,
+                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
+                        'observacoes' => $this->input->post('observacoes_parc'),
+                        'forma_pgto' => $this->input->post('formaPgto_parc'),
+                        'tipo' => $this->input->post('tipo_parc'),
+                        'usuarios_id' => $this->session->userdata('id'),
+
+                    );
+
+                    if ($this->financeiro_model->add('lancamentos', $data) == TRUE) {
+                        $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
+                        log_info('Adicionou um lançamento em Financeiro');
+                    } else {
+                        $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                    }
+                    $loops++;
+                }
+
+                redirect($urlAtual);
+            } else {
+
+                $data1 = array(
+                    'descricao' => $this->input->post('descricao_parc'),
+                    'valor' => $entrada,
+                    'data_vencimento' => $dia_pgto,
+                    'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format($myDateTime, "Y-m-d"),
+                    'baixado' => 1,
+                    'cliente_fornecedor' => $this->input->post('cliente_parc'),
+                    'observacoes' => $this->input->post('observacoes_parc'),
+                    'forma_pgto' => $this->input->post('formaPgto_parc'),
+                    'tipo' => $this->input->post('tipo_parc'),
+                    'usuarios_id' => $this->session->userdata('id'),
+
+
+
+                );
+                $this->financeiro_model->add1('lancamentos', $data1);
+
+                $loops = 1;
+                while ($loops <= $qtdparcelas_parc) {
+                    $myDateTimeISO = $dia_base_pgto;
+                    $loopsmes = $loops - 1;
+                    $addThese = $loopsmes;
+                    $myDateTime = new DateTime($myDateTimeISO);
+                    $myDayOfMonth = date_format($myDateTime, 'j');
+                    date_modify($myDateTime, "+$addThese months");
+
+                    //Find out if the day-of-month has dropped
+                    $myNewDayOfMonth = date_format($myDateTime, 'j');
+                    if ($myDayOfMonth > 28 && $myNewDayOfMonth < 4) {
+                        //If so, fix by going back the number of days that have spilled over
+                        date_modify($myDateTime, "-$myNewDayOfMonth days");
+                    }
+
+                    $data = array(
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcela [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'valor' => $this->input->post('valorparcelas'),
+                        'data_vencimento' => date_format($myDateTime, "Y-m-d"),
+                        'data_pagamento' => date_format($myDateTime, "Y-m-d"),
+                        'baixado' => 0,
+                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
+                        'observacoes' => $this->input->post('observacoes_parc'),
+                        'forma_pgto' => $this->input->post('formaPgto_parc'),
+                        'tipo' => $this->input->post('tipo_parc'),
+                        'usuarios_id' => $this->session->userdata('id'),
+
+                    );
+
+                    if ($this->financeiro_model->add('lancamentos', $data) == TRUE) {
+                        $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
+                        log_info('Adicionou um lançamento em Financeiro');
+                    } else {
+                        $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                    }
+                    $loops++;
+                }
+
+                redirect($urlAtual);
+            }
+        }
+
+        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento');
         redirect($urlAtual);
     }
 

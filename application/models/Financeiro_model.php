@@ -50,6 +50,15 @@ class Financeiro_model extends CI_Model
         return (array) $this->db->get()->row();
     }
 
+    public function getEstatisticasFinanceiro2()
+    {
+        $sql = "SELECT SUM(CASE WHEN baixado = 1 AND tipo = 'receita' THEN valor END) as total_receita,
+                       SUM(CASE WHEN baixado = 1 AND tipo = 'despesa' THEN valor END) as total_despesa,
+                       SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor END) as total_receita_pendente,
+                       SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor END) as total_despesa_pendente FROM lancamentos";
+
+        return $this->db->query($sql)->row();    
+    }
 
     public function getById($id)
     {
@@ -66,6 +75,16 @@ class Financeiro_model extends CI_Model
         }
 
         return false;
+    }
+
+    function add1($table,$data1){
+        $this->db->insert($table, $data1);         
+        if ($this->db->affected_rows() == '1')
+		{
+			return TRUE;
+		}
+		
+		return FALSE;       
     }
 
     public function edit($table, $data, $fieldID, $ID)
