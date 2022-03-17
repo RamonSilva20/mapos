@@ -96,4 +96,4 @@ se mesmo assim informando os dados certos de login nao der certo e ficar dando m
 
 11- Para conferir se executou a fila, vá em seu Map-os 'Configurações' e em 'Emails' e veja o 'Status', se tiver com o status 'Falhou' possivelmente o problema é na sua configuração smtp, para saber se executou ou não basta nao estar em 'Pendente', lembrando que o email em Emitente em configurações precisa estar o mesmo no smtp (Para problemas com configuração de smtp procure por Issues abertas ou fechadas exemplo 'envio de email smtp')
 
-Por fim, você pode criar outra tarefa para o comando 'index.php email/retry', para e-mails com erros ou não enviado, basta seguir os mesmos passos, somente alterando conforme o passo 7 a opção 'Adicione argumentos'
+Por fim, você pode criar outra tarefa para o comando 'index.php email/retry', que serve para reenviar e-mails com erros ou não enviados, basta seguir os mesmos passos, somente alterando conforme o passo 7 a opção 'Adicione argumentos'
