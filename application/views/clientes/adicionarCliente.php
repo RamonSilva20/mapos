@@ -70,7 +70,7 @@
                         <div class="control-group">
                             <label for="contato" class="control-label">Contato:</label>
                             <div class="controls">
-                                <input class="nomeCliente" type="text" name="contato" value="<?php echo set_value('contato'); ?>" />
+                                <input class="contato" type="text" name="contato" value="<?php echo set_value('contato'); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="senha" class="control-label">Senha</label>
+                            <label for="senha" class="control-label">Senha<span class="required">*</span></label>
                             <div class="controls">
                                 <input class="form-control" id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
@@ -211,6 +211,16 @@
             },
             messages: {
                 nomeCliente: {
+                    required: 'Campo Requerido.'
+                },
+            },
+            rules: {
+                senha: {
+                    required: true
+                },
+            },
+            messages: {
+                senha: {
                     required: 'Campo Requerido.'
                 },
             },

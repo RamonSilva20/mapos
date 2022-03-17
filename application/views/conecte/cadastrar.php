@@ -215,6 +215,9 @@
                     email: {
                         required: true
                     },
+                    senha: {
+                        required: true
+                    },
                     rua: {
                         required: true
                     },
@@ -246,6 +249,9 @@
                         required: 'Campo Requerido.'
                     },
                     email: {
+                        required: 'Campo Requerido.'
+                    },
+                    senha: {
                         required: 'Campo Requerido.'
                     },
                     rua: {
