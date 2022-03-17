@@ -89,7 +89,7 @@ $periodo = $this->input->get('periodo');
         </form>
     </div>
 
-    <div class="span12" style="margin-left: 0;">
+    <div>
         <div class="widget-box">
             <div class="widget-title">
                 <span class="icon">
@@ -251,7 +251,7 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
-                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
+                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required />
                 </div>
 
             	<div class="span2">  
@@ -353,13 +353,13 @@ $periodo = $this->input->get('periodo');
 	    	</div>
           <div class="span6"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
-    		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+    		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
     	</div>	
     	        
     		<div class="span6"> 
     			<label for="cliente_parc">Cliente/Fornecedor*</label>
-    			<input class="span12" id="cliente_parc" type="text" name="cliente_parc" />
+    			<input class="span12" id="cliente_parc" type="text" name="cliente_parc" required />
     		</div>
 		
 			<div class="span12" style="margin-left: 0">
@@ -370,7 +370,7 @@ $periodo = $this->input->get('periodo');
     	<div class="span12" style="margin-left: 0"> 
         		<div class="span3" style="margin-left: 0">  
     			<label for="valor_parc">Valor*</label>
-    			<input class="span12 money" id="valor_parc" type="text" name="valor_parc" />
+    			<input class="span12 money" id="valor_parc" type="text" name="valor_parc" required />
     		</div>
 			
 			<div class="span3">  
@@ -544,7 +544,7 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
                     <label for="fornecedor">Cliente/Fornecedor*</label>
-                    <input class="span12" id="fornecedorEditar" type="text" name="fornecedor" />
+                    <input class="span12" id="fornecedorEditar" type="text" name="fornecedor" required />
                 </div>
 
                 <div class="span12" style="margin-left: 0">
@@ -556,11 +556,11 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="idEditar" name="id" value="" />
-                    <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." />
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." required />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" />
+                    <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" required />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Tipo*</label>
@@ -897,6 +897,17 @@ $periodo = $this->input->get('periodo');
                 $("#idCliente").val(ui.item.id);
             }
         });
+
+        $("#cliente_parc").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#cliente_parc").val(ui.item.label);
+            }
+        });
+
+       
+
         $("#fornecedor").autocomplete({
             source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
