@@ -1,4 +1,4 @@
-Esse tutorial ensinará a criar cronjobs no Windows utlizando um programa do próprio sistema.
+Esse tutorial ensinará a criar cronjobs para envio de e-mails do sistema Map-os utlizando um programa do próprio Windows.
 
 1- Abra o menu de pesquisa do Windows e digite 'Agendador de Tarefas' conforme imagem:
 
