@@ -18,7 +18,7 @@ Esse tutorial ensinará a criar cronjobs para envio de e-mails do sistema Map-os
 
 
 
-3- Coloque um nome para a tarefa exemplo 'Enviar e-mails map-os' (para o processo rodar em backgraund e nao ficar aparecendo a tela de cmd executando o comando á cada vez no tempo informado, marque a opção 'Executar estando o usuário conectado ou não'):
+3- Coloque um nome para a tarefa exemplo 'Enviar e-mails map-os' (para o processo rodar em backgraund e não ficar encomodando aparecendo a tela de cmd executando o comando a cada vez no intervalo de tempo informado, marque a opção 'Executar estando o usuário conectado ou não', esta opção irá exigir seus dados de login do Windows):
 
 ![cQxX11L](https://user-images.githubusercontent.com/10822915/158884024-a0f113a9-952c-4721-9f5a-d3af29b03d48.png)
 
@@ -74,7 +74,7 @@ em baixo em 'Adicione argumentos' coloque o comando do map-os para processar a f
 
 
 
-9- Se você marcou a opção do passo 3 na primeira guia 'Geral' a opção 'Executar estando o usuário conectado ou não', ao clicar em 'Ok' vai ser solicitado uma credencial de login do Windows, selecione qualquer uma da lista ou o seu User do windows e preencha a senha de login (Talves tenha na lista alguma opção que nao exige a senha),
+9- Se você marcou a opção do passo 3 na primeira guia 'Geral' a opção 'Executar estando o usuário conectado ou não', ao clicar em 'Ok' vai ser solicitado uma credencial de login do Windows, selecione qualquer uma da lista ou o seu usuário do windows e preencha a senha de login (Talves tenha na lista alguma opção que não exija senha),
 se mesmo assim informando os dados certos de login nao der certo e ficar dando mensagem de erro, você pode voltar na primeira guia 'Geral' e desmarcar a opção 'Executar estando o usuário conectado ou não', lembrando que está opção é somente para quando a tarefa for executada nao ficar aparecendo uma janela de cmd por uns 3 segundos executando o comando
 (Se mesmo seguindo tudo do passo 9 nao aceitar o usuário, você pode clicar na opção 'Alterar usuário ou grupo', na janela que abre, no último campo escreva seu nome de USer ou 'sistema' e depois em verificar nomes ):
 
@@ -85,7 +85,7 @@ se mesmo assim informando os dados certos de login nao der certo e ficar dando m
 
 
 
-10- Para testar se funcionou, não precisa esperar o intervalor de tempo selecionado, basta clicar com o botão direito na tarefa e 'Executar', pode tambem selecionar com um clique a tarefa e ao lado nas opções em 'Executar':
+10- Para testar se funcionou, não precisa esperar o intervalo de tempo selecionado, basta clicar com o botão direito na tarefa e 'Executar', pode tambem selecionar com um clique a tarefa e ao lado nas opções em 'Executar':
 
 ![iEY2U45](https://user-images.githubusercontent.com/10822915/158884432-ecf5efda-1974-4c3b-be1f-1e8ec8825e9e.png)
 
@@ -96,4 +96,4 @@ se mesmo assim informando os dados certos de login nao der certo e ficar dando m
 
 11- Para conferir se executou a fila, vá em seu Map-os 'Configurações' e em 'Emails' e veja o 'Status', se tiver com o status 'Falhou' possivelmente o problema é na sua configuração smtp, para saber se executou ou não basta nao estar em 'Pendente'
 
-Por fim, você criar outra tarefa para o comando 'index.php email/retry', para e-mails com erros ou não enviado, basta seguir os mesmos passos, somente alterando conforme o passo 7 a opção 'Adicione argumentos'
+Por fim, você pode criar outra tarefa para o comando 'index.php email/retry', para e-mails com erros ou não enviado, basta seguir os mesmos passos, somente alterando conforme o passo 7 a opção 'Adicione argumentos'
