@@ -25,7 +25,7 @@ $periodo = $this->input->get('periodo');
     }
 </style>
 
-<div class="new122" style="margin-top: 0; min-height: 100vh">
+<div>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
         <div class="span5" style="display:flex">
