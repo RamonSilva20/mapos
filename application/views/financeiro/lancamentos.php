@@ -113,7 +113,8 @@ $periodo = $this->input->get('periodo');
                             <th>Status</th>
                             <th>Observações</th>
                             <th>Forma de Pagamento</th>
-                            <th>Valor</th>
+                            <th>Valor de Desconto</th>
+                            <th>Valor Total</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -146,10 +147,11 @@ $periodo = $this->input->get('periodo');
                             echo '<td>' . $status . '</td>';
                             echo '<td>' . $r->observacoes . '</td>';
                             echo '<td>' . $r->forma_pgto . '</td>';
+                            echo '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>';
                             echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $r->valor_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
@@ -200,6 +202,15 @@ $periodo = $this->input->get('periodo');
                       <tr>
                       <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes:  <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?></td>
                       </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos:  <?php echo($estatisticas_financeiro->total_valor_desconto); ?></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes:  <?php echo($estatisticas_financeiro->total_valor_desconto_pendente); ?></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;">Total de descontos aplicados (pendentes + pagos):  <?php echo($estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente); ?></td>
+                      </tr>
                     </tfoot>
                 </table>
             </div>
@@ -230,12 +241,12 @@ $periodo = $this->input->get('periodo');
 		    		</select>
 	    	</div>
 
-            <div class="span12" style="margin-left: 0">
+            <div class="span6">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
                 <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
             </div>
-            <div class="span12" style="margin-left: 0">
+            <div class="span12">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente/Fornecedor*</label>
                     <input class="span12" id="cliente" type="text" name="cliente" value="" required />
@@ -251,12 +262,16 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
+<<<<<<< Updated upstream
                     <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required />
+=======
+                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required/>
+>>>>>>> Stashed changes
                 </div>
 
             	<div class="span2">  
           <label for="valor_desconto">Val.Desc</label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" type="text" name="valor_desconto" value="<?php echo number_format("0.00",2,',','.') ?>" />
+          <input class="span12 money" id="valor_desconto" readOnly="true" type="text" name="valor_desconto" value="<?php echo number_format("0.00",2,',','.') ?>"/>
         </div>
 
         <div class="span4">  
@@ -264,21 +279,15 @@ $periodo = $this->input->get('periodo');
 	        <input class="span6 money" id="descontos" type="text" name="descontos" value="" placeholder="em R$" style="float: left;" />
 	        <input class="btn btn-inverse" onclick="mostrarValores();" type="button" name="valor_desconto" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
 	      </div>
-		
-		<div class="span4">  
-	        <label for="desconto">Desconto</label>
-	        <input class="span4" id="desconto" type="text" name="desconto" value="" placeholder="%" style="float: left;" />
-	        <input class="btn btn-inverse" onclick="mostrarValor();" type="button" name="valor_desconto" value="Aplicar" placeholder="%" style="float: left;margin-left:4px;" />
-	      </div>
-            
-                <div class="span4">
+		            
+                <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" required />
                 </div>
 
-                <div class="span3">
+                <div class="span4">
 		    		<label for="qtdparcelas">Qtd Parcelas</label>
-		    		<select name="qtdparcelas" id="qtdparcelas" class="span12">
+		    		<select name="qtdparcelas" id="qtdparcelas" class="span10">
 		    			<option value="0">Pagamento á vista</option>
 		    			<option value="1">1x</option>			
 		    			<option value="2">2x</option>			
@@ -295,15 +304,15 @@ $periodo = $this->input->get('periodo');
 		    		</select>
 		    	<a href="#modalReceitaParcelada" id="abrirmodalreceitaparcelada" data-toggle="modal" style="display: none;" role="button"> </a>   
 	    	</div>    
-
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span4" style="margin-left: 0">
+            <div class="span4" style="margin-left: 0">
+                <div class="span6" style="margin-left: 0">
                     <label for="recebido">Recebido?</label>
                     &nbsp &nbsp &nbsp &nbsp<input id="recebido" type="checkbox" name="recebido" value="1" />
                 </div>
+            </div>
+            
                 <div id="divRecebimento" class="span8" style=" display: none">
-                    <div class="span6">
+                    <div class="span6" style="margin-left: 0">
                         <label for="recebimento">Data Recebimento</label>
                         <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
@@ -353,8 +362,13 @@ $periodo = $this->input->get('periodo');
 	    	</div>
           <div class="span6"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
+<<<<<<< Updated upstream
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
     		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
+=======
+    		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+>>>>>>> Stashed changes
     	</div>	
     	        
     		<div class="span6"> 
@@ -375,8 +389,15 @@ $periodo = $this->input->get('periodo');
 			
 			<div class="span3">  
 	        <label for="desconto_parc">Desconto</label>
-	        <input class="span6" id="desconto_parc" type="text" readOnly="true" name="desconto_parc" value="" placeholder="em %" style="float: left;" />
+            <input class="span6 money" id="desconto_parc" readOnly="true" type="text" name="desconto_parc" value="<?php echo number_format("0.00",2,',','.') ?>" style="float: left;" />
 	      </div>
+
+          <div class="span4">  
+	        <label for="descontos_parc">Desconto</label>
+	        <input class="span6 money" id="descontos_parc" type="text" name="descontos_parc" value="" placeholder="em R$" style="float: left;" />
+	        <input class="btn btn-inverse" onclick="mostrarValoresParc();" type="button" name="desconto_parc" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
+	      </div>
+		            
 			
     		<div id="divParcelamento" class="span2">
 		    		<label for="qtdparcelas_parc">Parcelas</label>
@@ -446,9 +467,9 @@ $periodo = $this->input->get('periodo');
     </form>
 </div>
 
-<!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL) -->
+<!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL)
 <div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formDespesa" action="<?php echo base_url() ?>index.php/financeiro/adicionarDespesa" method="post">
+    <form id="formDespesa" action="<?php // echo base_url() ?>index.php/financeiro/adicionarDespesa" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
@@ -460,7 +481,7 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php  // echo current_url() ?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -523,7 +544,7 @@ $periodo = $this->input->get('periodo');
         </div>
     </form>
 </div>
-
+ -->
 
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -558,6 +579,18 @@ $periodo = $this->input->get('periodo');
                     <input type="hidden" id="idEditar" name="id" value="" />
                     <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." required />
                 </div>
+
+            	<div class="span2">  
+          <label for="valor_desconto">Val.Desc</label>
+          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00",2,',','.') ?>" />
+        </div>
+
+        <div class="span4">  
+	        <label for="descontos">Desconto</label>
+	        <input class="span6 money" id="descontos_editar" type="text" name="descontos_editar" value="" placeholder="em R$" style="float: left;" />
+	        <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
+	      </div>
+
                 <div class="span4">
                     <label for="vencimento">Data Vencimento*</label>
                     <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" required />
@@ -674,6 +707,44 @@ $periodo = $this->input->get('periodo');
 			document.getElementById('valor_desconto').value = totaldesc.toFixed(2);
 			}
 	}
+
+    function mostrarValoresEditar() {
+		if (document.getElementById('valorEditar').value == "" || document.getElementById('descontos_editar').value == "" || document.getElementById('descontoEditar').value == ""){
+			
+		}else{
+			var valor = parseFloat(document.getElementById('valorEditar').value);
+			var desconto = parseFloat(document.getElementById('descontos_editar').value); 
+			var valor_desconto = parseFloat(document.getElementById('descontoEditar').value);
+			var resultado, total;
+			resultado = valor;
+			total = valor-desconto;
+			
+			resultdesc = total ;
+			totaldesc = valor-(resultdesc);	
+			
+			document.getElementById('valorEditar').value = total.toFixed(2);
+			document.getElementById('descontoEditar').value = totaldesc.toFixed(2);
+			}
+	}
+
+    function mostrarValoresParc() {
+		if (document.getElementById('valor_parc').value == "" || document.getElementById('descontos_parc').value == "" || document.getElementById('desconto_parc').value == ""){
+			
+		}else{
+			var valor = parseFloat(document.getElementById('valor_parc').value);
+			var desconto = parseFloat(document.getElementById('descontos_parc').value); 
+			var valor_desconto = parseFloat(document.getElementById('desconto_parc').value);
+			var resultado, total;
+			resultado = valor;
+			total = valor-desconto;
+			
+			resultdesc = total ;
+			totaldesc = valor-(resultdesc);	
+			
+			document.getElementById('valor_parc').value = total.toFixed(2);
+			document.getElementById('desconto_parc').value = totaldesc.toFixed(2);
+			}
+        }
 
     jQuery(document).ready(function($) {
 
@@ -798,6 +869,7 @@ $periodo = $this->input->get('periodo');
             $("#pagamentoEditar").val($(this).attr('pagamento'));
             $("#formaPgtoEditar").val($(this).attr('formaPgto'));
             $("#tipoEditar").val($(this).attr('tipo'));
+            $("#descontoEditar").val($(this).attr('valor_desconto_editar'));
             $("#urlAtualEditar").val($(location).attr('href'));
             var baixado = $(this).attr('baixado');
             if (baixado == 1) {
@@ -872,15 +944,6 @@ $periodo = $this->input->get('periodo');
             }
         });
 
-        $("#cliente_fornecedor").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteFornecedor",
-            minLength: 1,
-            select: function(event, ui) {
-                $("#cliente_fornecedor").val(ui.item.value);
-                $("#idFornecedor").val(ui.item.id);
-            }
-        });
-
         $("#fornecedorEditar").autocomplete({
             source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteFornecedor",
             minLength: 1,
@@ -905,8 +968,6 @@ $periodo = $this->input->get('periodo');
                 $("#cliente_parc").val(ui.item.label);
             }
         });
-
-       
 
         $("#fornecedor").autocomplete({
             source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
@@ -977,8 +1038,7 @@ $periodo = $this->input->get('periodo');
 				}
 			}
 		});
-		
-						
+							
 		$('#valor_parc').keypress(function(event) {
 			valorParcelas();
 		});
@@ -995,7 +1055,6 @@ $periodo = $this->input->get('periodo');
 			}else{
 				$('#dia_pgto').css("color", "#eeeeee");
 			}
-			
 		});
 		
 		$('#valor_parc, #qtdparcelas_parc, #formaPgto_parc, #entrada, #dia_pgto, #dia_base_pgto').click(function(event){
@@ -1006,7 +1065,6 @@ $periodo = $this->input->get('periodo');
 			valorParcelas();
 		});
 		
-		
 		$('#entrada').keypress(function(event){
 			valorParcelas();
 			var entrada = $("#entrada").val();
@@ -1015,9 +1073,7 @@ $periodo = $this->input->get('periodo');
 			}else{
 				$('#dia_pgto').css("color", "#eeeeee");
 			}
-			
 		});
-		
 		$('#valor_parc, #qtdparcela_parc, #formaPgto_parc, #entrada, #dia_pgto, #dia_base_pgto').click(function(event){
 			valorParcelas();
 		});
@@ -1025,7 +1081,5 @@ $periodo = $this->input->get('periodo');
 		$('#add_receita').mouseover(function(event){
 			valorParcelas();
 		});
-
-
     });
 </script>
