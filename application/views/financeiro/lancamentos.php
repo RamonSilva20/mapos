@@ -274,7 +274,7 @@ $periodo = $this->input->get('periodo');
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos" type="text" name="descontos" value="" placeholder="em R$" style="float: left;" />
 
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValores();" name="valor_desconto" placeholder="R$" ><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValores();" name="valor_desconto" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
 	      </div>
 		            
                 <div class="span4" style="margin-left: 0">
@@ -387,7 +387,7 @@ $periodo = $this->input->get('periodo');
           <div class="span4">  
 	        <label for="descontos_parc">Desconto</label>
 	        <input class="span6 money" id="descontos_parc" type="text" name="descontos_parc" value="" placeholder="em R$" style="float: left;" />
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresParc();" name="desconto_parc" placeholder="R$" ><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresParc();" name="desconto_parc" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
 	      </div>
 		            
 			
@@ -580,7 +580,7 @@ $periodo = $this->input->get('periodo');
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos_editar" type="text" name="descontos_editar" value="" placeholder="em R$" style="float: left;" />
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresEditar();" name="valor_desconto_editar" placeholder="R$" ><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresEditar();" name="valor_desconto_editar" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
 	      </div>
 
                 <div class="span4">
