@@ -79,7 +79,7 @@ $parse_cpfcnpj = $this->input->get('c');
                                     <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
                                     <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
                                     <div class="links-uteis"><a href="<?= site_url('mine/resetarSenha') ?>">
-                                            <p>Esquece Senha</p>
+                                            <p style="margin:0px 0 18px">Esqueceu a senha?</p>
                                         </a></div>
                                     <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
                                             <p><?= date('Y'); ?> &copy; Ramon Silva</p>

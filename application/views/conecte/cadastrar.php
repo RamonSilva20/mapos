@@ -28,13 +28,17 @@
             cursor: pointer;
         }
 
+        .control-group.error .help-inline {
+            display: flex;
+        }
+
         .form-horizontal .control-group {
             border-bottom: 1px solid #ffffff;
         }
 
         .form-horizontal .controls {
-            margin: 0;
-            padding-bottom: 8px;
+            margin-left: 20px;
+            padding-bottom: 8px 0;
         }
 
         .form-horizontal .control-label {
@@ -44,11 +48,14 @@
 
         .nopadding {
             padding: 0 20px !important;
+            margin-right: 20px;
         }
 
         .widget-title h5 {
             padding-bottom: 15px;
             text-align-last: center;
+            font-size: 1.5em;
+            font-weight: 500;
         }
 
         @media (max-width: 480px) {
@@ -56,14 +63,12 @@
                 display: block !important;
             }
 
-            .widget-box {
-                width: 100%;
-                border-radius: 0;
-                margin-top: 210px;
-            }
-
             .form-horizontal .control-label {
                 margin-bottom: -6px;
+            }
+
+            .btn-xs {
+                position: initial !important;
             }
         }
     </style>
@@ -77,96 +82,98 @@
 
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
                     <div class="control-group">
-                        <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
+                        <label for="nomeCliente" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo set_value('nomeCliente'); ?>" />
+                            <input id="nomeCliente" type="text" placeholder="Nome*" name="nomeCliente" value="<?php echo set_value('nomeCliente'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <?php if (isset($custom_error) && $custom_error != '') {
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
-                        <label for="documento" class="control-label">CPF/CNPJ<span class="required">*</span></label>
+                        <label for="documento" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
-                            <button id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
+                            <input id="documento" class="cpfcnpj" type="text" placeholder="CPF/CNPJ*" name="documento" value="<?php echo set_value('documento'); ?>" />
+                            <button style="top:70px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
+                        <label for="telefone" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
+                            <input id="telefone" type="text" placeholder="Telefone*" name="telefone" value="<?php echo set_value('telefone'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="celular" class="control-label">Celular</label>
+                        <label for="celular" class="control-label"></label>
                         <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>" />
+                            <input id="celular" type="text" placeholder="Celular" name="celular" value="<?php echo set_value('celular'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="email" class="control-label">Email<span class="required">*</span></label>
+                        <label for="email" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
+                            <input id="email" type="text" placeholder="Email*" name="email" value="<?php echo set_value('email'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                        <label for="senha" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
+                            <input id="senha" type="password" placeholder="Senha*" name="senha" value="<?php echo set_value('senha'); ?>" />
                             <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="cep" class="control-label">CEP<span class="required">*</span></label>
+                        <label for="cep" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
+                            <input id="cep" type="text" placeholder="CEP*" name="cep" value="<?php echo set_value('cep'); ?>" />
                         </div>
                     </div>
 
 
                     <div class="control-group" class="control-label">
-                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
+                        <label for="rua" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
+                            <input id="rua" type="text" placeholder="Rua*" name="rua" value="<?php echo set_value('rua'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label for="numero" class="control-label">Número<span class="required">*</span></label>
+                        <label for="numero" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>" />
+                            <input id="numero" type="text" placeholder="Número*" name="numero" value="<?php echo set_value('numero'); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="complemento" class="control-label">Complemento</label>
+                        <label for="complemento" class="control-label"></label>
                         <div class="controls">
-                            <input id="complemento" type="text" name="complemento" value="<?php echo set_value('complemento'); ?>" />
+                            <input id="complemento" type="text" placeholder="Complemento" name="complemento" value="<?php echo set_value('complemento'); ?>" />
                         </div>
                     </div>
                     <div class="control-group" class="control-label">
-                        <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
+                        <label for="bairro" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="bairro" type="text" name="bairro" value="<?php echo set_value('bairro'); ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="cidade" type="text" name="cidade" value="<?php echo set_value('cidade'); ?>" />
+                            <input id="bairro" type="text" placeholder="Bairro*" name="bairro" value="<?php echo set_value('bairro'); ?>" />
                         </div>
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="estado" class="control-label">Estado<span class="required">*</span></label>
+                        <label for="cidade" class="control-label"><span class="required"></span></label>
                         <div class="controls">
-                            <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>" />
+                            <input id="cidade" type="text" placeholder="Cidade*" name="cidade" value="<?php echo set_value('cidade'); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group" class="control-label">
+                        <label for="estado" class="control-label"><span class="required"></span></label>
+                        <div class="controls">
+                            <select id="estado" name="estado">
+                                <option value="">Selecione Seu Estado...</option>
+                            </select>
                         </div>
                     </div>
             </div>
@@ -181,12 +188,22 @@
             </form>
         </div>
     </div>
-    </div>
 
 
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+
+            $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+                for (i in data.estados) {
+                    $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
+                    var curState = '<?php echo set_value('estado'); ?>';
+                    if (curState) {
+                        $("#estado option[value=" + curState + "]").prop("selected", true);
+                    }
+                }
+            });
+
             let container = document.querySelector('div');
             let input = document.querySelector('#senha');
             let icon = document.querySelector('#imgSenha');

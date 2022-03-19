@@ -31,6 +31,50 @@
         /* Move the check mark back when checked */
         text-indent: 0;
     }
+
+    .control-group.error .help-inline {
+        display: flex;
+    }
+
+    .form-horizontal .control-group {
+        border-bottom: 1px solid #ffffff;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 20px;
+        padding-bottom: 8px 0;
+    }
+
+    .form-horizontal .control-label {
+        text-align: left;
+        padding-top: 15px;
+    }
+
+    .nopadding {
+        padding: 0 20px !important;
+        margin-right: 20px;
+    }
+
+    .widget-title h5 {
+        padding-bottom: 30px;
+        text-align-last: left;
+        font-size: 2em;
+        font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+        form {
+            display: block !important;
+        }
+
+        .form-horizontal .control-label {
+            margin-bottom: -6px;
+        }
+
+        .btn-xs {
+            position: initial !important;
+        }
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -40,25 +84,18 @@
                     <i class="fas fa-user"></i>
                 </span>
                 <h5>Editar Cliente</h5>
-
             </div>
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#home">Informações Pessoais</a></li>
-                <li><a data-toggle="tab" href="#menu2">Endereço</a></li>
-            </ul>
-            <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
-                <div class="widget-content nopadding tab-content">
-                    <?php if ($custom_error != '') {
+            <?php if ($custom_error != '') {
     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
 } ?>
-                    <div id="home" class="tab-pane fade in active">
+            <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+                <div class="widget-content nopadding tab-content">
+                    <div class="span6">
                         <div class="control-group">
                             <label for="documento" class="control-label">CPF/CNPJ</label>
                             <div class="controls">
                                 <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
-                                <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar Informações
-                                    (CNPJ)
-                                </button>
+                                <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar(CNPJ)</button>
                             </div>
                         </div>
                         <div class="control-group">
@@ -71,7 +108,7 @@
                         <div class="control-group">
                             <label for="contato" class="control-label">Contato:</label>
                             <div class="controls">
-                                <input class="nomeCliente" type="text" name="contato" value="<?php echo $result->contato; ?>" />
+                                <input class="contato" type="text" name="contato" value="<?php echo $result->contato; ?>" />
                             </div>
                         </div>
                         <div class="control-group">
@@ -95,30 +132,22 @@
                         <div class="control-group">
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
-                                <input id="senha" type="text" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
+                                <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Tipo de Cliente</label>
                             <div class="controls">
-                                <label for="fornecedor" class="btn btn-default" style="margin-top: 5px;">Fornecedor
+                                <label for="fornecedor" class="btn btn-default">Fornecedor
                                     <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="1" <?= ($result->fornecedor == 1) ? 'checked' : '' ?>>
                                     <span class="badge">&check;</span>
                                 </label>
                             </div>
                         </div>
-                        <div class="form-actions">
-                            <div class="span12">
-                                <div class="span6 offset3" style="display:flex;justify-content: center">
-                                    <button type="submit" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                    <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <!-- Menu Endereços -->
-                    <div id="menu2" class="tab-pane fade">
+
+                    <div class="span6">
                         <div class="control-group" class="control-label">
                             <label for="cep" class="control-label">CEP</label>
                             <div class="controls">
@@ -158,24 +187,25 @@
                         <div class="control-group" class="control-label">
                             <label for="estado" class="control-label">Estado</label>
                             <div class="controls">
-                                <select id="estado" name="estado" class="span3">
+                                <select id="estado" name="estado" class="">
                                     <option value="">Selecione...</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-actions">
-                            <div class="span12">
-                                <div class="span6 offset3">
-                                    <button type="submit" class="button btn btn-primary" style="max-width: 160px">
-                                        <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="span12">
+                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                            <button type="submit" class="button btn btn-primary" style="max-width: 160px">
+                                <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
-</div>
 </div>
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
