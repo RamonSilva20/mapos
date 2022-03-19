@@ -262,11 +262,7 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
-<<<<<<< Updated upstream
                     <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required />
-=======
-                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required/>
->>>>>>> Stashed changes
                 </div>
 
             	<div class="span2">  
@@ -362,13 +358,8 @@ $periodo = $this->input->get('periodo');
 	    	</div>
           <div class="span6"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
-<<<<<<< Updated upstream
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
     		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
-=======
-    		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required/>
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
->>>>>>> Stashed changes
     	</div>	
     	        
     		<div class="span6"> 
