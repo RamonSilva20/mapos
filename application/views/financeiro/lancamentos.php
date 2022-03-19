@@ -281,7 +281,7 @@ $periodo = $this->input->get('periodo');
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" required />
                 </div>
 
-                <div class="span4">
+                <div class="span5">
 		    		<label for="qtdparcelas">Qtd Parcelas</label>
 		    		<select name="qtdparcelas" id="qtdparcelas" class="span10">
 		    			<option value="0">Pagamento á vista</option>
@@ -333,9 +333,9 @@ $periodo = $this->input->get('periodo');
             </div>
 
         </div>
-        <div class="modal-footer">
-    <button id="cancelar_nova_receita" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-    <button class="btn btn-success">Adicionar Registro</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+        <button class="button btn btn-success" id="submitReceita"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Registro</span></button>
   </div>
    </form>
      </div>
@@ -632,10 +632,8 @@ $periodo = $this->input->get('periodo');
             <div class="controls span4">
                 <input disabled id="usuarioEditar" value="" style="background-color: #f5f5f5; border-color: transparent; height: 10px">
             </div>
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar" style="min-width: 110px">
-                <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-primary" style="min-width: 110px">
-                <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar</span></button>
+        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+        <button class="button btn btn-success" id="submitReceita"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Salvar</span></button>
         </div>
     </form>
 </div>
