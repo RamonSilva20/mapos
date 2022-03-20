@@ -25,7 +25,7 @@ $periodo = $this->input->get('periodo');
     }
 </style>
 
-<div>
+<div class="new122">
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
         <div class="span5" style="display:flex">
@@ -113,7 +113,7 @@ $periodo = $this->input->get('periodo');
                             <th>Status</th>
                             <th>Observações</th>
                             <th>Forma de Pagamento</th>
-                            <th>Valor de Desconto</th>
+                            <th>Desconto</th>
                             <th>Valor Total</th>
                             <th>Ações</th>
                         </tr>
@@ -185,31 +185,31 @@ $periodo = $this->input->get('periodo');
                             <td colspan="6" style="text-align: left;"><strong>Estatísticas Financeiras:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas: <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?></td>
+                      <td colspan="6" style="text-align: left;">Total Receitas: R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas (+) Despesas: <?php echo($estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa); ?></td>
+                      <td colspan="6" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa; echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas (-) Despesas: <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?></td>
+                      <td colspan="6" style="text-align: left;">Total Receitas (-) Despesas: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; echo number_format($sub_receita_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas Pendentes: <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?></td>
+                      <td colspan="6" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format( $estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Despesas Pendentes: <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?></td>
+                      <td colspan="6" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes:  <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente; echo number_format( $sub_recpendente_despependente, 2, ',', '.')?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos:  <?php echo($estatisticas_financeiro->total_valor_desconto); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes:  <?php echo($estatisticas_financeiro->total_valor_desconto_pendente); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de descontos aplicados (pendentes + pagos):  <?php echo($estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de descontos aplicados (pendentes + pagos): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -273,8 +273,8 @@ $periodo = $this->input->get('periodo');
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos" type="text" name="descontos" value="" placeholder="em R$" style="float: left;" />
+            <input class="btn btn-inverse" onclick="mostrarValores();" type="button" name="valor_desconto" value="Aplicar" placeholder="R$" style="margin-left:3px;" />
 
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValores();" name="valor_desconto" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
 	      </div>
 		            
                 <div class="span4" style="margin-left: 0">
@@ -334,9 +334,9 @@ $periodo = $this->input->get('periodo');
             </div>
 
         </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-        <button class="button btn btn-success" id="submitReceita"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Registro</span></button>
+        <div class="modal-footer">
+    <button id="cancelar_nova_receita" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+    <button class="btn btn-success">Adicionar Registro</button>
   </div>
    </form>
      </div>
@@ -387,7 +387,7 @@ $periodo = $this->input->get('periodo');
           <div class="span4">  
 	        <label for="descontos_parc">Desconto</label>
 	        <input class="span6 money" id="descontos_parc" type="text" name="descontos_parc" value="" placeholder="em R$" style="float: left;" />
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresParc();" name="desconto_parc" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
+            <input class="btn btn-inverse" onclick="mostrarValoresParc();" type="button" name="desconto_parc" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
 	      </div>
 		            
 			
@@ -580,7 +580,7 @@ $periodo = $this->input->get('periodo');
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos_editar" type="text" name="descontos_editar" value="" placeholder="em R$" style="float: left;" />
-            <button class="button btn btn-mini btn-info" type="button" onclick="mostrarValoresEditar();" name="valor_desconto_editar" placeholder="R$" ><span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
+            <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
 	      </div>
 
                 <div class="span4">
@@ -633,8 +633,10 @@ $periodo = $this->input->get('periodo');
             <div class="controls span4">
                 <input disabled id="usuarioEditar" value="" style="background-color: #f5f5f5; border-color: transparent; height: 10px">
             </div>
-        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-        <button class="button btn btn-success" id="submitReceita"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Salvar</span></button>
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btnCancelarEditar" style="min-width: 110px">
+                <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-primary" style="min-width: 110px">
+                <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar</span></button>
         </div>
     </form>
 </div>
