@@ -233,20 +233,20 @@ $periodo = $this->input->get('periodo');
                 asterisco.
             </div>
 
-            <div class="span3">
+            <div class="span3" style="margin-left: 0">
 		    		<label for="tipo">Tipo</label>
-		    		<select name="tipo" id="tipo" class="span12">
+		    		<select name="tipo" id="tipo" class="span10">
 		    			<option value="receita">Receita</option>
 		    			<option value="despesa">Despesa</option>				
 		    		</select>
 	    	</div>
 
-            <div class="span6">
+            <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
                 <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
             </div>
-            <div class="span12">
+            <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente/Fornecedor*</label>
                     <input class="span12" id="cliente" type="text" name="cliente" value="" required />
@@ -265,18 +265,17 @@ $periodo = $this->input->get('periodo');
                     <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required />
                 </div>
 
-            	<div class="span2">  
-          <label for="valor_desconto">Val.Desc</label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" type="text" name="valor_desconto" value="<?php echo number_format("0.00",2,',','.') ?>"/>
-        </div>
-
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos" type="text" name="descontos" value="" placeholder="em R$" style="float: left;" />
-            <input class="btn btn-inverse" onclick="mostrarValores();" type="button" name="valor_desconto" value="Aplicar" placeholder="R$" style="margin-left:3px;" />
-
+            <input class="btn btn-inverse" onclick="mostrarValores();" type="button" name="valor_desconto" value="Aplicar" placeholder="R$" style="margin-left:3px; width: 70px;" />
 	      </div>
 		            
+          <div class="span3">  
+          <label for="valor_desconto">Val.Desc <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
+          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00",2,',','.') ?>"/>
+        </div>
+
                 <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Vencimento*</label>
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" required />
@@ -301,14 +300,14 @@ $periodo = $this->input->get('periodo');
 		    		</select>
 		    	<a href="#modalReceitaParcelada" id="abrirmodalreceitaparcelada" data-toggle="modal" style="display: none;" role="button"> </a>   
 	    	</div>    
-            <div class="span4" style="margin-left: 0">
-                <div class="span6" style="margin-left: 0">
+            <div class="span3" style="margin-left: 0">
+                <div class="span3" style="margin-left: 0">
                     <label for="recebido">Recebido?</label>
-                    &nbsp &nbsp &nbsp &nbsp<input id="recebido" type="checkbox" name="recebido" value="1" />
+                  <input id="recebido" type="checkbox" name="recebido" value="1" />
                 </div>
             </div>
             
-                <div id="divRecebimento" class="span8" style=" display: none">
+                <div id="divRecebimento" class="span8" style="display: none; margin-left: 0">
                     <div class="span6" style="margin-left: 0">
                         <label for="recebimento">Data Recebimento</label>
                         <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
@@ -350,25 +349,25 @@ $periodo = $this->input->get('periodo');
   </div>
   <div class="modal-body">	
   		<div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
-          <div class="span3">
+          <div class="span3" style="margin-left: 0">
 		    		<label for="tipo_parc" style="margin-left: 0">Tipo</label>
-		    		<select name="tipo_parc" id="tipo_parc" class="span12">
+		    		<select name="tipo_parc" id="tipo_parc" class="span10">
 		    			<option value="receita">Receita</option>
 		    			<option value="despesa">Despesa</option>				
 		    		</select>
 	    	</div>
-          <div class="span6"> 
+          <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
     		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
     	</div>	
     	        
-    		<div class="span6"> 
+    		<div class="span6" style="margin-left: 0"> 
     			<label for="cliente_parc">Cliente/Fornecedor*</label>
-    			<input class="span12" id="cliente_parc" type="text" name="cliente_parc" required />
+    			<input class="span11" id="cliente_parc" type="text" name="cliente_parc" required />
     		</div>
 		
-			<div class="span12" style="margin-left: 0">
+			<div class="span6" style="margin-left: 0">
           <label for="observacoes_parc">Observações</label>
           <textarea class="span12" id="observacoes_parc" name="observacoes_parc"></textarea>
         </div>	
@@ -378,22 +377,21 @@ $periodo = $this->input->get('periodo');
     			<label for="valor_parc">Valor*</label>
     			<input class="span12 money" id="valor_parc" type="text" name="valor_parc" required />
     		</div>
-			
-			<div class="span3">  
-	        <label for="desconto_parc">Desconto</label>
-            <input class="span6 money" id="desconto_parc" readOnly="true" type="text" name="desconto_parc" value="<?php echo number_format("0.00",2,',','.') ?>" style="float: left;" />
-	      </div>
 
-          <div class="span4">  
+          <div class="span4" style="margin-left: 2">  
 	        <label for="descontos_parc">Desconto</label>
 	        <input class="span6 money" id="descontos_parc" type="text" name="descontos_parc" value="" placeholder="em R$" style="float: left;" />
-            <input class="btn btn-inverse" onclick="mostrarValoresParc();" type="button" name="desconto_parc" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
+            <input class="btn btn-inverse" onclick="mostrarValoresParc();" type="button" name="desconto_parc" value="Aplicar" placeholder="R$" style="width: 70px; margin-left:3px;" />
 	      </div>
-		            
+		         
+          <div class="span3" style="margin-left: 0">  
+	        <label for="desconto_parc">Desconto <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
+            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format("0.00",2,',','.') ?>" style="float: left;" />
+	      </div>
 			
-    		<div id="divParcelamento" class="span2">
+    		<div id="divParcelamento" class="span2" style="margin-left: 0">
 		    		<label for="qtdparcelas_parc">Parcelas</label>
-		    		<select name="qtdparcelas_parc" id="qtdparcelas_parc" class="span12">
+		    		<select name="qtdparcelas_parc" id="qtdparcelas_parc" class="span12" style="margin-left: 0">
 		    			<option value="1">1x</option>
 		    			<option value="2">2x</option>			
 		    			<option value="3">3x</option>			
@@ -409,9 +407,9 @@ $periodo = $this->input->get('periodo');
 		    		</select>
 	    	</div>
 
-    		<div class="span4" style="float: right;">
+    		<div class="span4" style="margin-left: 0">
 		    		<label for="formaPgto_parc">Forma Pgto</label>
-		    		<select name="formaPgto_parc" id="formaPgto_parc" class="span12">
+		    		<select name="formaPgto_parc" id="formaPgto_parc" class="span12" style="margin-left: 0">
                              <option value="Dinheiro">Dinheiro</option>
                             <option value="Pix">Pix</option>
                             <option value="Boleto">Boleto</option>
@@ -433,19 +431,19 @@ $periodo = $this->input->get('periodo');
 	    		<input class="span12 money" id="entrada" type="text" name="entrada" value="0" required />
 	    	</div>
 
-	    	<div class="span4">
+	    	<div class="span4" style="margin-left: 1">
 	    		<label for="dia_pgto">Data da Entrada*</label>
 	    		<input class="span12 datepicker" id="dia_pgto" type="text" name="dia_pgto" value="<?php echo date('d/m/Y'); ?>"  autocomplete="off"  required/>
 	    	</div>
 	    	
-	    	<div class="span4">
+	    	<div class="span4" style="margin-left: 1">
 	    		<label for="dia_base_pgto">Data Base de Pgto* <i class="icon-info-sign tip-left" title="Dia do mês que serão lançadas as parcelas restantes, iniciando-se pela data selecionada."></i></label>
 	    		<input class="span12 datepicker" id="dia_base_pgto" type="text" autocomplete="off" name="dia_base_pgto" required  />
 	    	</div>
 
 	    	<div class="span12" style="background:#f5f5f5;border-radius:4px;margin: 0;border:1px solid #ddd;">
 		    	<input id="valorparcelas" type="hidden" name="valorparcelas" readonly />
-		    	<div class="span12" style="margin: 14px 0 0 0;float:right;text-align: center;">
+		    	<div class="span12" style="margin: 14px 0 0 0;float:right;text-align: center; color:#b94a48">
 		    		<label id="string_parc" style="font-weight: bold;"></label>
 		    	</div>
 	    	</div>
@@ -580,7 +578,7 @@ $periodo = $this->input->get('periodo');
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos_editar" type="text" name="descontos_editar" value="" placeholder="em R$" style="float: left;" />
-            <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="float: left;margin-left:3px;" />
+            <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="width: 70px; margin-left:3px;" />
 	      </div>
 
                 <div class="span4">
@@ -978,18 +976,18 @@ $periodo = $this->input->get('periodo');
 			
 			if(qtdparc > 1){
 				if(entrada > 0){
-					$("#string_parc").text('R$ '+entrada+' de entrada mais '+qtdparc+' parcelas de '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
+					$("#string_parc").text('R$ '+entrada+' de entrada mais '+qtdparc+' parcelas de R$ '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				$("#valorparcelas").val(parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				}else{
-					$("#string_parc").text(qtdparc+' parcelas de '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
+					$("#string_parc").text(qtdparc+' parcelas de R$ '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				$("#valorparcelas").val(parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				}
 			}else{
 				if(entrada > 0){
-					$("#string_parc").text('R$ '+entrada+' de entrada mais '+qtdparc+' parcela de '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
+					$("#string_parc").text('R$ '+entrada+' de entrada mais '+qtdparc+' parcela de R$ '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				$("#valorparcelas").val(parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				}else{
-					$("#string_parc").text(qtdparc+' parcela de '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
+					$("#string_parc").text(qtdparc+' parcela de R$ '+parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				$("#valorparcelas").val(parseFloat(Math.round(result * 100) / 100).toFixed(2));
 				}
 			}
