@@ -53,6 +53,8 @@ class Clientes extends MY_Controller
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
+        $senhaCliente = $this->input->post('senha') ?  $this->input->post('senha') : preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
+
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -63,7 +65,7 @@ class Clientes extends MY_Controller
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),
                 'email' => set_value('email'),
-                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
+                'senha' => password_hash($senhaCliente, PASSWORD_DEFAULT),
                 'rua' => set_value('rua'),
                 'numero' => set_value('numero'),
                 'complemento' => set_value('complemento'),
