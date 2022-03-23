@@ -24,7 +24,7 @@
         </form>
     </div>
 
-    <div class="span12" style="margin-left: 0">
+    <div>
         <div class="widget-box">
             <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
