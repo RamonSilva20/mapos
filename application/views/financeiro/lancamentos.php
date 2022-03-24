@@ -71,7 +71,7 @@ $periodo = $this->input->get('periodo');
             <div class="span2">
                 <label>Status</label>
                 <select name="status" class="span12">
-                    <option value="">Todos</option>
+                    <option value="">Todos (Pendente e Pago)</option>
                     <option value="0" <?= $this->input->get('status') === '0' ? 'selected' : '' ?>>Pendente</option>
                     <option value="1" <?= $this->input->get('status') === '1' ? 'selected' : '' ?>>Pago</option>
                 </select>
@@ -165,33 +165,36 @@ $periodo = $this->input->get('periodo');
                         <tr>
                             <td colspan="6" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
                             <td colspan="3" style="text-align: left; color: green">
-                                <strong>R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
                             <td colspan="3" style="text-align: left; color: red">
-                                <strong>R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" style="text-align: right"><strong>Saldo Líquido:</strong></td>
+                            <td colspan="6" style="text-align: right"><strong>Saldo:</strong></td>
                             <td colspan="3" style="text-align: left;">
-                                <strong>R$ <?php echo number_format($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa, 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                     
                         <tr>
-                            <td colspan="6" style="text-align: left;"><strong>Estatísticas Financeiras:</strong></td>
+                            <td colspan="6" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas: R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left; color: green">Total Receitas: R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left; color: red">Total Despesas: R$ <?php echo number_format( $estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; echo number_format($sub_receita_despesa, 2, ',', '.') ?></strong></td>
                       </tr>
                       <tr>
                       <td colspan="6" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa; echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
-                      </tr>
-                      <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas (-) Despesas: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; echo number_format($sub_receita_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
                       <td colspan="6" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format( $estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
@@ -203,13 +206,16 @@ $periodo = $this->input->get('periodo');
                       <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente; echo number_format( $sub_recpendente_despependente, 2, ',', '.')?></td>
                       </tr>
                       <tr>
+                      <td colspan="6" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente; echo number_format( $sub_recpendente_despependente, 2, ',', '.')?></strong></td>
+                      </tr>
+                      <tr>
                       <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
                       <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de descontos aplicados (pendentes + pagos): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></td>
+                      <td colspan="6" style="text-align: left;"><strong>Total de descontos aplicados (pendentes + pagos): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></strong></td>
                       </tr>
                     </tfoot>
                 </table>
