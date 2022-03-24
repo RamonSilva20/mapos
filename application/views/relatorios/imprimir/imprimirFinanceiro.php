@@ -33,10 +33,11 @@
                                 <tr>
                                     <th style="font-size: 1.2em; padding: 5px;width: 25%;">Cliente/Fornecedor</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Tipo</th>
+                                    <th style="font-size: 1.2em; padding: 5px;width: 20%;">Desconto</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Valor</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Vencimento</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Pagamento</th>
-                                    <th style="font-size: 1.2em; padding: 5px;width: 20%;">Forma de Pagamento</th>
+                                    <th style="font-size: 1.2em; padding: 5px;width: 20%;">Forma de Pgto.</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Situação</th>
                                 </tr>
                             </thead>
@@ -61,6 +62,7 @@
                                         echo '<tr>';
                                         echo '<td>' . $l->cliente_fornecedor . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
+                                        echo '<td>' . 'R$ ' . number_format($l->valor_desconto, 2, ',', '.') . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($l->valor, 2, ',', '.') . '</td>';
                                         echo '<td>' . $vencimento . '</td>';
                                         echo '<td>' . $pagamento . '</td>';
