@@ -164,9 +164,9 @@ class Asaas extends BasePaymentGateway
             ? $this->ci->Os_model->getServicos($id)
             : [];
         
-        $desconto = array($tipo === PaymentGateway::PAYMENT_TYPE_OS
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id));
+            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -262,9 +262,9 @@ class Asaas extends BasePaymentGateway
             ? $this->ci->Os_model->getServicos($id)
             : [];
 
-        $desconto = array($tipo === PaymentGateway::PAYMENT_TYPE_OS
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id));
+            : $this->ci->vendas_model->getById($id)];
 
 
         $totalProdutos = array_reduce(
@@ -354,7 +354,6 @@ class Asaas extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-
         return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
     }
 

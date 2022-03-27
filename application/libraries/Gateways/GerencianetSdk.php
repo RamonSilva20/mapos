@@ -4,8 +4,6 @@ use Gerencianet\Gerencianet;
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
 
-use function PHPSTORM_META\map;
-
 class GerencianetSdk extends BasePaymentGateway
 {
     /** @var Gerencianet $gerenciaNetApi */
@@ -147,7 +145,6 @@ class GerencianetSdk extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-
         return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
     }
 
@@ -161,9 +158,9 @@ class GerencianetSdk extends BasePaymentGateway
             ? $this->ci->Os_model->getServicos($id)
             : [];
 
-        $desconto = array($tipo === PaymentGateway::PAYMENT_TYPE_OS
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id));
+            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -296,9 +293,9 @@ class GerencianetSdk extends BasePaymentGateway
         $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getServicos($id)
             : [];
-        $desconto = array($tipo === PaymentGateway::PAYMENT_TYPE_OS
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id));
+            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,

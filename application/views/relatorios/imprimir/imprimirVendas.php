@@ -55,7 +55,7 @@
                                     <td colspan="5"></td>
                                     <td align="right"><b>TOTAL: </b></td>
                                     <td align="center"><b>R$:
-                                            <?php 
+                                            <?php
                                             foreach ($vendas as $valorTotal => $value) {
                                                 $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
                                             }

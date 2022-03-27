@@ -157,7 +157,7 @@
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto && $result->desconto) {
-                                        ?>
+                                            ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
@@ -170,7 +170,8 @@
                                                     <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2); ?>">
                                                 </td>
                                             </tr>
-                                        <?php } ?>
+                                        <?php
+                                        } ?>
                                     </tfoot>
                                 </table>
                             </div>
@@ -533,8 +534,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                    echo 'estoque = 1000000';
-                }; ?>
+                                            echo 'estoque = 1000000';
+                                        }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

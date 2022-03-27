@@ -9,9 +9,9 @@
                 <h5>Dados da Venda</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-                        echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
+    echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-                    } ?>
+} ?>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
@@ -130,14 +130,15 @@
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
                         <?php if ($result->valor_desconto && $result->desconto) {
-                         ?>
+                            ?>
                         <h4 style="text-align: right">Desconto: R$
                             <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
                         </h4>
                         <h4 style="text-align: right">Total Com Desconto: R$
                             <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
                         </h4>
-                    <?php } ?>
+                    <?php
+                        } ?>
                     </div>
                     <hr />
                     <h4 style="text-align: left">Observações:
