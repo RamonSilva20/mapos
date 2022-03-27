@@ -120,7 +120,7 @@
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0 ) { ?>
+                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0) { ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right"><strong>Desconto: R$</strong></td>
                                         <td>
