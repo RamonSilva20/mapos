@@ -1,6 +1,7 @@
 <?php $totalProdutos = 0; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <title>Map OS</title>
     <meta charset="UTF-8" />
@@ -19,6 +20,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row-fluid">
@@ -102,17 +104,27 @@
                                         echo '</tr>';
                                     } ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$
+                                        <td colspan="3" style="text-align: right"><strong>Total: R$</strong></td>
+                                        <td><strong>
                                                 <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                    </tr>
+                                    <?php if ($result->valor_desconto && $result->desconto) { ?>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
+                                        <td>
+                                            <strong>
+                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                                            </strong>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" style="text-align: right">
                                             <h4 style="text-align: right">Valor Total: R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                                                <?php echo number_format($result->desconto && $result->valor_desconto ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
                                             </h4>
                                         </td>
                                     </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         <?php
@@ -129,4 +141,5 @@
         window.print();
     </script>
 </body>
+
 </html>

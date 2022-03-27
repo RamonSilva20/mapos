@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
@@ -46,6 +47,8 @@
                                         </div>
                                     </div>
 
+
+
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>
@@ -64,15 +67,15 @@
                                         <div class="span8 offset2" style="text-align: center;display:flex; flex-wrap: wrap">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
-                                                  <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
+                                                    <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
                                             <?php
                                             } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
-                                              <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                                <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
-                                              <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
+                                                <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
                                             <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
-                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
@@ -99,7 +102,24 @@
                                     <div class="span2">
                                         <label for="">&nbsp</label>
                                         <button class="button btn btn-success" id="btnAdicionarProduto">
-                                          <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
+                                    </div>
+                                </form>
+                                <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
+                                    <div class="span2">
+                                        <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
+                                        <label for="">Desconto</label>
+                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" /><br />
+                                        <strong><span style="color: red" id="errorAlert"></span></strong>
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Total com Desconto</label>
+                                        <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" readonly />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">&nbsp;</label>
+                                        <button class="button btn btn-success" id="btnAdicionarDesconto">
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -136,6 +156,21 @@
                                                 <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
                                             </td>
                                         </tr>
+                                        <?php if ($result->valor_desconto && $result->desconto) {
+                                        ?>
+                                            <tr>
+                                                <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
+                                                <td>
+                                                    <div align="center"><strong><?php echo number_format($result->desconto, 2, '.', ','); ?> %</strong></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" style="text-align: right"><strong>Total Com Desconto:</strong></td>
+                                                <td>
+                                                    <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2); ?>">
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
                                     </tfoot>
                                 </table>
                             </div>
@@ -174,11 +209,10 @@
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
                     <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
-                    <strong><span style="color: red" id="resultado"></span></strong>
                 </div>
-                <div class="span4">
-                    <label>Desconto</label>
-                    <input style="width: 4em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" />
+                <div class="span5" style="margin-left: 2">
+                    <label for="valor">Valor Com Desconto*</label>
+                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " readonly />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -214,25 +248,78 @@
         </div>
         <div class="modal-footer" style="display:flex">
             <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
-              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+                <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
             <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
         </div>
     </form>
 </div>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcular() {
-        var desconto = Number(document.getElementById("valor").value);
-        var num2 = Number(document.getElementById("num2").value);
-        var elemResult = document.getElementById("resultado");
+    function calcDesconto(valor, desconto) {
 
-        if (elemResult.textContent === undefined) {
-            elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
-        } else { // IE
-            elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
+        var resultado = (valor - desconto * valor / 100).toFixed(2);
+        return resultado;
+    }
+
+    function validarDesconto(resultado, valor) {
+        if (resultado == valor) {
+            return resultado = "";
+        } else {
+            return resultado.toFixed(2);
         }
     }
+    var valorBackup = $("#total-venda").val();
+
+    $("#desconto").keyup(function() {
+
+        this.value = this.value.replace(/[^0-9.]/g, '');
+        if ($('#desconto').val() > 100) {
+            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $("#desconto").focus();
+        }
+        if ($("#total-venda").val() == null || $("#total-venda").val() == '') {
+            $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+            $("#total-venda").val(valorBackup);
+            $("#desconto").focus();
+
+        } else if (Number($("#desconto").val()) >= 0) {
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
+        } else {
+            $('#errorAlert').text('Erro desconhecido.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+        }
+    });
+
+    $("#total-venda").focusout(function() {
+        $("#total-venda").val(valorBackup);
+        if ($("#total-venda").val() == '0.00' && $('#resultado').val() != '') {
+            $('#errorAlert').text('Você não pode apagar o valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+            $("#total-venda").val(valorBackup);
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
+            $("#desconto").focus();
+        } else {
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
+        }
+    });
+
+    $('#resultado').focusout(function() {
+        if (Number($('#resultado').val()) > Number($("#total-venda").val())) {
+            $('#errorAlert').text('Desconto não pode ser maior que o Valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+        }
+        if ($("#desconto").val() != "" || $("#desconto").val() != null) {
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
+        }
+    });
 
     $(document).ready(function() {
         $(".money").maskMoney();
@@ -247,8 +334,66 @@
         $(document).on('click', '#btn-faturar', function(event) {
             event.preventDefault();
             valor = $('#total-venda').val();
+            valor_desconto = $('#total-desconto').val();
+            valor_desconto != 0.00 || valor_desconto ? $('#valor').attr('readonly', true) : $('#faturar-desconto').attr('readonly', false);
             valor = valor.replace(',', '');
             $('#valor').val(valor);
+        });
+        $('#formDesconto').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Processando',
+                        text: 'Registrando desconto...',
+                        icon: 'info',
+                        showCloseButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                },
+                success: function(response) {
+                    if (response.result) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Sucesso",
+                            text: response.messages
+                        });
+                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#desconto").val("");
+                        $("#resultado").val("");
+                        /*setTimeout(function() {
+                            window.location.href = window.BaseUrl + 'index.php/vendas/editar/' + <?php echo $result->idVendas ?>;
+                        }, 2000);*/
+                    } else {
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: response.messages
+                        });
+                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#desconto").val("");
+                        $("#resultado").val("");
+                    }
+
+                },
+                error: function(response) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: response.responseJSON.messages
+                    });
+                    $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                    $("#desconto").val("");
+                    $("#resultado").val("");
+                }
+            });
         });
         $("#formFaturar").validate({
             rules: {
@@ -388,8 +533,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
@@ -411,11 +556,13 @@
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
+                                $("#resultado").val("");
+                                $("#desconto").val("");
                             } else {
                                 Swal.fire({
                                     type: "error",
                                     title: "Atenção",
-                                    html: "Ocorreu um erro ao tentar adicionar produto."+data.messages
+                                    html: "Ocorreu um erro ao tentar adicionar produto." + data.messages
                                 });
                                 $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                                 $('#formProdutos')[0].reset();
@@ -440,6 +587,8 @@
                     success: function(data) {
                         if (data.result == true) {
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#resultado").val("");
+                            $("#desconto").val("");
                         } else {
                             Swal.fire({
                                 type: "error",

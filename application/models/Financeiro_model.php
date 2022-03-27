@@ -39,7 +39,7 @@ class Financeiro_model extends CI_Model
     {
         $this->db->select("
             SUM(case when tipo = 'despesa' then valor end) as despesas,
-            SUM(case when tipo = 'receita' then valor end) as receitas
+            SUM(case when tipo = 'receita' then IF(valor_desconto, `valor_desconto`, `valor`) end) as receitas
         ");
         $this->db->from('lancamentos');
 
