@@ -83,45 +83,49 @@
                         </div>
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
-                                    <div class="span6">
-                                        <input type="hidden" name="idProduto" id="idProduto" />
-                                        <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
-                                        <input type="hidden" name="estoque" id="estoque" value="" />
-                                        <label for="">Produto</label>
-                                        <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">Preço</label>
-                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">Quantidade</label>
-                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">&nbsp</label>
-                                        <button class="button btn btn-success" id="btnAdicionarProduto">
-                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                                    </div>
-                                </form>
-                                <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
-                                    <div class="span2">
-                                        <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
-                                        <label for="">Desconto</label>
-                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" /><br />
-                                        <strong><span style="color: red" id="errorAlert"></span></strong>
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">Total com Desconto</label>
-                                        <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" readonly />
-                                    </div>
-                                    <div class="span2">
-                                        <label for="">&nbsp;</label>
-                                        <button class="button btn btn-success" id="btnAdicionarDesconto">
-                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
-                                    </div>
-                                </form>
+                                <div>
+                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                        <div class="span6">
+                                            <input type="hidden" name="idProduto" id="idProduto" />
+                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
+                                            <input type="hidden" name="estoque" id="estoque" value="" />
+                                            <label for="">Produto</label>
+                                            <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">Preço</label>
+                                            <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">Quantidade</label>
+                                            <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">&nbsp</label>
+                                            <button class="button btn btn-success" id="btnAdicionarProduto">
+                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div>
+                                    <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
+                                        <div class="span2">
+                                            <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
+                                            <label for="">Desconto</label>
+                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" /><br />
+                                            <strong><span style="color: red" id="errorAlert"></span></strong>
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">Total com Desconto</label>
+                                            <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" readonly />
+                                        </div>
+                                        <div class="span2">
+                                            <label for="">&nbsp;</label>
+                                            <button class="button btn btn-success" id="btnAdicionarDesconto">
+                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                             <div class="span12" id="divProdutos" style="margin-left: 0">
                                 <table class="table table-bordered" id="tblProdutos">
@@ -156,8 +160,8 @@
                                                 <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
                                             </td>
                                         </tr>
-                                        <?php if ($result->valor_desconto && $result->desconto) {
-                                            ?>
+                                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                                        ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
@@ -213,7 +217,7 @@
                 </div>
                 <div class="span5" style="margin-left: 2">
                     <label for="valor">Valor Com Desconto*</label>
-                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " readonly />
+                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -336,7 +340,7 @@
             event.preventDefault();
             valor = $('#total-venda').val();
             valor_desconto = $('#total-desconto').val();
-            valor_desconto != 0.00 || valor_desconto ? $('#valor').attr('readonly', true) : $('#faturar-desconto').attr('readonly', false);
+            valor_desconto != 0.00 || valor_desconto ? $('#valor').attr('readonly', false) : $('#faturar-desconto').attr('readonly', false);
             valor = valor.replace(',', '');
             $('#valor').val(valor);
         });
@@ -534,8 +538,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

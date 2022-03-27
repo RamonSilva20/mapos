@@ -120,7 +120,7 @@
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-                                    <?php if ($result->valor_desconto && $result->desconto) { ?>
+                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0 ) { ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right"><strong>Desconto: R$</strong></td>
                                         <td>
@@ -133,7 +133,7 @@
                                     <tr>
                                         <td colspan="4" style="text-align: right"><strong>Total: R$</strong></td>
                                         <td><strong>
-                                        <?php echo number_format($result->desconto && $result->valor_desconto ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
+                                        <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
                                     </tr>
                                 </tbody>
                             </table>

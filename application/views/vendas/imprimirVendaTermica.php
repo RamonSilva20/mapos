@@ -103,12 +103,7 @@
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-                                    <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total: R$</strong></td>
-                                        <td><strong>
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
-                                    </tr>
-                                    <?php if ($result->valor_desconto && $result->desconto) { ?>
+                                    <?php if ($result->valor_desconto != 0 && $result->desconto != 0 ) { ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
                                         <td>
@@ -117,14 +112,14 @@
                                             </strong>
                                         </td>
                                     </tr>
+                                    <?php } ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right">
-                                            <h4 style="text-align: right">Valor Total: R$
-                                                <?php echo number_format($result->desconto && $result->valor_desconto ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
+                                            <h4 style="text-align: right">Total: R$
+                                                <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
                                             </h4>
                                         </td>
                                     </tr>
-                                    <?php } ?>
                                 </tbody>
                             </table>
                         <?php
