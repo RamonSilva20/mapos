@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                            <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
                                 <input class="form-control" id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
@@ -239,16 +239,6 @@
             },
             messages: {
                 nomeCliente: {
-                    required: 'Campo Requerido.'
-                },
-            },
-            rules: {
-                senha: {
-                    required: true
-                },
-            },
-            messages: {
-                senha: {
                     required: 'Campo Requerido.'
                 },
             },
