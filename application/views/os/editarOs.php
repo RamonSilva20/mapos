@@ -902,11 +902,17 @@
 
         $("#formProdutos").validate({
             rules: {
+                preco: {
+                    required: true
+                },
                 quantidade: {
                     required: true
                 }
             },
             messages: {
+                preco: {
+                    required: 'Inserir o preço'
+                },
                 quantidade: {
                     required: 'Insira a quantidade'
                 }

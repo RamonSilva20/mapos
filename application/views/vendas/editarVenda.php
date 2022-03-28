@@ -83,7 +83,7 @@
                         </div>
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <div>
+                                <div class="span11">
                                     <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
@@ -107,7 +107,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div>
+                                <div class="span11">
                                     <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
                                         <div class="span2">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
@@ -161,7 +161,7 @@
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
@@ -524,11 +524,17 @@
         });
         $("#formProdutos").validate({
             rules: {
+                preco: {
+                    required: true
+                },
                 quantidade: {
                     required: true
                 }
             },
             messages: {
+                preco: {
+                    required: 'Insira o preço'
+                },
                 quantidade: {
                     required: 'Insira a quantidade'
                 }
@@ -538,8 +544,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
@@ -567,7 +573,7 @@
                                 Swal.fire({
                                     type: "error",
                                     title: "Atenção",
-                                    html: "Ocorreu um erro ao tentar adicionar produto." + data.messages
+                                    html: "Ocorreu um erro ao tentar adicionar produto. <br /><br />Error: " + data.messages
                                 });
                                 $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                                 $('#formProdutos')[0].reset();
