@@ -161,7 +161,7 @@
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                                        ?>
+                                            ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
@@ -544,8 +544,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                    echo 'estoque = 1000000';
-                }; ?>
+                                            echo 'estoque = 1000000';
+                                        }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
