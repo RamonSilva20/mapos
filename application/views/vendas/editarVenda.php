@@ -260,6 +260,11 @@
 </div>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
+    
+    $("#quantidade").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
     function calcDesconto(valor, desconto) {
 
         var resultado = (valor - desconto * valor / 100).toFixed(2);

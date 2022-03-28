@@ -93,40 +93,40 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-                        echo 'selected';
-                    } ?> value="Orçamento">Orçamento
+                                                            echo 'selected';
+                                                        } ?> value="Orçamento">Orçamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Aberto') {
-                        echo 'selected';
-                    } ?> value="Aberto">Aberto
+                                                            echo 'selected';
+                                                        } ?> value="Aberto">Aberto
                                                 </option>
                                                 <option <?php if ($result->status == 'Faturado') {
-                        echo 'selected';
-                    } ?> value="Faturado">Faturado
+                                                            echo 'selected';
+                                                        } ?> value="Faturado">Faturado
                                                 </option>
                                                 <option <?php if ($result->status == 'Negociação') {
-                        echo 'selected';
-                    } ?> value="Negociação">Negociação
+                                                            echo 'selected';
+                                                        } ?> value="Negociação">Negociação
                                                 </option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-                        echo 'selected';
-                    } ?> value="Em Andamento">Em Andamento
+                                                            echo 'selected';
+                                                        } ?> value="Em Andamento">Em Andamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-                        echo 'selected';
-                    } ?> value="Finalizado">Finalizado
+                                                            echo 'selected';
+                                                        } ?> value="Finalizado">Finalizado
                                                 </option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-                        echo 'selected';
-                    } ?> value="Cancelado">Cancelado
+                                                            echo 'selected';
+                                                        } ?> value="Cancelado">Cancelado
                                                 </option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-                        echo 'selected';
-                    } ?> value="Aguardando Peças">Aguardando Peças
+                                                            echo 'selected';
+                                                        } ?> value="Aguardando Peças">Aguardando Peças
                                                 </option>
                                                 <option <?php if ($result->status == 'Aprovado') {
-                        echo 'selected';
-                    } ?> value="Aprovado">Aprovado
+                                                            echo 'selected';
+                                                        } ?> value="Aprovado">Aprovado
                                                 </option>
                                             </select>
                                         </div>
@@ -518,7 +518,7 @@
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Entrada*</label>
-                    <input class="span12 datepicker" autocomplete="on" id="vencimento" type="text" name="vencimento" />
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -529,7 +529,7 @@
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" autocomplete="on" id="recebimento" type="text" name="recebimento" />
+                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
@@ -570,6 +570,14 @@
         }
     }
     var valorBackup = $("#valorTotal").val();
+
+    $("#quantidade").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
+    $("#quantidade_servico").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
 
     $("#desconto").keyup(function() {
 
@@ -922,8 +930,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                                echo 'estoque = 1000000';
-                                            }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
