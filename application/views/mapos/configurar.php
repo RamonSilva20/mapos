@@ -128,8 +128,8 @@
                             <label for="control_baixa" class="control-label">Controle de baixa retroativa</label>
                             <div class="controls">
                                 <select name="control_baixa" id="control_baixa">
-                                    <option value="1">Sim</option>
-                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Não</option>
+                                    <option value="1">Ativar</option>
+                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Desativar</option>
                                 </select>
                                 <span class="help-inline">Ativar ou desativar o controle de baixa financeira, com data retroativa.</span>
                             </div>
@@ -138,10 +138,20 @@
                             <label for="control_editos" class="control-label">Controle de edição de OS</label>
                             <div class="controls">
                                 <select name="control_editos" id="control_editos">
-                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Sim</option>
-                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Não</option>
+                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Ativar</option>
+                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Desativar</option>
                                 </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar OS faturada e/ou cancelada.</span>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir OS faturada e/ou cancelada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="control_edit_vendas" class="control-label">Controle de edição de Vendas</label>
+                            <div class="controls">
+                                <select name="control_edit_vendas" id="control_edit_vendas">
+                                    <option value="1" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Ativar</option>
+                                    <option value="0" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir vendas faturada.</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -166,8 +176,8 @@
                             <label for="control_estoque" class="control-label">Controlar Estoque</label>
                             <div class="controls">
                                 <select name="control_estoque" id="control_estoque">
-                                    <option value="1">Sim</option>
-                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Não</option>
+                                    <option value="1">Ativar</option>
+                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Desativar</option>
                                 </select>
                                 <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
                             </div>

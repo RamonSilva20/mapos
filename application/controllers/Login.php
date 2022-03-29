@@ -16,7 +16,7 @@ class Login extends CI_Controller
     public function sair()
     {
         $this->session->sess_destroy();
-        redirect('login');
+        return redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function verificarLogin()

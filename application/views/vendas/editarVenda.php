@@ -415,8 +415,10 @@
                                 Swal.fire({
                                     type: "error",
                                     title: "Atenção",
-                                    text: "Ocorreu um erro ao tentar adicionar produto."
+                                    html: "Ocorreu um erro ao tentar adicionar produto."+data.messages
                                 });
+                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                                $('#formProdutos')[0].reset();
                             }
                         }
                     });
@@ -433,7 +435,7 @@
                 $.ajax({
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/vendas/excluirProduto",
-                    data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto,
+                    data: "idProduto=" + idProduto + "&idVendas=" + <?= $result->idVendas ?> + "&quantidade=" + quantidade + "&produto=" + produto,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
@@ -442,8 +444,9 @@
                             Swal.fire({
                                 type: "error",
                                 title: "Atenção",
-                                text: "Ocorreu um erro ao tentar excluir produto."
+                                html: "Ocorreu um erro ao tentar excluir produto." + data.messages
                             });
+                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                         }
                     }
                 });

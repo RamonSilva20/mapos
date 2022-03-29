@@ -50,6 +50,16 @@ class Vendas_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function isEditable($id = null)
+    {
+        if ($vendas = $this->getById($id)) {
+            if ($vendas->faturado) {
+                return $this->data['configuration']['control_edit_vendas'] == '1';
+            }
+        }
+        return true;
+    }
+
     public function getByIdCobrancas($id)
     {
         $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome, usuarios.nome, cobrancas.vendas_id,cobrancas.idCobranca,cobrancas.status');
