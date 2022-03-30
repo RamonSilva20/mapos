@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
   `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
   `valor` VARCHAR(15) NOT NULL,
+  `valor_desconto` VARCHAR(15) NULL DEFAULT 0,
   `data_vencimento` DATE NOT NULL,
   `data_pagamento` DATE NULL DEFAULT NULL,
   `baixado` TINYINT(1) NULL DEFAULT 0,
