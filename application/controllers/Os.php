@@ -470,6 +470,50 @@ class Os extends MY_Controller
             }
         }
 
+        if ($this->data['configuration']['email_automatico'] == 0) {
+            $remetentes = [];
+            switch ($this->data['configuration']['os_notification']) {
+                case 'todos':
+                    array_push($remetentes, $this->data['result']->email);
+                    array_push($remetentes, $tecnico->email);
+                    array_push($remetentes, $emitente->email);
+                    $ValidarEmail = true;
+                    break;
+                case 'cliente':
+                    array_push($remetentes, $this->data['result']->email);
+                    $ValidarEmail = true;
+                    break;
+                case 'tecnico':
+                    array_push($remetentes, $tecnico->email);
+                    break;
+                case 'emitente':
+                    array_push($remetentes, $emitente->email);
+                    break;
+                default:
+                    array_push($remetentes, $this->data['result']->email);
+                    $ValidarEmail = true;
+                    break;
+            }
+
+            if ($ValidarEmail) {
+                if (empty($this->data['result']->email) || !filter_var($this->data['result']->email, FILTER_VALIDATE_EMAIL)) {
+                    $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
+                    redirect(site_url('os/visualizar/') . $this->uri->segment(3));
+                }
+            }
+
+            $enviouEmail = $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço');
+
+            if ($enviouEmail) {
+                $this->session->set_flashdata('success', 'O email está sendo processado e será enviado em breve.');
+                log_info('Enviou e-mail para o cliente: ' . $this->data['result']->nomeCliente . '. E-mail: ' . $this->data['result']->email);
+                redirect(site_url('os'));
+            } else {
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao enviar e-mail.');
+                redirect(site_url('os'));
+            }
+        }
+
         $this->session->set_flashdata('success', 'O sistema está com uma configuração ativada para não notificar. Entre em contato com o administrador.');
         redirect(site_url('os'));
     }
@@ -708,7 +752,7 @@ class Os extends MY_Controller
 
         if ($this->os_model->add('servicos_os', $data) == true) {
             log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
-            
+
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
             $this->db->where('idOs', $this->input->post('idOsServico'));

@@ -84,6 +84,16 @@
                             </div>
                         </div>
                         <div class="control-group">
+                            <label for="email_automatico" class="control-label">Enviar Email Automático</label>
+                            <div class="controls">
+                                <select name="email_automatico" id="email_automatico">
+                                    <option value="1">Ativar</option>
+                                    <option value="0" <?= $configuration['email_automatico'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou Desativar a opção de envio de e-mail automático no cadastro de OS.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <label for="notifica_whats" class="control-label">Notificação do whatsapp</label>
                             <div class="controls">
                                 <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder="Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>

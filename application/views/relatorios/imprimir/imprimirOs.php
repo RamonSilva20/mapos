@@ -36,8 +36,8 @@
                                     <th width="140" align="center" style="font-size: 12px">TOTAL PRODUTOS</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL SERVIÇOS</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL</th>
-                                    <th width="100" align="center" style="font-size: 12px">TOTAL COM DESCONTO</th>
                                     <th width="140" align="center" style="font-size: 12px">DESCONTO</th>
+                                    <th width="100" align="center" style="font-size: 12px">TOTAL COM DESCONTO</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,8 +52,8 @@
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
-                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>' . $c->desconto . '%</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '</tr>';
                                     }
                                 ?>
@@ -63,8 +63,8 @@
                                     <td align="center"><small>R$: <?= number_format($total_produtos, 2, ',', '.') ?></small></td>
                                     <td align="center"><small>R$: <?= number_format($total_servicos, 2, ',', '.') ?></small></td>
                                     <td align="center"><small>R$: <?= number_format($total_produtos + $total_servicos, 2, ',', '.') ?> </small></td>
-                                    <td align="center"><small>R$: <?= number_format($total_geral, 2, ',', '.') ?></small></td>
                                     <td align="center"><small> </small></td>
+                                    <td align="center"><small>R$: <?= number_format($total_geral, 2, ',', '.') ?></small></td>
                                 </tr>
                             </tbody>
                         </table>
