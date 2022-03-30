@@ -208,7 +208,7 @@
                                     <div class="span3">
                                         <input type="hidden" name="idOs" id="idOs" value="<?php echo $result->idOs; ?>" />
                                         <label for="">Desconto</label>
-                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" />
+                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" />
                                         <strong><span style="color: red" id="errorAlert"></span></strong>
                                     </div>
                                     <div class="span2">

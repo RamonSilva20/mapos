@@ -112,7 +112,7 @@
                                         <div class="span2">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
-                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="3" size="2" /><br />
+                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
                                         <div class="span2">
