@@ -289,7 +289,7 @@ $totalProdutos = 0; ?>
                 <tr class="heading">
                     <td colspan="3"></td>
                     <td style="text-align: center">
-                        <strong>Desconto: <?= number_format($result->desconto, 2, ',', '.') ?> %</strong>
+                        <strong>Desconto: R$ <?= number_format($result->valor_desconto - ($totalProdutos + $totalServico), 2, ',', '.') ?></strong>
                     </td>
                 </tr>
                 <tr class="heading">
