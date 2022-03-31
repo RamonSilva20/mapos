@@ -1,8 +1,9 @@
 <?php $totalProdutos = 0; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <title>Map OS</title>
+    <title>Map_Vendas_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -19,6 +20,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row-fluid">
@@ -101,15 +103,20 @@
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
+                                    <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                        <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
+                                        <td>
+                                            <strong>
+                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                                            </strong>
+                                        </td>
                                     </tr>
+                                    <?php } ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right">
-                                            <h4 style="text-align: right">Valor Total: R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                                            <h4 style="text-align: right">Total: R$
+                                                <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
                                             </h4>
                                         </td>
                                     </tr>
@@ -129,4 +136,5 @@
         window.print();
     </script>
 </body>
+
 </html>

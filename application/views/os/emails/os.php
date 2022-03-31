@@ -285,6 +285,20 @@ $totalProdutos = 0; ?>
                     <strong>Total: R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></strong>
                 </td>
             </tr>
+            <?php if ($result->desconto != 0 && $result->valor_desconto != 0) { ?>
+                <tr class="heading">
+                    <td colspan="3"></td>
+                    <td style="text-align: center">
+                        <strong>Desconto: R$ <?= number_format($result->valor_desconto - ($totalProdutos + $totalServico), 2, ',', '.') ?></strong>
+                    </td>
+                </tr>
+                <tr class="heading">
+                    <td colspan="3"></td>
+                    <td style="text-align: center">
+                        <strong>Total com Desconto: R$ <?= number_format($result->valor_desconto, 2, ',', '.') ?></strong>
+                    </td>
+                </tr>
+            <?php } ?>
         </table>
     </div>
 </body>

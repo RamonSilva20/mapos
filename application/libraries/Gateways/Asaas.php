@@ -144,7 +144,7 @@ class Asaas extends BasePaymentGateway
                     'value' => round($cobranca->total / 100, 2)
                 ]
             );
-            if (! $result || $result->errors) {
+            if (!$result || $result->errors) {
                 throw new \Exception('Erro ao chamar Asaas!');
             }
         } else {
@@ -163,6 +163,10 @@ class Asaas extends BasePaymentGateway
         $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getServicos($id)
             : [];
+        
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
+            ? $this->ci->Os_model->getById($id)
+            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -175,6 +179,13 @@ class Asaas extends BasePaymentGateway
             $servicos,
             function ($total, $item) {
                 return $total + (floatval($item->preco) * intval($item->quantidade));
+            },
+            0
+        );
+        $totalDesconto = array_reduce(
+            $desconto,
+            function ($total, $item) {
+                return $item->desconto;
             },
             0
         );
@@ -197,14 +208,14 @@ class Asaas extends BasePaymentGateway
             'customer' => $this->criarOuRetornarClienteAsaasId($entity->clientes_id),
             'billingType' => 'BOLETO',
             'dueDate' => $expirationDate,
-            'value' => $totalProdutos + $totalServicos,
+            'value' => $this->valorTotal($totalProdutos, $totalServicos, $totalDesconto),
             'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'externalReference' => $id,
             'postalService' => false,
         ];
 
         $result = $this->asaasApi->Cobranca()->create($body);
-        if (! $result || $result->errors) {
+        if (!$result || $result->errors) {
             throw new \Exception('Erro ao chamar Asaas!');
         }
 
@@ -217,7 +228,7 @@ class Asaas extends BasePaymentGateway
             'expire_at' => $result->dueDate,
             'charge_id' => $result->id,
             'status' => $result->status,
-            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
+            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
             'payment' => $result->billingType,
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
@@ -251,6 +262,11 @@ class Asaas extends BasePaymentGateway
             ? $this->ci->Os_model->getServicos($id)
             : [];
 
+        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
+            ? $this->ci->Os_model->getById($id)
+            : $this->ci->vendas_model->getById($id)];
+
+
         $totalProdutos = array_reduce(
             $produtos,
             function ($total, $item) {
@@ -262,6 +278,14 @@ class Asaas extends BasePaymentGateway
             $servicos,
             function ($total, $item) {
                 return $total + (floatval($item->preco) * intval($item->quantidade));
+            },
+            0
+        );
+        
+        $totalDesconto = array_reduce(
+            $desconto,
+            function ($total, $item) {
+                return $item->desconto;
             },
             0
         );
@@ -284,7 +308,7 @@ class Asaas extends BasePaymentGateway
             'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'endDate' => $expirationDate,
-            'value' => $totalProdutos + $totalServicos,
+            'value' => $this->valorTotal($totalProdutos, $totalServicos, $totalDesconto),
             'billingType' => 'UNDEFINED',
             'chargeType' => 'DETACHED',
             'dueDateLimitDays' => preg_replace('/[^0-9]/', '', $this->asaasConfig['boleto_expiration']),
@@ -293,7 +317,7 @@ class Asaas extends BasePaymentGateway
         ];
 
         $result = $this->asaasApi->LinkPagamento()->create($body);
-        if (! $result || $result->errors) {
+        if (!$result || $result->errors) {
             throw new \Exception('Erro ao chamar Asaas!');
         }
 
@@ -302,7 +326,7 @@ class Asaas extends BasePaymentGateway
             'expire_at' => $result->endDate,
             'charge_id' => $result->id,
             'status' => 'PENDING',
-            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
+            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'link',
             'payment_gateway' => 'Asaas',
@@ -328,10 +352,15 @@ class Asaas extends BasePaymentGateway
         return $data;
     }
 
+    private function valorTotal($produtosValor, $servicosValor, $desconto)
+    {
+        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+    }
+
     private function criarOuRetornarClienteAsaasId($clienteId)
     {
         $cliente = (array) $this->ci->clientes_model->getById($clienteId);
-        if (! $cliente) {
+        if (!$cliente) {
             throw new Exception('Cliente não encontrado: ' . $clienteId);
         }
 

@@ -13,11 +13,11 @@
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
 } ?>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
-                      <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
-                      <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
-                      <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
-                        <span class="button__icon"><i class='bx bx-qr' ></i></span><span class="button__text">Gerar Pagamento</span></a></i>
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
+                    <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
+                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -28,8 +28,9 @@
                                 <?php if ($emitente == null) { ?>
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php
-                                                        } else { ?> <tr>
+                                            <<<< /td>
+                                    </tr> <?php
+                                        } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
@@ -47,7 +48,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                                        } ?>
+                                        } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -125,9 +126,19 @@
                         <?php
                         } ?>
                         <hr />
-                        <h4 style="text-align: right">Valor Total: R$
+                        <h4 style="text-align: right">Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
+                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                            ?>
+                        <h4 style="text-align: right">Desconto: R$
+                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <h4 style="text-align: right">Total Com Desconto: R$
+                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                        </h4>
+                    <?php
+                        } ?>
                     </div>
                     <hr />
                     <h4 style="text-align: left">Observações:
