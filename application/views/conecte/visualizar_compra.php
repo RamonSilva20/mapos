@@ -125,6 +125,14 @@
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
+                        <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
+                        <h4 style="text-align: right">Desconto: R$
+                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <h4 style="text-align: right">Total Com Desconto: R$
+                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                        </h4>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

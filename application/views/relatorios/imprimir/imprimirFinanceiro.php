@@ -34,6 +34,8 @@
                                     <th style="font-size: 1.2em; padding: 5px;width: 25%;">Cliente/Fornecedor</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Tipo</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Valor</th>
+                                    <th style="font-size: 1.2em; padding: 5px;width: 20%;">Desconto %</th>
+                                    <th style="font-size: 1.2em; padding: 5px;width: 20%;">Valor Com Desc.</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Vencimento</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Pagamento</th>
                                     <th style="font-size: 1.2em; padding: 5px;width: 20%;">Forma de Pagamento</th>
@@ -54,7 +56,7 @@
                                             $situacao = 'Pendente';
                                         }
                                         if ($l->tipo == 'receita') {
-                                            $totalReceita += $l->valor;
+                                            $totalReceita += $l->valor_desconto != 0 ? $l->valor_desconto : $l->valor;
                                         } else {
                                             $totalDespesa += $l->valor;
                                         }
@@ -62,6 +64,8 @@
                                         echo '<td>' . $l->cliente_fornecedor . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($l->valor, 2, ',', '.') . '</td>';
+                                        echo '<td>' . $l->desconto .' %</td>';
+                                        echo '<td>' . 'R$ ' . number_format($l->valor_desconto, 2, ',', '.') . '</td>';
                                         echo '<td>' . $vencimento . '</td>';
                                         echo '<td>' . $pagamento . '</td>';
                                         echo '<td>' . $l->forma_pgto . '</td>';
@@ -72,30 +76,30 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5" style="text-align: right; color: green">
+                                    <td colspan="7" style="text-align: right; color: green">
                                         <strong>Total Receitas:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left; color: green">
+                                    <td colspan="4" style="text-align: left; color: green">
                                         <strong>R$
                                             <?php echo number_format($totalReceita, 2, ',', '.') ?>
                                         </strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" style="text-align: right; color: red">
+                                    <td colspan="7" style="text-align: right; color: red">
                                         <strong>Total Despesas:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left; color: red">
+                                    <td colspan="4" style="text-align: left; color: red">
                                         <strong>R$
                                             <?php echo number_format($totalDespesa, 2, ',', '.') ?>
                                         </strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" style="text-align: right">
+                                    <td colspan="7" style="text-align: right">
                                         <strong>Saldo:</strong>
                                     </td>
-                                    <td colspan="2" style="text-align: left;">
+                                    <td colspan="4" style="text-align: left;">
                                         <strong>R$
                                             <?php echo number_format($totalReceita - $totalDespesa, 2, ',', '.') ?>
                                         </strong>

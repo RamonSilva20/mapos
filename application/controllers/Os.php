@@ -136,7 +136,7 @@ class Os extends MY_Controller
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
                     $remetentes = [];
                     switch ($this->data['configuration']['os_notification']) {
                         case 'todos':
@@ -248,7 +248,7 @@ class Os extends MY_Controller
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
                     $remetentes = [];
                     switch ($this->data['configuration']['os_notification']) {
                         case 'todos':
@@ -271,7 +271,6 @@ class Os extends MY_Controller
                     }
                     $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
                 }
-
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
                 log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
@@ -631,6 +630,12 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
+
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $id);
+            $this->db->update('os');
+
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
             return $this->output
@@ -665,6 +670,12 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
+
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $idOs);
+            $this->db->update('os');
+
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
             echo json_encode(['result' => true]);
@@ -697,6 +708,11 @@ class Os extends MY_Controller
         if ($this->os_model->add('servicos_os', $data) == true) {
             log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
 
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $this->input->post('idOsServico'));
+            $this->db->update('os');
+
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200)
@@ -716,6 +732,10 @@ class Os extends MY_Controller
 
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
             log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $idOs);
+            $this->db->update('os');
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
@@ -842,6 +862,46 @@ class Os extends MY_Controller
         }
     }
 
+    public function adicionarDesconto()
+    {
+        if ($this->input->post('desconto') == "") {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['messages' => 'Campo desconto vazio']));
+        } else {
+            $idOs = $this->input->post('idOs');
+            $data = [
+                'desconto' => $this->input->post('desconto'),
+                'valor_desconto' => $this->input->post('resultado')
+            ];
+            $editavel = $this->os_model->isEditable($idOs);
+            if (!$editavel) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'messages', 'Desconto não pode ser adiciona. Os não ja Faturada/Cancelada']));
+            }
+            if ($this->os_model->edit('os', $data, 'idOs', $idOs) == true) {
+                log_info('Adicionou um desconto na OS. ID: ' . $idOs);
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(201)
+                    ->set_output(json_encode(['result' => true, 'messages' => 'Desconto adicionado com sucesso!']));
+            } else {
+                log_info('Ocorreu um erro ao tentar adiciona desconto a OS: ' . $idOs);
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'messages', 'Ocorreu um erro ao tentar adiciona desconto a OS.']));
+            }
+        }
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(400)
+            ->set_output(json_encode(['result' => false, 'messages', 'Ocorreu um erro ao tentar adiciona desconto a OS.']));
+    }
+
     public function faturar()
     {
         $this->load->library('form_validation');
@@ -864,10 +924,12 @@ class Os extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-
+            $os = $this->os_model->getById($this->input->post('os_id'));
             $data = [
                 'descricao' => set_value('descricao'),
                 'valor' => getAmount($this->input->post('valor')),
+                'desconto' => $os->desconto,
+                'valor_desconto' => $os->valor_desconto,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -883,7 +945,7 @@ class Os extends MY_Controller
             if (!$editavel) {
                 return $this->output
                     ->set_content_type('application/json')
-                    ->set_status_header(200)
+                    ->set_status_header(400)
                     ->set_output(json_encode(['result' => false]));
             }
 
