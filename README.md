@@ -1,5 +1,5 @@
 
-![MapOS](https://raw.githubusercontent.com/MilsonElias/mapos-1/master/assets/img/logo.png)
+![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
 ![version](https://img.shields.io/badge/version-4.37.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
