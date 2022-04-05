@@ -6,39 +6,114 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
-<div class="row-fluid" style="margin-top:0">
+<style>
+.button {
+  display: flex;
+  padding: 0;
+  margin-bottom: 6px;
+  margin-left: 6px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  min-width: 160px;
+  overflow: hidden;
+  font-size: 1.1em;
+}
+
+.add-client {
+  font-size: 1.8em;
+    background: #9ba6b32e;
+    color: #9faab7;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 26px;
+    height: 27px;
+    right: 0;
+    border-left: 1px solid #d2d4de;
+    padding: 1px 7px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    justify-content: center;
+}
+
+.list-produt {
+  position: relative;
+  width: 100px;
+  height: 130px;
+  margin: 8px 0 0 8px;
+  border: 1px solid #c7cfd9;
+  background: #fff;
+  cursor: pointer;
+}
+
+.img-produt {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.disc-produt {
+  padding: 4px;
+  background: #c7cfd9;
+  bottom: 0px;
+  position: absolute;
+  text-align: center;
+}
+.row-fluid {
+  margin-top:0;
+  display: flex;
+}
+
+.new-pdvs {
+  display: flex;
+}
+
+.btn-group-vertical {
+  width: 100%;
+  margin-top: 39px;
+  margin-right: 55px;
+  right: 15px;
+}
+.modal-footer {
+  background-color: #e6e9f3;
+  border-top: 1px solid #d3d6dd;
+}
+</style>
+
+<div class="row-fluid">
     <div class="span12">
-        <div class="widget-box">
+        <div class="widget-box" style="padding-bottom: 10px">
             <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-cash-register"></i>
                 </span>
-                <h5>Editar Venda</h5>
+                <h5>Detalhes da Venda</h5>
             </div>
             <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
-                    <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da Venda</a></li>
-                        <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
-                    </ul>
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divEditarVenda">
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <?php echo form_hidden('idVendas', $result->idVendas) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>Venda:
+                                        <h4 style="margin: 0 10px 10px">Venda:
                                             <?php echo $result->idVendas ?>
-                                        </h3>
+                                        </h4>
                                         <div class="span2" style="margin-left: 0">
                                             <label for="dataFinal">Data Final</label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span5" style="position: relative">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
+                                            <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
+                                            <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" title="Adicionar Cliente" class="tip-bottom add-client">
+                                              <i class='bx bx-user-plus ' ></i></a><?php } ?></div>
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -47,42 +122,49 @@
                                         </div>
                                     </div>
 
-
-
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
-                                            <h4>Observações</h4>
+                                            <p>Observações</p>
                                         </label>
-                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                        <textarea style="width:100%;height:40px;padding-right: 0px" class="nota" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes_cliente">
-                                            <h4>Observações para o Cliente</h4>
+                                            <p>Observações para o Cliente</p>
                                         </label>
-                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
+                                        <textarea style="width:100%;height:40px" class="nota" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
                                     </div>
 
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span8 offset2" style="text-align: center;display:flex; flex-wrap: wrap">
-                                            <?php if ($result->faturado == 0) { ?>
-                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
-                                                    <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
-                                            <?php
-                                            } ?>
-                                            <button class="button btn btn-primary" id="btnContinuar">
-                                                <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
-                                                <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
-                                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                    <div class="span12" style="padding: 1%; margin-left: 0;border-top: 1px solid #ddd;padding-top: 15px">
+                                        <div class="span8 offset2" style="text-align: center;display:flex;margin-left: 0">
+                                          <div>
+                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary" style="height: 42px">
+                                              <span style="padding: 0 15px;" class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning" style="height: 42px">
+                                              <span style="padding: 0 15px;" class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                          </div>
+                                          <div>
+                                              <a href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" class="button btn btn-inverse" style="height: 42px;">
+                                              <span style="padding: 0 15px;" class="button__icon"><i class='bx bx-printer' ></i></span><span class="button__text2">Imprimir Nota</span></a>
+                                              <button class="button btn btn-primary" id="btnContinuar" style="height: 42px">
+                                              <span style="padding: 0 15px;" class="button__icon"><i class='bx bx-save' ></i></span><span class="button__text2">Salvar</span></button>
+                                          </div>
+                                          <div>
+                                              <?php if ($result->faturado == 0) { ?>
+                                                  <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-success" style="height: 90px;max-width: 180px">
+                                                  <span style="padding: 0 15px;" class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Pagamento</span></a>
+                                              <?php
+                                              } ?>
+                                          </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tab2">
-                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+
+                        <div class="" id="">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0;background: #fafaff">
                                 <div class="span11">
                                     <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
@@ -98,11 +180,11 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">Quantidade</label>
-                                            <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                            <input type="text" placeholder="Qtd." id="quantidade" name="quantidade" class="span12" />
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp</label>
-                                            <button class="button btn btn-success" id="btnAdicionarProduto">
+                                            <button style="min-width: 110px" class="button btn btn-success" id="btnAdicionarProduto">
                                                 <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                         </div>
                                     </form>
@@ -115,27 +197,28 @@
                                             <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
-                                        <div class="span2">
-                                            <label for="">Total com Desconto</label>
+                                        <div class="span2" style="width: 30%">
+                                            <label for="">Total com desconto</label>
                                             <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" readonly />
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp;</label>
-                                            <button class="button btn btn-success" id="btnAdicionarDesconto">
-                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+                                            <button style="min-width: 110px" class="button btn btn-success" id="btnAdicionarDesconto">
+                                                <span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <div class="span12" id="divProdutos" style="margin-left: 0">
+
+                            <div class="span12" id="divProdutos" style="margin-left: 0;background: #fafaff">
                                 <table class="table table-bordered" id="tblProdutos">
                                     <thead>
                                         <tr>
                                             <th>Produto</th>
-                                            <th width="8%">Quantidade</th>
                                             <th width="10%">Preço</th>
-                                            <th width="6%">Ações</th>
+                                            <th width="8%">Qtd.</th>
                                             <th width="10%">Sub-total</th>
+                                            <th width="6%">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -146,16 +229,16 @@
                                             $total = $total + $p->subTotal;
                                             echo '<tr>';
                                             echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
                                             echo '<td><div align="center">R$: ' . $preco . '</td>';
-                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
+                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
                                             echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
                                             echo '</tr>';
                                         } ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total a pagar:</strong></td>
                                             <td>
                                                 <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
                                             </td>
@@ -182,8 +265,25 @@
                         </div>
                     </div>
                 </div>
-                &nbsp
+                <br>
+
             </div>
+        </div>
+    </div>
+    <div class="widget-box tests" style="width: 100%;margin-left: 5px">
+        <div class="widget-title" style="margin: -20px 0 0">
+          <span class="icon"><i class="fas fa-cash-register"></i></span>
+          <h5>Produtos da Lista</h5>
+        </div>
+        <div class="" style="display:flex">
+        <div class="list-produt tip-bottom" title="Adicionar a lista">
+          <div class="img-produt"><img src="<?php echo base_url() ?>assets/img/Tela A10.webp"></div>
+          <div class="disc-produt">Tela frontal samsung A10</div>
+        </div>
+        <div class="list-produt tip-bottom" title="Adicionar a lista">
+          <div class="img-produt"><img src="<?php echo base_url() ?>assets/img/Tela A10.webp"></div>
+          <div class="disc-produt">Tela frontal samsung A10s</div>
+        </div>
         </div>
     </div>
 </div>
@@ -193,18 +293,19 @@
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Faturar Venda</h3>
+            <h3 id="myModalLabel">Pagamento</h3>
         </div>
+        <div class="new-pdvs" style="background:#d3d6dd">
         <div class="modal-body">
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda Nº: <?php echo $result->idVendas; ?> " />
+                <input style="max-width: 420px" class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda Nº: <?php echo $result->idVendas; ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente*</label>
-                    <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
+                    <input style="max-width: 420px" class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                     <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
                     <input type="hidden" name="vendas_id" id="vendas_id" value="<?php echo $result->idVendas; ?>">
                 </div>
@@ -216,13 +317,13 @@
                     <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
                 </div>
                 <div class="span5" style="margin-left: 2">
-                    <label for="valor">Valor Com Desconto*</label>
+                    <label for="valor">Valor Com desconto*</label>
                     <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
-                    <label for="vencimento">Data Entrada*</label>
+                    <label for="vencimento">Data entrada*</label>
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
@@ -233,7 +334,7 @@
                 </div>
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
-                        <label for="recebimento">Data Recebimento</label>
+                        <label for="recebimento">Data recebimento</label>
                         <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
                     <div class="span6">
@@ -251,16 +352,34 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer" style="display:flex">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
+
+              <div class="col-xs-3 text-center">
+                   <!-- <span style="font-size: 1.2em; font-weight: bold;">Dinheiro rápido</span> -->
+                   <div class="btn-group btn-group-vertical" style="width:100%;">
+                       <button type="button" class="btn btn-info btn-block quick-cash" id="quick-payable"><span class="badge">0.00</span></button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">1</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">5</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">10</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">20</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">50</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">100</button>
+                       <button type="button" class="btn btn-block btn-inverse quick-cash">200</button>
+                       <button type="button" class="btn btn-block btn-danger" id="clear-cash-notes">Limpar</button>
+                   </div>
+               </div>
+        </div>
+
+        <div class="modal-footer" style="display:flex;justify-content: space-evenly">
+            <button class="button btn btn-danger" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar" style="min-width: 105px">
                 <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
+            <button class="button btn btn-info" style="min-width: 105px">
+              <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Enviar</span></button>
         </div>
     </form>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    
+
     $("#quantidade").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });

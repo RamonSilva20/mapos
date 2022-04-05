@@ -3,6 +3,17 @@
 /*=======================================*/
 /* ===========================> FOCUS <=========================== */
 
+input[type="search"],
+select,
+input[type="text"],
+.row-fluid input[class*="span"],
+input[type="number"],
+select[class*="span"],
+.row-fluid select[class*="span"] {
+  background  : #ffffff;
+  border-color: #d2d4de;
+}
+
 /* INPUT DE BUSCA NA PÁGINA */
 #content {
   background: none repeat scroll 0 0 var(--bodycolor-w);
@@ -28,7 +39,7 @@
   background-color: #548b54;
 }
 
-.widget-box,
+.new122,
 .widget-box0,
 .widget-box1,
 .widget-box2,
@@ -37,6 +48,23 @@
   background: var(--widget-box-w);
   border    : 1px solid rgb(0 0 0 / 8%);
   box-shadow: 0 0 10px rgb(0 0 0 / 4%);
+}
+
+.widget-box {
+  border-radius: 6px;
+  background   : var(--widget-box-w);
+  border       : 1px solid rgb(0 0 0 / 8%);
+  box-shadow   : none;
+}
+
+.form-actions {
+  background-color          : #ffffff;
+  border-bottom-left-radius : 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.new122 {
+  background: var(--widget-box-w);
 }
 
 /* LOGO */
@@ -126,7 +154,7 @@ body {
 }
 
 .cardBox .card {
-  background: #ffffff;
+  opacity: 1;
 }
 
 .tempo-carga {

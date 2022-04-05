@@ -16,6 +16,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
+<style>
+.modal-body {
+    overflow-y: inherit;
+    }
+</style>
+
 <!-- New Bem-vindos -->
 <div id="content-bemv">
     <div class="bemv">Dashboard</div>
@@ -28,12 +34,18 @@
         <li class="card">
             <div>
                 <div class="numbers">Clientes</div>
-                <div class="cardName">F1</div>
+                <div class="cardName tip-top" title="Tecla de Atalho Cliente" class="tip-bottom">F1</div>
             </div>
             <a href="<?= site_url('clientes') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-group bx-border-circle'></i>
-                </div>
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/dxjqoygy.json"
+                    trigger="hover"
+                    colors="primary:#110a5c,secondary:#ffffff"
+                    stroke="65"
+                    style="width:55px;height:55px">
+                </lord-icon>
+              </div>
             </a>
         </li>
     <?php endif ?>
@@ -42,12 +54,18 @@
         <li class="card">
             <div>
                 <div class="numbers">Produtos</div>
-                <div class="cardName">F2</div>
+                <div class="cardName tip-top" title="Tecla de Atalho Produtos" class="tip-bottom">F2</div>
             </div>
             <a href="<?= site_url('produtos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-package bx-border-circle'></i>
-                </div>
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/dnoiydox.json"
+                    trigger="hover"
+                    colors="primary:#110a5c,secondary:#ffffff"
+                    stroke="65"
+                    style="width:55px;height:55px">
+                </lord-icon>
+              </div>
             </a>
         </li>
     <?php endif ?>
@@ -56,12 +74,18 @@
         <li class="card">
             <div>
                 <div class="numbers">Serviços</div>
-                <div class="cardName">F3</div>
+                <div class="cardName tip-top" title="Tecla de Atalho Serviços" class="tip-bottom">F3</div>
             </div>
             <a href="<?= site_url('servicos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-stopwatch bx-border-circle'></i>
-                </div>
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/sbiheqdr.json"
+                    trigger="hover"
+                    colors="primary:#110a5c,secondary:#ffffff"
+                    stroke="65"
+                    style="width:55px;height:55px">
+                </lord-icon>
+              </div>
             </a>
         </li>
     <?php endif ?>
@@ -70,34 +94,61 @@
         <li class="card">
             <div>
                 <div class="numbers N-tittle">Ordens</div>
-                <div class="cardName">F4</div>
+                <div class="cardName tip-top" title="Tecla de Atalho OS" class="tip-bottom">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-spreadsheet bx-border-circle'></i>
-                </div>
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/nocovwne.json"
+                    trigger="hover"
+                    colors="primary:#110a5c,secondary:#ffffff"
+                    stroke="65"
+                    style="width:55px;height:55px">
+                </lord-icon>
+              </div>
             </a>
         </li>
     <?php endif ?>
 
-    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers N-tittle">PDV</div>
+                <div class="cardName tip-top" title="Tecla de Atalho Vendas" class="tip-bottom">F6</div>
+            </div>
+            <a href="<?= site_url('vendas/adicionar') ?>">
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/yeallgsa.json"
+                    trigger="hover"
+                    colors="primary:#110a5c,secondary:#ffffff"
+                    stroke="65"
+                    style="width:60px;height:60px">
+                </lord-icon>
+              </div>
+            </a>
+        </li>
+    <?php endif ?>
 
-    <div Class="card-cl">
-        <div class="clock-card">
-            <div class="clock-flex">
-                <span class="num hour_num">00</span>
-                <div class="tit">Horas</div>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers N-tittle">Lançamentos</div>
+                <div class="cardName tip-top" title="Tecla de Atalho Lançamentos" class="tip-bottom">F7</div>
             </div>
-            <span class="colun" id="colun-1">:</span>
-            <div class="clock-flex">
-                <span class="num min_num">00</span>
-                <div class="tit">Minutos</div>
-            </div>
-            <div class="time_am_pm">
-                <span class="num am_pm">AM</span>
-            </div>
-        </div>
-    </div>
+            <a href="<?= site_url('financeiro/lancamentos') ?>">
+              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
+                <lord-icon
+                    src="https://cdn.lordicon.com/gqdnbnwt.json"
+                    trigger="hover"
+                    colors="primary:#ffffff,secondary:#110a5c"
+                    stroke="65"
+                    style="width:55px;height:55px">
+                </lord-icon>
+              </div>
+            </a>
+        </li>
+    <?php endif ?>
 </ul>
 <!--End-Action boxes-->
 
@@ -138,51 +189,51 @@
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
-                        <div><i class='bx bxs-group iconBx'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Adicionar clientes e fornecedores">
+                        <div><i class='bx bx-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-                            <div class="cardName">Add Clientes</div>
+                            <div class="cardName">Clientes</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
-                        <div><i class='bx bxs-package iconBx2'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar produtos">
+                        <div><i class='bx bx-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-                            <div class="cardName">Add Produtos</div>
+                            <div class="cardName">Produtos</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
-                        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
+                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                        <div><i class='bx bx-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-                            <div class="cardName">Add Serviços</div>
+                            <div class="cardName">Serviços</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
-                        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar Ordens de Serviço">
+                        <div><i class='bx bx-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-                            <div class="cardName">Add Ordens</div>
+                            <div class="cardName">Ordens</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
-                        <div><i class='bx bxs-receipt iconBx6'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                        <div><i class='bx bx-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-                            <div class="cardName">Add Garantias</div>
+                            <div class="cardName">Garantias</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
-                        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
+                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar vendas">
+                        <div><i class='bx bx-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-                            <div class="cardName">Add Vendas</div>
+                            <div class="cardName">Vendas</div>
                         </div>
                     </a>
 
@@ -194,16 +245,16 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
-                                    <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card tip-top">
+                                    <div><i class='bx bx-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
                                         <div class="cardName">Receita do dia</div>
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
-                                    <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card tip-top">
+                                    <div><i class='bx bx-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
                                         <div class="cardName">Despesa do dia</div>
@@ -424,7 +475,7 @@
                     'rgba(255, 159, 64, 0.5)',
                     'rgba(153, 102, 255, 0.5)'
                 ],
-                borderWidth: 1
+                borderWidth: 0,
             }]
         },
 
@@ -439,7 +490,7 @@
                             return new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL',
-                                maximumSignificantDidits: 1
+                                maximumSignificantDidits: 1,
                             }).format(value);
                         }
                     },
@@ -507,10 +558,10 @@
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
                                                 <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
                                                 <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
@@ -566,7 +617,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -616,7 +667,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -665,7 +716,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>

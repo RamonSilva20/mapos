@@ -12,13 +12,11 @@
                 <span class="icon">
                     <i class="fas fa-cash-register"></i>
                 </span>
-                <h5>Cadastro de venda</h5>
+                <h5>PDV / Venda</h5>
             </div>
             <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
-                    <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da venda</a></li>
-                    </ul>
+                  <h4 style="margin: 0 10px 10px">Iniciar venda</h4>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
@@ -31,12 +29,12 @@
                                             <label for="dataInicial">Data da Venda<span class="required">*</span></label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span5" style="position: relative">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
                                             <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-                                              <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
+                                            <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" title="Adicionar Cliente" class="" style="font-size: 1.8em;background: #9ba6b32e;color: #9faab7;position: absolute;top: 26px;right: 0;border-left: 1px solid #d2d4de;padding: 1px 7px;border-bottom-right-radius: 5px;border-top-right-radius: 5px;"><i class='bx bx-user-plus ' ></i></a><?php } ?></div>
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -47,16 +45,16 @@
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
-                                            <h4>Observações</h4>
+                                            <p>Observações</p>
                                         </label>
-                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
+                                        <textarea style="width: 100%;height: 40px;padding-right: 0px" class="nota" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                     </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes_cliente">
-                                            <h4>Observações para o Cliente</h4>
+                                            <p>Observações para o Cliente</p>
                                         </label>
-                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"></textarea>
+                                        <textarea style="width: 100%;height: 40px" class="nota" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"></textarea>
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">

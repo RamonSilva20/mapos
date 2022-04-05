@@ -23,9 +23,9 @@ body {
   --funSider2 : #0467fc;
   --subtitle  : #2c2b31;
   --title     : #d4d8e0;
-  --widget-box: #ffffff;
+  --widget-box: #e6e9f3;
   --toggle    : #676779;
-  --black     : #21232e;
+  --black     : #191b24;
 
   --white   : #676779;
   --cinza   : #a2a6ae;
@@ -49,13 +49,6 @@ body {
   font-size  : 0.77em;
   min-height : 100vh;
   overflow-x : hidden;
-}
-
-body.dark {
-  --funSider  : #2c2c30;
-  --bodycolor : #3d3f3f;
-  --widget-box: #f9f9f9;
-  --title     : #d6d9e0;
 }
 
 a {
@@ -141,7 +134,7 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  box-shadow: none;
+  box-shadow  : none;
 }
 
 .progress,
@@ -158,6 +151,22 @@ input[type="color"],
   background-image: none;
 }
 
+input[type="search"],
+select,
+input[type="text"],
+.row-fluid input[class*="span"],
+input[type="number"],
+select[class*="span"] {
+  background  : #e6e9f3;
+  border-color: #b1b9be;
+}
+
+.form-actions {
+  background-color          : #d2dbe3;
+  border-bottom-left-radius : 12px;
+  border-bottom-right-radius: 12px;
+}
+
 .fc th {
     font-weight: 500;
 }
@@ -171,7 +180,8 @@ h3 {
   display      : flex;
   height       : 30px;
   padding      : 0;
-  margin       : 0 6px 15px 0;
+  margin-bottom: 6px;
+  margin-left  : 6px;
   border       : none;
   outline      : none;
   border-radius: 5px;
@@ -183,7 +193,7 @@ h3 {
 
 .button__text,
 .button__icon {
-  display    : inline-flex;
+  display    : inline-flex !important;
   align-items: center;
   padding    : 0 7px;
   color      : #fff;
@@ -243,7 +253,9 @@ hr {
 .row-fluid select[class*="span"],
 .row-fluid textarea[class*="span"],
 .row-fluid .uneditable-input[class*="span"] {
-  margin-top: 0;
+  margin-top  : 0;
+  background  : #e6e9f3;
+  border-color: #b1bac0;
 }
 
 #btn-calendar .iconX2 {
@@ -411,10 +423,10 @@ hr {
   margin               : auto;
   padding              : 0px;
   display              : grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-gap             : 19px;
   margin-bottom        : 15px;
-  margin-top           : 3px;
+  margin-top           : 10px;
 }
 
 .cardBox .card {
@@ -424,10 +436,11 @@ hr {
   display        : flex;
   justify-content: space-around;
   align-items    : center;
+  opacity        : 0.9;
 }
 
 .cardBox .card:nth-child(1) {
-  background: linear-gradient(53deg, #38a9f5, #6ec4fb);
+  background: linear-gradient(53deg, #4db8ff, #93d5ff);
 }
 
 .cardBox .card:nth-child(2) {
@@ -439,7 +452,15 @@ hr {
 }
 
 .cardBox .card:nth-child(4) {
-  background: linear-gradient(53deg, #ff6384, #ff97ab);
+  background: linear-gradient(53deg, #ff6a8a, #fd9eb1);
+}
+
+.cardBox .card:nth-child(5) {
+  background: linear-gradient(53deg, #1acdac, #2af1cc);
+}
+
+.cardBox .card:nth-child(6) {
+  background: linear-gradient(53deg, #fbe267, #ffee95);
 }
 
 .cardBox .card .numbers {
@@ -452,6 +473,7 @@ hr {
   font-size  : 1.5em;
   font-weight: 600;
   padding    : 3px;
+  text-align : center;
 }
 
 .cardBox .card .iconBx {
@@ -473,7 +495,7 @@ hr {
   display        : flex;
   justify-content: space-around;
   align-items    : center;
-  background     : #fae26b;
+  background: linear-gradient(53deg, #fbe267, #ffee95);
 }
 
 .cardBox .card-cl .clock-card {
@@ -627,8 +649,8 @@ hr {
 
 #sidebar li .title-tooltip {
   position     : absolute;
-  background   : #ffd07c;
-  color        : #333649;
+  background   : #08080c;
+  color        : #93a2af;
   border       : 1px solid #6c6e7841;
   padding      : 0 6px;
   border-radius: 6px;
@@ -889,7 +911,7 @@ section .profile .profile-img {
 }
 
 #content-header {
-  margin         : 20px 10px 10px;
+  margin         : 25px 10px 15px;
   z-index        : 20;
   display        : flex;
   align-items    : center;
@@ -899,15 +921,15 @@ section .profile .profile-img {
 
 /* New bem-vindos */
 #content-bemv {
-  margin: 20px 10px 10px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
+  margin         : 25px 10px 15px;
+  z-index        : 20;
+  display        : flex;
+  align-items    : center;
   justify-content: space-between;
-  flex-direction: row-reverse;
-  top: 22px;
-  right: 25px;
-  position: absolute;
+  flex-direction : row-reverse;
+  top            : 22px;
+  right          : 25px;
+  position       : absolute;
 }
 
 .bemv {
@@ -1367,11 +1389,12 @@ section .profile .profile-img {
 
 .new-bottons .card:hover {
   text-decoration: none;
-  background     : #f5f6f7;
+  background     : #e0e3ed;
 }
 
 .new-bottons .card .cardName {
-  font-size  : 0.9em;
+  font-size  : 1.1em;
+  font-weight: 400;
   position   : relative;
   top        : 5px;
   font-family: system-ui;
@@ -1579,7 +1602,7 @@ section .profile .profile-img {
 .fc-event[href] {
   border-radius: 8px;
   color        : #76818d;
-  background   : #f3f4f6;
+  background   : #e6e9f3;
   border-color : #76818d;
 }
 
@@ -1677,9 +1700,12 @@ section .profile .profile-img {
   flex-direction: column;
   clear         : both;
   position      : relative;
-  border-radius : 12px;
   margin-top    : 10px;
   margin-bottom : 10px;
+  border-radius: 6px;
+  background   : var(--widget-box);
+  border       : 1px solid rgb(0 0 0 / 8%);
+  box-shadow   : none;
 }
 
 .widget-box-new {
@@ -1710,7 +1736,6 @@ section .profile .profile-img {
   border-radius : 12px;
 }
 
-.widget-box,
 .widget-box0,
 .widget-box2,
 .widget-box-new,
@@ -2484,11 +2509,30 @@ div.dataTables_wrapper .ui-widget-header {
 .modal-header {
   height : auto;
   padding: 8px 15px 5px;
+  border-bottom          : 0 solid #eee;
+  border-top-left-radius : 6px;
+  border-top-right-radius: 6px;
+  background             : #3dabf5;
+  color                  : #fff;
+  text-align-last        : center;
+}
+
+.modal-header h5 {
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
+}
+
+.modal-header h4 {
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
 }
 
 .modal-header h3 {
-  font-size  : 12px;
-  text-shadow: 0 1px 0 #ffffff;
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
 }
 
 .notify-ui ul {
@@ -2516,8 +2560,8 @@ form {
 }
 
 .form-horizontal .control-group {
-  border-top   : 1px solid #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  border-top   : 0px solid #ffffff;
+  border-bottom: 0px solid #eeeeee;
   margin-bottom: 0;
 }
 
@@ -3228,6 +3272,14 @@ form {
     padding: 0 !important;
   }
 
+  .cardBox .card .numbers {
+    font-size: 1.6em !important;
+  }
+
+  .cardBox .card .cardName {
+    display: none;
+  }
+
   .new-balance {
     grid-template-columns: 1fr;
   }
@@ -3292,6 +3344,10 @@ form {
   body {
     padding  : 0 !important;
     font-size: 0.67em !important;
+  }
+
+  .tip-bottom {
+    display: inline;
   }
 
   .cli1 {
@@ -3552,6 +3608,10 @@ form {
     font-size: 0.75em;
   }
 
+  .new-bottons .card .cardName {
+    font-size  : 0.9em;
+  }
+
   .cli1 {
     max-width    : 77px;
     white-space  : nowrap;
@@ -3692,6 +3752,11 @@ form {
 
   .cardBox .card .iconBx {
     font-size: 2.3rem;
+  }
+
+  lord-icon {
+    width : 50px !important;
+    height: 50px !important;
   }
 
   .dropdown-menu {
