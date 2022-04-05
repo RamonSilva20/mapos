@@ -72,7 +72,7 @@
 .btn-group-vertical {
   width: 100%;
   margin-top: 28px;
-  margin-right: 55px;
+  margin-right: 25px;
   right: 15px;
 }
 .modal-footer {
@@ -139,13 +139,13 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0;border-top: 1px solid #ddd;padding-top: 15px">
                                         <div class="span8 offset2" style="text-align: center;display:flex;margin-left: 0">
                                           <div>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary" style="height: 42px">
+                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-inverse" style="height: 42px">
                                               <span style="padding: 0 15px;" class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning" style="height: 42px">
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-danger" style="height: 42px">
                                               <span style="padding: 0 15px;" class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                           </div>
                                           <div>
-                                              <a href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" class="button btn btn-inverse" style="height: 42px;">
+                                              <a href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" class="button btn btn-warning" style="height: 42px;">
                                               <span style="padding: 0 15px;" class="button__icon"><i class='bx bx-printer' ></i></span><span class="button__text2">Imprimir Nota</span></a>
                                               <button class="button btn btn-primary" id="btnContinuar" style="height: 42px">
                                               <span style="padding: 0 15px;" class="button__icon"><i class='bx bx-save' ></i></span><span class="button__text2">Salvar</span></button>
@@ -184,7 +184,7 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp</label>
-                                            <button style="min-width: 110px" class="button btn btn-success" id="btnAdicionarProduto">
+                                            <button style="min-width: 110px" class="button btn btn-inverse" id="btnAdicionarProduto">
                                                 <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                         </div>
                                     </form>
@@ -203,7 +203,7 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp;</label>
-                                            <button style="min-width: 110px" class="button btn btn-success" id="btnAdicionarDesconto">
+                                            <button style="min-width: 110px" class="button btn btn-inverse" id="btnAdicionarDesconto">
                                                 <span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Aplicar</span></button>
                                         </div>
                                     </form>
@@ -326,7 +326,11 @@
                     <label for="vencimento">Data entrada*</label>
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
-                <div class="span4" style="margin-left: 2">
+                <div class="span4" style="margin-left: 2;max-width: 125px">
+                    <label for="vencimento">Valor pago</label>
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php ?> " />
+                </div>
+                <div class="span4" style="margin-left: 2;max-width: 125px">
                     <label for="vencimento">Troco</label>
                     <input class="span12 money" id="valor" type="text" name="valor" value="<?php ?> " />
                 </div>
