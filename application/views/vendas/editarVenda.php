@@ -71,7 +71,7 @@
 
 .btn-group-vertical {
   width: 100%;
-  margin-top: 39px;
+  margin-top: 28px;
   margin-right: 55px;
   right: 15px;
 }
@@ -326,6 +326,10 @@
                     <label for="vencimento">Data entrada*</label>
                     <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
+                <div class="span4" style="margin-left: 2">
+                    <label for="vencimento">Troco</label>
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php ?> " />
+                </div>
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
@@ -355,8 +359,8 @@
 
               <div class="col-xs-3 text-center">
                    <!-- <span style="font-size: 1.2em; font-weight: bold;">Dinheiro rápido</span> -->
-                   <div class="btn-group btn-group-vertical" style="width:100%;">
-                       <button type="button" class="btn btn-info btn-block quick-cash" id="quick-payable"><span class="badge">0.00</span></button>
+                   <div class="btn-group btn-group-vertical" style="width:100%">
+                       <button type="button" class="btn btn-info btn-block quick-cash" id="quick-payable"><span class="badge">000</span></button>
                        <button type="button" class="btn btn-block btn-inverse quick-cash">1</button>
                        <button type="button" class="btn btn-block btn-inverse quick-cash">5</button>
                        <button type="button" class="btn btn-block btn-inverse quick-cash">10</button>
