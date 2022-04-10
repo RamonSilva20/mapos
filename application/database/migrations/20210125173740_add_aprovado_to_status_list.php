@@ -7,7 +7,7 @@ class Migration_add_aprovado_to_status_list extends CI_Migration
         $configurationSql = "
             SELECT valor
             FROM configuracoes
-            WHERE idConfig = 13
+            WHERE idConfig = 12
             LIMIT 1
         ";
         $result = $this->db->query($configurationSql)->row();
