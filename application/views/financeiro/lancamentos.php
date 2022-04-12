@@ -114,7 +114,7 @@ $periodo = $this->input->get('periodo');
                             <th>Observações</th>
                             <th>Forma de Pagamento</th>
                             <th>Desconto</th>
-                            <th>Valor Total</th>
+                            <th>Valor com Desconto</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -185,10 +185,10 @@ $periodo = $this->input->get('periodo');
                             <td colspan="6" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="6" style="text-align: left; color: green">Total Receitas: R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left; color: red">Total Despesas: R$ <?php echo number_format( $estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format( $estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
                       <td colspan="6" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; echo number_format($sub_receita_despesa, 2, ',', '.') ?></strong></td>
@@ -433,8 +433,8 @@ $periodo = $this->input->get('periodo');
 
 	    <div class="span12" style="margin-left: 0;"> 
 	    	<div class="span4">
-	    		<label for="entrada">Entrada* <i class="icon-info-sign tip-right" title="O valor da entrada será lançado como pago no dia atual (Hoje)"></i></label>
-	    		<input class="span12 money" id="entrada" type="text" name="entrada" value="0" required />
+	    		<label for="entrada">Entrada <i class="icon-info-sign tip-right" title="O valor da entrada será lançado como pago no dia atual (Hoje)"></i></label>
+	    		<input class="span12 money" id="entrada" type="text" name="entrada" value="0" />
 	    	</div>
 
 	    	<div class="span4" style="margin-left: 1">

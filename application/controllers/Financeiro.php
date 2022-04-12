@@ -193,6 +193,8 @@ class Financeiro extends MY_Controller
             $entrada = $this->input->post('entrada');
             $valor_parc = $this->input->post('valor_parc');
             $valorparcelas = ($valor_parc - $entrada) / $qtdparcelas_parc;
+            $valor_desconto = $this->input->post('desconto_parc');
+            $desconto_por_parcela  = $valor_desconto / $qtdparcelas_parc;
 
             if ($entrada >= $valor_parc) {
                 $this->session->set_flashdata('error', 'O valor da entrada não pode ser maior ou igual ao valor total da receita/Despesa!');
@@ -239,7 +241,7 @@ class Financeiro extends MY_Controller
                     $data = array(
                         'descricao' => $this->input->post('descricao_parc') . ' - Parcela [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $valorparcelas,
-                        'valor_desconto' => $this->input->post('desconto_parc'),
+                        'valor_desconto' => $desconto_por_parcela,
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => $recebimento != null ? $recebimento : date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
@@ -270,7 +272,7 @@ class Financeiro extends MY_Controller
                 $data1 = array(
                     'descricao' => $this->input->post('descricao_parc'),
                     'valor' => $entrada,
-                    'valor_desconto' => $this->input->post('desconto_parc'),
+                    'valor_desconto' => $desconto_por_parcela,
                     'data_vencimento' => $dia_pgto,
                     'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format($myDateTime, "Y-m-d"),
                     'baixado' => 1,
@@ -308,7 +310,7 @@ class Financeiro extends MY_Controller
                     $data = array(
                         'descricao' => $this->input->post('descricao_parc') . ' - Parcela [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $this->input->post('valorparcelas'),
-                        'valor_desconto' => $this->input->post('desconto_parc'),
+                        'valor_desconto' => $desconto_por_parcela,
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
