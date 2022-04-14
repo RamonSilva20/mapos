@@ -281,7 +281,7 @@ class Mapos_model extends CI_Model
                 SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 0 AND tipo = 'receita' THEN valor - desconto END) AS VALOR_OUT_REC,
                 SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 0 AND tipo = 'despesa' THEN valor - desconto END) AS VALOR_OUT_DES,
                 SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 0 AND tipo = 'receita' THEN valor - desconto END) AS VALOR_NOV_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 0 AND tipo = 'despesa' THENvalor - desconto END) AS VALOR_NOV_DES,
+                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 0 AND tipo = 'despesa' THEN valor - desconto END) AS VALOR_NOV_DES,
                 SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 0 AND tipo = 'receita' THEN valor - desconto END) AS VALOR_DEZ_REC,
                 SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 0 AND tipo = 'despesa' THEN valor - desconto END) AS VALOR_DEZ_DES
             FROM lancamentos
