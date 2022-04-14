@@ -113,8 +113,9 @@ $periodo = $this->input->get('periodo');
                             <th>Status</th>
                             <th>Observações</th>
                             <th>Forma de Pagamento</th>
-                            <th>Desconto</th>
-                            <th>Valor com Desconto</th>
+                            <th>Valor (+)</th>
+                            <th>Desconto (-)</th>
+                            <th>Valor Total (=)</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -147,8 +148,10 @@ $periodo = $this->input->get('periodo');
                             echo '<td>' . $status . '</td>';
                             echo '<td>' . $r->observacoes . '</td>';
                             echo '<td>' . $r->forma_pgto . '</td>';
-                            echo '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>';
-                            echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>';
+                            echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; //valor total sem o desconto
+                            echo '<td> R$ ' . number_format($r->desconto, 2, ',', '.') . '</td>'; // valor do desconto
+                            echo '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>'; // valor total  com o desconto
+                           
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                 echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $r->valor_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
@@ -215,7 +218,13 @@ $periodo = $this->input->get('periodo');
                       <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;"><strong>Total de descontos aplicados (pendentes + pagos): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></strong></td>
+                      <td colspan="6" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></strong></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format( $estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
+                      </tr>
+                      <tr>
+                      <td colspan="6" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format( $estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -576,18 +585,18 @@ $periodo = $this->input->get('periodo');
                     <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." required />
                 </div>
 
-            	<div class="span2">  
-          <label for="valor_desconto">Val.Desc</label>
-          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00",2,',','.') ?>" />
-        </div>
-
         <div class="span4">  
 	        <label for="descontos">Desconto</label>
 	        <input class="span6 money" id="descontos_editar" type="text" name="descontos_editar" value="" placeholder="em R$" style="float: left;" />
             <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="width: 70px; margin-left:3px;" />
 	      </div>
 
-                <div class="span4">
+          <div class="span2">  
+          <label for="valor_desconto">Val.Desc</label>
+          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00",2,',','.') ?>" />
+        </div>
+
+                <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Vencimento*</label>
                     <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" required />
                 </div>
