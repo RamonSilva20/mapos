@@ -129,6 +129,10 @@ $periodo = $this->input->get('periodo');
                         }
                         foreach ($results as $r) {
                             $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
+                            $resultado_valor_desconto_valor = number_format($r->valor, 2, ',', '.');
+                            $resultado_valor_desconto_desconto = number_format($r->desconto, 2, ',', '.');
+                            $subtracao_valor_desconto = $resultado_valor_desconto_valor -  $resultado_valor_desconto_desconto;
+                          
                             if ($r->baixado == 0) {
                                 $status = 'Pendente';
                             } else {
@@ -150,11 +154,11 @@ $periodo = $this->input->get('periodo');
                             echo '<td>' . $r->forma_pgto . '</td>';
                             echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; //valor total sem o desconto
                             echo '<td> R$ ' . number_format($r->desconto, 2, ',', '.') . '</td>'; // valor do desconto
-                            echo '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>'; // valor total  com o desconto
+                            echo '<td> R$ ' . number_format($subtracao_valor_desconto, 2, ',', '.') . '</td>'; // valor total  com o desconto
                            
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $r->valor_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $resultado_valor_desconto_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';

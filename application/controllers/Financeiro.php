@@ -490,14 +490,14 @@ class Financeiro extends MY_Controller
             }
             $valor = $this->input->post('valor');
             $valor_desconto = $this->input->post('valor_desconto_editar');
-            $valor_sem_desconto =  $valor + $valor_desconto;
+            $valor_com_desconto =  $valor - $valor_desconto;
             $data = [
                 'descricao' => $this->input->post('descricao'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
-                'valor' => $valor_sem_desconto,
+                'valor' => $valor,
                 'desconto' => $this->input->post('valor_desconto_editar'),
-                'valor_desconto' => $valor_desconto,
+                'valor_desconto' => $valor_com_desconto,
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
