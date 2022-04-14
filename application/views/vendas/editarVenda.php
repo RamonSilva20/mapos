@@ -112,7 +112,7 @@
                                         <div class="span2">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
-                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" /><br />
+                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="R$" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
                                         <div class="span2">
@@ -165,7 +165,7 @@
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong><?php echo number_format($result->desconto, 2, '.', ','); ?> %</strong></div>
+                                                    <div align="center"><strong>R$ <?php echo number_format($result->desconto, 2, ',', '.'); ?></strong></div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -267,7 +267,7 @@
 
     function calcDesconto(valor, desconto) {
 
-        var resultado = (valor - desconto * valor / 100).toFixed(2);
+        var resultado = (valor - desconto).toFixed(2);
         return resultado;
     }
 

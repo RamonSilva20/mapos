@@ -277,6 +277,6 @@ class MercadoPago extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+        return ($produtosValor + $servicosValor) - $desconto;
     }
 }

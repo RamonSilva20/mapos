@@ -46,7 +46,7 @@
                                     echo '<td align="center">' . $v->nome . '</td>';
                                     echo '<td align="center">' . date('d/m/Y', strtotime($v->dataVenda)) . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valorTotal, 2, ',', '.') . '</td>';
-                                    echo '<td align="center">' . $v->desconto . '%</td>';
+                                    echo '<td align="center">R$: ' . number_format($v->desconto, 2, ',', '.') . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valor_desconto != 0 ? $v->valor_desconto : $v->valorTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
                                 }
