@@ -79,7 +79,7 @@ $periodo = $this->input->get('periodo');
 
             <div class="span2">
                 <label>Cliente/Fornecedor</label>
-                <input id="cliente_fornecedor" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+                <input id="cliente_busca" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
             </div>
 
             <div class="span2 pull-right">
@@ -129,8 +129,8 @@ $periodo = $this->input->get('periodo');
                         }
                         foreach ($results as $r) {
                             $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
-                            $resultado_valor_desconto_valor = number_format($r->valor, 2, ',', '.');
-                            $resultado_valor_desconto_desconto = number_format($r->desconto, 2, ',', '.');
+                            $resultado_valor_desconto_valor = $r->valor;
+                            $resultado_valor_desconto_desconto = $r->desconto;
                             $subtracao_valor_desconto = $resultado_valor_desconto_valor -  $resultado_valor_desconto_desconto;
                           
                             if ($r->baixado == 0) {
@@ -954,7 +954,7 @@ $periodo = $this->input->get('periodo');
         });
 
         $("#fornecedorEditar").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteFornecedor",
+            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedorEditar").val(ui.item.label);
@@ -967,6 +967,14 @@ $periodo = $this->input->get('periodo');
             select: function(event, ui) {
                 $("#cliente").val(ui.item.label);
                 $("#idCliente").val(ui.item.id);
+            }
+        });
+
+          $("#cliente_busca").autocomplete({
+            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            minLength: 1,
+            select: function(event, ui) {
+                $("#cliente_busca").val(ui.item.label);
             }
         });
 
