@@ -582,8 +582,8 @@
     $("#desconto").keyup(function() {
 
         this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($('#desconto').val() > 100) {
-            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
+        if ($('#desconto').val() > $("#valorTotal").val()) {
+            $('#errorAlert').text('Desconto não pode ser maior que o total.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
             $("#desconto").focus();
         }
