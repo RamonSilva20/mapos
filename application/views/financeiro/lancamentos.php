@@ -192,10 +192,10 @@ $periodo = $this->input->get('periodo');
                             <td colspan="6" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="6" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format( $estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format( $estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
                       <td colspan="6" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; echo number_format($sub_receita_despesa, 2, ',', '.') ?></strong></td>
@@ -204,31 +204,31 @@ $periodo = $this->input->get('periodo');
                       <td colspan="6" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa; echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format( $estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format($estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente; echo number_format( $sub_recpendente_despependente, 2, ',', '.')?></td>
+                      <td colspan="6" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente; echo number_format($sub_recpendente_despependente, 2, ',', '.')?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente; echo number_format( $sub_recpendente_despependente, 2, ',', '.')?></strong></td>
+                      <td colspan="6" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente; echo number_format($sub_recpendente_despependente, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format( $estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format( $soma_descontos_pagos, 2, ',', '.')?></strong></td>
+                      <td colspan="6" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente; echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format( $estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="6" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format( $estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="6" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -292,7 +292,7 @@ $periodo = $this->input->get('periodo');
 		            
           <div class="span3">  
           <label for="valor_desconto">Val.Desc <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00",2,',','.') ?>"/>
+          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00", 2, ',', '.') ?>"/>
         </div>
 
                 <div class="span4" style="margin-left: 0">
@@ -405,7 +405,7 @@ $periodo = $this->input->get('periodo');
 		         
           <div class="span3" style="margin-left: 0">  
 	        <label for="desconto_parc">Desconto <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format("0.00",2,',','.') ?>" style="float: left;" />
+            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format("0.00", 2, ',', '.') ?>" style="float: left;" />
 	      </div>
 			
     		<div id="divParcelamento" class="span2" style="margin-left: 0">
@@ -478,7 +478,7 @@ $periodo = $this->input->get('periodo');
 
 <!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL)
 <div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formDespesa" action="<?php // echo base_url() ?>index.php/financeiro/adicionarDespesa" method="post">
+    <form id="formDespesa" action="<?php // echo base_url()?>index.php/financeiro/adicionarDespesa" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
@@ -490,7 +490,7 @@ $periodo = $this->input->get('periodo');
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php  // echo current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php  // echo current_url()?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -597,7 +597,7 @@ $periodo = $this->input->get('periodo');
 
           <div class="span2">  
           <label for="valor_desconto">Val.Desc</label>
-          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00",2,',','.') ?>" />
+          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00", 2, ',', '.') ?>" />
         </div>
 
                 <div class="span4" style="margin-left: 0">

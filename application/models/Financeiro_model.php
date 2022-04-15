@@ -61,7 +61,7 @@ class Financeiro_model extends CI_Model
                        SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor_desconto END) as total_receita_pendente,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor_desconto END) as total_despesa_pendente FROM lancamentos";
 
-        return $this->db->query($sql)->row();    
+        return $this->db->query($sql)->row();
     }
 
     public function getById($id)
@@ -81,14 +81,14 @@ class Financeiro_model extends CI_Model
         return false;
     }
 
-    function add1($table,$data1){
-        $this->db->insert($table, $data1);         
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
+    public function add1($table, $data1)
+    {
+        $this->db->insert($table, $data1);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+        
+        return false;
     }
 
     public function edit($table, $data, $fieldID, $ID)
