@@ -218,7 +218,7 @@
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
                                         <button class="button btn btn-success" id="btnAdicionarDesconto">
-                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" onclick="descontoMaior();">Aplicar</span></button>
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -579,8 +579,6 @@
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
 
-
- 
 
     $("#desconto").keyup(function() {
      this.value = this.value.replace(/[^0-9.]/g, '');
