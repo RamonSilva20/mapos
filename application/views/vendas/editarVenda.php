@@ -112,7 +112,7 @@
                                         <div class="span2">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
-                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="R$" maxlength="6" size="2" /><br />
+                                            <input style="width: 6em;" id="desconto" name="desconto" type="text" placeholder="R$"  class="money" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
                                         <div class="span2">
@@ -161,7 +161,7 @@
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                                            ?>
+                                        ?>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
@@ -260,7 +260,6 @@
 </div>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    
     $("#quantidade").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
@@ -281,10 +280,13 @@
     var valorBackup = $("#total-venda").val();
 
     $("#desconto").keyup(function() {
-
         this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($('#desconto').val() > $("#valorTotal").val()) {
-            $('#errorAlert').text('Desconto não pode ser maior que o total.').css("display", "inline").fadeOut(5000);
+
+        let ValorTotal = parseFloat(document.getElementById('total-venda').value);
+        let desconto = parseFloat(document.getElementById('desconto').value);
+
+        if (desconto > ValorTotal) {
+            $('#errorAlert').text('Desconto não pode ser maior que o valor total.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
             $("#desconto").focus();
         }
@@ -549,8 +551,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({
