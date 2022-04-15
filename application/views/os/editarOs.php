@@ -205,10 +205,10 @@
                                             <input class="span12 money" id="valorTotal" name="valorTotal" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2, '.', ''); ?>" readonly />
                                         </div>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span4">
                                         <input type="hidden" name="idOs" id="idOs" value="<?php echo $result->idOs; ?>" />
                                         <label for="">Desconto</label>
-                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="R$" maxlength="6" size="2" />
+                                        <input style="width: 6em;" id="desconto" name="desconto" type="text" class="money" placeholder="R$"  size="2"/>
                                         <strong><span style="color: red" id="errorAlert"></span></strong>
                                     </div>
                                     <div class="span2">
@@ -218,7 +218,7 @@
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
                                         <button class="button btn btn-success" id="btnAdicionarDesconto">
-                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" onclick="descontoMaior();">Aplicar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -579,14 +579,21 @@
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
 
-    $("#desconto").keyup(function() {
 
-        this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($('#desconto').val() > $("#valorTotal").val()) {
-            $('#errorAlert').text('Desconto não pode ser maior que o total.').css("display", "inline").fadeOut(5000);
-            $('#desconto').val('');
+ 
+
+    $("#desconto").keyup(function() {
+     this.value = this.value.replace(/[^0-9.]/g, '');
+        
+    let ValorTotal = parseFloat(document.getElementById('valorTotal').value); 
+    let desconto = parseFloat(document.getElementById('desconto').value); 
+
+        if (desconto > ValorTotal) {
+            $('#errorAlert').text('Desconto não pode ser maior que o valor total.').css("display", "inline").fadeOut(5000);
+             $('#desconto').val('');
             $("#desconto").focus();
         }
+      
         if ($("#valorTotal").val() == null || $("#valorTotal").val() == '') {
             $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
