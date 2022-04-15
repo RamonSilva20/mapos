@@ -16,6 +16,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
+<!-- New Bem-vindos -->
+<div id="content-bemv">
+    <div class="bemv">Dashboard</div>
+    <div></div>
+</div>
+
 <!--Action boxes-->
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
@@ -63,7 +69,7 @@
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
             <div>
-                <div class="numbers">Ordens</div>
+                <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
@@ -87,11 +93,6 @@
                 <span class="num min_num">00</span>
                 <div class="tit">Minutos</div>
             </div>
-            <!-- <span class="colun" id="colun-2">:</span>
-            <div class="clock-flex">
-                <span class="num sec_num">00</span>
-                <div class="tit">Segundos</div>
-            </div> -->
             <div class="time_am_pm">
                 <span class="num am_pm">AM</span>
             </div>
@@ -251,14 +252,24 @@
             </div>
         <?php endif ?>
 
-<?php  }
-} ?>
 <script type="text/javascript">
+    if (window.outerWidth > 2000) {
+        Chart.defaults.font.size = 15;
+    };
+    if (window.outerWidth < 2000 && window.outerWidth > 1367) {
+        Chart.defaults.font.size = 11;
+    };
+    if (window.outerWidth < 1367 && window.outerWidth > 480) {
+        Chart.defaults.font.size = 9.5;
+    };
+    if (window.outerWidth < 480) {
+        Chart.defaults.font.size = 8.5;
+    };
+
     var ctx = document.getElementById('myChart').getContext('2d');
     var StatusOS = document.getElementById('statusOS').getContext('2d');
 
     var myChart = new Chart(ctx, {
-        type: 'bar',
         data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
@@ -277,7 +288,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -297,7 +308,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -317,7 +328,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderRadius: 15,
                 },
 
@@ -337,59 +348,57 @@
                         <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderRadius: 15,
                 }
             ]
 
         },
+        // configuração
+        type: 'bar',
         options: {
+            locale: 'pt-BR',
+            scales: {
+                y: {
+                    ticks: {
+                        callback: (value, index, values) => {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                maximumSignificantDidits: 1
+                            }).format(value);
+                        }
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Meses'
+                    }
+                }
+            },
+
             plugins: {
+                tooltip: {
+                    callbacks: {
+                        beforeTitle: function(context) {
+                            return 'Referente ao mês de';
+                        }
+                    }
+                },
+
                 legend: {
                     position: "bottom",
                     labels: {
                         usePointStyle: true,
-                        font: {
-                            size: 9
-                        },
                     }
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        acaleLabel: {
-                            display: true,
-                            labelString: 'Meses',
-                            fontColor: '#000000',
-                            fontSize: 10
-                        },
-                        ticks: {
-                            fontColor: "red",
-                            fontSize: 20
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Reais',
-                            fontColor: '#000000',
-                            fontSize: 10
-                        },
-                        ticks: {
-                            fontColor: "red",
-                            fontSize: 20
-                        }
-                    }]
                 }
-
             }
         }
     });
 
-
     var myChart = new Chart(statusOS, {
-        type: 'polarArea',
         data: {
             labels: [
                 'Receita total', 'Receita pendente',
@@ -408,37 +417,53 @@
                 ],
 
                 backgroundColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
                 ],
                 borderWidth: 1
             }]
         },
+
+        // configuração
+        type: 'polarArea',
         options: {
+            locale: 'pt-BR',
+            scales: {
+                r: {
+                    ticks: {
+                        callback: (value, index, values) => {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                maximumSignificantDidits: 1
+                            }).format(value);
+                        }
+                    },
+                    beginAtZero: true,
+                }
+            },
             plugins: {
                 legend: {
                     position: "bottom",
                     labels: {
                         usePointStyle: true,
-                        font: {
-                            size: 9
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
 
                     }
                 }
             }
         }
     });
+
+    function responsiveFonts() {
+        myChart.update();
+    }
 </script>
+<?php  }
+} ?>
 </div>
 </div>
 
@@ -457,7 +482,7 @@
                             <th>Produto</th>
                             <th>Preço de Venda</th>
                             <th>Estoque</th>
-                            <th>Estoque Mínimo</th>
+                            <th class="ph3">Estoque Mínimo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -468,7 +493,7 @@
                                     <td>
                                         <?= $p->idProdutos ?>
                                     </td>
-                                    <td>
+                                    <td class="cli1">
                                         <?= $p->descricao ?>
                                     </td>
                                     <td>R$
@@ -477,7 +502,7 @@
                                     <td>
                                         <?= $p->estoque ?>
                                     </td>
-                                    <td>
+                                    <td class="ph3">
                                         <?= $p->estoqueMinimo ?>
                                     </td>
                                     <td>
@@ -536,7 +561,7 @@
     echo "";
 } ?></td>
 
-                                <td>
+                                <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
@@ -586,7 +611,7 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td>
+                                <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
@@ -635,7 +660,7 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td>
+                                <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
@@ -665,7 +690,7 @@
         <h3 id="myModalLabel">Status OS Detalhada</h3>
     </div>
     <div class="modal-body">
-        <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
+        <div class="span5" id="divFormStatusOS" style="margin-left: 0"></div>
         <h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
         <h5 id="modalCliente" class="modal-cliente"></h5>
         <div id="modalDataInicial" class="modal-DataInicial"></div>
@@ -705,8 +730,8 @@
             <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
         </div>
         <div class="modal-footer" style="display:flex;justify-content: center">
-          <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-          <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
@@ -794,7 +819,7 @@
                     };
                 },
                 failure: function() {
-                   // alert('Falha ao buscar OS de calendário!');
+                    alert('Falha ao buscar OS de calendário!');
                 },
             },
             eventClick: function(info) {

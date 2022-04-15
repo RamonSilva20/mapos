@@ -44,6 +44,11 @@
   color: var(--subtitle-w);
 }
 
+#sidebar li .title-tooltip {
+  background   : #6c6e78;
+  color        : #fff;
+}
+
 #sidebar li .icon,
 #sidebar li .title {
   color     : var(--title-w);
@@ -82,8 +87,8 @@ body {
 }
 
 #sidebar {
-  background  : var(--funSider-w);
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  background  : var(--bodycolor-w);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 #sidebar > ul {
@@ -97,10 +102,6 @@ body {
 
 #sidebar > ul > li > a {
   color: #72737a;
-}
-
-#user-nav > ul > li > a > i,
-#sidebar li a i {
 }
 
 #sidebar li a:hover {
@@ -175,12 +176,12 @@ body {
 }
 
 #sidebar .search-box {
-  background: var(--widget-box-w);
+  background: var(--bodycolor-w);
   border    : 1px solid rgb(0 0 0 / 20%);
 }
 
 .search-box input {
-  background: var(--widget-box-w);
+  background: var(--bodycolor-w);
   color: var(--widget-box-c);
 }
 
@@ -203,11 +204,11 @@ body {
 }
 
 .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
-  background: #c5d1d6;
+  background: #f3f4f6;
 }
 
 .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
-  background: #c5d1d6;
+  background: #f3f4f6;
 }
 
 .btn [class^="icon-"],
@@ -266,6 +267,13 @@ body {
 }
 
 /* Responsive design */
+@media (min-width: 481px) and (max-width: 768px) {
+  #sidebar .mode {
+    background: #ffffff30 !important;
+    color     : #51576c !important;
+  }
+}
+
 @media (max-width: 480px) {
   #sidebar.open .toggle {
     background: var(--funSider-w);

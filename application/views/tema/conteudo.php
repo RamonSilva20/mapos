@@ -1,8 +1,7 @@
 <div id="content">
 <!--start-top-serch-->
-  <div id="content-header">  
-<!-- New Bem-vindos -->
-   <div class="bemv">Painel de Controle</div>
+  <div id="content-header">
+   <div></div>
       <div id="breadcrumb">
         <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"> Início</a>
         <?php if ($this->uri->segment(1) != null) { ?>
@@ -16,7 +15,7 @@
           <?php } ?>
       </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-flu">
       <div class="row-fluid">
         <div class="span12">
           <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
@@ -28,4 +27,3 @@
       </div>
     </div>
   </div>
-
