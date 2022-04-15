@@ -52,14 +52,6 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="senha" class="control-label">Senha</label>
-                        <div class="controls">
-                            <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
-                            <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="" style="width: 18px; cursor: pointer;">
-                        </div>
-                    </div>
-
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
@@ -112,9 +104,9 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary">
-                                    <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                  <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                 <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="button btn btn-mini btn-warning">
-                                    <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                  <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -129,20 +121,6 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        let container = document.querySelector('div');
-        let input = document.querySelector('#senha');
-        let icon = document.querySelector('#imgSenha');
-
-        icon.addEventListener('click', function() {
-            container.classList.toggle('visible');
-            if (container.classList.contains('visible')) {
-                icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
-                input.type = 'text';
-            } else {
-                icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
-                input.type = 'password';
-            }
-        });
         $('#formCliente').validate({
             rules: {
                 nomeCliente: {

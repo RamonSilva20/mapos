@@ -1,0 +1,3 @@
+[04-Apr-2022 22:03:04 America/Bahia] {"message":"The User ID must match the consultant's","error":"forbidden","status":403,"cause":[]}
+[05-Apr-2022 07:32:53 America/Bahia] {"message":"The User ID must match the consultant's","error":"forbidden","status":403,"cause":[]}
+[05-Apr-2022 07:32:53 America/Bahia] {"message":"Must provide your access_token to proceed","error":"unauthorized","status":401,"cause":[{"code":5,"description":"Must provide your access_token to proceed","data":"05-04-2022T10:32:53UTC;2d30056d-287a-427d-b77e-538d67424db5"}]}

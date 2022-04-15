@@ -50,6 +50,44 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label for="marca" class="control-label">Categoria<span class="required">*</span></label>
+                        <div class="controls">
+                            <select id="marca" onchange="buscaTipoMarca(this.value)">
+                                <option value="">Selecione a categoria</option>
+                                <option value="RACAO">RAÇÃO</option>
+                                <option value="ANIMAL">ANIMAL</option>
+                                <option value="MEDICAMENTO">MEDICAMENTO</option>
+                                <option value="ACESSORIO">ACESSORIO</option>
+                                <option value="SEMENTE">SEMENTE</option>
+                                <option value="MEDICAMENTO">GAIOLA</option>
+                                <option value="MEDICAMENTO">MEDICAMENTOS</option>
+                                <option value="VITAMINA">VITAMINA</option>
+                            </select>
+                           
+                            
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label for="marca" class="control-label">Marca<span class="required">*</span></label>
+                        <div class="controls">
+                            <select id="marca" onchange="buscaTipoMarca(this.value)">
+                                <option value="">Selecione a marca</option>
+                                <option value="SINFONIA">SINFONIA</option>
+                                <option value="ALINUTRI">ALINUTRI</option>
+                            </select>
+                           
+                            
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label for="marca" class="control-label">Marca Tipo<span class="required">*</span></label>
+                        <div class="controls">
+                           <select id="tipoMarca">
+                            </select>
+                                   
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
                             <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
@@ -66,7 +104,7 @@
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
                             <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
-                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text" placeholder="%" maxlength="3" size="2" />
+                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" value="<?php echo set_value('margemLucro'); ?>"  type="text" placeholder="%" maxlength="3" size="2" />
                             <strong><span style="color: red" id="errorAlert"></span><strong>
                         </div>
                     </div>
@@ -94,6 +132,15 @@
                             <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo set_value('estoqueMinimo'); ?>" />
                         </div>
                     </div>
+                    
+                    <div class="control-group">
+                        <label for="observacao" class="control-label">Obs<span class="required"></span></label>
+                        <div class="controls">
+                            <textarea rows="4" cols="50" id="observacao" name="observacao" value="<?php echo set_value('observacao'); ?>"></textarea>
+                        </div>
+                    </div>
+
+                    
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
@@ -111,6 +158,100 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
+
+var json_tipoMarca = {
+  "marcas": [
+    {
+      "sigla": "SINFONIA",
+      "nome": "SINFONIA",
+      "tipoMarca": [
+        "RAÇÃO PARA GALO DE BRIGA E CARDEAL",
+        "RAÇÃO PARA PAPAGAIO",
+        "RAÇÃO PARA 4 EM 1", 
+        "RAÇÃO TRITURADA COM DENDÊ",
+        
+        
+      ]
+    },
+    {
+      "sigla": "CHANIN",
+      "nome": "CHANIN",
+      "tipoMarca": [
+        "PREMIUM MIX"
+        ]
+    },
+    {
+      "sigla": "BIDOG",
+      "nome": "BIDOG",
+      "tipoMarca": [
+        "CARNE COM OSSINHOS"
+        ]
+    },
+    {
+      "sigla": "FOSTER",
+      "nome": "FOSTER",
+      "tipoMarca": [
+        "RACAS PEQUENAS"
+        ]
+    },
+    {
+      "sigla": "ALINUTRI",
+      "nome": "ALINUTRI",
+      "tipoMarca": [
+        "VITAMINA P/ CANÁRIO",
+       
+      ]
+    }
+  ]
+};
+// FIM DO .js
+
+function buscaTipoMarca(e){
+   document.querySelector("#tipoMarca").innerHTML = '';
+   var tipoMarca_select = document.querySelector("#tipoMarca");
+
+   var num_marcas = json_tipoMarca.marcas.length;
+   var j_index = -1;
+
+   // aqui eu pego o index do Estado dentro do JSON
+   for(var x=0;x<num_marcas;x++){
+      if(json_tipoMarca.marcas[x].sigla == e){
+         j_index = x; 
+      }
+   }
+
+   if(j_index != -1){
+  
+      // aqui eu percorro todas as cidades e crio os OPTIONS
+      json_tipoMarca.marcas[j_index].tipoMarca.forEach(function(tipoMarca){
+         var tip_opts = document.createElement('option');
+         tip_opts.setAttribute('value',tipoMarca)
+         tip_opts.innerHTML = tipoMarca;
+         tipoMarca_select.appendChild(tip_opts);
+      });
+   }else{
+      document.querySelector("#tipoMarca").innerHTML = '';
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function calcLucro(precoCompra, margemLucro) {
         var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
         return precoVenda;

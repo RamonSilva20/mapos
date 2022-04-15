@@ -394,9 +394,6 @@ class Relatorios extends MY_Controller
         $os = $this->Relatorios_model->osRapid($isXls);
         $totalProdutos = 0;
         $totalServicos = 0;
-        $totalDesconto = 0;
-        $totalValorDesconto = 0;
-        $valorTotal = 0;
         foreach ($os as $o) {
             $totalProdutos += $isXls
                 ? floatval($o['total_produto'])
@@ -404,21 +401,11 @@ class Relatorios extends MY_Controller
             $totalServicos += $isXls
                 ? floatval($o['total_servico'])
                 : floatval($o->total_servico);
-            $totalDesconto += $isXls
-                ? floatval($o['desconto'])
-                : floatval($o->desconto);
-
-            $isXls
-                ?
-                $totalValorDesconto += $o['valor_desconto'] ? floatval($o['valor_desconto']) : floatval($o['total_servico']) + floatval($o['total_produto'])
-                :
-                $totalValorDesconto += $o->valor_desconto ? floatval($o->valor_desconto) : floatval($o->total_produto) + floatval($o->total_servico);
         }
 
         if ($isXls) {
             $osFormatadas = array_map(function ($item) {
-                $subTotal = floatval($item['total_servico']) + floatval($item['total_produto']);
-                $total = floatval($item['valor_desconto']) ?: floatval($item['total_servico']) + floatval($item['total_produto']);
+                $total = floatval($item['total_servico']) + floatval($item['total_produto']);
 
                 return [
                     'idOs' => $item['idOs'],
@@ -428,9 +415,7 @@ class Relatorios extends MY_Controller
                     'descricaoProduto' => $item['descricaoProduto'],
                     'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
                     'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
-                    'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
-                    'total_geral_desconto' => $item['desconto'] ?: 0,
                 ];
             }, $os);
 
@@ -443,8 +428,6 @@ class Relatorios extends MY_Controller
                 'Total Produtos' => 'price',
                 'Total Serviços' => 'price',
                 'Total' => 'price',
-                'Total Com Desconto' => 'price',
-                'Desconto %' => 'number',
             ];
 
             $writer = new XLSXWriter();
@@ -463,7 +446,6 @@ class Relatorios extends MY_Controller
                 $totalProdutos,
                 $totalServicos,
                 $totalProdutos + $totalServicos,
-                $totalValorDesconto + $valorTotal,
             ]);
 
             $arquivo = $writer->writeToString();
@@ -476,8 +458,7 @@ class Relatorios extends MY_Controller
         $data['os'] = $os;
         $data['total_produtos'] = $totalProdutos;
         $data['total_servicos'] = $totalServicos;
-        $data['total_geral_desconto'] = $totalDesconto;
-        $data['total_geral'] = $totalValorDesconto + $valorTotal;
+        $data['total_geral'] = $totalProdutos + $totalServicos;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de OS';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
@@ -505,9 +486,6 @@ class Relatorios extends MY_Controller
         $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status, $isXls);
         $totalProdutos = 0;
         $totalServicos = 0;
-        $totalDesconto = 0;
-        $totalValorDesconto = 0;
-        $valorTotal = 0;
         foreach ($os as $o) {
             $totalProdutos += $isXls
                 ? floatval($o['total_produto'])
@@ -515,20 +493,11 @@ class Relatorios extends MY_Controller
             $totalServicos += $isXls
                 ? floatval($o['total_servico'])
                 : floatval($o->total_servico);
-            $totalDesconto += $isXls
-                ? floatval($o['desconto'])
-                : floatval($o->desconto);
-            $isXls
-                ?
-                $totalValorDesconto += $o['valor_desconto'] ? floatval($o['valor_desconto']) : floatval($o['total_servico']) + floatval($o['total_produto'])
-                :
-                $totalValorDesconto += $o->valor_desconto ? floatval($o->valor_desconto) : floatval($o->total_produto) + floatval($o->total_servico);
         }
 
         if ($isXls) {
             $osFormatadas = array_map(function ($item) {
-                $subTotal = floatval($item['total_servico']) + floatval($item['total_produto']);
-                $total = floatval($item['valor_desconto']) ?: floatval($item['total_servico']) + floatval($item['total_produto']);
+                $total = floatval($item['total_servico']) + floatval($item['total_produto']);
 
                 return [
                     'idOs' => $item['idOs'],
@@ -538,9 +507,7 @@ class Relatorios extends MY_Controller
                     'descricaoProduto' => $item['descricaoProduto'],
                     'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
                     'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
-                    'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
-                    'valorSubTotal' => $subTotal ? $subTotal : 0,
                 ];
             }, $os);
 
@@ -553,8 +520,6 @@ class Relatorios extends MY_Controller
                 'Total Produtos' => 'price',
                 'Total Serviços' => 'price',
                 'Total' => 'price',
-                'Total Com Desconto' => 'price',
-                'Desconto %' => 'number',
             ];
 
             $writer = new XLSXWriter();
@@ -573,7 +538,6 @@ class Relatorios extends MY_Controller
                 $totalProdutos,
                 $totalServicos,
                 $totalProdutos + $totalServicos,
-                $totalValorDesconto + $valorTotal,
             ]);
 
             $arquivo = $writer->writeToString();
@@ -595,8 +559,7 @@ class Relatorios extends MY_Controller
         $data['os'] = $os;
         $data['total_produtos'] = $totalProdutos;
         $data['total_servicos'] = $totalServicos;
-        $data['total_geral_desconto'] = $totalDesconto;
-        $data['total_geral'] = $totalValorDesconto + $valorTotal;
+        $data['total_geral'] = $totalProdutos + $totalServicos;
         $data['res_nome'] = $usuario;
 
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
@@ -636,8 +599,6 @@ class Relatorios extends MY_Controller
                     'idLancamentos' => $item['idLancamentos'],
                     'descricao' => $item['descricao'],
                     'valor' => $item['valor'],
-                    'desconto' => $item['desconto'],
-                    'valor_desconto' => $item['valor_desconto'],
                     'data_vencimento' => $item['data_vencimento'],
                     'data_pagamento' => $item['data_pagamento'],
                     'baixado' => $item['baixado'],
@@ -651,8 +612,6 @@ class Relatorios extends MY_Controller
                 'ID Lançamentos' => 'integer',
                 'Descricao' => 'string',
                 'Valor' => 'price',
-                'Desconto %' => 'price',
-                'Valor Com Desc.' => 'price',
                 'Data Vencimento' => 'YYYY-MM-DD',
                 'Data Pagamento' => 'YYYY-MM-DD',
                 'Baixado' => 'integer',
@@ -706,8 +665,6 @@ class Relatorios extends MY_Controller
                     'idLancamentos' => $item['idLancamentos'],
                     'descricao' => $item['descricao'],
                     'valor' => $item['valor'],
-                    'desconto' => $item['desconto'],
-                    'valor_desconto' => $item['valor_desconto'],
                     'data_vencimento' => $item['data_vencimento'],
                     'data_pagamento' => $item['data_pagamento'],
                     'baixado' => $item['baixado'],
@@ -721,8 +678,6 @@ class Relatorios extends MY_Controller
                 'ID Lançamentos' => 'integer',
                 'Descricao' => 'string',
                 'Valor' => 'price',
-                'Desconto %' => 'price',
-                'Valor Com Desc.' => 'price',
                 'Data Vencimento' => 'YYYY-MM-DD',
                 'Data Pagamento' => 'YYYY-MM-DD',
                 'Baixado' => 'integer',
@@ -777,21 +732,10 @@ class Relatorios extends MY_Controller
         $isXls = $format === 'xls';
         $vendas = $this->Relatorios_model->vendasRapid($isXls);
         $totalVendas = 0;
-        $totalDesconto = 0;
-        $totalValorDesconto = 0;
         foreach ($vendas as $venda) {
             $totalVendas += $isXls
                 ? floatval($venda['valorTotal'])
                 : floatval($venda->valorTotal);
-            $totalDesconto += $isXls
-                ? floatval($venda['desconto'])
-                : floatval($venda->desconto);
-
-            $isXls
-                ?
-                $totalValorDesconto += $venda['valor_desconto'] != 0 ? floatval($venda['valor_desconto']) : floatval($venda['valorTotal'])
-                :
-                $totalValorDesconto += $venda->valor_desconto != 0 ? floatval($venda->valor_desconto) : floatval($venda->valorTotal);
         }
 
         if ($format == 'xls') {
@@ -802,8 +746,6 @@ class Relatorios extends MY_Controller
                     'vendedor' => $item['nome'],
                     'data' => $item['dataVenda'],
                     'total' => $item['valorTotal'] ?: 0,
-                    'totalDesconto' => $item['valor_desconto'] ?: 0,
-                    'desconto' => $item['desconto'] ?: 0,
                 ];
             }, $vendas);
 
@@ -813,8 +755,6 @@ class Relatorios extends MY_Controller
                 'Vendedor' => 'string',
                 'Data' => 'DD-MM-YYYY',
                 'Total' => 'price',
-                'Total Com Desconto' => 'price',
-                'Desconto' => 'number',
             ];
 
             $writer = new XLSXWriter();
@@ -833,7 +773,6 @@ class Relatorios extends MY_Controller
                 null,
                 null,
                 $totalVendas,
-                $totalValorDesconto,
             ]);
 
             $arquivo = $writer->writeToString();
@@ -845,8 +784,6 @@ class Relatorios extends MY_Controller
 
         $data['vendas'] = $vendas;
         $data['total_vendas'] = $totalVendas;
-        $data['total_geral_desconto'] = $totalDesconto;
-        $data['total_geral'] = $totalValorDesconto;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Vendas Rápido';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
@@ -871,21 +808,10 @@ class Relatorios extends MY_Controller
         $isXls = $format === 'xls';
         $vendas = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel, $isXls);
         $totalVendas = 0;
-        $totalDesconto = 0;
-        $totalValorDesconto = 0;
         foreach ($vendas as $venda) {
             $totalVendas += $isXls
                 ? floatval($venda['valorTotal'])
                 : floatval($venda->valorTotal);
-            $totalDesconto += $isXls
-                ? floatval($venda['desconto'])
-                : floatval($venda->desconto);
-
-            $isXls
-                ?
-                $totalValorDesconto += $venda['valor_desconto'] != 0 ? floatval($venda['valor_desconto']) : floatval($venda['valorTotal'])
-                :
-                $totalValorDesconto += $venda->valor_desconto != 0 ? floatval($venda->valor_desconto) : floatval($venda->valorTotal);
         }
 
         if ($format == 'xls') {
@@ -896,8 +822,6 @@ class Relatorios extends MY_Controller
                     'vendedor' => $item['nome'],
                     'data' => $item['dataVenda'],
                     'total' => $item['valorTotal'] ?: 0,
-                    'totalDesconto' => $item['valor_desconto'] ?: 0,
-                    'desconto' => $item['desconto'] ?: 0,
                 ];
             }, $vendas);
 
@@ -907,8 +831,6 @@ class Relatorios extends MY_Controller
                 'Vendedor' => 'string',
                 'Data' => 'DD-MM-YYYY',
                 'Total' => 'price',
-                'Total Com Desconto' => 'price',
-                'Desconto' => 'number',
             ];
 
             $writer = new XLSXWriter();
@@ -926,12 +848,11 @@ class Relatorios extends MY_Controller
                 null,
                 null,
                 $totalVendas,
-                $totalValorDesconto,
             ]);
 
             $arquivo = $writer->writeToString();
             $this->load->helper('download');
-            force_download('relatorio_vendas_custom.xlsx', $arquivo);
+            force_download('relatorio_vendas.xlsx', $arquivo);
 
             return;
         }

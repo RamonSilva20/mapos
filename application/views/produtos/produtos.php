@@ -33,7 +33,7 @@
 
             if (!$results) {
                 echo '<tr>
-                                <td colspan="6">Nenhum Produto Cadastrado</td>
+                                <td colspan="5">Nenhum Produto Cadastrado</td>
                                 </tr>';
             }
             foreach ($results as $r) {

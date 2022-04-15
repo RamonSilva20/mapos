@@ -169,9 +169,6 @@ class MercadoPago extends BasePaymentGateway
         $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getServicos($id)
             : [];
-        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -184,13 +181,6 @@ class MercadoPago extends BasePaymentGateway
             $servicos,
             function ($total, $item) {
                 return $total + (floatval($item->preco) * intval($item->quantidade));
-            },
-            0
-        );
-        $totalDesconto = array_reduce(
-            $desconto,
-            function ($total, $item) {
-                return $item->desconto;
             },
             0
         );
@@ -213,7 +203,7 @@ class MercadoPago extends BasePaymentGateway
         $expirationDate = ($expirationDate->format(DateTime::RFC3339_EXTENDED));
 
         $payment = new Payment();
-        $payment->transaction_amount = floatval($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto));
+        $payment->transaction_amount = floatval($totalProdutos) + floatval($totalServicos);
         $payment->description = PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
         $payment->payment_method_id = "bolbradesco";
         $payment->notification_url = "http://mapos.com.br/";
@@ -248,7 +238,7 @@ class MercadoPago extends BasePaymentGateway
             'expire_at' => $payment->date_of_expiration,
             'charge_id' => $payment->id,
             'status' => $payment->status,
-            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
+            'total' => getMoneyAsCents($totalProdutos + $totalServicos),
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
             'payment_gateway' => 'MercadoPago',
@@ -273,10 +263,5 @@ class MercadoPago extends BasePaymentGateway
     protected function gerarCobrancaLink($id, $tipo)
     {
         throw new Exception('MercadoPago não suporta gerar link pela API, somente pelo painel!');
-    }
-
-    private function valorTotal($produtosValor, $servicosValor, $desconto)
-    {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
     }
 }

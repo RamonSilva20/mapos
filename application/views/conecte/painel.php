@@ -39,32 +39,11 @@
                     <?php
                     if ($os != null) {
                         foreach ($os as $o) {
-                            $vencGarantia = '';
-
-                            if ($o->garantia && is_numeric($o->garantia)) {
-                                $vencGarantia = dateInterval($o->dataFinal, $o->garantia);
-                            }
-                            $corGarantia = '';
-                            if (!empty($vencGarantia)) {
-                                $dataGarantia = explode('/', $vencGarantia);
-                                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#4d9c79';
-                                } else {
-                                    $corGarantia = '#f24c6f';
-                                }
-                            } elseif ($o->garantia == "0") {
-                                $vencGarantia = 'Sem Garantia';
-                                $corGarantia = '';
-                            } else {
-                                $vencGarantia = '';
-                                $corGarantia = '';
-                            }
                             echo '<tr>';
                             echo '<td>' . $o->idOs . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+                            echo '<td>' . $o->garantia . '</td>';
                             echo '<td>' . $o->status . '</td>';
                             echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                             echo '</tr>';

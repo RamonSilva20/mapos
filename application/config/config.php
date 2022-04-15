@@ -4,17 +4,17 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.37.0';
+$config['app_version'] = '4.36.2';
 
 /**
  * Nome do sistema
  */
-$config['app_name'] = 'Map-OS';
+$config['app_name'] = 'Sistema';
 
 /**
  * Descrição do sistema
  */
-$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+$config['app_subname'] = 'Sistema de Controle de Loja';
 
 
 /*
@@ -39,7 +39,7 @@ $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'enter_baseurl';
+$config['base_url'] = 'https://wltopos.com.br/agrotec/';
 
 /*
 |--------------------------------------------------------------------------

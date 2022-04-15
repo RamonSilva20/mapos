@@ -3,7 +3,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Map_Vendas_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
+    <title>Map OS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -25,9 +25,8 @@
                                 <?php if ($emitente == null) { ?>
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<< /td>
-                                    </tr> <?php
-                                        } else { ?> <tr>
+                                            <<<</td> </tr> <?php
+                                                        } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
 
                                         <td> <span style="font-size: 17px;">
@@ -63,7 +62,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                        } ?>
+                                                        } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -120,20 +119,16 @@
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0) { ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Desconto: R$</strong></td>
-                                        <td>
-                                            <strong>
-                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
-                                            </strong>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Total: R$</strong></td>
+
+<tr>
+                                        <td colspan="4" style="text-align: right"><strong>Desconto R$:</strong></td>
                                         <td><strong>
-                                        <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
+                                                <?php echo number_format($totalProdutos * ($result->desconto / 100 ), 2, ',', '.'); ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" style="text-align: right"><strong>Total R$:</strong></td>
+                                        <td><strong>
+                                                <?php  echo number_format($totalProdutos - ($totalProdutos * ($result->desconto / 100 )), 2, ',', '.');  ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>

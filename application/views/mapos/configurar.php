@@ -84,16 +84,6 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label for="email_automatico" class="control-label">Enviar Email Automático</label>
-                            <div class="controls">
-                                <select name="email_automatico" id="email_automatico">
-                                    <option value="1">Ativar</option>
-                                    <option value="0" <?= $configuration['email_automatico'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou Desativar a opção de envio de e-mail automático no cadastro de OS.</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
                             <label for="notifica_whats" class="control-label">Notificação do whatsapp</label>
                             <div class="controls">
                                 <textarea rows="5" cols="20" name="notifica_whats" id="notifica_whats" placeholder="Use as tags abaixo para criar seu texto!" style="margin: 0px; width: 606px; height: 86px;"><?php echo $configuration['notifica_whats']; ?></textarea>
@@ -138,8 +128,8 @@
                             <label for="control_baixa" class="control-label">Controle de baixa retroativa</label>
                             <div class="controls">
                                 <select name="control_baixa" id="control_baixa">
-                                    <option value="1">Ativar</option>
-                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Não</option>
                                 </select>
                                 <span class="help-inline">Ativar ou desativar o controle de baixa financeira, com data retroativa.</span>
                             </div>
@@ -148,20 +138,10 @@
                             <label for="control_editos" class="control-label">Controle de edição de OS</label>
                             <div class="controls">
                                 <select name="control_editos" id="control_editos">
-                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Ativar</option>
-                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Sim</option>
+                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Não</option>
                                 </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir OS faturada e/ou cancelada.</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="control_edit_vendas" class="control-label">Controle de edição de Vendas</label>
-                            <div class="controls">
-                                <select name="control_edit_vendas" id="control_edit_vendas">
-                                    <option value="1" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Ativar</option>
-                                    <option value="0" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir vendas faturada.</span>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar OS faturada e/ou cancelada.</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -186,8 +166,8 @@
                             <label for="control_estoque" class="control-label">Controlar Estoque</label>
                             <div class="controls">
                                 <select name="control_estoque" id="control_estoque">
-                                    <option value="1">Ativar</option>
-                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Não</option>
                                 </select>
                                 <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
                             </div>
@@ -207,7 +187,7 @@
                             <div class="span8">
                                 <div class="span9" style="display:flex">
                                     <button href="#modal-confirmabanco" data-toggle="modal" type="button" class="button btn btn-warning">
-                                      <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Banco de Dados</span></button>
+                                      <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar Banco de Dados</span></button>
                                     <button href="#modal-confirmaratualiza" data-toggle="modal" type="button" class="button btn btn-danger">
                                       <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar Mapos</span></button>
                                 </div>

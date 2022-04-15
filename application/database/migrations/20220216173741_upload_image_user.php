@@ -4,11 +4,17 @@ class Migration_upload_image_user extends CI_Migration
 {
     public function up()
     {
-        $this->db->query("ALTER TABLE `usuarios` ADD `url_image_user` varchar(255) NULL");
+        $sql = "
+            ALTER TABLE usuarios ADD url_image_user varchar(255) NULL;
+        ";
+        $this->db->query($sql);
     }
 
     public function down()
     {
-        $this->db->query("ALTER TABLE `usuarios` DROP `url_image_user`;");
+        $sql = "
+            ALTER TABLE usuarios DROP COLUMN url_image_user;
+        ";
+        $this->db->query($sql);
     }
 }
