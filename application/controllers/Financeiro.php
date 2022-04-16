@@ -488,16 +488,26 @@ class Financeiro extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
+
+        
             $valor = $this->input->post('valor');
-            $valor_desconto = $this->input->post('valor_desconto_editar');
-            $valor_com_desconto =  $valor - $valor_desconto;
+             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
+            if (empty($this->input->post('valor_desconto_editar'))) {
+                $valor_desconto =  "0";
+            } else {
+                $valor_desconto = $this->input->post('valor_desconto_editar'); // valor do total + desconto
+            }
+           
+            $valor_total =  $valor + $valor_desconto; //90 + 10=100
+            $valor_com_desconto = $valor_total - $valor_desconto;
+
             $data = [
                 'descricao' => $this->input->post('descricao'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
-                'valor' => $valor,
-                'desconto' => $this->input->post('valor_desconto_editar'),
-                'valor_desconto' => $valor_com_desconto,
+                'valor' => $valor_total,
+                'desconto' => $valor_desconto,
+                'valor_desconto' =>  $valor_com_desconto,
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),

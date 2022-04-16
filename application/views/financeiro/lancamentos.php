@@ -157,8 +157,14 @@ $periodo = $this->input->get('periodo');
                             echo '<td> R$ ' . number_format($subtracao_valor_desconto, 2, ',', '.') . '</td>'; // valor total  com o desconto
                            
                             echo '<td>';
+                           if  ($r->data_pagamento == "0000-00-00")  {
+                               $data_pagamento = "";
+                           } else  {
+                            $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
+                        }
+
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $resultado_valor_desconto_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . number_format($r->valor, 2, ',', '.') . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $resultado_valor_desconto_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
@@ -586,7 +592,7 @@ $periodo = $this->input->get('periodo');
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="idEditar" name="id" value="" />
-                    <input class="span12 money" type="text" name="valor" id="valorEditar" data-affixes-stay="true" data-thousands="" data-decimal="." required />
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?php echo number_format("0.00",2,',','.') ?>" required />
                 </div>
 
         <div class="span4">  
@@ -602,7 +608,7 @@ $periodo = $this->input->get('periodo');
 
                 <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" required />
+                    <input class="span12 datepicker2" type="text" name="vencimento" id="vencimentoEditar" autocomplete="off" required />
                 </div>
                 <div class="span4">
                     <label for="vencimento">Tipo*</label>
@@ -621,7 +627,7 @@ $periodo = $this->input->get('periodo');
                 <div id="divPagamentoEditar" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="pagamento">Data Pagamento</label>
-                        <input class="span12 datepicker2" id="pagamentoEditar" type="text" name="pagamento" />
+                        <input class="span12 datepicker2" id="pagamentoEditar" type="text" name="pagamento" autocomplete="off"  />
                     </div>
 
                     <div class="span6">
