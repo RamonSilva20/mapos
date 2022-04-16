@@ -8,27 +8,30 @@ $periodo = $this->input->get('periodo');
 ?>
 
 <style type="text/css">
-    label.error {
-        color: #b94a48;
+    .button {
+      margin: 0 6px 2px 0;
     }
 
     input.error {
-        border-color: #b94a48;
+      border-color: #b94a48;
     }
 
     input.valid {
-        border-color: #5bb75b;
+      border-color: #5bb75b;
     }
 
     textarea {
-        resize: vertical;
+      resize: vertical;
     }
 </style>
 
 <div class="new122" style="margin-top: 0; min-height: 100vh">
+  <div class="widget-title" style="margin:-15px -10px 0">
+      <h5>Lançamento Financeiro</h5>
+  </div>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-        <div class="span5" style="display:flex">
+        <div class="span5" style="display:flex;margin-left: 0">
             <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="width: 150px">
                 <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" title="Cadastrar nova receita">Nova Receita</span></a>
             <a href="#modalDespesa" data-toggle="modal" role="button" class="button btn btn-mini btn-danger" style="width: 150px">
@@ -91,19 +94,9 @@ $periodo = $this->input->get('periodo');
         </form>
     </div>
 
-    <div>
+    <div class="span12" style="margin-left: 0;">
         <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-hand-holding-usd"></i>
-                </span>
-                <h5>Lançamentos Financeiros</h5>
-
-            </div>
-
             <div class="widget-content nopadding tab-content">
-
-
                 <table class="table table-bordered " id="divLancamentos">
                     <thead>
                         <tr>
@@ -116,7 +109,7 @@ $periodo = $this->input->get('periodo');
                             <th>Observações</th>
                             <th>Valor</th>
                             <th>Desconto</th>
-                            <th>Valor Com Desconto</th>
+                            <th>V.Desconto</th>
                             <th>Ações</th>
                         </tr>
                     </thead>

@@ -102,6 +102,12 @@ body {
   background: var(--bodycolor-w);
 }
 
+#sidebar .mode {
+  background: var(--bodycolor-w);
+  border    : 2px solid var(--cinza0);
+  color     : var(--cinza0);
+}
+
 #sidebar > ul > li {
   border: none !important;
 }
@@ -168,6 +174,10 @@ body {
 
 .navebarn {
   background-color: var(--bodycolor-w);
+}
+
+.cardHeader {
+  color: #747e89;
 }
 
 #header {
@@ -307,13 +317,24 @@ body {
     background: var(--funSider-w);
   }
 
+  .cardHeader {
+    color: #4c6b8b;
+  }
+
   #sidebar {
-    background  : var(--funSider-w) !important;
+    background: var(--bodycolor-w) !important;
   }
 
   #sidebar .mode {
-    background: #ffffff30 !important;
-    color     : #51576c !important;
+    background: #ffffff30;
+    border    : 2px solid #b0b8c152;
+    color     : #b0b8c1;
+  }
+
+  #sidebar.open .mode {
+    background: var(--bodycolor-w);
+    border: 2px solid var(--cinza0);
+    color: var(--cinza0);
   }
 
   #sidebar > ul li span {

@@ -25,7 +25,7 @@ body {
   --title     : #d4d8e0;
   --widget-box: #e6e9f3;
   --toggle    : #676779;
-  --black     : #191b24;
+  --black     : #4a547e;
 
   --white   : #676779;
   --cinza   : #a2a6ae;
@@ -180,8 +180,7 @@ h3 {
   display      : flex;
   height       : 30px;
   padding      : 0;
-  margin-bottom: 6px;
-  margin-left  : 6px;
+  margin       : 0 6px 15px 0;
   border       : none;
   outline      : none;
   border-radius: 5px;
@@ -365,7 +364,8 @@ hr {
 }
 
 #user-nav .iconN {
-  padding-right: 1px;
+  padding-right: 3px;
+  margin-left  : 3px;
 }
 
 #user-nav>ul>li>a:hover,
@@ -440,27 +440,27 @@ hr {
 }
 
 .cardBox .card:nth-child(1) {
-  background: linear-gradient(53deg, #4db8ff, #93d5ff);
+  background: linear-gradient(270deg, #6a7bf3, #93d5ff);
 }
 
 .cardBox .card:nth-child(2) {
-  background: linear-gradient(53deg, #ffc154, #ffd487);
+  background: linear-gradient(270deg, #fe7096, #ffd096);
 }
 
 .cardBox .card:nth-child(3) {
-  background: linear-gradient(53deg, #4bc0c0, #5cede9);
+  background: linear-gradient(270deg, #10a6b5, #5cede9);
 }
 
 .cardBox .card:nth-child(4) {
-  background: linear-gradient(53deg, #ff6a8a, #fd9eb1);
+  background: linear-gradient(270deg, #e7276e, #fd9eb1);
 }
 
 .cardBox .card:nth-child(5) {
-  background: linear-gradient(53deg, #1acdac, #2af1cc);
+  background: linear-gradient(270deg, #15b698, #62eba6);
 }
 
 .cardBox .card:nth-child(6) {
-  background: linear-gradient(53deg, #fbe267, #ffee95);
+  background: linear-gradient(270deg, #f5913b, #f5da56);
 }
 
 .cardBox .card .numbers {
@@ -470,10 +470,8 @@ hr {
 }
 
 .cardBox .card .cardName {
-  font-size  : 1.5em;
-  font-weight: 600;
-  padding    : 3px;
-  text-align : center;
+  font-size  : 1.1em;
+  font-weight: 400;
 }
 
 .cardBox .card .iconBx {
@@ -615,7 +613,7 @@ hr {
 
 #sidebar ul {
   margin : 0;
-  padding: 10px 20px;
+  padding: 10px 20px 0;
 }
 
 #sidebar li {
@@ -670,18 +668,19 @@ hr {
 
 #sidebar .mode {
   position       : absolute;
-  top            : 17px;
-  right          : -32px;
-  transform      : translateY(-50%) rotate(180deg);
+  background     : var(--bodycolor);
+  border         : 2px solid var(--cinza0);
+  top            : 50%;
+  right          : -15px;
+  transform      : translateY(-50%);
   display        : flex;
   align-items    : center;
   justify-content: center;
-  height         : 40px;
-  width          : 40px;
+  height         : 23px;
+  width          : 23px;
   border-radius  : 50%;
   color          : var(--cinza0);
   transition     : var(--tran-05);
-  z-index        : 90;
 }
 
 #sidebar.open .mode {
@@ -820,7 +819,7 @@ body.dark .switch::before {
   justify-content : space-between;
   align-items     : center;
   margin-left     : 242px;
-  margin-top      : 3px;
+  margin-top      : 5px;
   background-color: var(--bodycolor);
 }
 
@@ -1376,7 +1375,7 @@ section .profile .profile-img {
   align-items    : center;
   border-radius  : 8px;
   padding        : 10px 5px;
-  border         : 0px solid rgba(0, 0, 0, 0.1);
+  border         : 1px solid rgba(229 229 229);
 }
 
 .new-bottons .card:nth-child(3) {
@@ -1396,7 +1395,6 @@ section .profile .profile-img {
   font-size  : 1.1em;
   font-weight: 400;
   position   : relative;
-  top        : 5px;
   font-family: system-ui;
   text-align : center;
   color      : var(--subtitle);
@@ -1404,7 +1402,6 @@ section .profile .profile-img {
 
 .new-bottons .card .cardName2 {
   position   : relative;
-  top        : 5px;
   font-size  : 2.1em;
   text-align : center;
   font-weight: 600;
@@ -1413,7 +1410,6 @@ section .profile .profile-img {
 
 .new-bottons .card .cardName1 {
   position   : relative;
-  top        : 5px;
   font-size  : 1.3em;
   text-align : center;
   font-weight: 600;
@@ -1428,7 +1424,7 @@ section .profile .profile-img {
 .iconBx6,
 .iconBx7,
 .iconBx8 {
-  font-size    : 2.4rem;
+  font-size    : 2.1rem;
   text-shadow  : 0 1px 10px rgb(248 247 247 / 40%);
   border-radius: 50%;
 }
@@ -1689,8 +1685,8 @@ section .profile .profile-img {
 /* Widgets */
 .cardHeader {
   font-weight  : 500;
-  font-size    : 1.7em;
-  color        : var(--subtitle);
+  font-size    : 1.3em;
+  color        : #0d0252;
   padding      : 5px 0 0 20px;
   margin-bottom: -11px;
 }
@@ -2958,8 +2954,8 @@ form {
   }
 
   .cardHeader {
-    font-size: 1.45em;
-    padding  : 0 0 0 10px;
+    font-size: 1.35em;
+    padding  : 0 0 0 13px;
   }
 
   .new122 {
@@ -2995,7 +2991,7 @@ form {
   }
 
   .navebarn {
-    margin-left: 105px;
+    margin-left: 85px;
   }
 
   #newlog {
@@ -3052,7 +3048,7 @@ form {
   }
 
   #sidebar.open .mode {
-      right  : -6px;
+      right  : -15px;
       z-index: 999999;
   }
 
@@ -3190,7 +3186,7 @@ form {
   }
 
   #sidebar .mode {
-    top: 16px;
+    top: 17px;
   }
 
   #sidebar.open .mode {
@@ -3619,6 +3615,10 @@ form {
     text-overflow: ellipsis;
   }
 
+  .fs-exit {
+    display: none;
+  }
+
   .ph1,
   .ph2,
   .ph3,
@@ -3736,6 +3736,18 @@ form {
   .new-bottons {
     grid-template-columns: repeat(2, 2fr);
     padding              : 15px 18px;
+  }
+
+  .new-bottons .card .iconBx,
+  .iconBx2,
+  .iconBx3,
+  .iconBx4,
+  .iconBx5,
+  .iconBx6,
+  .iconBx7,
+  .iconBx8 {
+    font-size    : 2.0rem;
+    padding-left : 8px;
   }
 
   .cardBox .card-cl {
@@ -3871,9 +3883,11 @@ form {
   }
 
   .cardHeader {
-    font-size    : 1.45em;
+    font-size    : 1.13em;
     padding      : 5px 0 0 15px;
     margin-bottom: 0;
+    color        : #0d0252;
+    font-weight  : 400;
   }
 
   input[type="number"] {
@@ -4076,14 +4090,17 @@ form {
   }
 
   #sidebar .mode {
-    background     : #3336499e !important;
-    color          : #a6afbb;
-    top            : 50%;
-    width          : 38px;
-    height         : 38px;
-    right          : -40px !important;
-    backdrop-filter: blur(5px);
-    box-shadow     : 0 0 10px rgb(0 0 0 / 20%) !important;
+    width          : 35px;
+    height         : 35px;
+    right          : -20px !important;
+  }
+
+  #sidebar .mode i {
+    left: 12px;
+  }
+
+  #sidebar.open .mode i {
+    left: auto;
   }
 
   .widget-box,

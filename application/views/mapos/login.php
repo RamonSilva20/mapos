@@ -11,6 +11,23 @@
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
     <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
 </head>
+
+<style>
+p {
+  color     : #aaa6b1;
+  text-align: left;
+  font-size : 0.9em;
+}
+.modal-dialog {
+  position: relative;
+  width   : 600px;
+  margin  : 50px auto;
+}
+.links-uteis {
+  margin-top: -5px;
+}
+</style>
+
 <body>
 <div class="main-login">
   <div class="left-login">
@@ -73,7 +90,8 @@ echo saudacao($login);
               </div>
               <div class="center"><button id="btn-acessar">Acessar</button>
               </div>
-              <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos"><p><?= date('Y'); ?> &copy; Ramon Silva</p></a>
+              <div class="links-uteis"><p style="color: var(--cinza1);font-size:0.9em"><p><span class="text-danger">Esqueceu sua senha?</span><br>
+                Não se preocupe! <a href="#" style="color: #d9d5df" class="text-danger" data-toggle="modal" data-target="#myModal">Clique aqui</a> para redefinir </p>
               </div>
               <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
               <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -103,7 +121,25 @@ echo saudacao($login);
       <div class="modal-footer">
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
       </div>
-    </div>
+
+     <!-- modal recuperar senha-->
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="http://localhost/pos/auth/forgot_password" method="post" accept-charset="utf-8">
+                  <input type="hidden" name="spos_token" value="8892d1e3e0d3ede7c12a12b8489a550a">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Trocar senha?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Entre com seu endereço de e-mail para enviarmos outra senha</p>
+                    <input type="email" name="forgot_email" placeholder="E-mail" autocomplete="off" class="form-control placeholder-no-fix">
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default pull-left" type="button">Fechar</button>
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                </div>
+            </div>
 
 <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
 <script src="<?= base_url() ?>assets/js/validate.js"></script>

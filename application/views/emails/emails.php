@@ -1,3 +1,17 @@
+<style>
+  select {
+    width: 70px;
+  }
+  .dataTables_filter {
+    top: 51px;
+  }
+  @media (max-width: 480px) {
+  .dataTables_filter {
+    top: 44px;
+  }
+}
+</style>
+
 <div class="widget-box">
     <div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">

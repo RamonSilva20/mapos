@@ -1,4 +1,13 @@
+<style>
+  select {
+    width: 70px;
+  }
+</style>
+
 <div class="new122" style="margin-top: 0; min-height: 100vh">
+  <div class="widget-title" style="margin:-15px -10px 0">
+      <h5>Arquivos</h5>
+  </div>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
@@ -24,14 +33,14 @@
         </form>
     </div>
 
-    <div>
-        <div class="widget-box">
-            <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-hdd"></i>
-                </span>
-                <h5>Arquivos</h5>
-            </div>
+    <div class="span12" style="margin-left: 0">
+        <div class="widget-box" style="margin-top: 0">
+          <div class="widget-title" style="margin: -20px 0 0">
+            <span class="icon">
+              <i class="fas fa-cash-register"></i>
+            </span>
+            <h5 style="padding: 3px 0"></h5>
+          </div>
             <div class="widget-content nopadding tab-content">
                 <table id="tabela" width="100%" class="table table-bordered ">
                     <thead>

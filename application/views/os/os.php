@@ -4,6 +4,9 @@
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 
 <div class="new122">
+  <div class="widget-title" style="margin:-15px -10px 0">
+      <h5>Ordens de Serviço</h5>
+  </div>
     <div class="span12" style="margin-left: 0">
         <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
@@ -45,12 +48,6 @@
     </div>
 
     <div class="widget-box" style="margin-top: 8px">
-        <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon">
-                <i class="fas fa-diagnoses"></i>
-            </span>
-            <h5>Ordens de Serviço</h5>
-        </div>
         <div class="widget-content nopadding">
             <div class="table-responsive">
                 <table class="table table-bordered ">
@@ -63,7 +60,7 @@
                             <th class="ph2">Data Final</th>
                             <th class="ph3">Venc. Garantia</th>
                             <th>Valor Total</th>
-                            <th>Valor com Desconto</th>
+                            <th>V. Desconto</th>
                             <th class="ph4">V.T (Faturado)</th>
                             <th>Status</th>
                             <th>Ações</th>
