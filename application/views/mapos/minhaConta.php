@@ -157,7 +157,6 @@
         right: 40px;
         padding: 6px;
         background: transparent;
-        color: #333649;
         border-radius: 50%;
         width: 15px;
         height: 15px;
@@ -168,10 +167,6 @@
 
     .img-user:before {
         opacity: 1;
-    }
-
-    .table td {
-        border-top: 1px solid #ddd;
     }
 
     .widget-box {
