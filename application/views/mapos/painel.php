@@ -30,15 +30,6 @@
       height: 45px;
     }
 
-  .card-img-absolute {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 100%;
-      border-bottom-right-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-
   @media (max-width: 480px) {
   lord-icon {
       width: 35px !important;
@@ -61,7 +52,6 @@
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
                 <div class="numbers">Clientes</div>
                 <div class="cardName">F1</div>
@@ -81,7 +71,6 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
                 <div class="numbers">Produtos</div>
                 <div class="cardName">F2</div>
@@ -101,7 +90,6 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
                 <div class="numbers">Serviços</div>
                 <div class="cardName">F3</div>
@@ -121,7 +109,6 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
                 <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
@@ -141,9 +128,8 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
-                <div class="numbers N-tittle">PDV</div>
+                <div class="numbers N-tittle">Vendas/PDV</div>
                 <div class="cardName">F6</div>
             </div>
             <a href="<?= site_url('vendas/adicionar') ?>">
@@ -161,7 +147,6 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
         <li class="card">
-        <img src="<?php echo base_url() ?>assets/img/circle.953c9ca0.svg" class="card-img-absolute" alt="circle">
             <div>
                 <div class="numbers N-tittle">Lançamentos</div>
                 <div class="cardName">F7</div>

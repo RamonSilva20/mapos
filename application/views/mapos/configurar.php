@@ -33,6 +33,7 @@
                                 <select name="app_theme" id="app_theme">
                                     <option value="default">Escuro</option>
                                     <option value="white" <?= $configuration['app_theme'] == 'white' ? 'selected' : ''; ?>>Claro</option>
+                                    <option value="dark" <?= $configuration['app_theme'] == 'dark' ? 'selected' : ''; ?>>Dark</option>
                                 </select>
                                 <span class="help-inline">Selecione o tema que que deseja usar no sistema</span>
                             </div>

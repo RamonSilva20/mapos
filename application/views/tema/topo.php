@@ -15,6 +15,9 @@
   <?php if ($configuration['app_theme'] == 'white') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema.css" />
   <?php } ?>
+  <?php if ($configuration['app_theme'] == 'dark') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-new.css" />
+  <?php } ?>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;700&display=swap' rel='stylesheet' type='text/css'>
   <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -98,7 +101,7 @@
       <li class="dropdown">
         <a id="btn1" href="#" class="tip-bottom dropdown-toggle" data-toggle="dropdown" title="Fullscreen"><i class='bx bx-fullscreen' ></i></a>
       </li>
-      <li class="dropdown">
+      <li class="dropdown fs-exit">
         <a id="btn2" href="#" class="tip-bottom dropdown-toggle" data-toggle="dropdown" title="Sair Fullscreen"><i class='bx bx-exit-fullscreen' ></i></a>
       </li>
       <script type="text/javascript">

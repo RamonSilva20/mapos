@@ -25,16 +25,21 @@ body {
   --title     : #d4d8e0;
   --widget-box: #e6e9f3;
   --toggle    : #676779;
+  --dark-1    : #111315;
+  --dark-2    : #1f2225;
+  --dark-azul : #2d73e4;
+  --dark-lar  : #c17943;
+  --wid-dark  : #2a2b32;
   --black     : #4a547e;
-
-  --white   : #676779;
-  --cinza   : #a2a6ae;
-  --cinza0  : #9aa6b3;
-  --laranja : #fd5e33;
-  --laranja1: #fc9d0f;
-  --laranja0: #faead2ee;
-  --blue    : #0039c6;
-  --blue2   : #212573;
+  --branco    : #caced8;
+  --white     : #676779;
+  --cinza     : #a2a6ae;
+  --cinza0    : #9aa6b3;
+  --laranja   : #fd5e33;
+  --laranja1  : #fc9d0f;
+  --laranja0  : #faead2ee;
+  --blue      : #0039c6;
+  --blue2     : #212573;
 
   /* === Transition === */
   --tran-02: all 0.2s ease;
