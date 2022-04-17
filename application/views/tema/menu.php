@@ -139,7 +139,7 @@
                 <?php } ?>
             </ul>
         </div>
-
+<!-- Projeto Kanban 
         <div class="botton-content" style="margin: 0 20px">
             <li class="">
                 <a class="tip-bottom" title="" href="<?= base_url() ?>">
@@ -149,6 +149,7 @@
                 </a>
             </li>
         </div>
+        -->
 
         <div class="botton-content">
             <li class="">
