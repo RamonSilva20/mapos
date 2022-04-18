@@ -49,7 +49,7 @@
                                     $saldo = 0;
                                     foreach ($lancamentos as $l) {
                                         $vencimento = date('d/m/Y', strtotime($l->data_vencimento));
-                                        $pagamento = $l->data_pagamento;
+                                        $pagamento = date('d/m/Y', strtotime($l->data_pagamento));
                                         if ($l->baixado == 1) {
                                             $situacao = 'Pago';
                                         } else {
@@ -60,14 +60,6 @@
                                         } else {
                                             $totalDespesa += $l->valor_desconto;
                                         }
-
-
-                                        if  ($pagamento == "0000-00-00")  {
-                                            $pagamento = "Não informado";
-                                        } else  {
-                                            $pagamento = date('d/m/Y', strtotime($pagamento));
-                                     }
-             
                                         echo '<tr>';
                                         echo '<td>' . $l->cliente_fornecedor . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
