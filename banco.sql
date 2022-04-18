@@ -138,7 +138,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `lancamentos` (
   `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
-  `valor` VARCHAR(15) NOT NULL,
+  `valor` DECIMAL(10, 2) NULL DEFAULT 0,
   `desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `data_vencimento` DATE NOT NULL,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `os` (
   `status` VARCHAR(45) NULL DEFAULT NULL,
   `observacoes` TEXT NULL DEFAULT NULL,
   `laudoTecnico` TEXT NULL DEFAULT NULL,
-  `valorTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `valorTotal` DECIMAL(10, 2) NULL DEFAULT 0,
   `desconto`DECIMAL(10, 2) NULL DEFAULT 0,
   `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `clientes_id` INT(11) NOT NULL,
@@ -344,7 +344,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `vendas` (
   `idVendas` INT NOT NULL AUTO_INCREMENT,
   `dataVenda` DATE NULL,
-  `valorTotal` VARCHAR(45) NULL,
+  `valorTotal` DECIMAL(10, 2) NULL DEFAULT 0,
   `desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `faturado` TINYINT(1) NULL,
