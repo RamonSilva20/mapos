@@ -60,6 +60,11 @@
                                         } else {
                                             $totalDespesa += $l->valor_desconto;
                                         }
+                                        if  ($pagamento == "0000-00-00")  {
+                                            $pagamento = "Não informado";
+                                        } else  {
+                                            $pagamento = date('d/m/Y', strtotime($pagamento));
+                                     }
                                         echo '<tr>';
                                         echo '<td>' . $l->cliente_fornecedor . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
