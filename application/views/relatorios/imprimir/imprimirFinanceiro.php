@@ -60,7 +60,6 @@
                                     } else {
                                         $totalDespesa += $l->valor_desconto;
                                     }
-
                                     if ($pagamento == "0000-00-00") {
                                         $pagamento = "Não informado";
                                     } else {
