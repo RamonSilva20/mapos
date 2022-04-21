@@ -25,19 +25,51 @@ body {
   --title     : #d4d8e0;
   --widget-box: #e6e9f3;
   --toggle    : #676779;
-  --dark-1    : #111315;
-  --dark-2    : #1f2225;
-  --dark-azul : #2d73e4;
-  --dark-lar  : #c17943;
-  --wid-dark  : #2a2b32;
+
+  /* === Tema pure dark === */
+  --wid-dark  : #1c1d26;
+  --dark-0    : #191a22;
+  --dark-1    : #14141a;
+  --dark-2    : #272835;
+  --dark-cinz : #8788a4;
+  --dark-azul : #1086dd;
+  --dark-viol : #52459f;
+
+  /* === Tema white green === */
+  --white-gre0  : #c8e2d5;
+  --white-gre   : #6dad8d;
+  --white-gre-o : #f2cc8e;
+  --white-gre-o2: #e79411;
+  --white-gre2  : #3c405b;
+  --white-pret  : #222222;
+  --white-bran  : #f2f5fa;
+
+  /* === Tema white blak === */
+  --white-blak     : #14121f;
+  --white-blak-tit : #525a6a;
+  --white-blak-tit2: #a0a0a0;
+  --white-blak-cont: #f5f5fd;
+  --white-blak-side: #ececf6;
+
+  /* === Tema dark violet === */
+  --dark-violet     : #14121f;
+  --dark-violet-tit : #eee7e7;
+  --dark-violet-tit2: #c3b2e9;
+  --dark-violet-widg: #291a57;
+  --dark-violet-cont: #1b1239;
+  --dark-violet-side: #6b29f8;
+
+  /* === tema orange === */
+  --dark-oran   : #fd7670;
+
   --black     : #4a547e;
   --branco    : #caced8;
-  --white     : #676779;
+  --white     : #ffffff;
   --cinza     : #a2a6ae;
   --cinza0    : #9aa6b3;
   --laranja   : #fd5e33;
   --laranja1  : #fc9d0f;
-  --laranja0  : #faead2ee;
+  --laranja0  : #ffa489;
   --blue      : #0039c6;
   --blue2     : #212573;
 
@@ -449,7 +481,7 @@ hr {
 }
 
 .cardBox .card:nth-child(2) {
-  background: linear-gradient(270deg, #fe7096, #ffd096);
+  background: linear-gradient(270deg, #e18c3e, #ffd096);
 }
 
 .cardBox .card:nth-child(3) {
@@ -465,7 +497,7 @@ hr {
 }
 
 .cardBox .card:nth-child(6) {
-  background: linear-gradient(270deg, #f5913b, #f5da56);
+  background: linear-gradient(270deg, #f1b50c, #f5da56);
 }
 
 .cardBox .card .numbers {
@@ -479,14 +511,14 @@ hr {
   font-weight: 400;
 }
 
-.cardBox .card .iconBx {
-  font-size      : 3em;
+.cardBox .card .iconBx01, .iconBx02, .iconBx03, .iconBx04, .iconBx05, .iconBx06 {
+  font-size      : 2.8em;
   text-decoration: none;
 }
 
 .cardBox .card .numbers,
 .cardBox .card .cardName,
-.cardBox .card .iconBx {
+.cardBox .card .iconBx01 {
   color: var(--subtitle);
 }
 
@@ -549,8 +581,8 @@ hr {
   position      : absolute;
   right         : 15px;
 }
-
 /* End hora certa */
+
 .icon-bord {
   position     : absolute;
   width        : 50px;
@@ -741,7 +773,7 @@ hr {
 
 #sidebar.open li a {
   justify-content: flex-start;
-  transition     : 20s;
+  transition     : var(--tran-03);
 }
 
 #sidebar li a {
@@ -2313,7 +2345,7 @@ span.icon .checker {
 
 .dataTables_length {
   color   : #878787;
-  margin  : 2px 8px;
+  margin  : 2px 10px;
   position: relative;
   width   : 50%;
 }
@@ -2401,8 +2433,8 @@ div.dataTables_wrapper .ui-widget-header {
 .dataTables_filter {
   color     : #878787;
   font-size : 11px;
-  right     : 8px;
-  top       : 53px;
+  right     : 10px;
+  top       : 21px;
   position  : absolute;
   text-align: left;
 }
@@ -2511,11 +2543,16 @@ div.dataTables_wrapper .ui-widget-header {
   height : auto;
   padding: 8px 15px 5px;
   border-bottom          : 0 solid #eee;
-  border-top-left-radius : 6px;
-  border-top-right-radius: 6px;
+  border-top-left-radius : 4px;
+  border-top-right-radius: 4px;
+  border-radius: 4px 4px 0 0;
   background             : #3dabf5;
   color                  : #fff;
   text-align-last        : center;
+}
+
+.modal-footer {
+  border-radius: 0 0 4px 4px;
 }
 
 .modal-header h5 {
@@ -3121,7 +3158,8 @@ form {
   }
 
   .cardBox {
-    margin-bottom: 0;
+    margin-bottom        : 0;
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 
   .cardBox .card {
@@ -3188,10 +3226,6 @@ form {
 
   #sidebar.open li form:hover .title-tooltip {
     display: none;
-  }
-
-  #sidebar .mode {
-    top: 17px;
   }
 
   #sidebar.open .mode {
@@ -3521,19 +3555,11 @@ form {
   }
 
   #sidebar .mode {
-    background: #3336499e !important;
-    color     : #a6afbb;
-    top       : 50%;
     right     : -21px;
     height    : 35px;
     width     : 35px;
-    box-shadow: 0 0 10px rgb(0 0 0 / 20%) !important;
   }
-
-  #sidebar.open .mode {
-    right: -41px;
-  }
-
+  
   .navebarn {
     margin-left: 86px;
   }
@@ -3824,7 +3850,7 @@ form {
   }
 
   .dataTables_filter {
-    top  : 38px;
+    top: 10px;
   }
 
   .dataTables_length {

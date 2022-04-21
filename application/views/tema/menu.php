@@ -5,7 +5,7 @@
             <img src="<?php echo base_url() ?>assets/img/logo-two.png">
         </div>
         <div class="title1">
-            <?= $configuration['app_theme'] == 'white' ? '<img src="' . base_url() . 'assets/img/logo-mapos.png">' : '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
+            <?= $configuration['app_theme'] == 'white', 'whitegreen' ? '<img src="' . base_url() . 'assets/img/logo-mapos.png">' : '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
         </div>
     </div>
     <a href="#" class="visible-phone">
@@ -19,9 +19,9 @@
     <!-- Start Pesquisar-->
     <li class="search-box">
         <form style="display: flex" action="<?= site_url('mapos/pesquisar') ?>">
-            <button style="background: transparent;border: transparent" type="submit" class="tip-bottom" title="">
+            <button style="background:transparent;border:transparent" type="submit" class="tip-bottom" title="">
                 <i class='bx bx-search iconX'></i></button>
-            <input style="background:transparent;border:transparent" type="search" name="termo" placeholder="Pesquise aqui...">
+            <input style="background:transparent;color:#fff;border:transparent" type="search" name="termo" placeholder="Pesquise aqui...">
             <span class="title-tooltip">Pesquisar</span>
         </form>
     </li>
@@ -139,8 +139,8 @@
                 <?php } ?>
             </ul>
         </div>
-<!-- Projeto Kanban 
-        <div class="botton-content" style="margin: 0 20px">
+
+        <div class="botton-content" style="display:none;margin: 0 20px">
             <li class="">
                 <a class="tip-bottom" title="" href="<?= base_url() ?>">
                 <i class='bx bx-columns iconX'></i>
@@ -149,7 +149,6 @@
                 </a>
             </li>
         </div>
-        -->
 
         <div class="botton-content">
             <li class="">

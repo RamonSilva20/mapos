@@ -6,7 +6,6 @@
 <script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
 <script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-
 <link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,17 +16,15 @@
 <body onresize="responsiveFonts()">
 
 <style>
-  .modal-body {
-      overflow-y: inherit;
-      }
+    .modal-body {
+        overflow-y: inherit;
+        }
 
-  lord-icon {
-      padding: 3px;
-      background: #2222221a;
-      border: 1px solid #ffffff7d;
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
+    .logo-img {
+    // to black
+    filter: invert(1);
+    // or to blue
+    // filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg);
     }
 
   @media (max-width: 480px) {
@@ -52,114 +49,84 @@
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Clientes</div>
                 <div class="cardName">F1</div>
             </div>
             <a href="<?= site_url('clientes') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/dxjqoygy.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon01">
+                <i class='bx bx-user iconBx01'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Produtos</div>
                 <div class="cardName">F2</div>
             </div>
             <a href="<?= site_url('produtos') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/dnoiydox.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon02">
+                <i class='bx bx-basket iconBx02'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Serviços</div>
                 <div class="cardName">F3</div>
             </div>
             <a href="<?= site_url('servicos') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/sbiheqdr.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon03">
+                <i class='bx bx-wrench iconBx03'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/nocovwne.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon04">
+                <i class='bx bx-file iconBx04'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
         <li class="card">
-            <div>
-                <div class="numbers N-tittle">Vendas/PDV</div>
+            <div class="grid-blak">
+                <div class="numbers N-tittle">PDV</div>
                 <div class="cardName">F6</div>
             </div>
             <a href="<?= site_url('vendas/adicionar') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/yeallgsa.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon05">
+                <i class='bx bx-cart-alt iconBx05'></i></span>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers N-tittle">Lançamentos</div>
                 <div class="cardName">F7</div>
             </div>
             <a href="<?= site_url('financeiro/lancamentos') ?>">
-              <div class="iconBx"><script src="https://cdn.lordicon.com/lusqsztk.js"></script>
-                <lord-icon
-                    src="https://cdn.lordicon.com/gqdnbnwt.json"
-                    trigger="hover"
-                    colors="primary:#f3f4f6,secondary:#f3f4f6"
-                    stroke="85">
-                </lord-icon>
-              </div>
+            <div class="lord-icon06">
+                <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
@@ -197,7 +164,7 @@
 
         <!-- New widget right -->
         <div class="new-statisc">
-            <div class="widget-box-new" style="height:100%">
+            <div class="widget-box-new widbox-blak" style="height:100%">
                 <div>
                     <h5 class="cardHeader">Estatísticas do Sistema</h5>
                 </div>
@@ -353,7 +320,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    backgroundColor: 'rgba(18, 170, 188, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -373,7 +340,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 173, 74, 0.6)',
+                    backgroundColor: 'rgba(254, 185, 90, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -393,7 +360,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    backgroundColor: 'rgba(239, 86, 68, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -413,7 +380,7 @@
                         <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    backgroundColor: 'rgba(0, 147, 253, 0.9)',
                     borderRadius: 15,
                 }
             ]
@@ -481,12 +448,12 @@
                 ],
 
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 173, 74, 0.6)',
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(108, 133, 228, 0.6)'
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 173, 74, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(108, 133, 228, 0.7)'
                 ],
                 borderWidth: 0,
             }]
@@ -534,7 +501,7 @@ function responsiveFonts() {
 <!-- Start Staus OS -->
 <div class="span12A" style="margin-left: 0">
     <div class="AAA">
-        <div class="widget-box0">
+        <div class="widget-box0 widbox-blak">
             <div>
                 <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
             </div>
@@ -589,7 +556,9 @@ function responsiveFonts() {
         </div>
     </div>
 
-    <div class="widget-box0">
+
+
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
         </div>
@@ -642,7 +611,7 @@ function responsiveFonts() {
     </div>
 
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Aguardando Peças</h5>
         </div>
@@ -690,7 +659,7 @@ function responsiveFonts() {
         </div>
     </div>
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Andamento</h5>
         </div>
