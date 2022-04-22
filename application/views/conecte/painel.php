@@ -1,23 +1,68 @@
 <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/owl.theme.default.min.css">
+<script type="text/javascript" src="<?= base_url(); ?>assets/js/instafeed.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/owl.carousel.min.js"></script>
+
 <div class="quick-actions_homepage">
     <ul class="cardBox">
         <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconBx'></i>
-          <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
-        </a>
+          <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div></a>
         </li>
-
         <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconBx'></i>
-                <div style="font-size: 1.2em" class="numbers">Compras</div>
-            </a></li>
+          <div style="font-size: 1.2em" class="numbers">Compras</div></a>
+        </li>
         <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class='bx bx-user-circle iconBx'></i>
-                <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
-            </a></li>
+          <div style="font-size: 1.2em" class="numbers">Minha Conta</div></a>
+        </li>
+        <!-- Adicione seu link do instagram entre aspas no href abaixo -->
+        <li class="card"> <a href="https://www.instagram.com/m_cell_assistec/" target="_blank"><i class='bx bxl-instagram iconBx'></i>
+          <div style="font-size: 1.2em" class="numbers">Siga Nosso Instagram</div></a>
+        </li>
+        <!-- Adicione seu link do whatsApp entre aspas no href abaixo -->
+        <li class="card"> <a href="https://a.umbler.com/gerador-de-link-whatsapp?gclid=Cj0KCQjwgYSTBhDKARIsAB8KukvHgbJcfbYWVYX12K_CwP5YgFYgZogAz1WVR_-zAihrWcr0rf5h9KUaAoH3EALw_wcB" target="_blank"><i class='bx bxl-whatsapp iconBx'></i></i>
+          <div style="font-size: 1.2em" class="numbers">Fale Conosco</div></a>
+        </li>
     </ul>
 </div>
 
-<div class="span12" style="margin-left: 0">
+<div>
+    <h5 style="margin-bottom:12px; color:var(--violeta1)" class="cardHeader">Últimos Trabalhos</h5>
+</div>
+<div id="instafeed" class="owl-carousel owl-theme owl-loaded owl-drag"></div>
 
+<script type="text/javascript">
+    var feed = new Instafeed({
+        accessToken: 'COLE SEU TOKEN AQUI !', 
+        limit: 8,
+        template:'<div class="item"><a href="{{link}}" target="_blank"><img title="{{caption}}" src="{{image}}" /></a></div>',
+        after: function(){
+            $('.owl-carousel').owlCarousel({
+                loop:true,
+                margin:10,
+                nav:false,
+                responsiveClass:true,
+                responsive:{
+                    0:{
+                        items:1
+                    },
+                    600:{
+                        items:3
+                    },
+                    1000:{
+                        items:5,
+                        loop:false
+                    }
+                }
+            });
+        }
+    });
+    feed.run();
+</script>
+
+<div class="span12" style="margin-left: 0">
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
           <span class="icon"><i class="fas fa-signal"></i></span>
@@ -66,7 +111,7 @@
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                             echo '<td>' . $o->status . '</td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn-nwe tip-top" title="Visualizar"><i class="bx bx-show"></i></a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -109,7 +154,7 @@
                             echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
                             echo '<td>' . $p->nome . '</td>';
                             echo '<td>' . $faturado . '</td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn-nwe tip-top" title="Visualizar"><i class="bx bx-show"></i></a></td>';
                             echo '</tr>';
                         }
                     } else {

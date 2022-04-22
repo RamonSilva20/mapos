@@ -22,8 +22,7 @@
 <body>
     <!--Header-part-->
     <div id="header">
-        <h1><a href="dashboard.html">
-                <?php echo $this->config->item('app_name'); ?></a></h1>
+        <h1><a href="dashboard.html"><?php echo $this->config->item('app_name'); ?></a></h1>
     </div>
     <!--close-Header-part-->
 
@@ -55,8 +54,8 @@
         <a href="#" class="visible-phone">
             <div class="mode">
                 <div class="moon-menu">
-                    <i class='bx bx-menu iconX open-2'></i>
-                    <i class='bx bx-x iconX close-2'></i>
+                    <i class='bx bx-chevron-right iconX open-2'></i>
+                    <i class='bx bx-chevron-left iconX close-2'></i>
                 </div>
             </div>
         </a>

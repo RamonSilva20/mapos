@@ -35,15 +35,35 @@ $parse_cpfcnpj = $this->input->get('c');
 ?>
 
 <body>
-    <div class="main-login">
+<div class="main-login">
         <div class="left-login">
-            <h1 class="h-one">Área do Cliente</h1>
+
+        <!-- Saudação -->
+        <h1 class="h-one">
+            <?php
+            function saudacao($nome = '')
+            {
+                date_default_timezone_set('America/Sao_Paulo');
+                $hora = date('H');
+                if ($hora >= 6 && $hora <= 12) {
+                    return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+                } elseif ($hora > 12 && $hora <=18) {
+                    return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+                } else {
+                    return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+                }
+            }
+        $login = 'bem-vindos';
+        echo saudacao($login);
+
+        // Irá retornar conforme o horário:
+        ?></h1>
+            <h3 style="margin: 0;margin-top: -15px;color: var(--laranja)" class="h-one">A área do cliente</h3>
             <img src="<?php echo base_url() ?>assets/img/forms-animate.svg" class="left-login-imagec" alt="Map-OS 5.0">
         </div>
 
         <div id="loginbox">
             <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
-
                 <div class="d-flex flex-column">
                     <div class="right-login">
                         <div class="container">
