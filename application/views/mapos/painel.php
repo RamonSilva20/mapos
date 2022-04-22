@@ -5,16 +5,39 @@
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
 <script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
 <script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<body onresize="responsiveFonts()">
+
+<style>
+    .modal-body {
+        overflow-y: inherit;
+        }
+
+    .logo-img {
+    // to black
+    filter: invert(1);
+    // or to blue
+    // filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg);
+    }
+
+  @media (max-width: 480px) {
+  lord-icon {
+      width: 35px !important;
+      height: 35px !important;
+    }
+
+  .cardBox .card .numbers {
+      font-size: 1.2em !important;
+    }
+  }
+</style>
 
 <!-- New Bem-vindos -->
 <div id="content-bemv">
@@ -26,78 +49,87 @@
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Clientes</div>
                 <div class="cardName">F1</div>
             </div>
             <a href="<?= site_url('clientes') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-group bx-border-circle'></i>
-                </div>
+            <div class="lord-icon01">
+                <i class='bx bx-user iconBx01'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Produtos</div>
                 <div class="cardName">F2</div>
             </div>
             <a href="<?= site_url('produtos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-package bx-border-circle'></i>
-                </div>
+            <div class="lord-icon02">
+                <i class='bx bx-basket iconBx02'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Serviços</div>
                 <div class="cardName">F3</div>
             </div>
             <a href="<?= site_url('servicos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-stopwatch bx-border-circle'></i>
-                </div>
+            <div class="lord-icon03">
+                <i class='bx bx-wrench iconBx03'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-spreadsheet bx-border-circle'></i>
-                </div>
+            <div class="lord-icon04">
+                <i class='bx bx-file iconBx04'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
-    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+        <li class="card">
+            <div class="grid-blak">
+                <div class="numbers N-tittle">PDV</div>
+                <div class="cardName">F6</div>
+            </div>
+            <a href="<?= site_url('vendas/adicionar') ?>">
+            <div class="lord-icon05">
+                <i class='bx bx-cart-alt iconBx05'></i></span>
+            </div>
+            </a>
+        </li>
+    <?php endif ?>
 
-    <div Class="card-cl">
-        <div class="clock-card">
-            <div class="clock-flex">
-                <span class="num hour_num">00</span>
-                <div class="tit">Horas</div>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
+        <li class="card">
+            <div class="grid-blak">
+                <div class="numbers N-tittle">Lançamentos</div>
+                <div class="cardName">F7</div>
             </div>
-            <span class="colun" id="colun-1">:</span>
-            <div class="clock-flex">
-                <span class="num min_num">00</span>
-                <div class="tit">Minutos</div>
+            <a href="<?= site_url('financeiro/lancamentos') ?>">
+            <div class="lord-icon06">
+                <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
             </div>
-            <div class="time_am_pm">
-                <span class="num am_pm">AM</span>
-            </div>
-        </div>
-    </div>
+            </a>
+        </li>
+    <?php endif ?>
 </ul>
 <!--End-Action boxes-->
 
@@ -132,57 +164,57 @@
 
         <!-- New widget right -->
         <div class="new-statisc">
-            <div class="widget-box-new" style="height:100%">
+            <div class="widget-box-new widbox-blak" style="height:100%">
                 <div>
                     <h5 class="cardHeader">Estatísticas do Sistema</h5>
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
-                        <div><i class='bx bxs-group iconBx'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Adicionar clientes e fornecedores">
+                        <div><i class='bx bx-user iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-                            <div class="cardName">Add Clientes</div>
+                            <div class="cardName">Clientes</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
-                        <div><i class='bx bxs-package iconBx2'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar produtos">
+                        <div><i class='bx bx-basket iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-                            <div class="cardName">Add Produtos</div>
+                            <div class="cardName">Produtos</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
-                        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
+                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                        <div><i class='bx bx-wrench iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-                            <div class="cardName">Add Serviços</div>
+                            <div class="cardName">Serviços</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
-                        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar Ordens de Serviço">
+                        <div><i class='bx bx-file iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-                            <div class="cardName">Add Ordens</div>
+                            <div class="cardName">Ordens</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
-                        <div><i class='bx bxs-receipt iconBx6'></i></div>
+                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                        <div><i class='bx bx-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-                            <div class="cardName">Add Garantias</div>
+                            <div class="cardName">Garantias</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
-                        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
+                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar vendas">
+                        <div><i class='bx bx-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-                            <div class="cardName">Add Vendas</div>
+                            <div class="cardName">Vendas</div>
                         </div>
                     </a>
 
@@ -194,16 +226,16 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
-                                    <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Adicionar receita" class="card tip-top">
+                                    <div><i class='bx bx-chevron-up-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
                                         <div class="cardName">Receita do dia</div>
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
-                                    <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Adicionar despesa" class="card tip-top">
+                                    <div><i class='bx bx-chevron-down-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
                                         <div class="cardName">Despesa do dia</div>
@@ -212,7 +244,7 @@
                             <?php endif ?>
 
                     <?php  }
-} ?>
+                } ?>
                 </div>
             </div>
         </div>
@@ -288,7 +320,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    backgroundColor: 'rgba(18, 170, 188, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -308,7 +340,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                    backgroundColor: 'rgba(254, 185, 90, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -328,7 +360,7 @@
                         <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
                     ],
 
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    backgroundColor: 'rgba(239, 86, 68, 0.9)',
                     borderRadius: 15,
                 },
 
@@ -348,7 +380,7 @@
                         <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
                     ],
 
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    backgroundColor: 'rgba(0, 147, 253, 0.9)',
                     borderRadius: 15,
                 }
             ]
@@ -357,6 +389,7 @@
         // configuração
         type: 'bar',
         options: {
+          animation: false,
             locale: 'pt-BR',
             scales: {
                 y: {
@@ -370,12 +403,10 @@
                         }
                     }
                 },
-                x: {
+                x: { grid: {
+                    display: false
+                },
                     beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Meses'
-                    }
                 }
             },
 
@@ -383,7 +414,7 @@
                 tooltip: {
                     callbacks: {
                         beforeTitle: function(context) {
-                            return 'Referente ao mês de';
+                            return 'Mês de:';
                         }
                     }
                 },
@@ -417,50 +448,50 @@
                 ],
 
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    'rgba(153, 102, 255, 0.5)'
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 173, 74, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(108, 133, 228, 0.7)'
                 ],
-                borderWidth: 1
+                borderWidth: 0,
             }]
         },
 
         // configuração
         type: 'polarArea',
         options: {
-            locale: 'pt-BR',
-            scales: {
-                r: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }).format(value);
-                        }
-                    },
-                    beginAtZero: true,
-                }
-            },
+          animation: false,
+          locale: 'pt-BR',
+          scales: {
+              r: {
+                  ticks: {
+                      callback: (value, index, values) => {
+                          return new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                              maximumSignificantDidits: 1
+                          }).format(value);
+                      }
+                  },
+                  beginAtZero: true,
+              }
+          },
             plugins: {
                 legend: {
                     position: "bottom",
                     labels: {
                         usePointStyle: true,
-
                     }
                 }
             }
         }
     });
 
-    function responsiveFonts() {
-        myChart.update();
-    }
+function responsiveFonts() {
+  myChart.update();
+}
 </script>
 <?php  }
 } ?>
@@ -470,7 +501,7 @@
 <!-- Start Staus OS -->
 <div class="span12A" style="margin-left: 0">
     <div class="AAA">
-        <div class="widget-box0">
+        <div class="widget-box0 widbox-blak">
             <div>
                 <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
             </div>
@@ -507,10 +538,8 @@
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
-                                                <i class="bx bx-edit"></i>
-                                            </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar"><i class="bx bx-edit"></i></a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
                                                 <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
@@ -529,7 +558,7 @@
 
 
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
         </div>
@@ -556,18 +585,17 @@
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
+                                echo date('d/m/Y', strtotime($o->dataFinal));
+                            } else {
+                                echo "";
+                            } ?></td>
 
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar"><i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -583,7 +611,7 @@
     </div>
 
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Aguardando Peças</h5>
         </div>
@@ -616,8 +644,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar"><i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -632,7 +659,7 @@
         </div>
     </div>
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Andamento</h5>
         </div>
@@ -665,8 +692,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar"><i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -687,10 +713,10 @@
 <div id="calendarModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Status OS Detalhada</h3>
+        <h5 style="font-size: 1.5em;font-weight: 500;text-align-last: center">Status de OS Detalhada</h5>
     </div>
     <div class="modal-body">
-        <div class="span5" id="divFormStatusOS" style="margin-left: 0"></div>
+        <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
         <h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
         <h5 id="modalCliente" class="modal-cliente"></h5>
         <div id="modalDataInicial" class="modal-DataInicial"></div>
@@ -703,16 +729,16 @@
         <div id="modalTotal" class="modal-Total"></div>
         <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="display:flex;justify-content: center">
         <?php
         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-            echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+            echo '<a id="modalIdVisualizar" style="margin-right: 1%; min-width: 108px" href="" class="button btn btn-primary" <span><i class="bx bx-show button__icon"></i></span><span class="button__text2">Visualizar</span></a>';
         }
         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-            echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+            echo '<a id="modalIdEditar" style="margin-right: 1%; min-width: 100px" href="" class="button btn btn-info" <span><i class="bx bx-edit button__icon"></i></span><span class="button__text2">Editar</span></a>';
         }
         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-            echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+            echo '<a id="linkExcluir" style="min-width: 100px" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="button btn btn-danger" <span><i class="bx bx-trash-alt button__icon"></i></span><span class="button__text2">Excluir</span></a>';
         }
         ?>
     </div>
@@ -741,7 +767,7 @@
     <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
+            <h5 id="myModalLabel">Atualizar Estoque</h5>
         </div>
         <div class="modal-body">
             <div class="control-group">
