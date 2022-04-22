@@ -28,6 +28,23 @@
             }
         }
     </script>
+
+    <style>
+    p {
+      color     : #aaa6b1;
+      text-align: left;
+      font-size : 0.9em;
+    }
+    .modal-dialog {
+      position: relative;
+      width   : 600px;
+      margin  : 50px auto;
+    }
+    .center {
+      margin-bottom: -5px;
+    }
+    </style>
+
 </head>
 <?php
 $parse_email = $this->input->get('e');
@@ -35,10 +52,10 @@ $parse_cpfcnpj = $this->input->get('c');
 ?>
 
 <body>
-<div class="main-login">
+    <div class="main-login">
         <div class="left-login">
 
-        <!-- Saudação -->
+          <!-- Saudação -->
         <h1 class="h-one">
             <?php
             function saudacao($nome = '')
@@ -64,6 +81,7 @@ $parse_cpfcnpj = $this->input->get('c');
 
         <div id="loginbox">
             <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
+
                 <div class="d-flex flex-column">
                     <div class="right-login">
                         <div class="container">
@@ -98,12 +116,9 @@ $parse_cpfcnpj = $this->input->get('c');
 
                                     <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
                                     <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
-                                    <div class="links-uteis"><a href="<?= site_url('mine/resetarSenha') ?>">
-                                            <p style="margin:0px 0 18px">Esqueceu a senha?</p>
-                                        </a></div>
-                                    <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                                            <p><?= date('Y'); ?> &copy; Ramon Silva</p>
-                                        </a></div>
+                                      <div class="links-uteis"><p style="color: var(--cinza1);font-size:0.9em"><p><span class="text-danger">Esqueceu sua senha?</span><br>
+                                        Não se preocupe! <a href="<?= site_url('mine/resetarSenha') ?>" style="color: #d9d5df" class="text-danger" data-toggle="modal" data-target="#myModal">Clique aqui</a> para redefinir </p>
+                                      </div>
                                 </div>
                             </div>
                         </div>
