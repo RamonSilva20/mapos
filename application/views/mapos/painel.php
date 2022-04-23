@@ -141,57 +141,57 @@
 
         <!-- New widget right -->
         <div class="new-statisc">
-            <div class="widget-box-new" style="height:100%">
+            <div class="widget-box-new widbox-blak" style="height:100%">
                 <div>
                     <h5 class="cardHeader">Estatísticas do Sistema</h5>
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
+                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-                            <div class="cardName">Add Clientes</div>
+                            <div class="cardName">Clientes</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
+                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-                            <div class="cardName">Add Produtos</div>
+                            <div class="cardName">Produtos</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
+                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-                            <div class="cardName">Add Serviços</div>
+                            <div class="cardName">Serviços</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
+                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-                            <div class="cardName">Add Ordens</div>
+                            <div class="cardName">Ordens</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
+                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-                            <div class="cardName">Add Garantias</div>
+                            <div class="cardName">Garantias</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
+                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-                            <div class="cardName">Add Vendas</div>
+                            <div class="cardName">Vendas</div>
                         </div>
                     </a>
 
@@ -203,7 +203,7 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
@@ -211,7 +211,7 @@
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
@@ -379,12 +379,10 @@
                         }
                     }
                 },
-                x: {
+                x: { grid: {
+                    display: false
+                },
                     beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Meses'
-                    }
                 }
             },
 
@@ -392,7 +390,7 @@
                 tooltip: {
                     callbacks: {
                         beforeTitle: function(context) {
-                            return 'Referente ao mês de';
+                            return 'Mês de';
                         }
                     }
                 },
@@ -479,7 +477,7 @@
 <!-- Start Staus OS -->
 <div class="span12A" style="margin-left: 0">
     <div class="AAA">
-        <div class="widget-box0">
+        <div class="widget-box0 widbox-blak">
             <div>
                 <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
             </div>
@@ -516,10 +514,10 @@
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
                                                 <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
                                                 <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
@@ -536,9 +534,7 @@
         </div>
     </div>
 
-
-
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
         </div>
@@ -575,7 +571,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -592,7 +588,7 @@
     </div>
 
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Aguardando Peças</h5>
         </div>
@@ -625,8 +621,8 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                            <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
                             </tr>
@@ -641,7 +637,7 @@
         </div>
     </div>
 
-    <div class="widget-box0">
+    <div class="widget-box0 widbox-blak">
         <div>
             <h5 class="cardHeader">Ordens de Serviço Em Andamento</h5>
         </div>
@@ -674,8 +670,8 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
-                                            <i class="bx bx-show"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                            <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
                             </tr>
