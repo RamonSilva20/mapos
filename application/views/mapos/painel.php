@@ -16,6 +16,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
+<body onresize="responsiveFonts()"> <!-- Responsividade dos gráficos -->
+
 <!-- New Bem-vindos -->
 <div id="content-bemv">
     <div class="bemv">Dashboard</div>
