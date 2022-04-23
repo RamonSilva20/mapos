@@ -26,78 +26,87 @@
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Clientes</div>
                 <div class="cardName">F1</div>
             </div>
             <a href="<?= site_url('clientes') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-group bx-border-circle'></i>
-                </div>
+            <div class="lord-icon01">
+                <i class='bx bx-user iconBx01'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Produtos</div>
                 <div class="cardName">F2</div>
             </div>
             <a href="<?= site_url('produtos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-package bx-border-circle'></i>
-                </div>
+            <div class="lord-icon02">
+                <i class='bx bx-basket iconBx02'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers">Serviços</div>
                 <div class="cardName">F3</div>
             </div>
             <a href="<?= site_url('servicos') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-stopwatch bx-border-circle'></i>
-                </div>
+            <div class="lord-icon03">
+                <i class='bx bx-wrench iconBx03'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
-            <div>
+            <div class="grid-blak">
                 <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
             <a href="<?= site_url('os') ?>">
-                <div class="iconBx">
-                    <i class='bx bx-spreadsheet bx-border-circle'></i>
-                </div>
+            <div class="lord-icon04">
+                <i class='bx bx-file iconBx04'></i>
+            </div>
             </a>
         </li>
     <?php endif ?>
 
-    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+        <li class="card">
+            <div class="grid-blak">
+                <div class="numbers N-tittle">PDV</div>
+                <div class="cardName">F6</div>
+            </div>
+            <a href="<?= site_url('vendas/adicionar') ?>">
+            <div class="lord-icon05">
+                <i class='bx bx-cart-alt iconBx05'></i></span>
+            </div>
+            </a>
+        </li>
+    <?php endif ?>
 
-    <div Class="card-cl">
-        <div class="clock-card">
-            <div class="clock-flex">
-                <span class="num hour_num">00</span>
-                <div class="tit">Horas</div>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
+        <li class="card">
+            <div class="grid-blak">
+                <div class="numbers N-tittle">Lançamentos</div>
+                <div class="cardName">F7</div>
             </div>
-            <span class="colun" id="colun-1">:</span>
-            <div class="clock-flex">
-                <span class="num min_num">00</span>
-                <div class="tit">Minutos</div>
+            <a href="<?= site_url('financeiro/lancamentos') ?>">
+            <div class="lord-icon06">
+                <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
             </div>
-            <div class="time_am_pm">
-                <span class="num am_pm">AM</span>
-            </div>
-        </div>
-    </div>
+            </a>
+        </li>
+    <?php endif ?>
 </ul>
 <!--End-Action boxes-->
 
