@@ -244,10 +244,20 @@ body {
     border-radius: 0 15px 15px 0;
 }
 
-.lord-icon {
-    padding   : 3px;
-    background: var(--dark-violet-cont);
-    border    : 1px solid #ffffff3b !important;
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    padding        : 3px;
+    background     : var(--dark-violet-cont);
+    padding        : 3px;
+    border-radius  : 50%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    border: 0px solid #ffffff3b !important;
 }
 
 .cardBox .card .iconBx01,
@@ -653,7 +663,7 @@ textarea, .uneditable-input {
     .iconBx4,
     .iconBx5,
     .iconBx6,
-    .iconBx7, 
+    .iconBx7,
     .iconBx8 {
         font-size   : 2.4em;
         padding-left: 8px;

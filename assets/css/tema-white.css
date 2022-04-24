@@ -159,8 +159,30 @@ body {
   color: var(--title-w);
 }
 
+/* CARDS */
+
 .cardBox .card {
   opacity: 1;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    padding        : 3px;
+    padding        : 3px;
+    border-radius  : 35%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    border    : none !important;
+    background: #ffffff54 !important;
+}
+
+.lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06:hover {
+    opacity: 0.8;
 }
 
 .tempo-carga {

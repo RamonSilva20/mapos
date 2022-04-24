@@ -51,6 +51,15 @@ body {
   --white-blak-cont: #f5f5fd;
   --white-blak-side: #ececf6;
 
+  /* === Tema dark orange === */
+  --dark-orange     : #de7902;
+  --dark-orange-tit : #a3a9ae;
+  --dark-orange-tit1: #757e89;
+  --dark-orange-tit2: #4c595e;
+  --dark-orange-widg: #142027;
+  --dark-orange-cont: #192732;
+  --dark-orange-side: #142027;
+
   /* === Tema dark violet === */
   --dark-violet     : #14121f;
   --dark-violet-tit : #eee7e7;
@@ -109,7 +118,7 @@ a:focus {
 
 .dropdown-menu {
   min-width: 120px;
-  top      : 36px;
+  top      : 25px;
 }
 
 .dropdown-menu>li>a {
@@ -522,7 +531,7 @@ hr {
   color: var(--subtitle);
 }
 
-/* hora certa */
+/* hora certa
 .cardBox .card-cl {
   position       : relative;
   padding        : 5px;
@@ -581,7 +590,27 @@ hr {
   position      : absolute;
   right         : 15px;
 }
-/* End hora certa */
+End hora certa */
+
+}
+
+.cardBox .card .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    border    : none !important;
+    background: #ffffff54 !important;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    padding        : 3px;
+    padding        : 3px;
+    border-radius  : 35%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    background     : #3336491f;
+    border         : 1px solid #3336491f;
+}
 
 .icon-bord {
   position     : absolute;
@@ -3559,7 +3588,7 @@ form {
     height    : 35px;
     width     : 35px;
   }
-  
+
   .navebarn {
     margin-left: 86px;
   }

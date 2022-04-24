@@ -96,6 +96,10 @@ body {
     border-right: 1px solid var(--white-gre0);
 }
 
+#sidebar.open {
+    box-shadow: 15px 0 16px rgba(16, 16, 31, 0.2) !important;
+}
+
 #sidebar > ul > li.active a {
     background-color: #525a64;
     color        : #ffffff;
@@ -122,9 +126,13 @@ body {
     color        : var(--white);
 }
 
+#newlog {
+    filter: invert(100%);
+}
+
 #newlog .icon2,
 #newlog .title1 {
-    filter: hue-rotate(138deg);
+    filter: hue-rotate(320deg);
 }
 
 #sidebar li .iconX, #sidebar li .title {
@@ -220,12 +228,24 @@ body {
     box-shadow   : none;
 }
 
-.lord-icon {
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    padding        : 3px;
+    background     : var(--dark-violet-cont);
+    padding        : 3px;
+    border-radius  : 50%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
     border    : none !important;
     background: var(--white-gre0) !important;
 }
 
-.lord-icon:hover {
+.lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06:hover {
     opacity: 0.8;
 }
 

@@ -133,6 +133,10 @@ body {
     color        : var(--white);
 }
 
+#newlog {
+    filter: invert(100%);
+}
+
 #newlog .icon2,
 #newlog .title1 {
     filter: saturate(0);
@@ -231,8 +235,20 @@ body {
     box-shadow: 0 15px 21px rgb(0 0 0 / 5%);
 }
 
-.lord-icon {
-    border: 1px solid var(--white-blak-tit) !important;
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    padding        : 3px;
+    background     : #f5f5fd;
+    padding        : 3px;
+    border-radius  : 50%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
+    border: 1px solid #525a6a17 !important;
 }
 
 .lord-icon:hover {
@@ -477,18 +493,9 @@ label {
         box-shadow: 0px 3px 10px rgb(0 0 0 / 21%);
     }
 
-    .cardBox .card {
-        background: linear-gradient(226deg, #14121fb8, #3f3f3f85) !important;
-    }
-
     .cardBox .card .iconBx {
         color: var(--white-blak-side);
         font-size: 2.3em;
         text-shadow: 0 10px 17px #050505ac;
-    }
-
-    .cardBox .card .numbers {
-        text-shadow: 0 3px 5px #030404ac;
-        font-weight: 400;
     }
 }
