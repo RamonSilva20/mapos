@@ -64,27 +64,6 @@
                                 <span class="help-inline">Ativar ou desativar a visualização em tabelas dinâmicas</span>
                             </div>
                         </div>
-                        <div class="control-group">
-                           <label for="app_name" class="control-label">TOKEN do Instagram</label>
-                           <div class="controls">
-                               <input type="text" id="lname" name="lname" value="">
-                               <span class="help-inline">Insira seu código TOKEN aqui</span>
-                           </div>
-                       </div>
-                       <div class="control-group">
-                           <label for="app_name" class="control-label">Link do Instagram</label>
-                           <div class="controls">
-                               <input type="text" id="lname" name="lname" value="">
-                               <span class="help-inline">Insera seu link do instagram aqui</span>
-                           </div>
-                       </div>
-                       <div class="control-group">
-                           <label for="app_name" class="control-label">Link do WhatsApp</label>
-                           <div class="controls">
-                               <input type="text" id="lname" name="lname" value="">
-                               <span class="help-inline">Insera seu link do whatsApp aqui</span>
-                           </div>
-                       </div>
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
