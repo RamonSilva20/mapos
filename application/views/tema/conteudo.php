@@ -5,7 +5,7 @@
 * email: sh4rck3@gmail.com
 *
 */
-// correção do erro referente  ao aviso de sucesso de qualquer alteração pós instalação
+// correção do erro referente  ao aviso de sucesso de qualquer alteração pós instalação 
 if(!empty($_SESSION['success'])){
 
   if(!empty($_SESSION['valorTemporario'])){
