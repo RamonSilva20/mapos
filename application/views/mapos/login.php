@@ -58,6 +58,19 @@ echo saudacao($login);
                   <img src="<?php echo base_url() ?>assets/img/logo-two.png">
                 </div>
                 <div class="title01">
+                  <?php
+                   /**
+                   * author: Luccas Woiciechoski  
+                   * email: sh4rck3@gmail.com
+                   *
+                   */
+                  //definindo valor de variavael caso nao receba o valor vindo do sistema
+                  // isso resolve o problema de variavel indefinida ao instalar o sistema.
+                  if(empty($configuration['app_theme'])){
+                    $configuration['app_theme'] = ""; 
+                  }
+                  
+                  ?>
                   <?= $configuration['app_theme'] == 'white' ? '<img src="'. base_url() .'assets/img/logo-mapos.png">' : '<img src="'. base_url() .'assets/img/logo-mapos-branco.png">'; ?>
                 </div>
               </div>
