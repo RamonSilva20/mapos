@@ -1,3 +1,35 @@
+<?php
+
+ /**
+* author: Luccas Woiciechoski  
+* email: sh4rck3@gmail.com
+*
+*/
+// correção do erro referente  ao aviso que nao para de sucesso/erro de qualquer alteração pós instalação 
+if(!empty($_SESSION['success'])){
+
+  if(!empty($_SESSION['valorTemporario'])){
+     
+    unset($_SESSION['success']);
+    unset($_SESSION['valorTemporario']);
+  }else{
+      $_SESSION['valorTemporario'] = 1;
+  }
+}
+
+if(!empty($_SESSION['error'])){
+
+  if(!empty($_SESSION['valorTemporario'])){
+     
+    unset($_SESSION['error']);
+    unset($_SESSION['valorTemporario']);
+  }else{
+      $_SESSION['valorTemporario'] = 1;
+  }
+}
+
+?>
+
 <div id="content">
 <!--start-top-serch-->
   <div id="content-header">
