@@ -58,6 +58,17 @@ echo saudacao($login);
                   <img src="<?php echo base_url() ?>assets/img/logo-two.png">
                 </div>
                 <div class="title01">
+                  <?php 
+                  /**
+                   * author:Luccas Woiciechoski
+                   * email: sh4rck3@gmail.com
+                   *
+                   */
+                  //enviando valor vazio caso esta variavael nao esteja definida nas configurações do sisstema
+                  if(empty($configuration['app_theme'])){
+                    $configuration['app_theme'] = "";
+                  }
+                  ?>
                   <?= $configuration['app_theme'] == 'white' ? '<img src="'. base_url() .'assets/img/logo-mapos.png">' : '<img src="'. base_url() .'assets/img/logo-mapos-branco.png">'; ?>
                 </div>
               </div>
