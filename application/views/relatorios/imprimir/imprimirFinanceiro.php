@@ -49,7 +49,11 @@
                                     $saldo = 0;
                                     foreach ($lancamentos as $l) {
                                         $vencimento = date('d/m/Y', strtotime($l->data_vencimento));
-                                        $pagamento = date('d/m/Y', strtotime($l->data_pagamento));
+                                        if ($l->data_pagamento == "0000-00-00") {
+                                            $pagamento = "Não informado";
+                                        } else {
+                                            $pagamento = date('d/m/Y', strtotime($l->data_pagamento));
+                                        }
                                         if ($l->baixado == 1) {
                                             $situacao = 'Pago';
                                         } else {
