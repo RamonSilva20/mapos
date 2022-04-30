@@ -4,6 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2022-04-30
+
+### Added
+
+- atualização e adequações para usar PHP 8.0 como versão mínima e refatoração de código. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Fixed
+
+- Corrigido erro em tela de login após instalação. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.38.0] - 2022-04-29
 
 ### Fixed
