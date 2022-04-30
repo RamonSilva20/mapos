@@ -1,13 +1,13 @@
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
 
-<script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
-<script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
-<script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
+<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+<script src='<?php echo base_url(); ?>assets/js/fullcalendar.min.js'></script>
+<script src='<?php echo base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
 
-<link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
-<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
+<link href='<?php echo base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,13 +30,13 @@
                 <div class="numbers">Clientes</div>
                 <div class="cardName">F1</div>
             </div>
-            <a href="<?= site_url('clientes') ?>">
+            <a href="<?php echo site_url('clientes'); ?>">
                 <div class="iconBx">
                     <i class='bx bx-group bx-border-circle'></i>
                 </div>
             </a>
         </li>
-    <?php endif ?>
+    <?php endif; ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
@@ -44,13 +44,13 @@
                 <div class="numbers">Produtos</div>
                 <div class="cardName">F2</div>
             </div>
-            <a href="<?= site_url('produtos') ?>">
+            <a href="<?php echo site_url('produtos'); ?>">
                 <div class="iconBx">
                     <i class='bx bx-package bx-border-circle'></i>
                 </div>
             </a>
         </li>
-    <?php endif ?>
+    <?php endif; ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
@@ -58,13 +58,13 @@
                 <div class="numbers">Serviços</div>
                 <div class="cardName">F3</div>
             </div>
-            <a href="<?= site_url('servicos') ?>">
+            <a href="<?php echo site_url('servicos'); ?>">
                 <div class="iconBx">
                     <i class='bx bx-stopwatch bx-border-circle'></i>
                 </div>
             </a>
         </li>
-    <?php endif ?>
+    <?php endif; ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
@@ -72,15 +72,15 @@
                 <div class="numbers N-tittle">Ordens</div>
                 <div class="cardName">F4</div>
             </div>
-            <a href="<?= site_url('os') ?>">
+            <a href="<?php echo site_url('os'); ?>">
                 <div class="iconBx">
                     <i class='bx bx-spreadsheet bx-border-circle'></i>
                 </div>
             </a>
         </li>
-    <?php endif ?>
+    <?php endif; ?>
 
-    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+    <script src="<?php echo base_url('assets/js/clock_time.js'); ?>"></script>
 
     <div Class="card-cl">
         <div class="clock-card">
@@ -141,7 +141,7 @@
                     <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('clientes'); ?></div>
                             <div class="cardName">Add Clientes</div>
                         </div>
                     </a>
@@ -149,15 +149,15 @@
                     <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('produtos'); ?></div>
                             <div class="cardName">Add Produtos</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
+                    <a href="<?php echo base_url(); ?>index.php/servicos/adicionar" class="card">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('servicos'); ?></div>
                             <div class="cardName">Add Serviços</div>
                         </div>
                     </a>
@@ -165,7 +165,7 @@
                     <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('os'); ?></div>
                             <div class="cardName">Add Ordens</div>
                         </div>
                     </a>
@@ -173,28 +173,28 @@
                     <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('garantias'); ?></div>
                             <div class="cardName">Add Garantias</div>
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
+                    <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
-                            <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
+                            <div class="cardName2"><?php echo $this->db->count_all('vendas'); ?></div>
                             <div class="cardName">Add Vendas</div>
                         </div>
                     </a>
 
                     <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
                     <?php if ($estatisticas_financeiro != null) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-                                <?php $diaRec = "VALOR_" . date('m') . "_REC";
-                                $diaDes = "VALOR_" . date('m') . "_DES"; ?>
+                                <?php $diaRec = 'VALOR_' . date('m') . '_REC';
+                                $diaDes = 'VALOR_' . date('m') . '_DES'; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
+                                <a href="<?php echo base_url(); ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
@@ -202,17 +202,17 @@
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
+                                <a href="<?php echo base_url(); ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
                                         <div class="cardName">Despesa do dia</div>
                                     </div>
                                 </a>
-                            <?php endif ?>
+                            <?php endif; ?>
 
                     <?php  }
-} ?>
+                    } ?>
                 </div>
             </div>
         </div>
@@ -222,7 +222,6 @@
 
 <?php if ($estatisticas_financeiro != null) {
     if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
-
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
             <!-- Start Charts -->
             <div class="new-balance">
@@ -230,7 +229,7 @@
                     <div class="widget-title2">
                         <h5 class="cardHeader">Balanço Mensal do Ano</h5>
                         <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y'); ?>">
                             <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
                         </form>
                     </div>
@@ -250,218 +249,218 @@
                     </div>
                 </div>
             </div>
-        <?php endif ?>
+        <?php endif; ?>
 
-<script type="text/javascript">
-    if (window.outerWidth > 2000) {
-        Chart.defaults.font.size = 15;
-    };
-    if (window.outerWidth < 2000 && window.outerWidth > 1367) {
-        Chart.defaults.font.size = 11;
-    };
-    if (window.outerWidth < 1367 && window.outerWidth > 480) {
-        Chart.defaults.font.size = 9.5;
-    };
-    if (window.outerWidth < 480) {
-        Chart.defaults.font.size = 8.5;
-    };
+        <script type="text/javascript">
+            if (window.outerWidth > 2000) {
+                Chart.defaults.font.size = 15;
+            };
+            if (window.outerWidth < 2000 && window.outerWidth > 1367) {
+                Chart.defaults.font.size = 11;
+            };
+            if (window.outerWidth < 1367 && window.outerWidth > 480) {
+                Chart.defaults.font.size = 9.5;
+            };
+            if (window.outerWidth < 480) {
+                Chart.defaults.font.size = 8.5;
+            };
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var StatusOS = document.getElementById('statusOS').getContext('2d');
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var StatusOS = document.getElementById('statusOS').getContext('2d');
 
-    var myChart = new Chart(ctx, {
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            datasets: [{
-                    label: 'Receita Líquida',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
-                    ],
+            var myChart = new Chart(ctx, {
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                            label: 'Receita Líquida',
+                            data: [<?php echo $financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES; ?>
+                            ],
 
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderRadius: 15,
-                },
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderRadius: 15,
+                        },
 
-                {
-                    label: 'Receita Bruta',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
-                    ],
+                        {
+                            label: 'Receita Bruta',
+                            data: [<?php echo $financeiro_mes->VALOR_JAN_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_FEV_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAR_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_ABR_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAI_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUN_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUL_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_AGO_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_SET_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_OUT_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_NOV_REC; ?>,
+                                <?php echo $financeiro_mes->VALOR_DEZ_REC; ?>
+                            ],
 
-                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                    borderRadius: 15,
-                },
+                            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                            borderRadius: 15,
+                        },
 
-                {
-                    label: 'Despesas',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
-                    ],
+                        {
+                            label: 'Despesas',
+                            data: [<?php echo $financeiro_mes->VALOR_JAN_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_FEV_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAR_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_ABR_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_MAI_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUN_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_JUL_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_AGO_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_SET_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_OUT_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_NOV_DES; ?>,
+                                <?php echo $financeiro_mes->VALOR_DEZ_DES; ?>
+                            ],
 
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderRadius: 15,
-                },
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderRadius: 15,
+                        },
 
-                {
-                    label: 'Inadimplência',
-                    data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
-                    ],
+                        {
+                            label: 'Inadimplência',
+                            data: [<?php echo $financeiro_mesinadipl->VALOR_JAN_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_FEV_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_MAR_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_ABR_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_MAI_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_JUN_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_JUL_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_AGO_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_SET_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_OUT_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_NOV_REC; ?>,
+                                <?php echo $financeiro_mesinadipl->VALOR_DEZ_REC; ?>
+                            ],
 
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderRadius: 15,
-                }
-            ]
-
-        },
-        // configuração
-        type: 'bar',
-        options: {
-            locale: 'pt-BR',
-            scales: {
-                y: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }).format(value);
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderRadius: 15,
                         }
-                    }
+                    ]
+
                 },
-                x: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Meses'
-                    }
-                }
-            },
-
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        beforeTitle: function(context) {
-                            return 'Referente ao mês de';
-                        }
-                    }
-                },
-
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        usePointStyle: true,
-                    }
-                }
-            }
-        }
-    });
-
-    var myChart = new Chart(statusOS, {
-        data: {
-            labels: [
-                'Receita total', 'Receita pendente',
-                'Previsto em caixa', 'Despesa total',
-                'Despesa pendente', 'Previsto a entrar'
-            ],
-            datasets: [{
-                label: 'Total',
-                data: [
-                    <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
-                ],
-
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    'rgba(153, 102, 255, 0.5)'
-                ],
-                borderWidth: 1
-            }]
-        },
-
-        // configuração
-        type: 'polarArea',
-        options: {
-            locale: 'pt-BR',
-            scales: {
-                r: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }).format(value);
+                // configuração
+                type: 'bar',
+                options: {
+                    locale: 'pt-BR',
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: (value, index, values) => {
+                                    return new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                        maximumSignificantDidits: 1
+                                    }).format(value);
+                                }
+                            }
+                        },
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Meses'
+                            }
                         }
                     },
-                    beginAtZero: true,
-                }
-            },
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        usePointStyle: true,
 
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                beforeTitle: function(context) {
+                                    return 'Referente ao mês de';
+                                }
+                            }
+                        },
+
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                usePointStyle: true,
+                            }
+                        }
                     }
                 }
-            }
-        }
-    });
+            });
 
-    function responsiveFonts() {
-        myChart.update();
-    }
-</script>
+            var myChart = new Chart(statusOS, {
+                data: {
+                    labels: [
+                        'Receita total', 'Receita pendente',
+                        'Previsto em caixa', 'Despesa total',
+                        'Despesa pendente', 'Previsto a entrar'
+                    ],
+                    datasets: [{
+                        label: 'Total',
+                        data: [
+                            <?php echo ($estatisticas_financeiro->total_receita != null) ? $estatisticas_financeiro->total_receita : '0.00'; ?>,
+                            <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ? $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
+                            <?php echo $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa; ?>,
+                            <?php echo ($estatisticas_financeiro->total_despesa != null) ? $estatisticas_financeiro->total_despesa : '0.00'; ?>,
+                            <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ? $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
+                            <?php echo $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente; ?>
+                        ],
+
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(255, 159, 64, 0.5)',
+                            'rgba(153, 102, 255, 0.5)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+
+                // configuração
+                type: 'polarArea',
+                options: {
+                    locale: 'pt-BR',
+                    scales: {
+                        r: {
+                            ticks: {
+                                callback: (value, index, values) => {
+                                    return new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                        maximumSignificantDidits: 1
+                                    }).format(value);
+                                }
+                            },
+                            beginAtZero: true,
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                usePointStyle: true,
+
+                            }
+                        }
+                    }
+                }
+            });
+
+            function responsiveFonts() {
+                myChart.update();
+            }
+        </script>
 <?php  }
 } ?>
 </div>
@@ -491,36 +490,36 @@
                             <?php foreach ($produtos as $p) : ?>
                                 <tr>
                                     <td>
-                                        <?= $p->idProdutos ?>
+                                        <?php echo $p->idProdutos; ?>
                                     </td>
                                     <td class="cli1">
-                                        <?= $p->descricao ?>
+                                        <?php echo $p->descricao; ?>
                                     </td>
                                     <td>R$
-                                        <?= $p->precoVenda ?>
+                                        <?php echo $p->precoVenda; ?>
                                     </td>
                                     <td>
-                                        <?= $p->estoque ?>
+                                        <?php echo $p->estoque; ?>
                                     </td>
                                     <td class="ph3">
-                                        <?= $p->estoqueMinimo ?>
+                                        <?php echo $p->estoqueMinimo; ?>
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
+                                            <a href="<?php echo base_url(); ?>index.php/produtos/editar/<?php echo $p->idProdutos; ?>" class="btn-nwe3">
                                                 <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?php echo $p->idProdutos; ?>" estoque="<?php echo $p->estoque; ?>" class="btn-nwe5" title="Atualizar Estoque">
                                                 <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                            <?php endforeach ?>
+                            <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
                                 <td colspan="6">Nenhum produto com estoque baixo.</td>
                             </tr>
-                        <?php endif ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -549,34 +548,34 @@
                         <?php foreach ($ordens as $o) : ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?php echo $o->idOs; ?>
                                 </td>
                                 <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                    <?php echo date('d/m/Y', strtotime($o->dataInicial)); ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
+                                        echo date('d/m/Y', strtotime($o->dataFinal));
+                                    } else {
+                                        echo '';
+                                    } ?></td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?php echo $o->nomeCliente; ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?php echo base_url(); ?>index.php/os/visualizar/<?php echo $o->idOs; ?>" class="btn-nwe">
                                             <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach ?>
+                        <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
                             <td colspan="5">Nenhuma OS em aberto.</td>
                         </tr>
-                    <?php endif ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -603,30 +602,30 @@
                         <?php foreach ($ordens1 as $o) : ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?php echo $o->idOs; ?>
                                 </td>
                                 <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                    <?php echo date('d/m/Y', strtotime($o->dataInicial)); ?>
                                 </td>
                                 <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
+                                    <?php echo date('d/m/Y', strtotime($o->dataFinal)); ?>
                                 </td>
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?php echo $o->nomeCliente; ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?php echo base_url(); ?>index.php/os/visualizar/<?php echo $o->idOs; ?>" class="btn-nwe">
                                             <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach ?>
+                        <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
                             <td colspan="5">Nenhuma OS Aguardando Peças.</td>
                         </tr>
-                    <?php endif ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -652,30 +651,30 @@
                         <?php foreach ($ordens_andamento as $o) : ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?php echo $o->idOs; ?>
                                 </td>
                                 <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                    <?php echo date('d/m/Y', strtotime($o->dataInicial)); ?>
                                 </td>
                                 <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
+                                    <?php echo date('d/m/Y', strtotime($o->dataFinal)); ?>
                                 </td>
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?php echo $o->nomeCliente; ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                        <a href="<?php echo base_url(); ?>index.php/os/visualizar/<?php echo $o->idOs; ?>" class="btn-nwe">
                                             <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach ?>
+                        <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
                             <td colspan="5">Nenhuma OS em Andamento.</td>
                         </tr>
-                    <?php endif ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -720,7 +719,7 @@
 
 <!-- Modal Excluir Os -->
 <div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+    <form action="<?php echo base_url(); ?>index.php/os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>
@@ -738,7 +737,7 @@
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?php echo base_url(); ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -766,8 +765,7 @@
     </form>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<!-- Modal Estoque-->
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).on('click', 'a', function(event) {
@@ -811,7 +809,7 @@
             dayMaxEvents: true, // allow "more" link when too many events
             displayEventTime: false,
             events: {
-                url: "<?= base_url() . "index.php/mapos/calendario"; ?>",
+                url: "<?php echo base_url() . 'index.php/mapos/calendario'; ?>",
                 method: 'GET',
                 extraParams: function() { // a function that returns an object
                     return {

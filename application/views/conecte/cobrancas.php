@@ -19,11 +19,10 @@
             </thead>
             <tbody>
                 <?php
-
                     if (!$results) {
                         echo '<tr>
-                                <td colspan="5">Nenhuma cobrança Cadastrada</td>
-                            </tr>';
+                                    <td colspan="5">Nenhuma cobrança Cadastrada</td>
+                                </tr>';
                     }
                     foreach ($results as $r) {
                         $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
@@ -57,7 +56,8 @@
                         }
                         echo '</td>';
                         echo '</tr>';
-                    } ?>
+                    }
+                ?>
             </tbody>
         </table>
     </div>
@@ -66,7 +66,7 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/excluir" method="post">
+    <form action="<?php echo base_url(); ?>index.php/cobrancas/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir cobrança</h5>
@@ -84,7 +84,7 @@
 
 
 <div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
+    <form action="<?php echo base_url(); ?>index.php/cobrancas/confirmarpagamento" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Confirmar pagamento</h5>
@@ -102,7 +102,7 @@
 
 
 <div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/cancelar" method="post">
+    <form action="<?php echo base_url(); ?>index.php/cobrancas/cancelar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Cancelar cobrança</h5>
@@ -120,7 +120,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
         $(document).on('click', 'a', function(event) {
             var cobranca = $(this).attr('charge_id');
             $('#charge_id').val(cobranca);

@@ -1,16 +1,19 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Conecte_model extends CI_Model
 {
-
     /**
      * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
+     * email: silva018-mg@yahoo.com.br.
      *
+     * @param mixed $table
+     * @param mixed $data
+     * @param mixed $returnId
      */
-
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -18,6 +21,7 @@ class Conecte_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 
@@ -46,7 +50,6 @@ class Conecte_model extends CI_Model
         return $this->db->get()->result();
     }
 
-
     public function getCompras($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
     {
         $this->db->select($fields);
@@ -60,7 +63,8 @@ class Conecte_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -77,9 +81,11 @@ class Conecte_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
+
     public function getOs($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array', $cliente)
     {
         $this->db->select($fields);
@@ -94,10 +100,11 @@ class Conecte_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
-    
+
     public function getById($id)
     {
         $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
@@ -114,6 +121,7 @@ class Conecte_model extends CI_Model
     public function count($table, $cliente)
     {
         $this->db->where('clientes_id', $cliente);
+
         return $this->db->count_all_results($table);
     }
 
@@ -121,9 +129,9 @@ class Conecte_model extends CI_Model
     {
         $this->db->where('idclientes', $this->session->userdata('cliente_id'));
         $this->db->limit(1);
+
         return $this->db->get('clientes')->row();
     }
-
 
     public function edit($table, $data, $fieldID, $ID)
     {

@@ -34,7 +34,7 @@
                                                 <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
                                                 <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
                                         <td style="width: 18%; text-align: center">#Venda: <span>
-                                                <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
+                                                <?php echo $result->idVendas; ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span></td>
                                     </tr>
 
@@ -52,14 +52,14 @@
                                                 <span>
                                                     <h5>Cliente</h5>
                                                     <span>
-                                                        <?php echo $result->nomeCliente ?></span><br />
+                                                        <?php echo $result->nomeCliente; ?></span><br />
                                                     <span>
-                                                        <?php echo $result->rua ?>,
-                                                        <?php echo $result->numero ?>,
-                                                        <?php echo $result->bairro ?></span><br />
+                                                        <?php echo $result->rua; ?>,
+                                                        <?php echo $result->numero; ?>,
+                                                        <?php echo $result->bairro; ?></span><br />
                                                     <span>
-                                                        <?php echo $result->cidade ?> -
-                                                        <?php echo $result->estado ?></span>
+                                                        <?php echo $result->cidade; ?> -
+                                                        <?php echo $result->estado; ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -70,25 +70,21 @@
                                                     <h5>Vendedor</h5>
                                                 </span>
                                                 <span>
-                                                    <?php echo $result->nome ?></span> <br />
+                                                    <?php echo $result->nome; ?></span> <br />
                                                 <span>Telefone:
-                                                    <?php echo $result->telefone_usuario ?></span><br />
+                                                    <?php echo $result->telefone_usuario; ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email_usuario ?></span>
+                                                    <?php echo $result->email_usuario; ?></span>
                                             </li>
                                         </ul>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-
                     </div>
 
                     <div style="margin-top: 0; padding-top: 0">
-
-
                         <?php if ($produtos != null) { ?>
-
                             <table class="table table-bordered table-condensed" id="tblProdutos" style="margin-top: 0; padding-top: 0">
                                 <thead>
                                     <tr>
@@ -126,12 +122,12 @@
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
                         <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
-                        <h4 style="text-align: right">Desconto: R$
-                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
-                        </h4>
-                        <h4 style="text-align: right">Total Com Desconto: R$
-                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
-                        </h4>
+                            <h4 style="text-align: right">Desconto: R$
+                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                            </h4>
+                            <h4 style="text-align: right">Total Com Desconto: R$
+                                <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                            </h4>
                         <?php } ?>
                     </div>
                 </div>

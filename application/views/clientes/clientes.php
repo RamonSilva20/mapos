@@ -8,7 +8,7 @@
     <?php } ?>
 
     <div class="widget-box">
-        <div class="widget-title"style="margin: -20px 0 0">
+        <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-user"></i>
             </span>
@@ -66,7 +66,7 @@
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+        <form action="<?php echo base_url(); ?>index.php/clientes/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir Cliente</h5>
@@ -76,8 +76,8 @@
                 <h5 style="text-align: center">Deseja realmente excluir este cliente e os dados associados a ele (OS, Vendas, Receitas)?</h5>
             </div>
             <div class="modal-footer" style="display:flex;justify-content: center">
-              <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-              <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
+                <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+                <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
             </div>
         </form>
     </div>

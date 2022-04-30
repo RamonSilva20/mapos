@@ -1,11 +1,13 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 // load MX core classes
-require_once __DIR__ .'/Lang.php';
-require_once __DIR__ .'/Config.php';
+require_once __DIR__ . '/Lang.php';
+require_once __DIR__ . '/Config.php';
 
 /**
- * Modular Extensions - HMVC
+ * Modular Extensions - HMVC.
  *
  * Adapted from the CodeIgniter Core Classes
  * @link    http://codeigniter.com
@@ -42,7 +44,7 @@ class CI extends CI_Controller
     public static $APP;
 
     /**
-     * [__construct description]
+     * [__construct description].
      *
      * @method __construct
      */
@@ -56,10 +58,10 @@ class CI extends CI_Controller
 
         // re-assign language and config for modules
         if (! $LANG instanceof MX_Lang) {
-            $LANG = new MX_Lang;
+            $LANG = new MX_Lang();
         }
         if (! $CFG instanceof MX_Config) {
-            $CFG = new MX_Config;
+            $CFG = new MX_Config();
         }
 
         parent::__construct();
@@ -67,4 +69,4 @@ class CI extends CI_Controller
 }
 
 // create the application object
-new CI;
+new CI();

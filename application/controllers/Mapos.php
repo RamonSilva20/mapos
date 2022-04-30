@@ -1,15 +1,10 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 class Mapos extends MY_Controller
 {
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -29,6 +24,7 @@ class Mapos extends MY_Controller
         $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
+
         return $this->layout();
     }
 
@@ -36,6 +32,7 @@ class Mapos extends MY_Controller
     {
         $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
         $this->data['view'] = 'mapos/minhaConta';
+
         return $this->layout();
     }
 
@@ -43,7 +40,7 @@ class Mapos extends MY_Controller
     {
         $current_user = $this->mapos_model->getById($this->session->userdata('id'));
 
-        if (!$current_user) {
+        if (! $current_user) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao pesquisar usuário!');
             redirect(site_url('mapos/minhaConta'));
         }
@@ -51,7 +48,7 @@ class Mapos extends MY_Controller
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
 
-        if (!password_verify($oldSenha, $current_user->senha)) {
+        if (! password_verify($oldSenha, $current_user->senha)) {
             $this->session->set_flashdata('error', 'A senha atual não corresponde com a senha informada.');
             redirect(site_url('mapos/minhaConta'));
         }
@@ -77,12 +74,13 @@ class Mapos extends MY_Controller
         $this->data['os'] = $data['results']['os'];
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mapos/pesquisa';
+
         return $this->layout();
     }
 
     public function backup()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para efetuar backup.');
             redirect(base_url());
         }
@@ -107,7 +105,7 @@ class Mapos extends MY_Controller
 
     public function emitente()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
@@ -115,12 +113,13 @@ class Mapos extends MY_Controller
         $this->data['menuConfiguracoes'] = 'Configuracoes';
         $this->data['dados'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'mapos/emitente';
+
         return $this->layout();
     }
 
     public function do_upload()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
@@ -129,7 +128,7 @@ class Mapos extends MY_Controller
 
         $image_upload_folder = FCPATH . 'assets/uploads';
 
-        if (!file_exists($image_upload_folder)) {
+        if (! file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
         }
 
@@ -143,19 +142,19 @@ class Mapos extends MY_Controller
 
         $this->upload->initialize($this->upload_config);
 
-        if (!$this->upload->do_upload()) {
+        if (! $this->upload->do_upload()) {
             $upload_error = $this->upload->display_errors();
             print_r($upload_error);
             exit();
-        } else {
-            $file_info = [$this->upload->data()];
-            return $file_info[0]['file_name'];
         }
+        $file_info = [$this->upload->data()];
+
+        return $file_info[0]['file_name'];
     }
 
     public function do_upload_user()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
@@ -164,7 +163,7 @@ class Mapos extends MY_Controller
 
         $image_upload_folder = FCPATH . 'assets/userImage/';
 
-        if (!file_exists($image_upload_folder)) {
+        if (! file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
         }
 
@@ -178,19 +177,19 @@ class Mapos extends MY_Controller
 
         $this->upload->initialize($this->upload_config);
 
-        if (!$this->upload->do_upload()) {
+        if (! $this->upload->do_upload()) {
             $upload_error = $this->upload->display_errors();
             print_r($upload_error);
             exit();
-        } else {
-            $file_info = [$this->upload->data()];
-            return $file_info[0]['file_name'];
         }
+        $file_info = [$this->upload->data()];
+
+        return $file_info[0]['file_name'];
     }
 
     public function cadastrarEmitente()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
@@ -239,7 +238,7 @@ class Mapos extends MY_Controller
 
     public function editarEmitente()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
@@ -287,13 +286,13 @@ class Mapos extends MY_Controller
 
     public function editarLogo()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
             redirect(base_url());
         }
 
         $id = $this->input->post('id');
-        if ($id == null || !is_numeric($id)) {
+        if ($id == null || ! is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
             redirect(site_url('mapos/emitente'));
         }
@@ -315,19 +314,19 @@ class Mapos extends MY_Controller
 
     public function uploadUserImage()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para mudar a foto.');
             redirect(base_url());
         }
 
         $id = $this->session->userdata('id');
-        if ($id == null || !is_numeric($id)) {
+        if ($id == null || ! is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
             redirect(site_url('mapos/minhaConta'));
         }
 
         $usuario = $this->mapos_model->getById($id);
-        
+
         if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
             unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
         }
@@ -335,7 +334,7 @@ class Mapos extends MY_Controller
         $image = $this->do_upload_user();
         $imageUserPath = $image;
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
-        
+
         if ($retorno) {
             $this->session->set_userdata('url_image_user', $imageUserPath);
             $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
@@ -348,7 +347,7 @@ class Mapos extends MY_Controller
 
     public function emails()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar fila de e-mails');
             redirect(base_url());
         }
@@ -366,12 +365,13 @@ class Mapos extends MY_Controller
         $this->data['results'] = $this->email_model->get('email_queue', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'emails/emails';
+
         return $this->layout();
     }
 
     public function excluirEmail()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir e-mail da fila.');
             redirect(base_url());
         }
@@ -393,7 +393,7 @@ class Mapos extends MY_Controller
 
     public function configurar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
         }
@@ -453,7 +453,7 @@ class Mapos extends MY_Controller
 
     public function atualizarBanco()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
         }
@@ -471,14 +471,14 @@ class Mapos extends MY_Controller
 
     public function atualizarMapos()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
         }
 
         $this->load->library('github_updater');
 
-        if (!$this->github_updater->has_update()) {
+        if (! $this->github_updater->has_update()) {
             $this->session->set_flashdata('success', 'Seu mapos já está atualizado!');
 
             return redirect(site_url('mapos/configurar'));
@@ -497,7 +497,7 @@ class Mapos extends MY_Controller
 
     public function calendario()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
             redirect(base_url());
         }
@@ -515,32 +515,42 @@ class Mapos extends MY_Controller
             switch ($os->status) {
                 case 'Aberto':
                     $cor = '#00cd00';
+
                     break;
                 case 'Negociação':
                     $cor = '#AEB404';
+
                     break;
                 case 'Em Andamento':
                     $cor = '#436eee';
+
                     break;
                 case 'Orçamento':
                     $cor = '#CDB380';
+
                     break;
                 case 'Cancelado':
                     $cor = '#CD0000';
+
                     break;
                 case 'Finalizado':
                     $cor = '#256';
+
                     break;
                 case 'Faturado':
                     $cor = '#B266FF';
+
                     break;
                 case 'Aguardando Peças':
                     $cor = '#FF7F00';
+
                     break;
                 default:
                     $cor = '#E0E4CC';
+
                     break;
             }
+
             return [
                 'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
                 'start' => $os->dataFinal,
@@ -559,7 +569,7 @@ class Mapos extends MY_Controller
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format($os->valorTotal, 2, ',', '.'),
                     'editar' => $this->os_model->isEditable($os->idOs),
-                ]
+                ],
             ];
         }, $allOs);
 

@@ -1,6 +1,7 @@
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/funcoes.js"></script>
+
 <style>
     #imgSenha {
         width: 18px;
@@ -31,49 +32,52 @@
         /* Move the check mark back when checked */
         text-indent: 0;
     }
+
     .control-group.error .help-inline {
-            display: flex;
+        display: flex;
+    }
+
+    .form-horizontal .control-group {
+        border-bottom: 1px solid #ffffff;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 20px;
+        padding-bottom: 8px 0;
+    }
+
+    .form-horizontal .control-label {
+        text-align: left;
+        padding-top: 15px;
+    }
+
+    .nopadding {
+        padding: 0 20px !important;
+        margin-right: 20px;
+    }
+
+    .widget-title h5 {
+        padding-bottom: 30px;
+        text-align-last: left;
+        font-size: 2em;
+        font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+        form {
+            display: block !important;
         }
-        
-        .form-horizontal .control-group {
-            border-bottom: 1px solid #ffffff;
-        }
-        
-        .form-horizontal .controls {
-            margin-left   : 20px;
-            padding-bottom: 8px 0;
-        }
-    
+
         .form-horizontal .control-label {
-            text-align : left;
-            padding-top: 15px;
+            margin-bottom: -6px;
         }
-    
-        .nopadding {
-            padding     : 0 20px !important;
-            margin-right: 20px;
+
+        .btn-xs {
+            position: initial !important;
         }
-    
-        .widget-title h5 {
-            padding-bottom : 30px;
-            text-align-last: left;
-            font-size      : 2em;
-            font-weight    : 500;
-        }
-    
-        @media (max-width: 480px) {
-            form {
-                display: block !important;
-            }
-        
-            .form-horizontal .control-label {
-                margin-bottom: -6px;
-            }
-            .btn-xs {
-                position: initial !important;
-            }
-        }
+    }
 </style>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -84,8 +88,8 @@
                 <h5>Cadastro de Cliente</h5>
             </div>
             <?php if ($custom_error != '') {
-    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+            } ?>
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">
@@ -130,7 +134,7 @@
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
                                 <input class="form-control" id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
-                                <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
+                                <img id="imgSenha" src="<?php echo base_url(); ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>
                         <div class="control-group">
@@ -195,7 +199,7 @@
                     <div class="span12">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-mini btn-success"><span class="button__icon"><i class='bx bx-save'></i></span> <span class="button__text2">Salvar</span></a></button>
-                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url(); ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </div>
@@ -203,7 +207,8 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let container = document.querySelector('div');
@@ -213,15 +218,15 @@
         icon.addEventListener('click', function() {
             container.classList.toggle('visible');
             if (container.classList.contains('visible')) {
-                icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
+                icon.src = '<?php echo base_url(); ?>assets/img/eye-off.svg';
                 input.type = 'text';
             } else {
-                icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
+                icon.src = '<?php echo base_url(); ?>assets/img/eye.svg'
                 input.type = 'password';
             }
         });
 
-        $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+        $.getJSON('<?php echo base_url(); ?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
                 var curState = '<?php echo set_value('estado'); ?>';

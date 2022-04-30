@@ -25,6 +25,7 @@
         text-indent: 0;
     }
 </style>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -38,7 +39,7 @@
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
-                        <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
+                        <?php echo form_hidden('idProdutos', $result->idProdutos); ?>
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
                         <div class="controls">
                             <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo $result->codDeBarra; ?>" />
@@ -55,11 +56,11 @@
                         <label class="control-label">Tipo de Movimento</label>
                         <div class="controls">
                             <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
-                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" <?= ($result->entrada == 1) ? 'checked' : '' ?>>
+                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" <?php echo ($result->entrada == 1) ? 'checked' : ''; ?>>
                                 <span class="badge">&check;</span>
                             </label>
                             <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
-                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" <?= ($result->saida == 1) ? 'checked' : '' ?>>
+                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" <?php echo ($result->saida == 1) ? 'checked' : ''; ?>>
                                 <span class="badge">&check;</span>
                             </label>
                         </div>
@@ -106,9 +107,9 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary" style="max-width: 160px">
-                                  <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
-                                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                                    <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                <a href="<?php echo base_url(); ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
+                                    <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -121,16 +122,15 @@
     </div>
 </div>
 
-
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcLucro(precoCompra, margemLucro) {
-    var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
-    return precoVenda;
+        var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
+        return precoVenda;
 
-}
-    $("#precoCompra").focusout(function () {
+    }
+    $("#precoCompra").focusout(function() {
         if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
@@ -140,7 +140,7 @@
         }
     });
 
-   $("#margemLucro").keyup(function () {
+    $("#margemLucro").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
             $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
@@ -157,11 +157,11 @@
         }
     });
 
-    $('#precoVenda').focusout(function () {
+    $('#precoVenda').focusout(function() {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
-            if($("#margemLucro").val() != "" || $("#margemLucro").val() != null){
+            if ($("#margemLucro").val() != "" || $("#margemLucro").val() != null) {
                 $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
             }
         }
@@ -169,7 +169,7 @@
 
     $(document).ready(function() {
         $(".money").maskMoney();
-        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+        $.getJSON('<?php echo base_url(); ?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
                 $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
                 $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected", true);

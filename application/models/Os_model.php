@@ -4,13 +4,6 @@ use Piggly\Pix\StaticPayload;
 
 class Os_model extends CI_Model
 {
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -29,7 +22,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -87,7 +80,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -146,6 +139,7 @@ class Os_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 
@@ -284,6 +278,7 @@ class Os_model extends CI_Model
     public function getAnexos($os)
     {
         $this->db->where('os_id', $os);
+
         return $this->db->get('anexos')->result();
     }
 
@@ -306,10 +301,11 @@ class Os_model extends CI_Model
 
     public function criarTextoWhats($textoBase, $troca)
     {
-        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}", "{EMITENTE}", "{TELEFONE_EMITENTE}", "{OBS_OS}", "{DEFEITO_OS}", "{LAUDO_OS}", "{DATA_FINAL}", "{DATA_INICIAL}", "{DATA_GARANTIA}"];
+        $procura = ['{CLIENTE_NOME}', '{NUMERO_OS}', '{STATUS_OS}', '{VALOR_OS}', '{DESCRI_PRODUTOS}', '{EMITENTE}', '{TELEFONE_EMITENTE}', '{OBS_OS}', '{DEFEITO_OS}', '{LAUDO_OS}', '{DATA_FINAL}', '{DATA_INICIAL}', '{DATA_GARANTIA}'];
         $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
+
         return $textoBase;
     }
 
@@ -338,15 +334,16 @@ class Os_model extends CI_Model
 
     public function isEditable($id = null)
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
             return false;
         }
         if ($os = $this->getById($id)) {
-            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
+            $osT = (int) ($os->status === 'Faturado' || $os->status === 'Cancelado' || $os->faturado == 1);
             if ($osT) {
                 return $this->data['configuration']['control_editos'] == '1';
             }
         }
+
         return true;
     }
 
@@ -364,14 +361,12 @@ class Os_model extends CI_Model
         }
 
         $pix = (new StaticPayload())
-            ->applyValidCharacters()
-            ->applyUppercase()
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome, true)
             ->setMerchantCity($emitente->cidade, true)
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s OS %s", $emitente->nome, $id), true);
+            ->setDescription(sprintf('%s OS %s', $emitente->nome, $id), true);
 
         return $pix->getQRCode();
     }

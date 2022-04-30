@@ -79,10 +79,10 @@
                             <td>
                                 <?php
                                     echo getCobrancaTransactionStatus(
-    $this->config->item('payment_gateways'),
-    $result->payment_gateway,
-    $result->status
-);
+                                        $this->config->item('payment_gateways'),
+                                        $result->payment_gateway,
+                                        $result->status
+                                    );
                                 ?>
                             </td>
                         </tr>

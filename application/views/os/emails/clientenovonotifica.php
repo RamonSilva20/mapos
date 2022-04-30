@@ -1,5 +1,5 @@
-<?php  0;
-0; ?>
+<?php
+ ?>
 
 <!doctype html>
 <html>
@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?php echo $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -128,7 +128,7 @@
             <tr class="details">
             
                 <td colspan="4" style="text-align: left">
-                    Caro <b><?= $usuario->nome ?></b>, <br>
+                    Caro <b><?php echo $usuario->nome; ?></b>, <br>
                     Um novo cliente se cadastrou no sistema. Seguem as informações sobre este cliente: <br>
                 </td>
 
@@ -153,22 +153,22 @@
                     Celular:
                 </td>
                 <td  style="text-align: left">
-                    <b> <?= $cliente->nomeCliente ?> </b><br>
-                    <?= $cliente->documento ?><br>
-                    <?= $cliente->rua ?>, <?= $cliente->numero ?> <br>
-                    <?= $cliente->complemento ?> <br>
-                    <?= $cliente->bairro ?><br>
-                    <?= $cliente->cidade ?>/<?= $cliente->estado ?> <br>
-                    <?= $cliente->cep ?> <br>
-                    <?= $cliente->email ?> <br>
-                    <?= $cliente->celular ?>
+                    <b> <?php echo $cliente->nomeCliente; ?> </b><br>
+                    <?php echo $cliente->documento; ?><br>
+                    <?php echo $cliente->rua; ?>, <?php echo $cliente->numero; ?> <br>
+                    <?php echo $cliente->complemento; ?> <br>
+                    <?php echo $cliente->bairro; ?><br>
+                    <?php echo $cliente->cidade; ?>/<?php echo $cliente->estado; ?> <br>
+                    <?php echo $cliente->cep; ?> <br>
+                    <?php echo $cliente->email; ?> <br>
+                    <?php echo $cliente->celular; ?>
                 </td>
             </tr>
 
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    <?= $emitente[0]->nome; ?>
+                    <?php echo $emitente[0]->nome; ?>
                 </td>
             </tr>
             

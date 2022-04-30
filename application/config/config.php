@@ -1,21 +1,21 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
 
+defined('BASEPATH') or exit('No direct script access allowed');
 
-/**
+/*
  * App current version
  */
-$config['app_version'] = '4.38.0';
+$config['app_version'] = '5.0.0';
 
-/**
+/*
  * Nome do sistema
  */
 $config['app_name'] = 'Map-OS';
 
-/**
+/*
  * Descrição do sistema
  */
 $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
-
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ $config['index_page'] = 'index.php';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']     = 'REQUEST_URI';
+$config['uri_protocol'] = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -417,11 +417,11 @@ $config['sess_regenerate_destroy'] = false;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
-$config['cookie_path']		= '/';
-$config['cookie_secure']	= false;
-$config['cookie_httponly'] 	= false;
+$config['cookie_prefix'] = '';
+$config['cookie_domain'] = '';
+$config['cookie_path'] = '/';
+$config['cookie_secure'] = false;
+$config['cookie_httponly'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -497,8 +497,6 @@ $config['time_reference'] = 'local';
 */
 $config['proxy_ips'] = '';
 
-
-
 $config['modules_locations'] = [
-    APPPATH.'modules/' => '../modules/',
+    APPPATH . 'modules/' => '../modules/',
 ];

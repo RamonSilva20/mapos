@@ -1,7 +1,9 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Modular Extensions - HMVC
+ * Modular Extensions - HMVC.
  *
  * Adapted from the CodeIgniter Core Classes
  * @link    http://codeigniter.com
@@ -36,13 +38,13 @@
 class MX_Config extends CI_Config
 {
     /**
-     * [load description]
+     * [load description].
      *
      * @method load
      *
      * @param  string  $file            [description]
-     * @param  boolean $use_sections    [description]
-     * @param  boolean $fail_gracefully [description]
+     * @param  bool $use_sections    [description]
+     * @param  bool $fail_gracefully [description]
      * @param  string  $_module         [description]
      *
      * @return [type]                   [description]
@@ -66,12 +68,13 @@ class MX_Config extends CI_Config
 
         if ($path === false) {
             parent::load($file, $use_sections, $fail_gracefully);
+
             return $this->item($file);
         }
 
         if ($config = Modules::load_file($file, $path, 'config')) {
             // reference to the config array
-            $current_config =& $this->config;
+            $current_config = &$this->config;
 
             if ($use_sections === true) {
                 if (isset($current_config[$file])) {
@@ -85,6 +88,7 @@ class MX_Config extends CI_Config
 
             $this->is_loaded[] = $file;
             unset($config);
+
             return $this->item($file);
         }
     }

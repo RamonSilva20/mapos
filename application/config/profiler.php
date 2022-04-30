@@ -1,4 +1,6 @@
-<?php  if (! defined('BASEPATH')) {
+<?php
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -9,11 +11,9 @@
 | data are displayed when the Profiler is enabled.
 | Please see the user guide for info:
 |
-|	http://codeigniter.com/user_guide/general/profiling.html
+|   http://codeigniter.com/user_guide/general/profiling.html
 |
 */
-
-
 
 /* End of file profiler.php */
 /* Location: ./application/config/profiler.php */

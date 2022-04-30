@@ -13,7 +13,7 @@ class Seeder
 
     public function __construct()
     {
-        $this->CI =& get_instance();
+        $this->CI = &get_instance();
         $this->CI->load->database();
         $this->CI->load->dbforge();
         $this->db = $this->CI->db;
@@ -21,7 +21,7 @@ class Seeder
     }
 
     /**
-     * Run another seeder
+     * Run another seeder.
      *
      * @param string $seeder Seeder classname
      */
@@ -29,7 +29,7 @@ class Seeder
     {
         $file = APPPATH . 'database/seeds/' . $seeder . '.php';
         require_once $file;
-        $obj = new $seeder;
+        $obj = new $seeder();
         $obj->run();
     }
 

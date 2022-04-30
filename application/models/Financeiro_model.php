@@ -1,25 +1,19 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Financeiro_model extends CI_Model
 {
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
     }
 
-
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', usuarios.*');
+        $this->db->select($fields . ', usuarios.*');
         $this->db->from($table);
         $this->db->join('usuarios', 'usuarios.idUsuarios = usuarios_id', 'left');
         $this->db->order_by('data_vencimento', 'asc');
@@ -30,7 +24,7 @@ class Financeiro_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -61,13 +55,14 @@ class Financeiro_model extends CI_Model
                        SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor_desconto END) as total_receita_pendente,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor_desconto END) as total_despesa_pendente FROM lancamentos";
 
-        return $this->db->query($sql)->row();    
+        return $this->db->query($sql)->row();
     }
 
     public function getById($id)
     {
         $this->db->where('idClientes', $id);
         $this->db->limit(1);
+
         return $this->db->get('clientes')->row();
     }
 
@@ -81,14 +76,14 @@ class Financeiro_model extends CI_Model
         return false;
     }
 
-    function add1($table,$data1){
-        $this->db->insert($table, $data1);         
-        if ($this->db->affected_rows() == '1')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;       
+    public function add1($table, $data1)
+    {
+        $this->db->insert($table, $data1);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+
+        return false;
     }
 
     public function edit($table, $data, $fieldID, $ID)
@@ -120,6 +115,7 @@ class Financeiro_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
+
         return $this->db->count_all_results();
     }
 

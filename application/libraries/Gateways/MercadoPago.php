@@ -7,7 +7,7 @@ use MercadoPago\SDK;
 
 class MercadoPago extends BasePaymentGateway
 {
-    /** @var SDK $mercadoPagoApi */
+    /** @var SDK */
     private $mercadoPagoApi;
 
     private $mercadoPagoConfig;
@@ -40,7 +40,7 @@ class MercadoPago extends BasePaymentGateway
     public function cancelar($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -61,12 +61,12 @@ class MercadoPago extends BasePaymentGateway
     public function enviarPorEmail($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
         $emitente = $this->ci->mapos_model->getEmitente();
-        if (!$emitente) {
+        if (! $emitente) {
             throw new \Exception('Emitente não configurado!');
         }
 
@@ -80,7 +80,7 @@ class MercadoPago extends BasePaymentGateway
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = 'Cobrança - ' . $emitente[0]->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -92,7 +92,7 @@ class MercadoPago extends BasePaymentGateway
             $headers = [
                 'From' => $emitente[0]->email,
                 'Subject' => $assunto,
-                'Return-Path' => ''
+                'Return-Path' => '',
             ];
             $email = [
                 'to' => $remetente,
@@ -108,7 +108,7 @@ class MercadoPago extends BasePaymentGateway
     public function atualizarDados($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -125,7 +125,7 @@ class MercadoPago extends BasePaymentGateway
         $databaseResult = $this->ci->cobrancas_model->edit(
             'cobrancas',
             [
-                'status' => $payment->status
+                'status' => $payment->status,
             ],
             'idCobranca',
             $id
@@ -136,6 +136,7 @@ class MercadoPago extends BasePaymentGateway
             log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
+
             throw new \Exception('Erro ao atualizar cobrança!');
         }
     }
@@ -143,7 +144,7 @@ class MercadoPago extends BasePaymentGateway
     public function confirmarPagamento($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -171,7 +172,7 @@ class MercadoPago extends BasePaymentGateway
             : [];
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
+            : $this->ci->vendas_model->getById($id), ];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -215,8 +216,8 @@ class MercadoPago extends BasePaymentGateway
         $payment = new Payment();
         $payment->transaction_amount = floatval($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto));
         $payment->description = PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
-        $payment->payment_method_id = "bolbradesco";
-        $payment->notification_url = "http://mapos.com.br/";
+        $payment->payment_method_id = 'bolbradesco';
+        $payment->notification_url = 'http://mapos.com.br/';
         $payment->date_of_expiration = $expirationDate;
         $payment->payer = [
             'email' => $entity->email,
@@ -224,7 +225,7 @@ class MercadoPago extends BasePaymentGateway
             'last_name' => $clientNameParts[count($clientNameParts) - 1],
             'identification' => [
                 'type' => strlen($documento) == 11 ? 'CPF' : 'CNPJ',
-                'number' => $documento
+                'number' => $documento,
             ],
             'address' => [
                 'zip_code' => preg_replace('/[^0-9]/', '', $entity->cep),
@@ -232,8 +233,8 @@ class MercadoPago extends BasePaymentGateway
                 'street_number' => $entity->numero,
                 'neighborhood' => $entity->bairro,
                 'city' => $entity->cidade,
-                'federal_unit' => $entity->estado
-            ]
+                'federal_unit' => $entity->estado,
+            ],
         ];
 
         $payment->save();
@@ -277,6 +278,6 @@ class MercadoPago extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+        return ($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100;
     }
 }

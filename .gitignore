@@ -25,5 +25,7 @@ vendor/
 .php-cs-fixer.cache
 application/logs/*
 ci_sessions/
+assets/arquivos/*
+assets/anexos/*
 
 uploads

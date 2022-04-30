@@ -25,6 +25,7 @@
         text-indent: 0;
     }
 </style>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -98,7 +99,7 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
                                 <button type="submit" class="button btn btn-mini btn-success" style="max-width: 160px"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                                <a href="<?php echo base_url(); ?>index.php/produtos" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -108,7 +109,7 @@
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcLucro(precoCompra, margemLucro) {
@@ -142,7 +143,7 @@
         }
     });
 
-    $('#precoVenda').focusout(function () {
+    $('#precoVenda').focusout(function() {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
@@ -155,7 +156,7 @@
 
     $(document).ready(function() {
         $(".money").maskMoney();
-        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+        $.getJSON('<?php echo base_url(); ?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
                 $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
             }

@@ -1,6 +1,6 @@
 <?php
 
-class Login extends CI_Controller
+class Login extends MY_Controller
 {
     public function __construct()
     {
@@ -10,12 +10,13 @@ class Login extends CI_Controller
 
     public function index()
     {
-        $this->load->view('mapos/login');
+        $this->load->view('mapos/login', $this->data);
     }
 
     public function sair()
     {
         $this->session->sess_destroy();
+
         return redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -29,46 +30,51 @@ class Login extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
-        if ($this->form_validation->run() == false) {
-            $json = ['result' => false, 'message' => validation_errors()];
-            echo json_encode($json);
-        } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
-            $this->load->model('Mapos_model');
-            $user = $this->Mapos_model->check_credentials($email);
-
-            if ($user) {
-                // Verificar se acesso está expirado
-                if ($this->chk_date($user->dataExpiracao)) {
-                    $json = ['result' => false, 'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'];
-                    echo json_encode($json);
-                    die();
-                }
-
-                // Verificar credenciais do usuário
-                if (password_verify($password, $user->senha)) {
-                    $session_data = ['nome' => $user->nome, 'email' => $user->email, 'url_image_user' => $user->url_image_user, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
-                    $this->session->set_userdata($session_data);
-                    log_info('Efetuou login no sistema');
-                    $json = ['result' => true];
-                    echo json_encode($json);
-                } else {
-                    $json = ['result' => false, 'message' => 'Os dados de acesso estão incorretos.'];
-                    echo json_encode($json);
-                }
-            } else {
-                $json = ['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.'];
-                echo json_encode($json);
-            }
+        if ($this->form_validation->run() === false) {
+            return $this->json([
+                'result' => false,
+                'message' => validation_errors(),
+            ]);
         }
-        die();
+        $email = $this->input->post('email');
+        $password = $this->input->post('senha');
+        $this->load->model('Mapos_model');
+        $user = $this->Mapos_model->check_credentials($email);
+
+        if ($user) {
+            // Verificar se acesso está expirado
+            if ($this->chk_date($user->dataExpiracao)) {
+                return $this->json([
+                    'result' => false,
+                    'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.',
+                ]);
+            }
+
+            // Verificar credenciais do usuário
+            if (password_verify($password, $user->senha)) {
+                $session_data = ['nome' => $user->nome, 'email' => $user->email, 'url_image_user' => $user->url_image_user, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
+                $this->session->set_userdata($session_data);
+                log_info('Efetuou login no sistema');
+
+                return $this->json(['result' => true]);
+            }
+
+            return $this->json([
+                'result' => false,
+                'message' => 'Os dados de acesso estão incorretos.',
+            ]);
+        }
+
+        return $this->json([
+            'result' => false,
+            'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas.',
+        ]);
     }
 
     private function chk_date($data_banco)
     {
         $data_banco = new DateTime($data_banco);
-        $data_hoje = new DateTime("now");
+        $data_hoje = new DateTime('now');
 
         return $data_banco < $data_hoje;
     }

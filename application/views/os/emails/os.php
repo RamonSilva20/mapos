@@ -113,12 +113,12 @@ $totalProdutos = 0; ?>
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?php echo $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
-                                OS #: <?= $result->idOs ?><br>
-                                Data Inicial: <?= date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
-                                Data Final: <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                OS #: <?php echo $result->idOs; ?><br>
+                                Data Inicial: <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
+                                Data Final: <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                             </td>
                         </tr>
                     </table>
@@ -130,19 +130,19 @@ $totalProdutos = 0; ?>
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $result->nomeCliente ?><br>
-                                <?= $result->rua ?>, <?= $result->numero ?>, <?= $result->bairro ?><br>
-                                <?= $result->cidade ?> - <?= $result->estado ?> <br>
-                                <?= $result->email ?> <br>
-                                <?= $result->celular_cliente ?>
+                                Cliente: <?php echo $result->nomeCliente; ?><br>
+                                <?php echo $result->rua; ?>, <?php echo $result->numero; ?>, <?php echo $result->bairro; ?><br>
+                                <?php echo $result->cidade; ?> - <?php echo $result->estado; ?> <br>
+                                <?php echo $result->email; ?> <br>
+                                <?php echo $result->celular_cliente; ?>
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente[0]->nome; ?> <br>
-                                <?= $emitente[0]->rua ?>, <?= $emitente[0]->numero ?>, <?= $emitente[0]->bairro ?><br>
-                                <?= $emitente[0]->cidade ?> - <?= $emitente[0]->uf ?> CEP: <?= $emitente[0]->cep ?> <br>
-                                Responsável: <?= $result->nome ?><br>
-                                <?= $result->email_usuario ?>
+                                <?php echo $emitente[0]->nome; ?> <br>
+                                <?php echo $emitente[0]->rua; ?>, <?php echo $emitente[0]->numero; ?>, <?php echo $emitente[0]->bairro; ?><br>
+                                <?php echo $emitente[0]->cidade; ?> - <?php echo $emitente[0]->uf; ?> CEP: <?php echo $emitente[0]->cep; ?> <br>
+                                Responsável: <?php echo $result->nome; ?><br>
+                                <?php echo $result->email_usuario; ?>
                             </td>
                         </tr>
                     </table>
@@ -154,7 +154,7 @@ $totalProdutos = 0; ?>
                     Status
                 </td>
                 <td colspan="2" style="text-align: center">
-                    <?= $result->status ?>
+                    <?php echo $result->status; ?>
                 </td>
             </tr>
 
@@ -165,7 +165,7 @@ $totalProdutos = 0; ?>
                     </td>
 
                     <td colspan="2" style="text-align: center">
-                        <?= $result->garantia ?>
+                        <?php echo $result->garantia; ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -178,7 +178,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->descricaoProduto) ?>
+                        <?php echo htmlspecialchars_decode($result->descricaoProduto); ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -191,7 +191,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->defeito) ?>
+                        <?php echo htmlspecialchars_decode($result->defeito); ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -204,7 +204,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->observacoes) ?>
+                        <?php echo htmlspecialchars_decode($result->observacoes); ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -217,7 +217,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->laudoTecnico) ?>
+                        <?php echo htmlspecialchars_decode($result->laudoTecnico); ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -243,7 +243,7 @@ $totalProdutos = 0; ?>
 
                 <tr class="item">
                     <td colspan="3"></td>
-                    <td style="text-align: center"><strong>Total em Produtos: R$ <?= number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                    <td style="text-align: center"><strong>Total em Produtos: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                 </tr>
             <?php } ?>
 
@@ -270,7 +270,7 @@ $totalProdutos = 0; ?>
 
                 <tr class="item">
                     <td colspan="3"></td>
-                    <td style="text-align: center"><strong>Total em Serviços: R$ <?= number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                    <td style="text-align: center"><strong>Total em Serviços: R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
                 </tr>
             <?php } ?>
             <tr class="heading">
@@ -282,20 +282,20 @@ $totalProdutos = 0; ?>
             <tr class="heading">
                 <td colspan="3"></td>
                 <td style="text-align: center">
-                    <strong>Total: R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></strong>
+                    <strong>Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong>
                 </td>
             </tr>
             <?php if ($result->desconto != 0 && $result->valor_desconto != 0) { ?>
                 <tr class="heading">
                     <td colspan="3"></td>
                     <td style="text-align: center">
-                        <strong>Desconto: R$ <?= number_format($result->valor_desconto - ($totalProdutos + $totalServico), 2, ',', '.') ?></strong>
+                        <strong>Desconto: R$ <?php echo number_format($result->valor_desconto - ($totalProdutos + $totalServico), 2, ',', '.'); ?></strong>
                     </td>
                 </tr>
                 <tr class="heading">
                     <td colspan="3"></td>
                     <td style="text-align: center">
-                        <strong>Total com Desconto: R$ <?= number_format($result->valor_desconto, 2, ',', '.') ?></strong>
+                        <strong>Total com Desconto: R$ <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></strong>
                     </td>
                 </tr>
             <?php } ?>

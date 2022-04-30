@@ -1,20 +1,22 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class ResetSenhas_model extends CI_Model
 {
-
     /**
      * author: Wilmerson
-     * email: will.phelipe@gmail.com
+     * email: will.phelipe@gmail.com.
      *
+     * @param mixed $email
      */
-
     public function getById($email)
     {
         $this->db->where('email', $email);
         $this->db->limit(1);
+
         return $this->db->get('resets_de_senha')->row();
     }
 
@@ -25,6 +27,7 @@ class ResetSenhas_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 

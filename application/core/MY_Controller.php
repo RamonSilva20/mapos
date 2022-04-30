@@ -2,7 +2,7 @@
 
 class MY_Controller extends CI_Controller
 {
-    public $data = [
+    protected $data = [
         'configuration' => [
             'per_page' => 10,
             'next_link' => 'Próxima',
@@ -31,23 +31,46 @@ class MY_Controller extends CI_Controller
             'control_baixa' => '0',
             'control_editos' => '1',
             'control_datatable' => '1',
+            'control_edit_vendas' => '1',
             'pix_key' => '',
+            'email_automatico' => false,
         ],
     ];
 
     public function __construct()
     {
         parent::__construct();
+        $this->CI = &get_instance();
 
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('login');
+        if ($this->CI->router->class !== 'login') {
+            $this->checkSession();
         }
-        $this->load_configuration();
+        $this->loadConfiguration();
     }
 
-    private function load_configuration()
+    protected function layout()
     {
-        $this->CI = &get_instance();
+        // load views
+        $this->load->view('tema/topo', $this->data);
+        $this->load->view('tema/menu');
+        $this->load->view('tema/conteudo');
+        $this->load->view('tema/rodape');
+    }
+
+    protected function userIsLoged()
+    {
+        return (session_id()) && ($this->session->userdata('logado'));
+    }
+
+    protected function checkSession()
+    {
+        if (! $this->userIsLoged()) {
+            redirect('login');
+        }
+    }
+
+    protected function loadConfiguration()
+    {
         $this->CI->load->database();
         $configuracoes = $this->CI->db->get('configuracoes')->result();
 
@@ -56,12 +79,11 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    public function layout()
+    protected function json(mixed $data, int $status = 200)
     {
-        // load views
-        $this->load->view('tema/topo', $this->data);
-        $this->load->view('tema/menu');
-        $this->load->view('tema/conteudo');
-        $this->load->view('tema/rodape');
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($status)
+            ->set_output(json_encode($data));
     }
 }

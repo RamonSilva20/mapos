@@ -1,4 +1,5 @@
 <?php
+
 /* tradução: ferreiramauricio.com */
 
 $lang['db_invalid_connection_str'] = 'Não foi possível determinar as configurações do banco de dados baseado na string de conexão que você submeteu.';

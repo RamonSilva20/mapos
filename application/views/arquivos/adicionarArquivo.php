@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -11,10 +11,9 @@
                 <h5>Cadastro de Arquivo</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-                <?= $custom_error ?>
+                <?php echo $custom_error; ?>
 
-                <form action="<?= current_url() ?>" id="formArquivo" enctype="multipart/form-data" method="post" class="form-horizontal">
-
+                <form action="<?php echo current_url(); ?>" id="formArquivo" enctype="multipart/form-data" method="post" class="form-horizontal">
                     <div class="control-group">
                         <label for="preco" class="control-label"><span class="required">Arquivo*</span></label>
                         <div class="controls">
@@ -47,9 +46,9 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-mini btn-success" style="max-width: 160px">
-                                  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a></button>
-                                <a href="<?= base_url() ?>index.php/arquivos" class="button btn btn-mini btn-warning" style="max-width: 160px">
-                                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a></button>
+                                <a href="<?php echo base_url(); ?>index.php/arquivos" class="button btn btn-mini btn-warning" style="max-width: 160px">
+                                    <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -59,7 +58,7 @@
     </div>
 </div>
 
-<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#formArquivo').validate({
@@ -91,6 +90,7 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
+
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });

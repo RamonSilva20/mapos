@@ -8,25 +8,17 @@ if (! defined('BASEPATH')) {
 
 class Vendas_model extends CI_Model
 {
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
     }
 
-
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', clientes.nomeCliente, clientes.idClientes');
+        $this->db->select($fields . ', clientes.nomeCliente, clientes.idClientes');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
-        $this->db->join('clientes', 'clientes.idClientes = '.$table.'.clientes_id');
+        $this->db->join('clientes', 'clientes.idClientes = ' . $table . '.clientes_id');
         $this->db->order_by('idVendas', 'desc');
         if ($where) {
             $this->db->where($where);
@@ -34,7 +26,8 @@ class Vendas_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -47,6 +40,7 @@ class Vendas_model extends CI_Model
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -57,6 +51,7 @@ class Vendas_model extends CI_Model
                 return $this->data['configuration']['control_edit_vendas'] == '1';
             }
         }
+
         return true;
     }
 
@@ -70,6 +65,7 @@ class Vendas_model extends CI_Model
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -79,6 +75,7 @@ class Vendas_model extends CI_Model
         $this->db->from('itens_de_vendas');
         $this->db->join('produtos', 'produtos.idProdutos = itens_de_vendas.produtos_id');
         $this->db->where('vendas_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -87,6 +84,7 @@ class Vendas_model extends CI_Model
         $this->db->select('cobrancas.*');
         $this->db->from('cobrancas');
         $this->db->where('vendas_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -97,6 +95,7 @@ class Vendas_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 
@@ -139,7 +138,7 @@ class Vendas_model extends CI_Model
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -153,11 +152,11 @@ class Vendas_model extends CI_Model
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
+                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idClientes']];
             }
             echo json_encode($row_set);
         } else {
-            $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
+            $row_set[] = ['label' => 'Adicionar cliente...', 'id' => null];
             echo json_encode($row_set);
         }
     }
@@ -171,7 +170,7 @@ class Vendas_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']];
+                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
             }
             echo json_encode($row_set);
         }
@@ -199,14 +198,12 @@ class Vendas_model extends CI_Model
         }
 
         $pix = (new StaticPayload())
-            ->applyValidCharacters()
-            ->applyUppercase()
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome, true)
             ->setMerchantCity($emitente->cidade, true)
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s Venda %s", $emitente->nome, $id), true);
+            ->setDescription(sprintf('%s Venda %s', $emitente->nome, $id), true);
 
         return $pix->getQRCode();
     }

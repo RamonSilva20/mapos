@@ -6,7 +6,7 @@ use Libraries\Gateways\Contracts\PaymentGateway;
 
 class Asaas extends BasePaymentGateway
 {
-    /** @var AsaasSdk $asaasApi */
+    /** @var AsaasSdk */
     private $asaasApi;
 
     private $asaasConfig;
@@ -33,7 +33,7 @@ class Asaas extends BasePaymentGateway
     public function cancelar($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -49,12 +49,12 @@ class Asaas extends BasePaymentGateway
     public function enviarPorEmail($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
         $emitente = $this->ci->mapos_model->getEmitente();
-        if (!$emitente) {
+        if (! $emitente) {
             throw new \Exception('Emitente não configurado!');
         }
 
@@ -68,7 +68,7 @@ class Asaas extends BasePaymentGateway
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = 'Cobrança - ' . $emitente[0]->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -80,7 +80,7 @@ class Asaas extends BasePaymentGateway
             $headers = [
                 'From' => $emitente[0]->email,
                 'Subject' => $assunto,
-                'Return-Path' => ''
+                'Return-Path' => '',
             ];
             $email = [
                 'to' => $remetente,
@@ -96,7 +96,7 @@ class Asaas extends BasePaymentGateway
     public function atualizarDados($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -107,14 +107,14 @@ class Asaas extends BasePaymentGateway
         }
 
         // Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
-        if ($result->status == "RECEIVED" || $result->status == "CONFIRMED" || $result->status == "DUNNING_RECEIVED") {
+        if ($result->status == 'RECEIVED' || $result->status == 'CONFIRMED' || $result->status == 'DUNNING_RECEIVED') {
             // TODO: dar baixa no lançamento caso exista
         }
 
         $databaseResult = $this->ci->cobrancas_model->edit(
             'cobrancas',
             [
-                'status' => $result->status
+                'status' => $result->status,
             ],
             'idCobranca',
             $id
@@ -125,6 +125,7 @@ class Asaas extends BasePaymentGateway
             log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
+
             throw new \Exception('Erro ao atualizar cobrança!');
         }
     }
@@ -132,7 +133,7 @@ class Asaas extends BasePaymentGateway
     public function confirmarPagamento($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -141,10 +142,10 @@ class Asaas extends BasePaymentGateway
                 $cobranca->charge_id,
                 [
                     'paymentDate' => (new DateTime())->format('Y-m-d'),
-                    'value' => round($cobranca->total / 100, 2)
+                    'value' => round($cobranca->total / 100, 2),
                 ]
             );
-            if (!$result || $result->errors) {
+            if (! $result || $result->errors) {
                 throw new \Exception('Erro ao chamar Asaas!');
             }
         } else {
@@ -163,10 +164,10 @@ class Asaas extends BasePaymentGateway
         $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getServicos($id)
             : [];
-        
+
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
+            : $this->ci->vendas_model->getById($id), ];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -215,7 +216,7 @@ class Asaas extends BasePaymentGateway
         ];
 
         $result = $this->asaasApi->Cobranca()->create($body);
-        if (!$result || $result->errors) {
+        if (! $result || $result->errors) {
             throw new \Exception('Erro ao chamar Asaas!');
         }
 
@@ -264,8 +265,7 @@ class Asaas extends BasePaymentGateway
 
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
-
+            : $this->ci->vendas_model->getById($id), ];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -281,7 +281,7 @@ class Asaas extends BasePaymentGateway
             },
             0
         );
-        
+
         $totalDesconto = array_reduce(
             $desconto,
             function ($total, $item) {
@@ -317,7 +317,7 @@ class Asaas extends BasePaymentGateway
         ];
 
         $result = $this->asaasApi->LinkPagamento()->create($body);
-        if (!$result || $result->errors) {
+        if (! $result || $result->errors) {
             throw new \Exception('Erro ao chamar Asaas!');
         }
 
@@ -354,13 +354,13 @@ class Asaas extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+        return ($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100;
     }
 
     private function criarOuRetornarClienteAsaasId($clienteId)
     {
         $cliente = (array) $this->ci->clientes_model->getById($clienteId);
-        if (!$cliente) {
+        if (! $cliente) {
             throw new Exception('Cliente não encontrado: ' . $clienteId);
         }
 
@@ -387,7 +387,7 @@ class Asaas extends BasePaymentGateway
         $success = $this->ci->clientes_model->edit(
             'clientes',
             [
-                'asaas_id' => $result->id
+                'asaas_id' => $result->id,
             ],
             'idClientes',
             $clienteId
@@ -395,8 +395,8 @@ class Asaas extends BasePaymentGateway
 
         if ($success) {
             return $result->id;
-        } else {
-            throw new Exception('Erro ao criar cliente na Asaas!');
         }
+
+        throw new Exception('Erro ao criar cliente na Asaas!');
     }
 }

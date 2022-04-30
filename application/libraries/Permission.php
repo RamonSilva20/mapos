@@ -1,9 +1,11 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 /**
- * Permission Class
+ * Permission Class.
  *
  * Biblioteca para controle de permissões
  *
@@ -15,17 +17,19 @@
  * d... Deletar ou Desabilitar
  * c... Cadastrar
  */
-
 class Permission
 {
     private $permissions = [];
+
     private $table = 'permissoes'; //Nome tabela onde ficam armazenadas as permissões
+
     private $pk = 'idPermissao'; // Nome da chave primaria da tabela
+
     private $select = 'permissoes'; // Campo onde fica o array de permissoes.
 
     public function __construct()
     {
-        log_message('debug', "Permission Class Initialized");
+        log_message('debug', 'Permission Class Initialized');
         $this->CI = &get_instance();
         $this->CI->load->database();
     }
@@ -38,7 +42,7 @@ class Permission
         // Se as permissões não estiverem carregadas, requisita o carregamento
         if ($this->permissions == null) {
             // Se não carregar retorna falso
-            if (!$this->loadPermission($idPermissao)) {
+            if (! $this->loadPermission($idPermissao)) {
                 return false;
             }
         }
@@ -51,6 +55,7 @@ class Permission
                 }
             }
         }
+
         return false;
     }
 
@@ -66,9 +71,11 @@ class Permission
                 $array = unserialize($array[$this->select]);
                 //Atribui as permissoes ao atributo permissions
                 $this->permissions = [$array];
+
                 return true;
             }
         }
+
         return false;
     }
 }

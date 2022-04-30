@@ -11,7 +11,7 @@
                 <section>
                     <div class="profileMC">
                         <div class="profile-img">
-                            <img src="<?= (!$usuario->url_image_user || !is_file(FCPATH . "assets/userImage/" . $usuario->url_image_user)) ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt="">
+                            <img src="<?php echo (!$usuario->url_image_user || !is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) ? base_url() . 'assets/img/User.png' : base_url() . 'assets/userImage/' . $usuario->url_image_user; ?>" alt="">
                         </div>
                     </div>
                 </section>
@@ -19,7 +19,7 @@
                     <label for="user" class="">
                         <span class="">
                             <a href="#modalImageUser" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="max-width: 140px">
-                              <span class="button__icon"><i class='bx bx-upload'></i></span> <span class="button__text2">Alterar Foto</span></a>
+                                <span class="button__icon"><i class='bx bx-upload'></i></span> <span class="button__text2">Alterar Foto</span></a>
                         </span>
                     </label>
                 </div>
@@ -29,15 +29,15 @@
                 <div class="span12">
                     <ul class="site-stats">
                         <li class="bg_ls span12"><strong>Nome:
-                                <?= $usuario->nome ?></strong></li>
+                                <?php echo $usuario->nome; ?></strong></li>
                         <li class="bg_lb span12" style="margin-left: 0"><strong>Telefone:
-                                <?= $usuario->telefone ?></strong></li>
+                                <?php echo $usuario->telefone; ?></strong></li>
                         <li class="bg_lg span12" style="margin-left: 0"><strong>Email:
-                                <?= $usuario->email ?></strong></li>
+                                <?php echo $usuario->email; ?></strong></li>
                         <li class="bg_lo span12" style="margin-left: 0"><strong>Nível:
-                                <?= $usuario->permissao; ?></strong></li>
+                                <?php echo $usuario->permissao; ?></strong></li>
                         <li class="bg_lh span12" style="margin-left: 0; border-bottom-left-radius: 9px;border-bottom-right-radius: 9px"><strong>Acesso expira em:
-                                <?= date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
+                                <?php echo date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
                     </ul>
                 </div>
 
@@ -57,7 +57,7 @@
         <div class="widget-content">
             <div class="row-fluid">
                 <div class="span12" style="min-height: 260px">
-                    <form id="formSenha" action="<?= site_url('mapos/alterarSenha'); ?>" method="post">
+                    <form id="formSenha" action="<?php echo site_url('mapos/alterarSenha'); ?>" method="post">
 
                         <div class="span12" style="margin-left: 0">
                             <label for="">Senha Atual</label>
@@ -71,8 +71,8 @@
                             <label for="">Confirmar Senha</label>
                             <input type="password" name="confirmarSenha" class="span12" />
                         </div>
-                            <button class="button btn btn-primary" style="max-width: 140px;text-align: center">
-                              <span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Alterar Senha</span></button>
+                        <button class="button btn btn-primary" style="max-width: 140px;text-align: center">
+                            <span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Alterar Senha</span></button>
                     </form>
                 </div>
 
@@ -82,7 +82,7 @@
 </div>
 
 <div id="modalImageUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?= site_url('mapos/uploadUserImage'); ?>" id="formImageUser" enctype="multipart/form-data" method="post" class="form-horizontal">
+    <form action="<?php echo site_url('mapos/uploadUserImage'); ?>" id="formImageUser" enctype="multipart/form-data" method="post" class="form-horizontal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="">MapOS - Atualizar Imagem do Usuario</h3>
@@ -103,8 +103,7 @@
     </form>
 </div>
 
-
-<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 

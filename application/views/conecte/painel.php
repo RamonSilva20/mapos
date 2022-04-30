@@ -2,25 +2,24 @@
 
 <div class="quick-actions_homepage">
     <ul class="cardBox">
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconBx'></i>
-          <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
-        </a>
+        <li class="card"> <a href="<?php echo base_url(); ?>index.php/mine/os"><i class='bx bx-spreadsheet iconBx'></i>
+                <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
+            </a>
         </li>
 
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconBx'></i>
+        <li class="card"> <a href="<?php echo base_url(); ?>index.php/mine/compras"><i class='bx bx-cart-alt iconBx'></i>
                 <div style="font-size: 1.2em" class="numbers">Compras</div>
             </a></li>
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class='bx bx-user-circle iconBx'></i>
+        <li class="card"> <a href="<?php echo base_url(); ?>index.php/mine/conta"><i class='bx bx-user-circle iconBx'></i>
                 <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
             </a></li>
     </ul>
 </div>
 
 <div class="span12" style="margin-left: 0">
-
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
-          <span class="icon"><i class="fas fa-signal"></i></span>
+            <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Ordens de Serviço</h5>
         </div>
         <div class="widget-content">
@@ -53,7 +52,7 @@
                                 } else {
                                     $corGarantia = '#f24c6f';
                                 }
-                            } elseif ($o->garantia == "0") {
+                            } elseif ($o->garantia == '0') {
                                 $vencGarantia = 'Sem Garantia';
                                 $corGarantia = '';
                             } else {
@@ -81,7 +80,7 @@
 
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
-          <span class="icon"><i class="fas fa-signal"></i></span>
+            <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Compras</h5>
         </div>
         <div class="widget-content">
@@ -115,7 +114,6 @@
                     } else {
                         echo '<tr><td colspan="5">Nenhum venda encontrada.</td></tr>';
                     }
-
                     ?>
                 </tbody>
             </table>

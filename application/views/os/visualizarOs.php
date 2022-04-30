@@ -1,4 +1,4 @@
-<link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
+<link href="<?php echo base_url('assets/css/custom.css'); ?>" rel="stylesheet">
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
@@ -9,28 +9,28 @@
                 <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-    echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-} ?>
+                    } ?>
 
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/os/imprimir/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-    $this->load->model('os_model');
-    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
-    $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-    if (!empty($zapnumber)) {
-        echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
+                        $this->load->model('os_model');
+                        $zapnumber = preg_replace('/[^0-9]/', '', $result->celular_cliente);
+                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+                        $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
+                        if (!empty($zapnumber)) {
+                            echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
         <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
-    }
-} ?>
+                        }
+                    } ?>
 
-                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
+                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url(); ?>/os/enviar_email/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span></a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
+                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
                             <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
                     <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
                         <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
@@ -43,7 +43,6 @@
                         <table class="table table-condensed">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
-
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<< </td>
@@ -55,8 +54,8 @@
                                             <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span>
                                         </td>
                                         <td style="width: 18%; text-align: center"><b>N° OS:</b>
-                                            <span><?php echo $result->idOs ?></span></br> </br>
-                                            <span>Emissão: <?php echo date('d/m/Y') ?></span>
+                                            <span><?php echo $result->idOs; ?></span></br> </br>
+                                            <span>Emissão: <?php echo date('d/m/Y'); ?></span>
                                         </td>
                                     </tr>
 
@@ -72,11 +71,11 @@
                                             <li>
                                                 <span>
                                                     <h5><b>CLIENTE</b></h5>
-                                                    <span><?php echo $result->nomeCliente ?></span><br />
-                                                    <span><?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?></span>,
-                                                    <span><?php echo $result->cidade ?> - <?php echo $result->estado ?></span><br>
-                                                    <span>E-mail: <?php echo $result->email ?></span><br>
-                                                    <span>Contato: <?php echo $result->celular_cliente ?></span>
+                                                    <span><?php echo $result->nomeCliente; ?></span><br />
+                                                    <span><?php echo $result->rua; ?>, <?php echo $result->numero; ?>, <?php echo $result->bairro; ?></span>,
+                                                    <span><?php echo $result->cidade; ?> - <?php echo $result->estado; ?></span><br>
+                                                    <span>E-mail: <?php echo $result->email; ?></span><br>
+                                                    <span>Contato: <?php echo $result->celular_cliente; ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -86,9 +85,9 @@
                                                 <span>
                                                     <h5><b>RESPONSÁVEL</b></h5>
                                                 </span>
-                                                <span><?php echo $result->nome ?></span> <br />
-                                                <span>Contato: <?php echo $result->telefone_usuario ?></span><br />
-                                                <span>Email: <?php echo $result->email_usuario ?></span>
+                                                <span><?php echo $result->nome; ?></span> <br />
+                                                <span>Contato: <?php echo $result->telefone_usuario; ?></span><br />
+                                                <span>Email: <?php echo $result->email_usuario; ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -99,14 +98,13 @@
                     </div>
 
                     <div style="margin-top: 0; padding-top: 0">
-
                         <table class="table table-condensed">
                             <tbody>
                                 <?php if ($result->dataInicial != null) { ?>
                                     <tr>
                                         <td>
                                             <b>STATUS OS: </b>
-                                            <?php echo $result->status ?>
+                                            <?php echo $result->status; ?>
                                         </td>
 
                                         <td>
@@ -146,7 +144,7 @@
                                     <tr>
                                         <td colspan="6">
                                             <b>DESCRIÇÃO: </b>
-                                            <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                            <?php echo htmlspecialchars_decode($result->descricaoProduto); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -155,7 +153,7 @@
                                     <tr>
                                         <td colspan="6">
                                             <b>DEFEITO APRESENTADO: </b>
-                                            <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                            <?php echo htmlspecialchars_decode($result->defeito); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -164,7 +162,7 @@
                                     <tr>
                                         <td colspan="6">
                                             <b>OBSERVAÇÕES: </b>
-                                            <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                            <?php echo htmlspecialchars_decode($result->observacoes); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -173,7 +171,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <b>LAUDO TÉCNICO: </b>
-                                            <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                            <?php echo htmlspecialchars_decode($result->laudoTecnico); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -293,9 +291,9 @@
 
                         <?php
                         if ($totalProdutos != 0 || $totalServico != 0) {
-                            echo "<h4 style='text-align: right'>Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
+                            echo "<h4 style='text-align: right'>Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . '</h4>';
+                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . '</h4>' : '';
+                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . '</h4>' : '';
                         }
                         ?>
                     </div>
@@ -305,7 +303,7 @@
     </div>
 </div>
 
-<?= $modalGerarPagamento ?>
+<?php echo $modalGerarPagamento; ?>
 
 <!-- Modal visualizar anexo -->
 <div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

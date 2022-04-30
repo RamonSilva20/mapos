@@ -1,10 +1,11 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 /**
- * CodeIgniter Email Queue
+ * CodeIgniter Email Queue.
  *
  * A CodeIgniter library to queue e-mails.
  *
- * @package     CodeIgniter
  * @category    Libraries
  * @author      Thaynã Bruno Moretti
  * @link    http://www.meau.com.br/
@@ -22,13 +23,15 @@ class MY_Email extends CI_Email
 
     // PHP Nohup command line
     private $phpcli = 'nohup php';
+
     private $expiration = null;
 
     // Status (pending, sending, sent, failed)
     private $status;
 
     /**
-     * Constructor
+     * Constructor.
+     * @param mixed $config
      */
     public function __construct($config = [])
     {
@@ -45,13 +48,16 @@ class MY_Email extends CI_Email
     public function set_status($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
     /**
-     * Get
+     * Get.
      *
      * Get queue emails.
+     * @param null|mixed $limit
+     * @param null|mixed $offset
      * @return  mixed
      */
     public function get($limit = null, $offset = null)
@@ -66,9 +72,10 @@ class MY_Email extends CI_Email
     }
 
     /**
-     * Save
+     * Save.
      *
      * Add queue email to database.
+     * @param mixed $skip_job
      * @return  mixed
      */
     public function send($skip_job = false)
@@ -77,11 +84,11 @@ class MY_Email extends CI_Email
             return parent::send();
         }
 
-        $date = date("Y-m-d H:i:s");
+        $date = date('Y-m-d H:i:s');
 
-        $to = is_array($this->_recipients) ? implode(", ", $this->_recipients) : $this->_recipients;
-        $cc = implode(", ", $this->_cc_array);
-        $bcc = implode(", ", $this->_bcc_array);
+        $to = is_array($this->_recipients) ? implode(', ', $this->_recipients) : $this->_recipients;
+        $cc = implode(', ', $this->_cc_array);
+        $bcc = implode(', ', $this->_bcc_array);
 
         $dbdata = [
             'to' => $to,
@@ -97,7 +104,7 @@ class MY_Email extends CI_Email
     }
 
     /**
-     * Start process
+     * Start process.
      *
      * Start php process to send emails
      * @return  mixed
@@ -111,7 +118,7 @@ class MY_Email extends CI_Email
     }
 
     /**
-     * Send queue
+     * Send queue.
      *
      * Send queue emails.
      * @return  void
@@ -123,14 +130,14 @@ class MY_Email extends CI_Email
 
         $this->CI->db->where('status', 'pending');
         $this->CI->db->set('status', 'sending');
-        $this->CI->db->set('date', date("Y-m-d H:i:s"));
+        $this->CI->db->set('date', date('Y-m-d H:i:s'));
         $this->CI->db->update($this->table_email_queue);
 
         foreach ($emails as $email) {
-            $recipients = explode(", ", $email->to);
+            $recipients = explode(', ', $email->to);
 
-            $cc = !empty($email->cc) ? explode(", ", $email->cc) : [];
-            $bcc = !empty($email->bcc) ? explode(", ", $email->bcc) : [];
+            $cc = ! empty($email->cc) ? explode(', ', $email->cc) : [];
+            $bcc = ! empty($email->bcc) ? explode(', ', $email->bcc) : [];
 
             $this->_headers = unserialize($email->headers);
 
@@ -150,13 +157,13 @@ class MY_Email extends CI_Email
             $this->CI->db->where('id', $email->id);
 
             $this->CI->db->set('status', $status);
-            $this->CI->db->set('date', date("Y-m-d H:i:s"));
+            $this->CI->db->set('date', date('Y-m-d H:i:s'));
             $this->CI->db->update($this->table_email_queue);
         }
     }
 
     /**
-     * Retry failed emails
+     * Retry failed emails.
      *
      * Resend failed or expired emails
      * @return void
@@ -164,7 +171,7 @@ class MY_Email extends CI_Email
     public function retry_queue()
     {
         $expire = (time() - $this->expiration);
-        $date_expire = date("Y-m-d H:i:s", $expire);
+        $date_expire = date('Y-m-d H:i:s', $expire);
 
         $this->CI->db->set('status', 'pending');
         $this->CI->db->where("(date < '{$date_expire}' AND status = 'sending')");

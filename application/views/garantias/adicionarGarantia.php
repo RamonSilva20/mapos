@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -29,7 +29,7 @@
                         </div>
                         <div class="span3">
                             <label for="usuarios_id">Responsável<span class="required">*</span></label>
-                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $this->session->userdata('nome') ?>" disabled />
+                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $this->session->userdata('nome'); ?>" disabled />
                         </div>
                         <div class="span7">
                             <label for="refGarantia">Ref Garantia<span class="required">*</span></label>
@@ -45,9 +45,9 @@
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button class="button btn btn-success" id="btnContinuar">
-                              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                            <a href="<?php echo base_url() ?>index.php/garantias" class="button btn btn-mini btn-warning">
-                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
+                            <a href="<?php echo base_url(); ?>index.php/garantias" class="button btn btn-mini btn-warning">
+                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </form>
@@ -56,6 +56,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $("#cliente").autocomplete({

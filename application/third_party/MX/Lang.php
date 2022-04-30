@@ -1,7 +1,9 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Modular Extensions - HMVC
+ * Modular Extensions - HMVC.
  *
  * Adapted from the CodeIgniter Core Classes
  * @link    http://codeigniter.com
@@ -36,14 +38,14 @@
 class MX_Lang extends CI_Lang
 {
     /**
-     * [load description]
+     * [load description].
      *
      * @method load
      *
      * @param  [type]  $langfile   [description]
      * @param  string  $lang       [description]
-     * @param  boolean $return     [description]
-     * @param  boolean $add_suffix [description]
+     * @param  bool $return     [description]
+     * @param  bool $add_suffix [description]
      * @param  string  $alt_path   [description]
      * @param  string  $_module    [description]
      *
@@ -55,13 +57,14 @@ class MX_Lang extends CI_Lang
             foreach ($langfile as $_lang) {
                 $this->load($_lang);
             }
+
             return $this->language;
         }
 
         $deft_lang = CI::$APP->config->item('language');
         $idiom = ($lang === '') ? $deft_lang : $lang;
 
-        if (in_array($langfile.'_lang'.EXT, $this->is_loaded, true)) {
+        if (in_array($langfile . '_lang' . EXT, $this->is_loaded, true)) {
             return $this->language;
         }
 
@@ -71,9 +74,9 @@ class MX_Lang extends CI_Lang
         // Before PHP 7.1.0, list() only worked on numerical arrays and assumes the numerical indices start at 0.
         if (version_compare(phpversion(), '7.1', '<')) {
             // php version isn't high enough
-            list($path, $_langfile) = Modules::find($langfile.'_lang', $_module, 'language/'.$idiom.'/');
+            list($path, $_langfile) = Modules::find($langfile . '_lang', $_module, 'language/' . $idiom . '/');
         } else {
-            [$path, $_langfile] = Modules::find($langfile.'_lang', $_module, 'language/'.$idiom.'/');
+            [$path, $_langfile] = Modules::find($langfile . '_lang', $_module, 'language/' . $idiom . '/');
         }
 
         if ($path === false) {
@@ -86,7 +89,7 @@ class MX_Lang extends CI_Lang
                     return $lang;
                 }
                 $this->language = array_merge($this->language, $lang);
-                $this->is_loaded[] = $langfile.'_lang'.EXT;
+                $this->is_loaded[] = $langfile . '_lang' . EXT;
                 unset($lang);
             }
         }

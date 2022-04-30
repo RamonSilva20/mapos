@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -9,7 +11,7 @@ $config['payment_gateways'] = [
         'production' => false,
         'credentials' => [
             'client_id' => '',
-            'client_secret' => ''
+            'client_secret' => '',
         ],
         'timeout' => 30,
         'boleto_expiration' => 'P3D',
@@ -20,8 +22,8 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'new' => 'Cobrança / Assinatura gerada',
@@ -37,7 +39,7 @@ $config['payment_gateways'] = [
             'active' => 'Assinatura ativa Todas as cobranças estão sendo geradas',
             'finished' => 'Carnê está finalizado',
             'up_to_date' => 'Carnê encontra-se em dia',
-        ]
+        ],
     ],
     'MercadoPago' => [
         'name' => 'MercadoPago',
@@ -49,14 +51,14 @@ $config['payment_gateways'] = [
             'client_id' => '',
             'integrator_id' => '',
             'platform_id' => '',
-            'corporation_id' => ''
+            'corporation_id' => '',
         ],
         'boleto_expiration' => 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
                 'value' => 'boleto',
-            ]
+            ],
         ],
         'transaction_status' => [
             'pending' => 'O usuário ainda não concluiu o processo de pagamento',
@@ -67,8 +69,8 @@ $config['payment_gateways'] = [
             'rejected' => 'O pagamento foi rejeitado, o usuário pode tentar o pagamento novamente',
             'cancelled' => 'O pagamento foi cancelado por uma das partes ou porque o prazo para pagamento expirou',
             'refunded' => 'O pagamento foi reembolsado ao usuário',
-            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador'
-        ]
+            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador',
+        ],
     ],
     'Asaas' => [
         'name' => 'Asaas',
@@ -86,8 +88,8 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'PENDING' => 'Aguardando pagamento',
@@ -103,6 +105,6 @@ $config['payment_gateways'] = [
             'DUNNING_REQUESTED' => 'Em processo de recuperação',
             'DUNNING_RECEIVED' => 'Recuperada',
             'AWAITING_RISK_ANALYSIS' => 'Pagamento em análise',
-        ]
-    ]
+        ],
+    ],
 ];

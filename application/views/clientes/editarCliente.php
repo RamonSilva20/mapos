@@ -1,6 +1,7 @@
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/funcoes.js"></script>
+
 <style>
     #imgSenha {
         width: 18px;
@@ -76,6 +77,7 @@
         }
     }
 </style>
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -86,8 +88,8 @@
                 <h5>Editar Cliente</h5>
             </div>
             <?php if ($custom_error != '') {
-    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+            } ?>
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">
@@ -99,7 +101,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <?php echo form_hidden('idClientes', $result->idClientes) ?>
+                            <?php echo form_hidden('idClientes', $result->idClientes); ?>
                             <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
                             <div class="controls">
                                 <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo $result->nomeCliente; ?>" />
@@ -133,14 +135,14 @@
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
                                 <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
-                                <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
+                                <img id="imgSenha" src="<?php echo base_url(); ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Tipo de Cliente</label>
                             <div class="controls">
                                 <label for="fornecedor" class="btn btn-default">Fornecedor
-                                    <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="1" <?= ($result->fornecedor == 1) ? 'checked' : '' ?>>
+                                    <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="1" <?php echo ($result->fornecedor == 1) ? 'checked' : ''; ?>>
                                     <span class="badge">&check;</span>
                                 </label>
                             </div>
@@ -199,7 +201,7 @@
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-primary" style="max-width: 160px">
                                 <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url(); ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </div>
@@ -207,7 +209,8 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let container = document.querySelector('div');
@@ -217,15 +220,15 @@
         icon.addEventListener('click', function() {
             container.classList.toggle('visible');
             if (container.classList.contains('visible')) {
-                icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
+                icon.src = '<?php echo base_url(); ?>assets/img/eye-off.svg';
                 input.type = 'text';
             } else {
-                icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
+                icon.src = '<?php echo base_url(); ?>assets/img/eye.svg'
                 input.type = 'password';
             }
         });
 
-        $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+        $.getJSON('<?php echo base_url(); ?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
                 var curState = '<?php echo $result->estado; ?>';

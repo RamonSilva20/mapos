@@ -6,7 +6,7 @@ use Libraries\Gateways\Contracts\PaymentGateway;
 
 class GerencianetSdk extends BasePaymentGateway
 {
-    /** @var Gerencianet $gerenciaNetApi */
+    /** @var Gerencianet */
     private $gerenciaNetApi;
 
     private $gerenciaNetConfig;
@@ -34,7 +34,7 @@ class GerencianetSdk extends BasePaymentGateway
     public function cancelar($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -49,12 +49,12 @@ class GerencianetSdk extends BasePaymentGateway
     public function enviarPorEmail($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
         $emitente = $this->ci->mapos_model->getEmitente();
-        if (!$emitente) {
+        if (! $emitente) {
             throw new \Exception('Emitente não configurado!');
         }
 
@@ -68,7 +68,7 @@ class GerencianetSdk extends BasePaymentGateway
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = 'Cobrança - ' . $emitente[0]->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -80,7 +80,7 @@ class GerencianetSdk extends BasePaymentGateway
             $headers = [
                 'From' => $emitente[0]->email,
                 'Subject' => $assunto,
-                'Return-Path' => ''
+                'Return-Path' => '',
             ];
             $email = [
                 'to' => $remetente,
@@ -96,7 +96,7 @@ class GerencianetSdk extends BasePaymentGateway
     public function atualizarDados($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -106,14 +106,14 @@ class GerencianetSdk extends BasePaymentGateway
         }
 
         // Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
-        if ($result['data']['status'] == "paid" || $result['data']['status'] == "settled") {
+        if ($result['data']['status'] == 'paid' || $result['data']['status'] == 'settled') {
             // TODO: dar baixa no lançamento caso exista
         }
 
         $databaseResult = $this->ci->cobrancas_model->edit(
             'cobrancas',
             [
-                'status' => $result['data']['status']
+                'status' => $result['data']['status'],
             ],
             'idCobranca',
             $id
@@ -124,6 +124,7 @@ class GerencianetSdk extends BasePaymentGateway
             log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
+
             throw new \Exception('Erro ao atualizar cobrança!');
         }
     }
@@ -131,7 +132,7 @@ class GerencianetSdk extends BasePaymentGateway
     public function confirmarPagamento($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
-        if (!$cobranca) {
+        if (! $cobranca) {
             throw new \Exception('Cobrança não existe!');
         }
 
@@ -145,7 +146,7 @@ class GerencianetSdk extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto)
     {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+        return ($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100;
     }
 
     protected function gerarCobrancaBoleto($id, $tipo)
@@ -160,7 +161,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
+            : $this->ci->vendas_model->getById($id), ];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -218,9 +219,9 @@ class GerencianetSdk extends BasePaymentGateway
             ];
         } else {
             $customer = [
-                "juridical_person" => [
-                    "corporate_name" => $entity->nomeCliente,
-                    "cnpj" => $documento,
+                'juridical_person' => [
+                    'corporate_name' => $entity->nomeCliente,
+                    'cnpj' => $documento,
                 ],
                 'phone_number' => $telefone,
                 'email' => $entity->email,
@@ -234,11 +235,11 @@ class GerencianetSdk extends BasePaymentGateway
                 [
                     'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                     'amount' => 1,
-                    'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto))
-                ]
+                    'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
+                ],
             ],
             'metadata' => [
-                'notification_url' => 'http://mapos.com.br/'
+                'notification_url' => 'http://mapos.com.br/',
             ],
             'payment' => [
                 'banking_billet' => [
@@ -246,7 +247,7 @@ class GerencianetSdk extends BasePaymentGateway
                     'message' => 'Pago em qualquer loterica\nPagar até o vencimento\nCaixa após vencimento não aceitar',
                     'customer' => $customer,
                 ],
-            ]
+            ],
         ];
 
         $result = $this->gerenciaNetApi->oneStep([], $body);
@@ -295,7 +296,7 @@ class GerencianetSdk extends BasePaymentGateway
             : [];
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
+            : $this->ci->vendas_model->getById($id), ];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -319,7 +320,6 @@ class GerencianetSdk extends BasePaymentGateway
             0
         );
 
-
         if (empty($entity)) {
             throw new \Exception('OS ou venda não existe!');
         }
@@ -339,8 +339,8 @@ class GerencianetSdk extends BasePaymentGateway
                     [
                         'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                         'amount' => 1,
-                        'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto))
-                    ]
+                        'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
+                    ],
                 ],
             ]
         );
@@ -354,13 +354,13 @@ class GerencianetSdk extends BasePaymentGateway
 
         $result = $this->gerenciaNetApi->linkCharge(
             [
-                'id' => $response['data']['charge_id']
+                'id' => $response['data']['charge_id'],
             ],
             [
                 'message' => 'Pagamento referente a ' . $title,
                 'expire_at' => $expirationDate,
                 'request_delivery_address' => false,
-                'payment_method' => 'all'
+                'payment_method' => 'all',
             ]
         );
         if (intval($result['code']) !== 200) {

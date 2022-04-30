@@ -9,7 +9,7 @@ class Migration_add_controle_cobrancas extends CI_Migration
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'charge_id' => [
                 'type' => 'INT',
@@ -94,8 +94,8 @@ class Migration_add_controle_cobrancas extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idCobranca", true);
-        $this->dbforge->create_table("cobrancas", true);
+        $this->dbforge->add_key('idCobranca', true);
+        $this->dbforge->create_table('cobrancas', true);
         $this->db->query('ALTER TABLE  `cobrancas` ADD INDEX `fk_cobrancas_os1` (`os_id` ASC)');
         $this->db->query('ALTER TABLE  `cobrancas` ADD CONSTRAINT `fk_cobrancas_os1`
 			FOREIGN KEY (`os_id`)

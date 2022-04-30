@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists("dd")) {
+if (! function_exists('dd')) {
     function dd($var, ...$moreVars)
     {
         dump($var, $moreVars);
