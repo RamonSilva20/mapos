@@ -282,8 +282,8 @@
     $("#desconto").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
 
-        let ValorTotal = parseFloat(document.getElementById('total-venda').value);
-        let desconto = parseFloat(document.getElementById('desconto').value);
+       var ValorTotal = parseFloat(document.getElementById('total-venda').value);
+        var desconto = parseFloat(document.getElementById('desconto').value);
 
         if (desconto > ValorTotal) {
             $('#errorAlert').text('Desconto não pode ser maior que o valor total.').css("display", "inline").fadeOut(5000);
