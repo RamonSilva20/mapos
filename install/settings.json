@@ -1,15 +1,15 @@
 {
-	"title": "MAPOS - Sistema de Controle de Ordens de Serviço",
-	"extensions": [
-		"cURL",
-		"MySQLi",
-		"GD"
-	],
-  "database_file": "../banco.sql",
-  "writeable_directories": {
-    "files": "/updates",
-    "index": "/index.php",
-    "config": "/application/config/config.php",
-    "database": "/application/config/database.php"
-  }
+    "title": "MAPOS - Sistema de Controle de Ordens de Serviço",
+    "extensions": [
+        "cURL",
+        "MySQLi",
+        "GD"
+    ],
+    "database_file": "../banco.sql",
+    "writeable_directories": {
+        "files": "/updates",
+        "index": "/index.php",
+        "config": "/application/config/config.php",
+        "database": "/application/config/database.php"
+    }
 }

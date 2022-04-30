@@ -8,7 +8,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- atualização e adequações para usar PHP 8.0 como versão mínima e refatoração de código. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Atualização e adequações para usar PHP 8.0 como versão mínima e refatoração de código. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ### Fixed
 
