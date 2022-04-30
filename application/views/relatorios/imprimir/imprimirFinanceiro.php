@@ -36,6 +36,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 <?php
                                 $totalReceita = 0;
                                 $totalDespesa = 0;
