@@ -350,10 +350,14 @@ class Relatorios_model extends CI_Model
 
     public function vendasRapid($array = false)
     {
-        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
+        $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, vendas_id FROM itens_de_vendas GROUP BY vendas_id;';
+        $result = $this->db->query($query);
+
+        $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome, total_produtos.total_produto');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('total_produtos', 'total_produtos.vendas_id = vendas.idVendas', 'left');
         $this->db->order_by('vendas.idVendas', 'ASC');
 
         $result = $this->db->get();
@@ -383,9 +387,13 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = 'AND usuarios_id = ' . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas
+        $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, vendas_id FROM itens_de_vendas GROUP BY vendas_id;';
+        $result = $this->db->query($query);
+
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome, total_produtos.total_produto FROM vendas
         LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
         LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
+        LEFT JOIN total_produtos ON total_produtos.vendas_id = vendas.idVendas
         WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.idVendas";
 
         $result = $this->db->query($query);

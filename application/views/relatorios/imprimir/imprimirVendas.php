@@ -44,7 +44,7 @@
                                         echo '<td>' . $v->nomeCliente . '</td>';
                                         echo '<td align="center">' . $v->nome . '</td>';
                                         echo '<td align="center">' . date('d/m/Y', strtotime($v->dataVenda)) . '</td>';
-                                        echo '<td align="center">R$: ' . number_format($v->valorTotal, 2, ',', '.') . '</td>';
+                                        echo '<td align="center">R$: ' . number_format($v->total_produto, 2, ',', '.') . '</td>';
                                         echo '<td align="center">' . $v->desconto . '%</td>';
                                         echo '<td align="center">R$: ' . number_format($v->valor_desconto != 0 ? $v->valor_desconto : $v->valorTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
@@ -55,11 +55,13 @@
                                         <td align="right"><b>TOTAL: </b></td>
                                         <td align="center"><b>R$:
                                                 <?php
-                                                foreach ($vendas as $valorTotal => $value) {
-                                                    $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
-                                                }
-                                                echo number_format($sum, 2, ',', '.');
-                                                ?></b></td>
+                                                    $sum = 0;
+                                                    foreach ($vendas as $valorTotal => $value) {
+                                                        $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
+                                                    }
+                                                    echo number_format($sum, 2, ',', '.');
+                                                ?></b>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

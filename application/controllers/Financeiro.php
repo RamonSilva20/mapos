@@ -141,9 +141,11 @@ class Financeiro extends MY_Controller
             }
 
             $desconto = $valor_desconto;
+
             //cria variavel para pegar o valor total ja sem o desconto e soma com o desconto
-            $total_sem_desconto = $valor + $valor_desconto;
+            $total_sem_desconto = floatval($valor) + floatval($valor_desconto);
             $valor = $total_sem_desconto;
+
             //cria variavel para pegar o valor total ja com o desconto e diminui com o desconto
             $total_com_desconto = $valor - $valor_desconto;
             $valor_desconto = $total_com_desconto;
