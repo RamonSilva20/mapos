@@ -16,6 +16,7 @@
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='<?php echo base_url() ?>assets/css/boxicons/boxicons.min.css' rel='stylesheet'>
     <!-- Script webeddy.com.br -->
     <script>
         function formatar(mascara, documento) {
