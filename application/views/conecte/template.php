@@ -17,6 +17,7 @@
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='<?php echo base_url() ?>assets/css/boxicons/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
