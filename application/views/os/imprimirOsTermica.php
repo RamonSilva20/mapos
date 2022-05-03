@@ -11,7 +11,7 @@ $totalProdutos = 0; ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
         .table {
 
