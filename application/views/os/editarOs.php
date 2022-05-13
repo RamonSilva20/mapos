@@ -244,6 +244,14 @@
                                         <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
                                     </div>
                                     <div class="span2">
+                                        <label for="">Iniciado em</label>
+                                        <input type="text" placeholder="Data hora de inicio" pattern="^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9])$" id="iniciadoEm" name="iniciadoEm" class="span12" />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Tempo utilizado</label>
+                                        <input type="text" placeholder="Tempo utilizado" id="minutosGastos" name="minutosGastos" class="span12" />
+                                    </div>
+                                    <div class="span2">
                                         <label for="">&nbsp;</label>
                                         <button class="button btn btn-success" id="btnAdicionarProduto">
                                             <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
@@ -293,13 +301,13 @@
                         <div class="tab-pane" id="tab4">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico" method="post">
-                                    <div class="span6">
+                                    <div class="span4">
                                         <input type="hidden" name="idServico" id="idServico" />
                                         <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs; ?>" />
                                         <label for="">Serviço</label>
                                         <input type="text" class="span12" name="servico" id="servico" placeholder="Digite o nome do serviço" />
                                     </div>
-                                    <div class="span2">
+                                    <div class="span1">
                                         <label for="">Preço</label>
                                         <input type="text" placeholder="Preço" id="preco_servico" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
                                     </div>
@@ -308,6 +316,14 @@
                                         <input type="text" placeholder="Quantidade" id="quantidade_servico" name="quantidade" class="span12" />
                                     </div>
                                     <div class="span2">
+                                        <label for="">Iniciado em</label>
+                                        <input type="text" placeholder="FORMATO: AAAA-MM-DD HH-MM" pattern="^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9])$" id="iniciadoEm" name="iniciadoEm" class="span12" />
+                                    </div>
+                                    <div class="span1">
+                                        <label for="">Tempo</label>
+                                        <input type="text" placeholder="Minutos U." id="minutosGastos" name="minutosGastos" class="span12" />
+                                    </div>
+                                    <div class="span1">
                                         <label for="">&nbsp;</label>
                                         <button class="button btn btn-success">
                                             <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
@@ -322,6 +338,8 @@
                                                 <th>Serviço</th>
                                                 <th width="8%">Quantidade</th>
                                                 <th width="10%">Preço</th>
+                                                <th width="10%">Iniciado em</th>
+                                                <th width="10%">Tempo utilizado</th>
                                                 <th width="6%">Ações</th>
                                                 <th width="10%">Sub-totals</th>
                                             </tr>
@@ -333,10 +351,14 @@
                                                 $preco = $s->preco ?: $s->precoVenda;
                                                 $subtotals = $preco * ($s->quantidade ?: 1);
                                                 $totals = $totals + $subtotals;
+                                                $tempo = $s->tempo ?: $s->minutosGastos;
+                                                $tempoTotal = $tempoTotal +$tempo;
                                                 echo '<tr>';
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
                                                 echo '<td><div align="center">R$ ' . $preco  . '</div></td>';
+                                                echo '<td>' . $s->iniciadoEm  . '</td>';
+                                                echo '<td>' . ($s->minutosGastos ?: 30) . '</td>';
                                                 echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
                                                 echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
                                                 echo '</tr>';
@@ -344,9 +366,16 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                                <td colspan="6" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$ <?php echo number_format($totals, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="<?php echo number_format($totals, 2); ?>"></strong></div>
+                                                    <div align="center">
+                                                        <strong>
+                                                        
+                                                        R$ <?php echo number_format($totals, 2, ',', '.'); ?>
+                                                        <?php echo ' | '. $tempoTotal. ' Minutos ';?>
+                                                    <input type="hidden" id="total-servico" value="<?php echo number_format($totals, 2); ?>">
+                                                </strong>
+                                            </div>
                                                 </td>
                                             </tr>
                                         </tfoot>

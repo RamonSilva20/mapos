@@ -248,11 +248,16 @@ class Relatorios_model extends CI_Model
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_servicos SELECT SUM(subTotal) as total_servico, os_id FROM servicos_os GROUP BY os_id; ';
         $this->db->query($query);
 
-        $this->db->select('os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto');
+        //cria uma temp para armazenar o total em minutos
+        $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_tempo_servicos SELECT SUM(minutosGastos) as total_tempo_servico, os_id FROM servicos_os GROUP BY os_id; ';
+        $this->db->query($query);
+
+        $this->db->select('os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto, total_tempo_servicos.total_tempo_servico');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('total_produtos', 'total_produtos.os_id = os.idOs', 'left');
         $this->db->join('total_servicos', 'total_servicos.os_id = os.idOs', 'left');
+        $this->db->join('total_tempo_servicos', 'total_tempo_servicos.os_id = os.idOS', 'left');
         $this->db->order_by('os.dataInicial', 'DESC');
 
         $result = $this->db->get();
@@ -290,10 +295,16 @@ class Relatorios_model extends CI_Model
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_servicos SELECT SUM(subTotal) as total_servico, os_id FROM servicos_os GROUP BY os_id; ';
         $this->db->query($query);
 
-        $query = "SELECT os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto FROM os
+        //cria uma temp para armazenar o total em minutos
+        $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_tempo_servicos SELECT SUM(minutosGastos) as total_tempo_servico, os_id FROM servicos_os GROUP BY os_id; ';
+        $this->db->query($query);
+
+        $query = "SELECT os.*,clientes.nomeCliente, total_servicos.total_servico, total_produtos.total_produto, total_tempo_servicos.total_tempo_servico FROM os
                    LEFT JOIN total_produtos ON total_produtos.os_id = os.idOs
                    LEFT JOIN total_servicos ON total_servicos.os_id = os.idOs
+                   LEFT JOIN total_tempo_servicos ON total_tempo_servicos.os_id = os.idOS
                    LEFT JOIN clientes ON os.clientes_id = clientes.idClientes
+                   
                    WHERE idOs != 0 $whereData $whereCliente $whereResponsavel $whereStatus
                    ORDER BY os.dataInicial";
 

@@ -395,6 +395,7 @@ class Relatorios extends MY_Controller
         $totalProdutos = 0;
         $totalServicos = 0;
         $totalDesconto = 0;
+        $totalMinutos = 0;
         $totalValorDesconto = 0;
         $valorTotal = 0;
         foreach ($os as $o) {
@@ -507,6 +508,7 @@ class Relatorios extends MY_Controller
         $totalServicos = 0;
         $totalDesconto = 0;
         $totalValorDesconto = 0;
+        $totalMinutos = 0;
         $valorTotal = 0;
         foreach ($os as $o) {
             $totalProdutos += $isXls

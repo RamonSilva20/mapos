@@ -18,6 +18,7 @@
                     <th>Cod.</th>
                     <th>Nome</th>
                     <th>Preço</th>
+                    <th>Minutos estimados</th>
                     <th>Descrição</th>
                     <th>Ações</th>
                 </tr>
@@ -34,6 +35,7 @@
                         echo '<td>' . $r->idServicos . '</td>';
                         echo '<td>' . $r->nome . '</td>';
                         echo '<td>' . number_format($r->preco, 2, ',', '.') . '</td>';
+                        echo '<td>' . $r->minutosEstimados.'</td>';
                         echo '<td>' . $r->descricao . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {

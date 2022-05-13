@@ -304,6 +304,7 @@ CREATE TABLE IF NOT EXISTS `servicos` (
   `nome` VARCHAR(45) NOT NULL,
   `descricao` VARCHAR(45) NULL DEFAULT NULL,
   `preco` DECIMAL(10,2) NOT NULL,
+  `minutoEstimados` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`idServicos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
@@ -321,6 +322,8 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
   `os_id` INT(11) NOT NULL,
   `servicos_id` INT(11) NOT NULL,
   `subTotal` DECIMAL(10,2) NULL DEFAULT 0,
+  `minutosGastos` INT NOT NULL DEFAULT 0,
+  `iniciadoEm`VARCHAR(64),
   PRIMARY KEY (`idServicos_os`),
   INDEX `fk_servicos_os_os1` (`os_id` ASC),
   INDEX `fk_servicos_os_servicos1` (`servicos_id` ASC),

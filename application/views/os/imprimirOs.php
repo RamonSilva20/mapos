@@ -29,7 +29,7 @@ $totalProdutos = 0; ?>
 
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<< /td>
+                                            <<<< </td>
                                     </tr> <?php } else { ?> <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> ">
                                     </td>
                                     <td> <span style="font-size: 17px;">
@@ -151,10 +151,12 @@ $totalProdutos = 0; ?>
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
-                                        <th>Produtos</th>
+                                        <th >Produtos</th>
+                                        <th>     </th>
+                                        <th>     </th>
                                         <th>Qt</th>
                                         <th>V. UN R$</th>
-                                        <th>S.Total R$</th>
+                                        <th style="text-align: right;" >S.Total R$</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,15 +164,15 @@ $totalProdutos = 0; ?>
                                     foreach ($produtos as $p) {
                                         $totalProdutos = $totalProdutos + $p->subTotal;
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td colspan="3">' . $p->descricao . '</td>';
                                         echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '<td >' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td style="text-align: right;">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                        <td colspan="6" style="text-align: right"><strong>Total: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                         
                                     </tr>
                                 </tbody>
                             </table>
@@ -182,7 +184,9 @@ $totalProdutos = 0; ?>
                                         <th>Serviços</th>
                                         <th>Qt</th>
                                         <th>V. UN R$</th>
-                                        <th>S.Total R$</th>
+                                        <th>Iniciado em:</th>
+                                        <th>Tempo utilizado</th>
+                                        <th style="text-align: right;">S.Total R$</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,16 +196,19 @@ $totalProdutos = 0; ?>
                                         $preco = $s->preco ?: $s->precoVenda;
                                         $subtotal = $preco * ($s->quantidade ?: 1);
                                         $totalServico = $totalServico + $subtotal;
+                                        $tempoTotal = $tempoTotal +$s->minutosGastos;
                                         echo '<tr>';
                                         echo '<td>' . $s->nome . '</td>';
                                         echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                         echo '<td>' . $preco . '</td>';
-                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                        echo '<td>' .$s->iniciadoEm.'</td>';
+                                        echo '<td>' . ($s->minutosGastos) . '</td>';
+                                        echo '<td style="text-align: right;">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                        <td colspan="6" style="text-align: right"><strong>Total: R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -211,6 +218,7 @@ $totalProdutos = 0; ?>
                             echo "<h4 style='text-align: right'> Valor Total da OS: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
+                            echo "<h4 style='text-align: right'>Tempo dos serviços acima: ". $tempoTotal. " Minutos </h4>";
                         }
                         ?>
                         <table class="table table-bordered table-condensed">
