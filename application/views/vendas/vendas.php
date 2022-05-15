@@ -47,6 +47,7 @@
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirTermica/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
+                            if($faturado == "Sim"){echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirRecibo/' . $r->idVendas . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Recibo"><i class="fas fa-print"></i></a>';}
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';

@@ -16,6 +16,7 @@ class Os extends MY_Controller
         $this->load->helper('form');
         $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
+        $this->load->model('financeiro_model');
     }
 
     public function index()
@@ -385,7 +386,12 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-
+        $this->data['lancamentos'] = ($this->financeiro_model->get('lancamentos','valor,baixado,data_pagamento',"descricao = 'Fatura de OS - #".$this->uri->segment(3)."'",'1'));
+        if(!$this->data['lancamentos']){
+            $this->data['lancamentos'] = ($this->financeiro_model->get('lancamentos','valor,baixado,data_pagamento',"descricao = 'Fatura de OS Nº: ".$this->uri->segment(3)."'",'1'));
+        }
+       
+        //print_r($this->data['lancamentos']);die();
         $this->load->view('os/imprimirOsTermica', $this->data);
     }
 
@@ -1050,5 +1056,30 @@ class Os extends MY_Controller
         } else {
             echo json_encode(['result' => false]);
         }
+    }
+    #por Denis Souza 
+    public function imprimirRecibo()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['lancamentos'] = ($this->financeiro_model->get('lancamentos','valor,baixado,data_pagamento',"descricao = 'Fatura de OS - #".$this->uri->segment(3)."'",'1'));
+        if(!$this->data['lancamentos']){
+            $this->data['lancamentos'] = ($this->financeiro_model->get('lancamentos','valor,baixado,data_pagamento',"descricao = 'Fatura de OS Nº: ".$this->uri->segment(3)."'",'1'));
+        }
+        $this->load->view('os/imprimirReciboOs', $this->data);
     }
 }

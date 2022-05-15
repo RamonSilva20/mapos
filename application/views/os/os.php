@@ -162,6 +162,8 @@
 
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Termica Não Fiscal"><i class="fas fa-print"></i></a>';
+                                if($r->valorTotal >0){echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirRecibo/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir Recibo"><i class="fas fa-print"></i></a>';}
                             }
                             if ($editavel) {
                                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
