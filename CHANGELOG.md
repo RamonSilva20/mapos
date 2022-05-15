@@ -4,6 +4,17 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [4.39.0] - 2022-05-13
+
+### Fixed
+
+- Alinhamento preço na impressão A4.
+
+### Added
+
+- Tempo em serviços [@denis-ulterior](https://github.com/denis-ulterior)
+
 ## [4.38.0] - 2022-04-29
 
 ### Fixed

@@ -35,6 +35,7 @@
                                     <th width="400" align="center" style="font-size: 12px">DESCRIÇÃO</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL PRODUTOS</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL SERVIÇOS</th>
+                                    <th width="140" align="center" style="font-size: 12px">TOTAL MINUTOS</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL</th>
                                     <th width="140" align="center" style="font-size: 12px">DESCONTO</th>
                                     <th width="100" align="center" style="font-size: 12px">TOTAL COM DESCONTO</th>
@@ -51,17 +52,19 @@
                                         echo '<td><small>' . $c->descricaoProduto . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
+                                        echo '<td><small> ' . $c->total_tempo_servico . ' min</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>' . $c->desconto . '%</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '</tr>';
+                                        $total_minutos = $total_minutos+$c->total_tempo_servico;
                                     }
                                 ?>
-
                                 <tr style="background-color: gainsboro;">
                                     <td colspan="5"></td>
                                     <td align="center"><small>R$: <?= number_format($total_produtos, 2, ',', '.') ?></small></td>
                                     <td align="center"><small>R$: <?= number_format($total_servicos, 2, ',', '.') ?></small></td>
+                                    <td align="center"><small> Total tempo: <?= $total_minutos?> Minutos</small></td>
                                     <td align="center"><small>R$: <?= number_format($total_produtos + $total_servicos, 2, ',', '.') ?> </small></td>
                                     <td align="center"><small> </small></td>
                                     <td align="center"><small>R$: <?= number_format($total_geral, 2, ',', '.') ?></small></td>

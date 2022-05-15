@@ -24,6 +24,12 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label for="minutosEstimados" class="control-label"><span>Minutos estimados</span></label>
+                        <div class="controls">
+                            <input id="minutosEstimados" class="money" type="text" name="minutosEstimados" value="<?php echo $result->minutosEstimados ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label for="descricao" class="control-label">Descrição</label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao ?>" />

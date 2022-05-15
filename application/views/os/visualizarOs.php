@@ -240,6 +240,8 @@
                                         <th>Serviço</th>
                                         <th>Quantidade</th>
                                         <th>Preço unit.</th>
+                                        <th>Iniciado em</th>
+                                        <th>Tempo utilizado</th>
                                         <th>Sub-total</th>
                                     </tr>
                                 </thead>
@@ -253,12 +255,14 @@
                                         echo '<td>' . $s->nome . '</td>';
                                         echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                         echo '<td>' . $preco . '</td>';
+                                        echo '<td>' . $s->iniciadoEm  . '</td>';
+                                        echo '<td>' . ($s->minutosGastos ) . '</td>';
                                         echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
 
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
+                                        <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>
                                         </td>
                                     </tr>

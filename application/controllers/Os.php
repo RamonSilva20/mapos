@@ -702,6 +702,8 @@ class Os extends MY_Controller
             'quantidade' => $this->input->post('quantidade'),
             'preco' => $this->input->post('preco'),
             'os_id' => $this->input->post('idOsServico'),
+            'minutosGastos' => $this->input->post('minutosGastos'),
+            'iniciadoEm' => $this->input->post('iniciadoEm'),
             'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
         ];
 

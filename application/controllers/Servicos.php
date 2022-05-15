@@ -64,6 +64,7 @@ class Servicos extends MY_Controller
             $data = [
                 'nome' => set_value('nome'),
                 'descricao' => set_value('descricao'),
+                'minutosEstimados' => set_value('minutosEstimados'),
                 'preco' => $preco,
             ];
 
@@ -95,6 +96,7 @@ class Servicos extends MY_Controller
             $preco = str_replace(",", "", $preco);
             $data = [
                 'nome' => $this->input->post('nome'),
+                'minutosEstimados' => set_value('minutosEstimados'),
                 'descricao' => $this->input->post('descricao'),
                 'preco' => $preco,
             ];
