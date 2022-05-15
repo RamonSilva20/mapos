@@ -17,6 +17,7 @@ class Vendas extends MY_Controller
 
         $this->load->helper('form');
         $this->load->model('vendas_model');
+        $this->load->model('financeiro_model');
         $this->data['menuVendas'] = 'Vendas';
     }
 
