@@ -408,6 +408,9 @@ class Relatorios extends MY_Controller
             $totalDesconto += $isXls
                 ? floatval($o['desconto'])
                 : floatval($o->desconto);
+            $totalMinutos += $isXls
+                ? floatval($o['total_tempo_servico'])
+                : floatval($o->total_tempo_servico);
 
             $isXls
                 ?
@@ -415,11 +418,12 @@ class Relatorios extends MY_Controller
                 :
                 $totalValorDesconto += $o->valor_desconto ? floatval($o->valor_desconto) : floatval($o->total_produto) + floatval($o->total_servico);
         }
-
         if ($isXls) {
             $osFormatadas = array_map(function ($item) {
+               // print_r($item);die();
                 $subTotal = floatval($item['total_servico']) + floatval($item['total_produto']);
                 $total = floatval($item['valor_desconto']) ?: floatval($item['total_servico']) + floatval($item['total_produto']);
+
 
                 return [
                     'idOs' => $item['idOs'],
@@ -429,6 +433,7 @@ class Relatorios extends MY_Controller
                     'descricaoProduto' => $item['descricaoProduto'],
                     'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
                     'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
+                    'valorTempo' => $item['total_tempo_servico'] ? $item['total_tempo_servico'] : 0,
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
                     'total_geral_desconto' => $item['desconto'] ?: 0,
@@ -443,6 +448,7 @@ class Relatorios extends MY_Controller
                 'Descrição' => 'string',
                 'Total Produtos' => 'price',
                 'Total Serviços' => 'price',
+                'Total Minutos' => 'integer',
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
                 'Desconto %' => 'number',
@@ -463,6 +469,7 @@ class Relatorios extends MY_Controller
                 null,
                 $totalProdutos,
                 $totalServicos,
+                $totalMinutos,
                 $totalProdutos + $totalServicos,
                 $totalValorDesconto + $valorTotal,
             ]);
@@ -520,6 +527,9 @@ class Relatorios extends MY_Controller
             $totalDesconto += $isXls
                 ? floatval($o['desconto'])
                 : floatval($o->desconto);
+            $totalMinutos += $isXls
+                ? floatval($o['total_tempo_servico'])
+                : floatval($o->total_tempo_servico);
             $isXls
                 ?
                 $totalValorDesconto += $o['valor_desconto'] ? floatval($o['valor_desconto']) : floatval($o['total_servico']) + floatval($o['total_produto'])
@@ -540,6 +550,7 @@ class Relatorios extends MY_Controller
                     'descricaoProduto' => $item['descricaoProduto'],
                     'total_produto' => $item['total_produto'] ? $item['total_produto'] : 0,
                     'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
+                    'valorTempo' => $item['total_tempo_servico'] ? $item['total_tempo_servico'] : 0,
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
@@ -554,6 +565,7 @@ class Relatorios extends MY_Controller
                 'Descrição' => 'string',
                 'Total Produtos' => 'price',
                 'Total Serviços' => 'price',
+                'Total Minutos' => 'integer',
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
                 'Desconto %' => 'number',
@@ -574,6 +586,7 @@ class Relatorios extends MY_Controller
                 null,
                 $totalProdutos,
                 $totalServicos,
+                $totalMinutos,
                 $totalProdutos + $totalServicos,
                 $totalValorDesconto + $valorTotal,
             ]);
