@@ -84,6 +84,20 @@
                     </li>
                 <?php } ?>
 
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
+                    <li class="<?php if (isset($menuPdv)) {
+    echo 'active';
+}; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('pdv') ?>"><i class='bx bx-cart-alt iconX'></i></span>
+                            <span class="title">PDV</span>
+                            <span class="title-tooltip">PDV</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <!--MODULO ADCIONAL FRENTE DE CAIXA -->
+
+
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                     <li class="<?php if (isset($menuOs)) {
     echo 'active';

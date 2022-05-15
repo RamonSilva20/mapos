@@ -47,7 +47,9 @@
     shortcut.add("F7", function() {
       location.href = '<?= site_url('garantias'); ?>';
     });
-    shortcut.add("F8", function() {});
+    shortcut.add("F8", function() {
+      location.href = '<?= site_url('pdv'); ?>';
+    });
     shortcut.add("F9", function() {});
     shortcut.add("F10", function() {});
     shortcut.add("F11", function() {});
