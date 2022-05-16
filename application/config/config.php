@@ -420,8 +420,9 @@ $config['sess_regenerate_destroy'] = false;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= false;
 $config['cookie_httponly'] 	= false;
+$config['cookie_samesite'] 	= 'Strict';
+$config['cookie_secure']	= false;
 
 /*
 |--------------------------------------------------------------------------
