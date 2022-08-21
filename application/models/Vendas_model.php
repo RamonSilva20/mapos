@@ -184,6 +184,7 @@ class Vendas_model extends CI_Model
         }
 
         $produtos = $this->getProdutos($id);
+        $valorDesconto = $this->getById($id);
         $totalProdutos = array_reduce(
             $produtos,
             function ($carry, $produto) {
@@ -191,7 +192,7 @@ class Vendas_model extends CI_Model
             },
             0
         );
-        $amount = round(floatval($totalProdutos), 2);
+        $amount = $valorDesconto->valor_desconto != 0 ? round(floatval($valorDesconto->valor_desconto), 2) : round(floatval($totalProdutos), 2);
 
         if ($amount <= 0) {
             return;

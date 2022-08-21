@@ -4,6 +4,18 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.38.0] - 2022-04-29
+
+### Fixed
+
+- Correções gerais de bugs. [@Wilmerson](https://github.com/willph)
+
+### Added
+
+- Desconto em OS e Vendas. [@Wilmerson](https://github.com/willph)
+- Financeiro (parcelamento, desconto e melhorias). [@luizrn](https://github.com/luizrn)
+- Documentação de cronjobs no Windows. [@luizrn](https://github.com/luizrn)
+
 ## [4.37.0] - 2022-03-27
 
 ### Fixed

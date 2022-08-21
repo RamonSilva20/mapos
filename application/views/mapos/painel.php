@@ -690,7 +690,7 @@
         <h3 id="myModalLabel">Status OS Detalhada</h3>
     </div>
     <div class="modal-body">
-        <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
+        <div class="span5" id="divFormStatusOS" style="margin-left: 0"></div>
         <h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
         <h5 id="modalCliente" class="modal-cliente"></h5>
         <div id="modalDataInicial" class="modal-DataInicial"></div>
