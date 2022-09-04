@@ -170,7 +170,7 @@ $totalProdutos = 0; ?>
                                         echo '<tr>';
                                         echo '<td style="text-align: center">' . $s->nome . '</td>';
                                         echo '<td style="text-align: center">R$' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                        echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                        echo '<td style="text-align: center">' . $s->quantidade . '</td>';
                                         echo '<td style="text-align: center">R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
