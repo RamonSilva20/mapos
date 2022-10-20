@@ -9,75 +9,109 @@
 <link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
 
-<!--Action boxes-->
-<div class="container-fluid">
-    <div class="quick-actions_homepage">
-        <ul class="quick-actions">
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
-                <li class="bg_lb">
-                    <a href="<?= base_url() ?>index.php/clientes"> <i class="fas fa-users" style="font-size:36px"></i>
-                        <div>Clientes <span class="badge badge-light">F1</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
-                <li class="bg_lg">
-                    <a href="<?= base_url() ?>index.php/produtos"> <i class="fas fa-shopping-bag" style="font-size:36px"></i>
-                        <div>Produtos <span class="badge badge-light">F2</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
-                <li class="bg_ly">
-                    <a href="<?= base_url() ?>index.php/servicos"> <i class="fas fa-wrench" style="font-size:36px"></i>
-                        <div>Serviços <span class="badge badge-light">F3</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
-
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                <li class="bg_lo">
-                    <a href="<?= base_url() ?>index.php/os"> <i class="fas fa-diagnoses" style="font-size:36px"></i>
-                        <div>OS <span class="badge badge-light">F4</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
-
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-                <li class="bg_ls">
-                    <a href="<?= base_url() ?>index.php/vendas"><i class="fas fa-cash-register" style="font-size:36px"></i>
-                        <div>Vendas <span class="badge badge-light">F6</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
-
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
-                <li class="bg_ls">
-                    <a href="<?= base_url() ?>index.php/garantias"><i class="fas fa-book" style="font-size:36px"></i>
-                        <div>Termo Garantia <span class="badge badge-light">F7</span></div>
-                    </a>
-                </li>
-            <?php endif ?>
-        </ul>
-    </div>
+<!-- New Bem-vindos -->
+<div id="content-bemv">
+    <div class="bemv">Dashboard</div>
+    <div></div>
 </div>
+
+<!--Action boxes-->
+<ul class="cardBox">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers">Clientes</div>
+                <div class="cardName">F1</div>
+            </div>
+            <a href="<?= site_url('clientes') ?>">
+                <div class="iconBx">
+                    <i class='bx bx-group bx-border-circle'></i>
+                </div>
+            </a>
+        </li>
+    <?php endif ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers">Produtos</div>
+                <div class="cardName">F2</div>
+            </div>
+            <a href="<?= site_url('produtos') ?>">
+                <div class="iconBx">
+                    <i class='bx bx-package bx-border-circle'></i>
+                </div>
+            </a>
+        </li>
+    <?php endif ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers">Serviços</div>
+                <div class="cardName">F3</div>
+            </div>
+            <a href="<?= site_url('servicos') ?>">
+                <div class="iconBx">
+                    <i class='bx bx-stopwatch bx-border-circle'></i>
+                </div>
+            </a>
+        </li>
+    <?php endif ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+        <li class="card">
+            <div>
+                <div class="numbers N-tittle">Ordens</div>
+                <div class="cardName">F4</div>
+            </div>
+            <a href="<?= site_url('os') ?>">
+                <div class="iconBx">
+                    <i class='bx bx-spreadsheet bx-border-circle'></i>
+                </div>
+            </a>
+        </li>
+    <?php endif ?>
+
+    <script src="<?= base_url('assets/js/clock_time.js') ?>"></script>
+
+    <div Class="card-cl">
+        <div class="clock-card">
+            <div class="clock-flex">
+                <span class="num hour_num">00</span>
+                <div class="tit">Horas</div>
+            </div>
+            <span class="colun" id="colun-1">:</span>
+            <div class="clock-flex">
+                <span class="num min_num">00</span>
+                <div class="tit">Minutos</div>
+            </div>
+            <div class="time_am_pm">
+                <span class="num am_pm">AM</span>
+            </div>
+        </div>
+    </div>
+</ul>
 <!--End-Action boxes-->
 
-<div class="row-fluid" style="margin-top: 0">
-    <div class="span12">
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon"><i class="fas fa-calendar"></i></span>
-                <h5>Agenda</h5>
+<div class="row-fluid" style="margin-top: 0; display: flex">
+    <div class="Sspan12">
+        <div class="widget-box2">
+            <div>
+                <h5 class="cardHeader">Agenda</h5>
             </div>
             <div class="widget-content">
-                <table class="table table-bordered">
-
+                <table>
                     <div id='source-calendar'>
                         <form method="post">
-                            <select class="span12" name="statusOsGet" id="statusOsGet" value="">
+                            <select style="padding-left: 30px" class="span12" name="statusOsGet" id="statusOsGet" value="">
                                 <option value="">Todos os Status</option>
                                 <option value="Aberto">Aberto</option>
                                 <option value="Faturado">Faturado</option>
@@ -89,30 +123,366 @@
                                 <option value="Aguardando Peças">Aguardando Peças</option>
                                 <option value="Aprovado">Aprovado</option>
                             </select>
-                            <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
+                            <button type="button" class="btn-xs" id="btn-calendar"><i class="bx bx-search iconX2"></i></button>
                         </form>
-
                     </div>
-
                 </table>
             </div>
         </div>
+
+        <!-- New widget right -->
+        <div class="new-statisc">
+            <div class="widget-box-new" style="height:100%">
+                <div>
+                    <h5 class="cardHeader">Estatísticas do Sistema</h5>
+                </div>
+
+                <div class="new-bottons">
+                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card" title="Adicionar Clientes e Fornecedores" class="tooltip fade bottom in">
+                        <div><i class='bx bxs-group iconBx'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
+                            <div class="cardName">Add Clientes</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card" title="Adicionar Produtos" class="tip-bottom">
+                        <div><i class='bx bxs-package iconBx2'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
+                            <div class="cardName">Add Produtos</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card">
+                        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
+                            <div class="cardName">Add Serviços</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card" title="Adicionar Ordens de Serviço" class="tip-bottom">
+                        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
+                            <div class="cardName">Add Ordens</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card">
+                        <div><i class='bx bxs-receipt iconBx6'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
+                            <div class="cardName">Add Garantias</div>
+                        </div>
+                    </a>
+
+                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card" title="Adicionar Vendas" class="tip-bottom">
+                        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
+                        <div>
+                            <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
+                            <div class="cardName">Add Vendas</div>
+                        </div>
+                    </a>
+
+                    <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
+                    <?php if ($estatisticas_financeiro != null) {
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+
+                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+                                <?php $diaRec = "VALOR_" . date('m') . "_REC";
+                                $diaDes = "VALOR_" . date('m') . "_DES"; ?>
+
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova receita" class="card">
+                                    <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
+                                    <div>
+                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
+                                        <div class="cardName">Receita do dia</div>
+                                    </div>
+                                </a>
+
+                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" title="Cadastrar nova despesa" class="card">
+                                    <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
+                                    <div>
+                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
+                                        <div class="cardName">Despesa do dia</div>
+                                    </div>
+                                </a>
+                            <?php endif ?>
+
+                    <?php  }
+} ?>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="span12" style="margin-left: 0">
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon"><i class="fas fa-shopping-bag"></i></span>
-                <h5>Produtos Com Estoque Mínimo</h5>
+</div>
+<!-- Fim new widget right -->
+
+<?php if ($estatisticas_financeiro != null) {
+    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
+            <!-- Start Charts -->
+            <div class="new-balance">
+                <div class="widget-box0">
+                    <div class="widget-title2">
+                        <h5 class="cardHeader">Balanço Mensal do Ano</h5>
+                        <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
+                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                            <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
+                        </form>
+                    </div>
+                    <div class="widget-content" style="padding:10px 25px 5px 25px">
+                        <div class="row-fluid" style="margin-top:-35px;">
+                            <div class="span12">
+                                <canvas id="myChart" style="overflow-x: scroll;margin-left: -14px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget-box-statist">
+                    <h5 class="cardHeader">Estatísticas Financeira</h5>
+                    <div class="widget-content" style="padding:10px;margin:25px 0 0">
+                        <canvas id="statusOS"> </canvas>
+                    </div>
+                </div>
+            </div>
+        <?php endif ?>
+
+<script type="text/javascript">
+    if (window.outerWidth > 2000) {
+        Chart.defaults.font.size = 15;
+    };
+    if (window.outerWidth < 2000 && window.outerWidth > 1367) {
+        Chart.defaults.font.size = 11;
+    };
+    if (window.outerWidth < 1367 && window.outerWidth > 480) {
+        Chart.defaults.font.size = 9.5;
+    };
+    if (window.outerWidth < 480) {
+        Chart.defaults.font.size = 8.5;
+    };
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var StatusOS = document.getElementById('statusOS').getContext('2d');
+
+    var myChart = new Chart(ctx, {
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            datasets: [{
+                    label: 'Receita Líquida',
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
+                    ],
+
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderRadius: 15,
+                },
+
+                {
+                    label: 'Receita Bruta',
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
+                    ],
+
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                    borderRadius: 15,
+                },
+
+                {
+                    label: 'Despesas',
+                    data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
+                        <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
+                    ],
+
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderRadius: 15,
+                },
+
+                {
+                    label: 'Inadimplência',
+                    data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
+                        <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
+                    ],
+
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderRadius: 15,
+                }
+            ]
+
+        },
+        // configuração
+        type: 'bar',
+        options: {
+            locale: 'pt-BR',
+            scales: {
+                y: {
+                    ticks: {
+                        callback: (value, index, values) => {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                maximumSignificantDidits: 1
+                            }).format(value);
+                        }
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Meses'
+                    }
+                }
+            },
+
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        beforeTitle: function(context) {
+                            return 'Referente ao mês de';
+                        }
+                    }
+                },
+
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                    }
+                }
+            }
+        }
+    });
+
+    var myChart = new Chart(statusOS, {
+        data: {
+            labels: [
+                'Receita total', 'Receita pendente',
+                'Previsto em caixa', 'Despesa total',
+                'Despesa pendente', 'Previsto a entrar'
+            ],
+            datasets: [{
+                label: 'Total',
+                data: [
+                    <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
+                    <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
+                    <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
+                    <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
+                    <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
+                ],
+
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderWidth: 1
+            }]
+        },
+
+        // configuração
+        type: 'polarArea',
+        options: {
+            locale: 'pt-BR',
+            scales: {
+                r: {
+                    ticks: {
+                        callback: (value, index, values) => {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                maximumSignificantDidits: 1
+                            }).format(value);
+                        }
+                    },
+                    beginAtZero: true,
+                }
+            },
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+
+                    }
+                }
+            }
+        }
+    });
+
+    function responsiveFonts() {
+        myChart.update();
+    }
+</script>
+<?php  }
+} ?>
+</div>
+</div>
+
+<!-- Start Staus OS -->
+<div class="span12A" style="margin-left: 0">
+    <div class="AAA">
+        <div class="widget-box0">
+            <div>
+                <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
             </div>
             <div class="widget-content">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Cod. Item</th>
+                            <th>Cod.</th>
                             <th>Produto</th>
                             <th>Preço de Venda</th>
                             <th>Estoque</th>
-                            <th>Estoque Mínimo</th>
+                            <th class="ph3">Estoque Mínimo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -123,7 +493,7 @@
                                     <td>
                                         <?= $p->idProdutos ?>
                                     </td>
-                                    <td>
+                                    <td class="cli1">
                                         <?= $p->descricao ?>
                                     </td>
                                     <td>R$
@@ -132,22 +502,23 @@
                                     <td>
                                         <?= $p->estoque ?>
                                     </td>
-                                    <td>
+                                    <td class="ph3">
                                         <?= $p->estoqueMinimo ?>
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn btn-info">
-                                                <i class="fas fa-edit"></i>
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3">
+                                                <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn btn-primary tip-top" title="Atualizar Estoque"><i class="fas fa-plus-square"></i></a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5" title="Atualizar Estoque">
+                                                <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="3">Nenhum produto com estoque baixo.</td>
+                                <td colspan="6">Nenhum produto com estoque baixo.</td>
                             </tr>
                         <?php endif ?>
                     </tbody>
@@ -156,71 +527,71 @@
         </div>
     </div>
 
-    <div class="span12" style="margin-left: 0">
-        <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon"><i class="fas fa-diagnoses"></i></span>
-                <h5>Ordens de Serviço Em Aberto</h5>
-            </div>
-            <div class="widget-content">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>N° OS</th>
-                            <th>Data Inicial</th>
-                            <th>Data Final</th>
-                            <th>Cliente</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($ordens != null) : ?>
-                            <?php foreach ($ordens as $o) : ?>
-                                <tr>
-                                    <td>
-                                        <?= $o->idOs ?>
-                                    </td>
-                                    <td>
-                                        <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                    </td>
 
-                                    <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
 
-                                    <td>
-                                        <?= $o->nomeCliente ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                            <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn">
-                                                <i class="fas fa-eye"></i> </a>
-                                        <?php endif ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        <?php else : ?>
-                            <tr>
-                                <td colspan="3">Nenhuma OS em aberto.</td>
-                            </tr>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon"><i class="fas fa-diagnoses"></i></span>
-            <h5>Ordens de Serviço Aguardando Peças</h5>
+    <div class="widget-box0">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>N° OS</th>
+                        <th>N°</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Cliente</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($ordens != null) : ?>
+                        <?php foreach ($ordens as $o) : ?>
+                            <tr>
+                                <td>
+                                    <?= $o->idOs ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                </td>
+
+                                <td><?php if ($o->dataFinal != null) {
+    echo date('d/m/Y', strtotime($o->dataFinal));
+} else {
+    echo "";
+} ?></td>
+
+                                <td class="cli1">
+                                    <?= $o->nomeCliente ?>
+                                </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5">Nenhuma OS em aberto.</td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="widget-box0">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviço Aguardando Peças</h5>
+        </div>
+        <div class="widget-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Cliente</th>
@@ -240,36 +611,36 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td>
+                                <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn">
-                                            <i class="fas fa-eye"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="3">Nenhuma OS Aguardando Peças.</td>
+                            <td colspan="5">Nenhuma OS Aguardando Peças.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon"><i class="fas fa-diagnoses"></i></span>
-            <h5>Ordens de Serviço em Andamento</h5>
+
+    <div class="widget-box0">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviço Em Andamento</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>N° OS</th>
+                        <th>N°</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Cliente</th>
@@ -289,20 +660,20 @@
                                 <td>
                                     <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
                                 </td>
-                                <td>
+                                <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn">
-                                            <i class="fas fa-eye"></i> </a>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe">
+                                            <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="3">Nenhuma OS em Andamento.</td>
+                            <td colspan="5">Nenhuma OS em Andamento.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
@@ -310,397 +681,7 @@
         </div>
     </div>
 </div>
-
-<?php if ($estatisticas_financeiro != null) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
-
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-            <div class="row-fluid" style="margin-top: 0">
-
-                <div class="row-fluid" style="margin-top: 0;">
-                    <div class="span12">
-                        <div class="widget-box">
-                            <div class="widget-title">
-                                <span class="icon"><i class="fas fa-diagnoses"></i></span>
-                                <h5>
-                                    Balanço Mensal do Ano:
-                                </h5>
-                                <form method="get">
-                                    <input type="number" name="year" style="height: 1.1rem; margin-bottom: 0; margin-top: 0.2rem" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
-                                    <button type="submit" class="btn-xs" style="height: 1.8rem; margin-bottom: 0; margin-top: 0.2rem">Pesquisar</button>
-                                </form>
-                            </div>
-                            <div class="widget-content">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div id="chart-vendas-mes1" style=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <script src="<?= base_url('assets/js/highchart/highcharts.js') ?>"></script>
-
-            <script type="text/javascript">
-                $(function() {
-                    var myChart = Highcharts.chart('chart-vendas-mes1', {
-                        chart: {
-                            type: 'column'
-                        },
-                        title: {
-                            text: 'Financeiro'
-                        },
-                        xAxis: {
-                            categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-                        },
-                        yAxis: {
-                            title: {
-                                text: 'Reais',
-                                format: 'R$: {value}'
-                            }
-                        },
-                        tooltip: {
-                            valueDecimals: 2,
-                            valuePrefix: 'R$: '
-                        },
-                        plotOptions: {
-                            series: {
-                                dataLabels: {
-                                    enabled: true,
-                                    format: 'R$: {y}',
-                                }
-                            }
-                        },
-                        credits: {
-                            enabled: false
-                        },
-                        series: [{
-                                name: 'Receita Líquida',
-                                color: '#98CE00', //COR DO LADO POSITIVO DA BARRA "RECEITA LIQUIDA"
-                                negativeColor: '#00CED1', //COR DO LADO NEGATIVO DA BARRA "RECEITA LIQUIDA"
-                                data: [
-                                    [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>]
-                                ]
-                            },
-                            {
-                                name: 'Receita Bruta',
-                                color: '#5EB1BF',//COR DO LADO NEGATIVO DA BARRA "RECEITA BRUTA"
-                                negativeColor: '#D32D41',//COR DO LADO NEGATIVO DA BARRA "RECEITA BRUTA"
-                                data: [
-                                    [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_FEV_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAR_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_ABR_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAI_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUN_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUL_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_AGO_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_SET_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_OUT_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_NOV_REC); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_DEZ_REC); ?>]
-                                ]
-                            },
-                            {
-                                name: 'Despesas',
-                                color: '#D84727', //COR DO LADO POSITIVO DA BARRA "DESPESAS"
-                                negativeColor: '#5EB1BF', //COR DO LADO NEGATIVO DA BARRA "DESPESAS"
-                                data: [
-                                    [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_FEV_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAR_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_ABR_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_MAI_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUN_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_JUL_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_AGO_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_SET_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_OUT_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_NOV_DES); ?>],
-                                    [<?php echo($financeiro_mes->VALOR_DEZ_DES); ?>]
-                                ]
-                            },
-                            {
-                                name: 'Inadimplência',
-                                color: '#EF7B45',//COR DO LADO POSITIVO DA BARRA "INADIMPLENCIA"
-                                negativeColor: '#D84727',//COR DO LADO NEGATIVO DA BARRA "INADIMPLENCIA"
-                                data: [
-                                    [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>],
-                                    [<?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>]
-                                ]
-                            }
-                        ]
-                    });
-                });
-            </script>
-        <?php endif ?>
-<?php  }
-} ?>
-
-<?php if ($estatisticas_financeiro != null) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
-
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-            <div class="row-fluid" style="margin-top: 0">
-
-                <div class="span4">
-
-                    <div class="widget-box">
-                        <div class="widget-title"><span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
-                            <h5>Estatísticas financeiras - Realizado</h5>
-                        </div>
-                        <div class="widget-content">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div id="chart-financeiro" style=""></div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="span4">
-
-                    <div class="widget-box">
-                        <div class="widget-title"><span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
-                            <h5>Estatísticas financeiras - Pendente</h5>
-                        </div>
-                        <div class="widget-content">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div id="chart-financeiro2" style=""></div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="span4">
-
-                    <div class="widget-box">
-                        <div class="widget-title"><span class="icon"><i class="fas fa-cash-register"></i></span>
-                            <h5>Total em caixa / Previsto</h5>
-                        </div>
-                        <div class="widget-content">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div id="chart-financeiro-caixa" style=""></div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        <?php endif ?>
-
-<?php  }
-} ?>
-
-<?php if ($os != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
-    <div class="row-fluid" style="margin-top: 0">
-
-        <div class="span12">
-
-            <div class="widget-box">
-                <div class="widget-title"><span class="icon"><i class="fas fa-diagnoses"></i></span>
-                    <h5>Estatísticas de OS</h5>
-                </div>
-                <div class="widget-content">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div id="chart-os" style=""></div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-
-
-<div class="row-fluid" style="margin-top: 0">
-
-    <div class="span12">
-
-        <div class="widget-box">
-            <div class="widget-title"><span class="icon"><i class="fas fa-signal"></i></span>
-                <h5>Estatísticas do Sistema</h5>
-            </div>
-            <div class="widget-content">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <ul class="site-stats">
-                            <li class="bg_lh"><i class="fas fa-users"></i> <strong>
-                                    <?= $this->db->count_all('clientes'); ?></strong> <small>Clientes</small></li>
-                            <li class="bg_lh"><i class="fas fa-shopping-bag"></i> <strong>
-                                    <?= $this->db->count_all('produtos'); ?></strong> <small>Produtos </small></li>
-                            <li class="bg_lh"><i class="fas fa-diagnoses"></i> <strong>
-                                    <?= $this->db->count_all('os'); ?></strong> <small>Ordens de Serviço</small></li>
-                            <li class="bg_lh"><i class="fas fa-wrench"></i> <strong>
-                                    <?= $this->db->count_all('servicos'); ?></strong> <small>Serviços</small></li>
-
-                        </ul>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?php if ($os != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs')) { ?>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var data = [
-                <?php foreach ($os as $o) {
-    echo "['" . $o->status . "', " . $o->total . "],";
-} ?>
-
-            ];
-            var plot1 = jQuery.jqplot('chart-os', [data], {
-                seriesDefaults: {
-                    // Make this a pie chart.
-                    seriesColors: ['#ffb703','#fb8500','#219ebc','#023047','#8ecae6','#e76f51'], //COR DE CADA BARRA DO GRAFICO DE PIZZA "ESTATISTICAS DE OS", ALTERAR CONFORME ORDEM DE EXIBICAO
-                    renderer: jQuery.jqplot.PieRenderer,
-                    rendererOptions: {
-                        // Put data labels on the pie slices.
-                        // By default, labels show the percentage of the slice.
-                        showDataLabels: true
-                    }
-                },
-                legend: {
-                    show: true,
-                    location: 'e'
-                }
-            });
-
-        });
-    </script>
-
-<?php
-} ?>
-
-
-
-<?php if (isset($estatisticas_financeiro) && $estatisticas_financeiro != null && $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {
-        ?>
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-                var data2 = [
-                    ['Total Receitas', <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>],
-                    ['Total Despesas', <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>]
-                ];
-                var plot2 = jQuery.jqplot('chart-financeiro', [data2], {
-
-                    seriesColors: ["#98CE00", "#e76f51", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"], //COR DAS BARRAS DO GRAFICO "ESTATISTICAS FINANCEIRAS REALIZADAS"
-                    seriesDefaults: {
-                        // Make this a pie chart.
-                        renderer: jQuery.jqplot.PieRenderer,
-                        rendererOptions: {
-                            // Put data labels on the pie slices.
-                            // By default, labels show the percentage of the slice.
-                            dataLabels: 'value',
-                            showDataLabels: true
-                        }
-                    },
-                    legend: {
-                        show: true,
-                        location: 'e'
-                    }
-                });
-
-
-                var data3 = [
-                    ['Total Receitas', <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>],
-                    ['Total Despesas', <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>]
-                ];
-                var plot3 = jQuery.jqplot('chart-financeiro2', [data3], {
-
-                        seriesColors: ["#90be6d", "#f94144", "#EAA228", "#579575", "#839557", "#958c12", "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"],//COR DAS BARRAS DO GRAFICO "ESTATISTICAS FINANCEIRAS PENDENTE"
-                        seriesDefaults: {
-                            // Make this a pie chart.
-                            renderer: jQuery.jqplot.PieRenderer,
-                            rendererOptions: {
-                                // Put data labels on the pie slices.
-                                // By default, labels show the percentage of the slice.
-                                dataLabels: 'value',
-                                showDataLabels: true
-                            }
-                        },
-                        legend: {
-                            show: true,
-                            location: 'e'
-                        }
-                    }
-
-                );
-
-
-                var data4 = [
-                    ['Total em Caixa', <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>],
-                    ['Total a Entrar', <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>]
-                ];
-                var plot4 = jQuery.jqplot('chart-financeiro-caixa', [data4], {
-
-                        seriesColors: ["#2D3E00", "#58355E", "#d8b83f", "#ff5800", "#0085cc"], //COR DAS BARRAS DO GRAFICO "TOTAL EM CAIXA"
-                        seriesDefaults: {
-                            // Make this a pie chart.
-                            renderer: jQuery.jqplot.PieRenderer,
-                            rendererOptions: {
-                                // Put data labels on the pie slices.
-                                // By default, labels show the percentage of the slice.
-                                dataLabels: 'value',
-                                showDataLabels: true
-                            }
-                        },
-                        legend: {
-                            show: true,
-                            location: 'e'
-                        }
-                    }
-
-                );
-
-
-            });
-        </script>
-
-<?php
-    }
-} ?>
+<!-- Fim Staus OS -->
 
 <!-- Modal Status OS Calendar -->
 <div id="calendarModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -709,7 +690,7 @@
         <h3 id="myModalLabel">Status OS Detalhada</h3>
     </div>
     <div class="modal-body">
-        <div class="span12" id="divFormStatusOS" style="margin-left: 0"></div>
+        <div class="span5" id="divFormStatusOS" style="margin-left: 0"></div>
         <h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
         <h5 id="modalCliente" class="modal-cliente"></h5>
         <div id="modalDataInicial" class="modal-DataInicial"></div>
@@ -748,9 +729,9 @@
             <input type="hidden" id="modalIdExcluir" name="id" value="" />
             <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Excluir</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
 </div>
@@ -778,9 +759,9 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-primary">Atualizar</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
         </div>
     </form>
 </div>

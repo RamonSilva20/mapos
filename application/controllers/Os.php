@@ -136,7 +136,7 @@ class Os extends MY_Controller
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
                     $remetentes = [];
                     switch ($this->data['configuration']['os_notification']) {
                         case 'todos':
@@ -227,6 +227,16 @@ class Os extends MY_Controller
             ];
             $os = $this->os_model->getById($this->input->post('idOs'));
 
+            //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
+
+            if (strtolower($this->input->post('status')) == "cancelado" && strtolower($os->status) != "cancelado") {
+                $this->devolucaoEstoque($this->input->post('idOs'));
+            }
+
+            if (strtolower($os->status) == "cancelado" && strtolower($this->input->post('status')) != "cancelado") {
+                $this->debitarEstoque($this->input->post('idOs'));
+            }
+
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
@@ -238,7 +248,7 @@ class Os extends MY_Controller
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum') {
+                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
                     $remetentes = [];
                     switch ($this->data['configuration']['os_notification']) {
                         case 'todos':
@@ -443,7 +453,7 @@ class Os extends MY_Controller
             if ($ValidarEmail) {
                 if (empty($this->data['result']->email) || !filter_var($this->data['result']->email, FILTER_VALIDATE_EMAIL)) {
                     $this->session->set_flashdata('error', 'Por favor preencha o email do cliente');
-                    redirect(site_url('os/visualizar/').$this->uri->segment(3));
+                    redirect(site_url('os/visualizar/') . $this->uri->segment(3));
                 }
             }
 
@@ -461,6 +471,32 @@ class Os extends MY_Controller
 
         $this->session->set_flashdata('success', 'O sistema está com uma configuração ativada para não notificar. Entre em contato com o administrador.');
         redirect(site_url('os'));
+    }
+
+    private function devolucaoEstoque($id)
+    {
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade . '. Motivo: Cancelamento/Exclusão');
+                }
+            }
+        }
+    }
+
+    private function debitarEstoque($id)
+    {
+        if ($produtos = $this->os_model->getProdutos($id)) {
+            $this->load->model('produtos_model');
+            if ($this->data['configuration']['control_estoque']) {
+                foreach ($produtos as $p) {
+                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' baixa do estoque. Quantidade: ' . $p->quantidade . '. Motivo: Mudou status que já estava Cancelado para outro');
+                }
+            }
+        }
     }
 
     public function excluir()
@@ -489,14 +525,10 @@ class Os extends MY_Controller
             }
         }
 
-        if ($produtos = $this->os_model->getProdutos($id)) {
-            $this->load->model('produtos_model');
-            if ($this->data['configuration']['control_estoque']) {
-                foreach ($produtos as $p) {
-                    $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: produto id ' . $p->produtos_id . ' teve baixa de estoque quantidade: ' . $p->quantidade);
-                }
-            }
+        $osStockRefund = $this->os_model->getById($id);
+        //Verifica para poder fazer a devolução do produto para o estoque caso OS seja excluida.
+        if (strtolower($osStockRefund->status) != "cancelado") {
+            $this->devolucaoEstoque($id);
         }
 
         $this->os_model->delete('servicos_os', 'os_id', $id);
@@ -598,6 +630,12 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '-');
             }
+
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $id);
+            $this->db->update('os');
+
             log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
 
             return $this->output
@@ -632,6 +670,12 @@ class Os extends MY_Controller
             if ($this->data['configuration']['control_estoque']) {
                 $this->produtos_model->updateEstoque($produto, $quantidade, '+');
             }
+
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $idOs);
+            $this->db->update('os');
+
             log_info('Removeu produto de uma OS. ID (OS): ' . $idOs);
 
             echo json_encode(['result' => true]);
@@ -664,6 +708,11 @@ class Os extends MY_Controller
         if ($this->os_model->add('servicos_os', $data) == true) {
             log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
 
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $this->input->post('idOsServico'));
+            $this->db->update('os');
+
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200)
@@ -683,6 +732,10 @@ class Os extends MY_Controller
 
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
             log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->where('idOs', $idOs);
+            $this->db->update('os');
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
@@ -809,6 +862,46 @@ class Os extends MY_Controller
         }
     }
 
+    public function adicionarDesconto()
+    {
+        if ($this->input->post('desconto') == "") {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['messages' => 'Campo desconto vazio']));
+        } else {
+            $idOs = $this->input->post('idOs');
+            $data = [
+                'desconto' => $this->input->post('desconto'),
+                'valor_desconto' => $this->input->post('resultado')
+            ];
+            $editavel = $this->os_model->isEditable($idOs);
+            if (!$editavel) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'messages', 'Desconto não pode ser adiciona. Os não ja Faturada/Cancelada']));
+            }
+            if ($this->os_model->edit('os', $data, 'idOs', $idOs) == true) {
+                log_info('Adicionou um desconto na OS. ID: ' . $idOs);
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(201)
+                    ->set_output(json_encode(['result' => true, 'messages' => 'Desconto adicionado com sucesso!']));
+            } else {
+                log_info('Ocorreu um erro ao tentar adiciona desconto a OS: ' . $idOs);
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'messages', 'Ocorreu um erro ao tentar adiciona desconto a OS.']));
+            }
+        }
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(400)
+            ->set_output(json_encode(['result' => false, 'messages', 'Ocorreu um erro ao tentar adiciona desconto a OS.']));
+    }
+
     public function faturar()
     {
         $this->load->library('form_validation');
@@ -831,10 +924,12 @@ class Os extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-
+            $os = $this->os_model->getById($this->input->post('os_id'));
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => $this->input->post('valor'),
+                'valor' => getAmount($this->input->post('valor')),
+                'desconto' => $os->desconto,
+                'valor_desconto' => $os->valor_desconto,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -850,7 +945,7 @@ class Os extends MY_Controller
             if (!$editavel) {
                 return $this->output
                     ->set_content_type('application/json')
-                    ->set_status_header(200)
+                    ->set_status_header(400)
                     ->set_output(json_encode(['result' => false]));
             }
 

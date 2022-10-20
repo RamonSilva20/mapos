@@ -20,7 +20,7 @@
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
@@ -72,9 +72,11 @@
 
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="text-align: center">
-                                            <button class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Cadastrar</button>
-                                            <a href="<?php echo base_url() ?>index.php/mine/os" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                                            <button class="button btn btn-success" id="btnContinuar">
+                                              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Cadastrar</span></button>
+                                            <a href="<?php echo base_url() ?>index.php/mine/os" class="button btn btn-mini btn-warning">
+                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>

@@ -16,7 +16,7 @@ class Login extends CI_Controller
     public function sair()
     {
         $this->session->sess_destroy();
-        redirect('login');
+        return redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function verificarLogin()
@@ -48,7 +48,7 @@ class Login extends CI_Controller
 
                 // Verificar credenciais do usuário
                 if (password_verify($password, $user->senha)) {
-                    $session_data = ['nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
+                    $session_data = ['nome' => $user->nome, 'email' => $user->email, 'url_image_user' => $user->url_image_user, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
                     $this->session->set_userdata($session_data);
                     log_info('Efetuou login no sistema');
                     $json = ['result' => true];

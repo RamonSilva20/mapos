@@ -4,6 +4,66 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.38.0] - 2022-04-29
+
+### Fixed
+
+- Correções gerais de bugs. [@Wilmerson](https://github.com/willph)
+
+### Added
+
+- Desconto em OS e Vendas. [@Wilmerson](https://github.com/willph)
+- Financeiro (parcelamento, desconto e melhorias). [@luizrn](https://github.com/luizrn)
+- Documentação de cronjobs no Windows. [@luizrn](https://github.com/luizrn)
+
+## [4.37.0] - 2022-03-27
+
+### Fixed
+
+- Correções gerais de bugs. [@Wilmerson](https://github.com/willph)
+- Correções gerais de bugs de layout. [@MilsonElias](https://github.com/MilsonElias)
+
+### Added
+
+- Implementado login com senha e recuperação de senha em área do cliente. [@Wilmerson](https://github.com/willph)
+
+## [4.36.2] - 2022-03-02
+
+### Fixed
+
+- Corrigido ícones em ações de detalhes/visualizar/atualizar cobranças. [@Wilmerson](https://github.com/willph)
+
+## [4.36.1] - 2022-02-23
+
+### Fixed
+- Corrigido deleção de anotações e serviços da OS. [@Wilmerson](https://github.com/willph)
+
+## [4.36.0] - 2022-02-20
+
+### Added
+- Adicionado novo layout referente a área do usuário e do cliente. Sendo o mesmo também responsivo. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado novo tema claro e tema escuro referente a área do usuário. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado nova logomarca. [@MilsonElias](https://github.com/MilsonElias)
+
+- Adicionado função em os.php para facilitar a visualização da OS em garantia, sem garantia e garantia vencida. [Luccas Woiciechoski] e [@Wilmerson](https://github.com/willph)
+
+- Adicionado função em painel.php mostrando receita dia e despesa dia. [@MilsonElias](https://github.com/MilsonElias) e [@Wilmerson](https://github.com/willph)
+
+- Adicionado função de adicionar e alterar imagem do usuário (foto do perfil). [@MilsonElias](https://github.com/MilsonElias) e [@Wilmerson](https://github.com/willph)
+
+## [4.35.2] - 2021-10-10
+
+### Fixed
+- Adequação para exibir mensagem de erro ao tentar faturar venda sem produtos e OS sem produtos e/ou serviços. [@visaotec](https://github.com/visaotec)
+
+## [4.35.1] - 2021-10-02
+
+### Fixed
+- Correção de bug que faturava OS/Venda incorretamente com valores superiores a R$ 1000,00. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Corrigido configuração de controle de edição de OS. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.35.0] - 2021-09-04
 
 ### Added

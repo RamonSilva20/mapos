@@ -317,6 +317,7 @@ class Os_model extends CI_Model
     {
         $totalServico = 0;
         $totalProdutos = 0;
+        $valorDesconto = 0;
         if ($servicos = $this->getServicos($id)) {
             foreach ($servicos as $s) {
                 $preco = $s->preco ?: $s->precoVenda;
@@ -328,8 +329,11 @@ class Os_model extends CI_Model
                 $totalProdutos = $totalProdutos + $p->subTotal;
             }
         }
+        if ($valorDescontoBD = $this->getById($id)) {
+            $valorDesconto = $valorDescontoBD->valor_desconto;
+        }
 
-        return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos];
+        return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos, 'valor_desconto' => $valorDesconto];
     }
 
     public function isEditable($id = null)
@@ -340,7 +344,7 @@ class Os_model extends CI_Model
         if ($os = $this->getById($id)) {
             $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
             if ($osT) {
-                return !(bool)$this->data['configuration']['control_editos'];
+                return $this->data['configuration']['control_editos'] == '1';
             }
         }
         return true;
@@ -353,7 +357,7 @@ class Os_model extends CI_Model
         }
 
         $result = $this->valorTotalOS($id);
-        $amount = round(floatval($result['totalServico'] + $result['totalProdutos']), 2);
+        $amount = $result['valor_desconto'] != 0 ? round(floatval($result['valor_desconto']), 2) : round(floatval($result['totalServico'] + $result['totalProdutos']), 2);
 
         if ($amount <= 0) {
             return;

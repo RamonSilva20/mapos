@@ -1,7 +1,7 @@
 <div class="accordion" id="collapse-group">
     <div class="accordion-group widget-box">
         <div class="accordion-heading">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
                     <span class="icon"><i class="fas fa-shopping-bag"></i></span>
                     <h5>Dados do Produto</h5>
@@ -13,7 +13,7 @@
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>
+                            <td style="text-align: center; width: 30%"><strong>Código de Barra</strong></td>
                             <td>
                                 <?php echo $result->codDeBarra ?>
                             </td>

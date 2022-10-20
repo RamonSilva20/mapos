@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `telefone` VARCHAR(20) NOT NULL,
   `celular` VARCHAR(20) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
   `dataCadastro` DATE NULL DEFAULT NULL,
   `rua` VARCHAR(70) NULL DEFAULT NULL,
   `numero` VARCHAR(15) NULL DEFAULT NULL,
@@ -43,7 +44,15 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
-
+CREATE TABLE `resets_de_senha` ( 
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(200) NOT NULL , 
+  `token` VARCHAR(255) NOT NULL , 
+  `data_expiracao` DATETIME NOT NULL, 
+  `token_utilizado` TINYINT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 -- -----------------------------------------------------
 -- Table `categorias`
@@ -109,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `permissoes_id` INT NOT NULL,
   `dataExpiracao` date DEFAULT NULL,
   `asaas_id` VARCHAR(255) DEFAULT NULL,
+  `url_image_user` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
   CONSTRAINT `fk_usuarios_permissoes1`
@@ -128,7 +138,9 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `lancamentos` (
   `idLancamentos` INT(11) NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
-  `valor` VARCHAR(15) NOT NULL,
+  `valor` DECIMAL(10, 2) NULL DEFAULT 0,
+  `desconto` DECIMAL(10, 2) NULL DEFAULT 0,
+  `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `data_vencimento` DATE NOT NULL,
   `data_pagamento` DATE NULL DEFAULT NULL,
   `baixado` TINYINT(1) NULL DEFAULT 0,
@@ -203,7 +215,9 @@ CREATE TABLE IF NOT EXISTS `os` (
   `status` VARCHAR(45) NULL DEFAULT NULL,
   `observacoes` TEXT NULL DEFAULT NULL,
   `laudoTecnico` TEXT NULL DEFAULT NULL,
-  `valorTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `valorTotal` DECIMAL(10, 2) NULL DEFAULT 0,
+  `desconto`DECIMAL(10, 2) NULL DEFAULT 0,
+  `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NOT NULL,
   `lancamento` INT(11) NULL DEFAULT NULL,
@@ -261,10 +275,10 @@ CREATE TABLE IF NOT EXISTS `produtos_os` (
   `idProdutos_os` INT(11) NOT NULL AUTO_INCREMENT,
   `quantidade` INT(11) NOT NULL,
   `descricao` VARCHAR(80) NULL,
-  `preco` VARCHAR(15) NULL,
+  `preco` DECIMAL(10,2) NULL DEFAULT 0,
   `os_id` INT(11) NOT NULL,
   `produtos_id` INT(11) NOT NULL,
-  `subTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `subTotal` DECIMAL(10,2) NULL DEFAULT 0,
   PRIMARY KEY (`idProdutos_os`),
   INDEX `fk_produtos_os_os1` (`os_id` ASC),
   INDEX `fk_produtos_os_produtos1` (`produtos_id` ASC),
@@ -303,10 +317,10 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
   `idServicos_os` INT(11) NOT NULL AUTO_INCREMENT,
   `servico` VARCHAR(80) NULL,
   `quantidade` DOUBLE NULL,
-  `preco` VARCHAR(15) NULL,
+  `preco` DECIMAL(10,2) NULL DEFAULT 0,
   `os_id` INT(11) NOT NULL,
   `servicos_id` INT(11) NOT NULL,
-  `subTotal` VARCHAR(15) NULL DEFAULT NULL,
+  `subTotal` DECIMAL(10,2) NULL DEFAULT 0,
   PRIMARY KEY (`idServicos_os`),
   INDEX `fk_servicos_os_os1` (`os_id` ASC),
   INDEX `fk_servicos_os_servicos1` (`servicos_id` ASC),
@@ -330,8 +344,9 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `vendas` (
   `idVendas` INT NOT NULL AUTO_INCREMENT,
   `dataVenda` DATE NULL,
-  `valorTotal` VARCHAR(45) NULL,
-  `desconto` VARCHAR(45) NULL,
+  `valorTotal` DECIMAL(10, 2) NULL DEFAULT 0,
+  `desconto` DECIMAL(10, 2) NULL DEFAULT 0,
+  `valor_desconto` DECIMAL(10, 2) NULL DEFAULT 0,
   `faturado` TINYINT(1) NULL,
   `observacoes` TEXT NULL,
   `observacoes_cliente` TEXT NULL,
@@ -399,9 +414,9 @@ CREATE TABLE `cobrancas` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
   `idItens` INT NOT NULL AUTO_INCREMENT,
-  `subTotal` VARCHAR(45) NULL,
+  `subTotal` DECIMAL(10,2) NULL DEFAULT 0,
   `quantidade` INT(11) NULL,
-  `preco` VARCHAR(15) NULL,
+  `preco` DECIMAL(10,2) NULL DEFAULT 0,
   `vendas_id` INT NOT NULL,
   `produtos_id` INT(11) NOT NULL,
   PRIMARY KEY (`idItens`),
@@ -609,7 +624,9 @@ INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (9, 'control_editos', '1'),
 (10, 'control_datatable', '1'),
 (11, 'pix_key', ''),
-(12, 'os_status_list', '[\"Aberto\",\"Faturado\",\"Negocia\\u00e7\\u00e3o\",\"Em Andamento\",\"Or\\u00e7amento\",\"Finalizado\",\"Cancelado\",\"Aguardando Pe\\u00e7as\",\"Aprovado\"]');
+(12, 'os_status_list', '[\"Aberto\",\"Faturado\",\"Negocia\\u00e7\\u00e3o\",\"Em Andamento\",\"Or\\u00e7amento\",\"Finalizado\",\"Cancelado\",\"Aguardando Pe\\u00e7as\",\"Aprovado\"]'),
+(13, 'control_edit_vendas', '1'),
+(14, 'email_automatico', '1');
 
 INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data`) VALUES
 (1, 'Administrador', 'a:53:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:9:"aGarantia";s:1:"1";s:9:"eGarantia";s:1:"1";s:9:"dGarantia";s:1:"1";s:9:"vGarantia";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:10:"aPagamento";N;s:10:"ePagamento";N;s:10:"dPagamento";N;s:10:"vPagamento";N;s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:10:"cAuditoria";s:1:"1";s:6:"cEmail";s:1:"1";s:8:"cSistema";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";s:9:"aCobranca";s:1:"1";s:9:"eCobranca";s:1:"1";s:9:"dCobranca";s:1:"1";s:9:"vCobranca";s:1:"1";}', 1, 'admin_created_at');

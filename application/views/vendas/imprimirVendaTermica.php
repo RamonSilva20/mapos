@@ -3,7 +3,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Map OS</title>
+    <title>Map_Vendas_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -12,11 +12,10 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
-
     <style>
         .table {
-            
-            width:72mm;
+
+            width: 72mm;
             margin: 0 auto;
         }
     </style>
@@ -33,18 +32,20 @@
                                 <?php if ($emitente == null) { ?>
                                     <tr>
                                         <td colspan="4" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<</td> </tr> <?php
-                                                            } else { ?> <tr>
+                                            <<<< /td>
+                                    </tr> <?php
+                                        } else { ?> <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo 'CNPJ: '.$emitente[0]->cnpj; ?> </br>
+                                                <?php echo 'CNPJ: ' . $emitente[0]->cnpj; ?> </br>
                                                 <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br>
-                                                <span><?php echo 'Fone: ' . $emitente[0]->telefone; ?></span></td>
-                                                            </tr>
-                                                            <tr>
+                                            <span><?php echo 'Fone: ' . $emitente[0]->telefone; ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="4" style="width: 100%;">#Venda: <span>
                                                 <?php echo $result->idVendas ?></span>
-                                                <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y'); ?></span>
+                                            <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y'); ?></span>
                                             <?php if ($result->faturado) : ?>
                                                 <br>
                                                 Vencimento:
@@ -53,7 +54,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                } ?>
+                                        } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -76,7 +77,6 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -94,25 +94,30 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                        foreach ($produtos as $p) {
-                                            $totalProdutos = $totalProdutos + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+                                    foreach ($produtos as $p) {
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td>' . $p->descricao . '</td>';
+                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
+                                    <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
                                     <tr>
-                                        <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                        <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
+                                        <td>
+                                            <strong>
+                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                                            </strong>
+                                        </td>
                                     </tr>
+                                    <?php } ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right">
-                                        <h4 style="text-align: right">Valor Total: R$
-                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
-                        </h4>
+                                            <h4 style="text-align: right">Total: R$
+                                                <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
+                                            </h4>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -120,7 +125,6 @@
                         <?php
                         } ?>
                         <hr />
-                        
                     </div>
                 </div>
             </div>

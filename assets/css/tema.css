@@ -1,219 +1,294 @@
 /* ======================================*/
 /*  Thomas Lage - lage.thomas@gmail.com  */
 /*=======================================*/
-
 /* ===========================> FOCUS <=========================== */
 
 /* INPUT DE BUSCA NA PÁGINA */
-#search input:focus[type=text]{
-    border: 1px solid;
-    border-top:none;
-    border-bottom: none;
-    border-color: red;
-    background-color: #FFFFFF;
-    color:#000000;
-}
-
-/* ===========================> ACTIVE <=========================== */
-
-/* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li.active a{
-    background-color: #7BCAE1;
-}
-
-/* MENUS LATERAIS*/
-#sidebar > ul > li.active{
-    background-color: rgba(79, 176, 241, 0.548);
+#content {
+  background: none repeat scroll 0 0 var(--bodycolor-w);
 }
 
 /* ITENS ATIVOS */
-#sidebar > ul > li.active a{
-    color:black;
-}  
-
-/* ===========================> HOVERS <=========================== */
-
-/*MENUS LATERAIS*/
-#sidebar > ul > li > a:hover{
-    background-color: #27a9e3;
-    color: #fff;
+#sidebar > ul > li.active a {
+  background-color: #525a64;
+  color        : #ffffff;
+  border-radius: 5px;
+}
+#user-nav > ul > li > a:hover,#user-nav > ul > li.open > a {
+  color: #090909;
 }
 
-/* ICONES DE VISUALIZAR */
-.visualizar:hover{
-    background-color: #548B54;
+#sidebar > ul > li > a:hover {
+  background-color: #909eb5;
+  color        : #fff;
+  border-radius: 5px;
 }
 
-/* INPUT DE BUSCA NA PÁGINA */
-#search input:hover[type=text]{
-    border: 1px solid;
-    border-top:none;
-    border-bottom: none;
-    border-color: red;
-    color:#000000;
+.visualizar:hover {
+  background-color: #548b54;
 }
 
-/* LINHA */
-li:hover{
-    color:#666;
+.widget-box,
+.widget-box0,
+.widget-box1,
+.widget-box2,
+.widget-box-new,
+.widget-box-statist {
+  background: var(--widget-box-w);
+  border    : 1px solid rgb(0 0 0 / 8%);
+  box-shadow: 0 0 10px rgb(0 0 0 / 4%);
 }
 
-/* SUBMENU FINANCEIRO E OUTROS*/
-#sidebar > ul li ul li a:hover{
-    background-color: #7BCAE1;
+/* LOGO */
+#newlog .title01 {
+  color: var(--subtitle-w);
 }
 
-/* MENU SUPERIOR (SAIR, VERSÂO, MINHA CONTA)*/
-#user-nav > ul > li > a:hover{
-    background-color: #7BCAE1;
+#sidebar li .title-tooltip {
+  background   : #6c6e78;
+  color        : #fff;
 }
 
-/* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > a > .label:hover{
-    background-color: #ffffff;
+#sidebar li .icon,
+#sidebar li .title {
+  color     : var(--title-w);
+  transition: var(--tran-02);
+}
+#sidebar > ul li ul li a:hover {
+  background-color: #2c88ff;
 }
 
-/*ITENS DO DASHBOARD - ICONES*/
+#user-nav > ul > li > a:hover {
+  opacity: 0.7;
+}
+
+#sidebar > ul > li > a > .label:hover {
+  background-color: #ffffff;
+}
+
 .quick-actions li a:hover {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
-/* ===========================> CSS NORMAL <=========================== */
-
-/* BORDAR REDONDA EM TODOS OS INPUTS */
-input {
-    border-radius: 7px !important;
+body {
+  background: var(--bodycolor-w);
 }
 
-/* BACKGROUND DO SISTEMA */
-body{
-    background-color: white;
+#sidebar > ul > li {
+  border: none !important;
 }
 
-/* REMOVER BORDAS ENTRE OS ITENS */
-#sidebar > ul > li{
-    border:none !important;
+#sidebar > ul > li > ul {
+  background-color: #fbfcff;
 }
 
-/* COR DOS CAMPOS DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > ul{
-    background-color:#E0E0E0;
-}
-/* COR DOS TEXTOS DENTRO DOS SUBMENUS (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul li ul li a{color:black;}
-
-/* BORDA NOS MENUS LATERAIS */
-#sidebar > ul{
-    border:none;
+#sidebar > ul li ul li a {
+  color: black;
 }
 
-/* ICONES DOS ITENS DO MENU LATERAL E OUTROS */
-#user-nav > ul > li > a > i, #sidebar li a i{
-    opacity: .99;
+#sidebar {
+  background  : var(--bodycolor-w);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* CORES DOS  TEXTOS DO MENI LATERAL */
-#sidebar > ul > li > a{
-    color:#000000;
+#sidebar > ul {
+  border: none;
 }
 
-/* COR DO FUNDO DOS BOTÕES (FINANCEIRO, RELATORIO, CONFIGURAÇÃO) */
-#sidebar > ul > li > a > .label{
-    background-color: #ffffff;
+#user-nav > ul > li > a > i,
+#sidebar li a i {
+  opacity: 0.99;
 }
 
-/* COR DOS ICONES MENU LATERAL E MENU SUPERIOR */
-#user-nav > ul > li > a > i, #sidebar li a i{
-    color:#000000;
+#sidebar > ul > li > a {
+  color: #72737a;
 }
 
-/*ITENS DO DASHBOARD - ICONES*/
-.bg_lr {border-radius: 5px;}
-.bg_ls {border-radius: 5px;}
-.bg_lo {border-radius: 5px;}
-.bg_ly {border-radius: 5px;}
-.bg_lg {border-radius: 5px;}
-.bg_lb {border-radius: 5px;}
-
-/* TEMPO DECARGA DA TELA */
-.tempo-carga{
-    color: #787878;
-    margin: 10px 0 0 20px;
+#sidebar li a:hover {
+  background: #25262620;
 }
 
-/* ICONE RELÓGIO */
-.icon-time{
-    color:#000000 !important;
+#sidebar li a:hover .iconX,
+#sidebar li a:hover .title {
+  color: #000;
+}
+#sidebar li.active {
+  background: #c5d1d6;
 }
 
-/* ESTATISTICAS DO SISTEMA*/
-.bg_lh{
-    border-radius: 5px;
+#sidebar li.active .iconX,
+#sidebar li.active .title {
+  color: #04395b;
 }
 
-/*CABEÇALHO E BARCUMB*/
-#header{background-color: #ffffff}
-#breadcrumb{background-color: #D0D0D0}
-#breadcrumb a{color: #000000}
-
-/* RELOGIO */
-.textoHora{
-    color: #000000; 
+#newlog .title1 {
+  color: var(--title-w);
 }
 
-/* BORDA ENTRE OS ITENS DO MENU SUPERIOR */
-#user-nav > ul > li{
-    border-top:none;
-    border-bottom: none;
-    border-left: 1px solid;
-    border-right: none;
-    border-color: #D0D0D0;
+.cardBox .card {
+  background: #ffffff;
 }
 
-/* BORDA AO LADO DIRETO DO BOTÂO (SAIR DO SISTEMA) */
-#user-nav > ul{
-    border-left:none;
-    border-right: 1px solid;
-    border-color: #E8E8E8;
+.tempo-carga {
+  color : #787878;
+  margin: 10px 0 0 20px;
 }
 
-/* TEXTOS DO MENU SUPERIOR */
-.navbar-inverse .brand, .navbar-inverse .nav>li>a{
-    color: #000000;
-    text-shadow:none;
+.icon-time {
+  color: #000000 !important;
 }
 
-/* PESQUISA */
-#search input[type=text]{
-    color:#000000;
-    background-color: #ffffff;
-}
-#search button{
-    border-radius:5px;
-    background-color: #ffffff;
-}
-#search button i{
-    color:black;
+.navebarn {
+  background-color: var(--bodycolor-w);
 }
 
-/* ICONES*/
-.btn{border-radius:5px;}
-.btn [class^="icon-"], .nav [class^="icon-"]{
-    color:#FFFFFF
+#header {
+  background-color: var(--bodycolor-w);
 }
 
-/* ICONES DE VISUALIZAR */
-.visualizar{
-    background-color: #7CCD7C;
+#breadcrumb a {
+  color: var(--cinza0);
+    border: 1px solid var(--cinza0);
+}
+
+#breadcrumb a:hover {
+  color: #ffffff;
+  background: var(--cinza0);
+}
+
+.textoHora {
+  color: #000000;
+}
+
+#user-nav > ul > li {
+  border-top   : none;
+  border-bottom: none;
+  padding      : 0;
+}
+
+#user-nav > ul {
+  border-left: none;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a {
+  color: #8c98a5;
+  text-shadow: none;
+}
+
+#sidebar .search-box {
+  background: var(--bodycolor-w);
+  border    : 1px solid rgb(0 0 0 / 20%);
+}
+
+.search-box input {
+  background: var(--bodycolor-w);
+  color: var(--widget-box-c);
+}
+
+#search input[type="text"] {
+  color           : #8c98a5;
+  background-color: #ffffff;
+}
+
+#search button {
+  border-radius   : 5px;
+  background-color: #ffffff;
+}
+
+#search button i {
+  color: black;
+}
+
+.bemv {
+  color: var(--subtitle-w);
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  background: #f3f4f6;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  background: #f3f4f6;
+}
+
+.btn [class^="icon-"],
+.nav [class^="icon-"] {
+  color: #ffffff;
+}
+
+#userr .userT0 {
+  color: var(--subtitle-w);
+}
+
+.visualizar {
+  background-color: #7ccd7c;
+}
+
+#header h1 {
+  background-color: #f2f2f2;
+}
+
+#footer {
+  background: var(--bodycolor-w);
+  border-top: 1px solid rgb(0 0 0 / 5%);
+}
+
+.new-bottons .card:hover {
+  text-decoration: none;
+  background     : #fbf8f8;
+}
+
+.widget-box0 .cards:nth-child(1) {
+  background-color: #cdcfdf;
+  color: #252341;
+}
+
+#sidebar .text-white {
+  color: #292929;
+}
+
+.cardBox .card,
+.cardBox .card-cl {
+  box-shadow: 0 5px 10px rgb(0 0 0 / 8%);
+}
+
+.cardBox .card .numbers {
+  position   : relative;
+  font-weight: 500;
+  font-size  : 1.3em;
+  color      : #0d0d10;
+}
+
+.cardBox .card .iconBx {
+  font-size: 3.3em;
+  color: #292929;
+  text-decoration: none;
+  text-shadow    : 0 1px 6px rgb(249 246 246 / 10%);
 }
 
 /* Responsive design */
+@media (min-width: 481px) and (max-width: 768px) {
+  #sidebar .mode {
+    background: #ffffff30 !important;
+    color     : #51576c !important;
+  }
+}
+
 @media (max-width: 480px) {
-    #user-nav {
-        border-top:1px solid #D0D0D0;
-        background:#FFF;
-    }
-    #sidebar > ul li span {
-        color:#000;
-    }
+  #sidebar.open .toggle {
+    background: var(--funSider-w);
+  }
+
+  #sidebar {
+    background  : var(--funSider-w) !important;
+  }
+
+  #sidebar .mode {
+    background: #ffffff30 !important;
+    color     : #51576c !important;
+  }
+
+  #sidebar > ul li span {
+    color: #000;
+  }
 }

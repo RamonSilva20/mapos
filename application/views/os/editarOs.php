@@ -23,46 +23,49 @@
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Ordem de Serviço</h5>
+                <h5>Editar Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($result->faturado == 0) { ?>
-                        <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-mini btn-danger">
-                            <i class="fas fa-cash-register"></i> Faturar</a>
+                        <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-mini btn-danger">
+                            <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text">Faturar</span></a>
                     <?php
                     } ?>
-
-                    <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '"><i class="fas fa-edit"></i> Editar</a>';
-                    } ?>
-                    <a title="Visualizar OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>"><i class="fas fa-eye"></i> Visualizar OS</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir A4</a>
-                    <a target="_blank" title="Imprimir OS" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Não Fiscal</a>
+                    <a title="Visualizar OS" class="button btn btn-primary" href="<?php echo site_url() ?>/os/visualizar/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text">Visualizar OS</span></a>
+                    <a target="_blank" title="Imprimir OS Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
+                    <a target="_blank" title="Imprimir OS Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . number_format($totalProdutos + $totalServico, 2, ',', '.'), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                         if (!empty($zapnumber)) {
-                            echo '<a title="Enviar Por WhatsApp" class="btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://web.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '" ' . ($zapnumber == '' ? 'disabled' : '') . '><i class="fab fa-whatsapp"></i> WhatsApp</a>';
+                            echo '<a title="Via WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://wa.me/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '" ' . ($zapnumber == '' ? 'disabled' : '') . '>
+                            <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
                         }
                     } ?>
 
-                    <a title="Enviar por E-mail" class="btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>"><i class="fas fa-envelope"></i> Enviar por E-mail</a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de Garantia</a> <?php } ?>
+                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span></a>
+                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>">
+                            <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
                 </div>
             </div>
             <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
-                        <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
-                        <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
-                        <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
-                        <li id="tabAnotacoes"><a href="#tab5" data-toggle="tab">Anotações</a></li>
+                        <li id="tabDesconto"><a href="#tab2" data-toggle="tab">Desconto</a></li>
+                        <li id="tabProdutos"><a href="#tab3" data-toggle="tab">Produtos</a></li>
+                        <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
+                        <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
+                        <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -77,7 +80,7 @@
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
-                                            <input id="valorTotal" type="hidden" name="valorTotal" value="" />
+                                            <input id="valor" type="hidden" name="valor" value="" />
                                         </div>
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
@@ -137,7 +140,7 @@
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia (dias)</label>
-                                            <input id="garantia" type="number" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
+                                            <input id="garantia" type="number" placeholder="Status s/g inserir nº/0" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
                                             <?php echo form_error('garantia'); ?>
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
@@ -168,24 +171,61 @@
                                         </label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
                                     </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="text-align: center">
-                                            <?php if ($result->faturado == 0) { ?>
-                                                <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="btn btn-danger"><i class="fas fa-cash-register"></i> Faturar</a>
-                                            <?php
-                                            } ?>
-                                            <button class="btn btn-primary" id="btnContinuar"><i class="fas fa-sync-alt"></i> Atualizar
-                                            </button>
-                                            <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="btn btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->garantias_id; ?>"><i class="fas fa-text-width"></i> Imprimir Termo de
-                                                    Garantia</a> <?php } ?>
-                                            <a href="<?php echo base_url() ?>index.php/os" class="btn"><i class="fas fa-backward"></i> Voltar</a>
+                                    <div class="span12" style="padding: 0; margin-left: 0">
+                                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                                            <button class="button btn btn-primary" id="btnContinuar"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                            <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        <!--Produtos-->
+                        <!--Desconto-->
+                        <?php
+                        $total = 0;
+                        foreach ($produtos as $p) {
+                            $total = $total + $p->subTotal;
+                        }
+                        ?>
+                        <?php
+                        $totals = 0;
+                        foreach ($servicos as $s) {
+                            $preco = $s->preco ?: $s->precoVenda;
+                            $subtotals = $preco * ($s->quantidade ?: 1);
+                            $totals = $totals + $subtotals;
+                        }
+                        ?>
+
                         <div class="tab-pane" id="tab2">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+                                <form id="formDesconto" action="<?php echo base_url(); ?>index.php/os/adicionarDesconto" method="POST">
+                                    <div id="divValorTotal">
+                                        <div class="span2">
+                                            <label for="">Valor Total Da OS:</label>
+                                            <input class="span12 money" id="valorTotal" name="valorTotal" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2, '.', ''); ?>" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="span3">
+                                        <input type="hidden" name="idOs" id="idOs" value="<?php echo $result->idOs; ?>" />
+                                        <label for="">Desconto</label>
+                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" />
+                                        <strong><span style="color: red" id="errorAlert"></span></strong>
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">Total com Desconto</label>
+                                        <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="<?php echo $result->valor_desconto ?>" readonly />
+                                    </div>
+                                    <div class="span2">
+                                        <label for="">&nbsp;</label>
+                                        <button class="button btn btn-success" id="btnAdicionarDesconto">
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!--Produtos-->
+                        <div class="tab-pane" id="tab3">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
                                     <div class="span6">
@@ -205,8 +245,8 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
-                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar
-                                        </button>
+                                        <button class="button btn btn-success" id="btnAdicionarProduto">
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -231,25 +271,26 @@
                                                 echo '<td>' . $p->descricao . '</td>';
                                                 echo '<td><div align="center">' . $p->quantidade . '</td>';
                                                 echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
-                                                echo '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
+                                                echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
                                                 echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                                 echo '</tr>';
                                             } ?>
+                                        </tbody>
+                                        <tfoot>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$
-                                                            <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></div>
+                                                    <div align="center"><strong>R$ <?php echo number_format($total, 2, ',', '.'); ?><input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>"></strong></div>
                                                 </td>
                                             </tr>
-                                        </tbody>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
                         <!--Serviços-->
-                        <div class="tab-pane" id="tab3">
+                        <div class="tab-pane" id="tab4">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico" method="post">
                                     <div class="span6">
@@ -268,13 +309,14 @@
                                     </div>
                                     <div class="span2">
                                         <label for="">&nbsp;</label>
-                                        <button class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar</button>
+                                        <button class="button btn btn-success">
+                                            <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                     </div>
                                 </form>
                             </div>
                             <div class="widget-box" id="divServicos">
                                 <div class="widget_content nopadding">
-                                    <table width="100%" class="table table-bordered">
+                                    <table width="100%" class="table table-bordered" id="tblServicos">
                                         <thead>
                                             <tr>
                                                 <th>Serviço</th>
@@ -295,26 +337,26 @@
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
                                                 echo '<td><div align="center">R$ ' . $preco  . '</div></td>';
-                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn btn-danger servico"><i class="fas fa-trash-alt"></i></span></div></td>';
+                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
                                                 echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
                                                 echo '</tr>';
                                             } ?>
+                                        </tbody>
+                                        <tfoot>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$
-                                                            <?php echo number_format($totals, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="
-												<?php echo number_format($totals, 2); ?>"></strong></div>
+                                                    <div align="center"><strong>R$ <?php echo number_format($totals, 2, ',', '.'); ?><input type="hidden" id="total-servico" value="<?php echo number_format($totals, 2); ?>"></strong></div>
                                                 </td>
                                             </tr>
-                                        </tbody>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
                         <!--Anexos-->
-                        <div class="tab-pane" id="tab4">
+                        <div class="tab-pane" id="tab5">
                             <div class="span12" style="padding: 1%; margin-left: 0">
                                 <div class="span12 well" style="padding: 1%; margin-left: 0" id="form-anexos">
                                     <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8" s method="post">
@@ -325,9 +367,8 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">.</label>
-                                            <button class="btn btn-success span12"><i class="fas fa-paperclip"></i>
-                                                Anexar
-                                            </button>
+                                            <button class="button btn btn-success">
+                                                <span class="button__icon"><i class='bx bx-paperclip'></i></span><span class="button__text2">Anexar</span></button>
                                         </div>
                                     </form>
                                 </div>
@@ -354,12 +395,13 @@
                         </div>
 
                         <!--Anotações-->
-                        <div class="tab-pane" id="tab5">
+                        <div class="tab-pane" id="tab6">
                             <div class="span12" style="padding: 1%; margin-left: 0">
 
                                 <div class="span12" id="divAnotacoes" style="margin-left: 0">
 
-                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar anotação</a>
+                                    <a href="#modal-anotacao" id="btn-anotacao" role="button" data-toggle="modal" class="button btn btn-success" style="max-width: 160px">
+                                        <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar anotação</span></a>
                                     <hr>
                                     <table class="table table-bordered">
                                         <thead>
@@ -375,11 +417,11 @@
                                                 echo '<tr>';
                                                 echo '<td>' . $a->anotacao . '</td>';
                                                 echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn btn-danger anotacao"><i class="fas fa-trash-alt"></i></span></td>';
+                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
                                                 echo '</tr>';
                                             }
                                             if (!$anotacoes) {
-                                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                                echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
                                             }
 
                                             ?>
@@ -433,7 +475,7 @@
                 <input type="hidden" name="os_id" value="<?php echo $result->idOs; ?>">
             </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="display:flex;justify-content: center">
             <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
             <button class="btn btn-primary">Adicionar</button>
         </div>
@@ -462,21 +504,21 @@
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
-                <div class="span5" style="margin-left: 0">
+                <div class="span6" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2); ?>" />
-                    <strong><span style="color: red" id="resultado"></span></strong>
+                    <input class="span12 money" id="valor" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2, '.', ''); ?>" />
                 </div>
-                <div class="span4">
-                    <label>Desconto</label>
-                    <input style="width: 4em;" id="num2" type="text" placeholder="%" onblur="calcular()" maxlength="3" size="2" />
+                <div class="span6" style="margin-left: 2;">
+                    <label for="valor">Valor Com Desconto*</label>
+                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " />
+                    <strong><span style="color: red" id="resultado"></span></strong>
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Entrada*</label>
-                    <input class="span12 datepicker" autocomplete="on" id="vencimento" type="text" name="vencimento" />
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -487,7 +529,7 @@
                 <div id="divRecebimento" class="span8" style=" display: none">
                     <div class="span6">
                         <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" autocomplete="on" id="recebimento" type="text" name="recebimento" />
+                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
                     </div>
                     <div class="span6">
                         <label for="formaPgto">Forma Pgto</label>
@@ -504,29 +546,89 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">Cancelar</button>
-            <button class="btn btn-primary">Faturar</button>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
         </div>
     </form>
 </div>
 
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 
 <script type="text/javascript">
-    function calcular() {
-        var desconto = Number(document.getElementById("valor").value);
-        var num2 = Number(document.getElementById("num2").value);
-        var elemResult = document.getElementById("resultado");
+    function calcDesconto(valor, desconto) {
 
-        if (elemResult.textContent === undefined) {
-            elemResult.textContent = "Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ".	";
-        } else { // IE
-            elemResult.innerText = "(Preço com Desconto: R$ " + String(desconto - num2 * desconto / 100) + ")";
-        }
+        var resultado = (valor - desconto * valor / 100).toFixed(2);
+        return resultado;
     }
 
+    function validarDesconto(resultado, valor) {
+        if (resultado == valor) {
+            return resultado = "";
+        } else {
+            return resultado.toFixed(2);
+        }
+    }
+    var valorBackup = $("#valorTotal").val();
+
+    $("#quantidade").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
+    $("#quantidade_servico").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
+    $("#desconto").keyup(function() {
+
+        this.value = this.value.replace(/[^0-9.]/g, '');
+        if ($('#desconto').val() > 100) {
+            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $("#desconto").focus();
+        }
+        if ($("#valorTotal").val() == null || $("#valorTotal").val() == '') {
+            $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+            $("#valorTotal").val(valorBackup);
+            $("#desconto").focus();
+
+        } else if (Number($("#desconto").val()) >= 0) {
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
+        } else {
+            $('#errorAlert').text('Erro desconhecido.').css("display", "inline").fadeOut(5000);
+            $('#desconto').val('');
+            $('#resultado').val('');
+        }
+    });
+
+    $("#valorTotal").focusout(function() {
+        $("#valorTotal").val(valorBackup);
+        if ($("#valorTotal").val() == '0.00' && $('#resultado').val() != '') {
+            $('#errorAlert').text('Você não pode apagar o valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+            $("#valorTotal").val(valorBackup);
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
+            $("#desconto").focus();
+        } else {
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
+        }
+    });
+
+    $('#resultado').focusout(function() {
+        if (Number($('#resultado').val()) > Number($("#valorTotal").val())) {
+            $('#errorAlert').text('Desconto não pode ser maior que o Valor.').css("display", "inline").fadeOut(6000);
+            $('#resultado').val('');
+        }
+        if ($("#desconto").val() != "" || $("#desconto").val() != null) {
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val())));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
+        }
+    });
     $(document).ready(function() {
 
         $(".money").maskMoney();
@@ -572,29 +674,87 @@
             },
             submitHandler: function(form) {
                 var dados = $(form).serialize();
+                var qtdProdutos = $('#tblProdutos >tbody >tr').length;
+                var qtdServicos = $('#tblServicos >tbody >tr').length;
+                var qtdTotalProdutosServicos = qtdProdutos + qtdServicos;
+
                 $('#btn-cancelar-faturar').trigger('click');
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/os/faturar",
-                    data: dados,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.result == true) {
 
-                            window.location.reload(true);
-                        } else {
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar OS."
-                            });
-                            $('#progress-fatura').hide();
+                if (qtdTotalProdutosServicos <= 0) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: "Não é possível faturar uma OS sem serviços e/ou produtos"
+                    });
+                } else if (qtdTotalProdutosServicos > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/os/faturar",
+                        data: dados,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.result == true) {
+                                window.location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "Atenção",
+                                    text: "Ocorreu um erro ao tentar faturar OS."
+                                });
+                                $('#progress-fatura').hide();
+                            }
                         }
-                    }
-                });
+                    });
 
-                return false;
+                    return false;
+                }
             }
+        });
+        $('#formDesconto').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Processando',
+                        text: 'Registrando desconto...',
+                        icon: 'info',
+                        showCloseButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                },
+                success: function(response) {
+                    if (response.result) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Sucesso",
+                            text: response.messages
+                        });
+                        setTimeout(function() {
+                            window.location.href = window.BaseUrl + 'index.php/os/editar/' + <?php echo $result->idOs ?>;
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            type: "error",
+                            title: "Atenção",
+                            text: response.messages
+                        });
+                    }
+
+                },
+                error: function(response) {
+                    Swal.fire({
+                        type: "error",
+                        title: "Atenção",
+                        text: response.responseJSON.messages
+                    });
+                }
+            });
         });
 
         $("#formwhatsapp").validate({
@@ -643,7 +803,7 @@
                             Swal.fire({
                                 type: "error",
                                 title: "Atenção",
-                                text: "Ocorreu um erro ao tentar faturar OS."
+                                text: "Ocorreu um erro ao tentar  OS."
                             });
                             $('#progress-fatura').hide();
                         }
@@ -750,11 +910,17 @@
 
         $("#formProdutos").validate({
             rules: {
+                preco: {
+                    required: true
+                },
                 quantidade: {
                     required: true
                 }
             },
             messages: {
+                preco: {
+                    required: 'Inserir o preço'
+                },
                 quantidade: {
                     required: 'Insira a quantidade'
                 }
@@ -786,6 +952,9 @@
                                 $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
+                                $("#resultado").val('');
+                                $("#desconto").val('');
+                                $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
@@ -838,6 +1007,9 @@
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
+                            $("#resultado").val('');
+                            $("#desconto").val('');
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
@@ -939,6 +1111,9 @@
                     success: function(data) {
                         if (data.result == true) {
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#resultado").val('');
+                            $("#desconto").val('');
 
                         } else {
                             Swal.fire({
@@ -968,6 +1143,9 @@
                     success: function(data) {
                         if (data.result == true) {
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#resultado").val('');
+                            $("#desconto").val('');
 
                         } else {
                             Swal.fire({
