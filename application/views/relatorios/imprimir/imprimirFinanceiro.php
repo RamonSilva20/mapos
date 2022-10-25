@@ -56,7 +56,7 @@
                                             $situacao = 'Pendente';
                                         }
                                         if ($l->tipo == 'receita') {
-                                            $totalReceita += $l->valor_desconto;
+                                            $totalReceita += $l->valor_desconto != 0 ? $l->valor_desconto : $l->valor;
                                         } else {
                                             $totalDespesa += $l->valor_desconto;
                                         }
@@ -64,8 +64,8 @@
                                         echo '<td>' . $l->cliente_fornecedor . '</td>';
                                         echo '<td>' . $l->tipo . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($l->valor, 2, ',', '.') . '</td>';
-                                        echo '<td>' . 'R$ ' . number_format($l->desconto, 2, ',', '.') . '</td>';
-                                        echo '<td>' . 'R$ ' . number_format($l->valor_desconto, 2, ',', '.') . '</td>';
+                                        echo '<td>' .  number_format($l->desconto, 2, ',', '.') . '% ' . '</td>';
+                                        echo '<td>' . 'R$ ' . number_format($l->valor_desconto != 0 ? $l->valor_desconto : $l->valor, 2, ',', '.') . '</td>';
                                         echo '<td>' . $vencimento . '</td>';
                                         echo '<td>' . $pagamento . '</td>';
                                         echo '<td>' . $l->forma_pgto . '</td>';
