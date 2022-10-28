@@ -9,9 +9,9 @@
                 <h5>Dados da Venda</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-    echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
+                        echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-} ?>
+                    } ?>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
@@ -30,7 +30,7 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php
-                                        } else { ?> <tr>
+                                } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
@@ -48,7 +48,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                        } ?>
+                                } ?>
                             </tbody>
                         </table>
                         <table class="table">

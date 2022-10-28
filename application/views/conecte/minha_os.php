@@ -22,7 +22,7 @@
     <div class="row-fluid">
         <div class="span12">
             <?php $totalServico = 0;
-            $totalProdutos = 0; ?>
+    $totalProdutos = 0; ?>
             <div class="row-fluid" style="margin-top: 0">
                 <div class="span12">
                     <div class="widget-box">
@@ -153,29 +153,29 @@
                                             <tbody>
                                             <?php
 
-                                            foreach ($produtos as $p) {
-                                                $totalProdutos = $totalProdutos + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td style="text-align: center">' . $p->descricao . '</td>';
-                                                echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                    foreach ($produtos as $p) {
+                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        echo '<tr>';
+                                        echo '<td style="text-align: center">' . $p->descricao . '</td>';
+                                        echo '<td style="text-align: center">' . $p->quantidade . '</td>';
 
-                                                echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+                                        echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
 
 
                                             <?php
-                                            setlocale(LC_MONETARY, 'en_US');
-                                            foreach ($servicos as $s) {
-                                                $preco = $s->preco;
-                                                $totalServico = $totalServico + $preco;
-                                                echo '<tr>';
-                                                echo '<td style="text-align: center">' . $s->nome . '</td>';
-                                                echo '<td></td>';
-                                                echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            }
-                                            ?>
+                                    setlocale(LC_MONETARY, 'en_US');
+                                        foreach ($servicos as $s) {
+                                            $preco = $s->preco;
+                                            $totalServico = $totalServico + $preco;
+                                            echo '<tr>';
+                                            echo '<td style="text-align: center">' . $s->nome . '</td>';
+                                            echo '<td></td>';
+                                            echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
+                                            echo '</tr>';
+                                        }
+                                        ?>
 
                                             <tr>
                                                 <td colspan="2" style="text-align: right"></td>

@@ -174,7 +174,7 @@ $totalProdutos = 0; ?>
                                         echo '<td style="text-align: center">R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
-                                    ?>
+                            ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"></td>

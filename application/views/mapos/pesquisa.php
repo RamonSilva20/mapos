@@ -101,7 +101,7 @@
                             echo '</td>';
                             echo '</tr>';
                         }
-                        ?>
+        ?>
                         <tr>
                         </tr>
                         </tbody>
@@ -146,7 +146,7 @@
                         echo '</td>';
                         echo '</tr>';
                     }
-                    ?>
+        ?>
                     <tr>
                     </tr>
                     </tbody>
@@ -176,28 +176,28 @@
                     </thead>
                     <tbody>
                     <?php
-                    if ($os == null) {
-                        echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
-                    }
-                    foreach ($os as $r) {
-                        $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                        echo '<tr>';
-                        echo '<td>' . $r->idOs . '</td>';
-                        echo '<td>' . $dataInicial . '</td>';
-                        echo '<td>' . $r->descricaoProduto . '</td>';
-                        echo '<td>' . $r->defeito . '</td>';
-                        echo '<td>';
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                            echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
-                        }
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                    ?>
+        if ($os == null) {
+            echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
+        }
+        foreach ($os as $r) {
+            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+            echo '<tr>';
+            echo '<td>' . $r->idOs . '</td>';
+            echo '<td>' . $dataInicial . '</td>';
+            echo '<td>' . $r->descricaoProduto . '</td>';
+            echo '<td>' . $r->defeito . '</td>';
+            echo '<td>';
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+            }
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        ?>
                     <tr>
                     </tr>
                     </tbody>

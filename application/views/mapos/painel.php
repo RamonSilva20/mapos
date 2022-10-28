@@ -188,7 +188,7 @@
 
                     <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
                     <?php if ($estatisticas_financeiro != null) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
+                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
 
                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
@@ -212,7 +212,7 @@
                             <?php endif ?>
 
                     <?php  }
-} ?>
+                    } ?>
                 </div>
             </div>
         </div>
@@ -556,10 +556,10 @@
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
-    echo date('d/m/Y', strtotime($o->dataFinal));
-} else {
-    echo "";
-} ?></td>
+                                    echo date('d/m/Y', strtotime($o->dataFinal));
+                                } else {
+                                    echo "";
+                                } ?></td>
 
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>
@@ -705,16 +705,16 @@
     </div>
     <div class="modal-footer">
         <?php
-        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-            echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-        }
-        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-            echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-        }
-        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-            echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
-        }
-        ?>
+                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                                            echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                                        }
+                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                                            echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                                        }
+                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                                            echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+                                        }
+?>
     </div>
 </div>
 

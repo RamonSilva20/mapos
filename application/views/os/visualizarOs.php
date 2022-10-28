@@ -9,24 +9,24 @@
                 <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-    echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
-} ?>
+                    } ?>
 
                     <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-    $this->load->model('os_model');
-    $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-    $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
-    $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
-    if (!empty($zapnumber)) {
-        echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://wa.me/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
+                        $this->load->model('os_model');
+                        $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
+                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente[0]->nome : ''), ($emitente ? $emitente[0]->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+                        $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
+                        if (!empty($zapnumber)) {
+                            echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://wa.me/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
         <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
-    }
-} ?>
+                        }
+                    } ?>
 
                     <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span></a>
@@ -188,16 +188,16 @@
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($anotacoes as $a) {
-                                    echo '<tr>';
-                                    echo '<td>' . $a->anotacao . '</td>';
-                                    echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-                                    echo '</tr>';
-                                }
-                                if (!$anotacoes) {
-                                    echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
-                                }
-                                ?>
+                                                    foreach ($anotacoes as $a) {
+                                                        echo '<tr>';
+                                                        echo '<td>' . $a->anotacao . '</td>';
+                                                        echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
+                                                        echo '</tr>';
+                                                    }
+                                                    if (!$anotacoes) {
+                                                        echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                                                    }
+?>
                             </tbody>
                         </table>
                         <?php if ($produtos != null) { ?>
@@ -214,14 +214,14 @@
                                 <tbody>
                                     <?php
 
-                                    foreach ($produtos as $p) {
-                                        echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+    foreach ($produtos as $p) {
+        echo '<tr>';
+        echo '<td>' . $p->descricao . '</td>';
+        echo '<td>' . $p->quantidade . '</td>';
+        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
+        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+        echo '</tr>';
+    } ?>
 
                                     <tr>
                                         <td></td>
@@ -245,17 +245,17 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    setlocale(LC_MONETARY, 'en_US');
-                                    foreach ($servicos as $s) {
-                                        $preco = $s->preco ?: $s->precoVenda;
-                                        $subtotal = $preco * ($s->quantidade ?: 1);
-                                        echo '<tr>';
-                                        echo '<td>' . $s->nome . '</td>';
-                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                        echo '<td>' . $preco . '</td>';
-                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+    setlocale(LC_MONETARY, 'en_US');
+                            foreach ($servicos as $s) {
+                                $preco = $s->preco ?: $s->precoVenda;
+                                $subtotal = $preco * ($s->quantidade ?: 1);
+                                echo '<tr>';
+                                echo '<td>' . $s->nome . '</td>';
+                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                echo '<td>' . $preco . '</td>';
+                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                echo '</tr>';
+                            } ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -275,18 +275,18 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($anexos as $a) {
-                                        if ($a->thumb == null) {
-                                            $thumb = base_url() . 'assets/img/icon-file.png';
-                                            $link = base_url() . 'assets/img/icon-file.png';
-                                        } else {
-                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                            $link = $a->url . '/' . $a->anexo;
-                                        }
-                                        echo '<tr>';
-                                        echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
-                                        echo '</tr>';
-                                    } ?>
+                            foreach ($anexos as $a) {
+                                if ($a->thumb == null) {
+                                    $thumb = base_url() . 'assets/img/icon-file.png';
+                                    $link = base_url() . 'assets/img/icon-file.png';
+                                } else {
+                                    $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                    $link = $a->url . '/' . $a->anexo;
+                                }
+                                echo '<tr>';
+                                echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                echo '</tr>';
+                            } ?>
                                 </tbody>
                             </table>
                         <?php } ?>
@@ -297,7 +297,7 @@
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
                         }
-                        ?>
+?>
                     </div>
                 </div>
             </div>

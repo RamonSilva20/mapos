@@ -42,7 +42,7 @@
                                         echo '<td align="center">R$: ' . $s->preco . '</td>';
                                         echo '</tr>';
                                     }
-                                ?>
+    ?>
                             </tbody>
                         </table>
                     </div>
