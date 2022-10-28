@@ -192,7 +192,7 @@ $(document).ready(function () {
                         }
 
                         // Força uma atualizacao do endereco via cep
-                        document.getElementById("cep").focus();
+                        //document.getElementById("cep").focus();
                         if ($("#nomeCliente").val() != null) {
                             document.getElementById("nomeCliente").focus();
                         }

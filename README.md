@@ -1,13 +1,13 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.35.2-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.38.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
-### [Feedback](https://mapos.fider.io/) - Vote ou sugira melhorias
+### [Feedback](https://github.com/RamonSilva20/mapos/discussions) - Vote ou sugira melhorias
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
 
@@ -108,7 +108,7 @@ Doações podem ser realizadas nos links:
 |:-:|:-:|:-:|:-:|:-:|
 | [<img src="https://avatars.githubusercontent.com/daniellbastos?s=115"><br><sub>Daniel Bastos</sub>](https://github.com/daniellbastos) | [<img src="https://avatars.githubusercontent.com/github?s=115"><br><sub>drelldeveloper</sub>](https://github.com/drelldeveloper) | [<img src="https://avatars.githubusercontent.com/fontebasso?s=115"><br><sub>Samuel Fontebasso</sub>](https://github.com/fontebasso) | [<img src="https://avatars.githubusercontent.com/marllonferreira?s=115"><br><sub>marllonferreira</sub>](https://github.com/marllonferreira) | [<img src="https://avatars.githubusercontent.com/rodrigo3d?s=115"><br><sub>Rodrigo Ribeiro</sub>](https://github.com/rodrigo3d)
 | [<img src="https://avatars.githubusercontent.com/willph?s=115"><br><sub>Wilmerson</sub>](https://github.com/willph) | [<img src="https://avatars.githubusercontent.com/bulfaitelo?s=115"><br><sub>Thiago Rodrigues</sub>](https://github.com/bulfaitelo) | [<img src="https://avatars.githubusercontent.com/mvnp?s=115"><br><sub>Marcos Pereira</sub>](https://github.com/mvnp)| [<img src="https://avatars.githubusercontent.com/marcotuliomtb?s=115"><br><sub>Marcos</sub>](https://github.com/marcotuliomtb)| [<img src="https://avatars.githubusercontent.com/zanzoushio?s=115"><br><sub>ZanzouShio</sub>](https://github.com/ZanzouShio)
-| [<img src="https://avatars.githubusercontent.com/seitbnao?s=115"><br><sub>Djunio</sub>](https://github.com/seitbnao)
+| [<img src="https://avatars.githubusercontent.com/seitbnao?s=115"><br><sub>Djunio</sub>](https://github.com/seitbnao) | [<img src="https://avatars.githubusercontent.com/MilsonElias?s=115"><br><sub>Milson Elias</sub>](https://github.com/MilsonElias) |
 
 
 ## Autor

@@ -3,7 +3,8 @@
 if (!$this->session->userdata('cadastra_os')) { ?>
     <div class="span12" style="margin-left: 0">
         <div class="span3">
-            <a href="<?php echo base_url(); ?>index.php/mine/adicionarOs" class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar OS</a>
+            <a href="<?php echo base_url(); ?>index.php/mine/adicionarOs" class="button btn btn-success" style="max-width: 150px">
+              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
         </div>
     </div>
 <?php
@@ -13,7 +14,7 @@ if (!$results) {
     ?>
     <div class="span12" style="margin-left: 0">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
@@ -26,7 +27,7 @@ if (!$results) {
 
                 <table id="tabela" class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr>
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
@@ -65,7 +66,7 @@ if (!$results) {
 
                 <table class="table table-bordered ">
                     <thead>
-                        <tr style="backgroud-color: #2D335B">
+                        <tr>
                             <th>#</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
@@ -101,9 +102,9 @@ if (!$results) {
         echo '<td>' . $status . '</td>';
 
 
-        echo '<td><a href="' . base_url() . 'index.php/mine/visualizarOs/' . $r->idOs . '" class="btn tip-top" title="Visualizar e Imprimir"><i class="fas fa-eye"></i></a>
-                                  <a href="' . base_url() . 'index.php/mine/imprimirOs/' . $r->idOs . '" target="_blank" class="btn btn-inverse tip-top" title="Imprimir"><i class="fas fa-print"></i></a>
-                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn btn-info tip-top" title="Ver mais detalhes"><i class="fas fa-bars"></i></a>
+        echo '<td><a href="' . base_url() . 'index.php/mine/visualizarOs/' . $r->idOs . '" class="btn-nwe" title="Visualizar e Imprimir"><i class="bx bx-show-alt"></i></a>
+                                  <a href="' . base_url() . 'index.php/mine/imprimirOs/' . $r->idOs . '" class="btn-nwe3" title="Imprimir"><i class="bx bx-printer"></i></a>
+                                  <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn-nwe4" title="Ver mais detalhes"><i class="bx bx-detail"></i></a>
                               </td>';
         echo '</tr>';
     } ?>

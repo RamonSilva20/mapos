@@ -1,14 +1,9 @@
 <div class="widget-box">
-    <div class="widget-title">
+    <div class="widget-title" style="margin: 0;font-size: 1.1em">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab1">Dados do Cliente</a></li>
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
-            <div class="buttons">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-    echo '<a title="Icon Title" class="btn btn-mini btn-info" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '"><i class="fas fa-edit"></i> Editar</a>';
-} ?>
-                <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/clientes"><i class="fas fa-arrow-left"></i> Voltar</a>
-            </div>
+
         </ul>
     </div>
     <div class="widget-content tab-content">
@@ -18,14 +13,14 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                                <span class="icon"><i class="fas fa-user"></i></span>
-                                <h5>Dados Pessoais</h5>
+                                <span><i class='bx bx-user icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Dados Pessoais</h5>
                             </a>
                         </div>
                     </div>
                     <div class="collapse in accordion-body" id="collapseGOne">
                         <div class="widget-content">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" style="border: 1px solid #ddd">
                                 <tbody>
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
@@ -60,14 +55,14 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
-                                <span class="icon"><i class="fas fa-phone-alt"></i></span>
-                                <h5>Contatos</h5>
+                                <span><i class='bx bx-phone icon-cli'></i></span>
+                                <h5 style="padding-left: 28px">Contatos</h5>
                             </a>
                         </div>
                     </div>
                     <div class="collapse accordion-body" id="collapseGTwo">
                         <div class="widget-content">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" style="border: 1px solid #ddd">
                                 <tbody>
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Contato:</strong></td>
@@ -102,17 +97,17 @@
                     <div class="accordion-heading">
                         <div class="widget-title">
                             <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
-                                <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
-                                <h5>Endereço</h5>
+                                <span><i class='bx bx-map-alt icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Endereço</h5>
                             </a>
                         </div>
                     </div>
                     <div class="collapse accordion-body" id="collapseGThree">
                         <div class="widget-content">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered th" style="border: 1px solid #ddd;border-left: 1px solid #ddd">
                                 <tbody>
                                 <tr>
-                                    <td style="text-align: right; width: 30%"><strong>Rua</strong></td>
+                                    <td style="text-align: right; width: 30%;"><strong>Rua</strong></td>
                                     <td>
                                         <?php echo $result->rua ?>
                                     </td>
@@ -218,5 +213,13 @@
                 <?php
             } ?>
         </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content: center">
+        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+                echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
+<span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
+            } ?>
+        <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
+          <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
     </div>
 </div>

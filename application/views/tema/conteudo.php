@@ -1,6 +1,9 @@
 <div id="content">
-    <div id="content-header">
-      <div id="breadcrumb"> <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"><i class="fas fa-home"></i> Dashboard</a>
+<!--start-top-serch-->
+  <div id="content-header">
+   <div></div>
+      <div id="breadcrumb">
+        <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"> Início</a>
         <?php if ($this->uri->segment(1) != null) { ?>
             <a href="<?= base_url() . 'index.php/' . $this->uri->segment(1) ?>" class="tip-bottom" title="<?= ucfirst($this->uri->segment(1)); ?>">
               <?= ucfirst($this->uri->segment(1)); ?>
@@ -12,7 +15,7 @@
           <?php } ?>
       </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-flu">
       <div class="row-fluid">
         <div class="span12">
           <?php if ($var = $this->session->flashdata('success')): ?><script>swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");</script><?php endif; ?>
@@ -24,4 +27,3 @@
       </div>
     </div>
   </div>
-

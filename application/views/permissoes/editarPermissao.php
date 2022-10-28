@@ -1,3 +1,86 @@
+
+<style>
+    .widget-title h5 {
+        font-weight : 500;
+        padding     : 5px;
+        padding-left: 36px !important;
+        line-height : 12px;
+        margin      : 5px 0 !important;
+        font-size   : 1.3em;
+        color       : var(--violeta1);
+    }
+
+    .icon-cli {
+        color: #239683;
+        margin-top : 3px;
+        margin-left: 8px;
+        position   : absolute;
+        font-size  : 18px;
+    }
+
+    .icon-clic {
+        color: #9faab7;
+        top: 4px;
+        right: 10px;
+        position: absolute;
+        font-size: 1.9em;
+    }
+
+    .icon-clic:hover {
+        color: #3fadf6;
+    }
+
+    .widget-content {
+        padding: 8px 12px 0;
+    }
+
+    .table td {
+        padding: 5px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .accordion .widget-box {
+        margin-top   : 10px;
+        margin-bottom: 0;
+        border-radius: 6px;
+    }
+
+    .accordion {
+        margin-top: -25px;
+    }
+
+    .collapse.in {
+        top: -15px
+    }
+
+    .button {
+    min-width: 130px;
+    }
+
+    .form-actions {
+        padding: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background-color: transparent;
+        border-top: 0px;
+    }
+
+    .widget-content table tbody tr:hover {
+        background: transparent;
+    }
+
+@media (max-width: 480px) {
+    .widget-content {
+        padding      : 10px 7px !important;
+        margin-bottom: -15px;
+    }
+}
+
+</style>
+
 <?php $permissoes = unserialize($result->permissoes);?>
 <div class="span12" style="margin-left: 0">
     <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
@@ -7,10 +90,7 @@
                <span class="icon">
                <i class="fas fa-lock"></i>
                </span>
-                    <h5>Editar Permissão</h5>
-                    <div class="buttons">
-                        <a title="Voltar" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/permissoes"><i class="fas fa-arrow-left"></i> Voltar</a>
-                    </div>
+                    <h5 style="padding:12px;padding-left:18px!important;margin:-10px 0 0!important;font-size:1.7em;">Editar Permissão</h5>
                 </div>
                 <div class="widget-content">
                     <div class="span4">
@@ -33,21 +113,38 @@
                         </select>
                     </div>
                     <div class="span4">
-                        <br/>
                         <label>
                             <input name="" type="checkbox" value="1" id="marcarTodos" />
                             <span class="lbl"> Marcar Todos</span>
                         </label>
-                        <br/>
                     </div>
+
                     <div class="control-group">
                         <label for="documento" class="control-label"></label>
                         <div class="controls">
-                            <table class="table table-bordered">
-                                <tbody>
+
+                    <div class="widget-content" style="padding: 5px 0 !important">
+        <div id="tab1" class="tab-pane active" style="min-height: 300px">
+            <div class="accordion" id="collapse-group">
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
+                                <span><i class='bx bx-group icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Clientes</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse in accordion-body" id="collapseGOne">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                                <tr>
+                                    <td colspan="4"></td>
+                                </tr>
                                 <tr>
                                     <td>
-                                        <label>
+                                        <label......>
                                             <input <?php if (isset($permissoes['vCliente'])) {
     if ($permissoes['vCliente'] == '1') {
         echo 'checked';
@@ -87,13 +184,31 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
-                                            <input <?php if (isset($permissoes['vProduto'])) {
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
+                                <span><i class='bx bx-package icon-cli'></i></span>
+                                <h5 style="padding-left: 28px">Produtos</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGTwo">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input <?php if (isset($permissoes['vProduto'])) {
     if ($permissoes['vProduto'] == '1') {
         echo 'checked';
     }
@@ -132,12 +247,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
+                                <span><i class='bx bx-stopwatch icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Serviços</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGThree">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vServico'])) {
     if ($permissoes['vServico'] == '1') {
         echo 'checked';
@@ -177,12 +310,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGFour" data-toggle="collapse">
+                                <span><i class='bx bx-spreadsheet icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Ordens de Serviço</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGFour">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vOs'])) {
     if ($permissoes['vOs'] == '1') {
         echo 'checked';
@@ -222,12 +373,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGFive" data-toggle="collapse">
+                                <span><i class='bx bx-cart-alt icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Vendas</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGFive">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vVenda'])) {
     if ($permissoes['vVenda'] == '1') {
         echo 'checked';
@@ -267,12 +436,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGSix" data-toggle="collapse">
+                                <span><i class='bx bx-credit-card-front icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Cobranças</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGSix">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vCobranca'])) {
     if ($permissoes['vCobranca'] == '1') {
         echo 'checked';
@@ -312,12 +499,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGSeven" data-toggle="collapse">
+                                <span><i class='bx bx-receipt icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Garantias</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGSeven">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vGarantia'])) {
     if ($permissoes['vGarantia'] == '1') {
         echo 'checked';
@@ -357,12 +562,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGEight" data-toggle="collapse">
+                                <span><i class='bx bx-box icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Arquivos</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGEight">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vArquivo'])) {
     if ($permissoes['vArquivo'] == '1') {
         echo 'checked';
@@ -402,12 +625,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGNine" data-toggle="collapse">
+                                <span><i class='bx bx-bar-chart-square icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Financeiro</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGNine">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['vLancamento'])) {
     if ($permissoes['vLancamento'] == '1') {
         echo 'checked';
@@ -447,12 +688,30 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGTen" data-toggle="collapse">
+                                <span><i class='bx bx-chart icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Relatórios</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGTen">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['rCliente'])) {
     if ($permissoes['rCliente'] == '1') {
         echo 'checked';
@@ -515,12 +774,30 @@
                                     </td>
                                     <td colspan="2"></td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group widget-box">
+                    <div class="accordion-heading">
+                        <div class="widget-title">
+                            <a data-parent="#collapse-group" href="#collapseGEleven" data-toggle="collapse">
+                                <span><i class='bx bx-cog icon-cli' ></i></span>
+                                <h5 style="padding-left: 28px">Configurações e Sistema</h5>
+                                <span><i class='bx bx-chevron-right icon-clic'></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse accordion-body" id="collapseGEleven">
+                        <div class="widget-content">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
                                             <input <?php if (isset($permissoes['cUsuario'])) {
     if ($permissoes['cUsuario'] == '1') {
         echo 'checked';
@@ -581,14 +858,18 @@
                                     </td>
                                     <td></td>
                                 </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
+                </div>
+
                     <div class="form-actions">
                         <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                            <div class="span6 offset3" style="display:flex;justify-content: center">
+                              <button type="submit" class="button btn btn-primary">
+                              <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar</span></button>
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                  <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -597,6 +878,8 @@
         </div>
     </form>
 </div>
+
+
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){

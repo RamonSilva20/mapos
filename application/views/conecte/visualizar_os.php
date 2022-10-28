@@ -3,7 +3,7 @@ $totalProdutos = 0; ?>
 <div class="row-fluid" style="margin-top: 0">
     <div class="span12">
         <div class="widget-box">
-            <div class="widget-title">
+            <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
@@ -181,6 +181,22 @@ $totalProdutos = 0; ?>
                                         <td style="text-align: center"><strong>Total: R$
                                                 <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong></td>
                                     </tr>
+                                    <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"></td>
+                                        <td style='text-align: center'><strong> Desconto: R$
+                                                <?php echo $result->valor_desconto != 0 ? number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') : ""; ?>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"></td>
+                                        <td style="text-align: center"><strong> Total com Desconto: R$
+                                                <?php echo $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : ""; ?>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         <?php

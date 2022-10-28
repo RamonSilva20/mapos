@@ -34,7 +34,8 @@
                 </div>
                 <div class="modal-footer">
                     <div>
-                        <button id="payment" type="submit" class="btn btn-success">Gerar Pagamento</button>
+                        <button id="payment" type="submit" class="button btn btn-mini btn-info" style="float: right;">
+                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></i></button>
                     </div>
                 </div>
             </div>

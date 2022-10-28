@@ -50,6 +50,16 @@ class Vendas_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function isEditable($id = null)
+    {
+        if ($vendas = $this->getById($id)) {
+            if ($vendas->faturado) {
+                return $this->data['configuration']['control_edit_vendas'] == '1';
+            }
+        }
+        return true;
+    }
+
     public function getByIdCobrancas($id)
     {
         $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome, usuarios.nome, cobrancas.vendas_id,cobrancas.idCobranca,cobrancas.status');
@@ -174,6 +184,7 @@ class Vendas_model extends CI_Model
         }
 
         $produtos = $this->getProdutos($id);
+        $valorDesconto = $this->getById($id);
         $totalProdutos = array_reduce(
             $produtos,
             function ($carry, $produto) {
@@ -181,7 +192,7 @@ class Vendas_model extends CI_Model
             },
             0
         );
-        $amount = round(floatval($totalProdutos), 2);
+        $amount = $valorDesconto->valor_desconto != 0 ? round(floatval($valorDesconto->valor_desconto), 2) : round(floatval($totalProdutos), 2);
 
         if ($amount <= 0) {
             return;
