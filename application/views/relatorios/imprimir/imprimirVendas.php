@@ -50,17 +50,17 @@
                                     echo '<td align="center">R$: ' . number_format($v->valor_desconto != 0 ? $v->valor_desconto : $v->valorTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
                                 }
-                                ?>
+    ?>
                                 <tr>
                                     <td colspan="5"></td>
                                     <td align="right"><b>TOTAL: </b></td>
                                     <td align="center"><b>R$:
                                             <?php
-                                            foreach ($vendas as $valorTotal => $value) {
-                                                $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
-                                            }
-                                           echo number_format($sum, 2, ',', '.');
-                                            ?></b></td>
+                foreach ($vendas as $valorTotal => $value) {
+                    $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
+                }
+               echo number_format($sum, 2, ',', '.');
+    ?></b></td>
                                 </tr>
                             </tbody>
                         </table>

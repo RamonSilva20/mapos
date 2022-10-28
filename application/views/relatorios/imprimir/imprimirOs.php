@@ -56,7 +56,7 @@
                                         echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '</tr>';
                                     }
-                                ?>
+    ?>
 
                                 <tr style="background-color: gainsboro;">
                                     <td colspan="5"></td>

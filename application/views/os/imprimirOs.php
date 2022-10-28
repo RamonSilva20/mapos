@@ -98,13 +98,13 @@ $totalProdutos = 0; ?>
                                             <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
                                         <?php if ($result->garantia) {
-    ?>
+                                            ?>
                                             <td>
                                                 <b>GARANTIA: </b>
                                                 <?php echo $result->garantia . ' dias'; ?>
                                             </td>
                                         <?php
-} ?>
+                                        } ?>
                                         <td>
                                             <b>
                                                 <?php if ($result->status == 'Finalizado') { ?>
@@ -159,15 +159,15 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
-                                        echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+                                                                            foreach ($produtos as $p) {
+                                                                                $totalProdutos = $totalProdutos + $p->subTotal;
+                                                                                echo '<tr>';
+                                                                                echo '<td>' . $p->descricao . '</td>';
+                                                                                echo '<td>' . $p->quantidade . '</td>';
+                                                                                echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
+                                                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                                                                echo '</tr>';
+                                                                            } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
@@ -187,18 +187,18 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    setlocale(LC_MONETARY, 'en_US');
-                                    foreach ($servicos as $s) {
-                                        $preco = $s->preco ?: $s->precoVenda;
-                                        $subtotal = $preco * ($s->quantidade ?: 1);
-                                        $totalServico = $totalServico + $subtotal;
-                                        echo '<tr>';
-                                        echo '<td>' . $s->nome . '</td>';
-                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                        echo '<td>' . $preco . '</td>';
-                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+                                                                            setlocale(LC_MONETARY, 'en_US');
+                            foreach ($servicos as $s) {
+                                $preco = $s->preco ?: $s->precoVenda;
+                                $subtotal = $preco * ($s->quantidade ?: 1);
+                                $totalServico = $totalServico + $subtotal;
+                                echo '<tr>';
+                                echo '<td>' . $s->nome . '</td>';
+                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                echo '<td>' . $preco . '</td>';
+                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                echo '</tr>';
+                            } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
@@ -212,7 +212,7 @@ $totalProdutos = 0; ?>
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
                         }
-                        ?>
+?>
                         <table class="table table-bordered table-condensed">
                             <tbody>
                                 <tr>
