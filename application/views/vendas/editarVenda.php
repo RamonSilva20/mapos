@@ -109,11 +109,19 @@
                                 </div>
                                 <div class="span11">
                                     <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
-                                        <div class="span2">
+                                        <div class="span1">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
-                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" /><br />
+                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="0.00" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
+                                        </div>
+                                        <div class="span1">
+                                        <label for="">Tipo Desc.</label>
+                                        <select style="width: 4em;" name="tipoDesconto" id="tipoDesconto">
+                                            <option value="real">R$</option>
+                                            <option value="porcento" <?=$result->tipo_desconto == "porcento" ? "selected" : "" ?>>%</option>
+                                        </select>
+                                        <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
                                         <div class="span2">
                                             <label for="">Total com Desconto</label>
@@ -165,7 +173,7 @@ foreach ($produtos as $p) {
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong><?php echo number_format($result->desconto, 2, '.', ''); ?> %</strong></div>
+                                                    <div align="center"><strong><?php echo $result->tipo_desconto == "real" ? "R$ " : ""; ?> <?php echo number_format($result->desconto, 2, '.', ''); ?> <?php echo $result->tipo_desconto == "porcento" ? " %" : ""; ?></strong></div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -265,9 +273,14 @@ foreach ($produtos as $p) {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
 
-    function calcDesconto(valor, desconto) {
-
-        var resultado = (valor - desconto * valor / 100).toFixed(2);
+    function calcDesconto(valor, desconto, tipoDesconto) {
+        var resultado = 0;
+        if (tipoDesconto == 'real') {
+            resultado = valor - desconto;
+        }
+        if (tipoDesconto == 'porcento') {
+            resultado = (valor - desconto * valor / 100).toFixed(2);
+        }
         return resultado;
     }
 
@@ -283,11 +296,6 @@ foreach ($produtos as $p) {
     $("#desconto").keyup(function() {
 
         this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($('#desconto').val() > 100) {
-            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
-            $('#desconto').val('');
-            $("#desconto").focus();
-        }
         if ($("#total-venda").val() == null || $("#total-venda").val() == '') {
             $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
@@ -296,12 +304,18 @@ foreach ($produtos as $p) {
             $("#desconto").focus();
 
         } else if (Number($("#desconto").val()) >= 0) {
-            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
         } else {
             $('#errorAlert').text('Erro desconhecido.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
             $('#resultado').val('');
+        }
+    });
+    $('#tipoDesconto').on('change', function() {
+        if (Number($("#desconto").val()) >= 0) {
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
         }
     });
 
@@ -311,11 +325,11 @@ foreach ($produtos as $p) {
             $('#errorAlert').text('Você não pode apagar o valor.').css("display", "inline").fadeOut(6000);
             $('#resultado').val('');
             $("#total-venda").val(valorBackup);
-            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
             $("#desconto").focus();
         } else {
-            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val())));
+            $('#resultado').val(calcDesconto(Number($("#total-venda").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#total-venda").val())));
         }
     });

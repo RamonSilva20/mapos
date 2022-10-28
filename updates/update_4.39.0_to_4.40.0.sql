@@ -1,0 +1,3 @@
+ALTER TABLE `os` ADD `tipo_desconto` VARCHAR(8) NULL DEFAULT NULL;
+ALTER TABLE `vendas` ADD `tipo_desconto` VARCHAR(8) NULL DEFAULT NULL;
+ALTER TABLE `lancamentos` ADD `tipo_desconto` VARCHAR(8) NULL DEFAULT NULL;

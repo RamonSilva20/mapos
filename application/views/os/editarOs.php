@@ -93,40 +93,40 @@
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-                                                } ?> value="Orçamento">Orçamento
+                                                            echo 'selected';
+                                                        } ?> value="Orçamento">Orçamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-                                                } ?> value="Aberto">Aberto
+                                                            echo 'selected';
+                                                        } ?> value="Aberto">Aberto
                                                 </option>
                                                 <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-                                                } ?> value="Faturado">Faturado
+                                                            echo 'selected';
+                                                        } ?> value="Faturado">Faturado
                                                 </option>
                                                 <option <?php if ($result->status == 'Negociação') {
-                                                    echo 'selected';
-                                                } ?> value="Negociação">Negociação
+                                                            echo 'selected';
+                                                        } ?> value="Negociação">Negociação
                                                 </option>
                                                 <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-                                                } ?> value="Em Andamento">Em Andamento
+                                                            echo 'selected';
+                                                        } ?> value="Em Andamento">Em Andamento
                                                 </option>
                                                 <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-                                                } ?> value="Finalizado">Finalizado
+                                                            echo 'selected';
+                                                        } ?> value="Finalizado">Finalizado
                                                 </option>
                                                 <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-                                                } ?> value="Cancelado">Cancelado
+                                                            echo 'selected';
+                                                        } ?> value="Cancelado">Cancelado
                                                 </option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
-                                                    echo 'selected';
-                                                } ?> value="Aguardando Peças">Aguardando Peças
+                                                            echo 'selected';
+                                                        } ?> value="Aguardando Peças">Aguardando Peças
                                                 </option>
                                                 <option <?php if ($result->status == 'Aprovado') {
-                                                    echo 'selected';
-                                                } ?> value="Aprovado">Aprovado
+                                                            echo 'selected';
+                                                        } ?> value="Aprovado">Aprovado
                                                 </option>
                                             </select>
                                         </div>
@@ -182,19 +182,19 @@
                         </div>
                         <!--Desconto-->
                         <?php
-                                                    $total = 0;
-foreach ($produtos as $p) {
-    $total = $total + $p->subTotal;
-}
-?>
+                        $total = 0;
+                        foreach ($produtos as $p) {
+                            $total = $total + $p->subTotal;
+                        }
+                        ?>
                         <?php
-$totals = 0;
-foreach ($servicos as $s) {
-    $preco = $s->preco ?: $s->precoVenda;
-    $subtotals = $preco * ($s->quantidade ?: 1);
-    $totals = $totals + $subtotals;
-}
-?>
+                        $totals = 0;
+                        foreach ($servicos as $s) {
+                            $preco = $s->preco ?: $s->precoVenda;
+                            $subtotals = $preco * ($s->quantidade ?: 1);
+                            $totals = $totals + $subtotals;
+                        }
+                        ?>
 
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
@@ -205,10 +205,18 @@ foreach ($servicos as $s) {
                                             <input class="span12 money" id="valorTotal" name="valorTotal" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="valor" value="<?php echo number_format($totals + $total, 2, '.', ''); ?>" readonly />
                                         </div>
                                     </div>
+                                    <div class="span1">
+                                        <label for="">Tipo Desc.</label>
+                                        <select style="width: 4em;" name="tipoDesconto" id="tipoDesconto">
+                                            <option value="real">R$</option>
+                                            <option value="porcento" <?=$result->tipo_desconto == "porcento" ? "selected" : "" ?>>%</option>
+                                        </select>
+                                        <strong><span style="color: red" id="errorAlert"></span></strong>
+                                    </div>
                                     <div class="span3">
                                         <input type="hidden" name="idOs" id="idOs" value="<?php echo $result->idOs; ?>" />
                                         <label for="">Desconto</label>
-                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="%" maxlength="6" size="2" />
+                                        <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="" maxlength="6" size="2" value="<?=$result->desconto ?>"/>
                                         <strong><span style="color: red" id="errorAlert"></span></strong>
                                     </div>
                                     <div class="span2">
@@ -264,17 +272,17 @@ foreach ($servicos as $s) {
                                         </thead>
                                         <tbody>
                                             <?php
-                    $total = 0;
-foreach ($produtos as $p) {
-    $total = $total + $p->subTotal;
-    echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
-    echo '<td><div align="center">' . $p->quantidade . '</td>';
-    echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
-    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
-    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-    echo '</tr>';
-} ?>
+                                            $total = 0;
+                                            foreach ($produtos as $p) {
+                                                $total = $total + $p->subTotal;
+                                                echo '<tr>';
+                                                echo '<td>' . $p->descricao . '</td>';
+                                                echo '<td><div align="center">' . $p->quantidade . '</td>';
+                                                echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
+                                                echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
+                                                echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                                echo '</tr>';
+                                            } ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -328,19 +336,19 @@ foreach ($produtos as $p) {
                                         </thead>
                                         <tbody>
                                             <?php
-$totals = 0;
-foreach ($servicos as $s) {
-    $preco = $s->preco ?: $s->precoVenda;
-    $subtotals = $preco * ($s->quantidade ?: 1);
-    $totals = $totals + $subtotals;
-    echo '<tr>';
-    echo '<td>' . $s->nome . '</td>';
-    echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
-    echo '<td><div align="center">R$ ' . $preco  . '</div></td>';
-    echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
-    echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
-    echo '</tr>';
-} ?>
+                                            $totals = 0;
+                                            foreach ($servicos as $s) {
+                                                $preco = $s->preco ?: $s->precoVenda;
+                                                $subtotals = $preco * ($s->quantidade ?: 1);
+                                                $totals = $totals + $subtotals;
+                                                echo '<tr>';
+                                                echo '<td>' . $s->nome . '</td>';
+                                                echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
+                                                echo '<td><div align="center">R$ ' . $preco  . '</div></td>';
+                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
+                                                echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
+                                                echo '</tr>';
+                                            } ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -389,7 +397,7 @@ foreach ($servicos as $s) {
                                                     <span>' . $a->anexo . '</span>
                                                 </div>';
                                     }
-?>
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -413,18 +421,18 @@ foreach ($servicos as $s) {
                                         </thead>
                                         <tbody>
                                             <?php
-        foreach ($anotacoes as $a) {
-            echo '<tr>';
-            echo '<td>' . $a->anotacao . '</td>';
-            echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-            echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
-            echo '</tr>';
-        }
-        if (!$anotacoes) {
-            echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
-        }
+                                            foreach ($anotacoes as $a) {
+                                                echo '<tr>';
+                                                echo '<td>' . $a->anotacao . '</td>';
+                                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
+                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
+                                                echo '</tr>';
+                                            }
+                                            if (!$anotacoes) {
+                                                echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
+                                            }
 
-?>
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -501,6 +509,7 @@ foreach ($servicos as $s) {
                     <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                     <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
                     <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
+                    <input type="hidden" name="tipoDesconto" id="tipoDesconto" value="<?php echo $result->tipo_desconto; ?>">
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -556,9 +565,14 @@ foreach ($servicos as $s) {
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 
 <script type="text/javascript">
-    function calcDesconto(valor, desconto) {
-
-        var resultado = (valor - desconto * valor / 100).toFixed(2);
+    function calcDesconto(valor, desconto, tipoDesconto) {
+        var resultado = 0;
+        if (tipoDesconto == 'real') {
+            resultado = valor - desconto;
+        }
+        if (tipoDesconto == 'porcento') {
+            resultado = (valor - desconto * valor / 100).toFixed(2);
+        }
         return resultado;
     }
 
@@ -578,15 +592,14 @@ foreach ($servicos as $s) {
     $("#quantidade_servico").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
-
-    $("#desconto").keyup(function() {
-
-        this.value = this.value.replace(/[^0-9.]/g, '');
-        if ($('#desconto').val() > 100) {
-            $('#errorAlert').text('Desconto não pode ser maior de 100%.').css("display", "inline").fadeOut(5000);
-            $('#desconto').val('');
-            $("#desconto").focus();
+    $('#tipoDesconto').on('change', function() {
+        if (Number($("#desconto").val()) >= 0) {
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
+            $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
         }
+    });
+    $("#desconto").keyup(function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#valorTotal").val() == null || $("#valorTotal").val() == '') {
             $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
@@ -595,7 +608,7 @@ foreach ($servicos as $s) {
             $("#desconto").focus();
 
         } else if (Number($("#desconto").val()) >= 0) {
-            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val())));
+            $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
         } else {
             $('#errorAlert').text('Erro desconhecido.').css("display", "inline").fadeOut(5000);
