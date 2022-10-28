@@ -116,15 +116,15 @@
                                     <tbody>
                                         <?php
                                         $total = 0;
-                                        foreach ($produtos as $p) {
-                                            $total = $total + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td>R$ ' . number_format($p->preco, 2, ',', '.') . '</td>';
-                                            echo '<td>' . $p->quantidade . '</td>';
-                                            echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+foreach ($produtos as $p) {
+    $total = $total + $p->subTotal;
+    echo '<tr>';
+    echo '<td>' . $p->descricao . '</td>';
+    echo '<td>R$ ' . number_format($p->preco, 2, ',', '.') . '</td>';
+    echo '<td>' . $p->quantidade . '</td>';
+    echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+    echo '</tr>';
+} ?>
 
                                         <tr>
                                             <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -153,16 +153,16 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $total = 0;
-                                            foreach ($servicos as $s) {
-                                                $total = $total + $s->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $s->nome . '</td>';
-                                                echo '<td>R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                                echo '<td>' . $s->quantidade . '</td>';
-                                                echo '<td>R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+    $total = 0;
+foreach ($servicos as $s) {
+    $total = $total + $s->subTotal;
+    echo '<tr>';
+    echo '<td>' . $s->nome . '</td>';
+    echo '<td>R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
+    echo '<td>' . $s->quantidade . '</td>';
+    echo '<td>R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
+    echo '</tr>';
+} ?>
 
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -216,7 +216,7 @@
                                                     <span>' . $a->anexo . '</span>
                                                 </div>';
                                     }
-                                    ?>
+?>
                                 </div>
 
                             </div>

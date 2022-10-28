@@ -13,8 +13,8 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php if ($custom_error != '') {
-    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+                } ?>
                 <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idUsuarios', $result->idUsuarios) ?>
@@ -122,12 +122,12 @@
                         <div class="controls">
                             <select name="situacao" id="situacao">
                                 <?php if ($result->situacao == 1) {
-    $ativo = 'selected';
-    $inativo = '';
-} else {
-    $ativo = '';
-    $inativo = 'selected';
-} ?>
+                                    $ativo = 'selected';
+                                    $inativo = '';
+                                } else {
+                                    $ativo = '';
+                                    $inativo = 'selected';
+                                } ?>
                                 <option value="1" <?php echo $ativo; ?>>Ativo</option>
                                 <option value="0" <?php echo $inativo; ?>>Inativo</option>
                             </select>
@@ -140,13 +140,13 @@
                         <div class="controls">
                             <select name="permissoes_id" id="permissoes_id">
                                 <?php foreach ($permissoes as $p) {
-    if ($p->idPermissao == $result->permissoes_id) {
-        $selected = 'selected';
-    } else {
-        $selected = '';
-    }
-    echo '<option value="' . $p->idPermissao . '"' . $selected . '>' . $p->nome . '</option>';
-} ?>
+                                    if ($p->idPermissao == $result->permissoes_id) {
+                                        $selected = 'selected';
+                                    } else {
+                                        $selected = '';
+                                    }
+                                    echo '<option value="' . $p->idPermissao . '"' . $selected . '>' . $p->nome . '</option>';
+                                } ?>
                             </select>
                         </div>
                     </div>

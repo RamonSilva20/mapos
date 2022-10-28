@@ -4,7 +4,6 @@
 
 class Garantias extends MY_Controller
 {
-
     /**
      * author: Wilmerson Felipe
      * email: will.phelipe@gmail.com

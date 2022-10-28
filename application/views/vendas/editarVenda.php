@@ -141,17 +141,17 @@
                                     <tbody>
                                         <?php
                                         $total = 0;
-                                        foreach ($produtos as $p) {
-                                            $preco = $p->preco ?: $p->precoVenda;
-                                            $total = $total + $p->subTotal;
-                                            echo '<tr>';
-                                            echo '<td>' . $p->descricao . '</td>';
-                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
-                                            echo '<td><div align="center">R$: ' . $preco . '</td>';
-                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
-                                            echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                            echo '</tr>';
-                                        } ?>
+foreach ($produtos as $p) {
+    $preco = $p->preco ?: $p->precoVenda;
+    $total = $total + $p->subTotal;
+    echo '<tr>';
+    echo '<td>' . $p->descricao . '</td>';
+    echo '<td><div align="center">' . $p->quantidade . '</td>';
+    echo '<td><div align="center">R$: ' . $preco . '</td>';
+    echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
+    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+    echo '</tr>';
+} ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -549,8 +549,8 @@
                 var estoque = parseInt($("#estoque").val());
 
                 <?php if (!$configuration['control_estoque']) {
-                                            echo 'estoque = 1000000';
-                                        }; ?>
+                    echo 'estoque = 1000000';
+                }; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

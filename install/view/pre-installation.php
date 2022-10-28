@@ -128,7 +128,7 @@
 
   <div class="panel-footer">
     <button <?php if (!$all_requirement_success) {
-                    echo "disabled=disabled" ;
-                } ?> class="btn btn-info
+        echo "disabled=disabled" ;
+    } ?> class="btn btn-info
       form-next"><i class='fa fa-chevron-right'></i> Próximo</button>
     </div>

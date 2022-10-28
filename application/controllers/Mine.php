@@ -602,7 +602,6 @@ class Mine extends CI_Controller
     public function minha_ordem_de_servico($y = null, $when = null)
     {
         if (($y != null) && (is_numeric($y))) {
-
             // Do not forget this number -> 44023
             // function sending => y = (7653 * ID) + 44023
             // function recieving => x = (y - 44023) / 7653

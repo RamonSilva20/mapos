@@ -54,7 +54,7 @@
                                         echo '<td>' . $r->origem . '</td>';
                                         echo '</tr>';
                                     }
-                                ?>
+    ?>
                             </tbody>
                         </table>
                     </div>
