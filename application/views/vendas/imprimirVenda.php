@@ -119,26 +119,34 @@
                                         echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
+                                        echo '<hr />';
                                     } ?>
-                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0) { ?>
                                     <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Desconto: R$</strong></td>
-                                        <td>
-                                            <strong>
-                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
-                                            </strong>
-                                        </td>
+                                        <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                        <td><strong>R$
+                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                                     </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Total: R$</strong></td>
-                                        <td><strong>
-                                        <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
-                                    </tr>
+                                    <hr />
                                 </tbody>
                             </table>
                         <?php
                         } ?>
+                        <hr />
+                        <h4 style="text-align: right">Total: R$
+                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                            ?>
+                        <h4 style="text-align: right">Desconto: R$
+                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <h4 style="text-align: right">Total Com Desconto: R$
+                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                        </h4>
+                    <?php
+                        } ?>
+                    </div>
+                    <hr />
                         <h5 style="text-align: left">Observações:</h5>
                         <table class="table">
                             <tbody>
