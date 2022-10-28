@@ -149,7 +149,7 @@ foreach ($produtos as $p) {
     echo '<td><div align="center">' . $p->quantidade . '</td>';
     echo '<td><div align="center">R$: ' . $preco . '</td>';
     echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
-    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, '.', '') . '</td>';
     echo '</tr>';
 } ?>
                                     </tbody>
@@ -157,7 +157,7 @@ foreach ($produtos as $p) {
                                         <tr>
                                             <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td>
-                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, ',', '.'); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2); ?>">
+                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, '.', ''); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2, '.', ''); ?>">
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
@@ -165,13 +165,13 @@ foreach ($produtos as $p) {
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong><?php echo number_format($result->desconto, 2, '.', ','); ?> %</strong></div>
+                                                    <div align="center"><strong><?php echo number_format($result->desconto, 2, '.', ''); ?> %</strong></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total Com Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2); ?>">
+                                                    <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, '.', ''); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
                                                 </td>
                                             </tr>
                                         <?php

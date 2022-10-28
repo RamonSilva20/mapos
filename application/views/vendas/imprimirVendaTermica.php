@@ -104,6 +104,14 @@
                                         echo '</tr>';
                                     } ?>
                                     <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
+                                        <tr>
+                                        <td colspan="3" style="text-align: right"><strong>Total: R$</strong></td>
+                                        <td>
+                                            <strong>
+                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                                            </strong>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
                                         <td>
