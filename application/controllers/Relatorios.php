@@ -443,7 +443,7 @@ class Relatorios extends MY_Controller
                 'Total Serviços' => 'price',
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
-                'Desconto %' => 'number',
+                'Desconto' => 'number',
             ];
 
             $writer = new XLSXWriter();
