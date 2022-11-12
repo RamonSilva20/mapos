@@ -143,9 +143,17 @@ class GerencianetSdk extends BasePaymentGateway
         return $this->atualizarDados($id);
     }
 
-    private function valorTotal($produtosValor, $servicosValor, $desconto)
+    private function valorTotal($produtosValor, $servicosValor, $desconto, $tipo_desconto)
     {
-        return (($produtosValor + $servicosValor) - $desconto * ($produtosValor + $servicosValor) / 100);
+        if ($tipo_desconto == "porcento") {
+            $def_desconto = $desconto * ($produtosValor + $servicosValor) / 100;
+        } elseif ($tipo_desconto == "real") {
+            $def_desconto = $desconto;
+        } else {
+            $def_desconto = 0;
+        }
+
+        return ($produtosValor + $servicosValor) - $def_desconto;
     }
 
     protected function gerarCobrancaBoleto($id, $tipo)
@@ -159,6 +167,10 @@ class GerencianetSdk extends BasePaymentGateway
             : [];
 
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
+            ? $this->ci->Os_model->getById($id)
+            : $this->ci->vendas_model->getById($id)];
+        
+        $tipo_desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
             : $this->ci->vendas_model->getById($id)];
 
@@ -180,6 +192,14 @@ class GerencianetSdk extends BasePaymentGateway
             $desconto,
             function ($total, $item) {
                 return $item->desconto;
+            },
+            0
+        );
+
+        $tipoDesconto = array_reduce(
+            $tipo_desconto,
+            function ($total, $item) {
+                return $item->tipo_desconto;
             },
             0
         );
@@ -234,7 +254,7 @@ class GerencianetSdk extends BasePaymentGateway
                 [
                     'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                     'amount' => 1,
-                    'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto))
+                    'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto))
                 ]
             ],
             'metadata' => [
@@ -261,7 +281,7 @@ class GerencianetSdk extends BasePaymentGateway
             'expire_at' => $result['data']['expire_at'],
             'charge_id' => $result['data']['charge_id'],
             'status' => $result['data']['status'],
-            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
+            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
             'payment' => $result['data']['payment'],
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
@@ -296,6 +316,10 @@ class GerencianetSdk extends BasePaymentGateway
         $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
             ? $this->ci->Os_model->getById($id)
             : $this->ci->vendas_model->getById($id)];
+        
+        $tipo_desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
+            ? $this->ci->Os_model->getById($id)
+            : $this->ci->vendas_model->getById($id)];
 
         $totalProdutos = array_reduce(
             $produtos,
@@ -311,6 +335,15 @@ class GerencianetSdk extends BasePaymentGateway
             },
             0
         );
+
+        $tipoDesconto = array_reduce(
+            $tipo_desconto,
+            function ($total, $item) {
+                return $item->tipo_desconto;
+            },
+            0
+        );
+
         $totalDesconto = array_reduce(
             $desconto,
             function ($total, $item) {
@@ -339,7 +372,7 @@ class GerencianetSdk extends BasePaymentGateway
                     [
                         'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
                         'amount' => 1,
-                        'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto))
+                        'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto))
                     ]
                 ],
             ]
@@ -371,7 +404,7 @@ class GerencianetSdk extends BasePaymentGateway
             'expire_at' => $result['data']['expire_at'],
             'charge_id' => $result['data']['charge_id'],
             'status' => $result['data']['status'],
-            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto)),
+            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'link',
             'payment_gateway' => 'GerencianetSdk',

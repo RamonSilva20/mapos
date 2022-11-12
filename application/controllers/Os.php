@@ -633,6 +633,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
@@ -673,6 +674,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $idOs);
             $this->db->update('os');
 
@@ -710,6 +712,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $this->input->post('idOsServico'));
             $this->db->update('os');
 
@@ -734,6 +737,7 @@ class Os extends MY_Controller
             log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $idOs);
             $this->db->update('os');
             echo json_encode(['result' => true]);
@@ -871,6 +875,7 @@ class Os extends MY_Controller
         } else {
             $idOs = $this->input->post('idOs');
             $data = [
+                'tipo_desconto' => $this->input->post('tipoDesconto'),
                 'desconto' => $this->input->post('desconto'),
                 'valor_desconto' => $this->input->post('resultado')
             ];
@@ -927,6 +932,7 @@ class Os extends MY_Controller
             $data = [
                 'descricao' => set_value('descricao'),
                 'valor' => getAmount($this->input->post('valor')),
+                'tipo_desconto' => ($this->input->post('tipoDesconto')),
                 'desconto' => $os->desconto,
                 'valor_desconto' => $os->valor_desconto,
                 'clientes_id' => $this->input->post('clientes_id'),

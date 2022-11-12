@@ -409,9 +409,13 @@ class Relatorios extends MY_Controller
 
             $isXls
                 ?
-                $totalValorDesconto += $o['valor_desconto'] ? floatval($o['valor_desconto']) : floatval($o['total_servico']) + floatval($o['total_produto'])
+                $totalValorDesconto += $o['valor_desconto']
+                ? floatval($o['valor_desconto'])
+                : floatval($o['total_servico']) + floatval($o['total_produto'])
                 :
-                $totalValorDesconto += $o->valor_desconto ? floatval($o->valor_desconto) : floatval($o->total_produto) + floatval($o->total_servico);
+                $totalValorDesconto += $o->valor_desconto
+                ? floatval($o->valor_desconto)
+                : floatval($o->total_produto) + floatval($o->total_servico);
         }
 
         if ($isXls) {
@@ -430,6 +434,7 @@ class Relatorios extends MY_Controller
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
                     'total_geral_desconto' => $item['desconto'] ?: 0,
+                    'tipo_desconto' => $item['tipo_desconto'] ?: "-",
                 ];
             }, $os);
 
@@ -443,7 +448,8 @@ class Relatorios extends MY_Controller
                 'Total Serviços' => 'price',
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
-                'Desconto %' => 'number',
+                'Desconto' => 'number',
+                'Tipo Desconto' => 'string',
             ];
 
             $writer = new XLSXWriter();
@@ -540,6 +546,7 @@ class Relatorios extends MY_Controller
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
+                    'tipo_desconto' => $item['tipo_desconto'] ?: "-",
                 ];
             }, $os);
 
@@ -553,7 +560,8 @@ class Relatorios extends MY_Controller
                 'Total Serviços' => 'price',
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
-                'Desconto %' => 'number',
+                'Desconto' => 'number',
+                'Tipo Desconto' => 'string',
             ];
 
             $writer = new XLSXWriter();
@@ -637,6 +645,7 @@ class Relatorios extends MY_Controller
                     'valor' => $item['valor'],
                     'desconto' => $item['desconto'],
                     'valor_desconto' => $item['valor_desconto'],
+                    'tipo_desconto' => $item['tipo_desconto'],
                     'data_vencimento' => $item['data_vencimento'],
                     'data_pagamento' => $item['data_pagamento'],
                     'baixado' => $item['baixado'],
@@ -650,7 +659,8 @@ class Relatorios extends MY_Controller
                 'ID Lançamentos' => 'integer',
                 'Descricao' => 'string',
                 'Valor' => 'price',
-                'Desconto %' => 'price',
+                'Desconto' => 'price',
+                'Tipo Desconto' => 'string',
                 'Valor Com Desc.' => 'price',
                 'Data Vencimento' => 'YYYY-MM-DD',
                 'Data Pagamento' => 'YYYY-MM-DD',
@@ -707,6 +717,7 @@ class Relatorios extends MY_Controller
                     'valor' => $item['valor'],
                     'desconto' => $item['desconto'],
                     'valor_desconto' => $item['valor_desconto'],
+                    'tipo_desconto' => $item['tipo_desconto'],
                     'data_vencimento' => $item['data_vencimento'],
                     'data_pagamento' => $item['data_pagamento'],
                     'baixado' => $item['baixado'],
@@ -720,7 +731,8 @@ class Relatorios extends MY_Controller
                 'ID Lançamentos' => 'integer',
                 'Descricao' => 'string',
                 'Valor' => 'price',
-                'Desconto %' => 'price',
+                'Desconto' => 'price',
+                'Tipo Desconto' => 'string',
                 'Valor Com Desc.' => 'price',
                 'Data Vencimento' => 'YYYY-MM-DD',
                 'Data Pagamento' => 'YYYY-MM-DD',
@@ -803,6 +815,7 @@ class Relatorios extends MY_Controller
                     'total' => $item['valorTotal'] ?: 0,
                     'totalDesconto' => $item['valor_desconto'] ?: 0,
                     'desconto' => $item['desconto'] ?: 0,
+                    'tipo_desconto' => $item['tipo_desconto'] ?: '-',
                 ];
             }, $vendas);
 
@@ -814,6 +827,7 @@ class Relatorios extends MY_Controller
                 'Total' => 'price',
                 'Total Com Desconto' => 'price',
                 'Desconto' => 'number',
+                'Tipo Desconto' => 'string',
             ];
 
             $writer = new XLSXWriter();
@@ -897,6 +911,7 @@ class Relatorios extends MY_Controller
                     'total' => $item['valorTotal'] ?: 0,
                     'totalDesconto' => $item['valor_desconto'] ?: 0,
                     'desconto' => $item['desconto'] ?: 0,
+                    'tipo_desconto' => $item['tipo_desconto'] ?: '-',
                 ];
             }, $vendas);
 
