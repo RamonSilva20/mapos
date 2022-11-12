@@ -792,7 +792,6 @@ class Os extends MY_Controller
                 $upload_data = $this->upload->data();
 
                 if ($upload_data['is_image'] == 1) {
-
                     // set the resize config
                     $resize_conf = [
 
