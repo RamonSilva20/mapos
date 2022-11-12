@@ -287,13 +287,11 @@ class MercadoPago extends BasePaymentGateway
 
     private function valorTotal($produtosValor, $servicosValor, $desconto, $tipo_desconto)
     {
-        if($tipo_desconto == "porcento"){
+        if ($tipo_desconto == "porcento") {
             $def_desconto = $desconto * ($produtosValor + $servicosValor) / 100;
-        }
-        elseif ($tipo_desconto == "real") {
+        } elseif ($tipo_desconto == "real") {
             $def_desconto = $desconto;
-        }
-        else {
+        } else {
             $def_desconto = 0;
         }
 

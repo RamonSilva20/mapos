@@ -409,12 +409,12 @@ class Relatorios extends MY_Controller
 
             $isXls
                 ?
-                $totalValorDesconto += $o['valor_desconto'] 
-                ? floatval($o['valor_desconto']) 
+                $totalValorDesconto += $o['valor_desconto']
+                ? floatval($o['valor_desconto'])
                 : floatval($o['total_servico']) + floatval($o['total_produto'])
                 :
-                $totalValorDesconto += $o->valor_desconto 
-                ? floatval($o->valor_desconto) 
+                $totalValorDesconto += $o->valor_desconto
+                ? floatval($o->valor_desconto)
                 : floatval($o->total_produto) + floatval($o->total_servico);
         }
 
