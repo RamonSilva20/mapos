@@ -101,12 +101,11 @@ $totalProdutos = 0; ?>
                                         <td>
                                             <?php if ($result->garantia != null) { ?>
                                                 <b>Garantia: </b>
-                                                <?php echo $result->garantia . ' dias'; ?><?php } ?>
+                                                <?php echo $result->garantia . ' dias'; ?>
+                                            <?php } ?>
                                         </td>
-
-
                                     <?php } ?>
-                                    <?php if ($result->status == 'Aberto') { ?>
+                                    
                                         <?php if ($result->descricaoProduto != null) { ?>
                                     <tr>
                                         <td colspan="5">
@@ -133,7 +132,6 @@ $totalProdutos = 0; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
-                            <?php } ?>
                             <?php if ($result->status != 'Aberto') { ?>
                                 <?php if ($result->laudoTecnico != null) { ?>
                                     <tr>
@@ -147,8 +145,6 @@ $totalProdutos = 0; ?>
 
                             </tbody>
                         </table>
-
-
                         <?php if ($produtos != null) { ?>
                             <br />
                             <table style='font-size: 11px;' class="table table-bordered table-condensed" id="tblProdutos">
@@ -162,20 +158,17 @@ $totalProdutos = 0; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-
                                     foreach ($produtos as $p) {
                                         $totalProdutos = $totalProdutos + $p->subTotal;
                                         echo '<tr>';
                                         echo '<td>' . $p->quantidade . '</td>';
                                         echo '<td>' . $p->descricao . '</td>';
                                         echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
-
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
 
                                     <tr>
-
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                                     </tr>
@@ -224,9 +217,7 @@ $totalProdutos = 0; ?>
                                                     echo "<h4 style='text-align: right; font-size: 13px;'>Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
                                                     echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
                                                     echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
-                                                }
-
-?>
+                                                } ?>
                                     </td>
                                 </tr>
                             </tbody>
