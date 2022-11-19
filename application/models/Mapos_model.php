@@ -192,7 +192,6 @@ class Mapos_model extends CI_Model
             return $this->db->query($sql)->row();
         }
         return false;
-        
     }
 
     public function getEstatisticasFinanceiroMes($year)
@@ -255,7 +254,6 @@ class Mapos_model extends CI_Model
             return $this->db->query($sql, [intval($numbersOnly)])->row();
         }
         return false;
-        
     }
 
     public function getEstatisticasFinanceiroMesInadimplencia($year)
