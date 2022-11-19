@@ -188,8 +188,11 @@ class Mapos_model extends CI_Model
                        SUM(CASE WHEN baixado = 1 AND tipo = 'despesa' THEN valor END) as total_despesa,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) as total_receita_pendente,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor END) as total_despesa_pendente FROM lancamentos";
-
-        return $this->db->query($sql)->row();
+        if ($this->db->query($sql) !== false) {
+            return $this->db->query($sql)->row();
+        }
+        return false;
+        
     }
 
     public function getEstatisticasFinanceiroMes($year)
@@ -229,8 +232,10 @@ class Mapos_model extends CI_Model
             FROM lancamentos
             WHERE EXTRACT(YEAR FROM data_pagamento) = ?
         ";
-
-        return $this->db->query($sql, [intval($numbersOnly)])->row();
+        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
+            return $this->db->query($sql, [intval($numbersOnly)])->row();
+        }
+        return false;
     }
 
     public function getEstatisticasFinanceiroDia($year)
@@ -246,7 +251,11 @@ class Mapos_model extends CI_Model
             FROM lancamentos
             WHERE EXTRACT(YEAR FROM data_pagamento) = ?
         ";
-        return $this->db->query($sql, [intval($numbersOnly)])->row();
+        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
+            return $this->db->query($sql, [intval($numbersOnly)])->row();
+        }
+        return false;
+        
     }
 
     public function getEstatisticasFinanceiroMesInadimplencia($year)
@@ -286,8 +295,10 @@ class Mapos_model extends CI_Model
             FROM lancamentos
             WHERE EXTRACT(YEAR FROM data_pagamento) = ?
         ";
-
-        return $this->db->query($sql, [intval($numbersOnly)])->row();
+        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
+            return $this->db->query($sql, [intval($numbersOnly)])->row();
+        }
+        return false;
     }
 
     public function getEmitente()
