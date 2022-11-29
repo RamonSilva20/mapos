@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `clientes` (
   `idClientes` INT(11) NOT NULL AUTO_INCREMENT,
+  `asaas_id` VARCHAR(255) DEFAULT NULL,
   `nomeCliente` VARCHAR(255) NOT NULL,
   `sexo` VARCHAR(20) NULL,
   `pessoa_fisica` BOOLEAN NOT NULL DEFAULT 1,
@@ -117,7 +118,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `dataCadastro` DATE NOT NULL,
   `permissoes_id` INT NOT NULL,
   `dataExpiracao` date DEFAULT NULL,
-  `asaas_id` VARCHAR(255) DEFAULT NULL,
   `url_image_user` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`idUsuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),

@@ -407,6 +407,7 @@ class Asaas extends BasePaymentGateway
             'addressNumber' => $cliente['numero'],
             'complement' => $cliente['complemento'],
             'province' => $cliente['bairro'],
+            'city' => $cliente['cidade'],
             'state' => $cliente['estado'],
             'country' => 'Brasil',
             'externalReference' => $clienteId,
