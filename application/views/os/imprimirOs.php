@@ -19,7 +19,6 @@ $totalProdutos = 0; ?>
             margin: 0;
             padding: 0;
             background-color: #FAFAFA;
-            font: 12pt "Tahoma";
         }
 
         * {
@@ -73,31 +72,15 @@ $totalProdutos = 0; ?>
 </head>
 
 <body style="background-color: rgba(0,0,0,.4)" id=body>
-    <div class="modal fade in" id="popup" tabindex="-1" role="dialog">
-        <div class="modal-header">
-            <h4 class="modal-title">Deseja imprimir 2 vias ?</h4>
-        </div>
-        <div class="modal-body">
-            <div class="formal-group">
-                <select value="" onchange="showEmpresa(this)">
-                    <option value="sim">Sim</option>
-                    <option value="nao">Não</option>
-                </select>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="continue" class="button btn btn-mini btn-info" style="float: right;" onclick="closePopup()"><span class="button__text">Continuar</span></button>
-        </div>
-    </div>
-    <div id="principal" hidden>
+    <div id="principal">
         <div class="book">
             <div class="container-fluid page" id="viaCliente">
-                <div class="subpage">Via Cliente
+                <div class="subpage"><?php echo (!$configuration['control_2vias']) ? "" : "Via Cliente" ?>
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="invoice-content">
                                 <div class="invoice-head" style="margin-bottom: 0">
-                                    <table class="table-condensed">
+                                    <table class="table table-condensed">
                                         <tbody>
                                             <?php if ($emitente == null) { ?>
 
@@ -309,13 +292,13 @@ $totalProdutos = 0; ?>
                 </div>
             </div>
             <!-- VIA EMPRESA  -->
-            <div class="container-fluid page" id="ViaEmpresa">
+            <div class="container-fluid page" id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                 <div class="subpage">Via Empresa
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="invoice-content">
                                 <div class="invoice-head" style="margin-bottom: 0">
-                                    <table class="table-condensed">
+                                    <table class="table table-condensed">
                                         <tbody>
                                             <?php if ($emitente == null) { ?>
 
@@ -529,22 +512,6 @@ $totalProdutos = 0; ?>
         </div>
     </div>
 
-    <script type="text/javascript">
-        function showEmpresa(select) {
-            if (select.value == "sim") {
-                document.getElementById('ViaEmpresa').style.display = "block";
-            } else {
-                document.getElementById('ViaEmpresa').style.display = "none";
-            }
-        };
-
-        function closePopup() {
-            document.getElementById('popup').style.display = "none";
-            document.getElementById('principal').style.display = "block";
-            document.getElementById('body').style.background = 'white';
-            window.print();
-        }
-    </script>
 </body>
 
 </html>
