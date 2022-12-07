@@ -26,15 +26,15 @@
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-        <div class="grid-blak">
+            <div class="grid-blak">
+                <a href="<?= site_url('clientes') ?>">
+                    <div class="numbers">Clientes</div>
+                    <div class="cardName">F1</div>
+                </a>
+            </div>
             <a href="<?= site_url('clientes') ?>">
-                <div class="numbers">Clientes</div>
-                <div class="cardName">F1</div>
-            </a>
-        </div>
-            <a href="<?= site_url('clientes') ?>">
-                <div class="lord-icon01">
-                    <i class='bx bx-user iconBx01'></i>
+                <div class="lord-icon02">
+                    <i class='bx bx-user iconBx02'></i>
                 </div>
             </a>
         </li>
