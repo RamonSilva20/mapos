@@ -1,11 +1,17 @@
+<style>
+  select {
+    width: 70px;
+  }
+</style>
 <div class="new122">
-    <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
+    <div class="widget-title" style="margin: -20px 0 0">
             <span class="icon">
                 <i class="fas fa-cash-register"></i>
             </span>
             <h5>Cobranças</h5>
-        </div>
+    </div>
+    <div class="widget-box">
+        <h5 style="padding: 3px 0"></h5>
         <div class="widget-content nopadding tab-content">
             <table id="tabela" class="table table-bordered ">
                 <thead>

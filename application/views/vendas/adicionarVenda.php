@@ -12,7 +12,7 @@
                 <span class="icon">
                     <i class="fas fa-cash-register"></i>
                 </span>
-                <h5>Cadastro de venda</h5>
+                <h5>Iniciar venda</h5>
             </div>
             <div class="widget-content nopadding tab-content">
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">

@@ -23,18 +23,64 @@ body {
   --funSider2 : #0467fc;
   --subtitle  : #2c2b31;
   --title     : #d4d8e0;
-  --widget-box: #ffffff;
+  --widget-box: #e6e9f3;
   --toggle    : #676779;
-  --black     : #21232e;
 
-  --white   : #676779;
-  --cinza   : #a2a6ae;
-  --cinza0  : #9aa6b3;
-  --laranja : #fd5e33;
-  --laranja1: #fc9d0f;
-  --laranja0: #faead2ee;
-  --blue    : #0039c6;
-  --blue2   : #212573;
+  /* === Tema pure dark === */
+  --wid-dark  : #1c1d26;
+  --dark-0    : #191a22;
+  --dark-1    : #14141a;
+  --dark-2    : #272835;
+  --dark-cinz : #8788a4;
+  --dark-azul : #1086dd;
+  --dark-viol : #52459f;
+
+  /* === Tema white green === */
+  --white-gre0  : #c8e2d5;
+  --white-gre   : #6dad8d;
+  --white-gre-o : #f2cc8e;
+  --white-gre-o2: #e79411;
+  --white-gre2  : #3c405b;
+  --white-pret  : #222222;
+  --white-bran  : #f2f5fa;
+
+  /* === Tema white blak === */
+  --white-blak     : #14121f;
+  --white-blak-tit : #525a6a;
+  --white-blak-tit2: #a0a0a0;
+  --white-blak-cont: #f5f5fd;
+  --white-blak-side: #ececf6;
+
+  /* === Tema dark orange === */
+  --dark-orange     : #de7902;
+  --dark-orange-tit : #a3a9ae;
+  --dark-orange-tit1: #757e89;
+  --dark-orange-tit2: #4c595e;
+  --dark-orange-widg: #142027;
+  --dark-orange-cont: #192732;
+  --dark-orange-side: #142027;
+
+  /* === Tema dark violet === */
+  --dark-violet     : #14121f;
+  --dark-violet-tit : #eee7e7;
+  --dark-violet-tit2: #c3b2e9;
+  --dark-violet-widg: #291a57;
+  --dark-violet-cont: #1b1239;
+  --dark-violet-side: #6b29f8;
+
+  /* === tema orange === */
+  --dark-oran   : #fd7670;
+
+  --black     : #4a547e;
+  --branco    : #caced8;
+  --white     : #ffffff;
+  --cinza     : #a2a6ae;
+  --cinza0    : #9aa6b3;
+  --laranja   : #fd5e33;
+  --laranja1  : #fc9d0f;
+  --laranja0  : #ffa489;
+  --blue      : #0039c6;
+  --blue2     : #212573;
 
   /* === Transition === */
   --tran-02: all 0.2s ease;
@@ -49,13 +95,6 @@ body {
   font-size  : 0.77em;
   min-height : 100vh;
   overflow-x : hidden;
-}
-
-body.dark {
-  --funSider  : #2c2c30;
-  --bodycolor : #3d3f3f;
-  --widget-box: #f9f9f9;
-  --title     : #d6d9e0;
 }
 
 a {
@@ -79,7 +118,7 @@ a:focus {
 
 .dropdown-menu {
   min-width: 120px;
-  top      : 36px;
+  top      : 25px;
 }
 
 .dropdown-menu>li>a {
@@ -141,7 +180,7 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  box-shadow: none;
+  box-shadow  : none;
 }
 
 .progress,
@@ -156,6 +195,22 @@ input[type="color"],
 .btn,
 .btn-primary {
   background-image: none;
+}
+
+input[type="search"],
+select,
+input[type="text"],
+.row-fluid input[class*="span"],
+input[type="number"],
+select[class*="span"] {
+  background  : #e6e9f3;
+  border-color: #b1b9be;
+}
+
+.form-actions {
+  background-color          : #d2dbe3;
+  border-bottom-left-radius : 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .fc th {
@@ -183,7 +238,7 @@ h3 {
 
 .button__text,
 .button__icon {
-  display    : inline-flex;
+  display    : inline-flex !important;
   align-items: center;
   padding    : 0 7px;
   color      : #fff;
@@ -243,7 +298,9 @@ hr {
 .row-fluid select[class*="span"],
 .row-fluid textarea[class*="span"],
 .row-fluid .uneditable-input[class*="span"] {
-  margin-top: 0;
+  margin-top  : 0;
+  background  : #e6e9f3;
+  border-color: #b1bac0;
 }
 
 #btn-calendar .iconX2 {
@@ -353,7 +410,8 @@ hr {
 }
 
 #user-nav .iconN {
-  padding-right: 1px;
+  padding-right: 3px;
+  margin-left  : 3px;
 }
 
 #user-nav>ul>li>a:hover,
@@ -411,10 +469,10 @@ hr {
   margin               : auto;
   padding              : 0px;
   display              : grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-gap             : 19px;
   margin-bottom        : 15px;
-  margin-top           : 3px;
+  margin-top           : 10px;
 }
 
 .cardBox .card {
@@ -424,22 +482,31 @@ hr {
   display        : flex;
   justify-content: space-around;
   align-items    : center;
+  opacity        : 0.9;
 }
 
 .cardBox .card:nth-child(1) {
-  background: linear-gradient(53deg, #38a9f5, #6ec4fb);
+  background: linear-gradient(270deg, #6a7bf3, #93d5ff);
 }
 
 .cardBox .card:nth-child(2) {
-  background: linear-gradient(53deg, #ffc154, #ffd487);
+  background: linear-gradient(270deg, #e18c3e, #ffd096);
 }
 
 .cardBox .card:nth-child(3) {
-  background: linear-gradient(53deg, #4bc0c0, #5cede9);
+  background: linear-gradient(270deg, #10a6b5, #5cede9);
 }
 
 .cardBox .card:nth-child(4) {
-  background: linear-gradient(53deg, #ff6384, #ff97ab);
+  background: linear-gradient(270deg, #e7276e, #fd9eb1);
+}
+
+.cardBox .card:nth-child(5) {
+  background: linear-gradient(270deg, #15b698, #62eba6);
+}
+
+.cardBox .card:nth-child(6) {
+  background: linear-gradient(270deg, #f1b50c, #f5da56);
 }
 
 .cardBox .card .numbers {
@@ -449,23 +516,22 @@ hr {
 }
 
 .cardBox .card .cardName {
-  font-size  : 1.5em;
-  font-weight: 600;
-  padding    : 3px;
+  font-size  : 1.1em;
+  font-weight: 400;
 }
 
-.cardBox .card .iconBx {
-  font-size      : 3em;
+.cardBox .card .iconBx01, .iconBx02, .iconBx03, .iconBx04, .iconBx05, .iconBx06, .iconBx07 {
+  font-size      : 2.8em;
   text-decoration: none;
 }
 
 .cardBox .card .numbers,
 .cardBox .card .cardName,
-.cardBox .card .iconBx {
+.cardBox .card .iconBx01 {
   color: var(--subtitle);
 }
 
-/* hora certa */
+/* hora certa
 .cardBox .card-cl {
   position       : relative;
   padding        : 5px;
@@ -473,7 +539,7 @@ hr {
   display        : flex;
   justify-content: space-around;
   align-items    : center;
-  background     : #fae26b;
+  background: linear-gradient(53deg, #fbe267, #ffee95);
 }
 
 .cardBox .card-cl .clock-card {
@@ -525,7 +591,27 @@ hr {
   right         : 15px;
 }
 
-/* End hora certa */
+}
+End hora certa */
+
+.cardBox .card .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
+    border    : none !important;
+    background: #ffffff54 !important;
+}
+
+.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
+    padding        : 3px;
+    padding        : 3px;
+    border-radius  : 35%;
+    width          : 40px;
+    height         : 40px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    background     : #3336491f;
+    border         : 1px solid #3336491f;
+}
+
 .icon-bord {
   position     : absolute;
   width        : 50px;
@@ -593,7 +679,7 @@ hr {
 
 #sidebar ul {
   margin : 0;
-  padding: 10px 20px;
+  padding: 10px 20px 0;
 }
 
 #sidebar li {
@@ -627,8 +713,8 @@ hr {
 
 #sidebar li .title-tooltip {
   position     : absolute;
-  background   : #ffd07c;
-  color        : #333649;
+  background   : #08080c;
+  color        : #93a2af;
   border       : 1px solid #6c6e7841;
   padding      : 0 6px;
   border-radius: 6px;
@@ -648,18 +734,19 @@ hr {
 
 #sidebar .mode {
   position       : absolute;
-  top            : 17px;
-  right          : -32px;
-  transform      : translateY(-50%) rotate(180deg);
+  background     : var(--bodycolor);
+  border         : 2px solid var(--cinza0);
+  top            : 50%;
+  right          : -15px;
+  transform      : translateY(-50%);
   display        : flex;
   align-items    : center;
   justify-content: center;
-  height         : 40px;
-  width          : 40px;
+  height         : 23px;
+  width          : 23px;
   border-radius  : 50%;
   color          : var(--cinza0);
   transition     : var(--tran-05);
-  z-index        : 90;
 }
 
 #sidebar.open .mode {
@@ -715,7 +802,7 @@ hr {
 
 #sidebar.open li a {
   justify-content: flex-start;
-  transition     : 20s;
+  transition     : var(--tran-03);
 }
 
 #sidebar li a {
@@ -798,7 +885,7 @@ body.dark .switch::before {
   justify-content : space-between;
   align-items     : center;
   margin-left     : 242px;
-  margin-top      : 3px;
+  margin-top      : 5px;
   background-color: var(--bodycolor);
 }
 
@@ -889,7 +976,7 @@ section .profile .profile-img {
 }
 
 #content-header {
-  margin         : 20px 10px 10px;
+  margin         : 25px 10px 15px;
   z-index        : 20;
   display        : flex;
   align-items    : center;
@@ -899,15 +986,15 @@ section .profile .profile-img {
 
 /* New bem-vindos */
 #content-bemv {
-  margin: 20px 10px 10px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
+  margin         : 25px 10px 15px;
+  z-index        : 20;
+  display        : flex;
+  align-items    : center;
   justify-content: space-between;
-  flex-direction: row-reverse;
-  top: 22px;
-  right: 25px;
-  position: absolute;
+  flex-direction : row-reverse;
+  top            : 22px;
+  right          : 25px;
+  position       : absolute;
 }
 
 .bemv {
@@ -1354,7 +1441,7 @@ section .profile .profile-img {
   align-items    : center;
   border-radius  : 8px;
   padding        : 10px 5px;
-  border         : 0px solid rgba(0, 0, 0, 0.1);
+  border         : 1px solid rgba(229 229 229);
 }
 
 .new-bottons .card:nth-child(3) {
@@ -1367,13 +1454,13 @@ section .profile .profile-img {
 
 .new-bottons .card:hover {
   text-decoration: none;
-  background     : #f5f6f7;
+  background     : #e0e3ed;
 }
 
 .new-bottons .card .cardName {
-  font-size  : 0.9em;
+  font-size  : 1.1em;
+  font-weight: 400;
   position   : relative;
-  top        : 5px;
   font-family: system-ui;
   text-align : center;
   color      : var(--subtitle);
@@ -1381,7 +1468,6 @@ section .profile .profile-img {
 
 .new-bottons .card .cardName2 {
   position   : relative;
-  top        : 5px;
   font-size  : 2.1em;
   text-align : center;
   font-weight: 600;
@@ -1390,7 +1476,6 @@ section .profile .profile-img {
 
 .new-bottons .card .cardName1 {
   position   : relative;
-  top        : 5px;
   font-size  : 1.3em;
   text-align : center;
   font-weight: 600;
@@ -1405,7 +1490,7 @@ section .profile .profile-img {
 .iconBx6,
 .iconBx7,
 .iconBx8 {
-  font-size    : 2.4rem;
+  font-size    : 2.1rem;
   text-shadow  : 0 1px 10px rgb(248 247 247 / 40%);
   border-radius: 50%;
 }
@@ -1579,7 +1664,7 @@ section .profile .profile-img {
 .fc-event[href] {
   border-radius: 8px;
   color        : #76818d;
-  background   : #f3f4f6;
+  background   : #e6e9f3;
   border-color : #76818d;
 }
 
@@ -1666,8 +1751,8 @@ section .profile .profile-img {
 /* Widgets */
 .cardHeader {
   font-weight  : 500;
-  font-size    : 1.7em;
-  color        : var(--subtitle);
+  font-size    : 1.3em;
+  color        : #0d0252;
   padding      : 5px 0 0 20px;
   margin-bottom: -11px;
 }
@@ -1677,9 +1762,12 @@ section .profile .profile-img {
   flex-direction: column;
   clear         : both;
   position      : relative;
-  border-radius : 12px;
   margin-top    : 10px;
   margin-bottom : 10px;
+  border-radius: 6px;
+  background   : var(--widget-box);
+  border       : 1px solid rgb(0 0 0 / 8%);
+  box-shadow   : none;
 }
 
 .widget-box-new {
@@ -1710,7 +1798,6 @@ section .profile .profile-img {
   border-radius : 12px;
 }
 
-.widget-box,
 .widget-box0,
 .widget-box2,
 .widget-box-new,
@@ -2287,7 +2374,7 @@ span.icon .checker {
 
 .dataTables_length {
   color   : #878787;
-  margin  : 2px 8px;
+  margin  : 2px 10px;
   position: relative;
   width   : 50%;
 }
@@ -2375,8 +2462,8 @@ div.dataTables_wrapper .ui-widget-header {
 .dataTables_filter {
   color     : #878787;
   font-size : 11px;
-  right     : 8px;
-  top       : 53px;
+  right     : 10px;
+  top       : 21px;
   position  : absolute;
   text-align: left;
 }
@@ -2484,11 +2571,35 @@ div.dataTables_wrapper .ui-widget-header {
 .modal-header {
   height : auto;
   padding: 8px 15px 5px;
+  border-bottom          : 0 solid #eee;
+  border-top-left-radius : 4px;
+  border-top-right-radius: 4px;
+  border-radius: 4px 4px 0 0;
+  background             : #3dabf5;
+  color                  : #fff;
+  text-align-last        : center;
+}
+
+.modal-footer {
+  border-radius: 0 0 4px 4px;
+}
+
+.modal-header h5 {
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
+}
+
+.modal-header h4 {
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
 }
 
 .modal-header h3 {
-  font-size  : 12px;
-  text-shadow: 0 1px 0 #ffffff;
+  font-size  : 1.5em !important;
+  font-weight: 500;
+  text-shadow: 0 1px 0 transparent;
 }
 
 .notify-ui ul {
@@ -2516,8 +2627,8 @@ form {
 }
 
 .form-horizontal .control-group {
-  border-top   : 1px solid #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  border-top   : 0px solid #ffffff;
+  border-bottom: 0px solid #eeeeee;
   margin-bottom: 0;
 }
 
@@ -2914,8 +3025,8 @@ form {
   }
 
   .cardHeader {
-    font-size: 1.45em;
-    padding  : 0 0 0 10px;
+    font-size: 1.35em;
+    padding  : 0 0 0 13px;
   }
 
   .new122 {
@@ -2951,7 +3062,7 @@ form {
   }
 
   .navebarn {
-    margin-left: 105px;
+    margin-left: 85px;
   }
 
   #newlog {
@@ -3008,7 +3119,7 @@ form {
   }
 
   #sidebar.open .mode {
-      right  : -6px;
+      right  : -15px;
       z-index: 999999;
   }
 
@@ -3076,7 +3187,8 @@ form {
   }
 
   .cardBox {
-    margin-bottom: 0;
+    margin-bottom        : 0;
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 
   .cardBox .card {
@@ -3143,10 +3255,6 @@ form {
 
   #sidebar.open li form:hover .title-tooltip {
     display: none;
-  }
-
-  #sidebar .mode {
-    top: 16px;
   }
 
   #sidebar.open .mode {
@@ -3228,6 +3336,14 @@ form {
     padding: 0 !important;
   }
 
+  .cardBox .card .numbers {
+    font-size: 1.6em !important;
+  }
+
+  .cardBox .card .cardName {
+    display: none;
+  }
+
   .new-balance {
     grid-template-columns: 1fr;
   }
@@ -3292,6 +3408,10 @@ form {
   body {
     padding  : 0 !important;
     font-size: 0.67em !important;
+  }
+
+  .tip-bottom {
+    display: inline;
   }
 
   .cli1 {
@@ -3464,17 +3584,9 @@ form {
   }
 
   #sidebar .mode {
-    background: #3336499e !important;
-    color     : #a6afbb;
-    top       : 50%;
     right     : -21px;
     height    : 35px;
     width     : 35px;
-    box-shadow: 0 0 10px rgb(0 0 0 / 20%) !important;
-  }
-
-  #sidebar.open .mode {
-    right: -41px;
   }
 
   .navebarn {
@@ -3552,11 +3664,19 @@ form {
     font-size: 0.75em;
   }
 
+  .new-bottons .card .cardName {
+    font-size  : 0.9em;
+  }
+
   .cli1 {
     max-width    : 77px;
     white-space  : nowrap;
     overflow     : hidden;
     text-overflow: ellipsis;
+  }
+
+  .fs-exit {
+    display: none;
   }
 
   .ph1,
@@ -3678,6 +3798,18 @@ form {
     padding              : 15px 18px;
   }
 
+  .new-bottons .card .iconBx,
+  .iconBx2,
+  .iconBx3,
+  .iconBx4,
+  .iconBx5,
+  .iconBx6,
+  .iconBx7,
+  .iconBx8 {
+    font-size    : 2.0rem;
+    padding-left : 8px;
+  }
+
   .cardBox .card-cl {
     display: none;
   }
@@ -3692,6 +3824,11 @@ form {
 
   .cardBox .card .iconBx {
     font-size: 2.3rem;
+  }
+
+  lord-icon {
+    width : 50px !important;
+    height: 50px !important;
   }
 
   .dropdown-menu {
@@ -3742,7 +3879,7 @@ form {
   }
 
   .dataTables_filter {
-    top  : 38px;
+    top: 10px;
   }
 
   .dataTables_length {
@@ -3806,9 +3943,11 @@ form {
   }
 
   .cardHeader {
-    font-size    : 1.45em;
+    font-size    : 1.13em;
     padding      : 5px 0 0 15px;
     margin-bottom: 0;
+    color        : #0d0252;
+    font-weight  : 400;
   }
 
   input[type="number"] {
@@ -4011,14 +4150,17 @@ form {
   }
 
   #sidebar .mode {
-    background     : #3336499e !important;
-    color          : #a6afbb;
-    top            : 50%;
-    width          : 38px;
-    height         : 38px;
-    right          : -40px !important;
-    backdrop-filter: blur(5px);
-    box-shadow     : 0 0 10px rgb(0 0 0 / 20%) !important;
+    width          : 35px;
+    height         : 35px;
+    right          : -20px !important;
+  }
+
+  #sidebar .mode i {
+    left: 12px;
+  }
+
+  #sidebar.open .mode i {
+    left: auto;
   }
 
   .widget-box,

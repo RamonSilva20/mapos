@@ -1,8 +1,14 @@
-<div class="new122" style="margin-top: 0; min-height: 100vh">
+<div class="new122">
     <link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
     <div class="span12" style="margin-left: 0">
+    <div class="widget-title" style="margin: -20px 0 0">
+                <span class="icon">
+                    <i class="fas fa-hdd"></i>
+                </span>
+                <h5>Arquivos</h5>
+            </div>
         <form method="get" action="<?= current_url(); ?>">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
                 <div class="span3">
@@ -26,12 +32,6 @@
 
     <div>
         <div class="widget-box">
-            <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-hdd"></i>
-                </span>
-                <h5>Arquivos</h5>
-            </div>
             <div class="widget-content nopadding tab-content">
                 <table id="tabela" width="100%" class="table table-bordered ">
                     <thead>

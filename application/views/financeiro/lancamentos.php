@@ -26,7 +26,12 @@ $periodo = $this->input->get('periodo');
 </style>
 
 <div class="new122">
-
+    <div class="widget-title">
+                <span class="icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </span>
+                <h5>Lançamentos Financeiros</h5>
+    </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
         <div class="span5" style="display:flex">
             <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="width: 230px">
@@ -91,13 +96,6 @@ $periodo = $this->input->get('periodo');
 
     <div>
         <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-hand-holding-usd"></i>
-                </span>
-                <h5>Lançamentos Financeiros</h5>
-
-            </div>
 
             <div class="widget-content nopadding tab-content">
 

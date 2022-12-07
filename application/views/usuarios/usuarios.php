@@ -1,14 +1,22 @@
+<style>
+  select {
+    width: 70px;
+  }
+</style>
+
 <div class="new122">
+    <div class="widget-title" style="margin:-15px -10px 0">
+      <h5>Usuários</h5>
+    </div>
   <a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
   <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Usuário</span></a>
 
 <div class="widget-box">
     <div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-user"></i>
-        </span>
-        <h5>Usuários</h5>
-
+      <span class="icon">
+        <i class="fas fa-cash-register"></i>
+      </span>
+      <h5 style="padding: 3px 0"></h5>
     </div>
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
