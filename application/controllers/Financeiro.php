@@ -171,7 +171,7 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -286,7 +286,7 @@ class Financeiro extends MY_Controller
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id'),
+                        'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
 
@@ -315,7 +315,7 @@ class Financeiro extends MY_Controller
                     'observacoes' => $this->input->post('observacoes_parc'),
                     'forma_pgto' => $this->input->post('formaPgto_parc'),
                     'tipo' => $this->input->post('tipo_parc'),
-                    'usuarios_id' => $this->session->userdata('id'),
+                    'usuarios_id' => $this->session->userdata('id_admin'),
 
 
 
@@ -354,7 +354,7 @@ class Financeiro extends MY_Controller
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id'),
+                        'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
 
@@ -427,7 +427,7 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -508,7 +508,7 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => $this->input->post('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -544,7 +544,7 @@ class Financeiro extends MY_Controller
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
             'tipo' => $this->input->post('tipo'),
-            'usuarios_id' => $this->session->userdata('id'),
+            'usuarios_id' => $this->session->userdata('id_admin'),
         ];
         if (set_value('idFornecedor')) {
             $data['clientes_id'] =  set_value('idFornecedor');

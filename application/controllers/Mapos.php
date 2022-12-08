@@ -33,14 +33,14 @@ class Mapos extends MY_Controller
 
     public function minhaConta()
     {
-        $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
+        $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id_admin'));
         $this->data['view'] = 'mapos/minhaConta';
         return $this->layout();
     }
 
     public function alterarSenha()
     {
-        $current_user = $this->mapos_model->getById($this->session->userdata('id'));
+        $current_user = $this->mapos_model->getById($this->session->userdata('id_admin'));
 
         if (!$current_user) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao pesquisar usuário!');
@@ -319,7 +319,7 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->session->userdata('id');
+        $id = $this->session->userdata('id_admin');
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar sua foto.');
             redirect(site_url('mapos/minhaConta'));
