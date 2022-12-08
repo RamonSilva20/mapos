@@ -64,7 +64,7 @@
 
     @media (max-width: 480px) {
         form {
-            display: block !important;
+            display: contents !important;
         }
 
         .form-horizontal .control-label {
