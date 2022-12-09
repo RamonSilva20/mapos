@@ -293,7 +293,7 @@ $totalProdutos = 0; ?>
             </div>
             <!-- VIA EMPRESA  -->
             <?php $totalServico = 0;
-            $totalProdutos = 0; ?>
+$totalProdutos = 0; ?>
             <div class="container-fluid page" id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                 <div class="subpage">Via Empresa
                     <div class="row-fluid">
