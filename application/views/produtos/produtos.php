@@ -1,8 +1,19 @@
-<div class="new122" style="margin-top: 0; min-height: 100vh">
+<style>
+  select {
+    width: 70px;
+  }
+</style>
+<div class="new122">
+    <div class="widget-title" style="margin: -20px 0 0">
+            <span class="icon">
+                <i class="fas fa-shopping-bag"></i>
+            </span>
+            <h5>Produtos</h5>
+    </div>
 <div class="flexxn" style="display: flex;">
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
     <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
-      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Add. Produtos</span></a>
+      <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2"> Produtos</span></a>
     <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-barcode-reader' ></i></span><span class="button__text2">Gerar Etiquetas</span></a>
 </div>
@@ -10,12 +21,7 @@
 <?php } ?>
 
 <div class="widget-box">
-    <div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-shopping-bag"></i>
-        </span>
-        <h5>Produtos</h5>
-    </div>
+    <h5 style="padding: 3px 0"></h5>
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>

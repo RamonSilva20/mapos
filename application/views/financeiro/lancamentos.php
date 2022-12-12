@@ -26,11 +26,16 @@ $periodo = $this->input->get('periodo');
 </style>
 
 <div class="new122">
-
+    <div class="widget-title">
+                <span class="icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </span>
+                <h5>Lançamentos Financeiros</h5>
+    </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
         <div class="span5" style="display:flex">
             <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="width: 230px">
-                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" title="Cadastrar nova receita ou despesa">Add. Receita/Despesa</span></a>
+                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" title="Cadastrar nova receita ou despesa"> Receita/Despesa</span></a>
         </div>
     <?php } ?>
 
@@ -91,13 +96,6 @@ $periodo = $this->input->get('periodo');
 
     <div>
         <div class="widget-box">
-            <div class="widget-title">
-                <span class="icon">
-                    <i class="fas fa-hand-holding-usd"></i>
-                </span>
-                <h5>Lançamentos Financeiros</h5>
-
-            </div>
 
             <div class="widget-content nopadding tab-content">
 
@@ -161,7 +159,7 @@ $periodo = $this->input->get('periodo');
                             }
 
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . number_format($r->valor, 2, ',', '.') . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" valor_desconto_editar="' . $resultado_valor_desconto_desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . number_format($r->valor, 2, ',', '.') . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
@@ -360,12 +358,14 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             </div>
 
         </div>
-        <div class="modal-footer">
-    <button id="cancelar_nova_receita" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-    <button class="btn btn-success">Adicionar Registro</button>
-  </div>
-   </form>
-     </div>
+        <div class="modal-footer" style="display:flex;justify-content: right">
+            <button class="button btn btn-warning" id="cancelar_nova_receita" data-dismiss="modal" aria-hidden="true" style="min-width: 110px">
+            <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-primary" style="min-width: 110px">
+            <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Adicionar Registro</span></button>
+        </div>
+    </form>
+</div>
 
 <!-- Modal nova receita e despesa parcelada -->
 <div id="modalReceitaParcelada" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -603,10 +603,10 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <input class="btn btn-inverse" onclick="mostrarValoresEditar();" type="button" name="valor_desconto_editar" value="Aplicar" placeholder="R$" style="width: 70px; margin-left:3px;" />
 	      </div>
 
-          <div class="span2">  
-          <label for="valor_desconto">Val.Desc</label>
-          <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00", 2, ',', '.') ?>" />
-        </div>
+            <div class="span2">  
+            <label for="valor_desconto">Val.Desc</label>
+            <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00", 2, ',', '.') ?>" />
+            </div>
 
                 <div class="span4" style="margin-left: 0">
                     <label for="vencimento">Data Vencimento*</label>
@@ -886,6 +886,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             $("#pagamentoEditar").val($(this).attr('pagamento'));
             $("#formaPgtoEditar").val($(this).attr('formaPgto'));
             $("#tipoEditar").val($(this).attr('tipo'));
+            $("#descontos_editar").val($(this).attr('descontos_editar'));
             $("#descontoEditar").val($(this).attr('valor_desconto_editar'));
             $("#urlAtualEditar").val($(location).attr('href'));
             var baixado = $(this).attr('baixado');

@@ -13,12 +13,26 @@
   <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/fullcalendar.css" />
   <?php if ($configuration['app_theme'] == 'white') { ?>
-    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema.css" />
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white.css" />
+  <?php } ?>
+  <?php if ($configuration['app_theme'] == 'puredark') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-pure-dark.css" />
+  <?php } ?>
+  <?php if ($configuration['app_theme'] == 'darkviolet') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-dark-violet.css" />
+  <?php } ?>
+  <?php if ($configuration['app_theme'] == 'darkorange') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-dark-orange.css" />
+  <?php } ?>
+  <?php if ($configuration['app_theme'] == 'whitegreen') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white-green.css" />
+  <?php } ?>
+  <?php if ($configuration['app_theme'] == 'whiteblack') { ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white-black.css" />
   <?php } ?>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;700&display=swap' rel='stylesheet' type='text/css'>
   <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/shortcut.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
@@ -42,10 +56,10 @@
     });
     //shortcut.add("F5", function() {});
     shortcut.add("F6", function() {
-      location.href = '<?= site_url('vendas'); ?>';
+      location.href = '<?= site_url('vendas/adicionar'); ?>';
     });
     shortcut.add("F7", function() {
-      location.href = '<?= site_url('garantias'); ?>';
+      location.href = '<?= site_url('financeiro/lancamentos'); ?>';
     });
     shortcut.add("F8", function() {});
     shortcut.add("F9", function() {});
@@ -53,27 +67,25 @@
     shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
     window.BaseUrl = "<?= base_url() ?>";
-  </script>
-
+</script>
 </head>
+
 <body>
 <!--top-Header-menu-->
 <div class="navebarn">
   <div id="user-nav" class="navbar navbar-inverse">
-
     <ul class="nav">
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Meu Perfil" class="tip-bottom"><i class='bx bx-user-circle iconN'></i><span class="text"> Meu Perfil</span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
-        <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine"> <span class="text">Área do Cliente</span></a></li>
+        <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text">Área do Cliente</span></a></li>
           <li class=""><a title="Meu Perfil" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text">Meu Perfil</span></a></li>
           <li class="divider"></li>
           <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class='bx bx-log-out-circle'></i> <span class="text">Sair do Sistema</span></a></li>
         </ul>
       </li>
-
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Relatórios" class="tip-bottom"><i class='bx bx-chart iconN'></i><span class="text"> Relatórios</span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
           <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
           <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
@@ -85,9 +97,8 @@
           <li><a href="<?= site_url('relatorios/receitasBrutasMei') ?>">Receitas Brutas - MEI</a></li>
         </ul>
       </li>
-
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Configurações" class="tip-bottom"><i class='bx bx-cog iconN'></i><span class="text"> Configurações</span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Configurações"><i class='bx bx-cog iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
         <li><a href="<?= site_url('mapos/configurar') ?>">Sistema</a></li>
         <li><a href="<?= site_url('usuarios') ?>">Usuários</a></li>
@@ -98,31 +109,54 @@
         <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
         </ul>
       </li>
+<!-- Start Fullscreen -->
+      <li class="dropdown">
+        <a id="btn1" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="TelaCheia"><i class='bx bx-fullscreen' ></i></a>
+      </li>
+      <li class="dropdown fs-exit">
+        <a id="btn2" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Sair TelaCheia"><i class='bx bx-exit-fullscreen' ></i></a>
+      </li>
+      <script type="text/javascript">
+          var btn1=document.getElementById("btn1")
+          var btn2=document.getElementById("btn2")
+          var el=document.documentElement;
+          btn1.addEventListener("click",()=>{
+            if (el.requestFullscreen) {
+              el.requestFullscreen()
+            }
+          })
+          btn2.addEventListener("click",()=>{
+            if (document.exitFullscreen) {
+            document.exitFullscreen()
+            }
+          })
+      </script>
     </ul>
-  </div>
+</div>
+<!-- End Fullscreen -->
 
 <!-- New User -->
 <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
-  <div class="user-names userT0"> <?php function saudacao($nome = '')
+  <div class="user-names userT0"> <?php function saudacao()
   {
       date_default_timezone_set('America/Sao_Paulo');
       $hora = date('H');
       if ($hora >= 6 && $hora <= 12) {
-          return 'Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+          return 'Bom dia, ';
       } elseif ($hora > 12 && $hora <=18) {
-          return 'Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+          return 'Boa tarde, ';
       } else {
-          return 'Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+          return 'Boa noite, ';
       }
   } $login = '';
-  echo saudacao($login); // Irá retornar conforme o horário:?>,
+  echo saudacao($login); // Irá retornar conforme o horário:?>
   </div>
-  <div class="userT"><?= $this->session->userdata('nome') ?></div>
+  <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
 
   <section style="display:block;position:absolute;right:10px">
   <div class="profile">
     <div class="profile-img">
-      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user') ?>" alt=""></a>
+      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
     </div>
   </div>
 </section>

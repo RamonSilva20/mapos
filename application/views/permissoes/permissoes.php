@@ -1,15 +1,21 @@
+<style>
+  select {
+    width: 70px;
+  }
+</style>
 <div class="new122" style="margin-top: 0; min-height: 100vh">
-  <a href="<?php echo base_url(); ?>index.php/permissoes/adicionar" class="button btn btn-success"style="max-width: 150px">
-  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
-
-<div class="widget-box">
-    <div class="widget-title" style="margin: -20px 0 0">
+<div class="widget-title" style="margin: -20px 0 0">
         <span class="icon">
             <i class="fas fa-lock"></i>
         </span>
         <h5>Permissões</h5>
     </div>
 
+  <a href="<?php echo base_url(); ?>index.php/permissoes/adicionar" class="button btn btn-success"style="max-width: 150px">
+  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
+
+<div class="widget-box">
+<h5 style="padding: 3px 0"></h5>
     <div class="widget-content nopadding tab-content">
         <table id="tabela" class="table table-bordered ">
             <thead>

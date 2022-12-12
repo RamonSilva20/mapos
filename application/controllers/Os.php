@@ -943,7 +943,7 @@ class Os extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             $editavel = $this->os_model->isEditable($this->input->post('idOs'));

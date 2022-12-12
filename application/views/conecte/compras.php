@@ -15,7 +15,7 @@ if (!$results) { ?>
 
             <table id="tabela" class="table table-bordered ">
                 <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>#</th>
                         <th>Data da Compra</th>
                         <th>Responsável</th>
@@ -50,7 +50,7 @@ if (!$results) { ?>
 
             <table id="tabela" class="table table-bordered ">
                 <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>#</th>
                         <th>Data da Compra</th>
                         <th>Responsável</th>

@@ -155,7 +155,7 @@
             <?php if (!$results) { ?>
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
@@ -174,7 +174,7 @@
             } else { ?>
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>

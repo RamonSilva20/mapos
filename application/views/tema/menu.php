@@ -5,23 +5,23 @@
             <img src="<?php echo base_url() ?>assets/img/logo-two.png">
         </div>
         <div class="title1">
-            <?= $configuration['app_theme'] == 'white' ? '<img src="' . base_url() . 'assets/img/logo-mapos.png">' : '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
+            <?= $configuration['app_theme'] == 'white' ||  $configuration['app_theme'] == 'whitegreen' ? '<img src="' . base_url() . 'assets/img/logo-mapos.png">' : '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
         </div>
     </div>
     <a href="#" class="visible-phone">
         <div class="mode">
             <div class="moon-menu">
-                <i class='bx bx-menu iconX open-2'></i>
-                <i class='bx bx-x iconX close-2'></i>
+                <i class='bx bx-chevron-right iconX open-2'></i>
+                <i class='bx bx-chevron-left iconX close-2'></i>
             </div>
         </div>
     </a>
     <!-- Start Pesquisar-->
     <li class="search-box">
         <form style="display: flex" action="<?= site_url('mapos/pesquisar') ?>">
-            <button style="background: transparent;border: transparent" type="submit" class="tip-bottom" title="">
+        <button style="background:transparent;border:transparent" type="submit" class="tip-bottom" title="">
                 <i class='bx bx-search iconX'></i></button>
-            <input type="search" name="termo" placeholder="Pesquise aqui...">
+                <input style="background:transparent;<?= $configuration['app_theme'] == 'white' ? 'color:#313030;' : 'color:#fff;' ?>border:transparent" type="search" name="termo" placeholder="Pesquise aqui...">
             <span class="title-tooltip">Pesquisar</span>
         </form>
     </li>
@@ -44,7 +44,7 @@
                     <li class="<?php if (isset($menuClientes)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('clientes') ?>"><i class='bx bx-group iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('clientes') ?>"><i class='bx bx-user iconX'></i>
                             <span class="title">Cliente / Fornecedor</span>
                             <span class="title-tooltip">Clientes</span>
                         </a>
@@ -55,7 +55,7 @@
                     <li class="<?php if (isset($menuProdutos)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('produtos') ?>"><i class='bx bx-package iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('produtos') ?>"><i class='bx bx-basket iconX'></i>
                             <span class="title">Produtos</span>
                             <span class="title-tooltip">Produtos</span>
                         </a>
@@ -66,7 +66,7 @@
                     <li class="<?php if (isset($menuServicos)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('servicos') ?>"><i class='bx bx-stopwatch iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('servicos') ?>"><i class='bx bx-wrench iconX'></i>
                             <span class="title">Serviços</span>
                             <span class="title-tooltip">Serviços</span>
                         </a>
@@ -88,7 +88,7 @@
                     <li class="<?php if (isset($menuOs)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('os') ?>"><i class='bx bx-spreadsheet iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('os') ?>"><i class='bx bx-file iconX'></i>
                             <span class="title">Ordens de Serviço</span>
                             <span class="title-tooltip">Ordens</span>
                         </a>
@@ -121,7 +121,7 @@
                     <li class="<?php if (isset($menuLancamentos)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-square iconX"></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('financeiro/lancamentos') ?>"><i class="bx bx-bar-chart-alt-2 iconX"></i>
                             <span class="title">Lançamentos</span>
                             <span class="title-tooltip">Lançamentos</span>
                         </a>
@@ -131,7 +131,7 @@
                     <li class="<?php if (isset($menuCobrancas)) {
                         echo 'active';
                     }; ?>">
-                        <a class="tip-bottom" title="" href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-credit-card-front iconX'></i>
+                        <a class="tip-bottom" title="" href="<?= site_url('cobrancas/cobrancas') ?>"><i class='bx bx-dollar-circle iconX'></i>
                             <span class="title">Cobranças</span>
                             <span class="title-tooltip">Cobranças</span>
                         </a>

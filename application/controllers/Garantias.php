@@ -61,7 +61,7 @@ class Garantias extends MY_Controller
                 'dataGarantia' => date('Y/m/d'),
                 'refGarantia' => $this->input->post('refGarantia'),
                 'textoGarantia' => $this->input->post('textoGarantia'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (is_numeric($id = $this->garantias_model->add('garantias', $data, true))) {

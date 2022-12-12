@@ -164,6 +164,7 @@ class Financeiro extends MY_Controller
                 'valor' => $valor,
                 'valor_desconto' => $valor_desconto,
                 'desconto' => $desconto,
+                'tipo_desconto' => 'real',
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
                 'baixado' => $this->input->post('recebido') ?: 0,
@@ -171,7 +172,7 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -278,6 +279,7 @@ class Financeiro extends MY_Controller
                         'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .'  [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
+                        'tipo_desconto' => 'real',
                         'valor_desconto' =>   $valorparcelas,
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => $recebimento != null ? $recebimento : date_format($myDateTime, "Y-m-d"),
@@ -286,7 +288,7 @@ class Financeiro extends MY_Controller
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id'),
+                        'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
 
@@ -308,6 +310,7 @@ class Financeiro extends MY_Controller
                     'valor' => $entrada,
                     'desconto' =>  $desconto_entrada,
                     'valor_desconto' => $entrada,
+                    'tipo_desconto' => 'real',
                     'data_vencimento' => $dia_pgto,
                     'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format($myDateTime, "Y-m-d"),
                     'baixado' => 1,
@@ -315,7 +318,7 @@ class Financeiro extends MY_Controller
                     'observacoes' => $this->input->post('observacoes_parc'),
                     'forma_pgto' => $this->input->post('formaPgto_parc'),
                     'tipo' => $this->input->post('tipo_parc'),
-                    'usuarios_id' => $this->session->userdata('id'),
+                    'usuarios_id' => $this->session->userdata('id_admin'),
 
 
 
@@ -346,6 +349,7 @@ class Financeiro extends MY_Controller
                         'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .' [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
+                        'tipo_desconto' => 'real',
                         'valor_desconto' => $valorparcelas,
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => date_format($myDateTime, "Y-m-d"),
@@ -354,7 +358,7 @@ class Financeiro extends MY_Controller
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id'),
+                        'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
 
@@ -427,7 +431,7 @@ class Financeiro extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -502,13 +506,14 @@ class Financeiro extends MY_Controller
                 'data_pagamento' => $pagamento,
                 'valor' => $valor_total,
                 'desconto' => $valor_desconto,
+                'tipo_desconto' => 'real',
                 'valor_desconto' =>  $valor_com_desconto,
                 'baixado' => $this->input->post('pago') ?: 0,
                 'cliente_fornecedor' => $this->input->post('fornecedor'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => $this->input->post('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if (set_value('idFornecedor')) {
@@ -540,11 +545,12 @@ class Financeiro extends MY_Controller
             'data_pagamento' => $pagamento,
             'valor' => $this->input->post('valor'),
             'valor_desconto' => $this->input->post('valor_desconto_editar'),
+            'tipo_desconto' => 'real',
             'baixado' => $this->input->post('pago'),
             'cliente_fornecedor' => set_value('fornecedor'),
             'forma_pgto' => $this->input->post('formaPgto'),
             'tipo' => $this->input->post('tipo'),
-            'usuarios_id' => $this->session->userdata('id'),
+            'usuarios_id' => $this->session->userdata('id_admin'),
         ];
         if (set_value('idFornecedor')) {
             $data['clientes_id'] =  set_value('idFornecedor');
