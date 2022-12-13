@@ -10,16 +10,23 @@
     'use strict';
     $.extend(true, $.trumbowyg, {
         langs: {
-            de: {
-                history: {
-                    redo: 'Wiederholen',
-                    undo: 'Rückgängig'
-                }
-            },
+            // jshint camelcase:false
             en: {
                 history: {
                     redo: 'Redo',
                     undo: 'Undo'
+                }
+            },
+            sl: {
+                history: {
+                    redo: 'Ponovno uveljavi',
+                    undo: 'Razveljavi'
+                }
+            },
+            by: {
+                history: {
+                    redo: 'Паўтарыць',
+                    undo: 'Скасаваць'
                 }
             },
             da: {
@@ -28,10 +35,52 @@
                     undo: 'Fortryd'
                 }
             },
+            de: {
+                history: {
+                    redo: 'Wiederholen',
+                    undo: 'Rückgängig'
+                }
+            },
+            et: {
+                history: {
+                    redo: 'Võta tagasi',
+                    undo: 'Tee uuesti'
+                }
+            },
             fr: {
                 history: {
                     redo: 'Annuler',
                     undo: 'Rétablir'
+                }
+            },
+            hu: {
+                history: {
+                    redo: 'Visszállít',
+                    undo: 'Visszavon'
+                }
+            },
+            ko: {
+                history: {
+                    redo: '다시 실행',
+                    undo: '되돌리기'
+                }
+            },
+            pt_br: {
+                history: {
+                    redo: 'Refazer',
+                    undo: 'Desfazer'
+                }
+            },
+            ru: {
+                history: {
+                    redo: 'Повторить',
+                    undo: 'Отменить'
+                }
+            },
+            tr: {
+                history: {
+                    redo: 'Geri al',
+                    undo: 'Yinele'
                 }
             },
             zh_tw: {
@@ -40,15 +89,13 @@
                    undo: '復原'
                }
             },
-            pt_br: {
-                history: {
-                    redo: 'Refazer',
-                    undo: 'Desfazer'
-                }
-            },
+            // jshint camelcase:true
         },
         plugins: {
             history: {
+                destroy: function (t) {
+                    t.$c.off('tbwinit.history tbwchange.history');
+                },
                 init: function (t) {
                     t.o.plugins.history = $.extend(true, {
                         _stack: [],
@@ -135,7 +182,7 @@
                                 t.o.plugins.history._stack = stack.slice(
                                     0, t.o.plugins.history._index
                                 );
-                                // now add new state to modifed history
+                                // now add new state to modified history
                                 t.o.plugins.history._stack.push(newState);
                             } else {
                                 // modify last stack entry
@@ -197,7 +244,7 @@
                         }
                     };
 
-                    t.$c.on('tbwinit tbwchange', pushToHistory);
+                    t.$c.on('tbwinit.history tbwchange.history', pushToHistory);
 
                     t.addBtnDef('historyRedo', btnBuildDefRedo);
                     t.addBtnDef('historyUndo', btnBuildDefUndo);

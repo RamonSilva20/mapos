@@ -290,9 +290,8 @@ hr {
   float: right;
 }
 
-.trumbowyg-editor,
-.trumbowyg-textarea {
-  min-height: 170px !important;
+.row-fluid [class*="span"] {
+  float: left !important;
 }
 
 .row-fluid select[class*="span"],
@@ -301,6 +300,10 @@ hr {
   margin-top  : 0;
   background  : #e6e9f3;
   border-color: #b1bac0;
+}
+
+.trumbowyg-box.trumbowyg-editor-visible .trumbowyg-textarea {
+  float: left !important;
 }
 
 #btn-calendar .iconX2 {
