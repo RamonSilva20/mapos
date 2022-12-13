@@ -292,6 +292,7 @@ hr {
 
 .row-fluid [class*="span"] {
   float: left !important;
+  font-size: 14px;
 }
 
 .row-fluid select[class*="span"],
