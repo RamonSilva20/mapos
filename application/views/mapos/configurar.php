@@ -33,6 +33,11 @@
                                 <select name="app_theme" id="app_theme">
                                     <option value="default">Escuro</option>
                                     <option value="white" <?= $configuration['app_theme'] == 'white' ? 'selected' : ''; ?>>Claro</option>
+                                    <option value="puredark" <?= $configuration['app_theme'] == 'puredark' ? 'selected' : ''; ?>>Pure dark</option>
+                                    <option value="darkorange" <?= $configuration['app_theme'] == 'darkorange' ? 'selected' : ''; ?>>Dark orange</option>
+                                    <option value="darkviolet" <?= $configuration['app_theme'] == 'darkviolet' ? 'selected' : ''; ?>>Dark violet</option>
+                                    <option value="whitegreen" <?= $configuration['app_theme'] == 'whitegreen' ? 'selected' : ''; ?>>White green</option>
+                                    <option value="whiteblack" <?= $configuration['app_theme'] == 'whiteblack' ? 'selected' : ''; ?>>White black</option>
                                 </select>
                                 <span class="help-inline">Selecione o tema que que deseja usar no sistema</span>
                             </div>
@@ -217,9 +222,19 @@
                     <!-- Menu OS -->
                     <div id="menu5" class="tab-pane fade">
                         <div class="control-group">
+                            <div class="span8" style="margin-left: 3em;">
+                                <label for="control_2vias" class="control-label">Controle de Impressão em 2 Vias</label>
+                                    <div class="controls">
+                                        <select name="control_2vias" id="control_2vias">
+                                            <option value="1">Ativar</option>
+                                            <option value="0" <?= $configuration['control_2vias'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                        </select>
+                                        <span class="help-inline">Ativar ou desativar impressão de OS em 2 vias.</span>
+                                    </div>
+                            </div>
                             <div class="span8">
-                                <span6 class="span10" style="margin-left: 1em;"> Defina a vizualização padrão, onde o que ficar checado será exibida na listagem de OS por padrão. </span6>
-                                <div class="span10">
+                                <span6 class="span10" style="margin-left: 2em;"> Defina a vizualização padrão, onde o que ficar checado será exibida na listagem de OS por padrão. </span6>
+                                <div class="span10" style="margin-left: 3em;">
                                     <label> <input <?= @in_array("Aberto", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aberto"> <span class="lbl"> Aberto</span> </label>
                                     <label> <input <?= @in_array("Faturado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Faturado"> <span class="lbl"> Faturado</span> </label>
                                     <label> <input <?= @in_array("Negociação", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Negociação"> <span class="lbl"> Negociação</span> </label>

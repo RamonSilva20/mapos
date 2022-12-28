@@ -2,8 +2,18 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-
+<style>
+  select {
+    width: 70px;
+  }
+</style>
 <div class="new122">
+    <div class="widget-title" style="margin: -20px 0 0">
+            <span class="icon">
+                <i class="fas fa-diagnoses"></i>
+            </span>
+            <h5>Ordens de Serviço</h5>
+        </div>
     <div class="span12" style="margin-left: 0">
         <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
@@ -45,12 +55,6 @@
     </div>
 
     <div class="widget-box" style="margin-top: 8px">
-        <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon">
-                <i class="fas fa-diagnoses"></i>
-            </span>
-            <h5>Ordens de Serviço</h5>
-        </div>
         <div class="widget-content nopadding">
             <div class="table-responsive">
                 <table class="table table-bordered ">
@@ -78,100 +82,100 @@
                                   </tr>';
                         }
                         $this->load->model('os_model');
-                        foreach ($results as $r) {
-                            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                            if ($r->dataFinal != null) {
-                                $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                            } else {
-                                $dataFinal = "";
-                            }
-                            if ($this->input->get('pesquisa') === null && is_array(json_decode($configuration['os_status_list']))) {
-                                if (in_array($r->status, json_decode($configuration['os_status_list'])) != true) {
-                                    continue;
-                                }
-                            }
+foreach ($results as $r) {
+    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+    if ($r->dataFinal != null) {
+        $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+    } else {
+        $dataFinal = "";
+    }
+    if ($this->input->get('pesquisa') === null && is_array(json_decode($configuration['os_status_list']))) {
+        if (in_array($r->status, json_decode($configuration['os_status_list'])) != true) {
+            continue;
+        }
+    }
 
-                            switch ($r->status) {
-                                case 'Aberto':
-                                    $cor = '#00cd00';
-                                    break;
-                                case 'Em Andamento':
-                                    $cor = '#436eee';
-                                    break;
-                                case 'Orçamento':
-                                    $cor = '#CDB380';
-                                    break;
-                                case 'Negociação':
-                                    $cor = '#AEB404';
-                                    break;
-                                case 'Cancelado':
-                                    $cor = '#CD0000';
-                                    break;
-                                case 'Finalizado':
-                                    $cor = '#256';
-                                    break;
-                                case 'Faturado':
-                                    $cor = '#B266FF';
-                                    break;
-                                case 'Aguardando Peças':
-                                    $cor = '#FF7F00';
-                                    break;
-                                case 'Aprovado':
-                                    $cor = '#808080';
-                                    break;
-                                default:
-                                    $cor = '#E0E4CC';
-                                    break;
-                            }
-                            $vencGarantia = '';
+    switch ($r->status) {
+        case 'Aberto':
+            $cor = '#00cd00';
+            break;
+        case 'Em Andamento':
+            $cor = '#436eee';
+            break;
+        case 'Orçamento':
+            $cor = '#CDB380';
+            break;
+        case 'Negociação':
+            $cor = '#AEB404';
+            break;
+        case 'Cancelado':
+            $cor = '#CD0000';
+            break;
+        case 'Finalizado':
+            $cor = '#256';
+            break;
+        case 'Faturado':
+            $cor = '#B266FF';
+            break;
+        case 'Aguardando Peças':
+            $cor = '#FF7F00';
+            break;
+        case 'Aprovado':
+            $cor = '#808080';
+            break;
+        default:
+            $cor = '#E0E4CC';
+            break;
+    }
+    $vencGarantia = '';
 
-                            if ($r->garantia && is_numeric($r->garantia)) {
-                                $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
-                            }
-                            $corGarantia = '';
-                            if (!empty($vencGarantia)) {
-                                $dataGarantia = explode('/', $vencGarantia);
-                                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#4d9c79';
-                                } else {
-                                    $corGarantia = '#f24c6f';
-                                }
-                            } elseif ($r->garantia == "0") {
-                                $vencGarantia = 'Sem Garantia';
-                                $corGarantia = '';
-                            } else {
-                                $vencGarantia = '';
-                                $corGarantia = '';
-                            }
+    if ($r->garantia && is_numeric($r->garantia)) {
+        $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
+    }
+    $corGarantia = '';
+    if (!empty($vencGarantia)) {
+        $dataGarantia = explode('/', $vencGarantia);
+        $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
+        if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+            $corGarantia = '#4d9c79';
+        } else {
+            $corGarantia = '#f24c6f';
+        }
+    } elseif ($r->garantia == "0") {
+        $vencGarantia = 'Sem Garantia';
+        $corGarantia = '';
+    } else {
+        $vencGarantia = '';
+        $corGarantia = '';
+    }
 
-                            echo '<tr>';
-                            echo '<td>' . $r->idOs . '</td>';
-                            echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-                            echo '<td class="ph1">' . $r->nome . '</td>';
-                            echo '<td>' . $dataInicial . '</td>';
-                            echo '<td class="ph2">' . $dataFinal . '</td>';
-                            echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                            echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
-                            echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
-                            echo '<td class="ph4">R$ R$ ' . number_format($r->valor_desconto ? : $r->valorTotal, 2, ',', '.') . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                            echo '<td>';
+    echo '<tr>';
+    echo '<td>' . $r->idOs . '</td>';
+    echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
+    echo '<td class="ph1">' . $r->nome . '</td>';
+    echo '<td>' . $dataInicial . '</td>';
+    echo '<td class="ph2">' . $dataFinal . '</td>';
+    echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+    echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
+    echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
+    echo '<td class="ph4">R$ R$ ' . number_format($r->valor_desconto ? : $r->valorTotal, 2, ',', '.') . '</td>';
+    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+    echo '<td>';
 
-                            $editavel = $this->os_model->isEditable($r->idOs);
+    $editavel = $this->os_model->isEditable($r->idOs);
 
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
-                            }
-                            if ($editavel) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';
-                            }
-                            echo '</td>';
-                            echo '</tr>';
-                        } ?>
+    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+    }
+    if ($editavel) {
+        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+    }
+    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
+        echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';
+    }
+    echo '</td>';
+    echo '</tr>';
+} ?>
                     </tbody>
                 </table>
             </div>

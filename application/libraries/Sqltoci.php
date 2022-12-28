@@ -142,7 +142,6 @@ class Sqltoci
 
         ## if write file, check if we can
         if ($this->write_file) {
-
             /* make subdir */
             $path = $this->path . '/' . $this->file_name;
 
@@ -235,8 +234,8 @@ class Sqltoci
                 if ($column_default == 'CURRENT_TIMESTAMP') {
                     $up .= PHP_EOL."\t\t\t"."'`$column[Field]` $column[Type] " . ($column['Null'] == 'NO' ? 'NOT NULL' : 'NULL') .
                     (
-                    #  if its timestamp column, don't '' around default value .... crap way, but should work for now
-                    $column['Default'] ? ' DEFAULT ' . ($column['Type'] == 'timestamp' ? $column['Default'] : '' . $column['Default'] . '') : ''
+                        #  if its timestamp column, don't '' around default value .... crap way, but should work for now
+                        $column['Default'] ? ' DEFAULT ' . ($column['Type'] == 'timestamp' ? $column['Default'] : '' . $column['Default'] . '') : ''
                     )
                     . " $column[Extra]',";
                 } else {

@@ -52,11 +52,11 @@
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
-                                        echo '<td align="center"><small>' . $c->desconto . '%</small></td>';
-                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
+                                        echo '<td align="center"><small>' . ($c->tipo_desconto == "real" ? "R$ " : "") . $c->desconto ." ". ($c->tipo_desconto == "porcento" ? " %" : "") .'</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.'). '</small></td>';
                                         echo '</tr>';
                                     }
-                                ?>
+    ?>
 
                                 <tr style="background-color: gainsboro;">
                                     <td colspan="5"></td>

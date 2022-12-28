@@ -633,6 +633,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
@@ -673,6 +674,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $idOs);
             $this->db->update('os');
 
@@ -710,6 +712,7 @@ class Os extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $this->input->post('idOsServico'));
             $this->db->update('os');
 
@@ -734,6 +737,7 @@ class Os extends MY_Controller
             log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idOs', $idOs);
             $this->db->update('os');
             echo json_encode(['result' => true]);
@@ -788,7 +792,6 @@ class Os extends MY_Controller
                 $upload_data = $this->upload->data();
 
                 if ($upload_data['is_image'] == 1) {
-
                     // set the resize config
                     $resize_conf = [
 
@@ -872,6 +875,7 @@ class Os extends MY_Controller
         } else {
             $idOs = $this->input->post('idOs');
             $data = [
+                'tipo_desconto' => $this->input->post('tipoDesconto'),
                 'desconto' => $this->input->post('desconto'),
                 'valor_desconto' => $this->input->post('resultado')
             ];
@@ -928,6 +932,7 @@ class Os extends MY_Controller
             $data = [
                 'descricao' => set_value('descricao'),
                 'valor' => getAmount($this->input->post('valor')),
+                'tipo_desconto' => ($this->input->post('tipoDesconto')),
                 'desconto' => $os->desconto,
                 'valor_desconto' => $os->valor_desconto,
                 'clientes_id' => $this->input->post('clientes_id'),
@@ -938,7 +943,7 @@ class Os extends MY_Controller
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             $editavel = $this->os_model->isEditable($this->input->post('idOs'));

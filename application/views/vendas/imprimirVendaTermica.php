@@ -34,7 +34,7 @@
                                         <td colspan="4" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php
-                                        } else { ?> <tr>
+                                } else { ?> <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
                                                 <?php echo 'CNPJ: ' . $emitente[0]->cnpj; ?> </br>
@@ -54,7 +54,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                        } ?>
+                                } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -104,6 +104,14 @@
                                         echo '</tr>';
                                     } ?>
                                     <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
+                                        <tr>
+                                        <td colspan="3" style="text-align: right"><strong>Total: R$</strong></td>
+                                        <td>
+                                            <strong>
+                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                                            </strong>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Desconto: R$</strong></td>
                                         <td>

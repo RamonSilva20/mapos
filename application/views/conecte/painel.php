@@ -2,15 +2,34 @@
 
 <div class="quick-actions_homepage">
     <ul class="cardBox">
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconBx'></i>
-          <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
-        </a>
+        <li class="card">
+            <a href="<?php echo base_url() ?>index.php/mine/os">
+                <div class="lord-icon04">
+                    <i class='bx bx-file iconBx04'></i>
+                </div>
+            </a>
+            <a href="<?php echo base_url() ?>index.php/mine/os">
+                <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
+            </a>
         </li>
 
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconBx'></i>
-                <div style="font-size: 1.2em" class="numbers">Compras</div>
-            </a></li>
-        <li class="card"> <a href="<?php echo base_url() ?>index.php/mine/conta"><i class='bx bx-user-circle iconBx'></i>
+        <li class="card"> 
+            <a href="<?php echo base_url() ?>index.php/mine/compras">
+                <div class="lord-icon05">
+                    <i class='bx bx-cart-alt iconBx05'></i>
+                </div>
+            </a>
+            <a href="<?php echo base_url() ?>index.php/mine/compras">
+                <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </a>
+        </li>
+        <li class="card"> 
+            <a href="<?php echo base_url() ?>index.php/mine/conta">
+                <div class="lord-icon07">
+                    <i class='bx bx-user-circle iconBx07'></i></span>
+                </div>
+            </a>
+            <a href="<?php echo base_url() ?>index.php/mine/conta">
                 <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
             </a></li>
     </ul>
@@ -73,7 +92,7 @@
                         echo '<tr><td colspan="3">Nenhum ordem de serviço encontrada.</td></tr>';
                     }
 
-                    ?>
+            ?>
                 </tbody>
             </table>
         </div>
@@ -97,26 +116,26 @@
                 </thead>
                 <tbody>
                     <?php
-                    if ($compras != null) {
-                        foreach ($compras as $p) {
-                            if ($p->faturado == 1) {
-                                $faturado = 'Sim';
-                            } else {
-                                $faturado = 'Não';
-                            }
-                            echo '<tr>';
-                            echo '<td>' . $p->idVendas . '</td>';
-                            echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
-                            echo '<td>' . $p->nome . '</td>';
-                            echo '<td>' . $faturado . '</td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
-                            echo '</tr>';
-                        }
+            if ($compras != null) {
+                foreach ($compras as $p) {
+                    if ($p->faturado == 1) {
+                        $faturado = 'Sim';
                     } else {
-                        echo '<tr><td colspan="5">Nenhum venda encontrada.</td></tr>';
+                        $faturado = 'Não';
                     }
+                    echo '<tr>';
+                    echo '<td>' . $p->idVendas . '</td>';
+                    echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
+                    echo '<td>' . $p->nome . '</td>';
+                    echo '<td>' . $faturado . '</td>';
+                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr><td colspan="5">Nenhum venda encontrada.</td></tr>';
+            }
 
-                    ?>
+            ?>
                 </tbody>
             </table>
         </div>

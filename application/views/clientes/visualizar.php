@@ -155,7 +155,7 @@
             <?php if (!$results) { ?>
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
@@ -174,7 +174,7 @@
             } else { ?>
                 <table class="table table-bordered ">
                     <thead>
-                    <tr style="backgroud-color: #2D335B">
+                    <tr>
                         <th>N° OS</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
@@ -216,9 +216,9 @@
     </div>
     <div class="modal-footer" style="display:flex;justify-content: center">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
+            echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
 <span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
-            } ?>
+        } ?>
         <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
           <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
     </div>

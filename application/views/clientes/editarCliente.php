@@ -64,7 +64,7 @@
 
     @media (max-width: 480px) {
         form {
-            display: block !important;
+            display: contents !important;
         }
 
         .form-horizontal .control-label {
@@ -86,8 +86,8 @@
                 <h5>Editar Cliente</h5>
             </div>
             <?php if ($custom_error != '') {
-    echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-} ?>
+                echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+            } ?>
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">

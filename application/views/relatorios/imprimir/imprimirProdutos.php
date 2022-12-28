@@ -48,7 +48,7 @@
                                         echo '<td align="center">R$: ' . number_format($p->valorEstoque, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
-                                ?>
+    ?>
                                 <tr>
                                     <td colspan="6">&nbsp;</td>
                                 </tr>

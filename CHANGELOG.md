@@ -4,6 +4,16 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.39.0] - 2022-10-28
+### Fixed
+
+- Correções em editarVenda.php corrigido erro para permitir adicionar desconto em venda com valor superior a mil reais, erro de mascará, consequentemente foi atualizado imprimirVenda.php e imprimirVendaTermica.php para tratar o mesmo problema. [@Rodrigo-Paz](https://github.com/Rodrigo-Paz)
+- Correções no relatorioFinanceiro.php valor total que não estava informado assim como o valor total do relatorio visto que nao puxava vendas sem desconto, foi corrigido e adicionado simbolo de % no lugar de R$ para o campo desconto. [@Rodrigo-Paz](https://github.com/Rodrigo-Paz)
+
+### Changed
+
+- Trocado link parta envio via Whatsapp, afim de abranger usuários do Whastapp desktop e Whatsapp mobile, já que o atual web.whatsapp.com não faz o redirecionamento para os apps citados anteriormente. Essa alteração não afeta usuários do Whatsapp Web. [@lukasabino](https://github.com/lukasabino)
+
 ## [4.38.0] - 2022-04-29
 
 ### Fixed

@@ -27,7 +27,7 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php
-                                        } else { ?> <tr>
+                                } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
 
                                         <td> <span style="font-size: 17px;">
@@ -63,7 +63,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                        } ?>
+                                } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -119,26 +119,34 @@
                                         echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
+                                        echo '<hr />';
                                     } ?>
-                                    <?php if ($result->valor_desconto !=0 && $result->desconto !=0) { ?>
                                     <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Desconto: R$</strong></td>
-                                        <td>
-                                            <strong>
-                                                <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
-                                            </strong>
-                                        </td>
+                                        <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                        <td><strong>R$
+                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
                                     </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Total: R$</strong></td>
-                                        <td><strong>
-                                        <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?>
-                                    </tr>
+                                    <hr />
                                 </tbody>
                             </table>
                         <?php
                         } ?>
+                        <hr />
+                        <h4 style="text-align: right">Total: R$
+                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                            ?>
+                        <h4 style="text-align: right">Desconto: R$
+                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <h4 style="text-align: right">Total Com Desconto: R$
+                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                        </h4>
+                    <?php
+                        } ?>
+                    </div>
+                    <hr />
                         <h5 style="text-align: left">Observações:</h5>
                         <table class="table">
                             <tbody>

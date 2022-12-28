@@ -33,7 +33,7 @@ $totalProdutos = 0; ?>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php
-                                        } else { ?> <tr>
+                                } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?php echo $emitente[0]->nome; ?></span> </br><span>
@@ -46,7 +46,7 @@ $totalProdutos = 0; ?>
                                     </tr>
 
                                 <?php
-                                        } ?>
+                                } ?>
                             </tbody>
                         </table>
 
@@ -199,9 +199,9 @@ $totalProdutos = 0; ?>
 
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');
-                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
-                            ?>
+echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
+echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
+?>
                         </h4>
 
                     </div>

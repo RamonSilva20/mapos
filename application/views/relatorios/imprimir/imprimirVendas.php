@@ -46,21 +46,21 @@
                                     echo '<td align="center">' . $v->nome . '</td>';
                                     echo '<td align="center">' . date('d/m/Y', strtotime($v->dataVenda)) . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valorTotal, 2, ',', '.') . '</td>';
-                                    echo '<td align="center">' . $v->desconto . '%</td>';
+                                    echo '<td align="center">' . ($v->tipo_desconto == "real" ? "R$ " : "") . $v->desconto ." ". ($v->tipo_desconto == "porcento" ? " %" : "") . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valor_desconto != 0 ? $v->valor_desconto : $v->valorTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
                                 }
-                                ?>
+    ?>
                                 <tr>
                                     <td colspan="5"></td>
                                     <td align="right"><b>TOTAL: </b></td>
                                     <td align="center"><b>R$:
                                             <?php
-                                            foreach ($vendas as $valorTotal => $value) {
-                                                $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
-                                            }
-                                           echo number_format($sum, 2, ',', '.');
-                                            ?></b></td>
+                foreach ($vendas as $valorTotal => $value) {
+                    $sum += $value->valor_desconto != 0 ? $value->valor_desconto : $value->valorTotal;
+                }
+               echo number_format($sum, 2, ',', '.');
+    ?></b></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -1,27 +1,120 @@
+<style>
+    .col-lg-12,
+    .col-lg-3,
+    .col-lg-9,
+    .col-md-12,
+    .col-md-3,
+    .col-md-9,
+    .col-sm-12,
+    .col-xs-12 {
+        position: relative;
+        min-height: 1px;
+    }
+
+    .img-user {
+      bottom: 15px;
+      right: 18px;
+      padding: 6px;
+      background: #d4d7df;
+      color: #333649;
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      align-items: center;
+      opacity: 0.8;
+      position: absolute;
+    }
+
+    .pass-user {
+        bottom: 27px;
+        right: 40px;
+        padding: 6px;
+        background: transparent;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        align-items: center;
+        opacity: 0.7;
+        position: absolute;
+    }
+
+    .img-user:before {
+        opacity: 1;
+    }
+
+    .profileMC {
+        margin-top: -60px;
+    }
+
+    section .profileMC .profile-img {
+        border : 4px solid #e6e9f3;
+        padding: 0;
+        height: 100px;
+        width: 100px;
+    }
+
+    @media (min-width: 1200px) {
+        .col-lg-3 {
+            width: 25%;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .col-lg-12,
+        .col-lg-3,
+        .col-lg-9 {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 480px) and (max-width: 992px) {
+        .col-md-3 {
+            width: 25%;
+        }
+
+        .col-lg-9 {
+            width: 85%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .table-condensed td {
+            padding: 4px 5px;
+        }
+
+        .table {
+            width: 100%;
+        }
+
+        .panel-body {
+            padding: 0;
+        }
+    }
+    
+
+</style>
 <div class="span6" style="margin-left: 0">
     <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
+        <div class="widget-title" style="margin: -10px 0 0">
             <span class="icon">
                 <i class="fas fa-user"></i>
             </span>
             <h5>Minha Conta</h5>
         </div>
-        <div class="widget-contentMC">
+        <div class="widget-contentMC" style="margin: 20px 0 0;">
             <div id="userMC">
-                <section>
-                    <div class="profileMC">
-                        <div class="profile-img">
-                            <img src="<?= (!$usuario->url_image_user || !is_file(FCPATH . "assets/userImage/" . $usuario->url_image_user)) ?  base_url() . "assets/img/User.png" : base_url(). "assets/userImage/" . $usuario->url_image_user ?>" alt="">
-                        </div>
+                <div class="row">
+                    <div class="col-md-3 col-lg-3 " style="text-align:center;">
+                        <section>
+                            <div class="profileMC">
+                                <div class="profile-img">
+                                    <img src="<?= (!$usuario->url_image_user || !is_file(FCPATH . "assets/userImage/" . $usuario->url_image_user)) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $usuario->url_image_user ?>" alt="">
+                                    <a href="#modalImageUser" data-toggle="modal" role="button"><span class="tip-top img-user button__icon" title="Alterar Foto"><i class='bx bxs-camera'></i></span></a>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                </section>
-                <div class="control-group" style="margin-bottom: 5px">
-                    <label for="user" class="">
-                        <span class="">
-                            <a href="#modalImageUser" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="max-width: 140px">
-                              <span class="button__icon"><i class='bx bx-upload'></i></span> <span class="button__text2">Alterar Foto</span></a>
-                        </span>
-                    </label>
                 </div>
             </div>
 

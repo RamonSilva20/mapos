@@ -31,8 +31,8 @@
 </head>
 <?php
 $parse_email = $this->input->get('e');
-$parse_cpfcnpj = $this->input->get('c');
-?>
+    $parse_cpfcnpj = $this->input->get('c');
+    ?>
 
 <body>
     <div class="main-login">

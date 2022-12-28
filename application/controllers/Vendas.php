@@ -4,7 +4,6 @@
 
 class Vendas extends MY_Controller
 {
-
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
@@ -333,6 +332,7 @@ class Vendas extends MY_Controller
 
                 $this->db->set('desconto', 0.00);
                 $this->db->set('valor_desconto', 0.00);
+                $this->db->set('tipo_desconto', null);
                 $this->db->where('idVendas', $this->input->post('idVendasProduto'));
                 $this->db->update('vendas');
 
@@ -373,6 +373,7 @@ class Vendas extends MY_Controller
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
             $this->db->where('idVendas', $this->input->post('idVendas'));
             $this->db->update('vendas');
 
@@ -394,6 +395,7 @@ class Vendas extends MY_Controller
             $idVendas = $this->input->post('idVendas');
             $data = [
                 'desconto' => $this->input->post('desconto'),
+                'tipo_desconto' => $this->input->post('tipoDesconto'),
                 'valor_desconto' => $this->input->post('resultado')
             ];
             $editavel = $this->vendas_model->isEditable($idVendas);
@@ -457,6 +459,7 @@ class Vendas extends MY_Controller
                 'descricao' => set_value('descricao'),
                 'valor' => $this->input->post('valor'),
                 'desconto' => $vendas->desconto,
+                'tipo_desconto' => $vendas->tipo_desconto,
                 'valor_desconto' => $vendas->valor_desconto,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
@@ -465,7 +468,7 @@ class Vendas extends MY_Controller
                 'cliente_fornecedor' => set_value('cliente'),
                 'forma_pgto' => $this->input->post('formaPgto'),
                 'tipo' => $this->input->post('tipo'),
-                'usuarios_id' => $this->session->userdata('id'),
+                'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if ($this->vendas_model->add('lancamentos', $data) == true) {
