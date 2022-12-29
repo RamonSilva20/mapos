@@ -33,8 +33,8 @@ class Login extends CI_Controller
             $json = ['result' => false, 'message' => validation_errors()];
             echo json_encode($json);
         } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
+            $email = $this->input->post('email', TRUE);
+            $password = $this->input->post('senha', TRUE);
             $this->load->model('Mapos_model');
             $user = $this->Mapos_model->check_credentials($email);
 

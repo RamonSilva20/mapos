@@ -251,7 +251,7 @@
                     <div class="widget-title2">
                         <h5 class="cardHeader">Balanço Mensal do Ano</h5>
                         <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year', TRUE))) ?: date('Y') ?>">
                             <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
                         </form>
                     </div>

@@ -59,8 +59,8 @@ class Garantias extends MY_Controller
         } else {
             $data = [
                 'dataGarantia' => date('Y/m/d'),
-                'refGarantia' => $this->input->post('refGarantia'),
-                'textoGarantia' => $this->input->post('textoGarantia'),
+                'refGarantia' => $this->input->post('refGarantia', TRUE),
+                'textoGarantia' => $this->input->post('textoGarantia', TRUE),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
@@ -96,14 +96,14 @@ class Garantias extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'textoGarantia' => $this->input->post('textoGarantia'),
-                'refGarantia' => $this->input->post('refGarantia'),
+                'textoGarantia' => $this->input->post('textoGarantia', TRUE),
+                'refGarantia' => $this->input->post('refGarantia', TRUE),
             ];
 
-            if ($this->garantias_model->edit('garantias', $data, 'idGarantias', $this->input->post('idGarantias')) == true) {
+            if ($this->garantias_model->edit('garantias', $data, 'idGarantias', $this->input->post('idGarantias', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'Termo de garantia editada com sucesso!');
-                log_info('Alterou uma garantia. ID: ' . $this->input->post('idGarantias'));
-                redirect(site_url('garantias/editar/') . $this->input->post('idGarantias'));
+                log_info('Alterou uma garantia. ID: ' . $this->input->post('idGarantias', TRUE));
+                redirect(site_url('garantias/editar/') . $this->input->post('idGarantias', TRUE));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -162,7 +162,7 @@ class Garantias extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('idGarantias');
+        $id = $this->input->post('idGarantias', TRUE);
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir termo de garantia.');
             redirect(base_url() . 'index.php/garantias/gerenciar/');

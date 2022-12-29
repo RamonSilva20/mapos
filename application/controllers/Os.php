@@ -30,10 +30,10 @@ class Os extends MY_Controller
 
         $where_array = [];
 
-        $pesquisa = $this->input->get('pesquisa');
-        $status = $this->input->get('status');
-        $de = $this->input->get('data');
-        $ate = $this->input->get('data2');
+        $pesquisa = $this->input->get('pesquisa', TRUE);
+        $status = $this->input->get('status', TRUE);
+        $de = $this->input->get('data', TRUE);
+        $ate = $this->input->get('data2', TRUE);
 
         if ($pesquisa) {
             $where_array['pesquisa'] = $pesquisa;
@@ -88,9 +88,9 @@ class Os extends MY_Controller
         if ($this->form_validation->run('os') == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
-            $dataInicial = $this->input->post('dataInicial');
-            $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('termoGarantia');
+            $dataInicial = $this->input->post('dataInicial', TRUE);
+            $dataFinal = $this->input->post('dataFinal', TRUE);
+            $termoGarantiaId = $this->input->post('termoGarantia', TRUE);
 
             try {
                 $dataInicial = explode('/', $dataInicial);
@@ -104,7 +104,7 @@ class Os extends MY_Controller
                 }
 
                 $termoGarantiaId = (!$termoGarantiaId == null || !$termoGarantiaId == '')
-                    ? $this->input->post('garantias_id')
+                    ? $this->input->post('garantias_id', TRUE)
                     : null;
             } catch (Exception $e) {
                 $dataInicial = date('Y/m/d');
@@ -113,8 +113,8 @@ class Os extends MY_Controller
 
             $data = [
                 'dataInicial' => $dataInicial,
-                'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
+                'clientes_id' => $this->input->post('clientes_id', TRUE), //set_value('idCliente'),
+                'usuarios_id' => $this->input->post('usuarios_id', TRUE), //set_value('idUsuario'),
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
@@ -188,7 +188,7 @@ class Os extends MY_Controller
         $this->data['custom_error'] = '';
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
 
-        $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
+        $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs', TRUE));
         if (!$this->data['editavel']) {
             $this->session->set_flashdata('error', 'Esta OS já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
 
@@ -198,9 +198,9 @@ class Os extends MY_Controller
         if ($this->form_validation->run('os') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $dataInicial = $this->input->post('dataInicial');
-            $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('garantias_id') ?: null;
+            $dataInicial = $this->input->post('dataInicial', TRUE);
+            $dataFinal = $this->input->post('dataFinal', TRUE);
+            $termoGarantiaId = $this->input->post('garantias_id', TRUE) ?: null;
 
             try {
                 $dataInicial = explode('/', $dataInicial);
@@ -215,33 +215,33 @@ class Os extends MY_Controller
             $data = [
                 'dataInicial' => $dataInicial,
                 'dataFinal' => $dataFinal,
-                'garantia' => $this->input->post('garantia'),
+                'garantia' => $this->input->post('garantia', TRUE),
                 'garantias_id' => $termoGarantiaId,
-                'descricaoProduto' => $this->input->post('descricaoProduto'),
-                'defeito' => $this->input->post('defeito'),
-                'status' => $this->input->post('status'),
-                'observacoes' => $this->input->post('observacoes'),
-                'laudoTecnico' => $this->input->post('laudoTecnico'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id'),
+                'descricaoProduto' => $this->input->post('descricaoProduto', TRUE),
+                'defeito' => $this->input->post('defeito', TRUE),
+                'status' => $this->input->post('status', TRUE),
+                'observacoes' => $this->input->post('observacoes', TRUE),
+                'laudoTecnico' => $this->input->post('laudoTecnico', TRUE),
+                'usuarios_id' => $this->input->post('usuarios_id', TRUE),
+                'clientes_id' => $this->input->post('clientes_id', TRUE),
             ];
-            $os = $this->os_model->getById($this->input->post('idOs'));
+            $os = $this->os_model->getById($this->input->post('idOs', TRUE));
 
             //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
 
-            if (strtolower($this->input->post('status')) == "cancelado" && strtolower($os->status) != "cancelado") {
-                $this->devolucaoEstoque($this->input->post('idOs'));
+            if (strtolower($this->input->post('status', TRUE)) == "cancelado" && strtolower($os->status) != "cancelado") {
+                $this->devolucaoEstoque($this->input->post('idOs', TRUE));
             }
 
-            if (strtolower($os->status) == "cancelado" && strtolower($this->input->post('status')) != "cancelado") {
-                $this->debitarEstoque($this->input->post('idOs'));
+            if (strtolower($os->status) == "cancelado" && strtolower($this->input->post('status', TRUE)) != "cancelado") {
+                $this->debitarEstoque($this->input->post('idOs', TRUE));
             }
 
-            if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
+            if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs', TRUE)) == true) {
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
 
-                $idOs = $this->input->post('idOs');
+                $idOs = $this->input->post('idOs', TRUE);
 
                 $os = $this->os_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente()[0];
@@ -273,8 +273,8 @@ class Os extends MY_Controller
                 }
 
                 $this->session->set_flashdata('success', 'Os editada com sucesso!');
-                log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
-                redirect(site_url('os/editar/') . $this->input->post('idOs'));
+                log_info('Alterou uma OS. ID: ' . $this->input->post('idOs', TRUE));
+                redirect(site_url('os/editar/') . $this->input->post('idOs', TRUE));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -506,7 +506,7 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
         $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
             $os = $this->os_model->getById($id);
@@ -605,19 +605,19 @@ class Os extends MY_Controller
                 ->set_output(json_encode($errors));
         }
 
-        $preco = $this->input->post('preco');
-        $quantidade = $this->input->post('quantidade');
+        $preco = $this->input->post('preco', TRUE);
+        $quantidade = $this->input->post('quantidade', TRUE);
         $subtotal = $preco * $quantidade;
-        $produto = $this->input->post('idProduto');
+        $produto = $this->input->post('idProduto', TRUE);
         $data = [
             'quantidade' => $quantidade,
             'subTotal' => $subtotal,
             'produtos_id' => $produto,
             'preco' => $preco,
-            'os_id' => $this->input->post('idOsProduto'),
+            'os_id' => $this->input->post('idOsProduto', TRUE),
         ];
 
-        $id = $this->input->post('idOsProduto');
+        $id = $this->input->post('idOsProduto', TRUE);
         $os = $this->os_model->getById($id);
         if ($os == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar inserir produto na OS.');
@@ -637,7 +637,7 @@ class Os extends MY_Controller
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
-            log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
+            log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto', TRUE));
 
             return $this->output
                 ->set_content_type('application/json')
@@ -653,8 +653,8 @@ class Os extends MY_Controller
 
     public function excluirProduto()
     {
-        $id = $this->input->post('idProduto');
-        $idOs = $this->input->post('idOs');
+        $id = $this->input->post('idProduto', TRUE);
+        $idOs = $this->input->post('idOs', TRUE);
 
         $os = $this->os_model->getById($idOs);
         if ($os == null) {
@@ -663,8 +663,8 @@ class Os extends MY_Controller
         }
 
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
-            $quantidade = $this->input->post('quantidade');
-            $produto = $this->input->post('produto');
+            $quantidade = $this->input->post('quantidade', TRUE);
+            $produto = $this->input->post('produto', TRUE);
 
             $this->load->model('produtos_model');
 
@@ -700,20 +700,20 @@ class Os extends MY_Controller
         }
 
         $data = [
-            'servicos_id' => $this->input->post('idServico'),
-            'quantidade' => $this->input->post('quantidade'),
-            'preco' => $this->input->post('preco'),
-            'os_id' => $this->input->post('idOsServico'),
-            'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
+            'servicos_id' => $this->input->post('idServico', TRUE),
+            'quantidade' => $this->input->post('quantidade', TRUE),
+            'preco' => $this->input->post('preco', TRUE),
+            'os_id' => $this->input->post('idOsServico', TRUE),
+            'subTotal' => $this->input->post('preco', TRUE) * $this->input->post('quantidade', TRUE),
         ];
 
         if ($this->os_model->add('servicos_os', $data) == true) {
-            log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
+            log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico', TRUE));
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
             $this->db->set('tipo_desconto', null);
-            $this->db->where('idOs', $this->input->post('idOsServico'));
+            $this->db->where('idOs', $this->input->post('idOsServico', TRUE));
             $this->db->update('os');
 
             return $this->output
@@ -730,8 +730,8 @@ class Os extends MY_Controller
 
     public function excluirServico()
     {
-        $ID = $this->input->post('idServico');
-        $idOs = $this->input->post('idOs');
+        $ID = $this->input->post('idServico', TRUE);
+        $idOs = $this->input->post('idOs', TRUE);
 
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $ID) == true) {
             log_info('Removeu serviço de uma OS. ID (OS): ' . $idOs);
@@ -751,7 +751,7 @@ class Os extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico');
+        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico', TRUE);
 
         // If it exist, check if it's a directory
         if (!is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
@@ -808,14 +808,14 @@ class Os extends MY_Controller
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
+                        $this->Os_model->anexar($this->input->post('idOsServico', TRUE), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico', TRUE)), 'thumb_' . $upload_data['file_name'], $directory);
                     }
                 } else {
                     $success[] = $upload_data;
 
                     $this->load->model('Os_model');
 
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    $this->Os_model->anexar($this->input->post('idOsServico', TRUE), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico', TRUE)), '', $directory);
                 }
             }
         }
@@ -823,7 +823,7 @@ class Os extends MY_Controller
         if (count($error) > 0) {
             echo json_encode(['result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.']);
         } else {
-            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
+            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico', TRUE));
             echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .']);
         }
     }
@@ -835,7 +835,7 @@ class Os extends MY_Controller
         } else {
             $this->db->where('idAnexos', $id);
             $file = $this->db->get('anexos', 1)->row();
-            $idOs = $this->input->post('idOs');
+            $idOs = $this->input->post('idOs', TRUE);
 
             unlink($file->path . DIRECTORY_SEPARATOR . $file->anexo);
 
@@ -867,17 +867,17 @@ class Os extends MY_Controller
 
     public function adicionarDesconto()
     {
-        if ($this->input->post('desconto') == "") {
+        if ($this->input->post('desconto', TRUE) == "") {
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400)
                 ->set_output(json_encode(['messages' => 'Campo desconto vazio']));
         } else {
-            $idOs = $this->input->post('idOs');
+            $idOs = $this->input->post('idOs', TRUE);
             $data = [
-                'tipo_desconto' => $this->input->post('tipoDesconto'),
-                'desconto' => $this->input->post('desconto'),
-                'valor_desconto' => $this->input->post('resultado')
+                'tipo_desconto' => $this->input->post('tipoDesconto', TRUE),
+                'desconto' => $this->input->post('desconto', TRUE),
+                'valor_desconto' => $this->input->post('resultado', TRUE)
             ];
             $editavel = $this->os_model->isEditable($idOs);
             if (!$editavel) {
@@ -914,8 +914,8 @@ class Os extends MY_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $vencimento = $this->input->post('vencimento');
-            $recebimento = $this->input->post('recebimento');
+            $vencimento = $this->input->post('vencimento', TRUE);
+            $recebimento = $this->input->post('recebimento', TRUE);
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -928,25 +928,25 @@ class Os extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-            $os = $this->os_model->getById($this->input->post('os_id'));
+            $os = $this->os_model->getById($this->input->post('os_id', TRUE));
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => getAmount($this->input->post('valor')),
-                'tipo_desconto' => ($this->input->post('tipoDesconto')),
+                'valor' => getAmount($this->input->post('valor', TRUE)),
+                'tipo_desconto' => ($this->input->post('tipoDesconto', TRUE)),
                 'desconto' => $os->desconto,
                 'valor_desconto' => $os->valor_desconto,
-                'clientes_id' => $this->input->post('clientes_id'),
+                'clientes_id' => $this->input->post('clientes_id', TRUE),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
-                'baixado' => $this->input->post('recebido') ?: 0,
+                'baixado' => $this->input->post('recebido', TRUE) ?: 0,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo'),
+                'forma_pgto' => $this->input->post('formaPgto', TRUE),
+                'tipo' => $this->input->post('tipo', TRUE),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
-            $editavel = $this->os_model->isEditable($this->input->post('idOs'));
+            $editavel = $this->os_model->isEditable($this->input->post('idOs', TRUE));
             if (!$editavel) {
                 return $this->output
                     ->set_content_type('application/json')
@@ -955,10 +955,10 @@ class Os extends MY_Controller
             }
 
             if ($this->os_model->add('lancamentos', $data) == true) {
-                $os = $this->input->post('os_id');
+                $os = $this->input->post('os_id', TRUE);
 
                 $this->db->set('faturado', 1);
-                $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('valorTotal', $this->input->post('valor', TRUE));
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idOs', $os);
                 $this->db->update('os');
@@ -1028,13 +1028,13 @@ class Os extends MY_Controller
             echo json_encode(validation_errors());
         } else {
             $data = [
-                'anotacao' => $this->input->post('anotacao'),
+                'anotacao' => $this->input->post('anotacao', TRUE),
                 'data_hora' => date('Y-m-d H:i:s'),
-                'os_id' => $this->input->post('os_id'),
+                'os_id' => $this->input->post('os_id', TRUE),
             ];
 
             if ($this->os_model->add('anotacoes_os', $data) == true) {
-                log_info('Adicionou anotação a uma OS. ID (OS): ' . $this->input->post('os_id'));
+                log_info('Adicionou anotação a uma OS. ID (OS): ' . $this->input->post('os_id', TRUE));
                 echo json_encode(['result' => true]);
             } else {
                 echo json_encode(['result' => false]);
@@ -1044,8 +1044,8 @@ class Os extends MY_Controller
 
     public function excluirAnotacao()
     {
-        $id = $this->input->post('idAnotacao');
-        $idOs = $this->input->post('idOs');
+        $id = $this->input->post('idAnotacao', TRUE);
+        $idOs = $this->input->post('idOs', TRUE);
 
         if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $id) == true) {
             log_info('Removeu anotação de uma OS. ID (OS): ' . $idOs);

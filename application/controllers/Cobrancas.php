@@ -40,16 +40,16 @@ class Cobrancas extends MY_Controller
                 ->set_status_header(400)
                 ->set_output(json_encode(['message' => validation_errors()]));
         } else {
-            $id = $this->input->post('id');
-            $tipo = $this->input->post('tipo');
-            $formaPagamento = $this->input->post('forma_pagamento');
-            $gatewayDePagamento = $this->input->post('gateway_de_pagamento');
+            $id = $this->input->post('id', TRUE);
+            $tipo = $this->input->post('tipo', TRUE);
+            $formaPagamento = $this->input->post('forma_pagamento', TRUE);
+            $gatewayDePagamento = $this->input->post('gateway_de_pagamento', TRUE);
 
             $this->load->model('Os_model');
             $this->load->model('vendas_model');
             $cobranca = $tipo === 'os'
-                ? $this->Os_model->getCobrancas($this->input->post('id'))
-                : $this->vendas_model->getCobrancas($this->input->post('id'));
+                ? $this->Os_model->getCobrancas($this->input->post('id', TRUE))
+                : $this->vendas_model->getCobrancas($this->input->post('id', TRUE));
             if ($cobranca) {
                 return $this->output
                     ->set_content_type('application/json')
@@ -112,10 +112,10 @@ class Cobrancas extends MY_Controller
             redirect(site_url('cobrancas/cobrancas/'));
         }
         try {
-            $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
+            $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id', TRUE));
 
-            if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
-                log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
+            if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id', TRUE)) == true) {
+                log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id', TRUE));
                 $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
@@ -154,7 +154,7 @@ class Cobrancas extends MY_Controller
         }
         try {
             $this->load->model('cobrancas_model');
-            $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
+            $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id', TRUE));
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
@@ -169,7 +169,7 @@ class Cobrancas extends MY_Controller
         }
         try {
             $this->load->model('cobrancas_model');
-            $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
+            $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id', TRUE));
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }

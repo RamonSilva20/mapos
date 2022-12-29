@@ -57,7 +57,7 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('vendas') == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
-            $dataVenda = $this->input->post('dataVenda');
+            $dataVenda = $this->input->post('dataVenda', TRUE);
 
             try {
                 $dataVenda = explode('/', $dataVenda);
@@ -68,10 +68,10 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
-                'observacoes' => $this->input->post('observacoes'),
-                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
-                'clientes_id' => $this->input->post('clientes_id'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
+                'observacoes' => $this->input->post('observacoes', TRUE),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente', TRUE),
+                'clientes_id' => $this->input->post('clientes_id', TRUE),
+                'usuarios_id' => $this->input->post('usuarios_id', TRUE),
                 'faturado' => 0,
             ];
 
@@ -106,7 +106,7 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('vendas') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $dataVenda = $this->input->post('dataVenda');
+            $dataVenda = $this->input->post('dataVenda', TRUE);
 
             try {
                 $dataVenda = explode('/', $dataVenda);
@@ -117,16 +117,16 @@ class Vendas extends MY_Controller
 
             $data = [
                 'dataVenda' => $dataVenda,
-                'observacoes' => $this->input->post('observacoes'),
-                'observacoes_cliente' => $this->input->post('observacoes_cliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id'),
+                'observacoes' => $this->input->post('observacoes', TRUE),
+                'observacoes_cliente' => $this->input->post('observacoes_cliente', TRUE),
+                'usuarios_id' => $this->input->post('usuarios_id', TRUE),
+                'clientes_id' => $this->input->post('clientes_id', TRUE),
             ];
 
-            if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas')) == true) {
+            if ($this->vendas_model->edit('vendas', $data, 'idVendas', $this->input->post('idVendas', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'Venda editada com sucesso!');
-                log_info('Alterou uma venda. ID: ' . $this->input->post('idVendas'));
-                redirect(site_url('vendas/editar/') . $this->input->post('idVendas'));
+                log_info('Alterou uma venda. ID: ' . $this->input->post('idVendas', TRUE));
+                redirect(site_url('vendas/editar/') . $this->input->post('idVendas', TRUE));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -226,7 +226,7 @@ class Vendas extends MY_Controller
 
         $this->load->model('vendas_model');
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
 
         $editavel = $this->vendas_model->isEditable($id);
         if (!$editavel) {
@@ -300,7 +300,7 @@ class Vendas extends MY_Controller
         $this->form_validation->set_rules('idProduto', 'Produto', 'trim|required');
         $this->form_validation->set_rules('idVendasProduto', 'Vendas', 'trim|required');
 
-        $editavel = $this->vendas_model->isEditable($this->input->post('idVendasProduto'));
+        $editavel = $this->vendas_model->isEditable($this->input->post('idVendasProduto', TRUE));
         if (!$editavel) {
             return $this->output
                 ->set_content_type('application/json')
@@ -311,16 +311,16 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false]);
         } else {
-            $preco = $this->input->post('preco');
-            $quantidade = $this->input->post('quantidade');
+            $preco = $this->input->post('preco', TRUE);
+            $quantidade = $this->input->post('quantidade', TRUE);
             $subtotal = $preco * $quantidade;
-            $produto = $this->input->post('idProduto');
+            $produto = $this->input->post('idProduto', TRUE);
             $data = [
                 'quantidade' => $quantidade,
                 'subTotal' => $subtotal,
                 'produtos_id' => $produto,
                 'preco' => $preco,
-                'vendas_id' => $this->input->post('idVendasProduto'),
+                'vendas_id' => $this->input->post('idVendasProduto', TRUE),
             ];
 
             if ($this->vendas_model->add('itens_de_vendas', $data) == true) {
@@ -333,7 +333,7 @@ class Vendas extends MY_Controller
                 $this->db->set('desconto', 0.00);
                 $this->db->set('valor_desconto', 0.00);
                 $this->db->set('tipo_desconto', null);
-                $this->db->where('idVendas', $this->input->post('idVendasProduto'));
+                $this->db->where('idVendas', $this->input->post('idVendasProduto', TRUE));
                 $this->db->update('vendas');
 
                 log_info('Adicionou produto a uma venda.');
@@ -352,7 +352,7 @@ class Vendas extends MY_Controller
             redirect(base_url());
         }
 
-        $editavel = $this->vendas_model->isEditable($this->input->post('idVendas'));
+        $editavel = $this->vendas_model->isEditable($this->input->post('idVendas', TRUE));
         if (!$editavel) {
             return $this->output
                 ->set_content_type('application/json')
@@ -360,10 +360,10 @@ class Vendas extends MY_Controller
                 ->set_output(json_encode(['result' => false, 'messages' => '<br /><br /> <strong>Motivo:</strong> Venda já faturada']));
         }
 
-        $ID = $this->input->post('idProduto');
+        $ID = $this->input->post('idProduto', TRUE);
         if ($this->vendas_model->delete('itens_de_vendas', 'idItens', $ID) == true) {
-            $quantidade = $this->input->post('quantidade');
-            $produto = $this->input->post('produto');
+            $quantidade = $this->input->post('quantidade', TRUE);
+            $produto = $this->input->post('produto', TRUE);
 
             $this->load->model('produtos_model');
 
@@ -374,7 +374,7 @@ class Vendas extends MY_Controller
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
             $this->db->set('tipo_desconto', null);
-            $this->db->where('idVendas', $this->input->post('idVendas'));
+            $this->db->where('idVendas', $this->input->post('idVendas', TRUE));
             $this->db->update('vendas');
 
             log_info('Removeu produto de uma venda.');
@@ -386,17 +386,17 @@ class Vendas extends MY_Controller
 
     public function adicionarDesconto()
     {
-        if ($this->input->post('desconto') == "") {
+        if ($this->input->post('desconto', TRUE) == "") {
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400)
                 ->set_output(json_encode(['messages' => 'Campo desconto vazio']));
         } else {
-            $idVendas = $this->input->post('idVendas');
+            $idVendas = $this->input->post('idVendas', TRUE);
             $data = [
-                'desconto' => $this->input->post('desconto'),
-                'tipo_desconto' => $this->input->post('tipoDesconto'),
-                'valor_desconto' => $this->input->post('resultado')
+                'desconto' => $this->input->post('desconto', TRUE),
+                'tipo_desconto' => $this->input->post('tipoDesconto', TRUE),
+                'valor_desconto' => $this->input->post('resultado', TRUE)
             ];
             $editavel = $this->vendas_model->isEditable($idVendas);
             if (!$editavel) {
@@ -438,9 +438,9 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $venda_id = $this->input->post('vendas_id');
-            $vencimento = $this->input->post('vencimento');
-            $recebimento = $this->input->post('recebimento');
+            $venda_id = $this->input->post('vendas_id', TRUE);
+            $vencimento = $this->input->post('vencimento', TRUE);
+            $recebimento = $this->input->post('recebimento', TRUE);
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -457,25 +457,25 @@ class Vendas extends MY_Controller
             $data = [
                 'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
-                'valor' => $this->input->post('valor'),
+                'valor' => $this->input->post('valor', TRUE),
                 'desconto' => $vendas->desconto,
                 'tipo_desconto' => $vendas->tipo_desconto,
                 'valor_desconto' => $vendas->valor_desconto,
-                'clientes_id' => $this->input->post('clientes_id'),
+                'clientes_id' => $this->input->post('clientes_id', TRUE),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
-                'baixado' => $this->input->post('recebido') == 1 ? true : false,
+                'baixado' => $this->input->post('recebido', TRUE) == 1 ? true : false,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo'),
+                'forma_pgto' => $this->input->post('formaPgto', TRUE),
+                'tipo' => $this->input->post('tipo', TRUE),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
             if ($this->vendas_model->add('lancamentos', $data) == true) {
-                $venda = $this->input->post('vendas_id');
+                $venda = $this->input->post('vendas_id', TRUE);
 
                 $this->db->set('faturado', 1);
-                $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('valorTotal', $this->input->post('valor', TRUE));
                 $this->db->where('idVendas', $venda);
                 $this->db->update('vendas');
 

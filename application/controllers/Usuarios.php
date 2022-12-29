@@ -64,12 +64,12 @@ class Usuarios extends MY_Controller
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
                 'email' => set_value('email'),
-                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
+                'senha' => password_hash($this->input->post('senha', TRUE), PASSWORD_DEFAULT),
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),
                 'dataExpiracao' => set_value('dataExpiracao'),
                 'situacao' => set_value('situacao'),
-                'permissoes_id' => $this->input->post('permissoes_id'),
+                'permissoes_id' => $this->input->post('permissoes_id', TRUE),
                 'dataCadastro' => date('Y-m-d'),
             ];
 
@@ -114,57 +114,57 @@ class Usuarios extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0) {
+            if ($this->input->post('idUsuarios', TRUE) == 1 && $this->input->post('situacao', TRUE) == 0) {
                 $this->session->set_flashdata('error', 'O usuário super admin não pode ser desativado!');
-                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
+                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios', TRUE));
             }
 
-            $senha = $this->input->post('senha');
+            $senha = $this->input->post('senha', TRUE);
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
                 $data = [
-                    'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
-                    'cpf' => $this->input->post('cpf'),
-                    'cep' => $this->input->post('cep'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'email' => $this->input->post('email'),
+                    'nome' => $this->input->post('nome', TRUE),
+                    'rg' => $this->input->post('rg', TRUE),
+                    'cpf' => $this->input->post('cpf', TRUE),
+                    'cep' => $this->input->post('cep', TRUE),
+                    'rua' => $this->input->post('rua', TRUE),
+                    'numero' => $this->input->post('numero', TRUE),
+                    'bairro' => $this->input->post('bairro', TRUE),
+                    'cidade' => $this->input->post('cidade', TRUE),
+                    'estado' => $this->input->post('estado', TRUE),
+                    'email' => $this->input->post('email', TRUE),
                     'senha' => $senha,
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
+                    'telefone' => $this->input->post('telefone', TRUE),
+                    'celular' => $this->input->post('celular', TRUE),
                     'dataExpiracao' => set_value('dataExpiracao'),
-                    'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id'),
+                    'situacao' => $this->input->post('situacao', TRUE),
+                    'permissoes_id' => $this->input->post('permissoes_id', TRUE),
                 ];
             } else {
                 $data = [
-                    'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
-                    'cpf' => $this->input->post('cpf'),
-                    'cep' => $this->input->post('cep'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'email' => $this->input->post('email'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
+                    'nome' => $this->input->post('nome', TRUE),
+                    'rg' => $this->input->post('rg', TRUE),
+                    'cpf' => $this->input->post('cpf', TRUE),
+                    'cep' => $this->input->post('cep', TRUE),
+                    'rua' => $this->input->post('rua', TRUE),
+                    'numero' => $this->input->post('numero', TRUE),
+                    'bairro' => $this->input->post('bairro', TRUE),
+                    'cidade' => $this->input->post('cidade', TRUE),
+                    'estado' => $this->input->post('estado', TRUE),
+                    'email' => $this->input->post('email', TRUE),
+                    'telefone' => $this->input->post('telefone', TRUE),
+                    'celular' => $this->input->post('celular', TRUE),
                     'dataExpiracao' => set_value('dataExpiracao'),
-                    'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id'),
+                    'situacao' => $this->input->post('situacao', TRUE),
+                    'permissoes_id' => $this->input->post('permissoes_id', TRUE),
                 ];
             }
 
-            if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
+            if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'Usuário editado com sucesso!');
-                log_info('Alterou um usuário. ID: ' . $this->input->post('idUsuarios'));
-                redirect(site_url('usuarios/editar/') . $this->input->post('idUsuarios'));
+                log_info('Alterou um usuário. ID: ' . $this->input->post('idUsuarios', TRUE));
+                redirect(site_url('usuarios/editar/') . $this->input->post('idUsuarios', TRUE));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }

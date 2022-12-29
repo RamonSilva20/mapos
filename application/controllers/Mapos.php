@@ -23,9 +23,9 @@ class Mapos extends MY_Controller
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();
         $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['financeiro_mes_dia'] = $this->mapos_model->getEstatisticasFinanceiroDia($this->input->get('year'));
-        $this->data['financeiro_mes'] = $this->mapos_model->getEstatisticasFinanceiroMes($this->input->get('year'));
-        $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
+        $this->data['financeiro_mes_dia'] = $this->mapos_model->getEstatisticasFinanceiroDia($this->input->get('year', TRUE));
+        $this->data['financeiro_mes'] = $this->mapos_model->getEstatisticasFinanceiroMes($this->input->get('year', TRUE));
+        $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year', TRUE));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
         return $this->layout();
@@ -47,8 +47,8 @@ class Mapos extends MY_Controller
             redirect(site_url('mapos/minhaConta'));
         }
 
-        $oldSenha = $this->input->post('oldSenha');
-        $senha = $this->input->post('novaSenha');
+        $oldSenha = $this->input->post('oldSenha', TRUE);
+        $senha = $this->input->post('novaSenha', TRUE);
 
         if (!password_verify($oldSenha, $current_user->senha)) {
             $this->session->set_flashdata('error', 'A senha atual não corresponde com a senha informada.');
@@ -68,7 +68,7 @@ class Mapos extends MY_Controller
 
     public function pesquisar()
     {
-        $termo = $this->input->get('termo');
+        $termo = $this->input->get('termo', TRUE);
 
         $data['results'] = $this->mapos_model->pesquisar($termo);
         $this->data['produtos'] = $data['results']['produtos'];
@@ -211,17 +211,17 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
             redirect(site_url('mapos/emitente'));
         } else {
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $cep = $this->input->post('cep');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
+            $nome = $this->input->post('nome', TRUE);
+            $cnpj = $this->input->post('cnpj', TRUE);
+            $ie = $this->input->post('ie', TRUE);
+            $cep = $this->input->post('cep', TRUE);
+            $logradouro = $this->input->post('logradouro', TRUE);
+            $numero = $this->input->post('numero', TRUE);
+            $bairro = $this->input->post('bairro', TRUE);
+            $cidade = $this->input->post('cidade', TRUE);
+            $uf = $this->input->post('uf', TRUE);
+            $telefone = $this->input->post('telefone', TRUE);
+            $email = $this->input->post('email', TRUE);
             $image = $this->do_upload();
             $logo = base_url() . 'assets/uploads/' . $image;
 
@@ -260,18 +260,18 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
             redirect(site_url('mapos/emitente'));
         } else {
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $cep = $this->input->post('cep');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
-            $id = $this->input->post('id');
+            $nome = $this->input->post('nome', TRUE);
+            $cnpj = $this->input->post('cnpj', TRUE);
+            $ie = $this->input->post('ie', TRUE);
+            $cep = $this->input->post('cep', TRUE);
+            $logradouro = $this->input->post('logradouro', TRUE);
+            $numero = $this->input->post('numero', TRUE);
+            $bairro = $this->input->post('bairro', TRUE);
+            $cidade = $this->input->post('cidade', TRUE);
+            $uf = $this->input->post('uf', TRUE);
+            $telefone = $this->input->post('telefone', TRUE);
+            $email = $this->input->post('email', TRUE);
+            $id = $this->input->post('id', TRUE);
 
             $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
             if ($retorno) {
@@ -291,7 +291,7 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
             redirect(site_url('mapos/emitente'));
@@ -375,7 +375,7 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir e-mail da fila.');
             redirect(site_url('mapos/emails/'));
@@ -424,20 +424,20 @@ class Mapos extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
-                'app_name' => $this->input->post('app_name'),
-                'per_page' => $this->input->post('per_page'),
-                'app_theme' => $this->input->post('app_theme'),
-                'os_notification' => $this->input->post('os_notification'),
-                'email_automatico' => $this->input->post('email_automatico'),
-                'control_estoque' => $this->input->post('control_estoque'),
-                'notifica_whats' => $this->input->post('notifica_whats'),
-                'control_baixa' => $this->input->post('control_baixa'),
-                'control_editos' => $this->input->post('control_editos'),
-                'control_edit_vendas' => $this->input->post('control_edit_vendas'),
-                'control_datatable' => $this->input->post('control_datatable'),
-                'pix_key' => $this->input->post('pix_key'),
-                'os_status_list' => json_encode($this->input->post('os_status_list')),
-                'control_2vias' => $this->input->post('control_2vias'),
+                'app_name' => $this->input->post('app_name', TRUE),
+                'per_page' => $this->input->post('per_page', TRUE),
+                'app_theme' => $this->input->post('app_theme', TRUE),
+                'os_notification' => $this->input->post('os_notification', TRUE),
+                'email_automatico' => $this->input->post('email_automatico', TRUE),
+                'control_estoque' => $this->input->post('control_estoque', TRUE),
+                'notifica_whats' => $this->input->post('notifica_whats', TRUE),
+                'control_baixa' => $this->input->post('control_baixa', TRUE),
+                'control_editos' => $this->input->post('control_editos', TRUE),
+                'control_edit_vendas' => $this->input->post('control_edit_vendas', TRUE),
+                'control_datatable' => $this->input->post('control_datatable', TRUE),
+                'pix_key' => $this->input->post('pix_key', TRUE),
+                'os_status_list' => json_encode($this->input->post('os_status_list', TRUE)),
+                'control_2vias' => $this->input->post('control_2vias', TRUE),
             ];
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
@@ -503,9 +503,9 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
         $this->load->model('os_model');
-        $status = $this->input->get('status') ?: null;
-        $start = $this->input->get('start') ?: null;
-        $end = $this->input->get('end') ?: null;
+        $status = $this->input->get('status', TRUE) ?: null;
+        $start = $this->input->get('start', TRUE) ?: null;
+        $end = $this->input->get('end', TRUE) ?: null;
 
         $allOs = $this->mapos_model->calendario(
             $start,

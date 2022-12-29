@@ -3,8 +3,8 @@
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/dayjs.min.js"></script>
 
-<?php $situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
+<?php $situacao = $this->input->get('situacao', TRUE);
+$periodo = $this->input->get('periodo', TRUE);
 ?>
 
 <style type="text/css">
@@ -44,31 +44,31 @@ $periodo = $this->input->get('periodo');
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
-                    <option value="dia" <?= $this->input->get('periodo') === 'dia' ? 'selected' : '' ?>>Dia</option>
-                    <option value="semana" <?= $this->input->get('periodo') === 'semana' ? 'selected' : '' ?>>Semana
+                    <option value="dia" <?= $this->input->get('periodo', TRUE) === 'dia' ? 'selected' : '' ?>>Dia</option>
+                    <option value="semana" <?= $this->input->get('periodo', TRUE) === 'semana' ? 'selected' : '' ?>>Semana
                     </option>
-                    <option value="mes" <?= $this->input->get('periodo') === 'mes' ? 'selected' : '' ?>>Mês</option>
-                    <option value="ano" <?= $this->input->get('periodo') === 'ano' ? 'selected' : '' ?>>Ano</option>
+                    <option value="mes" <?= $this->input->get('periodo', TRUE) === 'mes' ? 'selected' : '' ?>>Mês</option>
+                    <option value="ano" <?= $this->input->get('periodo', TRUE) === 'ano' ? 'selected' : '' ?>>Ano</option>
                 </select>
             </div>
 
             <div class="span2">
                 <label>Vencimento (de)</label>
-                <input id="vencimento_de" type="text" class="span12 datepicker" name="vencimento_de" value="<?= $this->input->get('vencimento_de') ? $this->input->get('vencimento_de') : date('d/m/Y') ?>">
+                <input id="vencimento_de" type="text" class="span12 datepicker" name="vencimento_de" value="<?= $this->input->get('vencimento_de', TRUE) ? $this->input->get('vencimento_de', TRUE) : date('d/m/Y') ?>">
             </div>
 
             <div class="span2">
                 <label>Vencimento (até)</label>
-                <input id="vencimento_ate" type="text" class="span12 datepicker" name="vencimento_ate" value="<?= $this->input->get('vencimento_ate') ? $this->input->get('vencimento_ate') : date('d/m/Y') ?>">
+                <input id="vencimento_ate" type="text" class="span12 datepicker" name="vencimento_ate" value="<?= $this->input->get('vencimento_ate', TRUE) ? $this->input->get('vencimento_ate', TRUE) : date('d/m/Y') ?>">
             </div>
 
             <div class="span2">
                 <label>Tipo</label>
                 <select name="tipo" class="span12">
                     <option value="">Todos</option>
-                    <option value="receita" <?= $this->input->get('tipo') === 'receita' ? 'selected' : '' ?>>Receita
+                    <option value="receita" <?= $this->input->get('tipo', TRUE) === 'receita' ? 'selected' : '' ?>>Receita
                     </option>
-                    <option value="despesa" <?= $this->input->get('tipo') === 'despesa' ? 'selected' : '' ?>>Despesa
+                    <option value="despesa" <?= $this->input->get('tipo', TRUE) === 'despesa' ? 'selected' : '' ?>>Despesa
                     </option>
                 </select>
             </div>
@@ -77,14 +77,14 @@ $periodo = $this->input->get('periodo');
                 <label>Status</label>
                 <select name="status" class="span12">
                     <option value="">Todos (Pendente e Pago)</option>
-                    <option value="0" <?= $this->input->get('status') === '0' ? 'selected' : '' ?>>Pendente</option>
-                    <option value="1" <?= $this->input->get('status') === '1' ? 'selected' : '' ?>>Pago</option>
+                    <option value="0" <?= $this->input->get('status', TRUE) === '0' ? 'selected' : '' ?>>Pendente</option>
+                    <option value="1" <?= $this->input->get('status', TRUE) === '1' ? 'selected' : '' ?>>Pago</option>
                 </select>
             </div>
 
             <div class="span2">
                 <label>Cliente/Fornecedor</label>
-                <input id="cliente_busca" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+                <input id="cliente_busca" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente', TRUE) ?>">
             </div>
 
             <div class="span2 pull-right">

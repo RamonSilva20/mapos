@@ -59,13 +59,13 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
 
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
-        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'));
+        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente', TRUE));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes Customizado';
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
@@ -82,7 +82,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $format = $this->input->get('format');
+        $format = $this->input->get('format', TRUE);
 
         if ($format == 'xls') {
             $clientes = $this->Relatorios_model->clientesRapid($array = true);
@@ -172,10 +172,10 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
-        $estoqueInicial = $this->input->get('estoqueInicial');
-        $estoqueFinal = $this->input->get('estoqueFinal');
+        $precoInicial = $this->input->get('precoInicial', TRUE);
+        $precoFinal = $this->input->get('precoFinal', TRUE);
+        $estoqueInicial = $this->input->get('estoqueInicial', TRUE);
+        $estoqueFinal = $this->input->get('estoqueFinal', TRUE);
 
         $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
@@ -189,8 +189,8 @@ class Relatorios extends MY_Controller
 
     public function produtosEtiquetas()
     {
-        $de = $this->input->get('de_id');
-        $ate = $this->input->get('ate_id');
+        $de = $this->input->get('de_id', TRUE);
+        $ate = $this->input->get('ate_id', TRUE);
         try {
             if ($de <= $ate) {
                 $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
@@ -227,7 +227,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $format = $this->input->get('format');
+        $format = $this->input->get('format', TRUE);
 
         if ($format == 'xls') {
             $vendas = $this->Relatorios_model->skuRapid(true);
@@ -277,11 +277,11 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
-        $cliente = $this->input->get('clientes_id');
-        $format = $this->input->get('format');
-        $origem = $this->input->get('origem');
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
+        $cliente = $this->input->get('clientes_id', TRUE);
+        $format = $this->input->get('format', TRUE);
+        $origem = $this->input->get('origem', TRUE);
 
         if ($format == 'xls') {
             $vendas = $this->Relatorios_model->skuCustom($dataInicial, $dataFinal, $cliente, $origem, true);
@@ -340,8 +340,8 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
+        $precoInicial = $this->input->get('precoInicial', TRUE);
+        $precoFinal = $this->input->get('precoFinal', TRUE);
 
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
@@ -387,7 +387,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $format = $this->input->get('format');
+        $format = $this->input->get('format', TRUE);
 
         $isXls = $format === 'xls';
         $os = $this->Relatorios_model->osRapid($isXls);
@@ -499,12 +499,12 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
-        $cliente = $this->input->get('cliente');
-        $responsavel = $this->input->get('responsavel');
-        $status = $this->input->get('status');
-        $format = $this->input->get('format');
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
+        $cliente = $this->input->get('cliente', TRUE);
+        $responsavel = $this->input->get('responsavel', TRUE);
+        $status = $this->input->get('status', TRUE);
+        $format = $this->input->get('format', TRUE);
 
         $isXls = $format === 'xls';
         $os = $this->Relatorios_model->osCustom($dataInicial, $dataFinal, $cliente, $responsavel, $status, $isXls);
@@ -633,7 +633,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $format = $this->input->get('format');
+        $format = $this->input->get('format', TRUE);
 
         if ($format == 'xls') {
             $lancamentos = $this->Relatorios_model->financeiroRapid(true);
@@ -701,11 +701,11 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
-        $tipo = $this->input->get('tipo');
-        $situacao = $this->input->get('situacao');
-        $format = $this->input->get('format');
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
+        $tipo = $this->input->get('tipo', TRUE);
+        $situacao = $this->input->get('situacao', TRUE);
+        $format = $this->input->get('format', TRUE);
 
         if ($format == 'xls') {
             $lancamentos = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao, true);
@@ -784,7 +784,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $format = $this->input->get('format');
+        $format = $this->input->get('format', TRUE);
         $isXls = $format === 'xls';
         $vendas = $this->Relatorios_model->vendasRapid($isXls);
         $totalVendas = 0;
@@ -875,11 +875,11 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de vendas.');
             redirect(base_url());
         }
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
-        $cliente = $this->input->get('cliente');
-        $responsavel = $this->input->get('responsavel');
-        $format = $this->input->get('format');
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
+        $cliente = $this->input->get('cliente', TRUE);
+        $responsavel = $this->input->get('responsavel', TRUE);
+        $format = $this->input->get('format', TRUE);
 
         $isXls = $format === 'xls';
         $vendas = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel, $isXls);
@@ -983,7 +983,7 @@ class Relatorios extends MY_Controller
         $this->load->helper('download');
         $this->load->helper('file');
 
-        $format = $this->input->get('format') ?: 'docx';
+        $format = $this->input->get('format', TRUE) ?: 'docx';
 
         $templatePath = realpath(FCPATH . "assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx");
         if (!$templatePath) {
@@ -1038,9 +1038,9 @@ class Relatorios extends MY_Controller
         $this->load->helper('download');
         $this->load->helper('file');
 
-        $format = $this->input->get('format') ?: 'docx';
-        $dataInicial = $this->input->get('dataInicial');
-        $dataFinal = $this->input->get('dataFinal');
+        $format = $this->input->get('format', TRUE) ?: 'docx';
+        $dataInicial = $this->input->get('dataInicial', TRUE);
+        $dataFinal = $this->input->get('dataFinal', TRUE);
 
         $templatePath = realpath(FCPATH . "assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx");
         if (!$templatePath) {

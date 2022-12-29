@@ -19,8 +19,8 @@
 					<div class="widget-content nopadding tab-content">
 						<?php
                         if (
-                            $this->input->get("etiquetaCode") !== "EAN13" && $this->input->get("etiquetaCode") !== "QR"
-                            && $this->input->get("etiquetaCode") !== "UPCA"
+                            $this->input->get("etiquetaCode", TRUE) !== "EAN13" && $this->input->get("etiquetaCode", TRUE) !== "QR"
+                            && $this->input->get("etiquetaCode", TRUE) !== "UPCA"
                         ) {
                             if (isset($_GET['qtdEtiqueta'])) {
                                 foreach ($produtos as $p) {
@@ -46,7 +46,7 @@
 									</b>
 								</div>
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode", TRUE) ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -77,7 +77,7 @@
 								</div>
 
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode", TRUE) ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 
@@ -110,7 +110,7 @@
 									</b>
 								</div>
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode", TRUE) ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -143,7 +143,7 @@
 								</div>
 
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode", TRUE) ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 

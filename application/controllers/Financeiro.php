@@ -31,15 +31,15 @@ class Financeiro extends MY_Controller
         }
 
         $where = '';
-        $vencimento_de = $this->input->get('vencimento_de') ?: date('d/m/Y');
-        $vencimento_ate = $this->input->get('vencimento_ate') ?: date('d/m/Y');
-        $cliente = $this->input->get('cliente');
-        $tipo = $this->input->get('tipo');
-        $status = $this->input->get('status');
-        $valor_desconto = $this->input->get('valor_desconto');
-        $desconto = $this->input->get('desconto');
+        $vencimento_de = $this->input->get('vencimento_de', TRUE) ?: date('d/m/Y');
+        $vencimento_ate = $this->input->get('vencimento_ate', TRUE) ?: date('d/m/Y');
+        $cliente = $this->input->get('cliente', TRUE);
+        $tipo = $this->input->get('tipo', TRUE);
+        $status = $this->input->get('status', TRUE);
+        $valor_desconto = $this->input->get('valor_desconto', TRUE);
+        $desconto = $this->input->get('desconto', TRUE);
 
-        $periodo = $this->input->get('periodo');
+        $periodo = $this->input->get('periodo', TRUE);
 
         if (! empty($vencimento_de)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
@@ -93,7 +93,7 @@ class Financeiro extends MY_Controller
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->financeiro_model->get('lancamentos', '*', $where, $this->data['configuration']['per_page'], $this->input->get('per_page'));
+        $this->data['results'] = $this->financeiro_model->get('lancamentos', '*', $where, $this->data['configuration']['per_page'], $this->input->get('per_page', TRUE));
         $this->data['totals'] = $this->financeiro_model->getTotals($where);
 
         $this->data['estatisticas_financeiro'] = $this->financeiro_model->getEstatisticasFinanceiro2();
@@ -111,12 +111,12 @@ class Financeiro extends MY_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
+        $urlAtual = $this->input->post('urlAtual', TRUE);
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $vencimento = $this->input->post('vencimento');
-            $recebimento = $this->input->post('recebimento');
+            $vencimento = $this->input->post('vencimento', TRUE);
+            $recebimento = $this->input->post('recebimento', TRUE);
 
             if ($recebimento != null) {
                 $recebimento = explode('/', $recebimento);
@@ -134,13 +134,13 @@ class Financeiro extends MY_Controller
                 $vencimento = date('Y/m/d');
             }
 
-            $valor = $this->input->post('valor');
+            $valor = $this->input->post('valor', TRUE);
 
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            if (empty($this->input->post('valor_desconto'))) {
+            if (empty($this->input->post('valor_desconto', TRUE))) {
                 $valor_desconto =  "0";
             } else {
-                $valor_desconto = $this->input->post('valor_desconto');
+                $valor_desconto = $this->input->post('valor_desconto', TRUE);
             }
 
             $desconto = $valor_desconto;
@@ -167,9 +167,9 @@ class Financeiro extends MY_Controller
                 'tipo_desconto' => 'real',
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-                'baixado' => $this->input->post('recebido') ?: 0,
+                'baixado' => $this->input->post('recebido', TRUE) ?: 0,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
+                'forma_pgto' => $this->input->post('formaPgto', TRUE),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
@@ -200,26 +200,26 @@ class Financeiro extends MY_Controller
     {
         //$this->load->library('form_validation');
         //$this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
+        $urlAtual = $this->input->post('urlAtual', TRUE);
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         } else {
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            if (empty($this->input->post('desconto_parc'))) {
+            if (empty($this->input->post('desconto_parc', TRUE))) {
                 $valor_desconto =  "0";
             } else {
-                $valor_desconto = $this->input->post('desconto_parc');
+                $valor_desconto = $this->input->post('desconto_parc', TRUE);
             }
 
-            if (empty($this->input->post('entrada'))) {
+            if (empty($this->input->post('entrada', TRUE))) {
                 $entrada =  "0";
             } else {
-                $entrada = $this->input->post('entrada');
+                $entrada = $this->input->post('entrada', TRUE);
             }
 
-            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc'); //4x
-            $valor_parc = $this->input->post('valor_parc'); //450
+            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc', TRUE); //4x
+            $valor_parc = $this->input->post('valor_parc', TRUE); //450
             $valorparcelas = ($valor_parc - $entrada) / $qtdparcelas_parc;
             $desconto_por_parcela  = $valor_desconto / $qtdparcelas_parc;
 
@@ -239,8 +239,8 @@ class Financeiro extends MY_Controller
                 redirect($urlAtual);
             }
 
-            $dia_pgto = $this->input->post('dia_pgto');
-            $dia_base_pgto = $this->input->post('dia_base_pgto');
+            $dia_pgto = $this->input->post('dia_pgto', TRUE);
+            $dia_base_pgto = $this->input->post('dia_base_pgto', TRUE);
 
             try {
                 $dia_pgto = explode('/', $dia_pgto);
@@ -253,7 +253,7 @@ class Financeiro extends MY_Controller
                 $dia_base_pgto = date('Y/m/d');
             }
 
-            $comissao = $this->input->post('comissao');
+            $comissao = $this->input->post('comissao', TRUE);
 
             if (!validate_money($comissao)) {
                 $comissao = str_replace([',', '.'], ['', ''], $comissao);
@@ -276,7 +276,7 @@ class Financeiro extends MY_Controller
                         date_modify($myDateTime, "-$myNewDayOfMonth days");
                     }
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .'  [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'descricao' => $this->input->post('descricao_parc', TRUE) . ' - Parcelamento de R$' . $descricao_parc_valor .'  [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
@@ -284,10 +284,10 @@ class Financeiro extends MY_Controller
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => $recebimento != null ? $recebimento : date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
-                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'observacoes' => $this->input->post('observacoes_parc'),
-                        'forma_pgto' => $this->input->post('formaPgto_parc'),
-                        'tipo' => $this->input->post('tipo_parc'),
+                        'cliente_fornecedor' => $this->input->post('cliente_parc', TRUE),
+                        'observacoes' => $this->input->post('observacoes_parc', TRUE),
+                        'forma_pgto' => $this->input->post('formaPgto_parc', TRUE),
+                        'tipo' => $this->input->post('tipo_parc', TRUE),
                         'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
@@ -306,7 +306,7 @@ class Financeiro extends MY_Controller
             } else {
                 $desconto_entrada = "0";
                 $data1 = [
-                    'descricao' => $this->input->post('descricao_parc')  . ' - Entrada do parc. de R$' . $descricao_parc_valor .' ',
+                    'descricao' => $this->input->post('descricao_parc', TRUE)  . ' - Entrada do parc. de R$' . $descricao_parc_valor .' ',
                     'valor' => $entrada,
                     'desconto' =>  $desconto_entrada,
                     'valor_desconto' => $entrada,
@@ -314,10 +314,10 @@ class Financeiro extends MY_Controller
                     'data_vencimento' => $dia_pgto,
                     'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format($myDateTime, "Y-m-d"),
                     'baixado' => 1,
-                    'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                    'observacoes' => $this->input->post('observacoes_parc'),
-                    'forma_pgto' => $this->input->post('formaPgto_parc'),
-                    'tipo' => $this->input->post('tipo_parc'),
+                    'cliente_fornecedor' => $this->input->post('cliente_parc', TRUE),
+                    'observacoes' => $this->input->post('observacoes_parc', TRUE),
+                    'forma_pgto' => $this->input->post('formaPgto_parc', TRUE),
+                    'tipo' => $this->input->post('tipo_parc', TRUE),
                     'usuarios_id' => $this->session->userdata('id_admin'),
 
 
@@ -346,7 +346,7 @@ class Financeiro extends MY_Controller
                     }
 
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .' [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'descricao' => $this->input->post('descricao_parc', TRUE) . ' - Parcelamento de R$' . $descricao_parc_valor .' [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
@@ -354,10 +354,10 @@ class Financeiro extends MY_Controller
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
                         'data_pagamento' => date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
-                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'observacoes' => $this->input->post('observacoes_parc'),
-                        'forma_pgto' => $this->input->post('formaPgto_parc'),
-                        'tipo' => $this->input->post('tipo_parc'),
+                        'cliente_fornecedor' => $this->input->post('cliente_parc', TRUE),
+                        'observacoes' => $this->input->post('observacoes_parc', TRUE),
+                        'forma_pgto' => $this->input->post('formaPgto_parc', TRUE),
+                        'tipo' => $this->input->post('tipo_parc', TRUE),
                         'usuarios_id' => $this->session->userdata('id_admin'),
 
                     ];
@@ -392,12 +392,12 @@ class Financeiro extends MY_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
+        $urlAtual = $this->input->post('urlAtual', TRUE);
         if ($this->form_validation->run('despesa') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
+            $vencimento = $this->input->post('vencimento', TRUE);
+            $pagamento = $this->input->post('pagamento', TRUE);
 
             if ($pagamento != null) {
                 $pagamento = explode('/', $pagamento);
@@ -415,7 +415,7 @@ class Financeiro extends MY_Controller
                 $vencimento = date('Y/m/d');
             }
 
-            $valor = $this->input->post('valor');
+            $valor = $this->input->post('valor', TRUE);
 
             if (!validate_money($valor)) {
                 $valor = str_replace([',', '.'], ['', ''], $valor);
@@ -426,9 +426,9 @@ class Financeiro extends MY_Controller
                 'valor' => $valor,
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento != null ? $pagamento : date('Y-m-d'),
-                'baixado' => $this->input->post('pago') ?: 0,
+                'baixado' => $this->input->post('pago', TRUE) ?: 0,
                 'cliente_fornecedor' => set_value('fornecedor'),
-                'forma_pgto' => $this->input->post('formaPgto'),
+                'forma_pgto' => $this->input->post('formaPgto', TRUE),
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
@@ -463,7 +463,7 @@ class Financeiro extends MY_Controller
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
+        $urlAtual = $this->input->post('urlAtual', TRUE);
 
         $this->form_validation->set_rules('descricao', '', 'trim|required');
         $this->form_validation->set_rules('fornecedor', '', 'trim|required');
@@ -475,8 +475,8 @@ class Financeiro extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
+            $vencimento = $this->input->post('vencimento', TRUE);
+            $pagamento = $this->input->post('pagamento', TRUE);
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -489,30 +489,30 @@ class Financeiro extends MY_Controller
             }
 
         
-            $valor = $this->input->post('valor');
+            $valor = $this->input->post('valor', TRUE);
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            if (empty($this->input->post('valor_desconto_editar'))) {
+            if (empty($this->input->post('valor_desconto_editar', TRUE))) {
                 $valor_desconto =  "0";
             } else {
-                $valor_desconto = $this->input->post('valor_desconto_editar'); // valor do total + desconto
+                $valor_desconto = $this->input->post('valor_desconto_editar', TRUE); // valor do total + desconto
             }
            
             $valor_total =  $valor + $valor_desconto; //90 + 10=100
             $valor_com_desconto = $valor_total - $valor_desconto;
 
             $data = [
-                'descricao' => $this->input->post('descricao'),
+                'descricao' => $this->input->post('descricao', TRUE),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
                 'valor' => $valor_total,
                 'desconto' => $valor_desconto,
                 'tipo_desconto' => 'real',
                 'valor_desconto' =>  $valor_com_desconto,
-                'baixado' => $this->input->post('pago') ?: 0,
-                'cliente_fornecedor' => $this->input->post('fornecedor'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo'),
-                'observacoes' => $this->input->post('observacoes'),
+                'baixado' => $this->input->post('pago', TRUE) ?: 0,
+                'cliente_fornecedor' => $this->input->post('fornecedor', TRUE),
+                'forma_pgto' => $this->input->post('formaPgto', TRUE),
+                'tipo' => $this->input->post('tipo', TRUE),
+                'observacoes' => $this->input->post('observacoes', TRUE),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
@@ -526,9 +526,9 @@ class Financeiro extends MY_Controller
             if (set_value('idCliente')) {
                 $data['clientes_id'] =  set_value('idCliente');
             }
-            if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
+            if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
-                log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
+                log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id', TRUE));
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar editar lançamento!');
@@ -540,16 +540,16 @@ class Financeiro extends MY_Controller
         redirect($urlAtual);
 
         $data = [
-            'descricao' => $this->input->post('descricao'),
-            'data_vencimento' => $this->input->post('vencimento'),
+            'descricao' => $this->input->post('descricao', TRUE),
+            'data_vencimento' => $this->input->post('vencimento', TRUE),
             'data_pagamento' => $pagamento,
-            'valor' => $this->input->post('valor'),
-            'valor_desconto' => $this->input->post('valor_desconto_editar'),
+            'valor' => $this->input->post('valor', TRUE),
+            'valor_desconto' => $this->input->post('valor_desconto_editar', TRUE),
             'tipo_desconto' => 'real',
-            'baixado' => $this->input->post('pago'),
+            'baixado' => $this->input->post('pago', TRUE),
             'cliente_fornecedor' => set_value('fornecedor'),
-            'forma_pgto' => $this->input->post('formaPgto'),
-            'tipo' => $this->input->post('tipo'),
+            'forma_pgto' => $this->input->post('formaPgto', TRUE),
+            'tipo' => $this->input->post('tipo', TRUE),
             'usuarios_id' => $this->session->userdata('id_admin'),
         ];
         if (set_value('idFornecedor')) {
@@ -572,7 +572,7 @@ class Financeiro extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
 
         if ($id == null || !is_numeric($id)) {
             $json = ['result' => false];

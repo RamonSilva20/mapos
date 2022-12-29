@@ -32,13 +32,13 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->form_validation->set_rules('senha', 'Senha', 'required');
 
-        if ($this->input->post("token") == null || $this->input->post("token") == '') {
+        if ($this->input->post("token", TRUE) == null || $this->input->post("token", TRUE) == '') {
             return redirect('mine');
         }
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false, 'message' => "Por favor digite uma senha"]);
         } else {
-            $token = $this->check_token($this->input->post("token"));
+            $token = $this->check_token($this->input->post("token", TRUE));
             $cliente = $this->check_credentials($token->email);
 
             if ($token == null && $cliente == null) {
@@ -49,7 +49,7 @@ class Mine extends CI_Controller
             } else {
                 if ($token->email == $cliente->email) {
                     $data = [
-                        'senha' => password_hash($this->input->post("senha"), PASSWORD_DEFAULT),
+                        'senha' => password_hash($this->input->post("senha", TRUE), PASSWORD_DEFAULT),
                     ];
 
                     $dataToken = [
@@ -84,7 +84,7 @@ class Mine extends CI_Controller
             $this->session->set_flashdata(['error' => (validation_errors() ? "Por favor digite o token" : false)]);
             return $this->load->view('conecte/token_digita');
         } else {
-            $token = $this->check_token($this->input->post("token"));
+            $token = $this->check_token($this->input->post("token", TRUE));
 
             if ($this->validateDate($token->data_expiracao)) {
                 $this->session->set_flashdata(['error' => 'Token expirado']);
@@ -174,7 +174,7 @@ class Mine extends CI_Controller
 
     public function gerarTokenResetarSenha()
     {
-        if (!$cliente = $this->check_credentials($this->input->post('email'))) {
+        if (!$cliente = $this->check_credentials($this->input->post('email', TRUE))) {
             $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
             $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
             $this->session->set_userdata($session_mine_data);
@@ -218,8 +218,8 @@ class Mine extends CI_Controller
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false, 'message' => validation_errors()]);
         } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
+            $email = $this->input->post('email', TRUE);
+            $password = $this->input->post('senha', TRUE);
             $cliente = $this->check_credentials($email);
 
             if ($cliente) {
@@ -278,42 +278,42 @@ class Mine extends CI_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $senha = $this->input->post('senha');
+            $senha = $this->input->post('senha', TRUE);
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
                 $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
+                    'nomeCliente' => $this->input->post('nomeCliente', TRUE),
+                    'documento' => $this->input->post('documento', TRUE),
+                    'telefone' => $this->input->post('telefone', TRUE),
+                    'celular' => $this->input->post('celular', TRUE),
+                    'email' => $this->input->post('email', TRUE),
                     'senha' => $senha,
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
+                    'rua' => $this->input->post('rua', TRUE),
+                    'numero' => $this->input->post('numero', TRUE),
+                    'complemento' => $this->input->post('complemento', TRUE),
+                    'bairro' => $this->input->post('bairro', TRUE),
+                    'cidade' => $this->input->post('cidade', TRUE),
+                    'estado' => $this->input->post('estado', TRUE),
+                    'cep' => $this->input->post('cep', TRUE),
                 ];
             } else {
                 $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
+                    'nomeCliente' => $this->input->post('nomeCliente', TRUE),
+                    'documento' => $this->input->post('documento', TRUE),
+                    'telefone' => $this->input->post('telefone', TRUE),
+                    'celular' => $this->input->post('celular', TRUE),
+                    'email' => $this->input->post('email', TRUE),
+                    'rua' => $this->input->post('rua', TRUE),
+                    'numero' => $this->input->post('numero', TRUE),
+                    'complemento' => $this->input->post('complemento', TRUE),
+                    'bairro' => $this->input->post('bairro', TRUE),
+                    'cidade' => $this->input->post('cidade', TRUE),
+                    'estado' => $this->input->post('estado', TRUE),
+                    'cep' => $this->input->post('cep', TRUE),
                 ];
             }
 
-            if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
+            if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
                 redirect(base_url() . 'index.php/mine/conta');
             } else {
@@ -666,8 +666,8 @@ class Mine extends CI_Controller
                 'clientes_id' => $this->session->userdata('cliente_id'), //set_value('idCliente'),
                 'usuarios_id' => $id, //set_value('idUsuario'),
                 'dataFinal' => date('Y-m-d'),
-                'descricaoProduto' => $this->input->post('descricaoProduto'),
-                'defeito' => $this->input->post('defeito'),
+                'descricaoProduto' => $this->input->post('descricaoProduto', TRUE),
+                'defeito' => $this->input->post('defeito', TRUE),
                 'status' => 'Aberto',
                 'observacoes' => set_value('observacoes'),
                 'faturado' => 0,
@@ -738,9 +738,9 @@ class Mine extends CI_Controller
                 'nomeCliente' => set_value('nomeCliente'),
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
+                'celular' => $this->input->post('celular', TRUE),
                 'email' => set_value('email'),
-                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
+                'senha' => password_hash($this->input->post('senha', TRUE), PASSWORD_DEFAULT),
                 'rua' => set_value('rua'),
                 'complemento' => set_value('complemento'),
                 'numero' => set_value('numero'),

@@ -31,9 +31,9 @@ class Arquivos extends MY_Controller
 
         $this->load->library('pagination');
 
-        $pesquisa = $this->input->get('pesquisa');
-        $de = $this->input->get('data');
-        $ate = $this->input->get('data2');
+        $pesquisa = $this->input->get('pesquisa', TRUE);
+        $de = $this->input->get('data', TRUE);
+        $ate = $this->input->get('data2', TRUE);
 
         if ($pesquisa == null && $de == null && $ate == null) {
             $this->data['configuration']['base_url'] = site_url('arquivos/gerenciar');
@@ -85,7 +85,7 @@ class Arquivos extends MY_Controller
             $tamanho = $arquivo['file_size'];
             $tipo = $arquivo['file_ext'];
 
-            $data = $this->input->post('data');
+            $data = $this->input->post('data', TRUE);
 
             if ($data == null) {
                 $data = date('Y-m-d');
@@ -95,8 +95,8 @@ class Arquivos extends MY_Controller
             }
 
             $data = [
-                'documento' => $this->input->post('nome'),
-                'descricao' => $this->input->post('descricao'),
+                'documento' => $this->input->post('nome', TRUE),
+                'descricao' => $this->input->post('descricao', TRUE),
                 'file' => $file,
                 'path' => $path,
                 'url' => $url,
@@ -139,7 +139,7 @@ class Arquivos extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = $this->input->post('data');
+            $data = $this->input->post('data', TRUE);
             if ($data == null) {
                 $data = date('Y-m-d');
             } else {
@@ -148,15 +148,15 @@ class Arquivos extends MY_Controller
             }
 
             $data = [
-                'documento' => $this->input->post('nome'),
-                'descricao' => $this->input->post('descricao'),
+                'documento' => $this->input->post('nome', TRUE),
+                'descricao' => $this->input->post('descricao', TRUE),
                 'cadastro' => $data,
             ];
 
-            if ($this->arquivos_model->edit('documentos', $data, 'idDocumentos', $this->input->post('idDocumentos')) == true) {
+            if ($this->arquivos_model->edit('documentos', $data, 'idDocumentos', $this->input->post('idDocumentos', TRUE)) == true) {
                 $this->session->set_flashdata('success', 'Alterações efetuadas com sucesso!');
-                log_info('Alterou um arquivo, ID: ' . $this->input->post('idDocumentos'));
-                redirect(site_url('arquivos/editar/') . $this->input->post('idDocumentos'));
+                log_info('Alterou um arquivo, ID: ' . $this->input->post('idDocumentos', TRUE));
+                redirect(site_url('arquivos/editar/') . $this->input->post('idDocumentos', TRUE));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
@@ -193,7 +193,7 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id', TRUE);
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
             redirect(site_url('arquivos'));
