@@ -2,10 +2,8 @@
 <html>
 
 <head>
-    <title>MAPOS</title>
-    <meta charset="UTF-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?= $this->config->item('app_name') ?> </title>
+    <meta charset="UTF-8" /><title><?= $this->config->item('app_name') ?> </title>tial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
