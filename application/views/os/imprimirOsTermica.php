@@ -238,7 +238,8 @@ $totalProdutos = 0; ?>
                         </table>
                       
                         <!-- Via Da Empresa  -->
-                        <?php $totalServico = 0; $totalProdutos = 0; ?>
+                        <?php $totalServico = 0;
+                        $totalProdutos = 0; ?>
                     <div id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                         <div class="invoice-head" style="margin-bottom: 0">
 
