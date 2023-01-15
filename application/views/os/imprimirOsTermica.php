@@ -21,25 +21,8 @@ $totalProdutos = 0; ?>
     </style>
 </head>
 
-<body style="background-color: rgba(0,0,0,.4);" id=body class = "body">
-<font face="Franklin Gothic">
-
-    <!-- Selecionar a 2 via -->
-    <div class = "modal fade in"  id="popup">
-        <div class = "modal-header"><h4 class="modal-title">Deseja imprimir 2 vias ?</h4></div>
-        <div class = "modal-body">
-            <div class="formal-group">
-            <select value="" onchange="showEmpresa(this)">  
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option> 
-            </select>
-            </div>
-        </div>
-        <div class = "modal-footer">
-        <button id="continue" class="button btn btn-mini btn-info" style="float: right;" onclick="closePopup()"><span class="button__text">Continuar</span></button> 
-        </div>    
-    </div> 
-<div id ="principal" hidden >
+<body id=body class="body">
+<div id ="principal">
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
@@ -255,7 +238,9 @@ $totalProdutos = 0; ?>
                         </table>
                       
                         <!-- Via Da Empresa  -->
-                    <div id="ViaEmpresa" >
+                        <?php $totalServico = 0;
+                        $totalProdutos = 0; ?>
+                    <div id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                         <div class="invoice-head" style="margin-bottom: 0">
 
                                 <table class="table table-condensed">
@@ -472,29 +457,9 @@ $totalProdutos = 0; ?>
         </div>
     </div>
 </div>
-</font>
 </body>
-
 
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
-
-    <script type="text/javascript">
-        function showEmpresa(select){
-            if(select.value=="sim"){
-                document.getElementById('ViaEmpresa').style.display = "block";
-            } else{
-                document.getElementById('ViaEmpresa').style.display = "none";
-            }
-            };
-        function closePopup(){
-                document.getElementById('popup').style.display= "none";
-                document.getElementById('principal').style.display= "block";
-                document.getElementById('body').style.background='white' ;
-            window.print();  
-            }
-    </script>
-
-
 
 </html>
