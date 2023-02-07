@@ -7,6 +7,7 @@
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
+### Contato: contato@mapos.com.br
 ### [Feedback](https://github.com/RamonSilva20/mapos/discussions) - Vote ou sugira melhorias
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
