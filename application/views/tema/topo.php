@@ -64,7 +64,7 @@
     shortcut.add("F8", function() {});
     shortcut.add("F9", function() {});
     shortcut.add("F10", function() {});
-    shortcut.add("F11", function() {});
+    //shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
     window.BaseUrl = "<?= base_url() ?>";
 </script>
@@ -76,7 +76,7 @@
   <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text">Perfis</span></a>
         <ul class="dropdown-menu">
         <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text">Área do Cliente</span></a></li>
           <li class=""><a title="Meu Perfil" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text">Meu Perfil</span></a></li>
@@ -85,7 +85,7 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text">Relatórios</span></a>
         <ul class="dropdown-menu">
           <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
           <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
@@ -98,7 +98,7 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Configurações"><i class='bx bx-cog iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Configurações"><i class='bx bx-cog iconN'></i><span class="text">Configurações</span></a>
         <ul class="dropdown-menu">
         <li><a href="<?= site_url('mapos/configurar') ?>">Sistema</a></li>
         <li><a href="<?= site_url('usuarios') ?>">Usuários</a></li>
@@ -110,28 +110,38 @@
         </ul>
       </li>
 <!-- Start Fullscreen -->
-      <li class="dropdown">
-        <a id="btn1" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="TelaCheia"><i class='bx bx-fullscreen' ></i></a>
-      </li>
-      <li class="dropdown fs-exit">
-        <a id="btn2" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Sair TelaCheia"><i class='bx bx-exit-fullscreen' ></i></a>
-      </li>
       <script type="text/javascript">
-          var btn1=document.getElementById("btn1")
-          var btn2=document.getElementById("btn2")
-          var el=document.documentElement;
-          btn1.addEventListener("click",()=>{
-            if (el.requestFullscreen) {
-              el.requestFullscreen()
-            }
-          })
-          btn2.addEventListener("click",()=>{
-            if (document.exitFullscreen) {
-            document.exitFullscreen()
-            }
-          })
-      </script>
-    </ul>
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'F11') {
+    toggleFullScreen();
+  event.preventDefault();  // pressione tecla F11 de mudar o modo de tela cheia do navegador
+    }
+  });
+function toggleFullScreen() {
+    if (!document.fullscreenElement &&    // alternative standard method
+    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+    if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  } else if (document.documentElement.msRequestFullscreen) {
+    document.documentElement.msRequestFullscreen();
+  } else if (document.documentElement.mozRequestFullScreen) {
+    document.documentElement.mozRequestFullScreen();
+  } else if (document.documentElement.webkitRequestFullscreen) {
+    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+  }
+  } else {
+    if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();}
+}});
+  window.BaseUrl = "<?= base_url() ?>";
+</script>
+</ul>
 </div>
 <!-- End Fullscreen -->
 
