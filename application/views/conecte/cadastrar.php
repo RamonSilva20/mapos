@@ -94,7 +94,7 @@
                         <label for="documento" class="control-label"><span class="required"></span></label>
                         <div class="controls">
                             <input id="documento" class="cpfcnpj" type="text" placeholder="CPF/CNPJ*" name="documento" value="<?php echo set_value('documento'); ?>" />
-                            <button style="top:70px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
+                            <button style="top:69px;right:16px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
 
