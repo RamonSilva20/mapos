@@ -41,7 +41,7 @@ class Financeiro extends MY_Controller
 
         $periodo = $this->input->get('periodo');
 
-        if (! empty($vencimento_de)) {
+        if (!empty($vencimento_de)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
 
             if (empty($where)) {
@@ -51,7 +51,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($vencimento_ate)) {
+        if (!empty($vencimento_ate)) {
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_ate)->format('Y-m-d');
 
             if (empty($where)) {
@@ -69,7 +69,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($cliente)) {
+        if (!empty($cliente)) {
             if (empty($where)) {
                 $where = "cliente_fornecedor LIKE '%${cliente}%'";
             } else {
@@ -77,7 +77,7 @@ class Financeiro extends MY_Controller
             }
         }
 
-        if (! empty($tipo)) {
+        if (!empty($tipo)) {
             if (empty($where)) {
                 $where = "tipo = '$tipo'";
             } else {
@@ -145,7 +145,7 @@ class Financeiro extends MY_Controller
 
             $desconto = $valor_desconto;
             //cria variavel para pegar o valor total ja sem o desconto e soma com o desconto
-            $total_sem_desconto = $valor  + $valor_desconto ;
+            $total_sem_desconto = $valor  + $valor_desconto;
             $valor =  $total_sem_desconto;
             //cria variavel para pegar o valor total ja com o desconto e diminui com o desconto
             $total_com_desconto = $valor - $valor_desconto;
@@ -181,7 +181,7 @@ class Financeiro extends MY_Controller
             if (set_value('idCliente')) {
                 $data['clientes_id'] =  set_value('idCliente');
             }
-      
+
 
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
@@ -205,33 +205,22 @@ class Financeiro extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         } else {
-            //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            if (empty($this->input->post('desconto_parc'))) {
-                $valor_desconto =  "0";
-            } else {
-                $valor_desconto = $this->input->post('desconto_parc');
-            }
 
-            if (empty($this->input->post('entrada'))) {
-                $entrada =  "0";
-            } else {
-                $entrada = $this->input->post('entrada');
-            }
+            $valor_desconto = $this->input->post('desconto_parc') ?: 0;
+            $entrada = $this->input->post('entrada') ?: 0;
+            $valor_desconto = str_replace(',', '.', $valor_desconto);
 
-            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc'); //4x
+            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc') ?: 1; //4x
             $valor_parc = $this->input->post('valor_parc'); //450
             $valorparcelas = ($valor_parc - $entrada) / $qtdparcelas_parc;
-            $desconto_por_parcela  = $valor_desconto / $qtdparcelas_parc;
+
+            $desconto_por_parcela  =  $valor_desconto > 0 ? ($valor_desconto / $qtdparcelas_parc) : 0;
 
             //para por na descrição, valor total sem desconto e sem parcelamento
             $descricao_parc_valor = $valor_parc + $valor_desconto;
 
-
-
             //cria variavel para pegar o valor total ja com o desconto e diminui com o desconto
             $total_com_desconto = $valorparcelas + $desconto_por_parcela;
-
-
 
 
             if ($entrada >= $valor_parc) {
@@ -241,6 +230,7 @@ class Financeiro extends MY_Controller
 
             $dia_pgto = $this->input->post('dia_pgto');
             $dia_base_pgto = $this->input->post('dia_base_pgto');
+            $recebimento = $this->input->post('recebimento');
 
             try {
                 $dia_pgto = explode('/', $dia_pgto);
@@ -251,6 +241,15 @@ class Financeiro extends MY_Controller
             } catch (Exception $e) {
                 $dia_pgto = date('Y/m/d');
                 $dia_base_pgto = date('Y/m/d');
+            }
+
+            if ($recebimento) {
+                try {
+
+                    $recebimento = explode('/', $recebimento);
+                    $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
+                } catch (Exception) {
+                }
             }
 
             $comissao = $this->input->post('comissao');
@@ -275,14 +274,15 @@ class Financeiro extends MY_Controller
                         //Em caso afirmativo, corrija voltando o número de dias que transbordaram
                         date_modify($myDateTime, "-$myNewDayOfMonth days");
                     }
+
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .'  [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . '  [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
                         'valor_desconto' =>   $valorparcelas,
                         'data_vencimento' => date_format($myDateTime, "Y-m-d"),
-                        'data_pagamento' => $recebimento != null ? $recebimento : date_format($myDateTime, "Y-m-d"),
+                        'data_pagamento' => $recebimento ?: date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
                         'cliente_fornecedor' => $this->input->post('cliente_parc'),
                         'observacoes' => $this->input->post('observacoes_parc'),
@@ -292,7 +292,6 @@ class Financeiro extends MY_Controller
 
                     ];
 
-                  
                     if ($this->financeiro_model->add('lancamentos', $data) == true) {
                         $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
                         log_info('Adicionou um lançamento em Financeiro');
@@ -306,7 +305,7 @@ class Financeiro extends MY_Controller
             } else {
                 $desconto_entrada = "0";
                 $data1 = [
-                    'descricao' => $this->input->post('descricao_parc')  . ' - Entrada do parc. de R$' . $descricao_parc_valor .' ',
+                    'descricao' => $this->input->post('descricao_parc')  . ' - Entrada do parc. de R$' . $descricao_parc_valor . ' ',
                     'valor' => $entrada,
                     'desconto' =>  $desconto_entrada,
                     'valor_desconto' => $entrada,
@@ -346,7 +345,7 @@ class Financeiro extends MY_Controller
                     }
 
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor .' [' . $loops . '/' . $qtdparcelas_parc . ']',
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . ' [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
@@ -471,7 +470,7 @@ class Financeiro extends MY_Controller
         $this->form_validation->set_rules('vencimento', '', 'trim|required');
         $this->form_validation->set_rules('pagamento', '', 'trim');
 
-      
+
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -488,7 +487,7 @@ class Financeiro extends MY_Controller
                 $vencimento = date('Y/m/d');
             }
 
-        
+
             $valor = $this->input->post('valor');
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
             if (empty($this->input->post('valor_desconto_editar'))) {
@@ -496,7 +495,7 @@ class Financeiro extends MY_Controller
             } else {
                 $valor_desconto = $this->input->post('valor_desconto_editar'); // valor do total + desconto
             }
-           
+
             $valor_total =  $valor + $valor_desconto; //90 + 10=100
             $valor_com_desconto = $valor_total - $valor_desconto;
 

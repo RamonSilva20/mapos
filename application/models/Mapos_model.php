@@ -301,7 +301,7 @@ class Mapos_model extends CI_Model
 
     public function getEmitente()
     {
-        return $this->db->get('emitente')->result();
+        return $this->db->get('emitente')->row();
     }
 
     public function addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo)
