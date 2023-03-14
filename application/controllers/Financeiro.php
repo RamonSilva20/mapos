@@ -71,9 +71,9 @@ class Financeiro extends MY_Controller
 
         if (!empty($cliente)) {
             if (empty($where)) {
-                $where = "cliente_fornecedor LIKE '%${cliente}%'";
+                $where = "cliente_fornecedor LIKE '%{$cliente}%'";
             } else {
-                $where .= " AND cliente_fornecedor LIKE '%${cliente}%'";
+                $where .= " AND cliente_fornecedor LIKE '%{$cliente}%'";
             }
         }
 
@@ -128,8 +128,7 @@ class Financeiro extends MY_Controller
             }
 
             try {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
+                $vencimento = date('Y-m-d', strtotime($vencimento));
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
@@ -137,15 +136,12 @@ class Financeiro extends MY_Controller
             $valor = $this->input->post('valor');
 
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            if (empty($this->input->post('valor_desconto'))) {
-                $valor_desconto =  "0";
-            } else {
-                $valor_desconto = $this->input->post('valor_desconto');
-            }
+            
+            $valor_desconto = doubleval($this->input->post('valor_desconto'));
 
             $desconto = $valor_desconto;
             //cria variavel para pegar o valor total ja sem o desconto e soma com o desconto
-            $total_sem_desconto = $valor  + $valor_desconto;
+            $total_sem_desconto = $valor + $valor_desconto;
             $valor =  $total_sem_desconto;
             //cria variavel para pegar o valor total ja com o desconto e diminui com o desconto
             $total_com_desconto = $valor - $valor_desconto;

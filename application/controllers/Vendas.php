@@ -190,7 +190,7 @@ class Vendas extends MY_Controller
         $this->data['qrCode'] = $this->vendas_model->getQrCode(
             $this->uri->segment(3),
             $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
+            $this->data['emitente']
         );
 
         $this->load->view('vendas/imprimirVenda', $this->data);

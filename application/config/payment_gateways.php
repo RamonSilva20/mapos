@@ -4,7 +4,7 @@
 
 $config['payment_gateways'] = [
     'GerencianetSdk' => [
-        'name' => 'GerenciaNet',
+        'name' => 'GerenciaNet (Efí)',
         'library_name' => 'GerencianetSdk',
         'production' => false,
         'credentials' => [

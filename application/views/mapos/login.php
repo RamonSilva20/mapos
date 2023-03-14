@@ -60,7 +60,7 @@
                 <img src="<?php echo base_url() ?>assets/img/logo-two.png">
               </div>
               <div class="title01">
-                <?= '<img src="' . base_url() . 'assets/img/logo-mapos.png">'; ?>
+                <?= '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
               </div>
             </div>
             <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
