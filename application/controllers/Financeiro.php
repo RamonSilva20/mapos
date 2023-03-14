@@ -128,7 +128,8 @@ class Financeiro extends MY_Controller
             }
 
             try {
-                $vencimento = date('Y-m-d', strtotime($vencimento));
+                $vencimento = explode('/', $vencimento);
+                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
