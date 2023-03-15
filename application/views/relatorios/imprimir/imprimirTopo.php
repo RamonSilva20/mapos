@@ -1,12 +1,12 @@
-<?php if ($emitente[0]): ?>
+<?php if ($emitente): ?>
     <div>
         <br>
         <div style="width: 50%; float: left" class="float-left col-md-3">
-            <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente[0]->url_logo) ?>" alt=""><br><br>
+            <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt=""><br><br>
         </div>
         <div style="float: right">
-            <b>EMPRESA: </b> <?= $emitente[0]->nome ?> <b>CNPJ: </b> <?= $emitente[0]->cnpj ?><br>
-            <b>ENDEREÇO: </b> <?= $emitente[0]->rua ?>, <?= $emitente[0]->numero ?>, <?= $emitente[0]->bairro ?>, <?= $emitente[0]->cidade ?> - <?= $emitente[0]->uf ?> <br>
+            <b>EMPRESA: </b> <?= $emitente->nome ?> <b>CNPJ: </b> <?= $emitente->cnpj ?><br>
+            <b>ENDEREÇO: </b> <?= $emitente->rua ?>, <?= $emitente->numero ?>, <?= $emitente->bairro ?>, <?= $emitente->cidade ?> - <?= $emitente->uf ?> <br>
 
             <?php if (isset($title)): ?>
                 <b>RELATÓRIO: </b> <?= $title ?> <br>
