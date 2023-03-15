@@ -138,7 +138,7 @@ class Financeiro extends MY_Controller
 
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
             
-            $valor_desconto = doubleval($this->input->post('valor_desconto'));
+            $valor_desconto = floatval($this->input->post('valor_desconto'));
 
             $desconto = $valor_desconto;
             //cria variavel para pegar o valor total ja sem o desconto e soma com o desconto
@@ -485,9 +485,9 @@ class Financeiro extends MY_Controller
             }
 
 
-            $valor = doubleval($this->input->post('valor'));
+            $valor = floatval($this->input->post('valor'));
             //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            $valor_desconto = doubleval($this->input->post('valor_desconto_editar')); // valor do total + desconto
+            $valor_desconto = floatval($this->input->post('valor_desconto_editar')); // valor do total + desconto
 
             $valor_total =  $valor + $valor_desconto; //90 + 10=100
             $valor_com_desconto = $valor_total - $valor_desconto;
