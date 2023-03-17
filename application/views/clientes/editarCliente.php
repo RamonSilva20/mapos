@@ -228,11 +228,12 @@
         $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
-                var curState = '<?php echo $result->estado; ?>';
-                if (curState) {
-                    $("#estado option[value=" + curState + "]").prop("selected", true);
-                }
             }
+            var curState = '<?php echo $result->estado; ?>';
+            if (curState) {
+                $("#estado option[value=" + curState + "]").prop("selected", true);
+            }
+
         });
         $('#formCliente').validate({
             rules: {
