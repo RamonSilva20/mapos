@@ -48,7 +48,7 @@
                 <img src="<?php echo base_url() ?>assets/img/logo-two.png">
             </div>
             <div class="title1">
-                <?= $configuration['app_theme'] == 'white' ? '<img src="' . base_url() . 'assets/img/logo-mapos.png">' : '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
+                <img src="<?= base_url()?>assets/img/logo-mapos-branco.png">
             </div>
         </div>
         <a href="#" class="visible-phone">
