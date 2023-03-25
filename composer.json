@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-curl": "*",
         "ext-gd": "*",
         "mercadopago/dx-php": "^2.2.1",
