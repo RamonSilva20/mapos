@@ -1,6 +1,6 @@
 <?php
-    $this->load->config('payment_gateways');
-    ?>
+$this->load->config('payment_gateways');
+?>
 
 <script>
     var paymentGatewaysConfig = JSON.parse("<?php echo addslashes(json_encode($this->config->item('payment_gateways'))); ?>");

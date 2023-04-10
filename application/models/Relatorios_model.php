@@ -78,13 +78,21 @@ class Relatorios_model extends CI_Model
         if ($tipo != null) {
             $whereData .= "AND fornecedor = " . $this->db->escape($tipo);
         }
-        $query = "SELECT * FROM clientes WHERE dataCadastro $whereData ORDER BY nomeCliente";
+        $query = "SELECT idClientes, nomeCliente, sexo, pessoa_fisica,
+        documento, telefone, celular, contato, email, fornecedor,
+        dataCadastro, rua, numero, complemento, bairro, cidade, estado,
+        cep FROM clientes WHERE dataCadastro $whereData ORDER BY nomeCliente";
 
         return $this->db->query($query, [$dataInicial, $dataFinal])->result();
     }
 
     public function clientesRapid($array = false)
     {
+        $this->db->select('idClientes, nomeCliente, sexo, pessoa_fisica,
+        documento, telefone, celular, contato, email, fornecedor,
+        dataCadastro, rua, numero, complemento, bairro, cidade, estado,
+        cep');
+
         $this->db->order_by('nomeCliente', 'asc');
 
         $result = $this->db->get('clientes');

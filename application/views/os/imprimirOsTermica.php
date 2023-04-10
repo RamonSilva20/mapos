@@ -239,7 +239,7 @@ $totalProdutos = 0; ?>
                       
                         <!-- Via Da Empresa  -->
                         <?php $totalServico = 0;
-                        $totalProdutos = 0; ?>
+$totalProdutos = 0; ?>
                     <div id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                         <div class="invoice-head" style="margin-bottom: 0">
 
@@ -374,15 +374,15 @@ $totalProdutos = 0; ?>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            foreach ($produtos as $p) {
-                                                $totalProdutos = $totalProdutos + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->quantidade . '</td>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
-                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+                    foreach ($produtos as $p) {
+                        $totalProdutos = $totalProdutos + $p->subTotal;
+                        echo '<tr>';
+                        echo '<td>' . $p->quantidade . '</td>';
+                        echo '<td>' . $p->descricao . '</td>';
+                        echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
+                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                        echo '</tr>';
+                    } ?>
 
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
@@ -404,7 +404,7 @@ $totalProdutos = 0; ?>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            setlocale(LC_MONETARY, 'en_US');
+                    setlocale(LC_MONETARY, 'en_US');
                                     foreach ($servicos as $s) {
                                         $preco = $s->preco ?: $s->precoVenda;
                                         $subtotal = $preco * ($s->quantidade ?: 1);

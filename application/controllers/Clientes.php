@@ -54,12 +54,21 @@ class Clientes extends MY_Controller
 
         $senhaCliente = $this->input->post('senha') ?  $this->input->post('senha') : preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
 
+        $cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
+        
+        if (strlen($cpf_cnpj) == 11) {
+            $pessoa_fisica = true;
+        } else {
+            $pessoa_fisica = false;
+        }
+
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'contato' => set_value('contato'),
+                'pessoa_fisica' => $pessoa_fisica,
                 'documento' => set_value('documento'),
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),

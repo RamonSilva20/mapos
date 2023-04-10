@@ -94,23 +94,33 @@ class Relatorios extends MY_Controller
                 'Documento' => 'string',
                 'Telefone' => 'string',
                 'Celular' => 'string',
+                'Contato' => 'string',
                 'E-mail' => 'string',
+                'Fornecedor' => 'string',
                 'Data de Cadastro' => 'YYYY-MM-DD',
                 'Rua' => 'string',
                 'Número' => 'string',
+                'Complemento' => 'string',
                 'Bairro' => 'string',
                 'Cidade' => 'string',
                 'Estado' => 'string',
                 'CEP' => 'string',
-                'Contato' => 'string',
-                'Complemento' => 'string',
-                'Fornecedor' => 'string',
             ];
 
             $writer = new XLSXWriter();
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($clientes as $cliente) {
+                if ($cliente["fornecedor"]) {
+                    $cliente["fornecedor"] = "sim";
+                } else {
+                    $cliente["fornecedor"] = "não";
+                }
+                if ($cliente["pessoa_fisica"]) {
+                    $cliente["pessoa_fisica"] = "sim";
+                } else {
+                    $cliente["pessoa_fisica"] = "não";
+                }
                 $writer->writeSheetRow('Sheet1', $cliente);
             }
 
