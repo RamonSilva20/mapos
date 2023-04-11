@@ -130,7 +130,8 @@ $totalProdutos = 0; ?>
                                                 </td>
                                                 <?php if ($qrCode) : ?>
                                                     <td style="width: 15%; padding-left: 0">
-                                                        <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                                        <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                                        <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                                     </td>
                                                 <?php endif ?>
                                             </tr>
@@ -350,7 +351,8 @@ $totalProdutos = 0; ?>
                                                 </td>
                                                 <?php if ($qrCode) : ?>
                                                     <td style="width: 15%; padding-left: 0">
-                                                        <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                                        <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                                        <img style="margin:6px 12px 2px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                                     </td>
                                                 <?php endif ?>
                                             </tr>
