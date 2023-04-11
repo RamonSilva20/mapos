@@ -517,7 +517,7 @@ class Os extends MY_Controller
             }
         }
 
-        if ($os->idCobranca != null) {
+        if (isset($os->idCobranca) != null) {
             if ($os->status == "canceled") {
                 $this->os_model->delete('cobrancas', 'os_id', $id);
             } else {

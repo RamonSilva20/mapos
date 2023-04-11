@@ -32,8 +32,8 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                        <td> <span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br><span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
+                                        <td> <span style="font-size: 20px; "> <?php echo $emitente->nome; ?></span> </br><span><?php echo $emitente->cnpj; ?> </br> <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
                                         <td style="width: 18%; text-align: center">#Venda: <span><?php echo $result->idVendas ?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y'); ?></span></td>
                                     </tr>
 
@@ -63,7 +63,7 @@
                                                 </span>
                                                 <span><?php echo $result->nome ?></span> <br />
                                                 <span>Telefone: <?php echo $result->telefone ?></span><br />
-                                                <span>Email: <?php echo $result->email_user ?></span>
+                                                <span>Email: <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>

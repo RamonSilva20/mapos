@@ -243,7 +243,7 @@ class Vendas extends MY_Controller
             }
         }
 
-        if ($venda->idCobranca != null) {
+        if (isset($venda->idCobranca) != null) {
             if ($venda->status == "canceled") {
                 $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
             } else {

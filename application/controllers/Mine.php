@@ -817,8 +817,7 @@ class Mine extends CI_Controller
         $dados['cliente'] = $this->clientes_model->getById($idClientes);
         $dados['resets_de_senha'] = json_decode($token);
 
-        $emitente = $dados['emitente']->email;
-        $emitenteNome = $dados['emitente']->nome;
+        $emitente = $dados['emitente'];
         $remetente = $clienteEmail;
 
         $html = $this->load->view('conecte/emails/clientenovasenha', $dados, true);
@@ -826,7 +825,7 @@ class Mine extends CI_Controller
         $this->load->model('email_model');
 
         $headers = [
-            'From' => "\"$emitenteNome\" <$emitente>",
+            'From' => "\"$emitente->nome\" <$emitente->email>",
             'Subject' => $assunto,
             'Return-Path' => ''
         ];
@@ -856,7 +855,7 @@ class Mine extends CI_Controller
         $dados['servicos'] = $this->os_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
 
-        $emitente = $dados['emitente']->email;
+        $emitente = $dados['emitente'];
         if (!isset($emitente)) {
             return false;
         }
@@ -868,7 +867,7 @@ class Mine extends CI_Controller
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
             $headers = [
-                'From' => $emitente,
+                'From' => $emitente->email,
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];
@@ -894,9 +893,8 @@ class Mine extends CI_Controller
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
-        $emitente = $dados['emitente']->email;
-        $emitenteNome = $dados['emitente']->nome;
-        $remetente = $dados['cliente']->email;
+        $emitente = $dados['emitente'];
+        $remetente = $dados['cliente'];
         $assunto = 'Bem-vindo!';
 
         $html = $this->load->view('os/emails/clientenovo', $dados, true);
@@ -904,12 +902,12 @@ class Mine extends CI_Controller
         $this->load->model('email_model');
 
         $headers = [
-            'From' => "\"$emitenteNome\" <$emitente>",
+            'From' => "\"$emitente->nome\" <$emitente->email>",
             'Subject' => $assunto,
             'Return-Path' => ''
         ];
         $email = [
-            'to' => $remetente,
+            'to' => $remetente->email,
             'message' => $html,
             'status' => 'pending',
             'date' => date('Y-m-d H:i:s'),
@@ -929,8 +927,7 @@ class Mine extends CI_Controller
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
-        $emitente = $dados['emitente']->email;
-        $emitenteNome = $dados['emitente']->nome;
+        $emitente = $dados['emitente'];
         $assunto = 'Novo Cliente Cadastrado no Sistema';
 
         $usuarios = [];
@@ -940,7 +937,7 @@ class Mine extends CI_Controller
             $dados['usuario'] = $usuario;
             $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
             $headers = [
-                'From' => "\"$emitenteNome\" <$emitente>",
+                'From' => "\"$emitente->nome\" <$emitente->email>",
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];

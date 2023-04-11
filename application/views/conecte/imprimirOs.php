@@ -34,12 +34,12 @@ $totalProdutos = 0; ?>
                                             <<<< /td>
                                     </tr> <?php
                                 } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo $emitente[0]->cnpj; ?> </br>
-                                                <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ' - ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <?php echo $emitente->cnpj; ?> </br>
+                                                <?php echo $emitente->rua . ', ' . $emitente->numero . ' - ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
+                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
                                         <td style="width: 18%; text-align: center">#Protocolo: <span>
                                                 <?php echo $result->idOs ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y') ?></span></td>
@@ -82,7 +82,7 @@ $totalProdutos = 0; ?>
                                                 <span>Telefone:
                                                     <?php echo $result->telefone ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email ?></span>
+                                                    <?php echo $result->email_usuario ?></span>
                                             </li>
                                         </ul>
                                     </td>
