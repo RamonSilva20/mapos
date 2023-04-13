@@ -1001,8 +1001,8 @@ class Os extends MY_Controller
         $dados['produtos'] = $this->os_model->getProdutos($idOs);
         $dados['servicos'] = $this->os_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
-        $emitente = $dados['emitente']->email;
-        if (!isset($emitente)) {
+        $emitente = $dados['emitente'];
+        if (!isset($emitente->email)) {
             return false;
         }
 
@@ -1012,7 +1012,7 @@ class Os extends MY_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente, 'Subject' => $assunto, 'Return-Path' => ''];
+            $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
             $email = [
                 'to' => $remetente,
                 'message' => $html,
