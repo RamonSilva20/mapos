@@ -362,13 +362,13 @@ class Os_model extends CI_Model
             return;
         }
 
-            $pix = (new StaticPayload())
-                ->setAmount($amount)
-                ->setTid($id)
-                ->setDescription(sprintf("%s OS %s", substr($emitente->nome, 0,  18), $id), true)
-                ->setPixKey(getPixKeyType($pixKey), $pixKey)
-                ->setMerchantName($emitente->nome)
-                ->setMerchantCity($emitente->cidade);
+        $pix = (new StaticPayload())
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf("%s OS %s", substr($emitente->nome, 0, 18), $id), true)
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade);
 
         return $pix->getQRCode();
     }

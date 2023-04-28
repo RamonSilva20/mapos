@@ -13,4 +13,3 @@ class Migration_alter_charset_configuracoes extends CI_Migration
         $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 7");
     }
 }
- 

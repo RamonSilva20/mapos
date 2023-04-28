@@ -200,7 +200,7 @@ class Vendas_model extends CI_Model
         $pix = (new StaticPayload())
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s Venda %s", substr($emitente->nome, 0,  18), $id), true)
+            ->setDescription(sprintf("%s Venda %s", substr($emitente->nome, 0, 18), $id), true)
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);
