@@ -58,7 +58,7 @@ class Clientes extends MY_Controller
         
         if (strlen($cpf_cnpj) == 11) {
             $pessoa_fisica = true;
-        }else {
+        } else {
             $pessoa_fisica = false;
         }
 
