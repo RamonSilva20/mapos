@@ -113,12 +113,12 @@ class Relatorios extends MY_Controller
             foreach ($clientes as $cliente) {
                 if ($cliente["fornecedor"]) {
                     $cliente["fornecedor"] = "sim";
-                }else {
+                } else {
                     $cliente["fornecedor"] = "não";
                 }
                 if ($cliente["pessoa_fisica"]) {
                     $cliente["pessoa_fisica"] = "sim";
-                }else {
+                } else {
                     $cliente["pessoa_fisica"] = "não";
                 }
                 $writer->writeSheetRow('Sheet1', $cliente);
