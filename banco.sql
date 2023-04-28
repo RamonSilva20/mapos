@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   PRIMARY KEY (`idClientes`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE `resets_de_senha` ( 
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,7 @@ CREATE TABLE `resets_de_senha` (
   `token_utilizado` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `categorias`
@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS `categorias` (
   `status` TINYINT(1) NULL,
   `tipo` VARCHAR(15) NULL,
   PRIMARY KEY (`idCategorias`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -81,7 +82,8 @@ CREATE TABLE IF NOT EXISTS `contas` (
   `status` TINYINT(1) NULL,
   `tipo` VARCHAR(80) NULL,
   PRIMARY KEY (`idContas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `permissoes`
@@ -93,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `permissoes` (
   `situacao` TINYINT(1) NULL,
   `data` DATE NULL,
   PRIMARY KEY (`idPermissao`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -201,7 +204,8 @@ CREATE TABLE IF NOT EXISTS `garantias` (
     REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `os`
@@ -375,7 +379,8 @@ CREATE TABLE IF NOT EXISTS `vendas` (
     REFERENCES `lancamentos` (`idLancamentos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 --
@@ -435,7 +440,8 @@ CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
     REFERENCES `produtos` (`idProdutos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `anexos`
@@ -454,7 +460,8 @@ CREATE TABLE IF NOT EXISTS `anexos` (
     REFERENCES `os` (`idOs`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -472,7 +479,8 @@ CREATE TABLE IF NOT EXISTS `documentos` (
   `tipo` VARCHAR(15) NULL,
   `tamanho` VARCHAR(45) NULL,
   PRIMARY KEY (`idDocumentos`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -484,7 +492,8 @@ CREATE TABLE IF NOT EXISTS `marcas` (
   `cadastro` DATE NULL,
   `situacao` TINYINT(1) NULL,
   PRIMARY KEY (`idMarcas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -516,7 +525,8 @@ CREATE TABLE IF NOT EXISTS `equipamentos` (
     REFERENCES `clientes` (`idClientes`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -542,7 +552,8 @@ CREATE TABLE IF NOT EXISTS `equipamentos_os` (
     REFERENCES `os` (`idOs`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -556,7 +567,8 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `hora` TIME NULL,
   `ip` VARCHAR(45) NULL,
   PRIMARY KEY (`idLogs`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `emitente`
@@ -576,7 +588,8 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   `url_logo` VARCHAR(225) NULL ,
   `cep` VARCHAR(20) NULL ,
   PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
 -- Table `email_queue`
@@ -607,7 +620,9 @@ CREATE TABLE IF NOT EXISTS `anotacoes_os` (
 -- -----------------------------------------------------
 -- Table `configuracoes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` TEXT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `configuracoes` ( 
+  `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` TEXT NULL , PRIMARY KEY (`idConfig`)
+  ) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `migrations`
