@@ -16,6 +16,10 @@ $config['app_name'] = 'Map-OS';
  */
 $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 
+/**
+ * Definição da hora local.
+ */
+date_default_timezone_set('America/Sao_Paulo');
 
 /*
 |--------------------------------------------------------------------------
