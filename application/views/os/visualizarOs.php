@@ -63,7 +63,6 @@
                                 <?php } ?>
                             </tbody>
                         </table>
-
                         <table class="table table-condensend">
                             <tbody>
                                 <tr>
