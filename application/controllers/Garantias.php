@@ -155,6 +155,26 @@ class Garantias extends MY_Controller
         $this->load->view('garantias/imprimirGarantia', $this->data);
     }
 
+    public function imprimirGarantiaOs()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para imprimir o Termo de Garantia.');
+            redirect(base_url());
+        }
+
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->data['osGarantia'] = $this->garantias_model->getByIdOsGarantia($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->view('garantias/imprimirGarantiaOs', $this->data);
+    }
+
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dGarantia')) {
