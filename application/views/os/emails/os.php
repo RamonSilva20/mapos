@@ -113,7 +113,7 @@ $totalProdutos = 0; ?>
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 OS #: <?= $result->idOs ?><br>
@@ -138,9 +138,9 @@ $totalProdutos = 0; ?>
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente[0]->nome; ?> <br>
-                                <?= $emitente[0]->rua ?>, <?= $emitente[0]->numero ?>, <?= $emitente[0]->bairro ?><br>
-                                <?= $emitente[0]->cidade ?> - <?= $emitente[0]->uf ?> CEP: <?= $emitente[0]->cep ?> <br>
+                                <?= $emitente->nome; ?> <br>
+                                <?= $emitente->rua ?>, <?= $emitente->numero ?>, <?= $emitente->bairro ?><br>
+                                <?= $emitente->cidade ?> - <?= $emitente->uf ?> CEP: <?= $emitente->cep ?> <br>
                                 Responsável: <?= $result->nome ?><br>
                                 <?= $result->email_usuario ?>
                             </td>

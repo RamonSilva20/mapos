@@ -53,8 +53,8 @@ class Financeiro_model extends CI_Model
     {
         $sql = "SELECT SUM(CASE WHEN baixado = 1 AND tipo = 'receita' THEN IF(valor_desconto = 0, valor, valor_desconto) END) as total_receita,
                        SUM(CASE WHEN baixado = 1 AND tipo = 'despesa' THEN valor - desconto END) as total_despesa,
-                       SUM(CASE WHEN baixado = 1 THEN valor - valor_desconto END) as total_valor_desconto,
-                       SUM(CASE WHEN baixado = 0 THEN valor - valor_desconto END) as total_valor_desconto_pendente,
+                       SUM(CASE WHEN baixado = 1 THEN desconto END) as total_valor_desconto,
+                       SUM(CASE WHEN baixado = 0 THEN desconto END) as total_valor_desconto_pendente,
                        SUM(CASE WHEN tipo = 'receita' THEN valor END) as total_receita_sem_desconto,
                        SUM(CASE WHEN tipo = 'despesa' THEN valor END) as total_despesa_sem_desconto,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor_desconto END) as total_receita_pendente,

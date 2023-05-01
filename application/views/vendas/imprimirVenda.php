@@ -28,24 +28,24 @@
                                             <<<< /td>
                                     </tr> <?php
                                 } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
 
                                         <td> <span style="font-size: 17px;">
 
-                                                <?php echo $emitente[0]->nome; ?></span> </br>
+                                                <?php echo $emitente->nome; ?></span> </br>
                                             <span style="font-size: 12px; ">
                                                 <span class="icon">
                                                     <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
-                                                    <?php echo $emitente[0]->cnpj; ?> </br>
+                                                    <?php echo $emitente->cnpj; ?> </br>
                                                     <span class="icon">
                                                         <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
-                                                        <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?>
+                                                        <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?>
 
                                                     </span> </br> <span>
                                                         <span class="icon">
                                                             <i class="fas fa-comments" style="margin:5px 1px"></i>
                                                             E-mail:
-                                                            <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?> </br>
+                                                            <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?> </br>
                                                             <span class="icon">
                                                                 <i class="fas fa-user-check"></i>
                                                                 Vendedor: <?php echo $result->nome ?>
@@ -85,10 +85,10 @@
                                             </li>
                                         </ul>
                                     </td>
-
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0">
-                                            <img style="margin:12px auto;" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                            <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                         </td>
                                     <?php endif ?>
                                 </tr>

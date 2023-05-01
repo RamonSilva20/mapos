@@ -155,6 +155,11 @@ class Vendas extends MY_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->vendas_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -190,7 +195,7 @@ class Vendas extends MY_Controller
         $this->data['qrCode'] = $this->vendas_model->getQrCode(
             $this->uri->segment(3),
             $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
+            $this->data['emitente']
         );
 
         $this->load->view('vendas/imprimirVenda', $this->data);
@@ -243,7 +248,7 @@ class Vendas extends MY_Controller
             }
         }
 
-        if ($venda->idCobranca != null) {
+        if (isset($venda->idCobranca) != null) {
             if ($venda->status == "canceled") {
                 $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
             } else {

@@ -36,10 +36,10 @@
                                     </tr> <?php
                                 } else { ?> <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
-                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo 'CNPJ: ' . $emitente[0]->cnpj; ?> </br>
-                                                <?php echo $emitente[0]->rua . ', ' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br>
-                                            <span><?php echo 'Fone: ' . $emitente[0]->telefone; ?></span>
+                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <?php echo 'CNPJ: ' . $emitente->cnpj; ?> </br>
+                                                <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br>
+                                            <span><?php echo 'Fone: ' . $emitente->telefone; ?></span>
                                         </td>
                                     </tr>
                                     <tr>

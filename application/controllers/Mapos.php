@@ -134,7 +134,7 @@ class Mapos extends MY_Controller
 
         $this->upload_config = [
             'upload_path' => $image_upload_folder,
-            'allowed_types' => 'png|jpg|jpeg|bmp',
+            'allowed_types' => 'png|jpg|jpeg|bmp|svg',
             'max_size' => 2048,
             'remove_space' => true,
             'encrypt_name' => true,

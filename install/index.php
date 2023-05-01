@@ -12,7 +12,7 @@ if (!file_exists($settings_file)) {
 $php_version_success = false;
 $allow_url_fopen_success = false;
 
-$php_version_required = "7.3.0";
+$php_version_required = "8.1";
 $current_php_version = PHP_VERSION;
 
 //check required php version

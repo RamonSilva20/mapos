@@ -16,6 +16,10 @@ $config['app_name'] = 'Map-OS';
  */
 $config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
 
+/**
+ * Definição da hora local.
+ */
+date_default_timezone_set('America/Sao_Paulo');
 
 /*
 |--------------------------------------------------------------------------
@@ -496,9 +500,3 @@ $config['time_reference'] = 'local';
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
-
-
-
-$config['modules_locations'] = [
-    APPPATH.'modules/' => '../modules/',
-];
