@@ -92,7 +92,7 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * [filp/whoops](https://github.com/filp/whoops)
 
 ### Requerimentos
-* PHP >= 8.0
+* PHP >= 8.1
 * MySQL
 * Composer
 
