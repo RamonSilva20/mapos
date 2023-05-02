@@ -109,42 +109,8 @@
         <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
         </ul>
       </li>
-      
-<!-- Start Fullscreen -->
-<script type="text/javascript">
-    document.addEventListener('keydown', function(event) {
-    if (event.key === 'F11') {
-    toggleFullScreen();
-  event.preventDefault();  // pressione tecla F11 de mudar o modo de tela cheia do navegador
-    }
-  });
-function toggleFullScreen() {
-    if (!document.fullscreenElement &&    // alternative standard method
-    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
-    if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
-  } else if (document.documentElement.msRequestFullscreen) {
-    document.documentElement.msRequestFullscreen();
-  } else if (document.documentElement.mozRequestFullScreen) {
-    document.documentElement.mozRequestFullScreen();
-  } else if (document.documentElement.webkitRequestFullscreen) {
-    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-  }
-  } else {
-    if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
-  } else if (document.mozCancelFullScreen) {
-    document.mozCancelFullScreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();}
-}};
-  window.BaseUrl = "<?= base_url() ?>";
-</script>
 </ul>
 </div>
-<!-- End Fullscreen -->
 
 <!-- New User -->
 <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
@@ -152,9 +118,9 @@ function toggleFullScreen() {
   {
       date_default_timezone_set('America/Sao_Paulo');
       $hora = date('H');
-      if ($hora >= 6 && $hora <= 12) {
+      if ($hora > 00 && $hora < 12) {
           return 'Bom dia, ';
-      } elseif ($hora > 12 && $hora <=18) {
+      } elseif ($hora > 12 && $hora < 18) {
           return 'Boa tarde, ';
       } else {
           return 'Boa noite, ';
