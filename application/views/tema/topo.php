@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-  <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
+  <title><?= $configuration['app_name'] ?: 'Lions' ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
@@ -75,16 +75,16 @@
   <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title=""><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
-        <li class=""><a title="" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text"></span></a></li>
-          <li class=""><a title="" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text"></span></a></li>
+        <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text">Área do Cliente</span></a></li>
+          <li class=""><a title="Meu Perfil" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text">Meu Perfil</span></a></li>
           <li class="divider"></li>
-          <li class=""><a title="" href="<?= site_url('login/sair'); ?>"><i class='bx bx-log-out-circle'></i> <span class="text">Sair do Sistema</span></a></li>
+          <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class='bx bx-log-out-circle'></i> <span class="text">Sair do Sistema</span></a></li>
         </ul>
       </li>
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-chart iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
           <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
           <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
@@ -138,7 +138,7 @@ function toggleFullScreen() {
     document.mozCancelFullScreen();
   } else if (document.webkitExitFullscreen) {
     document.webkitExitFullscreen();}
-}});
+}};
   window.BaseUrl = "<?= base_url() ?>";
 </script>
 </ul>
