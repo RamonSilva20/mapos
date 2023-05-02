@@ -70,6 +70,7 @@
 </script>
 </head>
 
+<body>
 <!--top-Header-menu-->
 <div class="navebarn">
   <div id="user-nav" class="navbar navbar-inverse">
@@ -84,7 +85,7 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-chart iconN'></i><span class="text"></span></a>
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
           <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
           <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
