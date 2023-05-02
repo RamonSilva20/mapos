@@ -141,9 +141,9 @@
   {
       date_default_timezone_set('America/Sao_Paulo');
       $hora = date('H');
-      if ($hora >= 6 && $hora <= 12) {
+      if ($hora > 00 && $hora < 12) {
           return 'Bom dia, ';
-      } elseif ($hora > 12 && $hora <=18) {
+      } elseif ($hora > 12 && $hora < 18) {
           return 'Boa tarde, ';
       } else {
           return 'Boa noite, ';

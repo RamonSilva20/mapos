@@ -31,48 +31,50 @@
         /* Move the check mark back when checked */
         text-indent: 0;
     }
+
     .control-group.error .help-inline {
-            display: flex;
+        display: flex;
+    }
+
+    .form-horizontal .control-group {
+        border-bottom: 1px solid #ffffff;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 20px;
+        padding-bottom: 8px 0;
+    }
+
+    .form-horizontal .control-label {
+        text-align: left;
+        padding-top: 15px;
+    }
+
+    .nopadding {
+        padding: 0 20px !important;
+        margin-right: 20px;
+    }
+
+    .widget-title h5 {
+        padding-bottom: 30px;
+        text-align-last: left;
+        font-size: 2em;
+        font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+        form {
+            display: contents !important;
         }
-        
-        .form-horizontal .control-group {
-            border-bottom: 1px solid #ffffff;
-        }
-        
-        .form-horizontal .controls {
-            margin-left   : 20px;
-            padding-bottom: 8px 0;
-        }
-    
+
         .form-horizontal .control-label {
-            text-align : left;
-            padding-top: 15px;
+            margin-bottom: -6px;
         }
-    
-        .nopadding {
-            padding     : 0 20px !important;
-            margin-right: 20px;
+
+        .btn-xs {
+            position: initial !important;
         }
-    
-        .widget-title h5 {
-            padding-bottom : 30px;
-            text-align-last: left;
-            font-size      : 2em;
-            font-weight    : 500;
-        }
-    
-        @media (max-width: 480px) {
-            form {
-                display: contents !important;
-            }
-        
-            .form-horizontal .control-label {
-                margin-bottom: -6px;
-            }
-            .btn-xs {
-                position: initial !important;
-            }
-        }
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -224,10 +226,10 @@
         $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
-                var curState = '<?php echo set_value('estado'); ?>';
-                if (curState) {
-                    $("#estado option[value=" + curState + "]").prop("selected", true);
-                }
+            }
+            var curState = '<?php echo set_value('estado'); ?>';
+            if (curState) {
+                $("#estado option[value=" + curState + "]").prop("selected", true);
             }
         });
         $("#nomeCliente").focus();

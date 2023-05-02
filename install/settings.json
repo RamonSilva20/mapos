@@ -3,7 +3,8 @@
 	"extensions": [
 		"cURL",
 		"MySQLi",
-		"GD"
+		"GD",
+    "zip"
 	],
   "database_file": "../banco.sql",
   "writeable_directories": {

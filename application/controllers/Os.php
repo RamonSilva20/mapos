@@ -132,7 +132,8 @@ class Os extends MY_Controller
 
                 $idOs = $id;
                 $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente()[0];
+                $emitente = $this->mapos_model->getEmitente();
+              
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
@@ -244,7 +245,7 @@ class Os extends MY_Controller
                 $idOs = $this->input->post('idOs');
 
                 $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente()[0];
+                $emitente = $this->mapos_model->getEmitente();
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
@@ -322,6 +323,11 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
         $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
+        $this->data['qrCode'] = $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -361,7 +367,7 @@ class Os extends MY_Controller
         $this->data['qrCode'] = $this->os_model->getQrCode(
             $this->uri->segment(3),
             $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
+            $this->data['emitente']
         );
 
         $this->load->view('os/imprimirOs', $this->data);
@@ -413,14 +419,14 @@ class Os extends MY_Controller
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-        if (!isset($this->data['emitente'][0]->email)) {
+        if (!isset($this->data['emitente']->email)) {
             $this->session->set_flashdata('error', 'Efetue o cadastro dos dados de emitente');
             redirect(site_url('os'));
         }
 
         $idOs = $this->uri->segment(3);
 
-        $emitente = $this->data['emitente'][0];
+        $emitente = $this->data['emitente'];
         $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
 
         // Verificar configuração de notificação
@@ -516,7 +522,7 @@ class Os extends MY_Controller
             }
         }
 
-        if ($os->idCobranca != null) {
+        if (isset($os->idCobranca) != null) {
             if ($os->status == "canceled") {
                 $this->os_model->delete('cobrancas', 'os_id', $id);
             } else {
@@ -995,9 +1001,8 @@ class Os extends MY_Controller
         $dados['produtos'] = $this->os_model->getProdutos($idOs);
         $dados['servicos'] = $this->os_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
-
-        $emitente = $dados['emitente'][0]->email;
-        if (!isset($emitente)) {
+        $emitente = $dados['emitente'];
+        if (!isset($emitente->email)) {
             return false;
         }
 
@@ -1007,7 +1012,7 @@ class Os extends MY_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente, 'Subject' => $assunto, 'Return-Path' => ''];
+            $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
             $email = [
                 'to' => $remetente,
                 'message' => $html,

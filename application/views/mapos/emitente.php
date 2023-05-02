@@ -177,14 +177,14 @@
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
-                                <td style="width: 25%"><img src=" <?= $dados[0]->url_logo; ?> "></td>
+                                <td style="width: 25%"><img src=" <?= $dados->url_logo; ?> "></td>
                                 <td> <span style="font-size: 20px; ">
-                                        <?= $dados[0]->nome; ?> </span> </br><span>
-                                        <?= $dados[0]->cnpj; ?> </br>
-                                        <?= $dados[0]->rua . ', nº: ' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' - ' . $dados[0]->uf; ?><br />
-                                        <?= 'CEP: ' . $dados[0]->cep; ?>
+                                        <?= $dados->nome; ?> </span> </br><span>
+                                        <?= $dados->cnpj; ?> </br>
+                                        <?= $dados->rua . ', nº: ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' - ' . $dados->uf; ?><br />
+                                        <?= 'CEP: ' . $dados->cep; ?>
                                     </span> </br>
-                                    <span> E-mail: <?= $dados[0]->email . ' - Fone: ' . $dados[0]->telefone; ?></span></td>
+                                    <span> E-mail: <?= $dados->email . ' - Fone: ' . $dados->telefone; ?></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -208,69 +208,69 @@
                 <div class="control-group">
                     <label for="nome" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="nomeEmitente" type="text" name="nome" value="<?= $dados[0]->nome; ?>" placeholder="Razão Social*" />
-                        <input id="nome" type="hidden" name="id" value="<?= $dados[0]->id; ?>" />
+                        <input id="nomeEmitente" type="text" name="nome" value="<?= $dados->nome; ?>" placeholder="Razão Social*" />
+                        <input id="nome" type="hidden" name="id" value="<?= $dados->id; ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cnpj" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input class="cnpjEmitente" type="text" id="documento" name="cnpj" value="<?= $dados[0]->cnpj; ?>" placeholder="CNPJ*"/>
+                        <input class="cnpjEmitente" type="text" id="documento" name="cnpj" value="<?= $dados->cnpj; ?>" placeholder="CNPJ*"/>
                         <button style="top:34px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" name="ie" value="<?= $dados[0]->ie; ?>" placeholder="IE*"/>
+                        <input type="text" name="ie" value="<?= $dados->ie; ?>" placeholder="IE*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cep" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="cep" type="text" name="cep" value="<?= $dados[0]->cep; ?>" placeholder="CEP*"/>
+                        <input id="cep" type="text" name="cep" value="<?= $dados->cep; ?>" placeholder="CEP*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="rua" name="logradouro" value="<?= $dados[0]->rua; ?>" placeholder="Logradouro*"/>
+                        <input type="text" id="rua" name="logradouro" value="<?= $dados->rua; ?>" placeholder="Logradouro*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="numero" name="numero" value="<?= $dados[0]->numero; ?>" placeholder="Número*"/>
+                        <input type="text" id="numero" name="numero" value="<?= $dados->numero; ?>" placeholder="Número*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="bairro" name="bairro" value="<?= $dados[0]->bairro; ?>" placeholder="Bairro*"/>
+                        <input type="text" id="bairro" name="bairro" value="<?= $dados->bairro; ?>" placeholder="Bairro*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="cidade" name="cidade" value="<?= $dados[0]->cidade; ?>" placeholder="Cidade*"/>
+                        <input type="text" id="cidade" name="cidade" value="<?= $dados->cidade; ?>" placeholder="Cidade*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="estado" name="uf" value="<?= $dados[0]->uf; ?>" placeholder="UF*"/>
+                        <input type="text" id="estado" name="uf" value="<?= $dados->uf; ?>" placeholder="UF*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="telefone" name="telefone" value="<?= $dados[0]->telefone; ?>" placeholder="Telefone*"/>
+                        <input type="text" id="telefone" name="telefone" value="<?= $dados->telefone; ?>" placeholder="Telefone*"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="email" type="text" name="email" value="<?= $dados[0]->email; ?>" placeholder="E-mail*"/>
+                        <input id="email" type="text" name="email" value="<?= $dados->email; ?>" placeholder="E-mail*"/>
                     </div>
                 </div>
             </div>
@@ -293,7 +293,7 @@
                     <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
                     <div class="controls">
                         <input type="file" name="userfile" value="" />
-                        <input id="nome" type="hidden" name="id" value="<?= $dados[0]->id; ?>" />
+                        <input id="nome" type="hidden" name="id" value="<?= $dados->id; ?>" />
                     </div>
                 </div>
             </div>
