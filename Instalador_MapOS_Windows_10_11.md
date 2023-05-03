@@ -1,5 +1,4 @@
-
-title Instalador Map-OS Windows v1.5.20230503
+title Instalador Map-OS Windows v1.6.20230503
 
 @ECHOOFF
 
@@ -11,9 +10,9 @@ ECHO # Detectando privilegios...                               #
 
 ECHO ###########################################################
 
-net session >NUL2>&1
+net session>NUL2>&1
 
-IF not %ERRORLEVEL% == 0 (
+IFnot%ERRORLEVEL%==0 (
 
    rem //Comandos sem privilegios de Administrador
 
@@ -27,7 +26,7 @@ IF not %ERRORLEVEL% == 0 (
 
    ECHO ###########################################################
 
-   PAUSE >NUL
+   PAUSE>NUL
 
    exit
 
@@ -73,7 +72,7 @@ SETdirDefault=C:\InstaladorMAPOS
 
 SETurlWget=https://eternallybored.org/misc/wget/1.21.3/32/wget.exe
 
-SETurlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.1.17/xampp-windows-x64-8.1.17-0-VS16-installer.exe"
+SETurlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.4/xampp-windows-x64-8.2.4-0-VS16-installer.exe"
 
 SETurlComposer=https://getcomposer.org/Composer-Setup.exe
 
@@ -103,23 +102,23 @@ ECHO.
 
 ECHO 01.1 Verificando pasta de instalacao
 
-IF not EXIST%dirDefault%mkdir%dirDefault% >NUL2>&1
+IFnotEXIST%dirDefault%mkdir%dirDefault%>NUL2>&1
 
 ECHO 01.2 Verificando Wget
 
-IF not EXIST"%dirDefault%\wget.exe"PowerShell -command "& { iwr %urlWget% -OutFile %dirDefault%\wget.exe }" >NUL2>&1
+IFnotEXIST"%dirDefault%\wget.exe"PowerShell -command "& { iwr %urlWget% -OutFile %dirDefault%\wget.exe }">NUL2>&1
 
 ECHO 01.3 Verificando Xampp
 
-IF not EXIST"%dirDefault%\xampp.exe"%dirDefault%\wget --quiet --show-progress %urlXampp% -O %dirDefault%\xampp.exe
+IFnotEXIST"%dirDefault%\xampp.exe"%dirDefault%\wget --quiet --show-progress %urlXampp% -O %dirDefault%\xampp.exe
 
 ECHO 01.4 Verificando Composer
 
-IF not EXIST"%dirDefault%\composer.exe"PowerShell -command "& { iwr %urlComposer% -OutFile %dirDefault%\composer.exe }" >NUL2>&1
+IFnotEXIST"%dirDefault%\composer.exe"PowerShell -command "& { iwr %urlComposer% -OutFile %dirDefault%\composer.exe }">NUL2>&1
 
 ECHO 01.5 Verificando MapOS GitHUB
 
-IF not EXIST"%dirDefault%\MapOS.zip"PowerShell -command "& { iwr %urlMapOS% -OutFile %dirDefault%\MapOS.zip }" >NUL2>&1
+IFnotEXIST"%dirDefault%\MapOS.zip"PowerShell -command "& { iwr %urlMapOS% -OutFile %dirDefault%\MapOS.zip }">NUL2>&1
 
 SETstepnext=step02
 
@@ -131,7 +130,7 @@ goto step00
 
 :step02
 
-ECHO02 SERVIDOR XAMPP 8.1.17...
+ECHO02 SERVIDOR WEB XAMPP...
 
 ECHO.
 
@@ -141,17 +140,19 @@ start /wait %dirDefault%\xampp.exe --mode unattended
 
 ECHO 02.2 Configurando XAMPP
 
-ECHO.>> %dirXampp%\xampp-control.ini
+ECHO.>>%dirXampp%\xampp-control.ini
 
-ECHO [Autostart]>> %dirXampp%\xampp-control.ini
+ECHO [Autostart]>>%dirXampp%\xampp-control.ini
 
-ECHO Apache=1 >> %dirXampp%\xampp-control.ini
+ECHO Apache=1>>%dirXampp%\xampp-control.ini
 
-ECHO MySQL=1 >> %dirXampp%\xampp-control.ini
+ECHO MySQL=1>>%dirXampp%\xampp-control.ini
 
-ECHO 02.3 Ativando Extensao PHP-GD
+ECHO 02.3 Ativando Extensoes do PHP
 
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=gd', 'extension=gd'} | Set-Content -Path '%dirPHP%\php.ini'"
+
+PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=zip', 'extension=zip'} | Set-Content -Path '%dirPHP%\php.ini'"
 
 ECHO 02.4 Configurando PHP TimeZone Sao_Paulo
 
@@ -201,7 +202,7 @@ ECHO 04.1 Executando instalador COMPOSER
 
 START /wait %dirDefault%\composer.exe /SILENT /ALLUSERS
 
-TIMEOUT /T 5 >NUL
+TIMEOUT /T 5>NUL
 
 ECHO 04.2 Instalacao do complemento COMPOSER
 
@@ -223,7 +224,7 @@ ECHO.
 
 ECHO 05.1 Criar Banco de Dados (mapos)
 
-%dirMySQL%\mysql.exe -u"root" -e "create database `mapos`;" >NUL2>&1
+%dirMySQL%\mysql.exe -u"root" -e "create database `mapos`;">NUL2>&1
 
 ECHO 05.2 Configurar MapOS (Browser)
 
@@ -263,11 +264,11 @@ ECHO  ************************************************
 
 ECHO.
 
-erase /F /S /Q "%dirDefault%\*.*" >NUL
+erase /F /S /Q "%dirDefault%\*.*">NUL
 
-rmdir /Q /S "%dirDefault%\" >NUL
+rmdir /Q /S "%dirDefault%\">NUL
 
-TIMEOUT /T 10 >NUL
+TIMEOUT /T 10>NUL
 
 EXIT
 
