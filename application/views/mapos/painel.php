@@ -720,6 +720,7 @@
         <div id="modalDefeito" class="modal-Defeito"></div>
         <div id="modalObservacoes" class="modal-Observacoes"></div>
         <div id="modalTotal" class="modal-Total"></div>
+        <div id="modalDesconto" class="modal-Total"></div>
         <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
     </div>
     <div class="modal-footer">
@@ -863,6 +864,7 @@
                 $('#modalDefeito').html(eventObj.defeito);
                 $('#modalObservacoes').html(eventObj.observacoes);
                 $('#modalTotal').html(eventObj.total);
+                $('#modalDesconto').html(eventObj.desconto);
                 $('#modalValorFaturado').html(eventObj.valorFaturado);
 
                 $('#eventUrl').attr('href', event.url);
