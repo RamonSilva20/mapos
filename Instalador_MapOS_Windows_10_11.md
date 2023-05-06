@@ -1,21 +1,61 @@
-title Instalador Map-OS Windows v1.6.20230503
+title Instalador Map-OS Windows v1.7.20230506
 @ECHO OFF
 cls
-ECHO ###########################################################
-ECHO # Detectando privilegios...                               #
-ECHO ###########################################################
-net session >NUL 2>&1
-IF not %ERRORLEVEL% == 0 (
-   rem //Comandos sem privilegios de Administrador
-   ECHO.
-   ECHO ###########################################################
-   ECHO #Atencao! Sem privilegios de Administrador.               #
-   ECHO #Feche o Instalador MAP-OS e execute como Administrador   #
-   ECHO ###########################################################
-   PAUSE >NUL
-   exit
-)
-SET stepnext=step01
+ECHO =============================
+ECHO Running Admin shell
+ECHO =============================
+
+:init
+setlocal DisableDelayedExpansion
+set cmdInvoke=1
+set winSysFolder=System32
+set "batchPath=%~0"
+for %%k in (%0) do set batchName=%%~nk
+set "vbsGetPrivileges=%temp%\OEgetPriv_%batchName%.vbs"
+setlocal EnableDelayedExpansion
+
+:checkPrivileges
+NET FILE 1>NUL 2>NUL
+if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
+
+:getPrivileges
+if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
+ECHO.
+ECHO **************************************
+ECHO Invoking UAC for Privilege Escalation
+ECHO **************************************
+
+ECHO Set UAC = CreateObject^("Shell.Application"^) > "%vbsGetPrivileges%"
+ECHO args = "ELEV " >> "%vbsGetPrivileges%"
+ECHO For Each strArg in WScript.Arguments >> "%vbsGetPrivileges%"
+ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
+ECHO Next >> "%vbsGetPrivileges%"
+
+if '%cmdInvoke%'=='1' goto InvokeCmd 
+
+ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
+goto ExecElevation.
+
+:InvokeCmd
+ECHO args = "/c """ + "!batchPath!" + """ " + args >> "%vbsGetPrivileges%"
+ECHO UAC.ShellExecute "%SystemRoot%\%winSysFolder%\cmd.exe", args, "", "runas", 1 >> "%vbsGetPrivileges%"
+
+:ExecElevation
+"%SystemRoot%\%winSysFolder%\WScript.exe" "%vbsGetPrivileges%" %*
+exit /B
+
+:gotPrivileges
+setlocal & cd /d %~dp0
+if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
+
+::::::::::::::::::::::::::::
+::START
+::::::::::::::::::::::::::::
+REM Run shell as admin (example) - put here code as you like
+ECHO %batchName% Arguments: P1=%1 P2=%2 P3=%3 P4=%4 P5=%5 P6=%6 P7=%7 P8=%8 P9=%9
+cls
+
+SET stepnext=stepTermos
 :: <=== Inicio STEP00 ===>
 :step00
 cls
@@ -45,6 +85,22 @@ SET dirPHP=C:\xampp\php
 :: <=== Fim SET Diretorios ===>
 goto %stepnext%
 :: <=== Fim STEP00 ===>
+
+:: <=== Inicio Termos de Aceite ===>
+:stepTermos
+ECHO AVISO IMPORTANTE!
+ECHO.
+ECHO Ao seguir com a execucao desse script, voce esta ciente de que caso exista uma instalacao previa do XAMPP ou MySQL no seu sistema, ela podera ser completamente removida. Isso pode resultar na perda permanente de todos os dados contidos nessas instalacoes.
+ECHO.
+ECHO Portanto, recomendamos que voce faca backup de todos os dados importantes antes de prosseguir com a instalacao. Ao continuar com a instalacao, voce concorda que nao responsabilizara os desenvolvedores do script por quaisquer perdas de dados que possam ocorrer como resultado da remocao dessas instalacoes.
+ECHO.
+ECHO Recomendamos tambem, caso haja uma instalacao previa do XAMPP, MySQL, Composer ou MAP-OS, desinstale/delete para que o script realize a instalacao adequada para que a aplicacao inicie corretamente.
+ECHO.
+CHOICE /C SN /M "Aceita os termos acima?"
+if ERRORLEVEL 2 SET stepnext=stepNaoAceite && goto step00
+if ERRORLEVEL 1 SET stepnext=step01 && goto step00
+PAUSE
+:: <=== Fim Termos de Aceite ===>
 
 :: <=== Inicio STEP01 ===>
 :step01
@@ -137,8 +193,18 @@ ECHO  ************************************************
 ECHO  ****    MAPOS CONFIGURADO COM SUCESSO       ****
 ECHO  ************************************************
 ECHO.
-erase /F /S /Q "%dirDefault%\*.*" >NUL
-rmdir /Q /S "%dirDefault%\" >NUL
+ERASE /F /S /Q "%dirDefault%\*.*" >NUL
+RMDIR /Q /S "%dirDefault%\" >NUL
 TIMEOUT /T 10 >NUL
 EXIT
 :: <=== Inicio STEP FIM ===>
+
+:: <=== Inicio STEP NAO ACEITE ===>
+:stepNaoAceite
+ECHO  ************************************************
+ECHO  ****  TERMOS DE INSTALACAO NAO CONFIRMADO   ****
+ECHO  ************************************************
+ECHO.
+TIMEOUT /T 5 >NUL
+EXIT
+:: <=== Inicio STEP NAO ACEITE ===>
