@@ -1,4 +1,4 @@
-title Instalador Map-OS Windows v1.7.20230506
+title Instalador Map-OS Windows v1.8.20230507
 @ECHO OFF
 cls
 ECHO =============================
@@ -16,10 +16,10 @@ setlocal EnableDelayedExpansion
 
 :checkPrivileges
 NET FILE 1>NUL 2>NUL
-if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
+IF '%errorlevel%' == '0' ( GOTO gotPrivileges ) else ( GOTO getPrivileges )
 
 :getPrivileges
-if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
+IF '%1'=='ELEV' (echo ELEV & shIFt /1 & GOTO gotPrivileges)
 ECHO.
 ECHO **************************************
 ECHO Invoking UAC for Privilege Escalation
@@ -31,10 +31,10 @@ ECHO For Each strArg in WScript.Arguments >> "%vbsGetPrivileges%"
 ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
 ECHO Next >> "%vbsGetPrivileges%"
 
-if '%cmdInvoke%'=='1' goto InvokeCmd 
+IF '%cmdInvoke%'=='1' GOTO InvokeCmd 
 
 ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
-goto ExecElevation.
+GOTO ExecElevation.
 
 :InvokeCmd
 ECHO args = "/c """ + "!batchPath!" + """ " + args >> "%vbsGetPrivileges%"
@@ -46,7 +46,7 @@ exit /B
 
 :gotPrivileges
 setlocal & cd /d %~dp0
-if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
+IF '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shIFt /1)
 
 ::::::::::::::::::::::::::::
 ::START
@@ -55,7 +55,7 @@ REM Run shell as admin (example) - put here code as you like
 ECHO %batchName% Arguments: P1=%1 P2=%2 P3=%3 P4=%4 P5=%5 P6=%6 P7=%7 P8=%8 P9=%9
 cls
 
-SET stepnext=stepTermos
+SET stepnext=step06
 :: <=== Inicio STEP00 ===>
 :step00
 cls
@@ -83,7 +83,7 @@ SET dirHtdocs=C:\xampp\htdocs
 SET dirMySQL=C:\xampp\mysql\bin
 SET dirPHP=C:\xampp\php
 :: <=== Fim SET Diretorios ===>
-goto %stepnext%
+GOTO %stepnext%
 :: <=== Fim STEP00 ===>
 
 :: <=== Inicio Termos de Aceite ===>
@@ -97,8 +97,8 @@ ECHO.
 ECHO Recomendamos tambem, caso haja uma instalacao previa do XAMPP, MySQL, Composer ou MAP-OS, desinstale/delete para que o script realize a instalacao adequada para que a aplicacao inicie corretamente.
 ECHO.
 CHOICE /C SN /M "Aceita os termos acima?"
-if ERRORLEVEL 2 SET stepnext=stepNaoAceite && goto step00
-if ERRORLEVEL 1 SET stepnext=step01 && goto step00
+IF ERRORLEVEL 2 SET stepnext=stepNaoAceite && GOTO step00
+IF ERRORLEVEL 1 SET stepnext=step01 && GOTO step00
 PAUSE
 :: <=== Fim Termos de Aceite ===>
 
@@ -117,7 +117,7 @@ IF not EXIST "%dirDefault%\composer.exe" PowerShell -command "& { iwr %urlCompos
 ECHO 01.5 Verificando MapOS GitHUB
 IF not EXIST "%dirDefault%\MapOS.zip" PowerShell -command "& { iwr %urlMapOS% -OutFile %dirDefault%\MapOS.zip }" >NUL 2>&1
 SET stepnext=step02
-goto step00
+GOTO step00
 :: <=== Fim STEP01 ===>
 
 :: <=== Inicio STEP02 ===>
@@ -139,7 +139,7 @@ PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace 'date.tim
 ECHO 02.5 Iniciar Apache e MySQL
 start %dirXampp%\xampp-control.exe >NUL 2>&1
 SET stepnext=step03
-goto step00
+GOTO step00
 :: <=== Fim STEP02 ===>
 
 :: <=== Inicio STEP03 ===>
@@ -151,7 +151,7 @@ PowerShell -ExecutionPolicy Bypass -Command "Expand-Archive %dirDefault%\MapOS.z
 ECHO 03.2 Correcao da Pasta MAP-OS
 IF EXIST %dirHtdocs%\mapos-master rename %dirHtdocs%\mapos-master mapos
 SET stepnext=step04
-goto step00
+GOTO step00
 :: <=== Fim STEP03 ===>
 
 :: <=== Inicio STEP04 ===>
@@ -164,7 +164,7 @@ TIMEOUT /T 5 >NUL
 ECHO 04.2 Instalacao do complemento COMPOSER
 START /I /D %dirHtdocs%\mapos /WAIT PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev
 SET stepnext=step05
-goto step00
+GOTO step00
 :: <=== Fim STEP04 ===>
 
 :: <=== Inicio STEP05 ===>
@@ -172,7 +172,7 @@ goto step00
 ECHO 05 CONFIGURANDO MAPOS...
 ECHO.
 ECHO 05.1 Criar Banco de Dados (mapos)
-%dirMySQL%\mysql.exe -u"root" -e "create database `mapos`;" >NUL 2>&1
+%dirMySQL%\mysql.exe -u "root" -e "create database `mapos`;" >NUL 2>&1
 ECHO 05.2 Configurar MapOS (Browser)
 ECHO 05.2.1 Insira as configuracoes abaixo:
 ECHO.
@@ -183,9 +183,20 @@ ECHO Banco de Dados: mapos
 ECHO URL: http://localhost/mapos
 start /B http://localhost/mapos
 PAUSE
-SET stepnext=stepfim
-goto step00
+SET stepnext=step06
+GOTO step00
 :: <=== Fim STEP05 ===>
+
+:: <=== Inicio STEP06 ===>
+:step06
+CHOICE /C SN /M "Gostaria de alterar o numero da primeira OS?"
+IF ERRORLEVEL 2 SET stepnext=stepfim && GOTO step00
+IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
+%dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
+pause
+SET stepnext=stepfim
+GOTO step00
+:: <=== Fim STEP06 ===>
 
 :: <=== Inicio STEP FIM ===>
 :stepfim
