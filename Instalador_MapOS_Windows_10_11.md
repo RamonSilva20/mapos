@@ -1,4 +1,4 @@
-title Instalador Map-OS Windows v1.8.20230507
+title Instalador Map-OS Windows v2.0.20230510
 @ECHO OFF
 cls
 ECHO =============================
@@ -19,7 +19,7 @@ NET FILE 1>NUL 2>NUL
 IF '%errorlevel%' == '0' ( GOTO gotPrivileges ) else ( GOTO getPrivileges )
 
 :getPrivileges
-IF '%1'=='ELEV' (echo ELEV & shIFt /1 & GOTO gotPrivileges)
+IF '%1'=='ELEV' (ECHO ELEV & shIFt /1 & GOTO gotPrivileges)
 ECHO.
 ECHO **************************************
 ECHO Invoking UAC for Privilege Escalation
@@ -189,14 +189,69 @@ GOTO step00
 
 :: <=== Inicio STEP06 ===>
 :step06
+CHOICE /C SN /M "Gostaria de configurar os dados de e-mail?"
+IF ERRORLEVEL 2 SET stepnext=step07 && GOTO step00
+IF ERRORLEVEL 1 ECHO.
+SET /p protocolo=Informe o Protocolo (Padrao: SMTP): 
+SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com): 
+SET /p criptografia=Informe a Criptografia (SSL/TLS): 
+SET /p porta=Informe a Porta (Ex: 587): 
+SET /p email=Informe o Email (Ex: nome@seudominio.com): 
+SET /p senha=Informe a Senha: 
+ECHO.
+CHOICE /C SN /M "Confirma a informacoes acima?"
+IF ERRORLEVEL 2 SET stepnext=GOTO step00
+IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\config\email.php
+PowerShell -command "&Set-Content -Path '%dirEmail%' -Value '<?php'"
+ECHO $config['protocol']         = '%protocolo%';>>%dirEmail%
+ECHO $config['smtp_host']        = '%hostsmtp%';>>%dirEmail%
+ECHO $config['smtp_crypto']      = '%criptografia%';>>%dirEmail%
+ECHO $config['smtp_port']        = %porta%;>>%dirEmail%
+ECHO $config['smtp_user']        = '%email%';>>%dirEmail%
+ECHO $config['smtp_pass']        = '%senha%';>>%dirEmail%
+ECHO $config['validate']         = true;>>%dirEmail%
+ECHO $config['mailtype']         = 'html';>>%dirEmail%
+ECHO $config['charset']          = 'utf-8';>>%dirEmail%
+ECHO $config['newline']          = "\r\n";>>%dirEmail%
+ECHO $config['bcc_batch_mode']   = false;>>%dirEmail%
+ECHO $config['wordwrap']         = false;>>%dirEmail%
+ECHO $config['priority']         = 3;>>%dirEmail%
+SET stepnext=step07
+GOTO step00
+:: <=== Fim STEP06 ===>
+
+:: <=== Inicio STEP07 ===>
+:step07
+CHOICE /C SN /M "Gostaria de ativar disparo automatico de Emails?"
+IF ERRORLEVEL 2 SET stepnext=step08 && GOTO step00
+IF ERRORLEVEL 1 ECHO.
+SET ps=%dirDefault%\schedule.ps1
+ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/process' -WorkingDirectory 'C:\xampp\htdocs\mapos'>%ps%
+ECHO $trigger = New-ScheduledTaskTrigger -AtStartup>>%ps%
+ECHO $task = Register-ScheduledTask -TaskName "MaposEnvioEmail" -Description "Comando responsável por verificar e disparar os e-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
+ECHO $task.Triggers.Repetition.Interval= 'PT2M'>>%ps%
+PowerShell -command "&Add-Content -Path '%ps%' -Value '$task | Set-ScheduledTask'"
+ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/retry' -WorkingDirectory 'C:\xampp\htdocs\mapos'>>%ps%
+ECHO $trigger = New-ScheduledTaskTrigger -AtStartup>>%ps%
+ECHO $task = Register-ScheduledTask -TaskName "MaposReenvioEmail" -Description "Comando responsável por verificar e disparar os e-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
+ECHO $task.Triggers.Repetition.Interval= 'PT5M'>>%ps%
+PowerShell -command "&Add-Content -Path '%ps%' -Value '$task | Set-ScheduledTask'"
+PowerShell -command "&%ps%"
+ECHO Agendador de Tarefas do Windows Configurada com Sucesso!
+TIMEOUT /T 3 >NUL
+SET stepnext=step08
+GOTO step00
+:: <=== Fim STEP07 ===>
+
+:: <=== Inicio STEP08 ===>
+:step08
 CHOICE /C SN /M "Gostaria de alterar o numero da primeira OS?"
 IF ERRORLEVEL 2 SET stepnext=stepfim && GOTO step00
 IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
-pause
 SET stepnext=stepfim
 GOTO step00
-:: <=== Fim STEP06 ===>
+:: <=== Fim STEP08 ===>
 
 :: <=== Inicio STEP FIM ===>
 :stepfim
