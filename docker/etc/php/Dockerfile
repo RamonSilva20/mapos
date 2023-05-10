@@ -37,9 +37,6 @@ RUN apt-get update && apt-get upgrade -y \
     mysqli \
     opcache \
     pdo_mysql \
-    pdo_pgsql \
-    pgsql \
-    soap \
     xsl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
@@ -47,15 +44,12 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-install -j$(nproc) imap \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-configure ldap \
-    && docker-php-ext-install ldap \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip \
     && CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install sockets \
     && pecl install xmlrpc-1.0.0RC3 && docker-php-ext-enable xmlrpc \
-    && pecl install xdebug && docker-php-ext-enable xdebug \
+    && pecl install xdebug && docker-php-ext-disable xdebug \
     && pecl install memcached && docker-php-ext-enable memcached \
-    && pecl install mongodb && docker-php-ext-enable mongodb \
     && pecl install redis && docker-php-ext-enable redis \
     && yes '' | pecl install imagick && docker-php-ext-enable imagick \
     && docker-php-source delete \
