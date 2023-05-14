@@ -4,6 +4,26 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.40.0] - 2023-05-14
+### Fixed
+
+- Corrigido CP não fiscal. [@Wilmerson](https://github.com/willph)
+- Corrigido dashboard de estatística. [@Wilmerson](https://github.com/willph)
+- Corrigido impressão no windows. [@Wilmerson](https://github.com/willph)
+- Corrigido layout. [@MilsonElias](https://github.com/MilsonElias)
+- Corrigido bugs de editor de texto em OS e Vendas. [@MilsonElias](https://github.com/MilsonElias)
+- Corrigido valor total em layout. [@MilsonElias](https://github.com/MilsonElias)
+- Corrigido botão voltar em editor de texto. [@MilsonElias](https://github.com/MilsonElias)
+- Corrigido nome de usuário em log de auditoria. [@HenriqueMiranda](https://github.com/Henrique-Miranda)
+- Corrigido relatórios financeiros. [@Wilmerson](https://github.com/willph)
+- Corrigido problema de fullscreen e whatsapp. [@WilliamCamargo](https://github.com/WillianCamargo01) 
+
+### Added
+
+- Implementado desconto por porcentagem e valor. [@Wilmerson](https://github.com/willph)
+- Implementado opção de imprimir duas vias. [@Wilmerson](https://github.com/willph)
+- Suporte ao PHP 8 pra cima. [@Wilmerson](https://github.com/willph)
+
 ## [4.39.0] - 2022-10-28
 ### Fixed
 
