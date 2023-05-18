@@ -1,6 +1,6 @@
-title Instalador Map-OS Windows v2.0.20230510
+TITLE Instalador Map-OS Windows 10/11
 @ECHO OFF
-cls
+CLS
 ECHO =============================
 ECHO Running Admin shell
 ECHO =============================
@@ -53,31 +53,37 @@ IF '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shIFt /1)
 ::::::::::::::::::::::::::::
 REM Run shell as admin (example) - put here code as you like
 ECHO %batchName% Arguments: P1=%1 P2=%2 P3=%3 P4=%4 P5=%5 P6=%6 P7=%7 P8=%8 P9=%9
-cls
+CLS
+
+::::::::::::::::::::::::::::
+:: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
+:: Versao Instalador: v2.1.20230518
+:: Publicado na versao 4.40.0 do MapOS
+::::::::::::::::::::::::::::
 
 SET stepnext=stepTermos
 :: <=== Inicio STEP00 ===>
 :step00
-cls
-ECHO  ************************************************
-ECHO  *                                              *
-ECHO  *           SCRIPT AUTO INSTALADOR             *
-ECHO  *    MAP-OS - SISTEMA DE ORDEM DE SERVICO      *
-ECHO  *                                              *
-ECHO  *                                              *
-ECHO  *              Desenvolvido por                *
-ECHO  *      Bruno Barreto - Leonardo Bernardi       *
-ECHO  *                                              *
-ECHO  ************************************************
-ECHO  ****       AGRADECEMOS A PREFERENCIA        ****
-ECHO  ************************************************
+CLS
+ECHO  **************************************************
+ECHO  **************************************************
+ECHO  **                                              **
+ECHO  **                                              **
+ECHO  **                                              **
+ECHO  **           SCRIPT AUTO INSTALADOR             **
+ECHO  **    MAP-OS - SISTEMA DE ORDEM DE SERVICO      **
+ECHO  **             Windows 10/11                    **
+ECHO  **                                              **
+ECHO  **                                              **
+ECHO  **                                              **
+ECHO  **************************************************
+ECHO  **************************************************
 ECHO.
 :: <=== Inicio SET Diretorios ===>
 SET dirDefault=C:\InstaladorMAPOS
 SET urlWget=https://eternallybored.org/misc/wget/1.21.3/32/wget.exe
 SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.4/xampp-windows-x64-8.2.4-0-VS16-installer.exe"
 SET urlComposer=https://getcomposer.org/Composer-Setup.exe
-SET urlMapOS=https://github.com/RamonSilva20/mapos/archive/refs/heads/master.zip
 SET dirXampp=C:\xampp
 SET dirHtdocs=C:\xampp\htdocs
 SET dirMySQL=C:\xampp\mysql\bin
@@ -115,7 +121,7 @@ IF not EXIST "%dirDefault%\xampp.exe" %dirDefault%\wget --quiet --show-progress 
 ECHO 01.4 Verificando Composer
 IF not EXIST "%dirDefault%\composer.exe" PowerShell -command "& { iwr %urlComposer% -OutFile %dirDefault%\composer.exe }" >NUL 2>&1
 ECHO 01.5 Verificando MapOS GitHUB
-IF not EXIST "%dirDefault%\MapOS.zip" PowerShell -command "& { iwr %urlMapOS% -OutFile %dirDefault%\MapOS.zip }" >NUL 2>&1
+IF not EXIST "%dirDefault%\MapOS.zip" FOR /F "eol= tokens=2 delims=, " %%A IN (' cURL -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest ^| findstr /I /C:"zipball_url" ') DO PowerShell -command "& { iwr %%A -OutFile %dirDefault%\MapOS.zip }"
 SET stepnext=step02
 GOTO step00
 :: <=== Fim STEP01 ===>
@@ -134,8 +140,8 @@ ECHO MySQL=1 >> %dirXampp%\xampp-control.ini
 ECHO 02.3 Ativando Extensoes do PHP
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=gd', 'extension=gd'} | Set-Content -Path '%dirPHP%\php.ini'"
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=zip', 'extension=zip'} | Set-Content -Path '%dirPHP%\php.ini'"
-ECHO 02.4 Configurando PHP TimeZone Sao_Paulo
-PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace 'date.timezone=Europe/Berlin', 'date.timezone=America/Sao_Paulo'} | Set-Content -Path '%dirPHP%\php.ini'"
+ECHO 02.4 Configurando PHP TimeZone
+PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace 'date.timezone=Europe/Berlin', 'date.timezone=America/Fortaleza'} | Set-Content -Path '%dirPHP%\php.ini'"
 ECHO 02.5 Iniciar Apache e MySQL
 start %dirXampp%\xampp-control.exe >NUL 2>&1
 SET stepnext=step03
@@ -149,7 +155,7 @@ ECHO.
 ECHO 03.1 Extracao dos arquivos MAP-OS
 PowerShell -ExecutionPolicy Bypass -Command "Expand-Archive %dirDefault%\MapOS.zip %dirHtdocs%" -Force
 ECHO 03.2 Correcao da Pasta MAP-OS
-IF EXIST %dirHtdocs%\mapos-master rename %dirHtdocs%\mapos-master mapos
+FOR /F "tokens=4" %%B IN ( ' dir "%dirHtdocs%\" ^| findstr /I /C:"RamonSilva20" ' ) DO IF NOT EXIST %dirHtdocs%\mapos rename %dirHtdocs%\%%B mapos
 SET stepnext=step04
 GOTO step00
 :: <=== Fim STEP03 ===>
