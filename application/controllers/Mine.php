@@ -646,7 +646,7 @@ class Mine extends CI_Controller
         } else {
             $id = null;
             $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
-            if ($usuario->usuarios_id == null) {
+            if ($usuario == null) {
                 $this->db->where('situacao', 1);
                 $this->db->limit(1);
                 $usuario = $this->db->get('usuarios')->row();
