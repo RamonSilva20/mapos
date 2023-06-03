@@ -71,6 +71,11 @@ $totalProdutos = 0; ?>
     </style>
 </head>
 
+<?php 
+$filePath = base_url('application/signatures/' . $result->idOs . $result->nomeCliente . '.png'); 
+$filePathT = base_url('application/signatures/' . $result->nome . '.png'); 
+?>
+
 <body style="background-color: rgba(0,0,0,.4)" id=body>
     <div id="principal">
         <div class="book">
@@ -276,13 +281,23 @@ $totalProdutos = 0; ?>
                                             <tr>
                                                 <td>Data
                                                     <hr>
-                                                </td>
-                                                <td>Assinatura do Cliente
-                                                    <hr>
-                                                </td>
-                                                <td>Assinatura do Técnico Responsável
-                                                    <hr>
-                                                </td>
+                                                    <br><br>
+
+                                                
+                                                    <td>
+                                                    <img width="150" src="<?php echo($filePath); ?>" />
+                                                    <br>
+                                                    ____________________________________    
+                                                    Assinatura do Cliente
+    
+                                                    </td>
+                                                    <td>
+                                                    <img width="150" src="<?php echo($filePathT); ?>" />
+                                                    <br>
+    
+                                                    _____________________________________
+                                                    Assinatura do Ténico
+                                                    </td>
                                             </tr>
                                         </tbody>
                                     </table>
