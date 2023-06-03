@@ -276,13 +276,23 @@ $totalProdutos = 0; ?>
                                             <tr>
                                                 <td>Data
                                                     <hr>
-                                                </td>
-                                                <td>Assinatura do Cliente
-                                                    <hr>
-                                                </td>
-                                                <td>Assinatura do Técnico Responsável
-                                                    <hr>
-                                                </td>
+                                                    <br><br>
+                                                    
+                                                    <td>
+                                                    <img width="150" src="<?php echo($filePath); ?>" />
+                                                    <br>
+                                                    ______________________________    
+                                                    Assinatura do Cliente
+    
+                                                    </td>
+                                                    <td>
+                                                    <img width="150" src="<?php echo($filePathT); ?>" />
+                                                    <br>
+    
+                                                    ______________________________
+                                                    Assinatura do Ténico
+                                                    </td>
+                                            </tr>
                                             </tr>
                                         </tbody>
                                     </table>
