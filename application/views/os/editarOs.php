@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 
 <style>
     .ui-datepicker {
@@ -66,6 +70,7 @@
                         <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
+                        <li id="tabAnotacoes"><a href="#tab7" data-toggle="tab">Assinaturas</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -440,6 +445,60 @@ foreach ($servicos as $s) {
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
+                        
+                        <!--Assinaturas-->
+                        <div class="tab-pane" id="tab7">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+                                <h3>Assine os Termos de Serviço</h3>
+                                <style>
+                                    
+                                    #signature-pad{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    #signature-pad2{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    .buttons-a{
+                                        margin-left: 30px;
+                                        margin-top: 10px;
+                                    }
+
+                                    .p-2{
+                                        margin-left: 30px;
+                                    }
+                                </style>
+
+                                
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-8 col-md-offset-2">,
+                                            <div id="signature-container">
+                                                <h4 class="p-2">Assinatura do Cliente</h4>
+                                                <canvas id="signature-pad" width="600" height="300"></canvas>
+                                                <br>
+                                                <h4 class="p-2">Assinatura do Técnico</h4>
+                                                <canvas id="signature-pad2" width="600" height="300"></canvas>
+                                            
+                                                <br>
+                                                <div class="buttons-a">
+                                                    <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
+                                                    <button id="clear-button2" type="button" class="btn btn-danger">Limpar Assinatura Técnico</button>  
+                                                    <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>                               
+                                                </div>
+
+                                                
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+
+                            </div>
+                        </div>
+                        <!-- Fim tab assinaturas -->
                     </div>
                 </div>
                 &nbsp
@@ -1246,4 +1305,86 @@ foreach ($servicos as $s) {
             lang: 'pt_br'
         });
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM está totalmente carregado');
+        var canvas = document.getElementById('signature-pad');
+        var signaturePad = new SignaturePad(canvas);
+
+        var canvas2 = document.getElementById('signature-pad2');
+        var signaturePad2 = new SignaturePad(canvas2);
+
+        var clearButton1 = document.getElementById('clear-button1');
+        var clearButton2 = document.getElementById('clear-button2');
+        var saveButton = document.getElementById('save-button');
+
+        
+        clearButton1.addEventListener('click', function(event) {
+                signaturePad.clear();
+        });
+        clearButton2.addEventListener('click', function(event) {
+                signaturePad2.clear();
+        });
+
+        saveButton.addEventListener('click', function(event) {
+            if (signaturePad.isEmpty() && signaturePad2.isEmpty() ) {
+                alert('Por favor, assine primeiro.');
+            } else {
+                var dataURL = signaturePad.toDataURL();
+                var dataURL2 = signaturePad2.toDataURL();
+                var customerName = '<?php echo $result->nomeCliente ?>';
+		var nOs = '<?php echo $result->idOs ?>';
+                var tecnico = '<?php echo $result->nome ?>';
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'upload_assinatura_cliente.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.log("Erro: " + xhr.status);
+                }
+                };
+                var params = "image=" + encodeURIComponent(dataURL) + "&name=" + encodeURIComponent(customerName);
+                xhr.send(params);
+                console.log("Img = " + dataURL);
+
+
+                $.ajax({
+                        url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
+                        type: 'POST',
+                        data: {
+                            imageData: dataURL,
+                            clientName: customerName,
+                            imageData2: dataURL2,
+			    nOs: nOs,
+                            tecnico: tecnico
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            Swal.fire({
+                                type: "success",
+                                title: "Atenção",
+                                text: "Assinatura Enviada com Sucesso"
+                            });
+                            signaturePad.clear();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR, textStatus, errorThrown);
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao enviar sua assinatura"
+                            });
+                        }
+                    });
+            }
+        });
+
+    });
+
+    
+
 </script>
