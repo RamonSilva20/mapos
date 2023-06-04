@@ -279,8 +279,16 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
                                     <table class="table table-bordered table-condensed">
                                         <tbody>
                                             <tr>
-                                                <td>Data
-                                                    <hr>
+                                            <td>Emissão
+                                                    <?php 
+                                                        date_default_timezone_set('America/Sao_Paulo');
+                                                       
+                                                        $dateTimestamp = strtotime($result->dataFinal); 
+                                                        $formattedDate = date("d/m/Y", $dateTimestamp);
+                                                        echo("<b><h5>" .$formattedDate. "</h5></b>");
+                                                    ?>
+                                                   
+                                                </td>
                                                     <br><br>
 
                                                 
