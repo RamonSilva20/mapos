@@ -1358,7 +1358,7 @@ foreach ($servicos as $s) {
                             imageData: dataURL,
                             clientName: customerName,
                             imageData2: dataURL2,
-			    nOs: nOs,
+			                nOs:nOs,
                             tecnico: tecnico
                         },
                         success: function(response) {

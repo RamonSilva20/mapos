@@ -278,8 +278,8 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
 ?>
                                     <table class="table table-bordered table-condensed">
                                         <tbody>
-                                            <tr>
-                                            <td>Emissão
+                                            <tr >
+                                                <td>Emissão
                                                     <?php 
                                                         date_default_timezone_set('America/Sao_Paulo');
                                                        
@@ -289,23 +289,23 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
                                                     ?>
                                                    
                                                 </td>
-                                                    <br><br>
+                                                <br>
 
                                                 
-                                                    <td>
-                                                    <img width="150" src="<?php echo($filePath); ?>" />
-                                                    <br>
-                                                    ____________________________________    
-                                                    Assinatura do Cliente
-    
-                                                    </td>
-                                                    <td>
-                                                    <img width="150" src="<?php echo($filePathT); ?>" />
-                                                    <br>
-    
-                                                    _____________________________________
-                                                    Assinatura do Ténico
-                                                    </td>
+                                                <td>
+                                                <img width="150" src="<?php echo($filePath); ?>" />
+                                                <br>
+                                                <br>______________________________
+                                                <br>Assinatura do Cliente
+                                                    
+                                                </td>
+                                                <td>
+                                                <img width="150" src="<?php echo($filePathT); ?>" />
+                                                <br>
+                                                    
+                                                <br> ______________________________   
+                                                <br> Assinatura do Ténico
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

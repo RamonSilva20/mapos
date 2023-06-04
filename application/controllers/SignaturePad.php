@@ -11,7 +11,7 @@ class SignaturePad extends CI_Controller {
 
     public function upload_signature()
     {
-	$nOs = $this->input->post('nOs');	
+	    $nOs = $this->input->post('nOs');	
         $imageData = $this->input->post('imageData');
         $imageData2 = $this->input->post('imageData2');
         $clientName = $this->input->post('clientName');
