@@ -72,10 +72,9 @@ $totalProdutos = 0; ?>
 </head>
 
 <?php 
-$filePath = base_url('application/signatures/' . $result->idOs . $result->nomeCliente . '.png'); 
+$filePath = base_url('application/signatures/' . $result->idOs . $result->nomeCliente . '.png');  
 $filePathT = base_url('application/signatures/' . $result->nome . '.png'); 
 ?>
-
 <body style="background-color: rgba(0,0,0,.4)" id=body>
     <div id="principal">
         <div class="book">
@@ -289,7 +288,7 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
                                                     ?>
                                                    
                                                 </td>
-                                                <br>
+                                                <br><br>
 
                                                 
                                                 <td>
@@ -301,8 +300,7 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
                                                 </td>
                                                 <td>
                                                 <img width="150" src="<?php echo($filePathT); ?>" />
-                                                <br>
-                                                    
+                                                <br>                                                  
                                                 <br> ______________________________   
                                                 <br> Assinatura do Ténico
                                                 </td>
