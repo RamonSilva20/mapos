@@ -22,10 +22,10 @@ class SignaturePad extends CI_Controller {
         $imageData2 = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData2);
 
         // Save the image file
-        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/mapos-master/application/signatures/' . $nOs . $clientName . '.png';
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/assets/signatures/' . $nOs . $clientName . '.png';
 file_put_contents($filePath, base64_decode($imageData));
 
-        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/mapos-master/application/signatures/' . $tecnico . '.png';
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/assets/signatures/' . $tecnico . '.png';
         file_put_contents($filePath, base64_decode($imageData2));
 
         echo 'Signature saved successfully. LOCAL = ' .$filePath;
