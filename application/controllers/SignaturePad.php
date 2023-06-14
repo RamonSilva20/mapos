@@ -5,8 +5,7 @@ class SignaturePad extends CI_Controller {
 
     public function index()
     {
-       
-        
+        // Conteúdo da função index
     }
 
     public function upload_signature()
@@ -23,8 +22,7 @@ class SignaturePad extends CI_Controller {
             return;
         }
 
-
-	    $nOs = $this->input->post('nOs');	
+        $nOs = $this->input->post('nOs');    
         $imageData = $this->input->post('imageData');
         $imageData2 = $this->input->post('imageData2');
         $clientName = $this->input->post('clientName');
@@ -34,19 +32,32 @@ class SignaturePad extends CI_Controller {
         $imageData = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData);
         $imageData2 = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData2);
 
-        // Save the image file
-        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sisfw/application/signatures/' . $nOs . $clientName . '.png';
-	    file_put_contents($filePath, base64_decode($imageData));
+        // Get the project root path
+        $projectRoot = realpath(APPPATH . '../');
+
+        // Set the directory path for signatures
+        $signaturesDir = $projectRoot . '/assets/signatures/';
+
+        // Create the directory if it doesn't exist
+        if (!is_dir($signaturesDir)) {
+            mkdir($signaturesDir, 0777, true);
+        }
+
+        // Set the file path for the client signature
+        $filePath = $signaturesDir . $nOs . $clientName . '.png';
+
+        // Save the client signature image file
+        file_put_contents($filePath, base64_decode($imageData));
+
+        // Set the file path for the technician signature
+        $technicoFilePath = $signaturesDir . $tecnico . '.png';
 
         // Check if the technician signature file already exists
-        $technicoFilePath = $_SERVER['DOCUMENT_ROOT'] . '/sisfw/application/signatures/' . $tecnico . '.png';
         if (!file_exists($technicoFilePath)) {
-        // Save the image file for the technician only if it doesn't exist
-        file_put_contents($technicoFilePath, base64_decode($imageData2));
+            // Save the image file for the technician only if it doesn't exist
+            file_put_contents($technicoFilePath, base64_decode($imageData2));
+        }
+
+        echo 'Signature saved successfully. LOCAL = ' . $filePath;
     }
-
-        echo 'Signature saved successfully. LOCAL = ' .$filePath;
-
-    }
-
 }
