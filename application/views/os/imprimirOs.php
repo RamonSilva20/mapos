@@ -72,8 +72,8 @@ $totalProdutos = 0; ?>
 </head>
 
 <?php 
-$filePath = base_url('application/signatures/' . $result->idOs . $result->nomeCliente . '.png');  
-$filePathT = base_url('application/signatures/' . $result->nome . '.png'); 
+$filePath = base_url('assets/signatures/' . $result->idOs . $result->nomeCliente . '.png');  
+$filePathT = base_url('assets/signatures/' . $result->nome . '.png'); 
 ?>
 <body style="background-color: rgba(0,0,0,.4)" id=body>
     <div id="principal">
@@ -278,15 +278,8 @@ $filePathT = base_url('application/signatures/' . $result->nome . '.png');
                                     <table class="table table-bordered table-condensed">
                                         <tbody>
                                             <tr >
-                                                <td>Emissão
-                                                    <?php 
-                                                        date_default_timezone_set('America/Sao_Paulo');
-                                                       
-                                                        $dateTimestamp = strtotime($result->dataFinal); 
-                                                        $formattedDate = date("d/m/Y", $dateTimestamp);
-                                                        echo("<b><h5>" .$formattedDate. "</h5></b>");
-                                                    ?>
-                                                   
+                                                <td>Data Assinatura
+                                                                                                       
                                                 </td>
                                                 <br><br>
 
