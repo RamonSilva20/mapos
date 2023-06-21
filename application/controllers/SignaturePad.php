@@ -3,11 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SignaturePad extends CI_Controller {
 
-    public function index()
-    {
-        // Conteúdo da função index
-    }
-
     public function upload_signature()
     {
         $this->load->library('form_validation');

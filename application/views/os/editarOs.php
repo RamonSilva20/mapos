@@ -472,7 +472,7 @@ foreach ($servicos as $s) {
                                 
                                     <div class="container">
                                         <div class="row">
-                                            <div class="col-md-8 col-md-offset-2">,
+                                            <div class="col-md-8 col-md-offset-2">
                                             <div id="signature-container">
                                                 <h4 class="p-2">Assinatura do Cliente</h4>
                                                 <canvas id="signature-pad" width="600" height="300"></canvas>
@@ -1307,7 +1307,8 @@ foreach ($servicos as $s) {
 </script>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM está totalmente carregado');
         var canvas = document.getElementById('signature-pad');
         var signaturePad = new SignaturePad(canvas);
 
@@ -1318,6 +1319,7 @@ foreach ($servicos as $s) {
         var clearButton2 = document.getElementById('clear-button2');
         var saveButton = document.getElementById('save-button');
 
+        
         clearButton1.addEventListener('click', function(event) {
                 signaturePad.clear();
         });
@@ -1332,7 +1334,7 @@ foreach ($servicos as $s) {
                 var dataURL = signaturePad.toDataURL();
                 var dataURL2 = signaturePad2.toDataURL();
                 var customerName = '<?php echo $result->nomeCliente ?>';
-		        var nOs = '<?php echo $result->idOs ?>';
+		var nOs = '<?php echo $result->idOs ?>';
                 var tecnico = '<?php echo $result->nome ?>';
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'upload_assinatura_cliente.php', true);
@@ -1348,6 +1350,7 @@ foreach ($servicos as $s) {
                 xhr.send(params);
                 console.log("Img = " + dataURL);
 
+
                 $.ajax({
                         url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
                         type: 'POST',
@@ -1355,10 +1358,11 @@ foreach ($servicos as $s) {
                             imageData: dataURL,
                             clientName: customerName,
                             imageData2: dataURL2,
-			                nOs: nOs,
+			    nOs: nOs,
                             tecnico: tecnico
                         },
                         success: function(response) {
+                            console.log(response);
                             Swal.fire({
                                 type: "success",
                                 title: "Atenção",
@@ -1378,5 +1382,8 @@ foreach ($servicos as $s) {
             }
         });
 
-    });  
+    });
+
+    
+
 </script>
