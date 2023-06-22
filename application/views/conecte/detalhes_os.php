@@ -232,60 +232,45 @@ foreach ($servicos as $s) {
 
 <!--Assinaturas-->
 <div class="tab-pane" id="tab5">
-                            <div class="span12" style="padding: 1%; margin-left: 0">
-                                <h3>Assine os Termos de Serviço</h3>
-                                <style>
-                                    
-                                    #signature-pad{
-                                        margin-left: 30px;
-                                        border: 1px solid #000;
-                                    }
-                                    #signature-pad2{
-                                        margin-left: 30px;
-                                        border: 1px solid #000;
-                                    }
-                                    .buttons-a{
-                                        margin-left: 30px;
-                                        margin-top: 10px;
-                                    }
+    <div class="span12" style="padding: 1%; margin-left: 0">
+        <h3>Assine os Termos de Serviço</h3>
+        <style>
+            #signature-pad {
+                margin-left: 30px;
+                border: 1px solid #000;
+            }
+            .buttons-a {
+                margin-left: 30px;
+                margin-top: 10px;
+            }
+            .p-2 {
+                margin-left: 30px;
+            }
+        </style>
 
-                                    .p-2{
-                                        margin-left: 30px;
-                                    }
-                                </style>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div id="signature-container">
+                        <h4 class="p-2">Assinatura do Cliente</h4>
+                        <canvas id="signature-pad" width="600" height="300"></canvas>
+                        <br>
+                        <h4 class="p-2" id="tecnico-signature-heading" style="display: none;">Assinatura do Técnico</h4>
+                        <canvas id="signature-pad2" width="600" height="300" style="display: none;"></canvas>
 
-                                
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-8 col-md-offset-2">
-                                            <div id="signature-container">
-                                                <h4 class="p-2">Assinatura do Cliente</h4>
-                                                <canvas id="signature-pad" width="600" height="300"></canvas>
-                                                <br>
-                                                <h4 class="p-2">Assinatura do Técnico</h4>
-                                                <canvas id="signature-pad2" width="600" height="300"></canvas>
-                                            
-                                                <br>
-                                                <div class="buttons-a">
-                                                    <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
-                                                    <button id="clear-button2" type="button" class="btn btn-danger">Limpar Assinatura Técnico</button>
-                                                    <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>                               
-                                                </div>
-
-                                                
-                                                
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                               
-
-                            </div>
+                        <br>
+                        <div class="buttons-a">
+                            <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
+                            <button id="clear-button2" type="button" class="btn btn-danger" style="display: none;">Limpar Assinatura Técnico</button>
+                            <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>
                         </div>
-                        <!-- Fim tab assinaturas -->
-                        
-
-
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fim tab assinaturas -->                   
 
                     </div>
 
