@@ -417,8 +417,7 @@ foreach ($servicos as $s) {
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM está totalmente carregado');
+        document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('signature-pad');
         var signaturePad = new SignaturePad(canvas);
 
@@ -471,9 +470,8 @@ foreach ($servicos as $s) {
 			                nOs: nOs,
                             tecnico: tecnico
                         },
-                        success: function(response) {
-                            console.log(response);
-                            Swal.fire({
+                                success: function(response) {
+                                Swal.fire({
                                 type: "success",
                                 title: "Atenção",
                                 text: "Assinatura Enviada com Sucesso"

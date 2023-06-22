@@ -12,7 +12,8 @@ class SignaturePad extends CI_Controller {
         $this->form_validation->set_rules('clientName', 'clientName', 'required');
         $this->form_validation->set_rules('tecnico', 'tecnico', 'required');
 
-        if ($this->form_validation->run() === FALSE) {
+        if (!$this->form_validation->run()) {
+            http_response_code(400); // Define o código de status HTTP para 400 Bad Request
             echo 'Erro: Dados de assinatura ausentes.';
             return;
         }

@@ -278,7 +278,7 @@ $filePathT = base_url('assets/signatures/' . $result->nome . '.png');
                                     <table class="table table-bordered table-condensed">
                                         <tbody>
                                             <tr >
-                                                <td>Data Assinatura
+                                                <td>Data
                                                                                                        
                                                 </td>
                                                 <br><br>

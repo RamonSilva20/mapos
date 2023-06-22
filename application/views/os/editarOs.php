@@ -1307,8 +1307,7 @@ foreach ($servicos as $s) {
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM está totalmente carregado');
+        document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('signature-pad');
         var signaturePad = new SignaturePad(canvas);
 
@@ -1319,7 +1318,6 @@ foreach ($servicos as $s) {
         var clearButton2 = document.getElementById('clear-button2');
         var saveButton = document.getElementById('save-button');
 
-        
         clearButton1.addEventListener('click', function(event) {
                 signaturePad.clear();
         });
@@ -1334,7 +1332,7 @@ foreach ($servicos as $s) {
                 var dataURL = signaturePad.toDataURL();
                 var dataURL2 = signaturePad2.toDataURL();
                 var customerName = '<?php echo $result->nomeCliente ?>';
-		var nOs = '<?php echo $result->idOs ?>';
+		        var nOs = '<?php echo $result->idOs ?>';
                 var tecnico = '<?php echo $result->nome ?>';
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'upload_assinatura_cliente.php', true);
@@ -1350,7 +1348,6 @@ foreach ($servicos as $s) {
                 xhr.send(params);
                 console.log("Img = " + dataURL);
 
-
                 $.ajax({
                         url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
                         type: 'POST',
@@ -1358,11 +1355,10 @@ foreach ($servicos as $s) {
                             imageData: dataURL,
                             clientName: customerName,
                             imageData2: dataURL2,
-			    nOs: nOs,
+			                nOs: nOs,
                             tecnico: tecnico
                         },
                         success: function(response) {
-                            console.log(response);
                             Swal.fire({
                                 type: "success",
                                 title: "Atenção",
@@ -1383,7 +1379,4 @@ foreach ($servicos as $s) {
         });
 
     });
-
-    
-
 </script>
