@@ -14,7 +14,12 @@ class SignaturePad extends CI_Controller {
 
         if (!$this->form_validation->run()) {
             http_response_code(400); // Define o código de status HTTP para 400 Bad Request
-            echo 'Erro: Dados de assinatura ausentes.';
+            
+            $response = array(
+                'success' => false,
+                'message' => 'Erro: Dados de assinatura ausentes.'
+            );
+            echo json_encode($response);
             return;
         }
 
@@ -54,6 +59,11 @@ class SignaturePad extends CI_Controller {
             file_put_contents($technicoFilePath, base64_decode($imageData2));
         }
 
-        echo 'Signature saved successfully. LOCAL = ' . $filePath;
+        $response = array(
+            'success' => true,
+            'message' => 'Signature saved successfully',
+            'local' => $filePath
+        );
+        echo json_encode($response);
     }
 }
