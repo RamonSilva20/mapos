@@ -262,7 +262,7 @@ foreach ($servicos as $s) {
                         <div class="buttons-a">
                             <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
                             <button id="clear-button2" type="button" class="btn btn-danger" style="display: none;">Limpar Assinatura Técnico</button>
-                            <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>
+                            <button id="save-button" type="button" class="btn btn-success">Enviar Assinatura</button>
                         </div>
                     </div>
                 </div>
