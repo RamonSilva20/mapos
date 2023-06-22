@@ -1,4 +1,8 @@
 <?php
+$this->load->library('upload');
+
+$response = array();
+
 if (isset($_POST['image']) && isset($_POST['name'])) {
     $data = $_POST['image'];
     $data = str_replace('data:image/png;base64,', '', $data);
@@ -20,6 +24,12 @@ if (isset($_POST['image']) && isset($_POST['name'])) {
     // Salva a assinatura do cliente sempre
     file_put_contents($clienteFilename, $data); // Salva a assinatura do cliente
     
-    echo 'Assinatura do cliente enviada com sucesso.';
+    $response['success'] = true;
+    $response['message'] = 'Assinatura do cliente enviada com sucesso.';
+} else {
+    $response['success'] = false;
+    $response['message'] = 'Falha ao enviar a assinatura do cliente. Por favor, verifique os dados enviados.';
 }
-?>
+
+echo json_encode($response);
+<?>
