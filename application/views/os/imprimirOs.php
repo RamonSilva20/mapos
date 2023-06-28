@@ -508,15 +508,25 @@ $totalProdutos = 0; ?>
 ?>
                                     <table class="table table-bordered table-condensed">
                                         <tbody>
-                                            <tr>
+                                            <tr >
                                                 <td>Data
-                                                    <hr>
+                                                                                                       
                                                 </td>
-                                                <td>Assinatura do Cliente
-                                                    <hr>
+                                                <br><br>
+
+                                                
+                                                <td>
+                                                <img width="150" src="<?php echo($filePath); ?>" />
+                                                <br>
+                                                <br>______________________________
+                                                <br>Assinatura do Cliente
+                                                    
                                                 </td>
-                                                <td>Assinatura do Técnico Responsável
-                                                    <hr>
+                                                <td>
+                                                <img width="150" src="<?php echo($filePathT); ?>" />
+                                                <br>                                                  
+                                                <br> ______________________________   
+                                                <br> Assinatura do Ténico
                                                 </td>
                                             </tr>
                                         </tbody>
