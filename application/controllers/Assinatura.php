@@ -29,33 +29,33 @@ class Assinatura extends CI_Controller {
         $clientName = $this->input->post('clientName');
         $tecnico = $this->input->post('tecnico');
 
-        // Strip the metadata from the base64-encoded image data
+        // Retire os metadados dos dados de imagem codificados em base64
         $imageData = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData);
         $imageData2 = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData2);
 
-        // Get the project root path
+        // Obter o caminho raiz do projeto
         $projectRoot = realpath(APPPATH . '../');
 
-        // Set the directory path for signatures
+        // Define o direotiro aonde será salvo a assinatura
         $signaturesDir = $projectRoot . '/assets/signatures/';
 
-        // Create the directory if it doesn't exist
+        // Cria o diretorio se não existir
         if (!is_dir($signaturesDir)) {
             mkdir($signaturesDir, 0777, true);
         }
 
-        // Set the file path for the client signature
+        // Define o caminho do arquivo para a assinatura do cliente
         $filePath = $signaturesDir . $nOs . $clientName . '.png';
 
-        // Save the client signature image file
+        // Salve o arquivo de imagem da assinatura do cliente
         file_put_contents($filePath, base64_decode($imageData));
 
-        // Set the file path for the technician signature
+        // Defina o caminho do arquivo para a assinatura do técnico
         $technicoFilePath = $signaturesDir . $tecnico . '.png';
 
-        // Check if the technician signature file already exists
+        // Faz uma verificação se existe o arquivo
         if (!file_exists($technicoFilePath)) {
-            // Save the image file for the technician only if it doesn't exist
+            // Sava o arquivo com assinatura do tecnico somente se não existir
             file_put_contents($technicoFilePath, base64_decode($imageData2));
         }
 
