@@ -1349,7 +1349,7 @@ foreach ($servicos as $s) {
                 console.log("Img = " + dataURL);
 
                 $.ajax({
-                        url: '<?php echo base_url('index.php/Assinatura/upload_signature') ?>',
+                        url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
                         type: 'POST',
                         data: {
                             imageData: dataURL,
