@@ -1305,7 +1305,7 @@ foreach ($servicos as $s) {
         });
     });
 </script>
-
+<!--Scrip Assinatura-->
 <script>
         document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('signature-pad');
