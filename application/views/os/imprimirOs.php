@@ -70,7 +70,7 @@ $totalProdutos = 0; ?>
         }
     </style>
 </head>
-
+<!--Define o nome do arquivo para Assinatura-->
 <?php 
 $filePath = base_url('assets/signatures/' . $result->idOs . $result->nomeCliente . '.png');  
 $filePathT = base_url('assets/signatures/' . $result->nome . '.png'); 
