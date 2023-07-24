@@ -113,8 +113,10 @@ class Os extends MY_Controller
 
             $data = [
                 'dataInicial' => $dataInicial,
-                'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
+                'clientes_id' => $this->input->post('clientes_id'),
+                //set_value('idCliente'),
+                'usuarios_id' => $this->input->post('usuarios_id'),
+                //set_value('idUsuario'),
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
@@ -133,7 +135,7 @@ class Os extends MY_Controller
                 $idOs = $id;
                 $os = $this->os_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente();
-              
+
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
@@ -541,7 +543,7 @@ class Os extends MY_Controller
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
-        if ((int)$os->faturado === 1) {
+        if ((int) $os->faturado === 1) {
             $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
         }
 
@@ -772,7 +774,8 @@ class Os extends MY_Controller
 
         $upload_conf = [
             'upload_path' => $directory,
-            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
+            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt',
+            // formatos permitidos para anexos de os
             'max_size' => 0,
         ];
 
@@ -950,6 +953,7 @@ class Os extends MY_Controller
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
+                'os_id' => $os->idOs,
             ];
 
             $editavel = $this->os_model->isEditable($this->input->post('idOs'));
