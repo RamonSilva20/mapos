@@ -12,7 +12,8 @@
         "mpdf/qrcode": "^1.1",
         "phpoffice/phpword": "^0.18.0",
         "piggly/php-pix": "^2.0",
-        "codephix/asaas-sdk": "dev-master"
+        "codephix/asaas-sdk": "dev-master",
+        "fakerphp/faker": "^1.23"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
