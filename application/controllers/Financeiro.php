@@ -289,6 +289,13 @@ class Financeiro extends MY_Controller
 
                     ];
 
+                    if (set_value('idFornecedor')) {
+                        $data['clientes_id'] =  set_value('idFornecedor');
+                    }
+                    if (set_value('idCliente')) {
+                        $data['clientes_id'] =  set_value('idCliente');
+                    }
+
                     if ($this->financeiro_model->add('lancamentos', $data) == true) {
                         $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
                         log_info('Adicionou um lançamento em Financeiro');
