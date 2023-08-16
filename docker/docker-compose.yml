@@ -25,6 +25,7 @@ services:
         restart: always
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+            - "./etc/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini"
             - "../:/var/www/html"
 
     composer:

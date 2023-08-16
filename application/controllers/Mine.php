@@ -176,7 +176,7 @@ class Mine extends CI_Controller
     {
         if (!$cliente = $this->check_credentials($this->input->post('email'))) {
             $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
-            $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
+            $session_mine_data = $cliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
             $this->session->set_userdata($session_mine_data);
             log_info('Cliente solicitou alteração de senha. Porém falhou ao realizar solicitação!');
             redirect($_SERVER['HTTP_REFERER']);
@@ -646,7 +646,7 @@ class Mine extends CI_Controller
         } else {
             $id = null;
             $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
-            if ($usuario->usuarios_id == null) {
+            if ($usuario == null) {
                 $this->db->where('situacao', 1);
                 $this->db->limit(1);
                 $usuario = $this->db->get('usuarios')->row();
@@ -823,6 +823,11 @@ class Mine extends CI_Controller
         $html = $this->load->view('conecte/emails/clientenovasenha', $dados, true);
 
         $this->load->model('email_model');
+        
+        if ($emitente == null) {
+            $this->session->set_flashdata(['error' => 'Cadastrar Emitente.\n\n Por favor contate o administrador do sistema.']);
+            return redirect(base_url() . 'index.php/mine/resetarSenha');
+        }
 
         $headers = [
             'From' => "\"$emitente->nome\" <$emitente->email>",

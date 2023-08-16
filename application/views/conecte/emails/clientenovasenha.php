@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente[0]->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= $emitente ? $emitente->url_logo : "" ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -134,7 +134,7 @@
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente[0]->nome; ?> <br>
+                                <?= $emitente ? $emitente->nome : ""; ?> <br>
 
                             </td>
                         </tr>
@@ -166,7 +166,7 @@
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    Equipe <?= $emitente[0]->nome; ?>
+                    Equipe <?= $emitente ? $emitente->nome : ""; ?>
                 </td>
             </tr>
 
