@@ -119,7 +119,6 @@
                                         echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
                                         echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
-                                        echo '<hr />';
                                     } ?>
                                     <tr>
                                         <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
