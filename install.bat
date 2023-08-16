@@ -57,7 +57,7 @@ CLS
 
 ::::::::::::::::::::::::::::
 :: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
-:: Versao Instalador: v2.1.20230518
+:: Versao Instalador: v2.3.20230815
 :: Publicado na versao 4.40.0 do MapOS
 ::::::::::::::::::::::::::::
 
@@ -81,7 +81,7 @@ ECHO  **************************************************
 ECHO.
 :: <=== Inicio SET Diretorios ===>
 SET dirDefault=C:\InstaladorMAPOS
-SET urlWget=https://eternallybored.org/misc/wget/1.21.3/32/wget.exe
+SET urlWget=https://eternallybored.org/misc/wget/1.21.4/32/wget.exe
 SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.4/xampp-windows-x64-8.2.4-0-VS16-installer.exe"
 SET urlComposer=https://getcomposer.org/Composer-Setup.exe
 SET dirXampp=C:\xampp
@@ -100,7 +100,7 @@ ECHO Ao seguir com a execucao desse script, voce esta ciente de que caso exista 
 ECHO.
 ECHO Portanto, recomendamos que voce faca backup de todos os dados importantes antes de prosseguir com a instalacao. Ao continuar com a instalacao, voce concorda que nao responsabilizara os desenvolvedores do script por quaisquer perdas de dados que possam ocorrer como resultado da remocao dessas instalacoes.
 ECHO.
-ECHO Recomendamos tambem, caso haja uma instalacao previa do XAMPP, MySQL, Composer ou MAP-OS, desinstale/delete para que o script realize a instalacao adequada para que a aplicacao inicie corretamente.
+@REM ECHO Recomendamos tambem, caso haja uma instalacao previa do XAMPP, MySQL, Composer ou MAP-OS, desinstale/delete para que o script realize a instalacao adequada para que a aplicacao inicie corretamente.
 ECHO.
 CHOICE /C SN /M "Aceita os termos acima?"
 IF ERRORLEVEL 2 SET stepnext=stepNaoAceite && GOTO step00
@@ -112,6 +112,10 @@ PAUSE
 :step01
 ECHO 01 BAIXANDO DEPENDENCIAS...
 ECHO.
+ECHO 01.0 Verificando instancias em execucao
+TASKLIST | find "httpd.exe" >NUL 2>&1 && ( ECHO Finalizando o Apache... && TASKKILL /F /IM httpd.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
+TASKLIST | find "mysqld.exe" >NUL 2>&1 && ( ECHO Finalizando o MySQL... && TASKKILL /F /IM mysqld.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
+TASKLIST | find "xampp-control.exe" >NUL 2>&1 && ( ECHO Finalizando o Xampp-Control... && TASKKILL /F /IM xampp-control.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
 ECHO 01.1 Verificando pasta de instalacao
 IF not EXIST %dirDefault% mkdir %dirDefault% >NUL 2>&1
 ECHO 01.2 Verificando Wget
@@ -131,7 +135,10 @@ GOTO step00
 ECHO 02 SERVIDOR WEB XAMPP...
 ECHO.
 ECHO 02.1 Executando instalador XAMPP
-start /wait %dirDefault%\xampp.exe --mode unattended
+ECHO * Por favor aguarde, a instalacao pode levar ate 5 min.
+IF EXIST %dirXampp%\xampp-control.ini del %dirXampp%\xampp-control.ini
+START /wait %dirDefault%\xampp.exe --mode unattended
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\xampp.exe && ECHO Falha na instalacao do XAMPP, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 ECHO 02.2 Configurando XAMPP
 ECHO.>> %dirXampp%\xampp-control.ini
 ECHO [Autostart]>> %dirXampp%\xampp-control.ini
@@ -143,6 +150,10 @@ PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extensi
 ECHO 02.4 Configurando PHP TimeZone
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace 'date.timezone=Europe/Berlin', 'date.timezone=America/Fortaleza'} | Set-Content -Path '%dirPHP%\php.ini'"
 ECHO 02.5 Iniciar Apache e MySQL
+TASKKILL /F /IM httpd.exe /T >NUL 2>&1
+TASKLIST | find "mysqld.exe" >NUL 2>&1
+TASKKILL /F /IM xampp-control.exe /T >NUL 2>&1
+TIMEOUT /T 5 >NUL
 start %dirXampp%\xampp-control.exe >NUL 2>&1
 SET stepnext=step03
 GOTO step00
@@ -154,7 +165,9 @@ ECHO 03 INSTALACAO SISTEMA MAP-OS...
 ECHO.
 ECHO 03.1 Extracao dos arquivos MAP-OS
 PowerShell -ExecutionPolicy Bypass -Command "Expand-Archive %dirDefault%\MapOS.zip %dirHtdocs%" -Force
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\MapOS.zip && ECHO Falha na extracao do Map-OS, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 ECHO 03.2 Correcao da Pasta MAP-OS
+IF EXIST %dirHtdocs%\mapos rename %dirHtdocs%\mapos mapos-bkp%date:~6,10%%date:~3,2%%date:~0,2%
 FOR /F "tokens=4" %%B IN ( ' dir "%dirHtdocs%\" ^| findstr /I /C:"RamonSilva20" ' ) DO IF NOT EXIST %dirHtdocs%\mapos rename %dirHtdocs%\%%B mapos
 SET stepnext=step04
 GOTO step00
@@ -166,6 +179,7 @@ ECHO 04 COMPLEMENTO COMPOSER...
 ECHO.
 ECHO 04.1 Executando instalador COMPOSER
 START /wait %dirDefault%\composer.exe /SILENT /ALLUSERS
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\composer.exe && ECHO Falha na execucao do COMPOSER, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 TIMEOUT /T 5 >NUL
 ECHO 04.2 Instalacao do complemento COMPOSER
 START /I /D %dirHtdocs%\mapos /WAIT PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev
@@ -188,9 +202,10 @@ ECHO Senha: "Em Branco"
 ECHO Banco de Dados: mapos
 ECHO URL: http://localhost/mapos
 start /B http://localhost/mapos
-PAUSE
-SET stepnext=step06
-GOTO step00
+ECHO.
+CHOICE /C SN /M "Configuracao do MapOS Finalizada?"
+IF ERRORLEVEL 2 SET stepnext=step05 && GOTO step00
+IF ERRORLEVEL 1 SET stepnext=step06 && GOTO step00
 :: <=== Fim STEP05 ===>
 
 :: <=== Inicio STEP06 ===>
@@ -203,10 +218,10 @@ SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com):
 SET /p criptografia=Informe a Criptografia (SSL/TLS): 
 SET /p porta=Informe a Porta (Ex: 587): 
 SET /p email=Informe o Email (Ex: nome@seudominio.com): 
-SET /p senha=Informe a Senha: 
+SET /p senha=Informe a Senha (****): 
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
-IF ERRORLEVEL 2 SET stepnext=GOTO step00
+IF ERRORLEVEL 2 SET stepnext=step06 && GOTO step00
 IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\config\email.php
 PowerShell -command "&Set-Content -Path '%dirEmail%' -Value '<?php'"
 ECHO $config['protocol']         = '%protocolo%';>>%dirEmail%
@@ -267,8 +282,8 @@ ECHO  ************************************************
 ECHO.
 ERASE /F /S /Q "%dirDefault%\*.*" >NUL
 RMDIR /Q /S "%dirDefault%\" >NUL
-TIMEOUT /T 10 >NUL
-EXIT
+TIMEOUT /T 5 >NUL
+GOTO StepSair
 :: <=== Inicio STEP FIM ===>
 
 :: <=== Inicio STEP NAO ACEITE ===>
@@ -278,5 +293,10 @@ ECHO  ****  TERMOS DE INSTALACAO NAO CONFIRMADO   ****
 ECHO  ************************************************
 ECHO.
 TIMEOUT /T 5 >NUL
-EXIT
+GOTO StepSair
 :: <=== Inicio STEP NAO ACEITE ===>
+
+:: <=== Inicio SAIR ===>
+:StepSair
+GOTO:=EOF
+:: <=== Fim SAIR ===>
