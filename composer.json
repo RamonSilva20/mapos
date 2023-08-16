@@ -12,12 +12,12 @@
         "mpdf/qrcode": "^1.1",
         "phpoffice/phpword": "^0.18.0",
         "piggly/php-pix": "^2.0",
-        "codephix/asaas-sdk": "dev-master",
-        "fakerphp/faker": "^1.23"
+        "codephix/asaas-sdk": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
-        "symfony/var-dumper": "^5.0"
+        "symfony/var-dumper": "^5.0",
+        "fakerphp/faker": "^1.23"
     },
     "scripts": {
         "format": [
