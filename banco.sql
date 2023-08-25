@@ -275,6 +275,26 @@ DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
+-- Table `produtos_imagens`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `produtos_imagens` (
+  `idProdutos_imagens` INT(11) NOT NULL AUTO_INCREMENT,
+  `produtos_id` INT(11) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `principal` BOOLEAN NOT NULL DEFAULT 0,
+  `uploaded_on` DATETIME NOT NULL,
+  PRIMARY KEY (`idProdutos_imagens`),
+  INDEX `fk_produtos_imagens_imagens1` (`produtos_id` ASC),
+  CONSTRAINT `fk_produtos_imagens_imagens1`
+    FOREIGN KEY (`produtos_id`)
+    REFERENCES `produtos` (`idProdutos`)
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB AUTO_INCREMENT = 1 
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+-- -----------------------------------------------------
 -- Table `produtos_os`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `produtos_os` (

@@ -24,6 +24,47 @@
         /* Move the check mark back when checked */
         text-indent: 0;
     }
+
+    output {
+        width: 100%;
+        display: inline-flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 15px;
+        position: relative;
+        border-radius: 5px;
+    }
+
+    output .image {
+        width: auto;
+        height: 150px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        position: relative;
+    }
+
+    output .image img {
+        height: 100%;
+        width: 100%;
+    }
+
+    output .image span {
+        position: absolute;
+        top: -4px;
+        right: 4px;
+        cursor: pointer;
+        font-size: 24px;
+        color: white;
+    }
+
+    output .image span:hover {
+        opacity: 0.8;
+    }
+
+    output .span--hidden {
+        visibility: hidden;
+    }
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -36,7 +77,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" enctype="multipart/form-data" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
@@ -102,13 +143,22 @@
                         </div>
                     </div>
 
+                    <div class="control-group">
+                        <label for="imagensProduto" class="control-label">Imagens do Produto</label>
+                        <div class="controls">
+                            <input type="file" id="imagensProduto" name="imagensProduto" multiple accept=".jpg,.jpeg,.png" style="display: none;" value="<?php echo $result->imagensProduto; ?>" />
+                            <button type="button" id="fileSelect" name="fileSelect" class="button btn btn-mini btn-default"><span class="button__icon" style="color:black"><i class='bx bx-file'></i></span><span class="button__text" style="color:black">Selecionar</span></button>
+                            <output></output>
+                        </div>
+                    </div>
+
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary" style="max-width: 160px">
-                                  <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                    <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
                                 <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
-                                  <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                                    <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -125,12 +175,47 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcLucro(precoCompra, margemLucro) {
-    var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
-    return precoVenda;
+    const fileSelect = document.getElementById("fileSelect");
+    const imagensProduto = document.getElementById("imagensProduto");
+    const output = document.querySelector("output");
+    let imagesArray = [];
 
-}
-    $("#precoCompra").focusout(function () {
+    fileSelect.addEventListener("click", (e) => {
+        if (imagensProduto) {
+            imagensProduto.click();
+        }
+    }, false);
+
+    imagensProduto.addEventListener("change", (e) => {
+        const files = imagensProduto.files;
+        for (let i = 0; i < files.length; i++) {
+            imagesArray.push(files[i]);
+        }
+        displayImages();
+    });
+
+    function displayImages() {
+        let images = "";
+        imagesArray.forEach((image, index) => {
+            images += `<div class="image">
+                         <img src="${URL.createObjectURL(image)}" alt="image">
+                         <span onclick="deleteImage(${index})">&times;</span>
+                       </div>`
+        })
+        output.innerHTML = images;
+    };
+
+    function deleteImage(index) {
+        imagesArray.splice(index, 1);
+        displayImages();
+    };
+
+    function calcLucro(precoCompra, margemLucro) {
+        var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
+        return precoVenda;
+
+    }
+    $("#precoCompra").focusout(function() {
         if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
@@ -140,7 +225,7 @@
         }
     });
 
-   $("#margemLucro").keyup(function () {
+    $("#margemLucro").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
             $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
@@ -157,11 +242,11 @@
         }
     });
 
-    $('#precoVenda').focusout(function () {
+    $('#precoVenda').focusout(function() {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
-            if($("#margemLucro").val() != "" || $("#margemLucro").val() != null){
+            if ($("#margemLucro").val() != "" || $("#margemLucro").val() != null) {
                 $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
             }
         }
