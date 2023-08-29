@@ -65,6 +65,7 @@
     margin-bottom: 8px!important;
 }
 
+/* Correção do Mini Caledário */
 .ui-datepicker {
     z-index: 9999 !import;
 }
@@ -72,4 +73,8 @@
 .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
+    }
+
+textarea {
+        resize: vertical;
     }
