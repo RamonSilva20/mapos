@@ -3,7 +3,7 @@
   <div id="content-header">
    <div></div>
       <div id="breadcrumb">
-        <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"> Início</a>
+        <a href="<?= base_url() ?>" title="Inicio" class="tip-bottom"> Início</a>
         <?php if ($this->uri->segment(1) != null) { ?>
             <a href="<?= base_url() . 'index.php/' . $this->uri->segment(1) ?>" class="tip-bottom" title="<?= ucfirst($this->uri->segment(1)); ?>">
               <?= ucfirst($this->uri->segment(1)); ?>

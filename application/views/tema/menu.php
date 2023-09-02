@@ -35,7 +35,7 @@
                     echo 'active';
                 }; ?>">
                     <a class="tip-bottom" title="" href="<?= base_url() ?>"><i class='bx bx-home-alt iconX'></i>
-                        <span class="title nav-title">Home</span>
+                        <span class="title nav-title">Inicio</span>
                         <span class="title-tooltip">Início</span>
                     </a>
                 </li>
