@@ -3,7 +3,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab1">Dados do Cliente</a></li>
             <li><a data-toggle="tab" href="#tab2">Ordens de Serviço</a></li>
-
+            <li><a data-toggle="tab" href="#tab3">Vendas</a></li>
         </ul>
     </div>
     <div class="widget-content tab-content">
@@ -203,6 +203,69 @@
                             echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
                         }
 
+                        echo  '</td>';
+                        echo '</tr>';
+                    } ?>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+                <?php
+            } ?>
+        </div>
+        <!--Tab 3-->
+        <div id="tab3" class="tab-pane" style="min-height: 300px">
+            <?php if (!$result_vendas) { ?>
+                <table class="table table-bordered ">
+                    <thead>
+                    <tr>
+                        <th>N° Venda</th>
+                        <th>Data</th>
+                        <th>Faturado</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">Nenhuma OS Cadastrada</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <?php
+            } else { ?>
+                <table class="table table-bordered ">
+                    <thead>
+                    <tr>
+			<th>N° Venda</th>
+                        <th>Data</th>
+                        <th>Faturado</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($result_vendas as $r) {
+                        $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
+                        if ($r->faturado == 1) {
+                            $faturado = 'Sim';
+                        } else {
+                            $faturado = 'Não';
+                        }
+                        echo '<tr>';
+                        echo '<td>' . $r->idVendas . '</td>';
+                        echo '<td>' . $dataVenda . '</td>';
+                        echo '<td>' . $faturado . '</td>';
+                        echo '<td>R$' . $r->valorTotal. '</td>';
+
+                        echo '<td>';
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                            echo '<a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                            echo '<a href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                        }
                         echo  '</td>';
                         echo '</tr>';
                     } ?>
