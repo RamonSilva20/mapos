@@ -162,7 +162,7 @@ class Os extends MY_Controller
                 }
 
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de Produtos e Serviços!');
-                log_info('Adicionou uma OS');
+                log_info('Adicionou uma OS. ID: ' . $id);
                 redirect(site_url('os/editar/') . $id);
             } else {
                 $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
