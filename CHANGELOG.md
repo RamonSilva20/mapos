@@ -9,7 +9,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Sobreposição mini calendário ao adicionar/editar venda. [@barretowiisk](https://github.com/barretowiisk)
 - Erro no upload na OS (aba Anexos). [@barretowiisk](https://github.com/barretowiisk)
 - Correção para aparecer o ID da OS que o usuario adicionou em logs. [@Fesantt](https://github.com/Fesantt)
-- Remoção de linhas na impressão de Vendas.[@lukasabino](https://github.com/lukasabino)
+- Remoção de linhas na impressão de Vendas. [@lukasabino](https://github.com/lukasabino)
 - Variável em visualizar OS na área do cliente. [@Wilmerson](https://github.com/willph)
 - Variável emitente e cliente quando vazia ao resetar senha. [@Wilmerson](https://github.com/willph)
 - Acessar propriedade inválida em usuário. [@Wilmerson](https://github.com/willph)
