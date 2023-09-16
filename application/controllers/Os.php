@@ -796,35 +796,53 @@ class Os extends MY_Controller
                 $error['upload'][] = $this->upload->display_errors();
             } else {
                 $upload_data = $this->upload->data();
-
+        
+                // Gera um nome de arquivo aleatório mantendo a extensão original
+                $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
+                $new_file_path = $upload_data['file_path'] . $new_file_name;
+        
+                rename($upload_data['full_path'], $new_file_path);
+        
                 if ($upload_data['is_image'] == 1) {
-                    // set the resize config
                     $resize_conf = [
-
-                        'source_image' => $upload_data['full_path'],
-                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $upload_data['file_name'],
+                        'source_image' => $new_file_path,
+                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
                         'width' => 200,
                         'height' => 125,
                     ];
-
+        
                     $this->image_lib->initialize($resize_conf);
-
+        
                     if (!$this->image_lib->resize()) {
                         $error['resize'][] = $this->image_lib->display_errors();
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
+                        $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $new_file_name, $directory);
+                        if (!$result) {
+                            $error['db'][] = 'Erro ao inserir no banco de dados.';
+                        }
                     }
                 } else {
                     $success[] = $upload_data;
-
+        
                     $this->load->model('Os_model');
-
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+        
+                    $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    if (!$result) {
+                        $error['db'][] = 'Erro ao inserir no banco de dados.';
+                    }
                 }
             }
         }
+        
+        if (count($error) > 0) {
+            echo json_encode(['result' => false, 'mensagem' => 'Ocorreu um erro ao processar os arquivos.', 'errors' => $error]);
+        } else {
+            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
+            echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
+        }
+    }
 
         if (count($error) > 0) {
             echo json_encode(['result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.']);
