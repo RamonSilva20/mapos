@@ -31,7 +31,7 @@ ECHO For Each strArg in WScript.Arguments >> "%vbsGetPrivileges%"
 ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
 ECHO Next >> "%vbsGetPrivileges%"
 
-IF '%cmdInvoke%'=='1' GOTO InvokeCmd 
+IF '%cmdInvoke%'=='1' GOTO InvokeCmd
 
 ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
 GOTO ExecElevation.
@@ -58,7 +58,7 @@ CLS
 ::::::::::::::::::::::::::::
 :: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
 :: Versao Instalador: v2.3.20230815
-:: Publicado na versao 4.40.0 do MapOS
+:: Publicado na versao 4.41.0 do MapOS
 ::::::::::::::::::::::::::::
 
 SET stepnext=stepTermos
@@ -213,12 +213,12 @@ IF ERRORLEVEL 1 SET stepnext=step06 && GOTO step00
 CHOICE /C SN /M "Gostaria de configurar os dados de e-mail?"
 IF ERRORLEVEL 2 SET stepnext=step07 && GOTO step00
 IF ERRORLEVEL 1 ECHO.
-SET /p protocolo=Informe o Protocolo (Padrao: SMTP): 
-SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com): 
-SET /p criptografia=Informe a Criptografia (SSL/TLS): 
-SET /p porta=Informe a Porta (Ex: 587): 
-SET /p email=Informe o Email (Ex: nome@seudominio.com): 
-SET /p senha=Informe a Senha (****): 
+SET /p protocolo=Informe o Protocolo (Padrao: SMTP):
+SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com):
+SET /p criptografia=Informe a Criptografia (SSL/TLS):
+SET /p porta=Informe a Porta (Ex: 587):
+SET /p email=Informe o Email (Ex: nome@seudominio.com):
+SET /p senha=Informe a Senha (****):
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
 IF ERRORLEVEL 2 SET stepnext=step06 && GOTO step00
@@ -268,7 +268,7 @@ GOTO step00
 :step08
 CHOICE /C SN /M "Gostaria de alterar o numero da primeira OS?"
 IF ERRORLEVEL 2 SET stepnext=stepfim && GOTO step00
-IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
+IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1):
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
 SET stepnext=stepfim
 GOTO step00
