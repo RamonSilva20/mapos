@@ -42,7 +42,7 @@ class Financeiro extends MY_Controller
         $periodo = $this->input->get('periodo');
 
         if (!empty($vencimento_de)) {
-            $date = DateTime::createFromFormat('d/m/Y', $vencimento_de)->format('Y-m-d');
+            $date = DateTime::createFromFormat('d/m/Y', $vencimento_de);
 
             if (empty($where)) {
                 $where = "data_vencimento >= '$date'";
@@ -315,7 +315,7 @@ class Financeiro extends MY_Controller
                     'valor_desconto' => $entrada,
                     'tipo_desconto' => 'real',
                     'data_vencimento' => $dia_pgto,
-                    'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format($myDateTime, "Y-m-d"),
+                    'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format("Y-m-d"),
                     'baixado' => 1,
                     'cliente_fornecedor' => $this->input->post('cliente_parc'),
                     'observacoes' => $this->input->post('observacoes_parc'),
