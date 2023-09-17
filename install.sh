@@ -7,22 +7,6 @@ if [ "$EUID" -ne 0 ]; then
     exit $?
 fi
 
-# Verificando Distribuicao
-if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    if [ "$ID" = "debian" ] || [ "$ID" = "ubuntu" ]; then
-        comando_instalar="sudo apt-get"
-    elif [ "$ID" = "centos" ]; then
-        comando_instalar="sudo yum"
-    else
-        echo "Esta distribuicao nao e suportada."
-        exit 1
-    fi
-else
-    echo "Nao foi possivel detectar a distribuicao Linux."
-    exit 1
-fi
-
 ##############################################################
 ## Script desenvolvido por Bruno Barreto e Leonardo Bernardi
 ## Versao Instalador: v1.0.20230916
@@ -38,7 +22,7 @@ fi
     echo "**                                              **"
     echo "**           SCRIPT AUTO INSTALADOR             **"
     echo "**    MAP-OS - SISTEMA DE ORDEM DE SERVICO      **"
-    echo "**          LINUX (Debian / CentOS)             **"
+    echo "**          LINUX (Debian / Ubuntu)             **"
     echo "**                                              **"
     echo "**                                              **"
     echo "**                                              **"
@@ -47,6 +31,7 @@ fi
     echo
 
     # <=== Inicio SET Diretorios ===>
+        comando_instalar="sudo apt-get"
         dirDefault=/opt/InstaladorMAPOS
         urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run/download"
         dirXampp=/opt/lampp
