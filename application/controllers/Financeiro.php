@@ -45,7 +45,8 @@ class Financeiro extends MY_Controller
             $date = DateTime::createFromFormat('d/m/Y', $vencimento_de);
 
             if (empty($where)) {
-                $where = "data_vencimento >= '$date'";
+                 $dateString = $date->format('Y-m-d'); 
+                 $where = "data_vencimento >= '$dateString'";
             } else {
                 $where .= " AND data_vencimento >= '$date'";
             }
