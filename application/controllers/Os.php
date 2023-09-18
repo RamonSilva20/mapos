@@ -844,14 +844,6 @@ class Os extends MY_Controller
         }
     }
 
-        if (count($error) > 0) {
-            echo json_encode(['result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.']);
-        } else {
-            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
-            echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .']);
-        }
-    }
-
     public function excluirAnexo($id = null)
     {
         if ($id == null || !is_numeric($id)) {
