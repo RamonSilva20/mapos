@@ -12,6 +12,8 @@
                         echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
+                    <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Orçamento</span></a>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
@@ -31,12 +33,12 @@
                                             <<<< /td>
                                     </tr> <?php
                                 } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
+                                        <td style="width: 25%"><img src="<?php echo "$emitente->url_logo"; ?>"></td>
                                         <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo $emitente[0]->cnpj; ?> </br>
-                                                <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <?php echo $emitente->cnpj; ?> </br>
+                                                <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
+                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
                                         <td style="width: 18%; text-align: center">Venda: <span>
                                                 <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span>
@@ -73,7 +75,7 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td style="width: 50%; padding-left: 0">
+                                    <td style="width: 40%; padding-left: 0">
                                         <ul>
                                             <li>
                                                 <span>
@@ -88,6 +90,12 @@
                                             </li>
                                         </ul>
                                     </td>
+                                    <?php if ($qrCode) : ?>
+                                        <td style="width: 15%; padding-left: 0">
+                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                            <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                        </td>
+                                    <?php endif ?>
                                 </tr>
                             </tbody>
                         </table>

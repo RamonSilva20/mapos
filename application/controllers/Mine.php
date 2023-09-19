@@ -176,7 +176,7 @@ class Mine extends CI_Controller
     {
         if (!$cliente = $this->check_credentials($this->input->post('email'))) {
             $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
-            $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
+            $session_mine_data = $cliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
             $this->session->set_userdata($session_mine_data);
             log_info('Cliente solicitou alteração de senha. Porém falhou ao realizar solicitação!');
             redirect($_SERVER['HTTP_REFERER']);
@@ -227,7 +227,7 @@ class Mine extends CI_Controller
                 if (password_verify($password, $cliente->senha)) {
                     $session_mine_data = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
                     $this->session->set_userdata($session_mine_data);
-                    log_info($_SERVER['HTTP_CLIENT_IP'] . 'Efetuou login no sistema');
+                    log_info($_SERVER['REMOTE_ADDR'] . ' Efetuou login no sistema');
                     echo json_encode(['result' => true]);
                 } else {
                     echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.']);
@@ -646,7 +646,7 @@ class Mine extends CI_Controller
         } else {
             $id = null;
             $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
-            if ($usuario->usuarios_id == null) {
+            if ($usuario == null) {
                 $this->db->where('situacao', 1);
                 $this->db->limit(1);
                 $usuario = $this->db->get('usuarios')->row();
@@ -817,16 +817,20 @@ class Mine extends CI_Controller
         $dados['cliente'] = $this->clientes_model->getById($idClientes);
         $dados['resets_de_senha'] = json_decode($token);
 
-        $emitente = $dados['emitente'][0]->email;
-        $emitenteNome = $dados['emitente'][0]->nome;
+        $emitente = $dados['emitente'];
         $remetente = $clienteEmail;
 
         $html = $this->load->view('conecte/emails/clientenovasenha', $dados, true);
 
         $this->load->model('email_model');
+        
+        if ($emitente == null) {
+            $this->session->set_flashdata(['error' => 'Cadastrar Emitente.\n\n Por favor contate o administrador do sistema.']);
+            return redirect(base_url() . 'index.php/mine/resetarSenha');
+        }
 
         $headers = [
-            'From' => "\"$emitenteNome\" <$emitente>",
+            'From' => "\"$emitente->nome\" <$emitente->email>",
             'Subject' => $assunto,
             'Return-Path' => ''
         ];
@@ -856,7 +860,7 @@ class Mine extends CI_Controller
         $dados['servicos'] = $this->os_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
 
-        $emitente = $dados['emitente'][0]->email;
+        $emitente = $dados['emitente'];
         if (!isset($emitente)) {
             return false;
         }
@@ -868,7 +872,7 @@ class Mine extends CI_Controller
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
             $headers = [
-                'From' => $emitente,
+                'From' => $emitente->email,
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];
@@ -894,9 +898,8 @@ class Mine extends CI_Controller
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
-        $emitente = $dados['emitente'][0]->email;
-        $emitenteNome = $dados['emitente'][0]->nome;
-        $remetente = $dados['cliente']->email;
+        $emitente = $dados['emitente'];
+        $remetente = $dados['cliente'];
         $assunto = 'Bem-vindo!';
 
         $html = $this->load->view('os/emails/clientenovo', $dados, true);
@@ -904,12 +907,12 @@ class Mine extends CI_Controller
         $this->load->model('email_model');
 
         $headers = [
-            'From' => "\"$emitenteNome\" <$emitente>",
+            'From' => "\"$emitente->nome\" <$emitente->email>",
             'Subject' => $assunto,
             'Return-Path' => ''
         ];
         $email = [
-            'to' => $remetente,
+            'to' => $remetente->email,
             'message' => $html,
             'status' => 'pending',
             'date' => date('Y-m-d H:i:s'),
@@ -929,8 +932,7 @@ class Mine extends CI_Controller
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
 
-        $emitente = $dados['emitente'][0]->email;
-        $emitenteNome = $dados['emitente'][0]->nome;
+        $emitente = $dados['emitente'];
         $assunto = 'Novo Cliente Cadastrado no Sistema';
 
         $usuarios = [];
@@ -940,7 +942,7 @@ class Mine extends CI_Controller
             $dados['usuario'] = $usuario;
             $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
             $headers = [
-                'From' => "\"$emitenteNome\" <$emitente>",
+                'From' => "\"$emitente->nome\" <$emitente->email>",
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];

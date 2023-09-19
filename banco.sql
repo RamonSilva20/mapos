@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   PRIMARY KEY (`idClientes`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE `resets_de_senha` ( 
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,7 @@ CREATE TABLE `resets_de_senha` (
   `token_utilizado` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `categorias`
@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS `categorias` (
   `status` TINYINT(1) NULL,
   `tipo` VARCHAR(15) NULL,
   PRIMARY KEY (`idCategorias`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -81,7 +82,8 @@ CREATE TABLE IF NOT EXISTS `contas` (
   `status` TINYINT(1) NULL,
   `tipo` VARCHAR(80) NULL,
   PRIMARY KEY (`idContas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `permissoes`
@@ -93,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `permissoes` (
   `situacao` TINYINT(1) NULL,
   `data` DATE NULL,
   PRIMARY KEY (`idPermissao`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -128,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 
@@ -181,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -201,7 +204,8 @@ CREATE TABLE IF NOT EXISTS `garantias` (
     REFERENCES `usuarios` (`idUsuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `os`
@@ -247,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `os` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -267,7 +271,7 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   PRIMARY KEY (`idProdutos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -295,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `produtos_os` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -309,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `servicos` (
   PRIMARY KEY (`idServicos`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -337,7 +341,7 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -375,7 +379,8 @@ CREATE TABLE IF NOT EXISTS `vendas` (
     REFERENCES `lancamentos` (`idLancamentos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 --
@@ -410,7 +415,7 @@ CREATE TABLE `cobrancas` (
   INDEX `fk_cobrancas_clientes1` (`clientes_id` ASC),
   CONSTRAINT `fk_cobrancas_clientes1` FOREIGN KEY (`clientes_id`) REFERENCES `clientes` (`idClientes`) ON DELETE NO ACTION ON UPDATE NO ACTION
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `itens_de_vendas`
@@ -435,7 +440,8 @@ CREATE TABLE IF NOT EXISTS `itens_de_vendas` (
     REFERENCES `produtos` (`idProdutos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `anexos`
@@ -454,7 +460,8 @@ CREATE TABLE IF NOT EXISTS `anexos` (
     REFERENCES `os` (`idOs`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -472,7 +479,8 @@ CREATE TABLE IF NOT EXISTS `documentos` (
   `tipo` VARCHAR(15) NULL,
   `tamanho` VARCHAR(45) NULL,
   PRIMARY KEY (`idDocumentos`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -484,7 +492,8 @@ CREATE TABLE IF NOT EXISTS `marcas` (
   `cadastro` DATE NULL,
   `situacao` TINYINT(1) NULL,
   PRIMARY KEY (`idMarcas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -516,7 +525,8 @@ CREATE TABLE IF NOT EXISTS `equipamentos` (
     REFERENCES `clientes` (`idClientes`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -542,7 +552,8 @@ CREATE TABLE IF NOT EXISTS `equipamentos_os` (
     REFERENCES `os` (`idOs`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
 -- -----------------------------------------------------
@@ -556,7 +567,8 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `hora` TIME NULL,
   `ip` VARCHAR(45) NULL,
   PRIMARY KEY (`idLogs`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `emitente`
@@ -576,7 +588,8 @@ CREATE  TABLE IF NOT EXISTS `emitente` (
   `url_logo` VARCHAR(225) NULL ,
   `cep` VARCHAR(20) NULL ,
   PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `email_queue`
@@ -591,7 +604,8 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
   `date` datetime DEFAULT NULL,
   `headers` text,
   PRIMARY KEY (`id`)
-);
+)ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `anotacaoes_os`
@@ -602,12 +616,15 @@ CREATE TABLE IF NOT EXISTS `anotacoes_os` (
     `data_hora` DATETIME NOT NULL ,
     `os_id` INT(11) NOT NULL ,
     PRIMARY KEY (`idAnotacoes`)
-);
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `configuracoes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `configuracoes` ( `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` TEXT NULL , PRIMARY KEY (`idConfig`)) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `configuracoes` ( 
+  `idConfig` INT NOT NULL AUTO_INCREMENT , `config` VARCHAR(20) NOT NULL UNIQUE, `valor` TEXT NULL , PRIMARY KEY (`idConfig`)
+  ) ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `migrations`
@@ -622,7 +639,7 @@ INSERT INTO `configuracoes` (`idConfig`, `config`, `valor`) VALUES
 (4, 'per_page', '10'),
 (5, 'os_notification', 'cliente'),
 (6, 'control_estoque', '1'),
-(7, 'notifica_whats', 'Prezado(a), {CLIENTE_NOME} a OS de nº {NUMERO_OS} teve o status alterado para :{STATUS_OS} segue a descrição {DESCRI_PRODUTOS} com valor total de {VALOR_OS}!\r\n Para mais informações entre em contato conosco.\r\n Atenciosamente, {EMITENTE} {TELEFONE_EMITENTE}.'),
+(7, 'notifica_whats', 'Prezado(a), {CLIENTE_NOME} a OS de nº {NUMERO_OS} teve o status alterado para: {STATUS_OS} segue a descrição {DESCRI_PRODUTOS} com valor total de {VALOR_OS}! Para mais informações entre em contato conosco. Atenciosamente, {EMITENTE} {TELEFONE_EMITENTE}.'),
 (8, 'control_baixa', '0'),
 (9, 'control_editos', '1'),
 (10, 'control_datatable', '1'),

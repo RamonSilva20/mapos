@@ -64,7 +64,7 @@
     shortcut.add("F8", function() {});
     shortcut.add("F9", function() {});
     shortcut.add("F10", function() {});
-    shortcut.add("F11", function() {});
+    //shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
     window.BaseUrl = "<?= base_url() ?>";
 </script>
@@ -109,31 +109,8 @@
         <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
         </ul>
       </li>
-<!-- Start Fullscreen -->
-      <li class="dropdown">
-        <a id="btn1" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="TelaCheia"><i class='bx bx-fullscreen' ></i></a>
-      </li>
-      <li class="dropdown fs-exit">
-        <a id="btn2" href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Sair TelaCheia"><i class='bx bx-exit-fullscreen' ></i></a>
-      </li>
-      <script type="text/javascript">
-          var btn1=document.getElementById("btn1")
-          var btn2=document.getElementById("btn2")
-          var el=document.documentElement;
-          btn1.addEventListener("click",()=>{
-            if (el.requestFullscreen) {
-              el.requestFullscreen()
-            }
-          })
-          btn2.addEventListener("click",()=>{
-            if (document.exitFullscreen) {
-            document.exitFullscreen()
-            }
-          })
-      </script>
-    </ul>
+</ul>
 </div>
-<!-- End Fullscreen -->
 
 <!-- New User -->
 <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
@@ -141,9 +118,9 @@
   {
       date_default_timezone_set('America/Sao_Paulo');
       $hora = date('H');
-      if ($hora >= 6 && $hora <= 12) {
+      if ($hora > 00 && $hora < 12) {
           return 'Bom dia, ';
-      } elseif ($hora > 12 && $hora <=18) {
+      } elseif ($hora > 12 && $hora < 18) {
           return 'Boa tarde, ';
       } else {
           return 'Boa noite, ';

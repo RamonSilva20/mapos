@@ -27,12 +27,12 @@ $totalProdutos = 0; ?>
                                 <?php
                                 } else { ?>
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
+                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                         <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente[0]->nome; ?></span> </br><span>
-                                                <?php echo $emitente[0]->cnpj; ?> </br>
-                                                <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span></td>
+                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <?php echo $emitente->cnpj; ?> </br>
+                                                <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
+                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
                                         <td style="width: 18%; text-align: center">#Protocolo: <span>
                                                 <?php echo $result->idOs ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y') ?></span></td>
@@ -170,7 +170,7 @@ $totalProdutos = 0; ?>
                                         echo '<tr>';
                                         echo '<td style="text-align: center">' . $s->nome . '</td>';
                                         echo '<td style="text-align: center">R$' . number_format($s->preco, 2, ',', '.') . '</td>';
-                                        echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                        echo '<td style="text-align: center">' . $s->quantidade . '</td>';
                                         echo '<td style="text-align: center">R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }

@@ -132,7 +132,8 @@ class Os extends MY_Controller
 
                 $idOs = $id;
                 $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente()[0];
+                $emitente = $this->mapos_model->getEmitente();
+              
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
@@ -161,7 +162,7 @@ class Os extends MY_Controller
                 }
 
                 $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de Produtos e Serviços!');
-                log_info('Adicionou uma OS');
+                log_info('Adicionou uma OS. ID: ' . $id);
                 redirect(site_url('os/editar/') . $id);
             } else {
                 $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
@@ -244,7 +245,7 @@ class Os extends MY_Controller
                 $idOs = $this->input->post('idOs');
 
                 $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente()[0];
+                $emitente = $this->mapos_model->getEmitente();
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
                 // Verificar configuração de notificação
@@ -322,6 +323,11 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
         $this->data['editavel'] = $this->os_model->isEditable($this->uri->segment(3));
+        $this->data['qrCode'] = $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
             [
@@ -361,7 +367,7 @@ class Os extends MY_Controller
         $this->data['qrCode'] = $this->os_model->getQrCode(
             $this->uri->segment(3),
             $this->data['configuration']['pix_key'],
-            $this->data['emitente'][0]
+            $this->data['emitente']
         );
 
         $this->load->view('os/imprimirOs', $this->data);
@@ -413,14 +419,14 @@ class Os extends MY_Controller
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
-        if (!isset($this->data['emitente'][0]->email)) {
+        if (!isset($this->data['emitente']->email)) {
             $this->session->set_flashdata('error', 'Efetue o cadastro dos dados de emitente');
             redirect(site_url('os'));
         }
 
         $idOs = $this->uri->segment(3);
 
-        $emitente = $this->data['emitente'][0];
+        $emitente = $this->data['emitente'];
         $tecnico = $this->usuarios_model->getById($this->data['result']->usuarios_id);
 
         // Verificar configuração de notificação
@@ -516,7 +522,7 @@ class Os extends MY_Controller
             }
         }
 
-        if ($os->idCobranca != null) {
+        if (isset($os->idCobranca) != null) {
             if ($os->status == "canceled") {
                 $this->os_model->delete('cobrancas', 'os_id', $id);
             } else {
@@ -790,41 +796,51 @@ class Os extends MY_Controller
                 $error['upload'][] = $this->upload->display_errors();
             } else {
                 $upload_data = $this->upload->data();
-
+        
+                // Gera um nome de arquivo aleatório mantendo a extensão original
+                $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
+                $new_file_path = $upload_data['file_path'] . $new_file_name;
+        
+                rename($upload_data['full_path'], $new_file_path);
+        
                 if ($upload_data['is_image'] == 1) {
-                    // set the resize config
                     $resize_conf = [
-
-                        'source_image' => $upload_data['full_path'],
-                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $upload_data['file_name'],
+                        'source_image' => $new_file_path,
+                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
                         'width' => 200,
                         'height' => 125,
                     ];
-
+        
                     $this->image_lib->initialize($resize_conf);
-
+        
                     if (!$this->image_lib->resize()) {
                         $error['resize'][] = $this->image_lib->display_errors();
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $upload_data['file_name'], $directory);
+                        $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $new_file_name, $directory);
+                        if (!$result) {
+                            $error['db'][] = 'Erro ao inserir no banco de dados.';
+                        }
                     }
                 } else {
                     $success[] = $upload_data;
-
+        
                     $this->load->model('Os_model');
-
-                    $this->Os_model->anexar($this->input->post('idOsServico'), $upload_data['file_name'], base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+        
+                    $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    if (!$result) {
+                        $error['db'][] = 'Erro ao inserir no banco de dados.';
+                    }
                 }
             }
         }
-
+        
         if (count($error) > 0) {
-            echo json_encode(['result' => false, 'mensagem' => 'Nenhum arquivo foi anexado.']);
+            echo json_encode(['result' => false, 'mensagem' => 'Ocorreu um erro ao processar os arquivos.', 'errors' => $error]);
         } else {
             log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
-            echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso .']);
+            echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
         }
     }
 
@@ -995,9 +1011,8 @@ class Os extends MY_Controller
         $dados['produtos'] = $this->os_model->getProdutos($idOs);
         $dados['servicos'] = $this->os_model->getServicos($idOs);
         $dados['emitente'] = $this->mapos_model->getEmitente();
-
-        $emitente = $dados['emitente'][0]->email;
-        if (!isset($emitente)) {
+        $emitente = $dados['emitente'];
+        if (!isset($emitente->email)) {
             return false;
         }
 
@@ -1007,7 +1022,7 @@ class Os extends MY_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente, 'Subject' => $assunto, 'Return-Path' => ''];
+            $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
             $email = [
                 'to' => $remetente,
                 'message' => $html,

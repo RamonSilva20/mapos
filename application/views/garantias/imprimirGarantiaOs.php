@@ -71,12 +71,10 @@
 
 <body>
 
-
     <div class="container-fluid page" id="viaCliente">
         <div class="subpage">
             <div class="row-fluid">
                 <div class="span12">
-
                     <div class="invoice-content">
                         <div class="invoice-head" style="margin-bottom: 0">
 
@@ -96,10 +94,13 @@
                                                     <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?>
                                                 </span>
                                             </td>
-                                            <td style="width: 18%; text-align: center">
-                                                <br /> <br />
+                                            <td style="width: 20%; text-align: center">
+                                                <br />
+                                                <span>Garantia OS: <?= $osGarantia->idOs ? $osGarantia->idOs : ""?>
+                                                </span>
+                                                <br />
                                                 <span>Emissão:
-                                                    <?php echo date('d/m/Y'); ?>
+                                                    <?= $osGarantia->osDataFinal ? date('d/m/Y', strtotime($osGarantia->osDataFinal)) : "" ?>
                                                 </span>
                                             </td>
                                         </tr>
@@ -129,7 +130,7 @@
                                             <ul>
                                                 <li>
 
-                                                    <span><?php echo htmlspecialchars_decode($result->textoGarantia) ?></span><br />
+                                                    <span><?php echo htmlspecialchars_decode($osGarantia->textoGarantia) ?></span><br />
                                                 </li>
                                             </ul>
                                         </td>
@@ -144,6 +145,7 @@
                                         </td>
                                         <td>Assinatura do Cliente
                                             <hr>
+                                            
                                         </td>
                                         <td>Assinatura do Técnico Responsável
                                             <hr>
