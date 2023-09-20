@@ -241,7 +241,7 @@ GOTO step00
 :: <=== Inicio STEP07 ===>
 :step07
 CHOICE /C SN /M "Gostaria de ativar disparo automatico de Emails?"
-IF ERRORLEVEL 2 ECHO "* Nao alterado valor da primeira OS." && SET stepnext=step08 && GOTO step00
+IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step08 && GOTO step00
 IF ERRORLEVEL 1 ECHO.
 SET ps=%dirDefault%\schedule.ps1
 ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/process' -WorkingDirectory 'C:\xampp\htdocs\mapos'>%ps%
@@ -263,8 +263,8 @@ GOTO step00
 
 :: <=== Inicio STEP08 ===>
 :step08
-CHOICE /C SN /M "Gostaria de alterar o numero da primeira OS?"
-IF ERRORLEVEL 2 SET stepnext=stepfim && GOTO step00
+CHOICE /C SN /M "Gostaria de alterar o numero da proxima OS?"
+IF ERRORLEVEL 2 echo "* Nao alterado valor da proxima OS." && SET stepnext=stepfim && GOTO step00
 IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
 SET stepnext=stepfim
