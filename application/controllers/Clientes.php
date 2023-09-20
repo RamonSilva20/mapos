@@ -185,6 +185,7 @@ class Clientes extends MY_Controller
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
         $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
+        $this->data['result_vendas'] = $this->clientes_model->getAllVendasByClient($this->uri->segment(3));
         $this->data['view'] = 'clientes/visualizar';
         return $this->layout();
     }
