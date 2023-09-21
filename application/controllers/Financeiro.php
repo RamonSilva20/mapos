@@ -49,6 +49,7 @@ class Financeiro extends MY_Controller
                 $where = "data_vencimento >= '$dateString'";
             } else {
                 $where .= " AND data_vencimento >= '$date'";
+            }
         }
 
         if (!empty($vencimento_ate)) {
