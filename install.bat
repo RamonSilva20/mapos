@@ -31,7 +31,7 @@ ECHO For Each strArg in WScript.Arguments >> "%vbsGetPrivileges%"
 ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
 ECHO Next >> "%vbsGetPrivileges%"
 
-IF '%cmdInvoke%'=='1' GOTO InvokeCmd 
+IF '%cmdInvoke%'=='1' GOTO InvokeCmd
 
 ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
 GOTO ExecElevation.
