@@ -57,7 +57,7 @@ CLS
 
 ::::::::::::::::::::::::::::
 :: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
-:: Versao Instalador: v2.3.20230815
+:: Versao Instalador: v2.4.20230920
 :: Publicado na versao 4.41.0 do MapOS
 ::::::::::::::::::::::::::::
 
@@ -100,8 +100,6 @@ ECHO Ao seguir com a execucao desse script, voce esta ciente de que caso exista 
 ECHO.
 ECHO Portanto, recomendamos que voce faca backup de todos os dados importantes antes de prosseguir com a instalacao. Ao continuar com a instalacao, voce concorda que nao responsabilizara os desenvolvedores do script por quaisquer perdas de dados que possam ocorrer como resultado da remocao dessas instalacoes.
 ECHO.
-@REM ECHO Recomendamos tambem, caso haja uma instalacao previa do XAMPP, MySQL, Composer ou MAP-OS, desinstale/delete para que o script realize a instalacao adequada para que a aplicacao inicie corretamente.
-ECHO.
 CHOICE /C SN /M "Aceita os termos acima?"
 IF ERRORLEVEL 2 SET stepnext=stepNaoAceite && GOTO step00
 IF ERRORLEVEL 1 SET stepnext=step01 && GOTO step00
@@ -112,10 +110,6 @@ PAUSE
 :step01
 ECHO 01 BAIXANDO DEPENDENCIAS...
 ECHO.
-ECHO 01.0 Verificando instancias em execucao
-TASKLIST | find "httpd.exe" >NUL 2>&1 && ( ECHO Finalizando o Apache... && TASKKILL /F /IM httpd.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
-TASKLIST | find "mysqld.exe" >NUL 2>&1 && ( ECHO Finalizando o MySQL... && TASKKILL /F /IM mysqld.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
-TASKLIST | find "xampp-control.exe" >NUL 2>&1 && ( ECHO Finalizando o Xampp-Control... && TASKKILL /F /IM xampp-control.exe /T >NUL 2>&1 && TIMEOUT /T 3 >NUL 2>&1 )
 ECHO 01.1 Verificando pasta de instalacao
 IF not EXIST %dirDefault% mkdir %dirDefault% >NUL 2>&1
 ECHO 01.2 Verificando Wget
@@ -135,8 +129,8 @@ GOTO step00
 ECHO 02 SERVIDOR WEB XAMPP...
 ECHO.
 ECHO 02.1 Executando instalador XAMPP
+IF EXIST "%dirXampp%\xampp-control.exe" SET stepnext=step03 && GOTO step00
 ECHO * Por favor aguarde, a instalacao pode levar ate 5 min.
-IF EXIST %dirXampp%\xampp-control.ini del %dirXampp%\xampp-control.ini
 START /wait %dirDefault%\xampp.exe --mode unattended
 IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\xampp.exe && ECHO Falha na instalacao do XAMPP, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 ECHO 02.2 Configurando XAMPP
@@ -164,10 +158,10 @@ GOTO step00
 ECHO 03 INSTALACAO SISTEMA MAP-OS...
 ECHO.
 ECHO 03.1 Extracao dos arquivos MAP-OS
+IF EXIST %dirHtdocs%\mapos\index.php SET stepnext=step04 && GOTO step00
 PowerShell -ExecutionPolicy Bypass -Command "Expand-Archive %dirDefault%\MapOS.zip %dirHtdocs%" -Force
 IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\MapOS.zip && ECHO Falha na extracao do Map-OS, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 ECHO 03.2 Correcao da Pasta MAP-OS
-IF EXIST %dirHtdocs%\mapos rename %dirHtdocs%\mapos mapos-bkp%date:~6,10%%date:~3,2%%date:~0,2%
 FOR /F "tokens=4" %%B IN ( ' dir "%dirHtdocs%\" ^| findstr /I /C:"RamonSilva20" ' ) DO IF NOT EXIST %dirHtdocs%\mapos rename %dirHtdocs%\%%B mapos
 SET stepnext=step04
 GOTO step00
@@ -178,11 +172,14 @@ GOTO step00
 ECHO 04 COMPLEMENTO COMPOSER...
 ECHO.
 ECHO 04.1 Executando instalador COMPOSER
+PowerShell composer --version >NUL 2>&1
+IF %ErrorLevel% EQU 0 ( GOTO step04-2 )
 START /wait %dirDefault%\composer.exe /SILENT /ALLUSERS
 IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\composer.exe && ECHO Falha na execucao do COMPOSER, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
 TIMEOUT /T 5 >NUL
+:step04-2
 ECHO 04.2 Instalacao do complemento COMPOSER
-START /I /D %dirHtdocs%\mapos /WAIT PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev
+IF NOT EXIST %dirHtdocs%\mapos\application\vendor START /I /D %dirHtdocs%\mapos /WAIT PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev
 SET stepnext=step05
 GOTO step00
 :: <=== Fim STEP04 ===>
@@ -211,17 +208,17 @@ IF ERRORLEVEL 1 SET stepnext=step06 && GOTO step00
 :: <=== Inicio STEP06 ===>
 :step06
 CHOICE /C SN /M "Gostaria de configurar os dados de e-mail?"
-IF ERRORLEVEL 2 SET stepnext=step07 && GOTO step00
+IF ERRORLEVEL 2 ECHO "* Dados de Email nao alterado." && SET stepnext=step07 && GOTO step00
 IF ERRORLEVEL 1 ECHO.
-SET /p protocolo=Informe o Protocolo (Padrao: SMTP):
-SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com):
-SET /p criptografia=Informe a Criptografia (SSL/TLS):
-SET /p porta=Informe a Porta (Ex: 587):
-SET /p email=Informe o Email (Ex: nome@seudominio.com):
-SET /p senha=Informe a Senha (****):
+SET /p protocolo=Informe o Protocolo (Padrao: SMTP): 
+SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com): 
+SET /p criptografia=Informe a Criptografia (SSL/TLS): 
+SET /p porta=Informe a Porta (Ex: 587): 
+SET /p email=Informe o Email (Ex: nome@seudominio.com): 
+SET /p senha=Informe a Senha (****): 
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
-IF ERRORLEVEL 2 SET stepnext=step06 && GOTO step00
+IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step06 && GOTO step00
 IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\config\email.php
 PowerShell -command "&Set-Content -Path '%dirEmail%' -Value '<?php'"
 ECHO $config['protocol']         = '%protocolo%';>>%dirEmail%
@@ -244,7 +241,7 @@ GOTO step00
 :: <=== Inicio STEP07 ===>
 :step07
 CHOICE /C SN /M "Gostaria de ativar disparo automatico de Emails?"
-IF ERRORLEVEL 2 SET stepnext=step08 && GOTO step00
+IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step08 && GOTO step00
 IF ERRORLEVEL 1 ECHO.
 SET ps=%dirDefault%\schedule.ps1
 ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/process' -WorkingDirectory 'C:\xampp\htdocs\mapos'>%ps%
@@ -266,9 +263,9 @@ GOTO step00
 
 :: <=== Inicio STEP08 ===>
 :step08
-CHOICE /C SN /M "Gostaria de alterar o numero da primeira OS?"
-IF ERRORLEVEL 2 SET stepnext=stepfim && GOTO step00
-IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1):
+CHOICE /C SN /M "Gostaria de alterar o numero da proxima OS?"
+IF ERRORLEVEL 2 echo "* Nao alterado valor da proxima OS." && SET stepnext=stepfim && GOTO step00
+IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
 SET stepnext=stepfim
 GOTO step00
@@ -279,10 +276,6 @@ GOTO step00
 ECHO  ************************************************
 ECHO  ****    MAPOS CONFIGURADO COM SUCESSO       ****
 ECHO  ************************************************
-ECHO.
-ERASE /F /S /Q "%dirDefault%\*.*" >NUL
-RMDIR /Q /S "%dirDefault%\" >NUL
-TIMEOUT /T 5 >NUL
 GOTO StepSair
 :: <=== Inicio STEP FIM ===>
 
