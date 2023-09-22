@@ -60,7 +60,7 @@ URL: http://localhost:8000/
 ### Instalação Automatizada (Ubuntu/Debian)
 1. Abra o Terminal ou acesse seu servidor via SSH;
 2. Eleve o privilégio aplicando `sudo su` (Recomendado);
-3. Execute o comando: `curl -o MapOS_Install.sh -L https://raw.githubusercontent.com/barretowiisk/mapos/feature/Install-Linux/install.sh && chmod +x MapOS_Install.sh && ./MapOS_Install.sh`
+3. Execute o comando: `curl -o MapOS_Install.sh -L https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.sh && chmod +x MapOS_Install.sh && ./MapOS_Install.sh`
 
 ### Atualização
 
