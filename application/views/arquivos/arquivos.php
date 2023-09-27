@@ -59,7 +59,8 @@
                                 <td><?= $r->idDocumentos ?></td>
                                 <td>
                                     <?php if (@getimagesize($r->path)) : ?>
-                                        <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
+                                        <a href="#" class="miniatura-link" data-miniatura-url="<?= $r->url ?>">
+                                        <img src="<?= $r->url ?>" class="miniatura-imagem">
                                     <?php else : ?>
                                         <span>-</span>
                                     <?php endif ?>
@@ -89,6 +90,35 @@
             </div>
         </div>
     </div>
+<!-- Modal Visualizar imagem -->
+<div id="modal-miniatura" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h5 id="myModalLabel">Visualizr</h5>
+    </div>
+    <div class="modal-body">
+        <img id="miniatura-grande" src="" alt="Miniatura" style="max-width: 100%; height: auto;">
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Adicione um evento de clique nas miniaturas
+        $(document).on('click', 'a.miniatura-link', function(event) {
+            event.preventDefault(); 
+            var miniaturaUrl = $(this).attr('data-miniatura-url'); 
+            $('#miniatura-grande').attr('src', miniaturaUrl); 
+            $('#modal-miniatura').modal('show'); 
+        });
+
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+</script>
+
+
+
 
     <?= $this->pagination->create_links() ?>
 
