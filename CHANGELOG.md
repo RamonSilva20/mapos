@@ -4,6 +4,21 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.41.0] - 2023-09-16
+### Fixed
+- Sobreposição mini calendário ao adicionar/editar venda. [@barretowiisk](https://github.com/barretowiisk)
+- Erro no upload na OS (aba Anexos). [@barretowiisk](https://github.com/barretowiisk)
+- Correção para aparecer o ID da OS que o usuario adicionou em logs. [@Fesantt](https://github.com/Fesantt)
+- Remoção de linhas na impressão de Vendas. [@lukasabino](https://github.com/lukasabino)
+- Variável em visualizar OS na área do cliente. [@Wilmerson](https://github.com/willph)
+- Variável emitente e cliente quando vazia ao resetar senha. [@Wilmerson](https://github.com/willph)
+- Acessar propriedade inválida em usuário. [@Wilmerson](https://github.com/willph)
+
+### Added
+- Impressão de orçamento de venda. [@barretowiisk](https://github.com/barretowiisk)
+- Aba de vendas em clientes. [@lukasabino](https://github.com/lukasabino)
+- Vincula cliente/fornecedor a lançamento parcelado. [@lukasabino](https://github.com/lukasabino)
+
 ## [4.40.0] - 2023-05-14
 ### Fixed
 
@@ -16,7 +31,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigido botão voltar em editor de texto. [@MilsonElias](https://github.com/MilsonElias)
 - Corrigido nome de usuário em log de auditoria. [@HenriqueMiranda](https://github.com/Henrique-Miranda)
 - Corrigido relatórios financeiros. [@Wilmerson](https://github.com/willph)
-- Corrigido problema de fullscreen e whatsapp. [@WilliamCamargo](https://github.com/WillianCamargo01) 
+- Corrigido problema de fullscreen e whatsapp. [@WilliamCamargo](https://github.com/WillianCamargo01)
 
 ### Added
 

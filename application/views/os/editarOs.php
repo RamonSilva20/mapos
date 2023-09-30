@@ -6,20 +6,8 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
-<style>
-    .ui-datepicker {
-        z-index: 99999 !important;
-    }
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
 
-    .trumbowyg-box {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    textarea {
-        resize: vertical;
-    }
-</style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">

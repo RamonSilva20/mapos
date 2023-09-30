@@ -5,6 +5,8 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">

@@ -64,3 +64,17 @@
 .modal-body .control-group .help-inline {
     margin-bottom: 8px!important;
 }
+
+/* Correção do Mini Caledário */
+.ui-datepicker {
+    z-index: 9999 !important;
+}
+
+.trumbowyg-box {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+textarea {
+        resize: vertical;
+    }

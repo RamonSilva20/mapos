@@ -222,6 +222,32 @@ class Vendas extends MY_Controller
         $this->load->view('vendas/imprimirVendaTermica', $this->data);
     }
 
+    public function imprimirVendaOrcamento()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar vendas.');
+            redirect(base_url());
+        }
+
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->vendas_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
+
+        $this->load->view('vendas/imprimirVendaOrcamento', $this->data);
+    }
+    
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
