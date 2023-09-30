@@ -19,7 +19,7 @@
                     <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-dollar-circle"></i></span> <span class="button__text">Orçamento</span></a>
                     <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
-                        <span class="button__icon"><i class="bx bx-file" ></i></span> <span class="button__text">Papel A4</span></a>
+                        <span class="button__icon"><i class="bx bx-file"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-receipt"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                 </div>
