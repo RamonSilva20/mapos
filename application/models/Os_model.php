@@ -357,7 +357,6 @@ public function getQrCodeE($idOs)
     }
     $url = base_url("index.php/os/visualizar/$idOs");
     require_once(APPPATH . 'third_party/phpqrcode/qrlib.php');
-    $tempPath = FCPATH . 'path/para/sua/pasta/temporaria/qr_codes/';
     if (!is_dir($tempPath)) {
         mkdir($tempPath, 0777, true);
     }
