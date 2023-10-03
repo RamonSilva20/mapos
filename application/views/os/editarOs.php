@@ -28,6 +28,8 @@
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
                     <a target="_blank" title="Imprimir OS Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
+                        <a target="_blank" title="Imprimir OS Etiqueta" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirEtiqueta/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Etiqueta</span></a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);

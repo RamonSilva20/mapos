@@ -349,6 +349,28 @@ class Os_model extends CI_Model
         return true;
     }
 
+// FUNÇÃO PARA GERAR QR CODE ETIQUETA OS
+public function getQrCodeE($idOs)
+{
+    if (empty($idOs)) {
+        return null; 
+    }
+    $url = base_url("index.php/os/visualizar/$idOs");
+    require_once(APPPATH . 'third_party/phpqrcode/qrlib.php');
+    $tempPath = FCPATH . 'path/para/sua/pasta/temporaria/qr_codes/';
+    if (!is_dir($tempPath)) {
+        mkdir($tempPath, 0777, true);
+    }
+    $tempFilename = 'qr_code_temp.png';
+    $tempFilePath = $tempPath . $tempFilename;
+    QRcode::png($url, $tempFilePath);
+    $qrCodeImage = file_get_contents($tempFilePath);
+    unlink($tempFilePath);
+    return $qrCodeImage;
+}
+
+// FIM FUNÇÃO GERAR ETIQUETA OS QRCODE
+
     public function getQrCode($id, $pixKey, $emitente)
     {
         if (empty($id) || empty($pixKey) || empty($emitente)) {
