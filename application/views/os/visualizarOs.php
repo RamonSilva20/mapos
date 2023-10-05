@@ -110,6 +110,11 @@
                                 <?php if ($result->dataInicial != null) { ?>
                                     <tr>
                                         <td>
+                                            <b>PRIORIDADE: </b>
+                                            <?php echo $result->prioridade ?>
+                                        </td>
+
+                                        <td>
                                             <b>STATUS OS: </b>
                                             <?php echo $result->status ?>
                                         </td>
