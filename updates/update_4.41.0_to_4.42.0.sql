@@ -1,0 +1,1 @@
+ALTER TABLE `os` ADD `prioridade` VARCHAR(45) NULL DEFAULT NULL;
