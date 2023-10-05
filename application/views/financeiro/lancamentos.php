@@ -392,6 +392,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     		<div class="span6" style="margin-left: 0"> 
     			<label for="cliente_parc">Cliente/Fornecedor*</label>
     			<input class="span11" id="cliente_parc" type="text" name="cliente_parc" required />
+                <input class="span11" id="idCliente_parc" type="hidden" name="idCliente_parc" value="" />
     		</div>
 		
 			<div class="span6" style="margin-left: 0">
@@ -992,6 +993,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_parc").val(ui.item.label);
+                $("#idCliente_parc").val(ui.item.id);
             }
         });
 
@@ -1036,6 +1038,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 				$('#abrirmodalreceitaparcelada').trigger('click');
 				$("#descricao_parc").val($("#descricao").val());
 				$("#cliente_parc").val($("#cliente").val());
+                $("#idCliente_parc").val($("#idCliente").val());
                 $("#tipo_parc").val($("#tipo").val());
                 $("#formaPgto_parc").val($("#formaPgto").val());
 				$("#pcontas_parc").val($("#pcontas").val());
@@ -1052,6 +1055,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 					$('#abrirmodalreceitaparcelada').trigger('click');
 					$("#descricao_parc").val($("#descricao").val());
 					$("#cliente_parc").val($("#cliente").val());
+                    $("#idCliente_parc").val($("#idCliente").val());
                     $("#tipo_parc").val($("#tipo").val());
                     $("#formaPgto_parc").val($("#formaPgto").val());
 					$("#pcontas_parc").val($("#pcontas").val());
