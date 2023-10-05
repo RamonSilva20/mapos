@@ -283,19 +283,12 @@ class Financeiro extends MY_Controller
                         'data_pagamento' => $recebimento ?: date_format($myDateTime, "Y-m-d"),
                         'baixado' => 0,
                         'cliente_fornecedor' => $this->input->post('cliente_parc'),
+                        'clientes_id ' => $this->input->post('idCliente_parc'),
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
                         'usuarios_id' => $this->session->userdata('id_admin'),
-
                     ];
-
-                    if (set_value('idFornecedor')) {
-                        $data['clientes_id'] = set_value('idFornecedor');
-                    }
-                    if (set_value('idCliente')) {
-                        $data['clientes_id'] = set_value('idCliente');
-                    }
 
                     if ($this->financeiro_model->add('lancamentos', $data) == true) {
                         $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
@@ -319,13 +312,11 @@ class Financeiro extends MY_Controller
                     'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format("Y-m-d"),
                     'baixado' => 1,
                     'cliente_fornecedor' => $this->input->post('cliente_parc'),
+                    'clientes_id' => $this->input->post('idCliente_parc'),
                     'observacoes' => $this->input->post('observacoes_parc'),
                     'forma_pgto' => $this->input->post('formaPgto_parc'),
                     'tipo' => $this->input->post('tipo_parc'),
                     'usuarios_id' => $this->session->userdata('id_admin'),
-
-
-
                 ];
                 // if (empty($data['valor_desconto'])) {
                 //     $data['valor_desconto'] =  "0";
