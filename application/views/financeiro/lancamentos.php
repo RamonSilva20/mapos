@@ -392,6 +392,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     		<div class="span6" style="margin-left: 0"> 
     			<label for="cliente_parc">Cliente/Fornecedor*</label>
     			<input class="span11" id="cliente_parc" type="text" name="cliente_parc" required />
+                <input class="span11" id="idCliente" type="hidden" name="idCliente" value="" />
     		</div>
 		
 			<div class="span6" style="margin-left: 0">
