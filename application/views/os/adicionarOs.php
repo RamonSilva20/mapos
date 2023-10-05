@@ -41,7 +41,16 @@
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
+                                        <div class="span2">
+                                            <label for="prioridade">Prioridade<span class="required">*</span></label>
+                                            <select class="span12" name="prioridade" id="prioridade" value="">
+                                                <option value="Baixa">Baixa</option>
+                                                <option value="Normal" selected>Normal</option>
+                                                <option value="Alta">Alta</option>
+                                                <option value="Critica">Crítica</option>
+                                            </select>
+                                        </div>
+                                        <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option value="Orçamento">Orçamento</option>
@@ -52,19 +61,21 @@
                                                 <option value="Aguardando Peças">Aguardando Peças</option>
                                                 <option value="Aprovado">Aprovado</option>
                                             </select>
-                                        </div>
-                                        <div class="span3">
+                                        </div>  
+                                        <div class="span2">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="dataFinal">Data Final<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="" />
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" placeholder="Status s/g inserir nº/0" min="0" max="9999" class="span12" name="garantia" value="" />
-                                            <?php echo form_error('garantia'); ?>
+                                        </div>
+                                        <div class="span2">
+                                        <?php echo form_error('garantia'); ?>
                                             <label for="termoGarantia">Termo Garantia</label>
                                             <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="" />
                                             <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="" />
@@ -107,7 +118,6 @@
                         </div>
                     </div>
                 </div>
-                .
             </div>
         </div>
     </div>
