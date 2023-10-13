@@ -877,7 +877,6 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 
         $(document).on('click', '.editar', function(event) {
-            console.log($(this).attr('valor'));
             $("#idEditar").val($(this).attr('idLancamento'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#usuarioEditar").val($(this).attr('usuario'));
