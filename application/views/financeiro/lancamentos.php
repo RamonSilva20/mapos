@@ -343,7 +343,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Pix">Pix</option>
                             <option value="Boleto">Boleto</option>
-                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Crédito" selected>Cartão de Crédito</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
                             <option value="Cheque">Cheque</option> 
                             <option value="Cheque Pré-datado">Cheque Pré-datado</option> 
