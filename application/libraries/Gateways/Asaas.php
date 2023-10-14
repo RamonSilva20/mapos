@@ -435,7 +435,7 @@ class Asaas extends BasePaymentGateway
             'groupName' => 'mapos',
         ]);
 
-        if(!$result){
+        if(!$result) {
             // Lide com o caso em que $id é nulo
             throw new \Exception('Erro ao criar cliente na Asaas!');
         }
