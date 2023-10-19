@@ -559,7 +559,7 @@ class Mapos extends MY_Controller
                     'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
                     'desconto' => '<b>Desconto:</b> R$ ' . number_format($os->desconto, 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> R$ ' . number_format(($os->totalProdutos + $os->totalServicos) - $os->desconto, 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ '. number_format($os->valorTotal - $os->desconto, 2, ',', '.') : "PENDENTE"),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ]
             ];
