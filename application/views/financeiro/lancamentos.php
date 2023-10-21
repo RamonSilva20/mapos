@@ -595,7 +595,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="idEditar" name="id" value="" />
-                    <input class="span12 money" type="text" name="valorEditar" id="valorEditar" value="<?php echo number_format("0.00", 2, ',', '.') ?>" required />
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?php echo number_format("0.00", 2, ',', '.') ?>" required />
                 </div>
 
         <div class="span4">  
