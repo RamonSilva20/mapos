@@ -571,7 +571,8 @@ class Mapos extends MY_Controller
             ->set_output(json_encode($events));
     }
 
-    private function desconto($valorTotal, $desconto, $tipo_desconto) {
+    private function desconto($valorTotal, $desconto, $tipo_desconto)
+    {
         if ($tipo_desconto === 'real') {
             return $desconto;
         }
