@@ -113,6 +113,12 @@ Doações podem ser realizadas nos links:
 * [catarse/mapos](https://www.catarse.me/mapos) - Mensal
 * [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
 
+### Hospedagem Parceira
+Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como SysGo para oferecer hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
+
+<a href="https://sysgo.com.br/" href="_blank">![SysGo](https://github.com/barretowiisk/mapos/assets/45976190/7f989287-72a4-4cde-9396-31079f517b23)
+</a>
+
 ### Contribuidores
 [![Contribuidores](https://contrib.rocks/image?repo=RamonSilva20/mapos)](https://github.com/RamonSilva20/mapos/graphs/contributors)
 
