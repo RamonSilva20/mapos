@@ -326,7 +326,7 @@ class Mapos extends MY_Controller
         }
 
         $usuario = $this->mapos_model->getById($id);
-        
+
         if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
             unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
         }
@@ -334,7 +334,7 @@ class Mapos extends MY_Controller
         $image = $this->do_upload_user();
         $imageUserPath = $image;
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
-        
+
         if ($retorno) {
             $this->session->set_userdata('url_image_user', $imageUserPath);
             $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
@@ -558,8 +558,8 @@ class Mapos extends MY_Controller
                     'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
                     'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto($os->valorTotal, $os->desconto, $os->tipo_desconto), 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ '. number_format($os->valorTotal - $this->desconto($os->valorTotal, $os->desconto, $os->tipo_desconto), 2, ',', '.') : "PENDENTE"),
+                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ '. number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : "PENDENTE"),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ]
             ];
@@ -571,14 +571,13 @@ class Mapos extends MY_Controller
             ->set_output(json_encode($events));
     }
 
-    private function desconto($valorTotal, $desconto, $tipo_desconto)
-    {
-        if ($tipo_desconto === 'real') {
-            return $desconto;
-        }
-
-        if ($tipo_desconto === 'porcento') {
-            return $valorTotal * ($desconto / 100);
-        }
+    private function desconto(
+        float $valorTotal,
+        float $desconto,
+        string $tipoDesconto
+    ) {
+        return $tipoDesconto === 'porcento'
+            ? $valorTotal * ($desconto / 100)
+            : $desconto;
     }
 }
