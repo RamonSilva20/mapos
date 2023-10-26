@@ -558,8 +558,8 @@ class Mapos extends MY_Controller
                     'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
                     'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
                     'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto:</b> R$ ' . number_format($os->desconto, 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ '. number_format($os->valorTotal - $os->desconto, 2, ',', '.') : "PENDENTE"),
+                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto($os->valorTotal, $os->desconto, $os->tipo_desconto), 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ '. number_format($os->valorTotal - $this->desconto($os->valorTotal, $os->desconto, $os->tipo_desconto), 2, ',', '.') : "PENDENTE"),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ]
             ];
@@ -569,5 +569,16 @@ class Mapos extends MY_Controller
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($events));
+    }
+
+    private function desconto($valorTotal, $desconto, $tipo_desconto)
+    {
+        if ($tipo_desconto === 'real') {
+            return $desconto;
+        }
+
+        if ($tipo_desconto === 'porcento') {
+            return $valorTotal * ($desconto / 100);
+        }
     }
 }
