@@ -4,6 +4,28 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.42.0] - 2023-10-25
+### Fixed
+- Erro na aba OS. [@barretowiisk](https://github.com/barretowiisk)
+- Correção nos lançamentos financeiros. [@barretowiisk](https://github.com/barretowiisk)
+- Correção no formato de datas no financeiro. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em Clientes. [@lukasabino](https://github.com/lukasabino)
+- Sobreposição mini calendário ao adicionar/editar venda. [@barretowiisk](https://github.com/barretowiisk)
+- Correção no instalador do Windows. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em fechamento de if. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Correção do ícone de limpar na área de relatório. [@WilliamCamargo](https://github.com/WillianCamargo01)
+- Correção do mini calendário que ao clicar na data para faturar uma Os ou Venda ele fica atrás do modal. [@WilliamCamargo](https://github.com/WillianCamargo01)
+- Correção da instalação via docker. [@thdev-matheus](https://github.com/thdev-matheus)
+- Correção em orçamento de venda. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em lançamento parcelado. [@lukasabino](https://github.com/lukasabino)
+- Correção em cabeçalho ao faturar OS. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em modal de desconto de OS do calendário no dashboard. [@barretowiisk](https://github.com/barretowiisk)
+- Correção de desconto em calendário. [@Wilmerson](https://github.com/willph)
+- Correção em modal de editar lançamento financeiro. [@Wilmerson](https://github.com/willph)
+
+### Added
+- Auto Instalador Map-OS Ubuntu/Debian. [@barretowiisk](https://github.com/barretowiisk)
+
 ## [4.41.0] - 2023-09-16
 ### Fixed
 - Sobreposição mini calendário ao adicionar/editar venda. [@barretowiisk](https://github.com/barretowiisk)
