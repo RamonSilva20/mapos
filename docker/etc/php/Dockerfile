@@ -1,8 +1,8 @@
 FROM php:8.2.5-fpm
 
 # Install extension
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y \
+RUN apt update && apt upgrade -y \
+    && apt install -y \
     g++ \
     libbz2-dev \
     libc-client-dev \
@@ -52,8 +52,8 @@ RUN apt-get update && apt-get upgrade -y \
     && pecl install redis && docker-php-ext-enable redis \
     && yes '' | pecl install imagick && docker-php-ext-enable imagick \
     && docker-php-source delete \
-    && apt-get remove -y g++ wget \
-    && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
+    && apt remove -y g++ wget \
+    && apt autoremove --purge -y && apt autoclean -y && apt clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* /var/tmp/*
 
@@ -61,7 +61,7 @@ RUN apt-get update && apt-get upgrade -y \
 RUN usermod -u 1000 www-data
 
 # Install supervisor and cron
-RUN apt-get update && apt-get install supervisor cron -y
+RUN apt update && apt install supervisor cron -y
 
 # Setup cron jobs
 RUN touch /var/log/cron.log

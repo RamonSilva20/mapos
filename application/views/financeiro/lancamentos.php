@@ -159,7 +159,7 @@ $periodo = $this->input->get('periodo');
                             }
 
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . number_format($r->valor, 2, ',', '.') . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
@@ -343,7 +343,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Pix">Pix</option>
                             <option value="Boleto">Boleto</option>
-                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Crédito" selected>Cartão de Crédito</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
                             <option value="Cheque">Cheque</option> 
                             <option value="Cheque Pré-datado">Cheque Pré-datado</option> 
@@ -392,6 +392,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     		<div class="span6" style="margin-left: 0"> 
     			<label for="cliente_parc">Cliente/Fornecedor*</label>
     			<input class="span11" id="cliente_parc" type="text" name="cliente_parc" required />
+                <input class="span11" id="idCliente_parc" type="hidden" name="idCliente_parc" value="" />
     		</div>
 		
 			<div class="span6" style="margin-left: 0">
@@ -992,6 +993,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_parc").val(ui.item.label);
+                $("#idCliente_parc").val(ui.item.id);
             }
         });
 
@@ -1036,6 +1038,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 				$('#abrirmodalreceitaparcelada').trigger('click');
 				$("#descricao_parc").val($("#descricao").val());
 				$("#cliente_parc").val($("#cliente").val());
+                $("#idCliente_parc").val($("#idCliente").val());
                 $("#tipo_parc").val($("#tipo").val());
                 $("#formaPgto_parc").val($("#formaPgto").val());
 				$("#pcontas_parc").val($("#pcontas").val());
@@ -1052,6 +1055,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 					$('#abrirmodalreceitaparcelada').trigger('click');
 					$("#descricao_parc").val($("#descricao").val());
 					$("#cliente_parc").val($("#cliente").val());
+                    $("#idCliente_parc").val($("#idCliente").val());
                     $("#tipo_parc").val($("#tipo").val());
                     $("#formaPgto_parc").val($("#formaPgto").val());
 					$("#pcontas_parc").val($("#pcontas").val());

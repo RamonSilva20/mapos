@@ -62,13 +62,13 @@ class Asaas extends BasePaymentGateway
             'cobrancas/emails/cobranca',
             [
                 'cobranca' => $cobranca,
-                'emitente' => $emitente[0],
+                'emitente' => $emitente,
                 'paymentGatewaysConfig' => $this->ci->config->item('payment_gateways'),
             ],
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = "Cobrança - " . $emitente->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -78,7 +78,7 @@ class Asaas extends BasePaymentGateway
         $remetentes = [$cobranca->email];
         foreach ($remetentes as $remetente) {
             $headers = [
-                'From' => $emitente[0]->email,
+                'From' => $emitente->email,
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];
@@ -144,8 +144,14 @@ class Asaas extends BasePaymentGateway
                     'value' => round($cobranca->total / 100, 2)
                 ]
             );
-            if (!$result || $result->errors) {
-                throw new \Exception('Erro ao chamar Asaas!');
+            if ($result && !empty($result->errors)) {
+                // A resposta da API inclui erros
+                foreach ($result->errors as $error) {
+                    throw new \Exception('Erro ao chamar Asaas.\n\n' . $error->description);
+                }
+            } elseif (!$result) {
+                // A chamada para a API falhou de alguma forma
+                throw new \Exception('Falha na chamada para a API Asaas');
             }
         } else {
             throw new Exception('Devido à limitação da Asaas, somente é possível confirmar cobranças com boletos!');
@@ -226,8 +232,15 @@ class Asaas extends BasePaymentGateway
         ];
 
         $result = $this->asaasApi->Cobranca()->create($body);
-        if (!$result || $result->errors) {
-            throw new \Exception('Erro ao chamar Asaas!');
+
+        if ($result && !empty($result->errors)) {
+            // A resposta da API inclui erros
+            foreach ($result->errors as $error) {
+                throw new \Exception('Erro na criação da cobrança: ' . $error->description);
+            }
+        } elseif (!$result) {
+            // A chamada para a API falhou de alguma forma
+            throw new \Exception('Falha na chamada para a API Asaas');
         }
 
         $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
@@ -337,8 +350,14 @@ class Asaas extends BasePaymentGateway
         ];
 
         $result = $this->asaasApi->LinkPagamento()->create($body);
-        if (!$result || $result->errors) {
-            throw new \Exception('Erro ao chamar Asaas!');
+        if ($result && !empty($result->errors)) {
+            // A resposta da API inclui erros
+            foreach ($result->errors as $error) {
+                throw new \Exception('Erro na criação da cobrança: ' . $error->description);
+            }
+        } elseif (!$result) {
+            // A chamada para a API falhou de alguma forma
+            throw new \Exception('Falha na chamada para a API Asaas');
         }
 
         $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
@@ -415,6 +434,11 @@ class Asaas extends BasePaymentGateway
             'observations' => '',
             'groupName' => 'mapos',
         ]);
+
+        if(!$result) {
+            // Lide com o caso em que $id é nulo
+            throw new \Exception('Erro ao criar cliente na Asaas!');
+        }
 
         $success = $this->ci->clientes_model->edit(
             'clientes',

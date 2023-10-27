@@ -47,13 +47,18 @@
                                 <input type="text" name="estoqueFinal" class="span12" />
                             </div>
                         </div>
-                        <div class="span12" style="display:flex;justify-content: center">
-                            <input type="reset" class="button btn btn-warning" value="Limpar" / style="justify-content: center">
-                            <button class="button btn btn-inverse"><span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text2">Imprimir</span></button>
+                        <div class="span12" style="display: flex; justify-content: center">
+                            <button type="reset" class="button btn btn-warning">
+                                <span class="button__icon"><i class="bx bx-brush-alt"></i></span>
+                                <span class="button__text">Limpar</span>
+                            </button>
+                            <button class="button btn btn-inverse">
+                                <span class="button__icon"><i class="bx bx-printer"></i></span>
+                                <span class="button__text">Imprimir</span>
+                            </button>
                         </div>
                     </form>
                 </div>
-                .
             </div>
         </div>
     </div>
