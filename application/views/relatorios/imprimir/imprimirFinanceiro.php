@@ -65,7 +65,7 @@
         echo '<td>' . $l->tipo . '</td>';
         echo '<td>' . 'R$ ' . number_format($l->valor, 2, ',', '.') . '</td>';
         echo '<td>' . ($l->tipo_desconto == "real" ? "R$ " : "") . number_format($l->desconto, 2, ',', '.') . ($l->tipo_desconto == "porcento" ? " %" : "") . '</td>';
-        echo '<td>' . 'R$ ' . number_format($l->valor_desconto != 0 ? $l->valor_desconto : $l->valor , 2, ',', '.') . '</td>';
+        echo '<td>' . 'R$ ' . number_format($l->valor_desconto != 0 ? $l->valor_desconto : $l->valor, 2, ',', '.') . '</td>';
         echo '<td>' . $vencimento . '</td>';
         echo '<td>' . $pagamento . '</td>';
         echo '<td>' . $l->forma_pgto . '</td>';
