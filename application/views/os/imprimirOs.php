@@ -102,6 +102,8 @@ $totalProdutos = 0; ?>
                                                                 <span class="icon">
                                                                     <i class="fas fa-comments" style="margin:5px 1px"></i>
                                                                     E-mail:<?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?> </br>
+                                                                    <i class="fas fa-globe" style="margin:5px 1px"></i>
+                                                                    Site: https://www.infocenter.rec.br </br>
                                                                     <span class="icon">
                                                                         <i class="fas fa-user-check"></i>
                                                                         Responsável: <?php echo $result->nome ?>
@@ -128,12 +130,28 @@ $totalProdutos = 0; ?>
                                                         </li>
                                                     </ul>
                                                 </td>
+                                                <?php if ($result->status != 'Finalizado') { ?>
+                                                    <?php if ($qrCode) : ?>
+                                                        <td style="width: 15%; padding-left: 0">
+                                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                                            <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                                        </td>
+                                                    <?php endif ?>
+                                                <?php } ?>
+
+                                                <?php if ($result->status == 'Finalizado') { ?>    
+                                                    <td style="width: 15%; padding-left: 0">
+                                                        <!-- <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /> -->
+                                                        <img style="margin:50px 100px 20px 0px" src="<?php echo base_url(); ?>assets/img/carimbo_pago.png" alt="Carimbo de pago" width="90%" height="90%"></img>
+                                                    </td>
+                                               <?php } ?>
                                                 <?php if ($qrCode) : ?>
                                                     <td style="width: 15%; padding-left: 0">
                                                         <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
                                                         <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                                     </td>
                                                 <?php endif ?>
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -282,6 +300,7 @@ $totalProdutos = 0; ?>
                                                 </td>
                                                 <td>Assinatura do Técnico Responsável
                                                     <hr>
+                                                    <?php echo $result->nome ?>
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -134,7 +134,7 @@
                         <form method="post">
                             <select style="padding-left: 30px" class="span12" name="statusOsGet" id="statusOsGet" value="">
                                 <option value="">Todos os Status</option>
-                                <option value="Aberto">Aberto</option>
+                                <option value="Pronta">Pronta</option>
                                 <option value="Faturado">Faturado</option>
                                 <option value="Negociação">Negociação</option>
                                 <option value="Orçamento">Orçamento</option>
@@ -550,7 +550,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
+            <h5 class="cardHeader">Ordens de Serviço Pronta</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -593,7 +593,7 @@
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="5">Nenhuma OS em aberto.</td>
+                            <td colspan="5">Nenhuma OS em pronta.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
