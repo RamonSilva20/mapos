@@ -94,9 +94,10 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 ### Hospedagem Parceira
 Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como SysGo para oferecer hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
 
-Solite sua Hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
+Solite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
 
-![SysGO-BlackFriday-Github](https://sysgo.com.br/img-externo/mapos-github.jpg)
+![](https://sysgo.com.br/mapos-github)<img src="https://sysgo.com.br/img-externo/mapos-github.jpg" height-max="500"/>
+
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
