@@ -91,6 +91,13 @@ URL: http://localhost:8000/
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.
 
+### Hospedagem Parceira
+Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como SysGo para oferecer hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
+
+Solite sua Hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
+
+![SysGO-BlackFriday-Github](https://sysgo.com.br/img-externo/mapos-github.jpg)
+
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
 * [twbs/bootstrap](https://github.com/twbs/bootstrap)
@@ -112,15 +119,6 @@ Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
 Doações podem ser realizadas nos links:
 * [catarse/mapos](https://www.catarse.me/mapos) - Mensal
 * [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
-
-### Hospedagem Parceira
-Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como SysGo para oferecer hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
-
-Solite sua Hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
-
-![image](https://github.com/barretowiisk/mapos/assets/45976190/099bf797-acbe-46f9-95b9-0ca9f5c1fc73)
-
-
 
 ### Contribuidores
 [![Contribuidores](https://contrib.rocks/image?repo=RamonSilva20/mapos)](https://github.com/RamonSilva20/mapos/graphs/contributors)
