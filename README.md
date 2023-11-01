@@ -96,7 +96,7 @@ Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como Sy
 
 Solite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
 
-![SysGO Banner](https://sysgo.com.br/img-externo/mapos-github.jpg?h=x200)
+![SysGO Banner](https://sysgo.com.br/img-externo/mapos-github.jpg)
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
