@@ -2,7 +2,11 @@
     <div>
         <br>
         <div style="width: 50%; float: left" class="float-left col-md-3">
-            <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt=""><br><br>
+            <?php if(file_exists(convertUrlToUploadsPath($emitente->url_logo))) { ?>
+                <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt="<?= $emitente->nome ?>"><br><br>
+            <?php }else { ?>
+                <svg width="150px" xmlns="http://www.w3.org/2000/svg"> <rect width="150px" height="50px" x="50" y="50" fill="transparent" /></svg>
+            <?php } ?>
         </div>
         <div style="float: right">
             <b>EMPRESA: </b> <?= $emitente->nome ?> <b>CNPJ: </b> <?= $emitente->cnpj ?><br>
