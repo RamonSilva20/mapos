@@ -5,7 +5,7 @@
             <?php if(file_exists(convertUrlToUploadsPath($emitente->url_logo))) { ?>
                 <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt="<?= $emitente->nome ?>"><br><br>
             <?php } else { ?>
-                <svg width="150px" xmlns="http://www.w3.org/2000/svg"> <rect width="150px" height="50px" x="50" y="50" fill="transparent" /></svg>
+                <div style="width: 150px;"><p></p></div>
             <?php } ?>
         </div>
         <div style="float: right">
