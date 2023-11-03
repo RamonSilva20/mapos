@@ -2,11 +2,7 @@
     <div>
         <br>
         <div style="width: 50%; float: left" class="float-left col-md-3">
-            <?php if(file_exists(convertUrlToUploadsPath($emitente->url_logo))) { ?>
-                <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt="<?= $emitente->nome ?>"><br><br>
-            <?php } else { ?>
-                <div style="width: 150px;"><p></p></div>
-            <?php } ?>
+            <img style="width: 150px" src="<?= convertUrlToUploadsPath($emitente->url_logo) ?>" alt=""><br><br>
         </div>
         <div style="float: right">
             <b>EMPRESA: </b> <?= $emitente->nome ?> <b>CNPJ: </b> <?= $emitente->cnpj ?><br>
