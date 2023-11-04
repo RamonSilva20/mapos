@@ -22,7 +22,7 @@
         <?php
         function saudacao($nome = '')
         {
-          $hora = date('H');
+            $hora = date('H');
             if ($hora >= 00 && $hora < 12) {
                 return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
             } elseif ($hora >= 12 && $hora < 18) {

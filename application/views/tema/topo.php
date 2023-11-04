@@ -129,8 +129,8 @@
       }
 
       $login = '';
-      echo saudacao($login); // Irá retornar conforme o horário
-    ?>
+  echo saudacao($login); // Irá retornar conforme o horário
+  ?>
   </div>
   <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
 
