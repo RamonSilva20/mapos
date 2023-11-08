@@ -55,7 +55,8 @@ URL: http://localhost:8000/
 
 ### Instalação Automatizada (Windows 10/11)
 1. Execute o Prompt de Comando ou PowerShell como Administrador;
-2. Execute o comando: `PowerShell -command "& { iwr https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.bat -OutFile MapOS_Install.bat }" && ./MapOS_Install.bat`
+2. Execute o comando: `PowerShell -command "& { iwr https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.bat -OutFile MapOS_Install.bat }; .\MapOS_Install.bat"`
+3. Tutorial Instalação: https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33
 
 ### Instalação Automatizada (Ubuntu/Debian)
 1. Abra o Terminal ou acesse seu servidor via SSH;
