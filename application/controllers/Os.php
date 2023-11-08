@@ -1022,15 +1022,19 @@ class Os extends MY_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
-            $email = [
-                'to' => $remetente,
-                'message' => $html,
-                'status' => 'pending',
-                'date' => date('Y-m-d H:i:s'),
-                'headers' => serialize($headers),
-            ];
-            $this->email_model->add('email_queue', $email);
+            if ($remetente) {
+                $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
+                $email = [
+                    'to' => $remetente,
+                    'message' => $html,
+                    'status' => 'pending',
+                    'date' => date('Y-m-d H:i:s'),
+                    'headers' => serialize($headers),
+                ];
+                $this->email_model->add('email_queue', $email);
+            } else {
+                log_info('Email não adicionado a Lista de envio de e-mails. Verifique se o remetente esta cadastrado. OS ID: ' . $idOs);
+            }
         }
 
         return true;

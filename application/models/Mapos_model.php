@@ -40,7 +40,7 @@ class Mapos_model extends CI_Model
     public function alterarSenha($senha)
     {
         $this->db->set('senha', password_hash($senha, PASSWORD_DEFAULT));
-        $this->db->where('idUsuarios', $this->session->userdata('id'));
+        $this->db->where('idUsuarios', $this->session->userdata('id_admin'));
         $this->db->update('usuarios');
 
         if ($this->db->affected_rows() >= 0) {

@@ -31,7 +31,7 @@
                                     <th width="70" align="center" style="font-size: 12px">OS</th>
                                     <th width="200" align="center" style="font-size: 12px">CLIENTE</th>
                                     <th width="150" align="center" style="font-size: 12px">STATUS</th>
-                                    <th width="100" salign="center" style="font-size: 12px">DATA</th>
+                                    <th width="100" align="center" style="font-size: 12px">DATA</th>
                                     <th width="400" align="center" style="font-size: 12px">DESCRIÇÃO</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL PRODUTOS</th>
                                     <th width="140" align="center" style="font-size: 12px">TOTAL SERVIÇOS</th>
@@ -53,7 +53,7 @@
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>' . ($c->tipo_desconto == "real" ? "R$ " : "") . $c->desconto ." ". ($c->tipo_desconto == "porcento" ? " %" : "") .'</small></td>';
-                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto ? : $c->total_produto + $c->total_servico, 2, ',', '.'). '</small></td>';
+                                        echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto != 0 ? $c->valor_desconto : $c->total_produto + $c->total_servico, 2, ',', '.'). '</small></td>';
                                         echo '</tr>';
                                     }
     ?>

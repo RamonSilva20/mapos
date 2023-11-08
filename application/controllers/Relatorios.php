@@ -419,11 +419,11 @@ class Relatorios extends MY_Controller
 
             $isXls
                 ?
-                $totalValorDesconto += $o['valor_desconto']
+                $totalValorDesconto += $o['valor_desconto'] != 0
                 ? floatval($o['valor_desconto'])
                 : floatval($o['total_servico']) + floatval($o['total_produto'])
                 :
-                $totalValorDesconto += $o->valor_desconto
+                $totalValorDesconto += $o->valor_desconto != 0
                 ? floatval($o->valor_desconto)
                 : floatval($o->total_produto) + floatval($o->total_servico);
         }
@@ -535,9 +535,13 @@ class Relatorios extends MY_Controller
                 : floatval($o->desconto);
             $isXls
                 ?
-                $totalValorDesconto += $o['valor_desconto'] ? floatval($o['valor_desconto']) : floatval($o['total_servico']) + floatval($o['total_produto'])
+                $totalValorDesconto += $o['valor_desconto'] != 0
+                ? floatval($o['valor_desconto'])
+                : floatval($o['total_servico']) + floatval($o['total_produto'])
                 :
-                $totalValorDesconto += $o->valor_desconto ? floatval($o->valor_desconto) : floatval($o->total_produto) + floatval($o->total_servico);
+                $totalValorDesconto += $o->valor_desconto != 0
+                ? floatval($o->valor_desconto)
+                : floatval($o->total_produto) + floatval($o->total_servico);
         }
 
         if ($isXls) {
@@ -555,7 +559,7 @@ class Relatorios extends MY_Controller
                     'total_servico' => $item['total_servico'] ? $item['total_servico'] : 0,
                     'valorSubTotal' => $subTotal ? $subTotal : 0,
                     'valorTotal' => $total ? $total : 0,
-                    'valorSubTotal' => $subTotal ? $subTotal : 0,
+                    'total_geral_desconto' => $item['desconto'] ?: 0,
                     'tipo_desconto' => $item['tipo_desconto'] ?: "-",
                 ];
             }, $os);
