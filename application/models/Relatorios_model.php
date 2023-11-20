@@ -124,8 +124,9 @@ class Relatorios_model extends CI_Model
     public function produtosRapidMin()
     {
         $query = "
-            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
-            SELECT produtos.*, SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
+            SELECT produtos.*, 
+            SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
+            SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             WHERE estoque <= estoqueMinimo
             GROUP BY produtos.idProdutos
