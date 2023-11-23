@@ -29,14 +29,19 @@ class Clientes extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
             redirect(base_url());
         }
-        $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url('clientes/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->clientes_model->count('clientes');
+        if ($this->data['configuration']['control_datatable']) {
+            $this->data['results'] = $this->clientes_model->get('clientes', '*');
+        } else {
+            $this->load->library('pagination');
 
-        $this->pagination->initialize($this->data['configuration']);
+            $this->data['configuration']['base_url'] = site_url('clientes/gerenciar/');
+            $this->data['configuration']['total_rows'] = $this->clientes_model->count('clientes');
 
-        $this->data['results'] = $this->clientes_model->get('clientes', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+            $this->pagination->initialize($this->data['configuration']);
+
+            $this->data['results'] = $this->clientes_model->get('clientes', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        }
 
         $this->data['view'] = 'clientes/clientes';
         return $this->layout();
