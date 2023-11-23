@@ -2393,11 +2393,10 @@ span.icon .checker {
 }
 
 .dataTables_paginate {
-  display     : none;
   line-height : 16px;
-  text-align  : right;
-  margin-top  : -14px;
   margin-right: 15px;
+  margin-bottom: 15px;
+  margin-top: 5px;
 }
 
 .dataTables_paginate .ui-button,

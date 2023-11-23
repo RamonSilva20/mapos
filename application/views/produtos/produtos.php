@@ -69,7 +69,7 @@
         </table>
     </div>
 </div>
-<?php echo $this->pagination->create_links(); ?>
+<?php echo $this->data['configuration']['control_datatable'] ? "" : $this->pagination->create_links() ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

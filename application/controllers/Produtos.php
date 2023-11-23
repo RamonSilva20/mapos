@@ -31,14 +31,18 @@ class Produtos extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
+        if ($this->data['configuration']['control_datatable']) {
+            $this->data['results'] = $this->produtos_model->get('produtos', '*');
+        } else {
+            $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->produtos_model->get('produtos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+            $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
+            $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
+    
+            $this->pagination->initialize($this->data['configuration']);
+    
+            $this->data['results'] = $this->produtos_model->get('produtos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        }
 
         $this->data['view'] = 'produtos/produtos';
         return $this->layout();
