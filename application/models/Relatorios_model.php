@@ -110,7 +110,9 @@ class Relatorios_model extends CI_Model
     public function produtosRapid()
     {
         $query = "
-            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            SELECT produtos.*, 
+            SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
+            SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             GROUP BY produtos.idProdutos
             ORDER BY descricao
@@ -122,7 +124,9 @@ class Relatorios_model extends CI_Model
     public function produtosRapidMin()
     {
         $query = "
-            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            SELECT produtos.*, 
+            SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
+            SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             WHERE estoque <= estoqueMinimo
             GROUP BY produtos.idProdutos
@@ -143,7 +147,9 @@ class Relatorios_model extends CI_Model
             $whereEstoque = "AND estoque BETWEEN " . $this->db->escape($estoqueInicial) . " AND " . $this->db->escape($estoqueFinal);
         }
         $query = "
-            SELECT produtos.*, SUM(produtos.estoque * produtos.precoVenda) as valorEstoque
+            SELECT produtos.*,
+            SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
+            SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             WHERE estoque >= 0 $wherePreco $whereEstoque
             GROUP BY produtos.idProdutos
