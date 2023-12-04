@@ -170,7 +170,7 @@
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Um abraço! <br>
+                    Muito Obrigado estamos a total disposição. Equipe Fw Informática <br>
                     Equipe <?= $emitente->nome; ?>
                 </td>
             </tr>

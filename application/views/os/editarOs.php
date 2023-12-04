@@ -10,8 +10,20 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<style>
+    .ui-datepicker {
+        z-index: 99999 !important;
+    }
 
+    .trumbowyg-box {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+</style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -58,7 +70,7 @@
                         <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
-                        <li id="tabAnotacoes"><a href="#tab7" data-toggle="tab">Assinaturas</a></li>
+                        <li id="tabAssinatura"><a href="#tab7" data-toggle="tab">Assinaturas</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -537,10 +549,10 @@ foreach ($servicos as $s) {
 </div>
 
 <!-- Modal Faturar-->
-<div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-faturar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal_header_anexos">
+            <button type="button" class="close" style="color:#f00" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">
@@ -1293,7 +1305,7 @@ foreach ($servicos as $s) {
         });
     });
 </script>
-<!--Scrip Assinatura-->
+
 <script>
         document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('signature-pad');

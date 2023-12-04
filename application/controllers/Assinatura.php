@@ -13,8 +13,7 @@ class Assinatura extends CI_Controller {
         $this->form_validation->set_rules('tecnico', 'tecnico', 'required');
 
         if (!$this->form_validation->run()) {
-            http_response_code(400); // Define o código de status HTTP para 400 Bad Request
-            
+            http_response_code(400);
             $response = array(
                 'success' => false,
                 'message' => 'Erro: Dados de assinatura ausentes.'
@@ -29,40 +28,94 @@ class Assinatura extends CI_Controller {
         $clientName = $this->input->post('clientName');
         $tecnico = $this->input->post('tecnico');
 
-        // Retire os metadados dos dados de imagem codificados em base64
+        // Verificar se já existe uma assinatura para esta OS
+        $this->load->database();
+        $this->db->select('id');
+        $this->db->from('ass');
+        $this->db->where('nOs', $nOs);
+        $this->db->order_by('assinaturaDate', 'DESC'); // Ordernar pela data de assinatura decrescente
+        $this->db->limit(1); // Apenas a assinatura mais recente
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            // Já existe uma assinatura para esta OS
+            http_response_code(400);
+            $response = array(
+                'success' => false,
+                'message' => 'Erro: Já existe uma assinatura para esta OS.'
+            );
+            echo json_encode($response);
+            return;
+        }
+
+        // Continuar com a inserção se não existir uma assinatura para esta OS
+
+        // Adicionar estas linhas para obter a data e o IP
+        $assinaturaDate = date('Y-m-d H:i:s');
+        $assinaturaIP = $_SERVER['REMOTE_ADDR'];
+
+        // Strip the metadata from the base64-encoded image data
         $imageData = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData);
         $imageData2 = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData2);
 
-        // Obter o caminho raiz do projeto
+        // Get the project root path
         $projectRoot = realpath(APPPATH . '../');
 
-        // Define o direotiro aonde será salvo a assinatura
-        $signaturesDir = $projectRoot . '/assets/signatures/';
+        // Set the directory path for signatures
+        $signaturesDir = $projectRoot . '/assets/assinaturas/';
 
-        // Cria o diretorio se não existir
+        // Create the directory if it doesn't exist
         if (!is_dir($signaturesDir)) {
             mkdir($signaturesDir, 0777, true);
         }
 
-        // Define o caminho do arquivo para a assinatura do cliente
-        $filePath = $signaturesDir . $nOs . $clientName . '.png';
+        // Set the file path for the client signature
+        $filePath = '/assets/assinaturas/' . $nOs . $clientName . '.png';
 
-        // Salve o arquivo de imagem da assinatura do cliente
-        file_put_contents($filePath, base64_decode($imageData));
+        // Save the client signature image file
+        file_put_contents($projectRoot . '/' . $filePath, base64_decode($imageData));
 
-        // Defina o caminho do arquivo para a assinatura do técnico
-        $technicoFilePath = $signaturesDir . $tecnico . '.png';
+        // Set the file path for the technician signature
+        $technicoFilePath = 'assets/assinaturas/' . $tecnico . '.png';
 
-        // Faz uma verificação se existe o arquivo
-        if (!file_exists($technicoFilePath)) {
-            // Sava o arquivo com assinatura do tecnico somente se não existir
-            file_put_contents($technicoFilePath, base64_decode($imageData2));
+        // Check if the technician signature file already exists
+        if (!file_exists($projectRoot . '/' . $technicoFilePath)) {
+            // Save the image file for the technician only if it doesn't exist
+            file_put_contents($projectRoot . '/' . $technicoFilePath, base64_decode($imageData2));
         }
 
+        // Salvar a assinatura no banco de dados
+        $this->load->database();
+
+        // Preparar os dados para inserção
+        $data = array(
+            'nOs' => $nOs,
+            'clientName' => $clientName,
+            'tecnico' => $tecnico,
+            'filePath' => $filePath,
+            'assinaturaDate' => $assinaturaDate,
+            'assinaturaIP' => $assinaturaIP
+        );
+
+        // Inserir dados no banco de dados
+        if (!$this->db->insert('ass', $data)) {
+            // Não foi possível salvar a assinatura no banco de dados
+            http_response_code(500);
+            $response = array(
+                'success' => false,
+                'message' => 'Erro interno do servidor: Não foi possível salvar a assinatura.'
+            );
+            echo json_encode($response);
+            return;
+        }
+
+        // Se chegou até aqui, a assinatura foi salva com sucesso
         $response = array(
             'success' => true,
-            'message' => 'Signature saved successfully',
-            'local' => $filePath
+            'message' => 'Assinatura salva com sucesso',
+            'local' => $filePath,
+            'assinaturaDate' => $assinaturaDate,
+            'assinaturaIP' => $assinaturaIP
         );
         echo json_encode($response);
     }

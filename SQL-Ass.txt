@@ -1,0 +1,9 @@
+CREATE TABLE ass (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nOs VARCHAR(255) NOT NULL,
+    clientName VARCHAR(255) NOT NULL,
+    tecnico VARCHAR(255) NOT NULL,
+    filePath VARCHAR(255) NOT NULL,
+    assinaturaDate DATETIME NOT NULL,
+    assinaturaIP VARCHAR(45) NOT NULL
+);
