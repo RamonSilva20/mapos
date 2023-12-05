@@ -27,18 +27,18 @@
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Detalhes OS</h5>
+                <h5>Assinar</h5>
             </div>
             <div class="widget-content nopadding tab-content">
 
 
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
+                        <li id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
-                        <li id="tabAssinar"><a href="#tab5" data-toggle="tab">Assinatura</a></li>
+                        <li class="active" id="tabAssinar"><a href="#tab5" data-toggle="tab">Assinatura</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -232,45 +232,60 @@ foreach ($servicos as $s) {
 
 <!--Assinaturas-->
 <div class="tab-pane" id="tab5">
-    <div class="span12" style="padding: 1%; margin-left: 0">
-        <h3>Assine os Termos de Serviço</h3>
-        <style>
-            #signature-pad {
-                margin-left: 30px;
-                border: 1px solid #000;
-            }
-            .buttons-a {
-                margin-left: 30px;
-                margin-top: 10px;
-            }
-            .p-2 {
-                margin-left: 30px;
-            }
-        </style>
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+                                <h3>Assine os Termos de Serviço</h3>
+                                <style>
+                                    
+                                    #signature-pad{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    #signature-pad2{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    .buttons-a{
+                                        margin-left: 30px;
+                                        margin-top: 10px;
+                                    }
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div id="signature-container">
-                        <h4 class="p-2">Assinatura do Cliente</h4>
-                        <canvas id="signature-pad" width="600" height="300"></canvas>
-                        <br>
-                        <h4 class="p-2" id="tecnico-signature-heading" style="display: none;">Assinatura do Técnico</h4>
-                        <canvas id="signature-pad2" width="600" height="300" style="display: none;"></canvas>
+                                    .p-2{
+                                        margin-left: 30px;
+                                    }
+                                </style>
 
-                        <br>
-                        <div class="buttons-a">
-                            <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
-                            <button id="clear-button2" type="button" class="btn btn-danger" style="display: none;">Limpar Assinatura Técnico</button>
-                            <button id="save-button" type="button" class="btn btn-success">Enviar Assinatura</button>
+                                
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-8 col-md-offset-2">,
+                                            <div id="signature-container">
+                                                <h4 class="p-2">Assinatura do Cliente</h4>
+                                                <canvas id="signature-pad" width="600" height="300"></canvas>
+                                                <br>
+                                                <h4 class="p-2">Assinatura do Técnico</h4>
+                                                <canvas id="signature-pad2" width="600" height="300"></canvas>
+                                            
+                                                <br>
+                                                <div class="buttons-a">
+                                                    <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
+                                                    <button id="clear-button2" type="button" class="btn btn-danger">Limpar Assinatura Técnico</button>  
+                                                    <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>                               
+                                                </div>
+
+                                                
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Fim tab assinaturas -->                   
+                        <!-- Fim tab assinaturas -->
+                        
+
+
 
                     </div>
 
@@ -402,7 +417,8 @@ foreach ($servicos as $s) {
 </script>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM está totalmente carregado');
         var canvas = document.getElementById('signature-pad');
         var signaturePad = new SignaturePad(canvas);
 
@@ -446,7 +462,7 @@ foreach ($servicos as $s) {
 
 
                 $.ajax({
-                        url: '<?php echo base_url('index.php/Assinatura/upload_signature') ?>',
+                        url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
                         type: 'POST',
                         data: {
                             imageData: dataURL,
@@ -455,8 +471,9 @@ foreach ($servicos as $s) {
 			                nOs: nOs,
                             tecnico: tecnico
                         },
-                                success: function(response) {
-                                Swal.fire({
+                        success: function(response) {
+                            console.log(response);
+                            Swal.fire({
                                 type: "success",
                                 title: "Atenção",
                                 text: "Assinatura Enviada com Sucesso"
@@ -479,19 +496,4 @@ foreach ($servicos as $s) {
 
     
 
-</script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Verifica se o parâmetro 'tab' existe na URL
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('tab')) {
-        // Obtém o valor do parâmetro 'tab'
-        var tabNumber = urlParams.get('tab');
-
-        // Ativa a guia correspondente
-        $('a[href="#tab' + tabNumber + '"]').tab('show');
-    }
-});
 </script>
