@@ -36,7 +36,6 @@
 </div>
 
 <div class="span12" style="margin-left: 0">
-
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
           <span class="icon"><i class="fas fa-signal"></i></span>
@@ -46,10 +45,10 @@
             <table id="tabela" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>Nº</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Garantia</th>
+                        <th>Venc. Garantia</th>
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -79,12 +78,46 @@
                                 $vencGarantia = '';
                                 $corGarantia = '';
                             }
+
+                            switch ($o->status) {
+                                case 'Aberto':
+                                    $cor = '#00cd00';
+                                    break;
+                                case 'Em Andamento':
+                                    $cor = '#436eee';
+                                    break;
+                                case 'Orçamento':
+                                    $cor = '#CDB380';
+                                    break;
+                                case 'Negociação':
+                                    $cor = '#AEB404';
+                                    break;
+                                case 'Cancelado':
+                                    $cor = '#CD0000';
+                                    break;
+                                case 'Finalizado':
+                                    $cor = '#256';
+                                    break;
+                                case 'Faturado':
+                                    $cor = '#B266FF';
+                                    break;
+                                case 'Aguardando Peças':
+                                    $cor = '#FF7F00';
+                                    break;
+                                case 'Aprovado':
+                                    $cor = '#808080';
+                                    break;
+                                default:
+                                    $cor = '#E0E4CC';
+                                    break;
+                            }
+
                             echo '<tr>';
                             echo '<td>' . $o->idOs . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                            echo '<td>' . $o->status . '</td>';
+                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
                             echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                             echo '</tr>';
                         }
