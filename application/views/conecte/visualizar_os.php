@@ -43,7 +43,6 @@ $totalProdutos = 0; ?>
                             </tbody>
                         </table>
                     </div>
-                    
                     <div style="margin-top: 0; padding-top: 0">
                             <table class="table table-condensed">
                                 <tbody>
