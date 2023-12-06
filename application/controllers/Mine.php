@@ -489,7 +489,6 @@ class Mine extends CI_Controller
         $data['output'] = 'conecte/os';
         $this->load->view('conecte/template', $data);
     }
-    
     public function visualizarOs($id = null)
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
