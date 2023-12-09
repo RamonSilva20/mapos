@@ -28,10 +28,11 @@ if (!$results) {
                 <table id="tabela" class="table table-bordered ">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Nº</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
                             <th>Data Final</th>
+                            <th>Venc. Garantia</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -67,45 +68,85 @@ if (!$results) {
                 <table class="table table-bordered ">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Nº</th>
                             <th>Responsável</th>
                             <th>Data Inicial</th>
                             <th>Data Final</th>
+                            <th>Venc. Garantia</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($results as $r) {
+                        <?php $this->load->model('os_model'); foreach ($results as $r) {
                             $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                             $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                            if ($r->status == "Aberto") {
-                                $status = '<span class="label label-success">Aberto</span>';
-                            } elseif ($r->status == "Orçamento") {
-                                $status = '<span class="label label-info">Orçamento</span>';
-                            } elseif ($r->status == "Finalizado") {
-                                $status = '<span class="label label-important">Finalizado</span>';
-                            } elseif ($r->status == "Cancelado") {
-                                $status = '<span class="label label-inverse">Cancelado</span>';
-                            } elseif ($r->status == "Faturado") {
-                                $status = '<span class="label">Faturado</span>';
-                            } elseif ($r->status == "Negociação") {
-                                $status = '<span class="label">Negociação / Inadimplente</span>';
-                            } else {
-                                $status = '<span class="label">Em Andamento</span>';
+                            switch ($r->status) {
+                                case 'Aberto':
+                                    $cor = '#00cd00';
+                                    break;
+                                case 'Em Andamento':
+                                    $cor = '#436eee';
+                                    break;
+                                case 'Orçamento':
+                                    $cor = '#CDB380';
+                                    break;
+                                case 'Negociação':
+                                    $cor = '#AEB404';
+                                    break;
+                                case 'Cancelado':
+                                    $cor = '#CD0000';
+                                    break;
+                                case 'Finalizado':
+                                    $cor = '#256';
+                                    break;
+                                case 'Faturado':
+                                    $cor = '#B266FF';
+                                    break;
+                                case 'Aguardando Peças':
+                                    $cor = '#FF7F00';
+                                    break;
+                                case 'Aprovado':
+                                    $cor = '#808080';
+                                    break;
+                                default:
+                                    $cor = '#E0E4CC';
+                                    break;
                             }
+                            
+                            $vencGarantia = '';
+                            if ($r->garantia && is_numeric($r->garantia)) {
+                                $vencGarantia = dateInterval($r->dataFinal, $r->garantia);
+                            }
+                            $corGarantia = '';
+                            if (!empty($vencGarantia)) {
+                                $dataGarantia = explode('/', $vencGarantia);
+                                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
+                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                                    $corGarantia = '#4d9c79';
+                                } else {
+                                    $corGarantia = '#f24c6f';
+                                }
+                            } elseif ($r->garantia == "0") {
+                                $vencGarantia = 'Sem Garantia';
+                                $corGarantia = '';
+                            } else {
+                                $vencGarantia = '';
+                                $corGarantia = '';
+                            }
+
                             echo '<tr>';
                             echo '<td>' . $r->idOs . '</td>';
                             echo '<td>' . $r->nome . '</td>';
                             echo '<td>' . $dataInicial . '</td>';
                             echo '<td>' . $dataFinal . '</td>';
-                            echo '<td>' . $status . '</td>';
-
+                            echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
 
                             echo '<td><a href="' . base_url() . 'index.php/mine/visualizarOs/' . $r->idOs . '" class="btn-nwe" title="Visualizar e Imprimir"><i class="bx bx-show-alt"></i></a>
                                   <a href="' . base_url() . 'index.php/mine/imprimirOs/' . $r->idOs . '" class="btn-nwe3" title="Imprimir"><i class="bx bx-printer"></i></a>
                                   <a href="' . base_url() . 'index.php/mine/detalhesOs/' . $r->idOs . '" class="btn-nwe4" title="Ver mais detalhes"><i class="bx bx-detail"></i></a>
-                              </td>';
+                                  </td>';
                             echo '</tr>';
                         } ?>
                     </tbody>
