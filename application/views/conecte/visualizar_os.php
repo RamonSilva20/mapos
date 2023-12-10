@@ -12,7 +12,7 @@ $totalProdutos = 0; ?>
 
                     <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
                     <!-- Adicione o botão "Assinar" -->
-                    <a title="Assinar" class="btn btn-mini btn-primary" href="<?php echo site_url() ?>/mine/detalhesos/<?php echo $result->idOs .'?tab=5'; ?>"><i class="fas fa-pencil-alt"></i> Assinar</a>
+                    <a title="Assinar" class="btn btn-mini btn-primary" href="<?php echo site_url() ?>/mine/detalhesos/<?php echo $result->idOs .'?tab=5'; ?>" style="margin-left:10px"><i class="fas fa-pencil-alt"></i> Autorizar e assinar</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">

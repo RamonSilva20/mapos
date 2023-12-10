@@ -92,8 +92,7 @@ $totalProdutos = 0; ?>
                                                     <span style="font-size: 12px; "><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?> </br>
                                                     <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
                                                     <span><span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></br>
-                                                    <span class="icon"><i class="fas fa-user-check"></i> Tecnico Responsável: <?php echo $result->nome ?></br>
-                                                    <!-- <span><span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> Email: <?php echo $result->email_usuario ?></br> -->
+                                                    <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?>
                                                     <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br></br><span>Emissão: <?php echo date('d/m/Y') ?></span></td></span>
                                                 </td>
                                                 </tr>
@@ -101,47 +100,45 @@ $totalProdutos = 0; ?>
                                         </tbody>
                                     </table>
                                     <table class="table table-condensend">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 50%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span>
-                                                    <h5><b>CLIENTE</b></h5>
-                                                    <span><?php echo $result->nomeCliente ?></span><br />
-                                                    <?php
-                                                        $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro]);
-                                                        $endereco = implode(', ', $retorno_end);
-                                                        if (!empty($endereco)) {echo $endereco . '<br>';}
-                                                        if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) { echo "<span>{$result->cidade} - {$result->estado}, {$result->cep}</span><br>";}
-                                                    ?>
-                                                    <?php if (!empty($result->email)) : ?>
-                                                        <span>E-mail: <?php echo $result->email ?></span><br>
-                                                    <?php endif; ?>
-                                                    <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)  ) : ?>
-                                                        <span>Contato: <?php if (!empty($result->contato_cliente)) : ?><?php echo $result->contato_cliente; ?> <?php endif; ?>
-                                                            <?php if (!empty($result->telefone_cliente) && $result->celular_cliente != $result->telefone_cliente) : ?>
-                                                                <?php echo $result->telefone_cliente; ?> /
-                                                            <?php endif; ?>
-                                                            <?php echo $result->celular_cliente; ?>
-                                                        </span>
-                                                    <?php endif; ?>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    
-                                    <?php if ($qrCode) : ?>
-                                        <td style="width: 15%; padding-left: 0">
-                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
-                                            <img style="margin:6px 12px 2px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
-                                        </td>
-                                    <?php endif ?>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 85%; padding-left: 0">
+                                                    <ul>
+                                                        <li>
+                                                            <span>
+                                                                <h5><b>CLIENTE</b></h5>
+                                                                <span><?php echo $result->nomeCliente ?></span><br />
+                                                                <?php
+                                                                    $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro]);
+                                                                    $endereco = implode(', ', $retorno_end);
+                                                                    if (!empty($endereco)) {echo $endereco . '<br>';}
+                                                                    if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) { echo "<span>{$result->cidade} - {$result->estado}, {$result->cep}</span><br>";}
+                                                                ?>
+                                                                <?php if (!empty($result->email)) : ?>
+                                                                    <span>E-mail: <?php echo $result->email ?></span><br>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)  ) : ?>
+                                                                    <span>Contato: <?php if (!empty($result->contato_cliente)) : ?><?php echo $result->contato_cliente; ?> <?php endif; ?>
+                                                                        <?php if (!empty($result->telefone_cliente) && $result->celular_cliente != $result->telefone_cliente) : ?>
+                                                                            <?php echo $result->telefone_cliente; ?> /
+                                                                        <?php endif; ?>
+                                                                        <?php echo $result->celular_cliente; ?>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <?php if ($qrCode) : ?>
+                                                    <td style="width: 15%; padding-left: 0">
+                                                        <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                                        <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
+                                                    </td>
+                                                <?php endif ?>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div style="margin-top: 0; padding-top: 0">
                                     <table class="table table-condensed">
                                         <tbody>
@@ -276,14 +273,27 @@ $totalProdutos = 0; ?>
                                     <table class="table table-bordered table-condensed" style="padding-top: 20px">
                                         <tbody>
                                             <tr>
-                                                <td>Data
-                                                    <hr>
+                                                <td style="text-align:center;">
+                                                    <img width="150" src="<?=$result->assClienteImg ? base_url('assets/assinaturas/' . $result->assClienteImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                                    <br>______________________________
+                                                    <br>Assinatura do Cliente
+                                                    <?php if ($result->assClienteImg) : ?>
+                                                        <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                                        <br>IP: <?=$result->assClienteIp ?>
+                                                    <?php else : ?>
+                                                        <br>Ordem de serviço não assinada.
+                                                    <?php endif; ?>
                                                 </td>
-                                                <td>Assinatura do Cliente
-                                                    <hr>
-                                                </td>
-                                                <td>Assinatura do Responsável
-                                                    <hr>
+                                                <td style="text-align:center;">
+                                                    <img width="150" src="<?=$result->assTecnicoImg ? base_url('assets/assinaturas/tecnicos/' . $result->assTecnicoImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                                    <br> ______________________________
+                                                    <br> Assinatura do Técnico
+                                                    <?php if ($result->assTecnicoImg) : ?>
+                                                        <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                        <br>IP: <?=$result->assTecnicoIp ?>
+                                                    <?php else : ?>
+                                                        <br>Ordem de serviço não assinada.
+                                                    <?php endif; ?>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -495,9 +505,28 @@ $totalProdutos = 0; ?>
                                     <table class="table table-bordered table-condensed" style="padding-top: 20px">
                                         <tbody>
                                             <tr>
-                                                <td>Data<hr></td>
-                                                <td>Assinatura do Cliente<hr></td>
-                                                <td>Assinatura do Responsável<hr></td>
+                                                <td style="text-align:center;">
+                                                    <img width="150" src="<?=$result->assClienteImg ? base_url('assets/assinaturas/' . $result->assClienteImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                                    <br>______________________________
+                                                    <br>Assinatura do Cliente
+                                                    <?php if ($result->assClienteImg) : ?>
+                                                        <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                                        <br>IP: <?=$result->assClienteIp ?>
+                                                    <?php else : ?>
+                                                        <br>Ordem de serviço não assinada.
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <img width="150" src="<?=$result->assTecnicoImg ? base_url('assets/assinaturas/' . $result->assTecnicoImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                                    <br> ______________________________
+                                                    <br> Assinatura do Técnico
+                                                    <?php if ($result->assTecnicoImg) : ?>
+                                                        <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                        <br>IP: <?=$result->assTecnicoIp ?>
+                                                    <?php else : ?>
+                                                        <br>Ordem de serviço não assinada.
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -5,25 +5,29 @@
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/signature_pad.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/assinaturas.js"></script>
 
-<style>
-    .ui-datepicker {
-        z-index: 99999 !important;
+<style>    
+    #assCliente-pad, #assTecnico-pad {
+        border: 1px solid #333333;
     }
 
-    .trumbowyg-box {
-        margin-top: 0;
-        margin-bottom: 0;
+    #assCliente-pad, #assTecnico-pad {
+        margin-top: 25px;
     }
 
-    textarea {
-        resize: vertical;
+    .buttonsAssinaturas {
+        margin-top: 10px;
+    }
+    
+    .buttonsAssinaturas button {
+        margin-top: 5px;
     }
 </style>
+
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -445,56 +449,64 @@ foreach ($servicos as $s) {
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
-                    <!--Assinaturas-->
-                    <div class="tab-pane" id="tab7">
+                        <!--Assinaturas-->
+                        <div class="tab-pane" id="tab7">
                             <div class="span12" style="padding: 1%; margin-left: 0">
-                                <h3>Assine os Termos de Serviço</h3>
-                                <style>
-                                    
-                                    #signature-pad{
-                                        margin-left: 30px;
-                                        border: 1px solid #000;
-                                    }
-                                    #signature-pad2{
-                                        margin-left: 30px;
-                                        border: 1px solid #000;
-                                    }
-                                    .buttons-a{
-                                        margin-left: 30px;
-                                        margin-top: 10px;
-                                    }
+                                <h3>Assine a Ordem de Serviço</h3>
+                                <div class="span11">
+                                    <div class="span11" id="assinaturaCliente" style="text-align:center;">
+                                      <?php if(!$result->assClienteImg): ?>
+                                        <canvas id="assCliente-pad" width="600" height="300"></canvas>
+                                        <h4>Assinatura do Cliente</h4>
+                                      <?php else: ?>
+                                        <img src="<?=base_url() . 'assets/assinaturas/' . $result->assClienteImg?>" width="600" alt="">
+                                        <h4>Assinatura do Cliente</h4>
+                                        <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?></p>
+                                        <p>IP: <?=$result->assClienteIp ?></p>
+                                      <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="span11">
+                                    <div class="span11" id="assinaturaTecnico" style="text-align:center;">
+                                      <?php if(!$this->session->userdata('assinatura') && !$result->assTecnicoImg): ?>
+                                        <canvas id="assTecnico-pad" width="600" height="300"></canvas>
+                                        <h4>Assinatura do Técnico</h4>
+                                      <?php elseif($result->assTecnicoImg): ?>
+                                        <img src="<?=base_url() . 'assets/assinaturas/tecnicos/' . $result->assTecnicoImg?>" width="600" alt="">
+                                        <h4>Assinatura do Técnico</h4>
+                                        <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?></p>
+                                        <p>IP: <?=$result->assTecnicoIp ?></p>
+                                      <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="span11">
+                                    <div class="span11" style="text-align:center;">
+                                        <div class="buttonsAssinaturas">
+                                          <?php
+                                            if(!$result->assClienteImg):
+                                                echo '<button id="limparAssCliente" type="button" class="btn btn-danger">Limpar Ass. Cliente</button>';
+                                            endif;
 
-                                    .p-2{
-                                        margin-left: 30px;
-                                    }
-                                </style>
+                                            if(!$result->assTecnicoImg && !$this->session->userdata('assinatura')):
+                                                echo '<button id="limparAssTecnico" type="button" class="btn btn-danger" style="margin-left:5px">Limpar Ass. Técnico</button>';
+                                            endif;
 
-                                
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-8 col-md-offset-2">
-                                            <div id="signature-container">
-                                                <h4 class="p-2">Assinatura do Cliente</h4>
-                                                <canvas id="signature-pad" width="600" height="300"></canvas>
-                                                <br>
-                                                <h4 class="p-2">Assinatura do Técnico</h4>
-                                                <canvas id="signature-pad2" width="600" height="300"></canvas>
-                                            
-                                                <br>
-                                                <div class="buttons-a">
-                                                    <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
-                                                    <button id="clear-button2" type="button" class="btn btn-danger">Limpar Assinatura Técnico</button>  
-                                                    <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>                               
-                                                </div>
+                                            if(!$result->assClienteImg && !$result->assTecnicoImg && !$this->session->userdata('assinatura')):
+                                                echo '<button id="salvarAss" type="button" class="btn btn-success" style="margin-left:5px">Enviar as 2 Ass.</button>';
+                                                echo '<button id="salvarAssTecnico" type="button" class="btn btn-primary" style="margin-left:5px">Enviar Ass. Técnico</button>';
+                                            elseif(!$result->assClienteImg):
+                                                echo '<button id="salvarAssCliente" type="button" class="btn btn-success" style="margin-left:5px">Enviar Ass. Cliente</button>';
+                                            elseif(!$result->assTecnicoImg):
+                                                echo '<button id="salvarAssTecnico" type="button" class="btn btn-primary" style="margin-left:5px">Enviar Ass. Técnico</button>';
+                                            endif;
 
-                                                
-                                                
-                                                </div>
-                                            </div>
+                                            if(!$result->assTecnicoImg && $this->session->userdata('assinatura')) {
+                                                echo '<button id="adicionarAss" type="button" class="btn btn-primary" style="margin-left:5px">Adicione sua assinatura</button>';
+                                            }
+                                          ?>
                                         </div>
                                     </div>
-                               
-
+                                </div>
                             </div>
                         </div>
                         <!-- Fim tab assinaturas -->
@@ -549,10 +561,10 @@ foreach ($servicos as $s) {
 </div>
 
 <!-- Modal Faturar-->
-<div id="modal-faturar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
-        <div class="modal_header_anexos">
-            <button type="button" class="close" style="color:#f00" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">
@@ -1304,79 +1316,7 @@ foreach ($servicos as $s) {
             lang: 'pt_br'
         });
     });
-</script>
 
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-        var canvas = document.getElementById('signature-pad');
-        var signaturePad = new SignaturePad(canvas);
-
-        var canvas2 = document.getElementById('signature-pad2');
-        var signaturePad2 = new SignaturePad(canvas2);
-
-        var clearButton1 = document.getElementById('clear-button1');
-        var clearButton2 = document.getElementById('clear-button2');
-        var saveButton = document.getElementById('save-button');
-
-        clearButton1.addEventListener('click', function(event) {
-                signaturePad.clear();
-        });
-        clearButton2.addEventListener('click', function(event) {
-                signaturePad2.clear();
-        });
-
-        saveButton.addEventListener('click', function(event) {
-            if (signaturePad.isEmpty() && signaturePad2.isEmpty() ) {
-                alert('Por favor, assine primeiro.');
-            } else {
-                var dataURL = signaturePad.toDataURL();
-                var dataURL2 = signaturePad2.toDataURL();
-                var customerName = '<?php echo $result->nomeCliente ?>';
-		        var nOs = '<?php echo $result->idOs ?>';
-                var tecnico = '<?php echo $result->nome ?>';
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'upload_assinatura_cliente.php', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log(xhr.responseText);
-                } else {
-                    console.log("Erro: " + xhr.status);
-                }
-                };
-                var params = "image=" + encodeURIComponent(dataURL) + "&name=" + encodeURIComponent(customerName);
-                xhr.send(params);
-                console.log("Img = " + dataURL);
-
-                $.ajax({
-                        url: '<?php echo base_url('index.php/Assinatura/upload_signature') ?>',
-                        type: 'POST',
-                        data: {
-                            imageData: dataURL,
-                            clientName: customerName,
-                            imageData2: dataURL2,
-			                nOs: nOs,
-                            tecnico: tecnico
-                        },
-                        success: function(response) {
-                            Swal.fire({
-                                type: "success",
-                                title: "Atenção",
-                                text: "Assinatura Enviada com Sucesso"
-                            });
-                            signaturePad.clear();
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR, textStatus, errorThrown);
-                            Swal.fire({
-                                type: "error",
-                                title: "Atenção",
-                                text: "Ocorreu um erro ao enviar sua assinatura"
-                            });
-                        }
-                    });
-            }
-        });
-
-    });
+    window.base_url = <?=json_encode(base_url())?>;
+    window.idOs     = $("#idOs").val();
 </script>

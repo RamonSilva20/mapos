@@ -203,6 +203,35 @@ echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Desconto: R$
 echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'> Total com Desconto: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
 ?>
                         </h4>
+                        
+                        <table class="table table-bordered table-condensed" style="padding-top: 20px">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <img width="150" src="<?=$result->assClienteImg ? base_url('assets/assinaturas/' . $result->assClienteImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                        <br>______________________________
+                                        <br>Assinatura do Cliente
+                                        <?php if ($result->assClienteImg) : ?>
+                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                            <br>IP: <?=$result->assClienteIp ?>
+                                        <?php else : ?>
+                                            <br>Ordem de serviço não assinada.
+                                        <?php endif; ?>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <img width="150" src="<?=$result->assTecnicoImg ? base_url('assets/assinaturas/tecnicos/' . $result->assTecnicoImg) : base_url('assets/assinaturas/branco.png')?>" />
+                                        <br> ______________________________
+                                        <br> Assinatura do Técnico
+                                        <?php if ($result->assTecnicoImg) : ?>
+                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                            <br>IP: <?=$result->assTecnicoIp ?>
+                                        <?php else : ?>
+                                            <br>Ordem de serviço não assinada.
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
