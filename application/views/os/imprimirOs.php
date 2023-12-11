@@ -118,11 +118,14 @@ $totalProdutos = 0; ?>
                                                                     <span>E-mail: <?php echo $result->email ?></span><br>
                                                                 <?php endif; ?>
                                                                 <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)  ) : ?>
-                                                                    <span>Contato: <?php if (!empty($result->contato_cliente)) : ?><?php echo $result->contato_cliente; ?> <?php endif; ?>
-                                                                        <?php if (!empty($result->telefone_cliente) && $result->celular_cliente != $result->telefone_cliente) : ?>
-                                                                            <?php echo $result->telefone_cliente; ?> /
-                                                                        <?php endif; ?>
-                                                                        <?php echo $result->celular_cliente; ?>
+                                                                    <span>Contato: <?= !empty($result->contato_cliente) ? $result->contato_cliente . ' ' : "" ?>
+                                                                    <?php if ($result->celular_cliente == $result->telefone_cliente) { ?>
+                                                                        <?= $result->celular_cliente ?>
+                                                                    <?php } else { ?>
+                                                                        <?= !empty($result->telefone_cliente) ? $result->telefone_cliente : "" ?>
+                                                                        <?= !empty($result->celular_cliente) && !empty($result->telefone_cliente) ? ' / ' : "" ?>
+                                                                        <?= !empty($result->celular_cliente) ? $result->celular_cliente : "" ?>
+                                                                    <?php } ?>
                                                                     </span>
                                                                 <?php endif; ?>
                                                             </span>
@@ -133,68 +136,7 @@ $totalProdutos = 0; ?>
                                                     <td style="width: 15%; padding: 0;text-align:center;">
                                                         <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
                                                         <img style="margin:0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                                        <?php function validarCPF($cpf) {
-                                                                $cpf = preg_replace('/[^0-9]/', '', $cpf);
-                                                                if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
-                                                                    return false;
-                                                                }
-                                                                $soma1 = 0;
-                                                                for ($i = 0; $i < 9; $i++) {
-                                                                    $soma1 += $cpf[$i] * (10 - $i);
-                                                                }
-                                                                $resto1 = $soma1 % 11;
-                                                                $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
-                                                                if ($dv1 != $cpf[9]) {
-                                                                    return false;
-                                                                }
-                                                                $soma2 = 0;
-                                                                for ($i = 0; $i < 10; $i++) {
-                                                                    $soma2 += $cpf[$i] * (11 - $i);
-                                                                }
-                                                                $resto2 = $soma2 % 11;
-                                                                $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
-
-                                                                return $dv2 == $cpf[10];
-                                                            }
-                                                            function validarCNPJ($cnpj) {
-                                                                $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
-                                                                if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
-                                                                    return false;
-                                                                }
-                                                                $soma1 = 0;
-                                                                for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
-                                                                    $pos = ($pos < 2) ? 9 : $pos;
-                                                                    $soma1 += $cnpj[$i] * $pos;
-                                                                }
-                                                                $dv1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
-                                                                if ($dv1 != $cnpj[12]) {
-                                                                    return false;
-                                                                }
-                                                                $soma2 = 0;
-                                                                for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
-                                                                    $pos = ($pos < 2) ? 9 : $pos;
-                                                                    $soma2 += $cnpj[$i] * $pos;
-                                                                }
-                                                                $dv2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
-
-                                                                return $dv2 == $cnpj[13];
-                                                            }
-                                                            function formatarChave($chave) {
-                                                                if (validarCPF($chave)) {
-                                                                    return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
-                                                                }
-                                                                elseif (validarCNPJ($chave)) {
-                                                                    return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
-                                                                }
-                                                                elseif (strlen($chave) === 11) {
-                                                                    return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
-                                                                }
-                                                                return $chave;
-                                                            }
-                                                            $chaveOriginal = $this->data['configuration']['pix_key'];
-                                                            $chaveFormatada = formatarChave($chaveOriginal);
-                                                            echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: </br>' . $chaveFormatada . '</span>';
-                                                        ?>
+                                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
                                                     </td>
                                                 <?php endif ?>
                                             </tr>
@@ -407,11 +349,14 @@ $totalProdutos = 0; ?>
                                                                     <span>E-mail: <?php echo $result->email ?></span><br>
                                                                 <?php endif; ?>
                                                                 <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)  ) : ?>
-                                                                    <span>Contato: <?php if (!empty($result->contato_cliente)) : ?><?php echo $result->contato_cliente; ?> <?php endif; ?>
-                                                                        <?php if (!empty($result->telefone_cliente) && $result->celular_cliente != $result->telefone_cliente) : ?>
-                                                                            <?php echo $result->telefone_cliente; ?> /
-                                                                        <?php endif; ?>
-                                                                        <?php echo $result->celular_cliente; ?>
+                                                                    <span>Contato: <?= !empty($result->contato_cliente) ? $result->contato_cliente . ' ' : "" ?>
+                                                                    <?php if ($result->celular_cliente == $result->telefone_cliente) { ?>
+                                                                        <?= $result->celular_cliente ?>
+                                                                    <?php } else { ?>
+                                                                        <?= !empty($result->telefone_cliente) ? $result->telefone_cliente : "" ?>
+                                                                        <?= !empty($result->celular_cliente) && !empty($result->telefone_cliente) ? ' / ' : "" ?>
+                                                                        <?= !empty($result->celular_cliente) ? $result->celular_cliente : "" ?>
+                                                                    <?php } ?>
                                                                     </span>
                                                                 <?php endif; ?>
                                                             </span>
@@ -422,11 +367,7 @@ $totalProdutos = 0; ?>
                                                     <td style="width: 15%; padding: 0;text-align:center;">
                                                         <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
                                                         <img style="margin:0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                                        <?php
-                                                            $chaveOriginal = $this->data['configuration']['pix_key'];
-                                                            $chaveFormatada = formatarChave($chaveOriginal);
-                                                            echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: </br>' . $chaveFormatada . '</span>';
-                                                         ?>
+                                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
                                                     </td>
                                                 <?php endif ?>
                                             </tr>

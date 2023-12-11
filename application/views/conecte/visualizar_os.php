@@ -8,9 +8,9 @@ $totalProdutos = 0; ?>
                     <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Ordem de Serviço</h5>
-                <div class="buttons">
-
-                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir Relatório</a>
+                <div class="buttons" style=" padding-left:5px;">
+                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -20,7 +20,6 @@ $totalProdutos = 0; ?>
                         <table class="table table-condensed">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
-
                                     <tr>
                                         <td colspan="3" class="alert">Os dados do emitente não foram configurados.</td>
                                     </tr>
@@ -30,7 +29,7 @@ $totalProdutos = 0; ?>
                                         <td>
                                             <span style="font-size: 20px;"><?php echo $emitente->nome; ?></span></br>
                                             <?php if($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
-                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
+                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
                                             <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></br>
                                             <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?>
                                         </td>
@@ -45,85 +44,85 @@ $totalProdutos = 0; ?>
                     </div>
                     
                     <div style="margin-top: 0; padding-top: 0">
-                            <table class="table table-condensed">
-                                <tbody>
-                                        <?php if ($result->dataInicial != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <b>STATUS OS: </b><?php echo $result->status ?>
-                                                </td>
+                        <table class="table table-condensed">
+                            <tbody>
+                                    <?php if ($result->dataInicial != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <b>STATUS OS: </b><?php echo $result->status ?>
+                                            </td>
 
-                                                <td>
-                                                    <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
-                                                </td>
+                                            <td>
+                                                <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                            </td>
 
-                                                <td>
-                                                    <b>DATA FINAL: </b><?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
-                                                </td>
+                                            <td>
+                                                <b>DATA FINAL: </b><?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                            </td>
 
-                                                <td>
-                                                    <?php if (!empty ($result->garantia)) { ?>
-                                                        <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
-                                                    <?php } ?>
-                                                </td>
+                                            <td>
+                                                <?php if (!empty ($result->garantia)) { ?>
+                                                    <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                                <?php } ?>
+                                            </td>
 
-                                                <td>
-                                                    <b><?php if ($result->status == 'Finalizado') { ?> VENC. DA GARANTIA: </b><?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                </tbody>
-                            </table>
- 
-                            <table class="table table-condensed">
-                                <?php if ($result->descricaoProduto != null || $result->defeito != null || $result->laudoTecnico != null || $result->observacoes) { ?>
-                                        <?php if ($result->descricaoProduto != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <strong>DESCRIÇÃO: </strong><br>
-                                                    <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
-                                                </td>
-                                            </tr>
+                                            <td>
+                                                <b><?php if ($result->status == 'Finalizado') { ?> VENC. DA GARANTIA: </b><?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                            </tbody>
+                        </table>
 
-                                        <?php } ?>
+                        <table class="table table-condensed">
+                            <?php if ($result->descricaoProduto != null || $result->defeito != null || $result->laudoTecnico != null || $result->observacoes) { ?>
+                                    <?php if ($result->descricaoProduto != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>DESCRIÇÃO: </strong><br>
+                                                <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                            </td>
+                                        </tr>
 
-                                        <?php if ($result->defeito != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <strong>DEFEITO APRESENTADO: </strong><br>
-                                                    <?php echo htmlspecialchars_decode($result->defeito) ?>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
+                                    <?php } ?>
 
-                                        <?php if ($result->observacoes != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <strong>OBSERVAÇÕES: </strong><br>
-                                                    <?php echo htmlspecialchars_decode($result->observacoes) ?>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
+                                    <?php if ($result->defeito != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>DEFEITO APRESENTADO: </strong><br>
+                                                <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
 
-                                        <?php if ($result->laudoTecnico != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <strong>LAUDO TÉCNICO: </strong><br>
-                                                    <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
+                                    <?php if ($result->observacoes != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>OBSERVAÇÕES: </strong><br>
+                                                <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
 
-                                        <?php if ($result->garantias_id != null) { ?>
-                                            <tr>
-                                                <td>
-                                                    <strong>TERMO DE GARANTIA </strong><br>
-                                                    <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                <?php } ?>
-                            </table>
+                                    <?php if ($result->laudoTecnico != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>LAUDO TÉCNICO: </strong><br>
+                                                <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+
+                                    <?php if ($result->garantias_id != null) { ?>
+                                        <tr>
+                                            <td>
+                                                <strong>TERMO DE GARANTIA </strong><br>
+                                                <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                            <?php } ?>
+                        </table>
                         
                         <?php if ($anexos != null) { ?>
                             <table class="table table-bordered table-condensed">
@@ -212,13 +211,29 @@ $totalProdutos = 0; ?>
                             </table>
                         <?php } ?>
 
-                        <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                            if ($result->valor_desconto != 0) {
-                                echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
-                            } else { echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
-                        }?>
+                        <table class="table table-condensed">
+                            <thead>
+                                <td>
+                                    <?php if ($totalProdutos != 0 || $totalServico != 0) {
+                                        if ($result->valor_desconto != 0) {
+                                            echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
+                                            echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
+                                        } else { echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
+                                    }?>
+                                </td>
+
+                                <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
+                                    <?php if ($qrCode) : ?>
+                                        <td style="width: 15%; padding-left: 0; text-align:center;">
+                                            <img style="margin:0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
+                                        </td>
+                                    <?php endif ?>
+                                <?php } ?>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>

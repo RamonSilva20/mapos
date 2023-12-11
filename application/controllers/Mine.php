@@ -500,13 +500,22 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-
+        $this->CI = &get_instance();
+        $this->CI->load->database();
+        
+        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
-
+        $data['qrCode'] = $this->os_model->getQrCode(
+            $id,
+            $data['pix_key'],
+            $data['emitente']
+        );
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
+        
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
@@ -514,6 +523,67 @@ class Mine extends CI_Controller
 
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
+    }
+
+    public function validarCPF($cpf) {
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0; $i < 9; $i++) {
+            $soma1 += $cpf[$i] * (10 - $i);
+        }
+        $resto1 = $soma1 % 11;
+        $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
+        if ($dv1 != $cpf[9]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $soma2 += $cpf[$i] * (11 - $i);
+        }
+        $resto2 = $soma2 % 11;
+        $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
+
+        return $dv2 == $cpf[10];
+    }
+
+    public function validarCNPJ($cnpj) {
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+        if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma1 += $cnpj[$i] * $pos;
+        }
+        $dv1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
+        if ($dv1 != $cnpj[12]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma2 += $cnpj[$i] * $pos;
+        }
+        $dv2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
+
+        return $dv2 == $cnpj[13];
+    }
+
+    public function formatarChave($chave) {
+        if ($this->validarCPF($chave)) {
+            return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
+        }
+        elseif ($this->validarCNPJ($chave)) {
+            return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
+        }
+        elseif (strlen($chave) === 11) {
+            return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
+        }
+        return $chave;
     }
 
     public function gerarPagamentoGerencianetBoleto()
