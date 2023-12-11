@@ -89,7 +89,7 @@ $totalProdutos = 0; ?>
                                     <tr>
                                         <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php } else { ?> 
-                                    <td colspan="5" style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="5" style="text-align: center; font-size: 11px;" >
                                             <span style="font-size: 12px; text-transform: uppercase"><b><?php echo $emitente->nome; ?></b></br></span>
@@ -289,7 +289,7 @@ $totalProdutos = 0; ?>
                                             <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<</td>
                                         </tr>
                                     <?php } else { ?>
-                                        <td colspan="5" style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                        <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="5" style="text-align: center; font-size: 11px;" >
                                             <span style="font-size: 12px; text-transform: uppercase"><b><?php echo $emitente->nome; ?></b></br></span>
@@ -473,13 +473,15 @@ $totalProdutos = 0; ?>
                                     </td>
                                 </tr>
                             </tbody>
-                            <?php if ($qrCode) : ?>
-                                <td style="width: 15%; padding: 0;text-align:center;">
-                                    <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                    <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                    <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>' ;?>
-                                </td>
-                            <?php endif ?>
+                            <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
+                                <?php if ($qrCode) : ?>
+                                    <td style="width: 15%; padding: 0;text-align:center;">
+                                        <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
+                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>' ;?>
+                                    </td>
+                                <?php endif ?>
+                            <?php } ?>
                         </table>
                         <table class="table table-bordered table-condensed" style="font-size: 15px">
                             <tbody>
@@ -500,8 +502,10 @@ $totalProdutos = 0; ?>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+  window.print(); 
+</script>
 </body>
-
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
 
