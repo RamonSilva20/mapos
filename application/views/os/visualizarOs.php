@@ -50,7 +50,7 @@
                                         <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> " style="max-height: 100px"></td>
                                         <td>
                                             <span style="font-size: 20px;"><?php echo $emitente->nome; ?></span></br>
-                                            <?php if($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
+                                            <span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br>
                                             <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
                                             <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span>
                                         </td>
@@ -105,72 +105,9 @@
                                         </ul>
                                     </td>
                                     <?php if ($qrCode) : ?>
-                                        <td style="width: 15%; padding: 0;text-align:center;">
-                                        <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php
-                                                function validarCPF($cpf) {
-                                                    $cpf = preg_replace('/[^0-9]/', '', $cpf);
-                                                    if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
-                                                        return false;
-                                                    }
-                                                    $soma1 = 0;
-                                                    for ($i = 0; $i < 9; $i++) {
-                                                        $soma1 += $cpf[$i] * (10 - $i);
-                                                    }
-                                                    $resto1 = $soma1 % 11;
-                                                    $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
-                                                    if ($dv1 != $cpf[9]) {
-                                                        return false;
-                                                    }
-                                                    $soma2 = 0;
-                                                    for ($i = 0; $i < 10; $i++) {
-                                                        $soma2 += $cpf[$i] * (11 - $i);
-                                                    }
-                                                    $resto2 = $soma2 % 11;
-                                                    $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
-
-                                                    return $dv2 == $cpf[10];
-                                                }
-                                                function validarCNPJ($cnpj) {
-                                                    $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
-                                                    if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
-                                                        return false;
-                                                    }
-                                                    $soma1 = 0;
-                                                    for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
-                                                        $pos = ($pos < 2) ? 9 : $pos;
-                                                        $soma1 += $cnpj[$i] * $pos;
-                                                    }
-                                                    $dv1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
-                                                    if ($dv1 != $cnpj[12]) {
-                                                        return false;
-                                                    }
-                                                    $soma2 = 0;
-                                                    for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
-                                                        $pos = ($pos < 2) ? 9 : $pos;
-                                                        $soma2 += $cnpj[$i] * $pos;
-                                                    }
-                                                    $dv2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
-
-                                                    return $dv2 == $cnpj[13];
-                                                }
-                                                function formatarChave($chave) {
-                                                    if (validarCPF($chave)) {
-                                                        return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
-                                                    }
-                                                    elseif (validarCNPJ($chave)) {
-                                                        return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
-                                                    }
-                                                    elseif (strlen($chave) === 11) {
-                                                        return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
-                                                    }
-                                                    return $chave;
-                                                }
-                                                $chaveOriginal = $this->data['configuration']['pix_key'];
-                                                $chaveFormatada = formatarChave($chaveOriginal);
-                                                echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';
-                                            ?>
+                                        <td style="width: 15%; padding-left: 0">
+                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                            <img style="margin:6px 12px 2px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                         </td>
                                     <?php endif ?>
                                 </tr>
@@ -252,7 +189,7 @@
 
                                 <?php if ($result->laudoTecnico != null) { ?>
                                     <tr>
-                                        <td colspan="6">
+                                        <td colspan="5">
                                             <b>LAUDO TÉCNICO: </b>
                                             <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                         </td>
@@ -279,29 +216,6 @@
                                 }?>
                             </tbody>
                         </table>
-                        <?php if ($anexos != null) { ?>
-                            <table class="table table-bordered table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>Anexo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <th>
-                                        <?php foreach ($anexos as $a) {
-                                            if ($a->thumb == null) {
-                                                $thumb = base_url() . 'assets/img/icon-file.png';
-                                                $link = base_url() . 'assets/img/icon-file.png';
-                                            } else {
-                                                $thumb = $a->url . '/thumbs/' . $a->thumb;
-                                                $link = $a->url . '/' . $a->anexo;
-                                            }
-                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
-                                        } ?>
-                                    </th>
-                                </tbody>
-                            </table>
-                        <?php } ?>
                         <?php if ($produtos != null) { ?>
                             <br />
                             <table class="table table-bordered table-condensed" id="tblProdutos">
@@ -331,6 +245,7 @@
                                 </tbody>
                             </table>
                         <?php } ?>
+
                         <?php if ($servicos != null) { ?>
                             <table class="table table-bordered table-condensed">
                                 <thead>
@@ -358,6 +273,30 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                            </table>
+                        <?php } ?>
+
+                        <?php if ($anexos != null) { ?>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($anexos as $a) {
+                                        if ($a->thumb == null) {
+                                            $thumb = base_url() . 'assets/img/icon-file.png';
+                                            $link = base_url() . 'assets/img/icon-file.png';
+                                        } else {
+                                            $thumb = $a->url . '/thumbs/' . $a->thumb;
+                                            $link = $a->url . '/' . $a->anexo;
+                                        }
+                                        echo '<tr>';
+                                        echo '<td><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></td>';
+                                        echo '</tr>';
+                                    } ?>
+                            </tbody>
                             </table>
                         <?php } ?>
                         <?php if ($totalProdutos != 0 || $totalServico != 0) {
