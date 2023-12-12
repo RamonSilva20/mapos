@@ -391,6 +391,11 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
 
         $this->load->view('os/imprimirOsTermica', $this->data);
     }
@@ -1047,7 +1052,7 @@ class Os extends MY_Controller
             echo json_encode(validation_errors());
         } else {
             $data = [
-                'anotacao' => $this->input->post('anotacao'),
+                'anotacao' => '[' . $this->session->userdata('nome_admin') . '] ' . $this->input->post('anotacao'),
                 'data_hora' => date('Y-m-d H:i:s'),
                 'os_id' => $this->input->post('os_id'),
             ];

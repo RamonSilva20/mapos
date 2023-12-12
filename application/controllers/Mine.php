@@ -489,7 +489,7 @@ class Mine extends CI_Controller
         $data['output'] = 'conecte/os';
         $this->load->view('conecte/template', $data);
     }
-
+    
     public function visualizarOs($id = null)
     {
         if (!session_id() || !$this->session->userdata('conectado')) {
@@ -504,6 +504,7 @@ class Mine extends CI_Controller
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
