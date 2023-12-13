@@ -246,6 +246,33 @@
                                     <label> <input <?= @in_array("Aprovado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aprovado"> <span class="lbl"> Aprovado </span> </label>
                                 </div>
                             </div>
+                            <div class="span8" style="margin-left: 3em;">
+                                <label for="usar_assinatura" class="control-label">Sistema de assinaturas de OS</label>
+                                <div class="controls">
+                                    <select name="usar_assinatura" id="control_2vias">
+                                        <option value="1">Ativar</option>
+                                        <option value="0" <?= $configuration['usar_assinatura'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    </select>
+                                    <span class="help-inline">Ativar ou desativar sistema de assinatura online de OS.</span>
+                                </div>
+                            </div>
+                            <div class="span8" style="margin-left: 3em;">
+                                <label for="status_assinatura" class="control-label">Status pós assinatura do cliente</label>
+                                <div class="controls">
+                                    <select name="status_assinatura" id="control_2vias">
+                                        <option>Aberto</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Faturado' ? 'selected' : ''; ?>>Faturado</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Negociação' ? 'selected' : ''; ?>>Negociação</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Em Andamento' ? 'selected' : ''; ?>>Em Andamento</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Orçamento' ? 'selected' : ''; ?>>Orçamento</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Finalizado' ? 'selected' : ''; ?>>Finalizado</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Cancelado' ? 'selected' : ''; ?>>Cancelado</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Aguardando Peças' ? 'selected' : ''; ?>>Aguardando Peças</option>
+                                        <option <?= $configuration['status_assinatura'] == 'Aprovado' ? 'selected' : ''; ?>>Aprovado</option>
+                                    </select>
+                                    <span class="help-inline">Pra qual status a OS vai quando o cliente assinar?</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-actions">
                             <div class="span8">

@@ -288,6 +288,9 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
+        $this->load->model('usuarios_model');
+        $this->data['tecTemAssinatura'] = $this->usuarios_model->getById($this->session->userdata('id_admin'))->assinaturaImg ? true : false;
+
         if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];

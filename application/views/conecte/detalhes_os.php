@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/signature_pad.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/assinaturas.js"></script>
 
 <style>
     .ui-datepicker {
@@ -10,6 +12,14 @@
     .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
+    }
+
+    #assCliente-pad {
+        border: 1px solid #333333;
+    }
+
+    .buttons-a {
+        margin-top: 10px;
     }
 </style>
 
@@ -27,13 +37,16 @@
 
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
+                        <li <?=$tab != 5 ? 'class="active" ' : ''?>id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
+                      <?php if($this->data['usar_assinatura']): ?>
+                        <li <?=$tab == 5 ? 'class="active" ' : ''?>id="tabAssinar"><a href="#tab5" data-toggle="tab">Assinatura</a></li>
+                      <?php endif; ?>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab1">
+                        <div class="tab-pane<?=$tab != 5 ? ' active' : ''?>" id="tab1">
 
                             <div class="span12" id="divCadastrarOs">
 
@@ -220,17 +233,40 @@ foreach ($servicos as $s) {
                             </div>
                         </div>
 
-
-
+                        <!--Assinaturas-->
+                        <?php if($this->data['usar_assinatura']): ?>
+                            <div class="tab-pane<?=$tab == 5 ? ' active' : ''?>" id="tab5">
+                                <div class="span12" style="padding: 1%; margin-left: 0">
+                                    <h3>Autorizar e assinar Ordem de Serviço</h3>
+                                    <p style="margin-left: 10px;">Ao assinar e enviar sua assinatura você estará autorizando a execução da ordem de serviço!</p>
+                                    <div class="span11">
+                                        <div class="span10" id="assinaturaCliente" style="text-align:center;">
+                                        <?php if(!$result->assClienteImg): ?>
+                                            <canvas id="assCliente-pad" width="600" height="300"></canvas>
+                                            <h4>Assinatura do Cliente</h4>
+                                        <?php else: ?>
+                                            <img src="<?=$result->assClienteImg?>" width="600" alt="">
+                                            <h4>Assinatura do Cliente</h4>
+                                            <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?></p>
+                                            <p>IP: <?=$result->assClienteIp ?></p>
+                                        <?php endif; ?>
+                                        </div>
+                                    <?php if(!$result->assClienteImg): ?>
+                                        <div class="span10" style="text-align:center; margin-left:0;">
+                                            <div class="buttons-a">
+                                                <button id="limparAssCliente" type="button" class="btn btn-danger">Limpar Assinatura</button>
+                                                <button id="salvarAssCliente" type="button" class="btn btn-success">Enviar Assinatura</button>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <!-- Fim tab assinaturas -->
                     </div>
-
                 </div>
-
-
-                .
-
             </div>
-
         </div>
     </div>
 </div>
@@ -349,4 +385,7 @@ foreach ($servicos as $s) {
         $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
         $("#download").attr('href', "<?php echo base_url(); ?>index.php/mine/downloadanexo/" + id);
     });
+
+    window.base_url = <?php echo json_encode(base_url()); ?>;
+    window.idOs     = $("#os_id").val();
 </script>
