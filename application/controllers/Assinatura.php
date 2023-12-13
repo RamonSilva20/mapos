@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Assinatura extends MY_Controller
+class Assinatura extends CI_Controller
 {
     public function upload_signature()
     {
