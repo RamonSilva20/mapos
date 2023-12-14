@@ -75,7 +75,7 @@ class Assinatura extends CI_Controller
 
         log_info("[Ass. Digital] OS ID <b>{$idOs}</b> assinada por <b>{$this->input->post('nomeAssinatura')}</b>");
         $anotacao = [
-            'anotacao' => "[Ass. Digital] OS assinada por <b>{$this->input->post('nomeAssinatura')}</b> por meio do IP (ip) <b>{$data['assClienteIp']}</b>",
+            'anotacao' => "[Ass. Digital] OS assinada por <b>{$this->input->post('nomeAssinatura')}</b> por meio do IP <b>{$data['assClienteIp']}</b>",
             'data_hora' => date('Y-m-d H:i:s'),
             'os_id' => $idOs,
         ];
