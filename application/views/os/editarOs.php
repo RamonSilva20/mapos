@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
@@ -441,6 +441,7 @@ foreach ($servicos as $s) {
                                     <div class="span11" id="assinaturaCliente" style="text-align:center;">
                                       <?php if(!$result->assClienteImg): ?>
                                         <canvas id="assCliente-pad" width="600" height="300"></canvas>
+                                        <p style="margin-top: 10px;"><input type="text" name="nomeAssinatura" id="nomeAssinatura" placeholder="Nome e Sobrenome*" class="text-center"></p>
                                         <h4>Assinatura do Cliente</h4>
                                       <?php else: ?>
                                         <img src="<?=$result->assClienteImg?>" width="600" alt="">

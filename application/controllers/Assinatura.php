@@ -9,6 +9,7 @@ class Assinatura extends CI_Controller
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('idOs', 'idOs', 'required');
+        $this->form_validation->set_rules('nomeAssinatura', 'nomeAssinatura');
         $this->form_validation->set_rules('assClienteImg', 'valid_base64');
         $this->form_validation->set_rules('assTecnicoImg', 'valid_base64');
 
@@ -71,10 +72,10 @@ class Assinatura extends CI_Controller
         $this->CI = &get_instance();
         $this->CI->load->database();
         $data['status'] = $this->CI->db->get_where('configuracoes', ['config' => 'status_assinatura'])->row_object()->valor;
-        $msgLog = "O Cliente <b>{$dadosCliente->nomeCliente}</b> assinou a OS Id: <b>{$idOs}</b> na Data <b>".date('d/m/Y H:i:s', strtotime($data['assClienteData']))."</b> com o IP <b>{$data['assClienteIp']}</b>";
-        log_info($msgLog);
+
+        log_info("[Ass. Digital] OS ID <b>{$idOs}</b> assinada por <b>{$this->input->post('nomeAssinatura')}</b>");
         $anotacao = [
-            'anotacao' => $this->session->userdata('nome_admin') ? '[' . $this->session->userdata('nome_admin') . '] '.$msgLog : $msgLog,
+            'anotacao' => "[Ass. Digital] OS assinada por <b>{$this->input->post('nomeAssinatura')}</b> por meio do IP (ip) <b>{$data['assClienteIp']}</b>",
             'data_hora' => date('Y-m-d H:i:s'),
             'os_id' => $idOs,
         ];
@@ -92,10 +93,10 @@ class Assinatura extends CI_Controller
             $data['assTecnicoImg']  = $dadosDoTecnico->assinaturaImg;
             $data['assTecnicoIp']   = $this->input->ip_address();
             $data['assTecnicoData'] = date('Y-m-d H:i:s');
-            $msgLog = "O Técnico <b>{$dadosDoTecnico->nome}</b> assinou a OS Id: <b>{$idOs}</b> na Data <b>".date('d/m/Y H:i:s', strtotime($data['assTecnicoData']))."</b> com o IP <b>{$data['assTecnicoIp']}</b>";
-            log_info($msgLog);
+
+            log_info("[Ass. Digital] OS ID <b>{$idOs}</b> assinada por <b>".mb_substr($dadosDoTecnico->nome, 0, 18)."</b>.");
             $anotacao = [
-                'anotacao' => $msgLog,
+                'anotacao' => "[Ass. Digital] OS assinada por <b>{$dadosDoTecnico->nome}</b> por meio do IP <b>{$data['assTecnicoIp']}</b>.",
                 'data_hora' => date('Y-m-d H:i:s'),
                 'os_id' => $idOs,
             ];
@@ -108,10 +109,10 @@ class Assinatura extends CI_Controller
             $data['assTecnicoImg']  = $assTecnicoImg64;
             $data['assTecnicoIp']   = $this->input->ip_address();
             $data['assTecnicoData'] = date('Y-m-d H:i:s');
-            $msgLog = "O Técnico <b>{$dadosDoTecnico->nome}</b> assinou a OS Id: <b>{$idOs}</b> na Data <b>".date('d/m/Y H:i:s', strtotime($data['assTecnicoData']))."</b> com o IP <b>{$data['assTecnicoIp']}</b>";
-            log_info($msgLog);
+
+            log_info("[Ass. Digital] OS ID <b>{$idOs}</b> assinada por <b>".mb_substr($dadosDoTecnico->nome, 0, 18)."</b>.");
             $anotacao = [
-                'anotacao' => $msgLog,
+                'anotacao' => "[Ass. Digital] OS assinada por <b>{$dadosDoTecnico->nome}</b> por meio do IP <b>{$data['assTecnicoIp']}</b>.",
                 'data_hora' => date('Y-m-d H:i:s'),
                 'os_id' => $idOs,
             ];

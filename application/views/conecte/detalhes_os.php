@@ -17,6 +17,7 @@
 
     #assCliente-pad {
         border: 1px solid #333333;
+        border-radius: 6px;
     }
 
     .buttons-a {
@@ -244,6 +245,7 @@ foreach ($servicos as $s) {
                                         <div class="span10" id="assinaturaCliente" style="text-align:center;">
                                         <?php if(!$result->assClienteImg): ?>
                                             <canvas id="assCliente-pad" width="600" height="300"></canvas>
+                                            <p style="margin-top: 10px;"><input type="text" name="nomeAssinatura" id="nomeAssinatura" placeholder="Nome e Sobrenome*" class="text-center"></p>
                                             <h4>Assinatura do Cliente</h4>
                                         <?php else: ?>
                                             <img src="<?=$result->assClienteImg?>" width="600" alt="">

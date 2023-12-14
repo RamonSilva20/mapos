@@ -42,9 +42,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 form_data.append('idOs', idOs);
 
                 if(assCliente) {
+                    var nomeAssinatura  = $('#nomeAssinatura').val();
+                    if(!nomeAssinatura) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro",
+                            text: "Informe o nome de quem está assinando!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#nomeAssinatura').focus();
+                        return;
+                    }
+
                     var assClienteImg64 = assClientePad.toDataURL();
                     form_data.append('assClienteImg', assClienteImg64);
                     form_data.append('inserirAssCli', 1);
+                    form_data.append('nomeAssinatura', nomeAssinatura);
                 }
                 if(assTecnico) {
                     var assTecnicoImg64 = assTecnicoPad.toDataURL();
@@ -66,12 +80,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: "O Cliente precisa assinar!"
                 });
             } else {
+                var nomeAssinatura = $('#nomeAssinatura').val();
+                if(!nomeAssinatura) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Erro",
+                        text: "Informe o nome de quem está assinando!",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('#nomeAssinatura').focus();
+                    return;
+                }
+
                 var form_data = new FormData();
                 form_data.append('idOs', idOs);
                 
                 var assClienteImg64 = assClientePad.toDataURL();
                 form_data.append('assClienteImg', assClienteImg64);
                 form_data.append('inserirAssCli', 1);
+                form_data.append('nomeAssinatura', nomeAssinatura);
                 
                 post_form(form_data, assClienteImg64);
             }
@@ -125,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             .append('<p>Em '+response.assClienteData+'</p>').append('<p>IP: '+response.assClienteIp+'</p>');
                         $('button').remove('#limparAssCliente, #salvarAss, #salvarAssCliente');
                         $("#divAnotacoes").load(base_url+'index.php/os/editar/'+form_data.get('idOs')+' #divAnotacoes');
+                        $('#nomeAssinatura').remove();
                     }
                     if(response.assTecnicoImg) {
                         assTecnico && assTecnico.remove();

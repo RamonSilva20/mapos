@@ -82,6 +82,7 @@ textarea {
 /* ASSINATURAS */
 #assCliente-pad, #assTecnico-pad {
     border: 1px solid #333333;
+    border-radius: 6px;
 }
 
 #assCliente-pad, #assTecnico-pad {
