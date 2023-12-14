@@ -41,6 +41,7 @@ class Conecte_model extends CI_Model
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit(5);
+        $this->db->order_by('idVendas', 'desc');
 
         return $this->db->get()->result();
     }
@@ -53,6 +54,7 @@ class Conecte_model extends CI_Model
         $this->db->join('usuarios', 'vendas.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit($perpage, $start);
+        $this->db->order_by('idVendas', 'desc');
         if ($where) {
             $this->db->where($where);
         }
@@ -70,6 +72,7 @@ class Conecte_model extends CI_Model
         $this->db->join('clientes', 'cobrancas.clientes_id = clientes.idClientes', 'left');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit($perpage, $start);
+        $this->db->order_by('idCobrancas', 'desc');
         if ($where) {
             $this->db->where($where);
         }
