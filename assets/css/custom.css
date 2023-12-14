@@ -96,3 +96,7 @@ textarea {
 .buttonsAssinaturas button {
     margin-top: 5px;
 }
+
+#nomeAssinatura {
+    border: 1px solid #333333;
+}
