@@ -28,7 +28,7 @@ class Conecte_model extends CI_Model
         $this->db->from('os');
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(10);
+        $this->db->limit(5);
         $this->db->order_by('idOs', 'desc');
 
         return $this->db->get()->result();
@@ -41,7 +41,7 @@ class Conecte_model extends CI_Model
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
         $this->db->order_by('idVendas', 'desc');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(10);
+        $this->db->limit(5);
 
         return $this->db->get()->result();
     }
