@@ -8,9 +8,17 @@ $totalProdutos = 0; ?>
                     <i class="fas fa-diagnoses"></i>
                 </span>
                 <h5>Ordem de Serviço</h5>
+<<<<<<< HEAD
                 <div class="buttons" style=" padding-left:5px;">
                     <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
+=======
+                <div class="buttons">
+
+                    <a target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>"><i class="fas fa-print"></i> Imprimir</a>
+                    <!-- Adicione o botão "Assinar" -->
+                    <a title="Assinar" class="btn btn-mini btn-primary" href="<?php echo site_url() ?>/mine/detalhesos/<?php echo $result->idOs .'?tab=5'; ?>" style="margin-left:10px"><i class="fas fa-pencil-alt"></i> Autorizar e assinar</a>
+>>>>>>> 8488e32ad17ca7567c6aa272964cb14c8bfe02b8
                 </div>
             </div>
             <div class="widget-content" id="printOs">
