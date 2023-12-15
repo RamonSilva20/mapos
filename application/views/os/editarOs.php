@@ -1,10 +1,12 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/signature_pad.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/assinaturas.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
 
@@ -54,6 +56,9 @@
                         <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
+                      <?php if($this->data['configuration']['usar_assinatura']): ?>
+                        <li id="tabAssinatura"><a href="#tab7" data-toggle="tab">Assinaturas</a></li>
+                      <?php endif; ?>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -427,6 +432,70 @@ foreach ($servicos as $s) {
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
+                      <?php if($this->data['configuration']['usar_assinatura']): ?>
+                        <!--Assinaturas-->
+                        <div class="tab-pane" id="tab7">
+                            <div class="span12" style="padding: 1%; margin-left: 0">
+                                <h3>Assine a Ordem de Serviço</h3>
+                                <div class="span11">
+                                    <div class="span11" id="assinaturaCliente" style="text-align:center;">
+                                      <?php if(!$result->assClienteImg): ?>
+                                        <canvas id="assCliente-pad" width="600" height="300"></canvas>
+                                        <p style="margin-top: 10px;"><input type="text" name="nomeAssinatura" id="nomeAssinatura" placeholder="Nome e Sobrenome*" class="text-center"></p>
+                                        <h4>Assinatura do Cliente</h4>
+                                      <?php else: ?>
+                                        <img src="<?=$result->assClienteImg?>" width="600" alt="">
+                                        <h4>Assinatura do Cliente</h4>
+                                        <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?></p>
+                                        <p>IP: <?=$result->assClienteIp ?></p>
+                                      <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="span11">
+                                    <div class="span11" id="assinaturaTecnico" style="text-align:center;">
+                                      <?php if(!$tecTemAssinatura && !$result->assTecnicoImg): ?>
+                                        <canvas id="assTecnico-pad" width="600" height="300"></canvas>
+                                        <h4 id="tituloAssTec">Assinatura do Técnico</h4>
+                                      <?php elseif($result->assTecnicoImg): ?>
+                                        <img src="<?=$result->assTecnicoImg?>" width="600" alt="">
+                                        <h4 id="tituloAssTec">Assinatura do Técnico</h4>
+                                        <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?></p>
+                                        <p>IP: <?=$result->assTecnicoIp ?></p>
+                                      <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="span11">
+                                    <div class="span11" style="text-align:center;">
+                                        <div class="buttonsAssinaturas">
+                                          <?php
+                                            if(!$result->assClienteImg):
+                                                echo '<button id="limparAssCliente" type="button" class="btn btn-danger">Limpar Ass. Cliente</button>';
+                                            endif;
+
+                                            if(!$result->assTecnicoImg && !$tecTemAssinatura):
+                                                echo '<button id="limparAssTecnico" type="button" class="btn btn-danger" style="margin-left:5px">Limpar Ass. Técnico</button>';
+                                            endif;
+
+                                            if(!$result->assClienteImg && !$result->assTecnicoImg && !$tecTemAssinatura):
+                                                echo '<button id="salvarAss" type="button" class="btn btn-success" style="margin-left:5px">Enviar as 2 Ass.</button>';
+                                                echo '<button id="salvarAssTecnico" type="button" class="btn btn-primary" style="margin-left:5px">Enviar Ass. Técnico</button>';
+                                            elseif(!$result->assClienteImg):
+                                                echo '<button id="salvarAssCliente" type="button" class="btn btn-success" style="margin-left:5px">Enviar Ass. Cliente</button>';
+                                            elseif(!$result->assTecnicoImg && !$tecTemAssinatura):
+                                                echo '<button id="salvarAssTecnico" type="button" class="btn btn-primary" style="margin-left:5px">Enviar Ass. Técnico</button>';
+                                            endif;
+
+                                            if(!$result->assTecnicoImg && $tecTemAssinatura) {
+                                                echo '<button id="adicionarAss" type="button" class="btn btn-primary" style="margin-left:5px">Adicione sua assinatura</button>';
+                                            }
+                                          ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      <?php endif; ?>
+                        <!-- Fim tab assinaturas -->
                     </div>
                 </div>
                 &nbsp
@@ -1233,4 +1302,7 @@ foreach ($servicos as $s) {
             lang: 'pt_br'
         });
     });
+
+    window.base_url = <?=json_encode(base_url())?>;
+    window.idOs     = $("#idOs").val();
 </script>

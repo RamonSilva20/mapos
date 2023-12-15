@@ -78,3 +78,25 @@
 textarea {
         resize: vertical;
     }
+
+/* ASSINATURAS */
+#assCliente-pad, #assTecnico-pad {
+    border: 1px solid #333333;
+    border-radius: 6px;
+}
+
+#assCliente-pad, #assTecnico-pad {
+    margin-top: 25px;
+}
+
+.buttonsAssinaturas {
+    margin-top: 10px;
+}
+
+.buttonsAssinaturas button {
+    margin-top: 5px;
+}
+
+#nomeAssinatura {
+    border: 1px solid #333333;
+}
