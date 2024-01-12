@@ -868,7 +868,7 @@
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                               <button type="submit" class="button btn btn-primary">
                               <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar</span></button>
-                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?=site_url()?>/permissoes">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>

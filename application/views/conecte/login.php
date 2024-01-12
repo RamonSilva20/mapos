@@ -6,15 +6,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-login.css" />
     <link href="<?= base_url('assets/css/particula.css'); ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <script src="<?php echo base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
-    <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
-    <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <script src="<?=base_url()?>assets/js/jquery-1.12.4.min.js"></script>
+    <link rel="shortcut icon" href="<?=base_url()?>assets/img/favicon.png">
+    <script src="<?=base_url()?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?=base_url()?>assets/js/funcoes.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <!-- Script webeddy.com.br -->
     <script>
@@ -38,11 +38,11 @@ $parse_email = $this->input->get('e');
     <div class="main-login">
         <div class="left-login">
             <h1 class="h-one">Área do Cliente</h1>
-            <img src="<?php echo base_url() ?>assets/img/forms-animate.svg" class="left-login-imagec" alt="Map-OS 5.0">
+            <img src="<?=base_url()?>assets/img/forms-animate.svg" class="left-login-imagec" alt="Map-OS 5.0">
         </div>
 
         <div id="loginbox">
-            <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
+            <form class="form-vertical" id="formLogin" method="post" action="<?=site_url()?>/mine/login">
 
                 <div class="d-flex flex-column">
                     <div class="right-login">
@@ -51,10 +51,10 @@ $parse_email = $this->input->get('e');
                                 <div class="content">
                                     <div id="newlog">
                                         <div class="icon2">
-                                            <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                                            <img src="<?=base_url()?>assets/img/logo-two.png">
                                         </div>
                                         <div class="title01">
-                                            <img src="<?php echo base_url() ?>assets/img/logo-mapos-branco.png">
+                                            <img src="<?=base_url()?>assets/img/logo-mapos-branco.png">
                                         </div>
                                     </div>
                                     <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
@@ -92,9 +92,9 @@ $parse_email = $this->input->get('e');
         </div>
     </div>
 
-    <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+    <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+    <script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
     <?php if ($this->session->flashdata('success') != null) { ?>
         <script>
             Swal.fire({
@@ -147,12 +147,12 @@ $parse_email = $this->input->get('e');
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/mine/login?ajax=true",
+                        url: "<?=base_url()?>index.php/mine/login?ajax=true",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                window.location.href = "<?php echo base_url(); ?>index.php/mine/painel";
+                                window.location.href = "<?=base_url()?>index.php/mine/painel";
                             } else {
                                 Swal.fire({
                                     position: 'center',

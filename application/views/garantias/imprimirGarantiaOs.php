@@ -5,9 +5,9 @@
     <title>Map OS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
+    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
@@ -82,7 +82,7 @@
                                 <tbody>
                                     <?php if ($emitente == null) { ?>
                                         <tr>
-                                            <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                                 <<<</td> </tr> <?php
                                     } else { ?> <tr>
                                             <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
@@ -161,8 +161,8 @@
             </div>
         </div>
     </div>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
+    <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>assets/js/matrix.js"></script>
     <script>
         window.print();
     </script>

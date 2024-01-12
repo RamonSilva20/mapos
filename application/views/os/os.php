@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/table-custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
 <style>
   select {
     width: 70px;
@@ -15,10 +15,10 @@
             <h5>Ordens de Serviço</h5>
         </div>
     <div class="span12" style="margin-left: 0">
-        <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
+        <form method="get" action="<?=base_url()?>index.php/os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
                 <div class="span3">
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+                    <a href="<?=base_url()?>index.php/os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
                         <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Ordem de Serviço</span></a>
                 </div>
             <?php
@@ -184,7 +184,7 @@
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+        <form action="<?=base_url()?>index.php/os/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir OS</h5>
@@ -211,7 +211,7 @@
         $(document).on('click', '#excluir-notificacao', function(event) {
             event.preventDefault();
             $.ajax({
-                    url: '<?php echo site_url() ?>/os/excluir_notificacao',
+                    url: '<?=site_url()?>/os/excluir_notificacao',
                     type: 'GET',
                     dataType: 'json',
                 })

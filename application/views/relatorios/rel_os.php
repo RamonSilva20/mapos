@@ -9,8 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/osRapid"><i class="fas fa-diagnoses"></i> <small>Todas as OS - pdf</small></a></li>
-                    <li><a target="_blank" href="<?php echo base_url() ?>index.php/relatorios/osRapid?format=xls"><i class="fas fa-diagnoses"></i> <small>Todas as OS - xls</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/osRapid"><i class="fas fa-diagnoses"></i> <small>Todas as OS - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/osRapid?format=xls"><i class="fas fa-diagnoses"></i> <small>Todas as OS - xls</small></a></li>
                 </ul>
             </div>
         </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?php echo base_url() ?>index.php/relatorios/osCustom" method="get">
+                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/osCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Data de:</label>
@@ -87,21 +87,21 @@
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?=base_url()?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $(".money").maskMoney();
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clienteHide").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#responsavelHide").val(ui.item.id);

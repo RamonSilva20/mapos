@@ -8,7 +8,7 @@
     <div class="widget-title" style="margin:-15px -10px 0">
       <h5>Usuários</h5>
     </div>
-  <a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
+  <a href="<?=base_url()?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
   <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Usuário</span></a>
 
 <div class="widget-box">

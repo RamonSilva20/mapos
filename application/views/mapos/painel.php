@@ -1,4 +1,4 @@
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?=base_url()?>js/dist/excanvas.min.js"></script><![endif]-->
 
 <script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
+                    <a href="<?=base_url()?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
@@ -167,7 +167,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
+                    <a href="<?=base_url()?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
@@ -175,7 +175,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                    <a href="<?=base_url()?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
@@ -183,7 +183,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
+                    <a href="<?=base_url()?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
@@ -191,7 +191,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                    <a href="<?=base_url()?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
@@ -199,7 +199,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
+                    <a href="<?=base_url()?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
@@ -215,7 +215,7 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
+                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
@@ -223,7 +223,7 @@
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
+                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
@@ -740,7 +740,7 @@
 
 <!-- Modal Excluir Os -->
 <div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+    <form action="<?=base_url()?>index.php/os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>
@@ -758,7 +758,7 @@
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?=base_url()?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -786,7 +786,7 @@
     </form>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <!-- Modal Estoque-->
 <script type="text/javascript">
     $(document).ready(function() {
@@ -845,11 +845,11 @@
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
-                $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
+                $('#modalIdVisualizar').attr("href", "<?=base_url()?>index.php/os/visualizar/" + eventObj.id);
                 if (eventObj.editar) {
                     $('#modalIdEditar').show();
                     $('#linkExcluir').show();
-                    $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
+                    $('#modalIdEditar').attr("href", "<?=base_url()?>index.php/os/editar/" + eventObj.id);
                     $('#modalIdExcluir').val(eventObj.id);
                 } else {
                     $('#modalIdEditar').hide();

@@ -7,9 +7,9 @@ $totalProdutos = 0; ?>
     <title>Map_OS_<?php echo $result->idOs ?>_<?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
+    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
@@ -84,7 +84,7 @@ $totalProdutos = 0; ?>
                                         <tbody>
                                             <?php if ($emitente == null) { ?>
                                                 <tr>
-                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                                         <<<< /td>
                                                 </tr> <?php } else { ?><td style="width: 20%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                                 <td>
@@ -135,7 +135,7 @@ $totalProdutos = 0; ?>
                                                 <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
                                                     <?php if ($qrCode) : ?>
                                                         <td style="width: 15%; padding: 0;text-align:center;">
-                                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                                            <img style="margin:12px 0px 0px 0px" src="<?=base_url()?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                                             <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
                                                         </td>
@@ -317,7 +317,7 @@ $totalProdutos = 0; ?>
                                         <tbody>
                                             <?php if ($emitente == null) { ?>
                                                 <tr>
-                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                                         <<<< /td>
                                                 </tr> <?php } else { ?><td style="width: 20%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                                 <td>
@@ -368,7 +368,7 @@ $totalProdutos = 0; ?>
                                                 <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
                                                     <?php if ($qrCode) : ?>
                                                         <td style="width: 15%; padding: 0;text-align:center;">
-                                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                                            <img style="margin:12px 0px 0px 0px" src="<?=base_url()?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                                             <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
                                                         </td>

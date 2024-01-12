@@ -1,12 +1,12 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/custom.css" />
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -26,7 +26,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divEditarVenda">
-                                <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
+                                <form action="<?=current_url()?>" method="post" id="formVendas">
                                     <?php echo form_hidden('idVendas', $result->idVendas) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>Venda:
@@ -74,9 +74,9 @@
                                             } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
                                                 <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
+                                            <a href="<?=base_url()?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
                                                 <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
+                                            <a href="<?=base_url()?>index.php/vendas" class="button btn btn-warning">
                                                 <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <div class="span11">
-                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                    <form id="formProdutos" action="<?=base_url()?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
                                             <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
@@ -110,7 +110,7 @@
                                     </form>
                                 </div>
                                 <div class="span11">
-                                    <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
+                                    <form id="formDesconto" action="<?=base_url()?>index.php/vendas/adicionarDesconto" method="POST">
                                         <div class="span1">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
@@ -200,7 +200,7 @@ foreach ($produtos as $p) {
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
+    <form id="formFaturar" action="<?=current_url()?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar Venda</h3>
@@ -268,7 +268,7 @@ foreach ($produtos as $p) {
         </div>
     </form>
 </div>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?=base_url()?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     
     $("#quantidade").keyup(function() {
@@ -391,7 +391,7 @@ foreach ($produtos as $p) {
                             title: "Sucesso",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#divProdutos").load("<?=current_url()?> #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                         /*setTimeout(function() {
@@ -403,7 +403,7 @@ foreach ($produtos as $p) {
                             title: "Atenção",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#divProdutos").load("<?=current_url()?> #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                     }
@@ -415,7 +415,7 @@ foreach ($produtos as $p) {
                         title: "Atenção",
                         text: response.responseJSON.messages
                     });
-                    $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                    $("#divProdutos").load("<?=current_url()?> #divProdutos");
                     $("#desconto").val("");
                     $("#resultado").val("");
                 }
@@ -465,7 +465,7 @@ foreach ($produtos as $p) {
                 } else if (qtdProdutos > 0) {
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/vendas/faturar",
+                        url: "<?=base_url()?>index.php/vendas/faturar",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -487,7 +487,7 @@ foreach ($produtos as $p) {
             }
         });
         $("#produto").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProdutoSaida",
+            source: "<?=base_url()?>index.php/os/autoCompleteProdutoSaida",
             minLength: 2,
             select: function(event, ui) {
                 $("#idProduto").val(ui.item.id);
@@ -497,14 +497,14 @@ foreach ($produtos as $p) {
             }
         });
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
@@ -579,12 +579,12 @@ foreach ($produtos as $p) {
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/vendas/adicionarProduto",
+                        url: "<?=base_url()?>index.php/vendas/adicionarProduto",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                                $("#divProdutos").load("<?=current_url()?> #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
@@ -596,7 +596,7 @@ foreach ($produtos as $p) {
                                     title: "Atenção",
                                     html: "Ocorreu um erro ao tentar adicionar produto. <br /><br />Error: " + data.messages
                                 });
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                                $("#divProdutos").load("<?=current_url()?> #divProdutos");
                                 $('#formProdutos')[0].reset();
                             }
                         }
@@ -613,12 +613,12 @@ foreach ($produtos as $p) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/vendas/excluirProduto",
+                    url: "<?=base_url()?>index.php/vendas/excluirProduto",
                     data: "idProduto=" + idProduto + "&idVendas=" + <?= $result->idVendas ?> + "&quantidade=" + quantidade + "&produto=" + produto,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
-                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#divProdutos").load("<?=current_url()?> #divProdutos");
                             $("#resultado").val("");
                             $("#desconto").val("");
                         } else {
@@ -627,7 +627,7 @@ foreach ($produtos as $p) {
                                 title: "Atenção",
                                 html: "Ocorreu um erro ao tentar excluir produto." + data.messages
                             });
-                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#divProdutos").load("<?=current_url()?> #divProdutos");
                         }
                     }
                 });

@@ -15,7 +15,7 @@
                 <li><a data-toggle="tab" href="#menu4">Atualizações</a></li>
                 <li><a data-toggle="tab" href="#menu5">OS</a></li>
             </ul>
-            <form action="<?php echo current_url(); ?>" id="formConfigurar" method="post" class="form-horizontal">
+            <form action="<?=current_url()?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <?php echo $custom_error; ?>
                     <!-- Menu Gerais -->
@@ -263,7 +263,7 @@
 </div>
 <!-- Modal -->
 <div id="modal-confirmaratualiza" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+    <form action="<?=base_url()?>index.php/clientes/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Atualização de sistema</h5>
@@ -283,7 +283,7 @@
 </div>
 <!-- Modal -->
 <div id="modal-confirmabanco" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+    <form action="<?=base_url()?>index.php/clientes/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Atualização de sistema</h5>
@@ -291,7 +291,7 @@
         <div class="modal-body">
             <h5 style="text-align: left">Deseja realmente fazer a atualização do banco de dados?</h5>
             <h7 style="text-align: left">Recomendamos que faça um backup antes de prosseguir!
-                <a target="_blank" title="Fazer Bakup" class="btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mapos/backup">Fazer Backup</a>
+                <a target="_blank" title="Fazer Bakup" class="btn btn-mini btn-inverse" href="<?=site_url()?>/mapos/backup">Fazer Backup</a>
             </h7>
         </div>
         <div class="modal-footer" style="display:flex;justify-content: center">

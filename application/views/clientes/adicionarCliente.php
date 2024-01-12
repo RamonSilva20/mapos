@@ -1,6 +1,6 @@
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?=base_url()?>assets/js/funcoes.js"></script>
 <style>
     #imgSenha {
         width: 18px;
@@ -88,7 +88,7 @@
             <?php if ($custom_error != '') {
                 echo '<div class="alert alert-danger">' . $custom_error . '</div>';
             } ?>
-            <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+            <form action="<?=current_url()?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">
                         <div class="control-group">
@@ -132,7 +132,7 @@
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
                                 <input class="form-control" id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
-                                <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
+                                <img id="imgSenha" src="<?=base_url()?>assets/img/eye.svg" alt="">
                             </div>
                         </div>
                         <div class="control-group">
@@ -197,7 +197,7 @@
                     <div class="span12">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-mini btn-success"><span class="button__icon"><i class='bx bx-save'></i></span> <span class="button__text2">Salvar</span></a></button>
-                            <a title="Voltar" class="button btn btn-warning" href="<?php echo site_url() ?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                            <a title="Voltar" class="button btn btn-warning" href="<?=site_url()?>/clientes"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </div>
@@ -205,7 +205,7 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let container = document.querySelector('div');
@@ -215,15 +215,15 @@
         icon.addEventListener('click', function() {
             container.classList.toggle('visible');
             if (container.classList.contains('visible')) {
-                icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
+                icon.src = '<?=base_url()?>assets/img/eye-off.svg';
                 input.type = 'text';
             } else {
-                icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
+                icon.src = '<?=base_url()?>assets/img/eye.svg'
                 input.type = 'password';
             }
         });
 
-        $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+        $.getJSON('<?=base_url()?>assets/json/estados.json', function(data) {
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
             }

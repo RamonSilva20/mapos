@@ -3,7 +3,7 @@
 if (!$this->session->userdata('cadastra_os')) { ?>
     <div class="span12" style="margin-left: 0">
         <div class="span3">
-            <a href="<?php echo base_url(); ?>index.php/mine/adicionarOs" class="button btn btn-success" style="max-width: 150px">
+            <a href="<?=base_url()?>index.php/mine/adicionarOs" class="button btn btn-success" style="max-width: 150px">
               <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
         </div>
     </div>

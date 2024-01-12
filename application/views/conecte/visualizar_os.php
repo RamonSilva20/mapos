@@ -9,7 +9,7 @@ $totalProdutos = 0; ?>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons" style=" padding-left:5px;">
-                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
                 </div>
             </div>
@@ -226,7 +226,7 @@ $totalProdutos = 0; ?>
                                 <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0; text-align:center;">
-                                            <img style="margin:0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:0px" src="<?=base_url()?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
                                             <img style="margin:6px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                             <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
                                         </td>
@@ -265,9 +265,9 @@ $totalProdutos = 0; ?>
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            var url = '<?=base_url()?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
-            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?=base_url()?>index.php/os/downloadanexo/" + id);
         });
     });
 </script>
@@ -296,10 +296,10 @@ $totalProdutos = 0; ?>
             }
 
             mywindow.document.write('<html><head><title>Map Os</title>');
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-style.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-media.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?=base_url()?>assets/css/bootstrap.min.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?=base_url()?>assets/css/bootstrap-responsive.min.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?=base_url()?>assets/css/matrix-style.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?=base_url()?>assets/css/matrix-media.css' />");
 
             mywindow.document.write("</head><body >");
             mywindow.document.write(data);

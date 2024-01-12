@@ -3,33 +3,33 @@
 <div class="quick-actions_homepage">
     <ul class="cardBox">
         <li class="card">
-            <a href="<?php echo base_url() ?>index.php/mine/os">
+            <a href="<?=base_url()?>index.php/mine/os">
                 <div class="lord-icon04">
                     <i class='bx bx-file iconBx04'></i>
                 </div>
             </a>
-            <a href="<?php echo base_url() ?>index.php/mine/os">
+            <a href="<?=base_url()?>index.php/mine/os">
                 <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
             </a>
         </li>
 
         <li class="card"> 
-            <a href="<?php echo base_url() ?>index.php/mine/compras">
+            <a href="<?=base_url()?>index.php/mine/compras">
                 <div class="lord-icon05">
                     <i class='bx bx-cart-alt iconBx05'></i>
                 </div>
             </a>
-            <a href="<?php echo base_url() ?>index.php/mine/compras">
+            <a href="<?=base_url()?>index.php/mine/compras">
                 <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </a>
         </li>
         <li class="card"> 
-            <a href="<?php echo base_url() ?>index.php/mine/conta">
+            <a href="<?=base_url()?>index.php/mine/conta">
                 <div class="lord-icon07">
                     <i class='bx bx-user-circle iconBx07'></i></span>
                 </div>
             </a>
-            <a href="<?php echo base_url() ?>index.php/mine/conta">
+            <a href="<?=base_url()?>index.php/mine/conta">
                 <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
             </a></li>
     </ul>

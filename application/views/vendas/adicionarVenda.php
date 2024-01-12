@@ -1,11 +1,11 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/custom.css" />
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -27,7 +27,7 @@
                                 <?php if ($custom_error == true) { ?>
                                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
-                                <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
+                                <form action="<?=current_url()?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span2">
                                             <label for="dataInicial">Data da Venda<span class="required">*</span></label>
@@ -38,7 +38,7 @@
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
                                             <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-                                              <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
+                                              <a href="<?=base_url()?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -64,7 +64,7 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex;justify-content: center">
                                           <button class="button btn btn-success" id="btnContinuar"><span class="button__icon"><i class='bx bx-chevrons-right'></i></span><span class="button__text2">Continuar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                            <a href="<?=base_url()?>index.php/vendas" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
@@ -80,7 +80,7 @@
     $(document).ready(function() {
         $('.addclient').hide();
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteCliente",
+            source: "<?=base_url()?>index.php/vendas/autoCompleteCliente",
             minLength: 1,
             close: function(ui) { if(ui.label == 'Adicionar cliente...')ui.target.value = '';},
             select: function(event, ui) {
@@ -94,7 +94,7 @@
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteUsuario",
+            source: "<?=base_url()?>index.php/vendas/autoCompleteUsuario",
             minLength: 1,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);

@@ -1,6 +1,6 @@
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.mask.min.js"></script>
+<script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?=base_url()?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -13,7 +13,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
 
-                <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+                <form action="<?=current_url()?>" id="formCliente" method="post" class="form-horizontal">
                     <div class="control-group">
                         <input type="hidden" name="idClientes" id="idClientes" value="<?php echo $result->idClientes; ?>" />
                         <label for="nomeCliente" class="control-label">Nome<span class="required">*</span></label>
@@ -56,7 +56,7 @@
                         <label for="senha" class="control-label">Senha</label>
                         <div class="controls">
                             <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
-                            <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="" style="width: 18px; cursor: pointer;">
+                            <img id="imgSenha" src="<?=base_url()?>assets/img/eye.svg" alt="" style="width: 18px; cursor: pointer;">
                         </div>
                     </div>
 
@@ -113,7 +113,7 @@
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary">
                                     <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="button btn btn-mini btn-warning">
+                                <a href="<?=base_url()?>index.php/mine/conta" id="" class="button btn btn-mini btn-warning">
                                     <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
 
 
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let container = document.querySelector('div');
@@ -136,10 +136,10 @@
         icon.addEventListener('click', function() {
             container.classList.toggle('visible');
             if (container.classList.contains('visible')) {
-                icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
+                icon.src = '<?=base_url()?>assets/img/eye-off.svg';
                 input.type = 'text';
             } else {
-                icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
+                icon.src = '<?=base_url()?>assets/img/eye.svg'
                 input.type = 'password';
             }
         });

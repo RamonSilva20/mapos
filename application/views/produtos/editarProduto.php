@@ -36,7 +36,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                <form action="<?=current_url()?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
@@ -107,7 +107,7 @@
                             <div class="span6 offset3" style="display: flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary" style="max-width: 160px">
                                   <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
+                                <a href="<?=base_url()?>index.php/produtos" id="" class="button btn btn-mini btn-warning">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
@@ -122,8 +122,8 @@
 </div>
 
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcLucro(precoCompra, margemLucro) {
     var precoVenda = (precoCompra * margemLucro / 100 + precoCompra).toFixed(2);
@@ -169,7 +169,7 @@
 
     $(document).ready(function() {
         $(".money").maskMoney();
-        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+        $.getJSON('<?=base_url()?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
                 $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
                 $("#unidade option[value=" + '<?php echo $result->unidade; ?>' + "]").prop("selected", true);

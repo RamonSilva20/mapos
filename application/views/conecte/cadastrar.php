@@ -6,19 +6,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
-    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-media.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="<?=base_url()?>assets/img/favicon.png" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-media.css" />
+    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/fullcalendar.css" />
+    <link href="<?=base_url()?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.12.4.min.js"></script>
+    <script src="<?=base_url()?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+    <script src="<?=base_url()?>assets/js/funcoes.js"></script>
 </head>
 
 <body>
@@ -80,7 +80,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
 
-                <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
+                <form action="<?=current_url()?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
                     <div class="control-group">
                         <label for="nomeCliente" class="control-label"><span class="required"></span></label>
                         <div class="controls">
@@ -123,7 +123,7 @@
                         <label for="senha" class="control-label"><span class="required"></span></label>
                         <div class="controls">
                             <input id="senha" type="password" placeholder="Senha*" name="senha" value="<?php echo set_value('senha'); ?>" />
-                            <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
+                            <img id="imgSenha" src="<?=base_url()?>assets/img/eye.svg" alt="">
                         </div>
                     </div>
 
@@ -181,7 +181,7 @@
                 <div class="span12">
                     <div class="span6 offset3" style="display:flex;justify-content: center">
                         <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
-                        <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                        <a href="<?=base_url()?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                     </div>
                 </div>
             </div>
@@ -190,11 +190,11 @@
     </div>
 
 
-    <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+    <script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
-            $.getJSON('<?php echo base_url() ?>assets/json/estados.json', function(data) {
+            $.getJSON('<?=base_url()?>assets/json/estados.json', function(data) {
                 for (i in data.estados) {
                     $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
                     var curState = '<?php echo set_value('estado'); ?>';
@@ -211,10 +211,10 @@
             icon.addEventListener('click', function() {
                 container.classList.toggle('visible');
                 if (container.classList.contains('visible')) {
-                    icon.src = '<?php echo base_url() ?>assets/img/eye-off.svg';
+                    icon.src = '<?=base_url()?>assets/img/eye-off.svg';
                     input.type = 'text';
                 } else {
-                    icon.src = '<?php echo base_url() ?>assets/img/eye.svg'
+                    icon.src = '<?=base_url()?>assets/img/eye.svg'
                     input.type = 'password';
                 }
             });
@@ -316,7 +316,7 @@
     <!-- javascript
 ================================================== -->
 
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url(); ?>index.php/permissoes/adicionar" id="formPermissao" method="post">
+    <form action="<?=base_url()?>index.php/permissoes/adicionar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">
             <div class="widget-box">
                 <div class="widget-title" style="margin: -20px 0 0">
@@ -571,7 +571,7 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-success"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Confirmar</span></button>
-                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?=site_url()?>/permissoes">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
@@ -581,7 +581,7 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/validate.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#marcarTodos").change(function() {

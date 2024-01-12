@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -12,7 +12,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formArquivo" method="post" class="form-horizontal">
+                <form action="<?=current_url()?>" id="formArquivo" method="post" class="form-horizontal">
 
 
                     <div class="control-group">
@@ -42,7 +42,7 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/arquivos" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                <a href="<?=base_url()?>index.php/arquivos" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 

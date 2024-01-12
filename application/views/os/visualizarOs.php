@@ -13,9 +13,9 @@
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
 
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/os/imprimir/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
@@ -28,9 +28,9 @@
                         }
                     } ?>
 
-                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
+                    <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?=site_url()?>/os/enviar_email/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span></a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->garantias_id; ?>">
+                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/garantias/imprimirGarantiaOs/<?php echo $result->garantias_id; ?>">
                             <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
                     <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
                         <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
@@ -43,7 +43,7 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                             <<< </td>
                                     </tr> <?php } else { ?>
                                     <tr>
@@ -109,7 +109,7 @@
                                     </td>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding: 0;text-align:center;">
-                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:12px 0px 0px 0px" src="<?=base_url()?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                             <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
                                         </td>
@@ -343,11 +343,11 @@
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            var url = '<?=base_url()?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
 
-            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?=base_url()?>index.php/os/downloadanexo/" + id);
 
         });
 
@@ -367,7 +367,7 @@
                 data: "idOs=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
+                        $("#divAnexos").load("<?=current_url()?> #divAnexos");
                     } else {
                         Swal.fire({
                             type: "error",

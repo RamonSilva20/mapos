@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <style>
     .ui-datepicker {
@@ -264,7 +264,7 @@ foreach ($servicos as $s) {
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
+    <form id="formFaturar" action="<?=current_url()?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar Venda</h3>
@@ -347,6 +347,6 @@ foreach ($servicos as $s) {
         var link = $(this).attr('link');
         var id = $(this).attr('imagem');
         $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
-        $("#download").attr('href', "<?php echo base_url(); ?>index.php/mine/downloadanexo/" + id);
+        $("#download").attr('href', "<?=base_url()?>index.php/mine/downloadanexo/" + id);
     });
 </script>

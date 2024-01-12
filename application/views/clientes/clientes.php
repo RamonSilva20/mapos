@@ -11,7 +11,7 @@
             <h5>Clientes</h5>
         </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-        <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="button btn btn-mini btn-success" style="max-width: 165px">
+        <a href="<?=base_url()?>index.php/clientes/adicionar" class="button btn btn-mini btn-success" style="max-width: 165px">
             <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">
                 Cliente / Fornecedor
             </span>
@@ -71,7 +71,7 @@
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
+        <form action="<?=base_url()?>index.php/clientes/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir Cliente</h5>

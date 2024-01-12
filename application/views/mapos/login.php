@@ -38,7 +38,7 @@
   ?></h1>
 
       <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
-      <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
+      <img src="<?=base_url()?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
     </div>
     <div id="loginbox">
       <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
@@ -56,7 +56,7 @@
           <div class="content">
             <div id="newlog">
               <div class="icon2">
-                <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                <img src="<?=base_url()?>assets/img/logo-two.png">
               </div>
               <div class="title01">
                 <?= '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>

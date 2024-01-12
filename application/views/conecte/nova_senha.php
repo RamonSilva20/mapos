@@ -6,19 +6,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
-    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-media.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="<?=base_url()?>assets/img/favicon.png" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-media.css" />
+    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/fullcalendar.css" />
+    <link href="<?=base_url()?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.12.4.min.js"></script>
+    <script src="<?=base_url()?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+    <script src="<?=base_url()?>assets/js/funcoes.js"></script>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
                                     <button name="senhaClient" id="senhaClient" type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-lock-open'></i></span><span class="button__text2">Alterar</span></button>
-                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                                    <a href="<?=base_url()?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                 </div>
               </div>
 
-    <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+    <script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -65,7 +65,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url() ?>index.php/mine/senhaSalvar",
+                    url: "<?=base_url()?>index.php/mine/senhaSalvar",
                     dataType: 'json',
                     data: {
                         token: token,
@@ -78,7 +78,7 @@
                                 title: "Salvo com Sucesso",
                                 text: data.message
                             });
-                            window.location.replace("<?php echo base_url() ?>index.php/mine/");
+                            window.location.replace("<?=base_url()?>index.php/mine/");
                         } else {
                             Swal.fire({
                                 type: "error",
@@ -110,7 +110,7 @@
     <!-- javascript
 ================================================== -->
 
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -12,7 +12,7 @@
                         echo '<a title="Editar Termo de Garantia" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/garantias/editar/' . $result->idGarantias . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
-                    <a target="_blank" title="Imprimir" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>">
+                    <a target="_blank" title="Imprimir" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/garantias/imprimir/<?php echo $result->idGarantias; ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir</span></a>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php
                                 } else { ?> <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>

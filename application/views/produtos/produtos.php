@@ -12,7 +12,7 @@
     </div>
 <div class="flexxn" style="display: flex;">
 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) { ?>
-    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+    <a href="<?=base_url()?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2"> Produtos</span></a>
     <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-barcode-reader' ></i></span><span class="button__text2">Gerar Etiquetas</span></a>
@@ -73,7 +73,7 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/excluir" method="post">
+    <form action="<?=base_url()?>index.php/produtos/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-trash-alt"></i> Excluir Produto</h5>
@@ -92,7 +92,7 @@
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?=base_url()?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -122,7 +122,7 @@
 
 <!-- Modal Etiquetas -->
 <div id="modal-etiquetas" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/relatorios/produtosEtiquetas" method="get">
+    <form action="<?=base_url()?>index.php/relatorios/produtosEtiquetas" method="get">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Gerar etiquetas com Código de Barras</h5>
@@ -168,7 +168,7 @@
     </form>
 </div>
 </div>
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 <!-- Modal Etiquetas e Estoque-->
 <script type="text/javascript">
     $(document).ready(function () {

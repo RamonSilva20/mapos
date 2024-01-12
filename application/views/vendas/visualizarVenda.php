@@ -12,11 +12,11 @@
                         echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
-                    <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
+                    <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Orçamento</span></a>
-                    <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
+                    <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
-                    <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
+                    <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
                     <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
                         <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
@@ -29,7 +29,7 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
                                     </tr> <?php
                                 } else { ?> <tr>
@@ -92,7 +92,7 @@
                                     </td>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0">
-                                            <img style="margin:12px 0px 2px 7px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
+                                            <img style="margin:12px 0px 2px 7px" src="<?=base_url()?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" />
                                             <img style="margin:6px 12px 2px 0px" width="94" src="<?= $qrCode ?>" alt="QR Code de Pagamento" />
                                         </td>
                                     <?php endif ?>

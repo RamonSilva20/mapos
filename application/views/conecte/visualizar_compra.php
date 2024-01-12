@@ -9,7 +9,7 @@
                 <h5>Venda</h5>
                 <div class="buttons">
 
-                    <a id="imprimir" target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/mine/imprimirCompra/<?php echo $result->idVendas; ?>"><i class="fas fa-print"></i> Imprimir</a>
+                    <a id="imprimir" target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?=site_url()?>/mine/imprimirCompra/<?php echo $result->idVendas; ?>"><i class="fas fa-print"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">

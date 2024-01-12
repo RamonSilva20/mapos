@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/dayjs.min.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?=base_url()?>assets/js/dayjs.min.js"></script>
 
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
@@ -40,7 +40,7 @@ $periodo = $this->input->get('periodo');
     <?php } ?>
 
     <div class="span12" style="margin-left: 0;margin-top: 1rem;">
-        <form action="<?php echo current_url(); ?>" method="get">
+        <form action="<?=current_url()?>" method="get">
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
@@ -247,7 +247,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova receita e despesa -->
 <div id="modalReceita" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formReceita" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita" method="post">
+    <form id="formReceita" action="<?=base_url()?>index.php/financeiro/adicionarReceita" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Adicionar Receita/Despesa</h3>
@@ -269,7 +269,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?=current_url()?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -369,7 +369,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova receita e despesa parcelada -->
 <div id="modalReceitaParcelada" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form id="formReceita_parc" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita_parc" method="post">
+  <form id="formReceita_parc" action="<?=base_url()?>index.php/financeiro/adicionarReceita_parc" method="post">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Adicionar Receita/Despesa Parcelada</h3>
@@ -386,7 +386,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
           <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?=current_url()?>"/>
     	</div>	
     	        
     		<div class="span6" style="margin-left: 0"> 
@@ -566,7 +566,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formEditar" action="<?php echo base_url() ?>index.php/financeiro/editar" method="post">
+    <form id="formEditar" action="<?=base_url()?>index.php/financeiro/editar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Editar Lançamento</h3>
@@ -683,8 +683,8 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+<script src="<?=base_url()?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
 
     function mostrarValor() {
@@ -907,7 +907,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>index.php/financeiro/excluirLancamento",
+                url: "<?=base_url()?>index.php/financeiro/excluirLancamento",
                 data: "id=" + id,
                 dataType: 'json',
                 success: function(data) {
@@ -964,7 +964,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedorEditar").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedorEditar").val(ui.item.label);
@@ -972,7 +972,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
     
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente").val(ui.item.label);
@@ -981,7 +981,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
           $("#cliente_busca").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_busca").val(ui.item.label);
@@ -989,7 +989,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#cliente_parc").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_parc").val(ui.item.label);
@@ -998,7 +998,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedor").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedor").val(ui.item.label);

@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -21,7 +21,7 @@
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                 <?php  } ?>
 
-                <form action="<?php echo current_url(); ?>" method="post" id="formGarantia">
+                <form action="<?=current_url()?>" method="post" id="formGarantia">
 
                     <div class="span12">
                         <div class="span2">
@@ -49,7 +49,7 @@
                     <div class="span12" style="padding: 1%; margin-left: 0">
                         <div class="span6 offset5" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                            <a href="<?php echo base_url() ?>index.php/garantias" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                            <a href="<?=base_url()?>index.php/garantias" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </form>
@@ -61,14 +61,14 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/garantias/autoCompleteCliente",
+            source: "<?=base_url()?>index.php/garantias/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/garantias/autoCompleteUsuario",
+            source: "<?=base_url()?>index.php/garantias/autoCompleteUsuario",
             minLength: 1,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
