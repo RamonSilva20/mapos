@@ -139,7 +139,7 @@
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?= htmlspecialchars_decode($result->laudoTecnico) ?></textarea>
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
-                                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                                        <div class="span12" style="display:flex; justify-content:center;">
                                             <button class="button btn btn-primary" id="btnContinuar">
                                                 <span class="button__icon"><i class="bx bx-sync"></i></span>
                                                 <span class="button__text2">Atualizar</span>
