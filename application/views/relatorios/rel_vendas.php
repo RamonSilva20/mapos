@@ -9,8 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/vendasRapid"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - pdf</small></a></li>
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/vendasRapid?format=xls"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - xls</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/vendasRapid"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/vendasRapid?format=xls"><i class="fas fa-cash-register"></i> <small>Todas as Vendas - xls</small></a></li>
                 </ul>
             </div>
         </div>

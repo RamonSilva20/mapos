@@ -9,8 +9,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/osRapid"><i class="fas fa-diagnoses"></i> <small>Todas as OS - pdf</small></a></li>
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/osRapid?format=xls"><i class="fas fa-diagnoses"></i> <small>Todas as OS - xls</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/osRapid"><i class="fas fa-diagnoses"></i> <small>Todas as OS - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/osRapid?format=xls"><i class="fas fa-diagnoses"></i> <small>Todas as OS - xls</small></a></li>
                 </ul>
             </div>
         </div>

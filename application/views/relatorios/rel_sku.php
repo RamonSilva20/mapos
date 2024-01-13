@@ -11,8 +11,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
                 </ul>
             </div>
         </div>

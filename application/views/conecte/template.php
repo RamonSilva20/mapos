@@ -33,9 +33,9 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='bx bx-user-circle iconN1'></i> <?= $this->session->userdata('nome') ?> </a>
                     <ul class="dropdown-menu">
-                        <li class=""><a title="Meu Perfil" href="<?=base_url()?>index.php/mine/conta"><i class="fas fa-user"></i> <span class="text">Meu Perfil</span></a></li>
+                        <li class=""><a title="Meu Perfil" href="<?=base_url()?>mine/conta"><i class="fas fa-user"></i> <span class="text">Meu Perfil</span></a></li>
                         <li class="divider"></li>
-                        <li class=""><a title="Sair" href="<?=base_url()?>index.php/mine/sair"><i class="fas fa-sign-out-alt"></i> <span class="text">Sair</span></a></li>
+                        <li class=""><a title="Sair" href="<?=base_url()?>mine/sair"><i class="fas fa-sign-out-alt"></i> <span class="text">Sair</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -65,19 +65,19 @@
                 <ul class="menu-links" style="position: relative;">
                     <li class="<?php if (isset($menuPainel)) {
                         echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>index.php/mine/painel"><i class='bx bx-home-alt iconX'></i> <span class="title">Painel</span></a></li>
+                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>mine/painel"><i class='bx bx-home-alt iconX'></i> <span class="title">Painel</span></a></li>
                     <li class="<?php if (isset($menuConta)) {
                         echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>index.php/mine/conta"><i class="bx bx-user-circle iconX"></i> <span class="title">Minha Contas</span></a></li>
+                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>mine/conta"><i class="bx bx-user-circle iconX"></i> <span class="title">Minha Contas</span></a></li>
                     <li class="<?php if (isset($menuOs)) {
                         echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>index.php/mine/os"><i class='bx bx-spreadsheet iconX'></i> <span class="title">Ordens de Serviço</span></a></li>
+                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>mine/os"><i class='bx bx-spreadsheet iconX'></i> <span class="title">Ordens de Serviço</span></a></li>
                     <li class="<?php if (isset($menuVendas)) {
                         echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>index.php/mine/compras"><i class='bx bx-cart-alt iconX'></i> <span class="title">Compras</span></a></li>
+                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>mine/compras"><i class='bx bx-cart-alt iconX'></i> <span class="title">Compras</span></a></li>
                     <li class="<?php if (isset($menuCobrancas)) {
                         echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>index.php/mine/cobrancas"><i class='bx bx-credit-card-front iconX'></i> <span class="title">Cobranças</span></a></li>
+                    }; ?>"><a class="tip-bottom" title="" href="<?=base_url()?>mine/cobrancas"><i class='bx bx-credit-card-front iconX'></i> <span class="title">Cobranças</span></a></li>
                 </ul>
             </div>
 
