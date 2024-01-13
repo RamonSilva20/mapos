@@ -267,7 +267,7 @@ $totalProdutos = 0; ?>
             var id = $(this).attr('imagem');
             var url = '<?=base_url()?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
-            $("#download").attr('href', "<?=base_url()?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?=base_url()?>os/downloadanexo/" + id);
         });
     });
 </script>

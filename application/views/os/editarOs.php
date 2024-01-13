@@ -1179,7 +1179,7 @@
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
 
-            $("#download").attr('href', "<?=base_url()?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?=base_url()?>os/downloadanexo/" + id);
 
         });
 

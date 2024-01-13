@@ -845,11 +845,11 @@
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
-                $('#modalIdVisualizar').attr("href", "<?=base_url()?>index.php/os/visualizar/" + eventObj.id);
+                $('#modalIdVisualizar').attr("href", "<?=base_url()?>os/visualizar/" + eventObj.id);
                 if (eventObj.editar) {
                     $('#modalIdEditar').show();
                     $('#linkExcluir').show();
-                    $('#modalIdEditar').attr("href", "<?=base_url()?>index.php/os/editar/" + eventObj.id);
+                    $('#modalIdEditar').attr("href", "<?=base_url()?>os/editar/" + eventObj.id);
                     $('#modalIdExcluir').val(eventObj.id);
                 } else {
                     $('#modalIdEditar').hide();
