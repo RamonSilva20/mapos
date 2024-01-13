@@ -147,12 +147,12 @@ $parse_email = $this->input->get('e');
 
                     $.ajax({
                         type: "POST",
-                        url: "<?=base_url()?>index.php/mine/login?ajax=true",
+                        url: "<?=base_url()?>mine/login?ajax=true",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                window.location.href = "<?=base_url()?>index.php/mine/painel";
+                                window.location.href = "<?=base_url()?>mine/painel";
                             } else {
                                 Swal.fire({
                                     position: 'center',

@@ -5,11 +5,11 @@
       <div id="breadcrumb">
         <a href="<?= base_url() ?>" title="Dashboard" class="tip-bottom"> Início</a>
         <?php if ($this->uri->segment(1) != null) { ?>
-            <a href="<?= base_url() . 'index.php/' . $this->uri->segment(1) ?>" class="tip-bottom" title="<?= ucfirst($this->uri->segment(1)); ?>">
+            <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" class="tip-bottom" title="<?= ucfirst($this->uri->segment(1)); ?>">
               <?= ucfirst($this->uri->segment(1)); ?>
             </a>
           <?php if ($this->uri->segment(2) != null) { ?>
-            <a href="<?= base_url() . 'index.php/' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>" class="current tip-bottom" title="<?= ucfirst($this->uri->segment(2)); ?>">
+            <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>" class="current tip-bottom" title="<?= ucfirst($this->uri->segment(2)); ?>">
               <?= ucfirst($this->uri->segment(2));
           } ?>
             </a>

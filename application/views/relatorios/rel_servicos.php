@@ -9,7 +9,7 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/servicosRapid"><i class="fas fa-wrench"></i> <small>Todos os Serviços</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/servicosRapid"><i class="fas fa-wrench"></i> <small>Todos os Serviços</small></a></li>
                 </ul>
             </div>
         </div>
@@ -24,7 +24,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/servicosCustom" method="get">
+                    <form target="_blank" action="<?=base_url()?>relatorios/servicosCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Preço de:</label>

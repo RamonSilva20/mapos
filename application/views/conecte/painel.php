@@ -3,33 +3,33 @@
 <div class="quick-actions_homepage">
     <ul class="cardBox">
         <li class="card">
-            <a href="<?=base_url()?>index.php/mine/os">
+            <a href="<?=base_url()?>mine/os">
                 <div class="lord-icon04">
                     <i class='bx bx-file iconBx04'></i>
                 </div>
             </a>
-            <a href="<?=base_url()?>index.php/mine/os">
+            <a href="<?=base_url()?>mine/os">
                 <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
             </a>
         </li>
 
         <li class="card"> 
-            <a href="<?=base_url()?>index.php/mine/compras">
+            <a href="<?=base_url()?>mine/compras">
                 <div class="lord-icon05">
                     <i class='bx bx-cart-alt iconBx05'></i>
                 </div>
             </a>
-            <a href="<?=base_url()?>index.php/mine/compras">
+            <a href="<?=base_url()?>mine/compras">
                 <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </a>
         </li>
         <li class="card"> 
-            <a href="<?=base_url()?>index.php/mine/conta">
+            <a href="<?=base_url()?>mine/conta">
                 <div class="lord-icon07">
                     <i class='bx bx-user-circle iconBx07'></i></span>
                 </div>
             </a>
-            <a href="<?=base_url()?>index.php/mine/conta">
+            <a href="<?=base_url()?>mine/conta">
                 <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
             </a></li>
     </ul>
@@ -118,7 +118,7 @@
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                            echo '<td> <a href="' . base_url() . 'mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -161,7 +161,7 @@
                     echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
                     echo '<td>' . $p->nome . '</td>';
                     echo '<td>' . $faturado . '</td>';
-                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                    echo '<td> <a href="' . base_url() . 'mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                     echo '</tr>';
                 }
             } else {

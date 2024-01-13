@@ -11,8 +11,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/skuRapid"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/skuRapid?format=xls"><i class="fas fa-shopping-bag"></i> <small>SKU rápido - xls</small></a></li>
                 </ul>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <h5>Relatórios Customizáveis</h5>
             </div>
             <div class="widget-content">
-                <form target="_blank" action="<?=base_url()?>index.php/relatorios/skuCustom" method="get">
+                <form target="_blank" action="<?=base_url()?>relatorios/skuCustom" method="get">
                     <div class="span12 well">
                         <div class="span6">
                             <label for="">Data de ocorrência de:</label>
@@ -89,7 +89,7 @@
         $(".money").maskMoney();
 
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);

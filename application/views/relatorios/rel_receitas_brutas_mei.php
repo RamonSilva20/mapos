@@ -11,8 +11,8 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/receitasBrutasRapid?format=docx"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - docx</small></a></li>
-                    <li><a target="_blank" href="<?=base_url()?>index.php/relatorios/receitasBrutasRapid?format=pdf"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - pdf</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/receitasBrutasRapid?format=docx"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - docx</small></a></li>
+                    <li><a target="_blank" href="<?=base_url()?>relatorios/receitasBrutasRapid?format=pdf"><i class="fas fa-shopping-bag"></i> <small>Receitas Brutas MEI - mês atual - pdf</small></a></li>
                 </ul>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <h5>Relatórios Customizáveis</h5>
             </div>
             <div class="widget-content">
-                <form target="_blank" action="<?=base_url()?>index.php/relatorios/receitasBrutasCustom" method="get">
+                <form target="_blank" action="<?=base_url()?>relatorios/receitasBrutasCustom" method="get">
                     <div class="span12 well">
                         <div class="span6">
                             <label for="">Data de ocorrência de:</label>

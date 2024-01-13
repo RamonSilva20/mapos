@@ -87,7 +87,7 @@ $totalProdutos = 0; ?>
                                     <tbody>
                                         <?php if ($emitente == null) { ?>
                                             <tr>
-                                                <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
+                                                <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>mapos/emitente">Configurar</a>
                                                     <<<< /td>
                                             </tr> <?php } else { ?><td style="width: 20%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                             <td>

@@ -9,7 +9,7 @@
                 <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
 
@@ -43,7 +43,7 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?=base_url()?>mapos/emitente">Configurar</a>
                                             <<< </td>
                                     </tr> <?php } else { ?>
                                     <tr>
@@ -343,11 +343,11 @@
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?=base_url()?>index.php/os/excluirAnexo/';
+            var url = '<?=base_url()?>os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
 
-            $("#download").attr('href', "<?=base_url()?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?=base_url()?>os/downloadanexo/" + id);
 
         });
 

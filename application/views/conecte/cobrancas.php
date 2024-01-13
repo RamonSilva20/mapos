@@ -38,22 +38,22 @@
                         echo '<td>' . $dataVenda . '</td>';
 
                         if ($r->os_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '">  Ordem de Serviço: #' . $r->os_id . '</a></td>';
+                            echo '<td><a href="' . base_url() . 'os/visualizar/' . $r->os_id . '">  Ordem de Serviço: #' . $r->os_id . '</a></td>';
                         }
                         if ($r->vendas_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
+                            echo '<td><a href="' . base_url() . 'vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
                         }
 
                         echo '<td>' . $cobrancaStatus . '</td>';
                         echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/atualizarcobranca/' . $r->idCobranca . '"  class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'mine/atualizarcobranca/' . $r->idCobranca . '"  class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
                         }
 
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
                             echo '<a style="margin-right: 1%" href="' . $r->link . '"  target="_blank" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->idCobranca . '" class="btn-nwe2" title="Reenviar por email"><i class="bx bx-mail-send" ></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . base_url() . 'mine/enviarcobranca/' . $r->idCobranca . '" class="btn-nwe2" title="Reenviar por email"><i class="bx bx-mail-send" ></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -66,7 +66,7 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/cobrancas/excluir" method="post">
+    <form action="<?=base_url()?>cobrancas/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir cobrança</h5>
@@ -84,7 +84,7 @@
 
 
 <div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/cobrancas/confirmarpagamento" method="post">
+    <form action="<?=base_url()?>cobrancas/confirmarpagamento" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Confirmar pagamento</h5>
@@ -102,7 +102,7 @@
 
 
 <div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/cobrancas/cancelar" method="post">
+    <form action="<?=base_url()?>cobrancas/cancelar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Cancelar cobrança</h5>

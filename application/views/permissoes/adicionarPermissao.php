@@ -1,5 +1,5 @@
 <div class="span12" style="margin-left: 0">
-    <form action="<?=base_url()?>index.php/permissoes/adicionar" id="formPermissao" method="post">
+    <form action="<?=base_url()?>permissoes/adicionar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">
             <div class="widget-box">
                 <div class="widget-title" style="margin: -20px 0 0">

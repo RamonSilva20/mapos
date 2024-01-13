@@ -31,7 +31,7 @@
                   <span class="required">Digite ou copie e cole o token enviado para seu email.</span>
                 </div>
                 <div class="widget-content nopadding tab-content">
-                    <form action="<?php echo base_url() . 'index.php/mine/tokenManual' ?>" id="formCliente" method="post" class="form-horizontal">
+                    <form action="<?= base_url() . 'mine/tokenManual' ?>" id="formCliente" method="post" class="form-horizontal">
 
                         <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly">
                             <label style="width: auto" for="token" class="control-label">Token<span class="required">*</span></label>
@@ -45,7 +45,7 @@
                             <div class="span12">
                                 <div class="span6 offset3" style="display:flex;justify-content: center">
                                     <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-check-shield'></i></span><span class="button__text2">Validar</span></button>
-                                    <a href="<?=base_url()?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                                    <a href="<?=base_url()?>mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                                 </div>
                             </div>
                         </div>

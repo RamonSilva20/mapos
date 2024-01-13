@@ -8,7 +8,7 @@
     <div class="widget-title" style="margin:-15px -10px 0">
       <h5>Usuários</h5>
     </div>
-  <a href="<?=base_url()?>index.php/usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
+  <a href="<?=base_url()?>usuarios/adicionar" class="button btn btn-success" style="max-width: 160px">
   <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Usuário</span></a>
 
 <div class="widget-box">
@@ -47,7 +47,7 @@
                         echo '<td>' . $r->permissao . '</td>';
                         echo '<td>' . $r->dataExpiracao . '</td>';
                         echo '<td>
-                                <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
+                                <a href="' . base_url() . 'usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
                                 </td>';
                         echo '</tr>';
                     } ?>

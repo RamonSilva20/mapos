@@ -34,7 +34,7 @@ class Usuarios extends MY_Controller
     {
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
+        $this->data['configuration']['base_url'] = base_url() . 'usuarios/gerenciar/';
         $this->data['configuration']['total_rows'] = $this->usuarios_model->count('usuarios');
 
         $this->pagination->initialize($this->data['configuration']);
@@ -116,7 +116,7 @@ class Usuarios extends MY_Controller
         } else {
             if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0) {
                 $this->session->set_flashdata('error', 'O usuário super admin não pode ser desativado!');
-                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
+                redirect(base_url() . 'usuarios/editar/' . $this->input->post('idUsuarios'));
             }
 
             $senha = $this->input->post('senha');

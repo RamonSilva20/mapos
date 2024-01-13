@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?=base_url()?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
+                    <a href="<?=base_url()?>clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
@@ -167,7 +167,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
+                    <a href="<?=base_url()?>produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
@@ -175,7 +175,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                    <a href="<?=base_url()?>servicos/adicionar" class="card tip-top" title="Adicionar serviços">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
@@ -183,7 +183,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
+                    <a href="<?=base_url()?>os/adicionar" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
@@ -191,7 +191,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                    <a href="<?=base_url()?>garantias" class="card tip-top" title="Adicionar garantia">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
@@ -199,7 +199,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
+                    <a href="<?=base_url()?>vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
@@ -215,7 +215,7 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
+                                <a href="<?=base_url()?>financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
@@ -223,7 +223,7 @@
                                     </div>
                                 </a>
 
-                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
+                                <a href="<?=base_url()?>financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
@@ -528,7 +528,7 @@
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
+                                            <a href="<?= base_url() ?>produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
                                                 <i class="bx bx-edit"></i>
                                             </a>
                                             <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
@@ -585,7 +585,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -635,7 +635,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
@@ -684,7 +684,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
@@ -740,7 +740,7 @@
 
 <!-- Modal Excluir Os -->
 <div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/os/excluir" method="post">
+    <form action="<?=base_url()?>os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>
@@ -758,7 +758,7 @@
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?=base_url()?>produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -831,7 +831,7 @@
             dayMaxEvents: true, // allow "more" link when too many events
             displayEventTime: false,
             events: {
-                url: "<?= base_url() . "index.php/mapos/calendario"; ?>",
+                url: "<?= base_url() . "mapos/calendario"; ?>",
                 method: 'GET',
                 extraParams: function() { // a function that returns an object
                     return {
@@ -845,11 +845,11 @@
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
-                $('#modalIdVisualizar').attr("href", "<?=base_url()?>index.php/os/visualizar/" + eventObj.id);
+                $('#modalIdVisualizar').attr("href", "<?=base_url()?>os/visualizar/" + eventObj.id);
                 if (eventObj.editar) {
                     $('#modalIdEditar').show();
                     $('#linkExcluir').show();
-                    $('#modalIdEditar').attr("href", "<?=base_url()?>index.php/os/editar/" + eventObj.id);
+                    $('#modalIdEditar').attr("href", "<?=base_url()?>os/editar/" + eventObj.id);
                     $('#modalIdExcluir').val(eventObj.id);
                 } else {
                     $('#modalIdEditar').hide();

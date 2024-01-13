@@ -4,7 +4,7 @@
             <li class="active"><a data-toggle="tab" href="#tab1">Meus Dados</a></li>
 
             <div>
-                <a title="Editar" class="button btn btn-success" style="max-width: 140px;margin: 5px" href="<?=base_url()?>index.php/mine/editarDados/<?php echo $result->idClientes ?>">
+                <a title="Editar" class="button btn btn-success" style="max-width: 140px;margin: 5px" href="<?=base_url()?>mine/editarDados/<?php echo $result->idClientes ?>">
                   <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text2">Editar</span></a>
             </div>
         </ul>

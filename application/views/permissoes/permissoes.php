@@ -11,7 +11,7 @@
         <h5>Permissões</h5>
     </div>
 
-  <a href="<?=base_url()?>index.php/permissoes/adicionar" class="button btn btn-success"style="max-width: 150px">
+  <a href="<?=base_url()?>permissoes/adicionar" class="button btn btn-success"style="max-width: 150px">
   <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
 
 <div class="widget-box">
@@ -47,7 +47,7 @@
                         echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
                         echo '<td>' . $situacao . '</td>';
                         echo '<td>
-                                <a href="' . base_url() . 'index.php/permissoes/editar/' . $r->idPermissao . '" class="btn-nwe3" title="Editar permissões"><i class="bx bx-edit"></i></a>
+                                <a href="' . base_url() . 'permissoes/editar/' . $r->idPermissao . '" class="btn-nwe3" title="Editar permissões"><i class="bx bx-edit"></i></a>
                                 <a href="#modal-excluir" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn-nwe4" title="Desativar Permissão"><i class="bx bx-notification-off" ></i></a>
                               </td>';
                         echo '</tr>';
@@ -60,7 +60,7 @@
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?=base_url()?>index.php/permissoes/desativar" method="post">
+    <form action="<?=base_url()?>permissoes/desativar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Desativar Permissão</h5>
