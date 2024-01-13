@@ -40,7 +40,13 @@ class MY_Controller extends CI_Controller
         parent::__construct();
 
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('login');
+            $destino = (!is_null(get_instance()->uri->segment(1)) ? '/'.get_instance()->uri->segment(1) : '')
+                      .(!is_null(get_instance()->uri->segment(2)) ? '/'.get_instance()->uri->segment(2) : '')
+                      .(!is_null(get_instance()->uri->segment(3)) ? '/'.get_instance()->uri->segment(3) : '');
+
+            $redirect = $destino ? '?redirect='.$destino : '';
+
+            redirect('login'.$redirect);
         }
         $this->load_configuration();
     }

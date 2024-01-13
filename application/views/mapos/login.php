@@ -5,11 +5,11 @@
   <title><?= $this->config->item('app_name') ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="<?= base_url(); ?>assets/img/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="<?= base_url() ?>assets/img/favicon.png" type="image/png" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
-  <link rel="stylesheet" href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
 </head>
 
 <body>
@@ -17,8 +17,8 @@
     <div class="left-login">
       <!-- Saudação -->
       <h1 class="h-one"><?=$saudacao?></h1>
-      <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
-      <img src="<?=base_url()?>assets/img/dashboard-animate.svg" class="left-login-image" alt="<?= $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>">
+      <h2 class="h-two">Ao Sistema de Controle de Ordens de Serviço</h2>
+      <img src="<?=base_url()?>assets/img/dashboard-animate.svg" class="left-login-image" alt="<?= $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version') ?>">
     </div>
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
       <div id="loginbox">
@@ -112,12 +112,12 @@
 
           $.ajax({
             type: "POST",
-            url: "<?= site_url('login/verificarLogin?ajax=true'); ?>",
+            url: "<?= site_url('login/verificarLogin?ajax=true') ?>",
             data: dados,
             dataType: 'json',
             success: function(data) {
               if (data.result == true) {
-                window.location.href = "<?= site_url('mapos'); ?>";
+                window.location.href = "<?= site_url($redirect) ?>";
               } else {
                 $('#btn-acessar').removeClass('disabled');
                 $('#message').text(data.message || 'Os dados de acesso estão incorretos, por favor tente novamente!');
