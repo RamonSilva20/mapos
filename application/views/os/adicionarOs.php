@@ -120,21 +120,21 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>os/autoCompleteUsuario",
             minLength: 1,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
             }
         });
         $("#termoGarantia").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteTermoGarantia",
+            source: "<?=base_url()?>os/autoCompleteTermoGarantia",
             minLength: 1,
             select: function(event, ui) {
                 $("#garantias_id").val(ui.item.id);

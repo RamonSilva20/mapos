@@ -80,7 +80,7 @@
     $(document).ready(function() {
         $('.addclient').hide();
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/vendas/autoCompleteCliente",
+            source: "<?=base_url()?>vendas/autoCompleteCliente",
             minLength: 1,
             close: function(ui) { if(ui.label == 'Adicionar cliente...')ui.target.value = '';},
             select: function(event, ui) {
@@ -94,7 +94,7 @@
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/vendas/autoCompleteUsuario",
+            source: "<?=base_url()?>vendas/autoCompleteUsuario",
             minLength: 1,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);

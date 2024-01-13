@@ -89,7 +89,7 @@
         $(".money").maskMoney();
 
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);

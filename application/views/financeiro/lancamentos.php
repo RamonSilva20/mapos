@@ -964,7 +964,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedorEditar").autocomplete({
-            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedorEditar").val(ui.item.label);
@@ -972,7 +972,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
     
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente").val(ui.item.label);
@@ -981,7 +981,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
           $("#cliente_busca").autocomplete({
-            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_busca").val(ui.item.label);
@@ -989,7 +989,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#cliente_parc").autocomplete({
-            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_parc").val(ui.item.label);
@@ -998,7 +998,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedor").autocomplete({
-            source: "<?=base_url()?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?=base_url()?>financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedor").val(ui.item.label);

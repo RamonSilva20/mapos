@@ -826,7 +826,7 @@
         });
 
         $("#produto").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteProduto",
+            source: "<?=base_url()?>os/autoCompleteProduto",
             minLength: 2,
             select: function(event, ui) {
                 $("#codDeBarra").val(ui.item.codbar);
@@ -838,7 +838,7 @@
         });
 
         $("#servico").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteServico",
+            source: "<?=base_url()?>os/autoCompleteServico",
             minLength: 2,
             select: function(event, ui) {
                 $("#idServico").val(ui.item.id);
@@ -849,7 +849,7 @@
 
 
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
@@ -857,7 +857,7 @@
         });
 
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
@@ -865,7 +865,7 @@
         });
 
         $("#termoGarantia").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteTermoGarantia",
+            source: "<?=base_url()?>os/autoCompleteTermoGarantia",
             minLength: 1,
             select: function(event, ui) {
                 if (ui.item.id) {

@@ -487,7 +487,7 @@ foreach ($produtos as $p) {
             }
         });
         $("#produto").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteProdutoSaida",
+            source: "<?=base_url()?>os/autoCompleteProdutoSaida",
             minLength: 2,
             select: function(event, ui) {
                 $("#idProduto").val(ui.item.id);
@@ -497,14 +497,14 @@ foreach ($produtos as $p) {
             }
         });
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);

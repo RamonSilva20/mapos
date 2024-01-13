@@ -94,14 +94,14 @@
     $(document).ready(function() {
         $(".money").maskMoney();
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteCliente",
+            source: "<?=base_url()?>os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clienteHide").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/os/autoCompleteUsuario",
+            source: "<?=base_url()?>os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#responsavelHide").val(ui.item.id);

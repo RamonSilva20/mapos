@@ -59,14 +59,14 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#cliente").autocomplete({
-            source: "<?=base_url()?>index.php/garantias/autoCompleteCliente",
+            source: "<?=base_url()?>garantias/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?=base_url()?>index.php/garantias/autoCompleteUsuario",
+            source: "<?=base_url()?>garantias/autoCompleteUsuario",
             minLength: 1,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
