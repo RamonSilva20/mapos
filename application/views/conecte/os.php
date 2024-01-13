@@ -1,6 +1,6 @@
 <?php
 // alterar para permissão de o cliente adicionar ou não a ordem de serviço
-if (!$this->session->userdata('cadastra_os')) { ?>
+if (!$this->session->userdata('cadastra_os')) : ?>
     <div class="span12" style="margin-left: 0">
         <div class="span3">
             <a href="<?=base_url()?>mine/adicionarOs" class="button btn btn-success" style="max-width: 150px">
@@ -8,10 +8,10 @@ if (!$this->session->userdata('cadastra_os')) { ?>
         </div>
     </div>
 <?php
-}
+endif;
 
-if (!$results) {
-    ?>
+if (!$results) :
+?>
     <div class="span12" style="margin-left: 0">
         <div class="widget-box">
             <div class="widget-title" style="margin: -20px 0 0">
@@ -49,8 +49,7 @@ if (!$results) {
 
     </div>
 
-<?php
-} else { ?>
+<?php else : ?>
 
     <div class="span12" style="margin-left: 0">
         <div class="widget-box">
@@ -144,7 +143,7 @@ if (!$results) {
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
 
                             echo '<td><a href="' . base_url() . 'mine/visualizarOs/' . $r->idOs . '" class="btn-nwe" title="Visualizar e Imprimir"><i class="bx bx-show-alt"></i></a>
-                                  <a href="' . base_url() . 'mine/imprimirOs/' . $r->idOs . '" class="btn-nwe3" title="Imprimir"><i class="bx bx-printer"></i></a>
+                                  <a target="_blank" href="' . base_url() . 'mine/imprimirOs/' . $r->idOs . '" class="btn-nwe3" title="Imprimir"><i class="bx bx-printer"></i></a>
                                   <a href="' . base_url() . 'mine/detalhesOs/' . $r->idOs . '" class="btn-nwe4" title="Ver mais detalhes"><i class="bx bx-detail"></i></a>
                                   </td>';
                             echo '</tr>';
@@ -154,5 +153,7 @@ if (!$results) {
             </div>
         </div>
     </div>
-<?php echo $this->pagination->create_links();
-} ?>
+<?php
+    echo $this->pagination->create_links();
+endif;
+?>

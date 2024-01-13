@@ -53,6 +53,10 @@
         width: 100px;
     }
 
+    .site-stats li {
+        cursor: unset;
+    }
+
     @media (min-width: 1200px) {
         .col-lg-3 {
             width: 25%;
@@ -92,7 +96,24 @@
         }
     }
     
+    /* ASSINATURAS */
+    #assUsuario-pad {
+        border: 1px solid #333333;
+        border-radius: 6px;
+        background-color: #fff;
+    }
 
+    #assCliente-pad, #assTecnico-pad {
+        margin-top: 25px;
+    }
+
+    .buttonsAssinaturas {
+        margin-top: 10px;
+    }
+
+    .buttonsAssinaturas button {
+        margin-top: 5px;
+    }
 </style>
 <div class="span6" style="margin-left: 0">
     <div class="widget-box">
@@ -131,6 +152,9 @@
                                 <?= $usuario->permissao; ?></strong></li>
                         <li class="bg_lh span12" style="margin-left: 0; border-bottom-left-radius: 9px;border-bottom-right-radius: 9px"><strong>Acesso expira em:
                                 <?= date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
+                        <li class="bg_lo span12" style="margin-left: 0;">
+                            <strong>Nível: <?= $usuario->permissao; ?></strong>
+                        </li>
                     </ul>
                 </div>
 
@@ -141,7 +165,7 @@
 
 <div class="span6">
     <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
+        <div class="widget-title" style="margin: -10px 0 0">
             <span class="icon">
                 <i class="fas fa-lock"></i>
             </span>
@@ -165,7 +189,7 @@
                             <input type="password" name="confirmarSenha" class="span12" />
                         </div>
                             <button class="button btn btn-primary" style="max-width: 140px;text-align: center">
-                              <span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Alterar Senha</span></button>
+                            <span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Alterar Senha</span></button>
                     </form>
                 </div>
 
@@ -174,11 +198,59 @@
     </div>
 </div>
 
+</div>
+<div class="row-fluid">
+
+<?php if($configuration['usar_assinatura']): ?>
+    <div class="span6">
+        <div class="widget-box">
+            <div class="widget-title" style="margin: -10px 0 0">
+                <span class="icon">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <h5>Minha Assinatura</h5>
+            </div>
+            <div class="widget-content">
+                <div class="span12">
+                    <div class="span12 text-center">
+                        <div id="assinaturaUsuario">
+                            <?php if(!$usuario->assinaturaImg): ?>
+                                <canvas id="assUsuario-pad" class="telSm" width="320" height="300"></canvas>
+                                <canvas id="assUsuario-pad" class="telMd" width="370" height="300"></canvas>
+                                <canvas id="assUsuario-pad" class="padPc" width="460" height="300"></canvas>
+                            <?php else: ?>
+                                <img src="<?=$usuario->assinaturaImg?>" height="300">
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="span12" style="display:flex;justify-content: center; margin-top: 20px;" id="botoesAssinatura">
+                        <?php if(!$usuario->assinaturaImg): ?>
+                            <button id="limparAssUsuario" type="button" class="button btn btn-danger" title="Apagar Assinatura">
+                                <span class="button__icon"><i class="fas fa-eraser"></i></span>
+                                <span class="button__text2">Limpar assinatura</span>
+                            </button>
+                            <button id="salvarAssUsuario" data-id-usuario="<?= $usuario->idUsuarios ?>" type="button" class="button btn btn-primary" style="margin-left:5px" title="Salvar Assinatura">
+                                <span class="button__icon"><i class="far fa-save"></i></span>
+                                <span class="button__text2">Salvar assinatura</span>
+                            </button>
+                        <?php else: ?>
+                            <a href="#modal-excluir" role="button" data-toggle="modal" idUsuario="<?= $usuario->idUsuarios ?>" class="button btn btn-danger" title="Excluir Assinatura">
+                                <span class="button__icon"><i class="far fa-trash-alt"></i></span>
+                                <span class="button__text2">Excluir assinatura</span>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div id="modalImageUser" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?= site_url('mapos/uploadUserImage'); ?>" id="formImageUser" enctype="multipart/form-data" method="post" class="form-horizontal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="">MapOS - Atualizar Imagem do Usuario</h3>
+            <h3>Atualizar Imagem do Usuario</h3>
         </div>
         <div class="modal-body">
             <div class="span12 alert alert-info">Selecione uma nova imagem do usuario. Tamanho indicado (130 X 130).</div>
@@ -196,8 +268,36 @@
     </form>
 </div>
 
+<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form action="<?=base_url()?>index.php/Assinatura/excluirAssinaturaUsuario" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel">Excluir Assinatura</h5>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="idUsuario" value="<?=$usuario->idUsuarios?>" />
+            <h5 style="text-align: center">Deseja realmente excluir a assinatura?</h5>
+        </div>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
+                <span class="button__icon"><i class="bx bx-x"></i></span> 
+                <span class="button__text2">Cancelar</span>
+            </button>
+            <button class="button btn btn-danger">
+                <span class="button__icon"><i class='bx bx-trash'></i></span> 
+                <span class="button__text2">Excluir</span>
+            </button>
+        </div>
+    </form>
+</div>
 
-<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/sweetalert2.all.min.js"></script>
+<?php if($configuration['usar_assinatura'] && !$usuario->assinaturaImg): ?>
+    <script type="text/javascript" src="<?= base_url() ?>assets/js/signature_pad.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>assets/js/assinaturas.js"></script>
+<?php endif; ?>
 <script type="text/javascript">
     $(document).ready(function() {
 
@@ -260,4 +360,19 @@
             }
         });
     });
+    
+    <?php if($configuration['usar_assinatura'] && !$usuario->assinaturaImg): ?>
+        if(window.screen.width < 600 && window.screen.width > 391) {
+            document.querySelector(".telSm").remove();
+            document.querySelector(".padPc").remove();
+        } else if(window.screen.width < 391) {
+            document.querySelector(".telMd").remove();
+            document.querySelector(".padPc").remove();
+        } else if(window.screen.width > 600) {
+            document.querySelector(".telSm").remove();
+            document.querySelector(".telMd").remove();
+        }
+
+        window.base_url = <?=json_encode(base_url())?>;
+    <?php endif; ?>
 </script>

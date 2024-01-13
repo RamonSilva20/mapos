@@ -4,14 +4,14 @@ $totalProdutos = 0; ?>
 <html lang="pt-br">
 
 <head>
-    <title>Map_OS_<?php echo $result->idOs ?>_<?php echo $result->nomeCliente ?></title>
+    <title><?php echo $this->config->item('app_name') ?> - <?php echo $result->idOs ?> - <?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
-    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/custom.css" />
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' type='text/css' />
     <style>
         body {
             width: 100%;
@@ -107,7 +107,7 @@ $totalProdutos = 0; ?>
                                                         <li>
                                                             <span>
                                                                 <h5><b>CLIENTE</b></h5>
-                                                                <span><?php echo $result->nomeCliente ?></span><br />
+                                                                <span><?= $result->nomeCliente ?></span><br />
                                                                 <?php
                                                                     $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro]);
                                                                     $endereco = implode(', ', $retorno_end);
@@ -119,28 +119,28 @@ $totalProdutos = 0; ?>
                                                                 <?php endif; ?>
                                                                 <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)  ) : ?>
                                                                     <span>Contato: <?= !empty($result->contato_cliente) ? $result->contato_cliente . ' ' : "" ?>
-                                                                    <?php if ($result->celular_cliente == $result->telefone_cliente) { ?>
+                                                                    <?php if ($result->celular_cliente == $result->telefone_cliente) : ?>
                                                                         <?= $result->celular_cliente ?>
-                                                                    <?php } else { ?>
+                                                                    <?php else : ?>
                                                                         <?= !empty($result->telefone_cliente) ? $result->telefone_cliente : "" ?>
                                                                         <?= !empty($result->celular_cliente) && !empty($result->telefone_cliente) ? ' / ' : "" ?>
                                                                         <?= !empty($result->celular_cliente) ? $result->celular_cliente : "" ?>
-                                                                    <?php } ?>
+                                                                    <?php endif; ?>
                                                                     </span>
                                                                 <?php endif; ?>
                                                             </span>
                                                         </li>
                                                     </ul>
                                                 </td>
-                                                <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
+                                                <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') : ?>
                                                     <?php if ($qrCode) : ?>
                                                         <td style="width: 15%; padding: 0;text-align:center;">
                                                             <img style="margin:12px 0px 0px 0px" src="<?=base_url()?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
+                                                            <span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: <?= $chaveFormatada ?></span>
                                                         </td>
-                                                    <?php endif ?>
-                                                <?php } ?>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -148,7 +148,7 @@ $totalProdutos = 0; ?>
                                 <div style="margin-top: 0; padding-top: 0">
                                     <table class="table table-condensed">
                                         <tbody>
-                                            <?php if ($result->dataInicial != null) { ?>
+                                            <?php if ($result->dataInicial != null) : ?>
                                                 <tr>
                                                     <td>
                                                         <b>STATUS OS: </b>
@@ -162,65 +162,62 @@ $totalProdutos = 0; ?>
                                                         <b>DATA FINAL: </b>
                                                         <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                                     </td>
-                                                    <?php if ($result->garantia) {
-                                                        ?>
+                                                    <?php if ($result->garantia) : ?>
                                                         <td>
                                                             <b>GARANTIA: </b>
                                                             <?php echo $result->garantia . ' dia(s)'; ?>
                                                         </td>
-                                                    <?php
-                                                    } ?>
+                                                    <?php endif; ?>
                                                     <td>
-                                                        <b>
-                                                            <?php if ($result->status == 'Finalizado') { ?>
-                                                                VENC. DA GARANTIA:
-                                                        </b>
-                                                        <?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
+                                                        <?php if ($result->status == 'Finalizado') : ?>
+                                                            <b>VENC. DA GARANTIA:</b>
+                                                            <?= dateInterval($result->dataFinal, $result->garantia) ?>
+                                                        <?php endif; ?>
                                                 </tr>
-                                            <?php } ?>
-                                            <?php if ($result->descricaoProduto != null) { ?>
+                                            <?php endif; ?>
+                                            <?php if ($result->descricaoProduto != null) : ?>
                                                 <tr>
                                                     <td colspan="5">
                                                         <b>DESCRIÇÃO: </b>
                                                         <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
-                                            <?php if ($result->defeito != null) { ?>
+                                            <?php endif; ?>
+                                            <?php if ($result->defeito != null) : ?>
                                                 <tr>
                                                     <td colspan="5">
                                                         <b>DEFEITO APRESENTADO: </b>
                                                         <?php echo htmlspecialchars_decode($result->defeito) ?>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
-                                            <?php if ($result->observacoes != null) { ?>
+                                            <?php endif; ?>
+                                            <?php if ($result->observacoes != null) : ?>
                                                 <tr>
                                                     <td colspan="5">
                                                         <b>OBSERVAÇÕES: </b>
                                                         <?php echo htmlspecialchars_decode($result->observacoes) ?>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
-                                            <?php if ($result->laudoTecnico != null) { ?>
+                                            <?php endif; ?>
+                                            <?php if ($result->laudoTecnico != null) : ?>
                                                 <tr>
                                                     <td colspan="5">
                                                         <b>LAUDO TÉCNICO: </b>
                                                         <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
-                                            <?php if ($result->garantias_id != null) { ?>
+                                            <?php endif; ?>
+                                            <?php if ($result->garantias_id != null) : ?>
                                                 <tr>
                                                     <td colspan="5">
                                                         <strong>TERMO DE GARANTIA </strong><br>
                                                         <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
-                                    <?php if ($produtos != null) { ?>
+                                    <?php if ($produtos != null) : ?>
                                         <table class="table table-bordered table-condensed" id="tblProdutos">
                                             <thead>
                                                 <tr>
@@ -231,7 +228,7 @@ $totalProdutos = 0; ?>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($produtos as $p) {
+                                                <?php foreach ($produtos as $p) :
                                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                                     echo '<tr>';
                                                     echo '<td>' . $p->descricao . '</td>';
@@ -239,15 +236,15 @@ $totalProdutos = 0; ?>
                                                     echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
                                                     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                                     echo '</tr>';
-                                                } ?>
+                                                endforeach; ?>
                                                 <tr>
                                                     <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                                    <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                                    <td><strong>R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    <?php } ?>
-                                    <?php if ($servicos != null) { ?>
+                                    <?php endif; ?>
+                                    <?php if ($servicos != null) : ?>
                                         <table class="table table-bordered table-condensed">
                                             <thead>
                                                 <tr>
@@ -258,47 +255,82 @@ $totalProdutos = 0; ?>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php setlocale(LC_MONETARY, 'en_US'); foreach ($servicos as $s) {
-                                                    $preco = $s->preco ?: $s->precoVenda;
-                                                    $subtotal = $preco * ($s->quantidade ?: 1);
-                                                    $totalServico = $totalServico + $subtotal;
-                                                    echo '<tr>';
-                                                    echo '<td>' . $s->nome . '</td>';
-                                                    echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                                    echo '<td>R$ ' . $preco . '</td>';
-                                                    echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                                    echo '</tr>';
-                                                } ?>
+                                                <?php 
+                                                    setlocale(LC_MONETARY, 'en_US'); 
+                                                    foreach ($servicos as $s) :
+                                                        $preco = $s->preco ?: $s->precoVenda;
+                                                        $subtotal = $preco * ($s->quantidade ?: 1);
+                                                        $totalServico = $totalServico + $subtotal;
+                                                        echo '<tr>';
+                                                        echo '<td>' . $s->nome . '</td>';
+                                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                                        echo '<td>R$ ' . $preco . '</td>';
+                                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                                        echo '</tr>';
+                                                    endforeach; ?>
                                                 <tr>
                                                     <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                                    <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                                    <td><strong>R$ <?= number_format($totalServico, 2, ',', '.') ?></strong></td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    <?php } ?>
+                                    <?php endif; ?>
 
-                                    <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                                        if ($result->valor_desconto != 0) {
+                                    <?php if ($totalProdutos != 0 || $totalServico != 0) :
+                                        if ($result->valor_desconto != 0) :
                                             echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
                                             echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
                                             echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
-                                        } else { echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
-                                    }?>
-                                    <table class="table table-bordered table-condensed" style="padding-top: 20px">
-                                        <tbody>
-                                            <tr>
-                                                <td>Data
-                                                    <hr>
-                                                </td>
-                                                <td>Assinatura do Cliente
-                                                    <hr>
-                                                </td>
-                                                <td>Assinatura do Responsável
-                                                    <hr>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        else :
+                                             echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                        endif;
+                                    endif;?>
+                                    <?php if($this->data['configuration']['usar_assinatura']): ?>
+                                        <table class="table" style="padding-top: 20px">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:center;" width="50%">
+                                                        <img src="<?=$result->assClienteImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                        <br>______________________________
+                                                        <br>Assinatura do Cliente
+                                                        <?php if ($result->assClienteImg) : ?>
+                                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                                            <br>IP: <?=$result->assClienteIp ?>
+                                                        <?php else : ?>
+                                                            <br>Ordem de serviço não assinada.
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td style="text-align:center;" width="50%">
+                                                        <img src="<?=$result->assTecnicoImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                        <br> ______________________________
+                                                        <br> Assinatura do Técnico
+                                                        <?php if ($result->assTecnicoImg) : ?>
+                                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                            <br>IP: <?=$result->assTecnicoIp ?>
+                                                        <?php else : ?>
+                                                            <br>Ordem de serviço não assinada.
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <?php else: ?>
+                                        <table class="table table-bordered table-condensed" style="padding-top: 20px">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Data
+                                                        <hr>
+                                                    </td>
+                                                    <td>Assinatura do Cliente
+                                                        <hr>
+                                                    </td>
+                                                    <td>Assinatura do Responsável
+                                                        <hr>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -517,15 +549,52 @@ $totalProdutos = 0; ?>
                                             echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
                                         } else { echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
                                     }?>
-                                    <table class="table table-bordered table-condensed" style="padding-top: 20px">
-                                        <tbody>
-                                            <tr>
-                                                <td>Data<hr></td>
-                                                <td>Assinatura do Cliente<hr></td>
-                                                <td>Assinatura do Responsável<hr></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <?php if($this->data['configuration']['usar_assinatura']): ?>
+                                        <table class="table" style="padding-top: 20px">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:center;" width="50%">
+                                                        <img src="<?=$result->assClienteImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                        <br>______________________________
+                                                        <br>Assinatura do Cliente
+                                                        <?php if ($result->assClienteImg) : ?>
+                                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                                            <br>IP: <?=$result->assClienteIp ?>
+                                                        <?php else : ?>
+                                                            <br>Ordem de serviço não assinada.
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td style="text-align:center;" width="50%">
+                                                        <img src="<?=$result->assTecnicoImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                        <br> ______________________________
+                                                        <br> Assinatura do Técnico
+                                                        <?php if ($result->assTecnicoImg) : ?>
+                                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                            <br>IP: <?=$result->assTecnicoIp ?>
+                                                        <?php else : ?>
+                                                            <br>Ordem de serviço não assinada.
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <?php else: ?>
+                                        <table class="table table-bordered table-condensed" style="padding-top: 20px">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Data
+                                                        <hr>
+                                                    </td>
+                                                    <td>Assinatura do Cliente
+                                                        <hr>
+                                                    </td>
+                                                    <td>Assinatura do Responsável
+                                                        <hr>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

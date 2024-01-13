@@ -1,19 +1,16 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js"></script>
-
 <link rel="stylesheet" href="<?=base_url()?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <style>
     .ui-datepicker {
         z-index: 9999 !important;
     }
-
+    
     .trumbowyg-box {
         margin-top: 0;
         margin-bottom: 0;
+        background: #FFFFFF;
+        border-radius: 5px;
     }
 </style>
 
@@ -27,27 +24,19 @@
                 <h5>Cadastro de OS</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-
-
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
-
                             <div class="span12" id="divCadastrarOs">
-
                                 <form action="<?=current_url()?>" method="post" id="formOs">
-
                                     <div class="span12" style="padding: 1%;">
                                         <div class="span12 alert alert-info">
                                             <h5 class="text-center">Preencha os campos abaixo detalhando o que você precisa. Campos com asterisco são obrigatórios.</h5>
                                         </div>
-
                                     </div>
-
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
 
                                         <div class="span12">
@@ -55,21 +44,17 @@
                                             <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
                                         </div>
                                     </div>
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-
                                         <div class="span12">
                                             <label for="defeito">Defeito</label>
                                             <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
                                         </div>
-
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span12">
                                             <label for="observacoes">Observações</label>
                                             <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                         </div>
-
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex;justify-content: center">
@@ -81,28 +66,20 @@
                                     </div>
                                 </form>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-                .
-
             </div>
-
         </div>
     </div>
 </div>
 
-
-
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/trumbowyg/langs/pt_br.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
-
         $("#formOs").validate({
             rules: {
                 descricaoProduto: {
@@ -114,7 +91,6 @@
                     required: 'O campo descrição da OS é obrigatório.'
                 }
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight: function(element, errorClass, validClass) {

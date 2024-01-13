@@ -503,6 +503,7 @@ class Mine extends CI_Controller
         $this->CI = &get_instance();
         $this->CI->load->database();
         
+        $data['usar_assinatura'] = $this->CI->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object()->valor;
         $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
@@ -610,6 +611,9 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
+        $this->CI = &get_instance();
+        $this->CI->load->database();
+        $data['usar_assinatura'] = $this->CI->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object()->valor;
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -777,6 +781,9 @@ class Mine extends CI_Controller
             $this->load->model('mapos_model');
             $this->load->model('os_model');
 
+            $this->CI = &get_instance();
+            $this->CI->load->database();
+            $this->data['usar_assinatura'] = $this->CI->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object()->valor;
             $this->data['result'] = $this->os_model->getById($id);
             $this->data['produtos'] = $this->os_model->getProdutos($id);
             $this->data['servicos'] = $this->os_model->getServicos($id);
@@ -786,6 +793,8 @@ class Mine extends CI_Controller
                 $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
                 redirect('mine/painel');
             }
+            
+            $this->data['tab'] = isset($_GET['tab']) ? $_GET['tab'] : 0;
 
             $this->data['output'] = 'conecte/detalhes_os';
             $this->load->view('conecte/template', $this->data);

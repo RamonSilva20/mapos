@@ -9,8 +9,14 @@ $totalProdutos = 0; ?>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons" style=" padding-left:5px;">
-                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?=site_url()?>mine/imprimirOs/<?php echo $result->idOs; ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
+                    <?php if($usar_assinatura && !$result->assClienteImg): ?>
+                        <a title="Assinar" class="button btn btn-mini btn-primary" href="<?php echo site_url() ?>mine/detalhesOs/<?php echo $result->idOs .'?tab=5'; ?>" style="margin-left:10px">
+                            <span class="button__icon"><i class="fas fa-pencil-alt"></i></span>  
+                            <span class="button__text">Autorizar e assinar</span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="widget-content" id="printOs">

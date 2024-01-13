@@ -15,6 +15,7 @@ class Os extends MY_Controller
         parent::__construct();
         $this->load->helper('form');
         $this->load->model('os_model');
+        $this->load->model('usuarios_model');
         $this->data['menuOs'] = 'OS';
     }
 
@@ -288,6 +289,8 @@ class Os extends MY_Controller
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 
+        $this->data['tecTemAssinatura'] = $this->usuarios_model->getById($this->session->userdata('id_admin'))->assinaturaImg ? true : false;
+
         if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
@@ -295,6 +298,7 @@ class Os extends MY_Controller
 
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['tab'] = isset($_GET['tab']) ? $_GET['tab'] : 0;
 
         $this->data['view'] = 'os/editarOs';
         return $this->layout();
