@@ -4,14 +4,14 @@ $totalProdutos = 0; ?>
 <html lang="pt-br">
 
 <head>
-    <title>Map_OS_<?php echo $result->idOs ?>_<?php echo $result->nomeCliente ?></title>
+    <title><?php echo $this->config->item('app_name') ?> - <?php echo $result->idOs ?> - <?php echo $result->nomeCliente ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
-    <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/custom.css" />
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' type='text/css' />
     <style>
         .table {
 
@@ -266,16 +266,36 @@ $totalProdutos = 0; ?>
                             <?php endif ?>
                         <?php } ?>
                     </table>
-                    <table class="table table-bordered table-condensed" style="font-size: 15px">
-                        <tbody>
-                            <tr>
-                                <td colspan="5">
-                                    <b><p class="text-center">Assinatura do Cliente</p></b><br />
-                                    <hr>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <?php if($this->data['configuration']['usar_assinatura']): ?>
+                        <table class="table" style="padding-top: 20px">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <img width="150" src="<?=$result->assClienteImg ?: base_url('assets/img/assinatura_branco.png')?>" />
+                                        <br>______________________________
+                                        <br>Assinatura do Cliente
+                                        <?php if ($result->assClienteImg) : ?>
+                                            <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                            <br>IP: <?=$result->assClienteIp ?>
+                                        <?php else : ?>
+                                            <br>Ordem de serviço não assinada.
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <table class="table table-bordered table-condensed" style="font-size: 15px">
+                            <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <b><p class="text-center">Assinatura do Cliente</p></b><br />
+                                        <hr>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
                 </div>
                       
                 <!-- Via Da Empresa  -->
@@ -483,18 +503,36 @@ $totalProdutos = 0; ?>
                                 <?php endif ?>
                             <?php } ?>
                         </table>
-                        <table class="table table-bordered table-condensed" style="font-size: 15px">
-                            <tbody>
-                                <tr>
-
-                                    <td colspan="5">
-                                        <b><p class="text-center">Assinatura do Recebedor</p></b><br />
-                                        <hr>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        </table>
+                        <?php if($this->data['configuration']['usar_assinatura']): ?>
+                            <table class="table" style="padding-top: 20px">
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            <img src="<?=$result->assTecnicoImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                            <br> ______________________________
+                                            <br> Assinatura do Técnico
+                                            <?php if ($result->assTecnicoImg) : ?>
+                                                <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                <br>IP: <?=$result->assTecnicoIp ?>
+                                            <?php else : ?>
+                                                <br>Ordem de serviço não assinada.
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <?php else: ?>
+                            <table class="table table-bordered table-condensed" style="font-size: 15px">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <b><p class="text-center">Assinatura do Recebedor</p></b><br />
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
                         </div>
                     </div>
                 </div>

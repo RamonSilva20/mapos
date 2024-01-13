@@ -14,7 +14,6 @@ $totalProdutos = 0; ?>
     <link rel="stylesheet" href="<?=base_url()?>assets/css/matrix-style.css" />
     <link href="<?=base_url()?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"></script>
     <style>
         body {
             width: 100%;
@@ -193,7 +192,7 @@ $totalProdutos = 0; ?>
                                         <?php } ?>
                                     </tbody>
                                 </table>
-                                <?php if ($produtos != null) { ?>
+                                <?php if ($produtos != null) : ?>
                                     <table class="table table-bordered table-condensed" id="tblProdutos">
                                         <thead>
                                             <tr>
@@ -204,23 +203,25 @@ $totalProdutos = 0; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($produtos as $p) {
-                                                $totalProdutos = $totalProdutos + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td>' . $p->quantidade . '</td>';
-                                                echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
-                                                echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+                                            <?php 
+                                                foreach ($produtos as $p) :
+                                                    $totalProdutos = $totalProdutos + $p->subTotal;
+                                                    echo '<tr>';
+                                                    echo '<td>'.$p->descricao.'</td>';
+                                                    echo '<td>'.$p->quantidade.'</td>';
+                                                    echo '<td>'.$p->preco ?: $p->precoVenda.'</td>';
+                                                    echo '<td>R$ '.number_format($p->subTotal, 2, ',', '.').'</td>';
+                                                    echo '</tr>';
+                                                endforeach;
+                                            ?>
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                                <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                                <td><strong>R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                <?php } ?>
-                                <?php if ($servicos != null) { ?>
+                                <?php endif ?>
+                                <?php if ($servicos != null) : ?>
                                     <table class="table table-bordered table-condensed">
                                         <thead>
                                             <tr>
@@ -231,40 +232,77 @@ $totalProdutos = 0; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php setlocale(LC_MONETARY, 'en_US'); foreach ($servicos as $s) {
-                                                $preco = $s->preco ?: $s->precoVenda;
-                                                $subtotal = $preco * ($s->quantidade ?: 1);
-                                                $totalServico = $totalServico + $subtotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $s->nome . '</td>';
-                                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                                echo '<td>R$ ' . $preco . '</td>';
-                                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+                                            <?php 
+                                                setlocale(LC_MONETARY, 'en_US');
+                                                foreach ($servicos as $s) :
+                                                    $preco = $s->preco ?: $s->precoVenda;
+                                                    $subtotal = $preco * ($s->quantidade ?: 1);
+                                                    $totalServico = $totalServico + $subtotal;
+                                                    echo '<tr>';
+                                                    echo '<td>'.$s->nome.'</td>';
+                                                    echo '<td>'.($s->quantidade ?: 1).'</td>';
+                                                    echo '<td>R$ '.$preco.'</td>';
+                                                    echo '<td>R$ '.number_format($subtotal, 2, ',', '.').'</td>';
+                                                    echo '</tr>';
+                                                endforeach;
+                                            ?>
                                             <tr>
                                                 <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                                <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                                <td><strong>R$ <?= number_format($totalServico, 2, ',', '.') ?></strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                <?php } ?>
+                                <?php endif; ?>
 
-                                <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                                    if ($result->valor_desconto != 0) {
-                                        echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                        echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                        echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
-                                    } else { echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
-                                }?>
+                                <?php if ($totalProdutos != 0 || $totalServico != 0) :
+                                    if ($result->valor_desconto != 0) :
+                                        echo "<h4 style='text-align: right'>SUBTOTAL: R$ ".number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>";
+                                        echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ ".number_format(($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00), 2, ',', '.')."</h4>" : "";
+                                        echo "<h4 style='text-align: right'>TOTAL: R$ ".number_format($result->valor_desconto, 2, ',', '.')."</h4>";
+                                    else : 
+                                        echo "<h4 style='text-align: right'>TOTAL: R$ ".number_format($totalProdutos + $totalServico, 2, ',', '.')."</h4>"; 
+                                    endif;
+                                endif; ?>
+
+                                <?php if($usar_assinatura): ?>
+                                  <table class="table" style="padding-top: 20px">
+                                      <tbody>
+                                          <tr>
+                                              <td style="text-align:center;" width="50%">
+                                                  <img src="<?=$result->assClienteImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                  <br>______________________________
+                                                  <br>Assinatura do Cliente
+                                                  <?php if ($result->assClienteImg) : ?>
+                                                      <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?>
+                                                      <br>IP: <?=$result->assClienteIp ?>
+                                                  <?php else : ?>
+                                                      <br>Ordem de serviço não assinada.
+                                                  <?php endif; ?>
+                                              </td>
+                                              <td style="text-align:center;" width="50%">
+                                                  <img src="<?=$result->assTecnicoImg ?: base_url('assets/img/assinatura_branco.png')?>" style="height:150px;" />
+                                                  <br> ______________________________
+                                                  <br> Assinatura do Técnico
+                                                  <?php if ($result->assTecnicoImg) : ?>
+                                                      <br>Em <?=date('d/m/Y H:i:s', strtotime($result->assTecnicoData))?>
+                                                      <br>IP: <?=$result->assTecnicoIp ?>
+                                                  <?php else : ?>
+                                                      <br>Ordem de serviço não assinada.
+                                                  <?php endif; ?>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-    <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
-    <script src="<?=base_url()?>assets/js/matrix.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/js/matrix.js"></script>
 
     <script>
         window.print();
