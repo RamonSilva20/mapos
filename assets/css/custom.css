@@ -71,10 +71,12 @@
 }
 
 .trumbowyg-box {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+}
 
 textarea {
-        resize: vertical;
-    }
+    resize: vertical;
+}
