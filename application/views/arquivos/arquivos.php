@@ -93,7 +93,7 @@
     <?= $this->pagination->create_links() ?>
 
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?= base_url() ?>index.php/arquivos/excluir" method="post">
+        <form action="<?= base_url() ?>arquivos/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir Arquivo</h5>

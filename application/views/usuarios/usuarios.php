@@ -47,7 +47,7 @@
                         echo '<td>' . $r->permissao . '</td>';
                         echo '<td>' . $r->dataExpiracao . '</td>';
                         echo '<td>
-                                <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
+                                <a href="' . base_url() . 'usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
                                 </td>';
                         echo '</tr>';
                     } ?>

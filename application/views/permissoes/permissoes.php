@@ -47,7 +47,7 @@
                         echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
                         echo '<td>' . $situacao . '</td>';
                         echo '<td>
-                                <a href="' . base_url() . 'index.php/permissoes/editar/' . $r->idPermissao . '" class="btn-nwe3" title="Editar permissões"><i class="bx bx-edit"></i></a>
+                                <a href="' . base_url() . 'permissoes/editar/' . $r->idPermissao . '" class="btn-nwe3" title="Editar permissões"><i class="bx bx-edit"></i></a>
                                 <a href="#modal-excluir" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn-nwe4" title="Desativar Permissão"><i class="bx bx-notification-off" ></i></a>
                               </td>';
                         echo '</tr>';

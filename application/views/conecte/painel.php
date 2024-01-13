@@ -118,7 +118,7 @@
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                            echo '<td> <a href="' . base_url() . 'mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -161,7 +161,7 @@
                     echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
                     echo '<td>' . $p->nome . '</td>';
                     echo '<td>' . $faturado . '</td>';
-                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                    echo '<td> <a href="' . base_url() . 'mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
                     echo '</tr>';
                 }
             } else {

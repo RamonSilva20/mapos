@@ -44,7 +44,7 @@
                         echo '<td>' . $dataGarantia . '</td>';
                         echo '<td>' . $r->refGarantia . '</td>';
                         echo '<td>' . $textoGarantiaShort . '</td>';
-                        echo '<td><a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '">' . $r->nome . '</a></td>';
+                        echo '<td><a href="' . base_url() . 'usuarios/editar/' . $r->idUsuarios . '">' . $r->nome . '</a></td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/visualizar/' . $r->idGarantias . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';

@@ -46,7 +46,7 @@
                         echo '<tr>';
                         echo '<td>' . $r->idVendas . '</td>';
                         echo '<td>' . $dataVenda . '</td>';
-                        echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
+                        echo '<td><a href="' . base_url() . 'clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
                         echo '<td>' . $faturado . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {

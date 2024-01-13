@@ -149,7 +149,7 @@
 
                                 echo '<tr>';
                                 echo '<td>' . $r->idOs . '</td>';
-                                echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
+                                echo '<td class="cli1"><a href="' . base_url() . 'clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
                                 echo '<td class="ph1">' . $r->nome . '</td>';
                                 echo '<td>' . $dataInicial . '</td>';
                                 echo '<td class="ph2">' . $dataFinal . '</td>';
