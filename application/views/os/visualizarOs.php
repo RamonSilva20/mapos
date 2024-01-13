@@ -343,7 +343,7 @@
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?=base_url()?>index.php/os/excluirAnexo/';
+            var url = '<?=base_url()?>os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
 
