@@ -25,7 +25,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/osCustom" method="get">
+                    <form target="_blank" action="<?=base_url()?>relatorios/osCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Data de:</label>

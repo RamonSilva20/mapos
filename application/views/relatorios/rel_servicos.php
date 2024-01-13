@@ -24,7 +24,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/servicosCustom" method="get">
+                    <form target="_blank" action="<?=base_url()?>relatorios/servicosCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Preço de:</label>

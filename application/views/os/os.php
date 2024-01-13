@@ -15,7 +15,7 @@
             <h5>Ordens de Serviço</h5>
         </div>
     <div class="span12" style="margin-left: 0">
-        <form method="get" action="<?=base_url()?>index.php/os/gerenciar">
+        <form method="get" action="<?=base_url()?>os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
                 <div class="span3">
                     <a href="<?=base_url()?>os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">

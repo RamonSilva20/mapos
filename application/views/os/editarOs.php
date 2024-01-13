@@ -169,7 +169,7 @@
                         ?>
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <form id="formDesconto" action="<?=base_url()?>index.php/os/adicionarDesconto" method="POST">
+                                <form id="formDesconto" action="<?=base_url()?>os/adicionarDesconto" method="POST">
                                     <div id="divValorTotal">
                                         <div class="span2">
                                             <label for="">Valor Total Da OS:</label>
@@ -207,7 +207,7 @@
                         <!--Produtos-->
                         <div class="tab-pane" id="tab3">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <form id="formProdutos" action="<?=base_url()?>index.php/os/adicionarProduto" method="post">
+                                <form id="formProdutos" action="<?=base_url()?>os/adicionarProduto" method="post">
                                     <div class="span6">
                                         <input type="hidden" name="idProduto" id="idProduto" />
                                         <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?php echo $result->idOs; ?>" />
@@ -281,7 +281,7 @@
                         <!--Serviços-->
                         <div class="tab-pane" id="tab4">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
-                                <form id="formServicos" action="<?=base_url()?>index.php/os/adicionarServico" method="post">
+                                <form id="formServicos" action="<?=base_url()?>os/adicionarServico" method="post">
                                     <div class="span6">
                                         <input type="hidden" name="idServico" id="idServico" />
                                         <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs; ?>" />

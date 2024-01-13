@@ -86,7 +86,7 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <div class="span11">
-                                    <form id="formProdutos" action="<?=base_url()?>index.php/vendas/adicionarProduto" method="post">
+                                    <form id="formProdutos" action="<?=base_url()?>vendas/adicionarProduto" method="post">
                                         <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
                                             <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
@@ -110,7 +110,7 @@
                                     </form>
                                 </div>
                                 <div class="span11">
-                                    <form id="formDesconto" action="<?=base_url()?>index.php/vendas/adicionarDesconto" method="POST">
+                                    <form id="formDesconto" action="<?=base_url()?>vendas/adicionarDesconto" method="POST">
                                         <div class="span1">
                                             <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>

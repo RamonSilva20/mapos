@@ -28,7 +28,7 @@
             </div>
             <div class="widget-content">
                 <div class="span12 well">
-                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/clientesCustom"
+                    <form target="_blank" action="<?=base_url()?>relatorios/clientesCustom"
                           method="get">
                         <div class="span4">
                             <label for="">Cadastrado de:</label>

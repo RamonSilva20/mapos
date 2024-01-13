@@ -26,7 +26,7 @@
             <div class="widget-content">
                 <div class="span12 well">
                     <div class="span12 alert alert-info">Deixe em branco caso não deseje utilizar o parâmetro.</div>
-                    <form target="_blank" action="<?=base_url()?>index.php/relatorios/produtosCustom" method="get">
+                    <form target="_blank" action="<?=base_url()?>relatorios/produtosCustom" method="get">
                         <div class="span12 well">
                             <div class="span6">
                                 <label for="">Preço de Venda de:</label>

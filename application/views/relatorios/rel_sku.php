@@ -27,7 +27,7 @@
                 <h5>Relatórios Customizáveis</h5>
             </div>
             <div class="widget-content">
-                <form target="_blank" action="<?=base_url()?>index.php/relatorios/skuCustom" method="get">
+                <form target="_blank" action="<?=base_url()?>relatorios/skuCustom" method="get">
                     <div class="span12 well">
                         <div class="span6">
                             <label for="">Data de ocorrência de:</label>
