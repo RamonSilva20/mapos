@@ -71,7 +71,7 @@
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?=base_url()?>index.php/clientes/excluir" method="post">
+        <form action="<?=base_url()?>clientes/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir Cliente</h5>

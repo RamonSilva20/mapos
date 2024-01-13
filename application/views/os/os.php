@@ -184,7 +184,7 @@
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?=base_url()?>index.php/os/excluir" method="post">
+        <form action="<?=base_url()?>os/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir OS</h5>
