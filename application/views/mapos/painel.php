@@ -528,7 +528,7 @@
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
+                                            <a href="<?= base_url() ?>produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
                                                 <i class="bx bx-edit"></i>
                                             </a>
                                             <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
@@ -585,7 +585,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -635,7 +635,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
@@ -684,7 +684,7 @@
                                 </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i></a>
                                     <?php endif ?>
                                 </td>
