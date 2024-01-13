@@ -91,7 +91,7 @@ class Mine extends CI_Controller
                 $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
                 $this->session->set_userdata($session_mine_data);
                 log_info('Digitou Token. Porém, Token expirado');
-                return redirect(base_url() . 'index.php/mine');
+                return redirect(base_url() . 'mine');
             } else {
                 if ($token) {
                     if (($cliente = $this->check_credentials($token->email)) == null) {
@@ -108,7 +108,7 @@ class Mine extends CI_Controller
                             $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
                             $this->session->set_userdata($session_mine_data);
                             log_info('Digitou Token. Porém, dados divergentes ou Token invalido.');
-                            return redirect(base_url() . 'index.php/mine');
+                            return redirect(base_url() . 'mine');
                         }
                     }
                 } else {
@@ -140,7 +140,7 @@ class Mine extends CI_Controller
                 $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
                 $this->session->set_userdata($session_mine_data);
                 log_info('Acesso via link do email (Token). Porém, Token expirado');
-                return redirect(base_url() . 'index.php/mine');
+                return redirect(base_url() . 'mine');
             } else {
                 if ($token) {
                     if (($cliente = $this->check_credentials($token->email)) == null) {
@@ -157,7 +157,7 @@ class Mine extends CI_Controller
                             $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
                             $this->session->set_userdata($session_mine_data);
                             log_info('Acesso via link do email (Token). Porém, dados divergentes ou Token invalido.');
-                            return redirect(base_url() . 'index.php/mine');
+                            return redirect(base_url() . 'mine');
                         }
                     }
                 } else {
@@ -194,7 +194,7 @@ class Mine extends CI_Controller
                 $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha.');
                 $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $cliente->email);
-                redirect(base_url() . 'index.php/mine');
+                redirect(base_url() . 'mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar solicitação!');
                 $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
@@ -315,7 +315,7 @@ class Mine extends CI_Controller
 
             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
-                redirect(base_url() . 'index.php/mine/conta');
+                redirect(base_url() . 'mine/conta');
             } else {
             }
         }
@@ -828,7 +828,7 @@ class Mine extends CI_Controller
                 $this->enviarEmailBoasVindas($id);
                 $this->enviarEmailTecnicoNotificaClienteNovo($id);
                 $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para ' . $data['email']);
-                redirect(base_url() . 'index.php/mine');
+                redirect(base_url() . 'mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
             }
@@ -897,7 +897,7 @@ class Mine extends CI_Controller
         
         if ($emitente == null) {
             $this->session->set_flashdata(['error' => 'Cadastrar Emitente.\n\n Por favor contate o administrador do sistema.']);
-            return redirect(base_url() . 'index.php/mine/resetarSenha');
+            return redirect(base_url() . 'mine/resetarSenha');
         }
 
         $headers = [

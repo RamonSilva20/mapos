@@ -587,7 +587,7 @@ class Os extends MY_Controller
             $os = $this->os_model->getById($id);
             if ($os == null) {
                 $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-                redirect(base_url() . 'index.php/os/gerenciar/');
+                redirect(base_url() . 'os/gerenciar/');
             }
         }
 
@@ -696,7 +696,7 @@ class Os extends MY_Controller
         $os = $this->os_model->getById($id);
         if ($os == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar inserir produto na OS.');
-            redirect(base_url() . 'index.php/os/gerenciar/');
+            redirect(base_url() . 'os/gerenciar/');
         }
 
         if ($this->os_model->add('produtos_os', $data) == true) {
@@ -734,7 +734,7 @@ class Os extends MY_Controller
         $os = $this->os_model->getById($idOs);
         if ($os == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto na OS.');
-            redirect(base_url() . 'index.php/os/gerenciar/');
+            redirect(base_url() . 'os/gerenciar/');
         }
 
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {

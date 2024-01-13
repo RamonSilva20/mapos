@@ -176,7 +176,7 @@ class Arquivos extends MY_Controller
 
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
-            redirect(base_url() . 'index.php/arquivos/');
+            redirect(base_url() . 'arquivos/');
         }
 
         $file = $this->arquivos_model->getById($id);

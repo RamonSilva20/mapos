@@ -185,7 +185,7 @@ class Garantias extends MY_Controller
         $id = $this->input->post('idGarantias');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir termo de garantia.');
-            redirect(base_url() . 'index.php/garantias/gerenciar/');
+            redirect(base_url() . 'garantias/gerenciar/');
         }
 
         if ($this->garantias_model->delete('garantias', 'idGarantias', $id) == true) {

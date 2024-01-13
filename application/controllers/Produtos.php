@@ -166,7 +166,7 @@ class Produtos extends MY_Controller
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
-            redirect(base_url() . 'index.php/produtos/gerenciar/');
+            redirect(base_url() . 'produtos/gerenciar/');
         }
 
         $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
