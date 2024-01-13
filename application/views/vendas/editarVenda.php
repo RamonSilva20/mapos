@@ -395,7 +395,7 @@ foreach ($produtos as $p) {
                         $("#desconto").val("");
                         $("#resultado").val("");
                         /*setTimeout(function() {
-                            window.location.href = window.BaseUrl + 'index.php/vendas/editar/' + <?php echo $result->idVendas ?>;
+                            window.location.href = window.BaseUrl + 'vendas/editar/' + <?php echo $result->idVendas ?>;
                         }, 2000);*/
                     } else {
                         Swal.fire({
@@ -465,7 +465,7 @@ foreach ($produtos as $p) {
                 } else if (qtdProdutos > 0) {
                     $.ajax({
                         type: "POST",
-                        url: "<?=base_url()?>index.php/vendas/faturar",
+                        url: "<?=base_url()?>vendas/faturar",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -579,7 +579,7 @@ foreach ($produtos as $p) {
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                     $.ajax({
                         type: "POST",
-                        url: "<?=base_url()?>index.php/vendas/adicionarProduto",
+                        url: "<?=base_url()?>vendas/adicionarProduto",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -613,7 +613,7 @@ foreach ($produtos as $p) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/vendas/excluirProduto",
+                    url: "<?=base_url()?>vendas/excluirProduto",
                     data: "idProduto=" + idProduto + "&idVendas=" + <?= $result->idVendas ?> + "&quantidade=" + quantidade + "&produto=" + produto,
                     dataType: 'json',
                     success: function(data) {

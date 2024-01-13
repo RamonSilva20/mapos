@@ -487,7 +487,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL)
 <div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formDespesa" action="<?php // echo base_url()?>index.php/financeiro/adicionarDespesa" method="post">
+    <form id="formDespesa" action="<?php // echo base_url()?>financeiro/adicionarDespesa" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
@@ -907,7 +907,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             $.ajax({
                 type: "POST",
-                url: "<?=base_url()?>index.php/financeiro/excluirLancamento",
+                url: "<?=base_url()?>financeiro/excluirLancamento",
                 data: "id=" + id,
                 dataType: 'json',
                 success: function(data) {

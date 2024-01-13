@@ -29,7 +29,7 @@
                 </div>
                 <div class="widget-content nopadding tab-content">
 
-                    <form action="<?php echo base_url() . "index.php/mine/gerarTokenResetarSenha" ?>" id="formCliente" method="post" class="form-horizontal">
+                    <form action="<?= base_url() . "mine/gerarTokenResetarSenha" ?>" id="formCliente" method="post" class="form-horizontal">
 
                         <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly;border-bottom: 0px">
                             <label style="width: auto" for="email" class="control-label">Email<span class="required">*</span></label>

@@ -65,7 +65,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/mine/senhaSalvar",
+                    url: "<?=base_url()?>mine/senhaSalvar",
                     dataType: 'json',
                     data: {
                         token: token,
@@ -78,7 +78,7 @@
                                 title: "Salvo com Sucesso",
                                 text: data.message
                             });
-                            window.location.replace("<?=base_url()?>index.php/mine/");
+                            window.location.replace("<?=base_url()?>mine/");
                         } else {
                             Swal.fire({
                                 type: "error",

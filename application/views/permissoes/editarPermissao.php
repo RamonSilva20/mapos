@@ -83,7 +83,7 @@
 
 <?php $permissoes = unserialize($result->permissoes);?>
 <div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
+    <form action="<?php echo base_url();?>permissoes/editar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">
             <div class="widget-box">
                 <div class="widget-title">

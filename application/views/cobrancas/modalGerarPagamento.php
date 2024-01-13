@@ -8,7 +8,7 @@ $this->load->config('payment_gateways');
 
 <div class="modal fade" id="modal-gerar-pagamento" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <form id="form-gerar-cobranca" name="cobranca" method="post" action="<?php echo base_url() . 'index.php/cobrancas/adicionar'; ?>">
+        <form id="form-gerar-cobranca" name="cobranca" method="post" action="<?php echo base_url() . 'cobrancas/adicionar'; ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -700,7 +700,7 @@
                 } else if (qtdTotalProdutosServicos > 0) {
                     $.ajax({
                         type: "POST",
-                        url: "<?=base_url()?>index.php/os/faturar",
+                        url: "<?=base_url()?>os/faturar",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -747,7 +747,7 @@
                             text: response.messages
                         });
                         setTimeout(function() {
-                            window.location.href = window.BaseUrl + 'index.php/os/editar/' + <?php echo $result->idOs ?>;
+                            window.location.href = window.BaseUrl + 'os/editar/' + <?php echo $result->idOs ?>;
                         }, 2000);
                     } else {
                         Swal.fire({
@@ -803,7 +803,7 @@
                 $('#btn-cancelar-faturar').trigger('click');
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/faturar",
+                    url: "<?=base_url()?>os/faturar",
                     data: dados,
                     dataType: 'json',
                     success: function(data) {
@@ -955,7 +955,7 @@
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                     $.ajax({
                         type: "POST",
-                        url: "<?=base_url()?>index.php/os/adicionarProduto",
+                        url: "<?=base_url()?>os/adicionarProduto",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -1010,7 +1010,7 @@
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/adicionarServico",
+                    url: "<?=base_url()?>os/adicionarServico",
                     data: dados,
                     dataType: 'json',
                     success: function(data) {
@@ -1052,7 +1052,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/adicionarAnotacao",
+                    url: "<?=base_url()?>os/adicionarAnotacao",
                     data: dados,
                     dataType: 'json',
                     success: function(data) {
@@ -1082,7 +1082,7 @@
                 $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/anexar",
+                    url: "<?=base_url()?>os/anexar",
                     data: dados,
                     mimeType: "multipart/form-data",
                     contentType: false,
@@ -1116,7 +1116,7 @@
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/excluirProduto",
+                    url: "<?=base_url()?>os/excluirProduto",
                     data: "idProduto=" + idProduto + "&quantidade=" + quantidade + "&produto=" + produto + "&idOs=" + idOS,
                     dataType: 'json',
                     success: function(data) {
@@ -1147,7 +1147,7 @@
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/excluirServico",
+                    url: "<?=base_url()?>os/excluirServico",
                     data: "idServico=" + idServico + "&idOs=" + idOS,
                     data: "idServico=" + idServico,
                     dataType: 'json',
@@ -1216,7 +1216,7 @@
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url()?>index.php/os/excluirAnotacao",
+                    url: "<?=base_url()?>os/excluirAnotacao",
                     data: "idAnotacao=" + idAnotacao + "&idOs=" + idOS,
                     dataType: 'json',
                     success: function(data) {
