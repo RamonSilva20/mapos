@@ -61,7 +61,7 @@ class Assinatura extends CI_Controller
                     $response['assTecnicoData'] = date('d/m/Y H:i:s', strtotime($data['assTecnicoData']));
                 }
 
-                $this->responseSignature($response);
+                return $this->responseSignature($response);
             }
         }
 
@@ -74,7 +74,7 @@ class Assinatura extends CI_Controller
                 'success' => true,
                 'message' => 'Assinatura salva com sucesso.'
             ];
-            $this->responseSignature($response);
+            return $this->responseSignature($response);
         }
         
         $response['message'] = 'Erro: Falha ao salvar os dados da assinatura.';

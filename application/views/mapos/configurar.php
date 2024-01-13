@@ -235,15 +235,30 @@
                             <div class="span8">
                                 <span6 class="span10" style="margin-left: 2em;"> Defina a vizualização padrão, onde o que ficar checado será exibida na listagem de OS por padrão. </span6>
                                 <div class="span10" style="margin-left: 3em;">
-                                    <label> <input <?= @in_array("Aberto", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aberto"> <span class="lbl"> Aberto</span> </label>
-                                    <label> <input <?= @in_array("Faturado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Faturado"> <span class="lbl"> Faturado</span> </label>
-                                    <label> <input <?= @in_array("Negociação", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Negociação"> <span class="lbl"> Negociação</span> </label>
-                                    <label> <input <?= @in_array("Em Andamento", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Em Andamento"> <span class="lbl"> Em Andamento</span> </label>
-                                    <label> <input <?= @in_array("Orçamento", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Orçamento"> <span class="lbl"> Orçamento</span> </label>
-                                    <label> <input <?= @in_array("Finalizado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Finalizado"> <span class="lbl"> Finalizado</span> </label>
-                                    <label> <input <?= @in_array("Cancelado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Cancelado"> <span class="lbl"> Cancelado</span> </label>
-                                    <label> <input <?= @in_array("Aguardando Peças", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aguardando Peças"> <span class="lbl"> Aguardando Peças </span> </label>
-                                    <label> <input <?= @in_array("Aprovado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aprovado"> <span class="lbl"> Aprovado </span> </label>
+                                    <?php foreach(json_decode($configuration['os_status_list']) as $status): ?>
+                                        <label> <input <?=@in_array($status, json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''?> name="os_status_list[]" class="marcar" type="checkbox" value="<?=$status?>"> <span class="lbl"><?=$status?></span> </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="span8" style="margin-left: 3em;">
+                                <label for="usar_assinatura" class="control-label">Sistema de assinaturas de OS</label>
+                                <div class="controls">
+                                    <select name="usar_assinatura" id="control_2vias">
+                                        <option value="1">Ativar</option>
+                                        <option value="0" <?= $configuration['usar_assinatura'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    </select>
+                                    <span class="help-inline">Ativar ou desativar sistema de assinatura online de OS.</span>
+                                </div>
+                            </div>
+                            <div class="span8" style="margin-left: 3em;">
+                                <label for="status_assinatura" class="control-label">Status pós assinatura do cliente</label>
+                                <div class="controls">
+                                    <select name="status_assinatura" id="control_2vias">
+                                      <?php foreach(json_decode($configuration['os_status_list']) as $status): ?>
+                                        <option <?=@in_array($status, json_decode($configuration['os_status_list'])) == 'true' ? 'selected' : ''?>><?=$status?></option>
+                                      <?php endforeach; ?>
+                                    </select>
+                                    <span class="help-inline">Pra qual status a OS vai quando o cliente assinar?</span>
                                 </div>
                             </div>
                         </div>

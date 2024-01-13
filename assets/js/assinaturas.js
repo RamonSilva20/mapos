@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function post_form(form_data, assClienteImg64 = '', assTecnicoImg64 = '', assUsuarioImg64 = '')
     {
         $.ajax({
-            url: base_url+'Assinatura/upload_signature',
+            url: base_url+'index.php/Assinatura/upload_signature',
             type: 'POST',
             cache: false,
             data : form_data,
@@ -187,14 +187,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             .append('<p>Em '+response.assTecnicoData+'</p>').append('<p>IP: '+response.assTecnicoIp+'</p>');
                         $('button').remove('#limparAssTecnico, #salvarAss, #salvarAssTecnico, #adicionarAss');
                         $('#salvarAssCliente').removeClass('hide');
-                        $("#divAnotacoes").load(base_url+'os/editar/'+form_data.get('idOs')+' #divAnotacoes');
+                        $("#divAnotacoes").load(base_url+'index.php/os/editar/'+form_data.get('idOs')+' #divAnotacoes');
                     }
                     if(response.assClienteImg) {
                         assCliente.remove();
                         $('#assinaturaCliente').prepend('<img src="'+assClienteImg64+'" class="img-fluid" style="max-width:600px;" alt="">')
                             .append('<p>Em '+response.assClienteData+'</p>').append('<p>IP: '+response.assClienteIp+'</p>');
                         $('button').remove('#limparAssCliente, #salvarAss, #salvarAssCliente');
-                        $("#divAnotacoes").load(base_url+'os/editar/'+form_data.get('idOs')+' #divAnotacoes');
+                        $("#divAnotacoes").load(base_url+'index.php/os/editar/'+form_data.get('idOs')+' #divAnotacoes');
                         $('#nomeAssinatura').remove();
                     }
                     if(response.code == 200) {
