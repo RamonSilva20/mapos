@@ -10,7 +10,11 @@ class Login extends CI_Controller
 
     public function index()
     {
-        $this->load->view('mapos/login');
+        $hora = date('H');
+        $texto = $hora >= 00 && $hora < 12 ? 'Bom dia' : ($hora >= 12 && $hora < 18 ? 'Boa tarde' : 'Boa noite');
+        $data['saudacao'] = "Olá! {$texto}, bem-vindo";
+
+        $this->load->view('mapos/login', $data);
     }
 
     public function sair()
