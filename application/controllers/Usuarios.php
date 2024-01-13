@@ -34,7 +34,7 @@ class Usuarios extends MY_Controller
     {
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
+        $this->data['configuration']['base_url'] = base_url() . 'usuarios/gerenciar/';
         $this->data['configuration']['total_rows'] = $this->usuarios_model->count('usuarios');
 
         $this->pagination->initialize($this->data['configuration']);

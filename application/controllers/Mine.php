@@ -335,7 +335,7 @@ class Mine extends CI_Controller
         $data['menuVendas'] = 'vendas';
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'index.php/mine/compras/';
+        $config['base_url'] = base_url() . 'mine/compras/';
         $config['total_rows'] = $this->Conecte_model->count('vendas', $this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -376,7 +376,7 @@ class Mine extends CI_Controller
 
         $data['menuCobrancas'] = 'cobrancas';
 
-        $config['base_url'] = base_url() . 'index.php/mine/cobrancas/';
+        $config['base_url'] = base_url() . 'mine/cobrancas/';
         $config['total_rows'] = $this->Conecte_model->count('cobrancas', $this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -460,7 +460,7 @@ class Mine extends CI_Controller
         $data['menuOs'] = 'os';
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'index.php/mine/os/';
+        $config['base_url'] = base_url() . 'mine/os/';
         $config['total_rows'] = $this->Conecte_model->count('os', $this->session->userdata('cliente_id'));
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
