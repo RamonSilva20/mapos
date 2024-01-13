@@ -143,7 +143,7 @@
                             <div class="span6 offset3" style="display:flex">
                                 <button type="submit" class="button btn btn-success">
                                   <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                                <a href="<?=base_url()?>index.php/usuarios" id="" class="button btn btn-mini btn-warning">
+                                <a href="<?=base_url()?>usuarios" id="" class="button btn btn-mini btn-warning">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>

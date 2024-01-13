@@ -9,9 +9,9 @@
             </div>
             <div class="widget-content">
                 <ul style="flex-direction: row;" class="site-stats">
-                    <li><a href="<?=base_url()?>index.php/relatorios/clientesRapid" target="_blank"><i
+                    <li><a href="<?=base_url()?>relatorios/clientesRapid" target="_blank"><i
                                     class="fas fa-users"></i> <small>Todos os Clientes - pdf</small></a></li>
-                    <li><a href="<?=base_url()?>index.php/relatorios/clientesRapid?format=xls" target="_blank"><i
+                    <li><a href="<?=base_url()?>relatorios/clientesRapid?format=xls" target="_blank"><i
                                     class="fas fa-users"></i> <small>Todos os Clientes - xls</small></a></li>
                 </ul>
             </div>

@@ -11,7 +11,7 @@
         <h5>Vendas</h5>
     </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aVenda')) { ?>
-    <a href="<?=base_url()?>index.php/vendas/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+    <a href="<?=base_url()?>vendas/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Nova Venda</span></a>
 <?php } ?>
 

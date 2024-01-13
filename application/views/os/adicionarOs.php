@@ -96,7 +96,7 @@
                                                 <span class="button__icon"><i class='bx bx-chevrons-right'></i></span>
                                                 <span class="button__text2">Continuar</span>
                                             </button>
-                                            <a href="<?=base_url()?>index.php/os" class="button btn btn-mini btn-warning" style="max-width: 160px">
+                                            <a href="<?=base_url()?>os" class="button btn btn-mini btn-warning" style="max-width: 160px">
                                                 <span class="button__icon"><i class="bx bx-undo"></i></span>
                                                 <span class="button__text2">Voltar</span>
                                             </a>

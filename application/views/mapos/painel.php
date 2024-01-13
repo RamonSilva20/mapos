@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?=base_url()?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
+                    <a href="<?=base_url()?>clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
@@ -167,7 +167,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
+                    <a href="<?=base_url()?>produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
@@ -175,7 +175,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                    <a href="<?=base_url()?>servicos/adicionar" class="card tip-top" title="Adicionar serviços">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
@@ -183,7 +183,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
+                    <a href="<?=base_url()?>os/adicionar" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
@@ -191,7 +191,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                    <a href="<?=base_url()?>garantias" class="card tip-top" title="Adicionar garantia">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
@@ -199,7 +199,7 @@
                         </div>
                     </a>
 
-                    <a href="<?=base_url()?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
+                    <a href="<?=base_url()?>vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
@@ -215,7 +215,7 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
+                                <a href="<?=base_url()?>financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
@@ -223,7 +223,7 @@
                                     </div>
                                 </a>
 
-                                <a href="<?=base_url()?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
+                                <a href="<?=base_url()?>financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
                                         <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>

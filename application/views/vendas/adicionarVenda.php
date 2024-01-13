@@ -38,7 +38,7 @@
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
                                             <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-                                              <a href="<?=base_url()?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
+                                              <a href="<?=base_url()?>clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
@@ -64,7 +64,7 @@
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex;justify-content: center">
                                           <button class="button btn btn-success" id="btnContinuar"><span class="button__icon"><i class='bx bx-chevrons-right'></i></span><span class="button__text2">Continuar</span></button>
-                                            <a href="<?=base_url()?>index.php/vendas" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                            <a href="<?=base_url()?>vendas" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>

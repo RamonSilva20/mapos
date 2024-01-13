@@ -94,7 +94,7 @@
 
     <div style="background: #f3f4f6" id="content">
         <div class="content-header" id="content-header">
-            <div id="breadcrumb"><a href="<?=base_url()?>index.php/mine/painel" title="Painel" class="tip-bottom"><i class="fas fa-home"></i> Painel</a></div>
+            <div id="breadcrumb"><a href="<?=base_url()?>mine/painel" title="Painel" class="tip-bottom"><i class="fas fa-home"></i> Painel</a></div>
         </div>
 
         <div class="container-fluid">

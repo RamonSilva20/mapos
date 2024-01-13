@@ -33,7 +33,7 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary" style="max-width: 160px"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?=base_url()?>index.php/servicos" id="btnAdicionar" class="button btn btn-mini btn-warning" style="max-width: 160px">
+                                <a href="<?=base_url()?>servicos" id="btnAdicionar" class="button btn btn-mini btn-warning" style="max-width: 160px">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>

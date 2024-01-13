@@ -11,7 +11,7 @@
         <h5>Serviços</h5>
     </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) { ?>
-    <a href="<?=base_url()?>index.php/servicos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+    <a href="<?=base_url()?>servicos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
       <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2"> Serviços</span></a>
 <?php } ?>
 

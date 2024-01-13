@@ -11,7 +11,7 @@
             <h5>Clientes</h5>
         </div>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-        <a href="<?=base_url()?>index.php/clientes/adicionar" class="button btn btn-mini btn-success" style="max-width: 165px">
+        <a href="<?=base_url()?>clientes/adicionar" class="button btn btn-mini btn-success" style="max-width: 165px">
             <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">
                 Cliente / Fornecedor
             </span>
