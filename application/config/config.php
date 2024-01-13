@@ -4,12 +4,12 @@
 /**
  * App current version
  */
-$config['app_version'] = '4.42.0';
+$config['app_version'] = '4.50.0';
 
 /**
  * Nome do sistema
  */
-$config['app_name'] = 'Map-OS';
+$config['app_name'] = 'Map-OS Custom';
 
 /**
  * Descrição do sistema
@@ -55,7 +55,7 @@ $config['base_url'] = 'enter_baseurl';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
