@@ -9,7 +9,7 @@
                 <h5>Dados da Venda</h5>
                 <div class="buttons">
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-                        echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
+                        echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
                     <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?=site_url()?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">

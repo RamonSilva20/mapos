@@ -163,10 +163,10 @@
                                 $editavel = $this->os_model->isEditable($r->idOs);
 
                                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
                                 }
                                 if ($editavel) {
-                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
                                 }
                                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
                                     echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';

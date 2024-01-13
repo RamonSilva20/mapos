@@ -9,7 +9,7 @@
                 <h5>Dados da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'os/editar/' . $result->idOs . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
 
