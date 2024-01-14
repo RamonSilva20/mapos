@@ -72,7 +72,7 @@ class Conecte_model extends CI_Model
         $this->db->join('clientes', 'cobrancas.clientes_id = clientes.idClientes', 'left');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit($perpage, $start);
-        $this->db->order_by('idCobrancas', 'desc');
+        $this->db->order_by('idCobranca', 'desc');
         if ($where) {
             $this->db->where($where);
         }
