@@ -26,8 +26,10 @@
                     <tr>
                         <th>Cod.</th>
                         <th>Nome</th>
+                        <th>Contato</th>
                         <th>CPF/CNPJ</th>
                         <th>Telefone</th>
+                        <th>Celular</th>
                         <th>Email</th>
                         <th>Ações</th>
                     </tr>
@@ -44,8 +46,10 @@
                         echo '<tr>';
                         echo '<td>' . $r->idClientes . '</td>';
                         echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
+                        echo '<td>' . $r->contato . '</td>';
                         echo '<td>' . $r->documento . '</td>';
                         echo '<td>' . $r->telefone . '</td>';
+                        echo '<td>' . $r->celular . '</td>';
                         echo '<td>' . $r->email . '</td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
