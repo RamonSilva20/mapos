@@ -256,7 +256,7 @@ $totalProdutos = 0; ?>
                                 </td>
                             </tr>
                         </tbody>
-                        <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
+                        <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
                             <?php if ($qrCode) : ?>
                                 <td style="width: 15%; padding: 0;text-align:center;">
                                     <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
@@ -473,7 +473,7 @@ $totalProdutos = 0; ?>
                                     </td>
                                 </tr>
                             </tbody>
-                            <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
+                            <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
                                 <?php if ($qrCode) : ?>
                                     <td style="width: 15%; padding: 0;text-align:center;">
                                         <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
