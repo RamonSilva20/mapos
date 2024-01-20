@@ -104,7 +104,7 @@
         </li>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
         <li class="card">
             <div class="grid-blak">
                 <a href="<?= site_url('financeiro/lancamentos') ?>">
