@@ -118,11 +118,11 @@ class Os extends MY_Controller
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
-                'descricaoProduto' => set_value('descricaoProduto'),
-                'defeito' => set_value('defeito'),
+                'descricaoProduto' => $this->input->post('descricaoProduto'),
+                'defeito' => $this->input->post('defeito'),
                 'status' => set_value('status'),
-                'observacoes' => set_value('observacoes'),
-                'laudoTecnico' => set_value('laudoTecnico'),
+                'observacoes' => $this->input->post('observacoes'),
+                'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'faturado' => 0,
             ];
 
