@@ -39,8 +39,10 @@ class Conecte_model extends CI_Model
         $this->db->select('vendas.*,usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->order_by('idVendas', 'desc');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit(5);
+        $this->db->order_by('idVendas', 'desc');
 
         return $this->db->get()->result();
     }
@@ -51,8 +53,10 @@ class Conecte_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'vendas.usuarios_id = usuarios.idUsuarios', 'left');
+        $this->db->order_by('idVendas', 'desc');
         $this->db->where('clientes_id', $cliente);
         $this->db->limit($perpage, $start);
+        $this->db->order_by('idVendas', 'desc');
         if ($where) {
             $this->db->where($where);
         }
@@ -69,7 +73,9 @@ class Conecte_model extends CI_Model
         $this->db->from($table);
         $this->db->join('clientes', 'cobrancas.clientes_id = clientes.idClientes', 'left');
         $this->db->where('clientes_id', $cliente);
+        $this->db->order_by('expire_at','desc');
         $this->db->limit($perpage, $start);
+        $this->db->order_by('idCobranca', 'desc');
         if ($where) {
             $this->db->where($where);
         }
@@ -99,7 +105,7 @@ class Conecte_model extends CI_Model
     
     public function getById($id)
     {
-        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, garantias.textoGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');

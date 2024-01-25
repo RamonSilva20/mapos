@@ -382,7 +382,6 @@ foreach ($servicos as $s) {
                                                     <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
                                                         <img src="' . $thumb . '" alt="">
                                                     </a>
-                                                    <span>' . $a->anexo . '</span>
                                                 </div>';
                                     }
 ?>
@@ -402,25 +401,25 @@ foreach ($servicos as $s) {
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Anotação</th>
                                                 <th>Data/Hora</th>
+                                                <th>Anotação</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-        foreach ($anotacoes as $a) {
-            echo '<tr>';
-            echo '<td>' . $a->anotacao . '</td>';
-            echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-            echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
-            echo '</tr>';
-        }
-        if (!$anotacoes) {
-            echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
-        }
+                                                foreach ($anotacoes as $a) {
+                                                    echo '<tr>';
+                                                    echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
+                                                    echo '<td>' . $a->anotacao . '</td>';
+                                                    echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
+                                                    echo '</tr>';
+                                                }
+                                                if (!$anotacoes) {
+                                                    echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
+                                                }
 
-?>
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -479,10 +478,10 @@ foreach ($servicos as $s) {
 </div>
 
 <!-- Modal Faturar-->
-<div id="modal-faturar" class="modal hide fade widget_box_vizualizar4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
-        <div class="modal_header_anexos">
-            <button type="button" class="close" style="color:#f00" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar OS</h3>
         </div>
         <div class="modal-body">

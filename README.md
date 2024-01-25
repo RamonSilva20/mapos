@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.41.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.42.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -55,7 +55,8 @@ URL: http://localhost:8000/
 
 ### Instalação Automatizada (Windows 10/11)
 1. Execute o Prompt de Comando ou PowerShell como Administrador;
-2. Execute o comando: `PowerShell -command "& { iwr https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.bat -OutFile MapOS_Install.bat }" && ./MapOS_Install.bat`
+2. Execute o comando: `PowerShell -command "& { iwr https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.bat -OutFile MapOS_Install.bat }; .\MapOS_Install.bat"`
+3. Tutorial Instalação: https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33
 
 ### Instalação Automatizada (Ubuntu/Debian)
 1. Abra o Terminal ou acesse seu servidor via SSH;
@@ -90,6 +91,13 @@ URL: http://localhost:8000/
 ### Comandos de terminal
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.
+
+### Hospedagem Parceira
+Em parceria com o Projeto Map-OS as empresas SysmaTech e Gotek se uniram como SysGo para oferecer hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
+
+Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
+
+<p><img src="https://sysgo.com.br/img-externo/mapos-github.jpg" alt="SysGO - MAP-OS Cloud Hosting" style="width:50%;"></p>
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)

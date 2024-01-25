@@ -118,11 +118,11 @@ class Os extends MY_Controller
                 'dataFinal' => $dataFinal,
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
-                'descricaoProduto' => set_value('descricaoProduto'),
-                'defeito' => set_value('defeito'),
+                'descricaoProduto' => $this->input->post('descricaoProduto'),
+                'defeito' => $this->input->post('defeito'),
                 'status' => set_value('status'),
-                'observacoes' => set_value('observacoes'),
-                'laudoTecnico' => set_value('laudoTecnico'),
+                'observacoes' => $this->input->post('observacoes'),
+                'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'faturado' => 0,
             ];
 
@@ -337,6 +337,7 @@ class Os extends MY_Controller
             true
         );
         $this->data['view'] = 'os/visualizarOs';
+        $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
         if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
             $this->data['totalServico'] = $return['totalServico'];
@@ -344,6 +345,67 @@ class Os extends MY_Controller
         }
 
         return $this->layout();
+    }
+
+    public function validarCPF($cpf) {
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0; $i < 9; $i++) {
+            $soma1 += $cpf[$i] * (10 - $i);
+        }
+        $resto1 = $soma1 % 11;
+        $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
+        if ($dv1 != $cpf[9]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $soma2 += $cpf[$i] * (11 - $i);
+        }
+        $resto2 = $soma2 % 11;
+        $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
+
+        return $dv2 == $cpf[10];
+    }
+
+    public function validarCNPJ($cnpj) {
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+        if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma1 += $cnpj[$i] * $pos;
+        }
+        $dv1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
+        if ($dv1 != $cnpj[12]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma2 += $cnpj[$i] * $pos;
+        }
+        $dv2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
+
+        return $dv2 == $cnpj[13];
+    }
+
+    public function formatarChave($chave) {
+        if ($this->validarCPF($chave)) {
+            return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
+        }
+        elseif ($this->validarCNPJ($chave)) {
+            return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
+        }
+        elseif (strlen($chave) === 11) {
+            return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
+        }
+        return $chave;
     }
 
     public function imprimir()
@@ -369,6 +431,7 @@ class Os extends MY_Controller
             $this->data['configuration']['pix_key'],
             $this->data['emitente']
         );
+        $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
         $this->load->view('os/imprimirOs', $this->data);
     }
@@ -391,6 +454,12 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
+        $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
         $this->load->view('os/imprimirOsTermica', $this->data);
     }
@@ -1022,15 +1091,19 @@ class Os extends MY_Controller
 
         $remetentes = array_unique($remetentes);
         foreach ($remetentes as $remetente) {
-            $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
-            $email = [
-                'to' => $remetente,
-                'message' => $html,
-                'status' => 'pending',
-                'date' => date('Y-m-d H:i:s'),
-                'headers' => serialize($headers),
-            ];
-            $this->email_model->add('email_queue', $email);
+            if ($remetente) {
+                $headers = ['From' => $emitente->email, 'Subject' => $assunto, 'Return-Path' => ''];
+                $email = [
+                    'to' => $remetente,
+                    'message' => $html,
+                    'status' => 'pending',
+                    'date' => date('Y-m-d H:i:s'),
+                    'headers' => serialize($headers),
+                ];
+                $this->email_model->add('email_queue', $email);
+            } else {
+                log_info('Email não adicionado a Lista de envio de e-mails. Verifique se o remetente esta cadastrado. OS ID: ' . $idOs);
+            }
         }
 
         return true;
@@ -1043,7 +1116,7 @@ class Os extends MY_Controller
             echo json_encode(validation_errors());
         } else {
             $data = [
-                'anotacao' => $this->input->post('anotacao'),
+                'anotacao' => '[' . $this->session->userdata('nome_admin') . '] ' . $this->input->post('anotacao'),
                 'data_hora' => date('Y-m-d H:i:s'),
                 'os_id' => $this->input->post('os_id'),
             ];

@@ -33,7 +33,8 @@
                                     <th width="130" align="center" style="font-size: 15px">Preço Compra</th>
                                     <th width="130" align="center" style="font-size: 15px">Preço Venda</th>
                                     <th width="145" align="center" style="font-size: 15px">Estoque</th>
-                                    <th width="145" align="center" style="font-size: 15px">Valor Estoque</th>
+                                    <th width="145" align="center" style="font-size: 15px">Valor (Venda)</th>
+                                    <th width="145" align="center" style="font-size: 15px">Valor (Compra)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,21 +47,26 @@
                                         echo '<td align="center">R$: ' . $p->precoVenda . '</td>';
                                         echo '<td align="center">' . $p->estoque . '</td>';
                                         echo '<td align="center">R$: ' . number_format($p->valorEstoque, 2, ',', '.') . '</td>';
+                                        echo '<td align="center">R$: ' . number_format(floatval($p->estoque) * floatval($p->precoCompra), 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
-    ?>
+                                   ?>
+                                
+                 
                                 <tr>
-                                    <td colspan="6">&nbsp;</td>
+                                     <td colspan="6">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                     <td align="center"><b>Itens em Estoque</b></td>
-                                    <td align="center"><b>Valor do Estoque</b></td>
+                                    <td align="center"><b>Valor do Estoque (Venda)</b></td>
+                                    <td align="center"><b>Valor do Estoque (Compra)</b></td> <!-- Nova coluna -->
                                 </tr>
                                 <tr style="background-color: gainsboro;">
                                     <td colspan="4"></td>
                                     <td align="center"><?= array_sum(array_column($produtos, 'estoque')) ?></td>
                                     <td align="center">R$: <?= number_format(array_sum(array_column($produtos, 'valorEstoque')), 2, ',', '.'); ?></td>
+                                    <td align="center">R$: <?= number_format(array_sum(array_column($produtos, 'valorEstoqueR')), 2, ',', '.'); ?></td> <!-- Valor do Estoque (Compra) -->
                                 </tr>
                             </tbody>
                         </table>
