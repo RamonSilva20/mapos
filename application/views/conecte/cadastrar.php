@@ -78,10 +78,9 @@
             <div class="widget-title">
                 <h5>Cadastre-se no Sistema</h5>
             </div>
-            <div class="widget-content nopadding tab-content">
-
-                <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
-                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+            <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+                <div class="widget-content nopadding tab-content" style="display: grid;grid-template-columns: 1fr 1fr">
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">
                         <label for="nomeCliente" class="control-label"><span class="required"></span></label>
                         <div class="controls">
@@ -135,7 +134,6 @@
                         </div>
                     </div>
 
-
                     <div class="control-group" class="control-label">
                         <label for="rua" class="control-label"><span class="required"></span></label>
                         <div class="controls">
@@ -177,15 +175,25 @@
                             </select>
                         </div>
                     </div>
-            </div>
-            <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-bottom: 0">
-                <div class="span12">
-                    <div class="span6 offset3" style="display:flex;justify-content: center">
-                        <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
-                        <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                </div>
+                
+                <div class="control-group span12" style="background-color:transparent;border:none;padding: 10px;margin-left: 0;margin-bottom: 0;">
+                    <div style="display:flex; justify-content: center; flex-direction: column; align-items: center;">
+                        <?=$captchaImage?>
+                        <div class="controls" style="margin-left: 0;">
+                            <input id="captcha" type="text" placeholder="Digite o texto da imagem*" name="captcha" value="" />
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-bottom: 0">
+                    <div class="span12">
+                        <div class="span6 offset3" style="display:flex;justify-content: center">
+                            <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
+                            <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -253,6 +261,9 @@
                     },
                     cep: {
                         required: true
+                    },
+                    captcha: {
+                        required: true
                     }
                 },
                 messages: {
@@ -289,8 +300,10 @@
                     },
                     cep: {
                         required: 'Campo Requerido.'
+                    },
+                    captcha: {
+                        required: 'Campo Requerido.'
                     }
-
                 },
 
                 errorClass: "help-inline",
