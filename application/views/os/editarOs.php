@@ -84,9 +84,9 @@
                                                     echo 'selected';
                                                 } ?> value="Orçamento">Orçamento
                                                 </option>
-                                                <option <?php if ($result->status == 'Aberto') {
+                                                <option <?php if ($result->status == 'Pronta') {
                                                     echo 'selected';
-                                                } ?> value="Aberto">Aberto
+                                                } ?> value="Pronta">Pronta
                                                 </option>
                                                 <option <?php if ($result->status == 'Faturado') {
                                                     echo 'selected';

@@ -86,6 +86,7 @@ $totalProdutos = 0; ?>
                                                 <tr>
                                                     <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                                         <<<< /td>
+
                                                 </tr> <?php } else { ?><td style="width: 20%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                                 <td>
                                                     <span style="font-size: 17px;"><?php echo $emitente->nome; ?></span></br>
@@ -94,6 +95,7 @@ $totalProdutos = 0; ?>
                                                     <span><span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></br>
                                                     <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?>
                                                     <td style="width: 18%; text-align: center"><b>N° OS:</b> <span><?php echo $result->idOs ?></span></br></br><span>Emissão: <?php echo date('d/m/Y') ?></span></td></span>
+
                                                 </td>
                                                 </tr>
                                             <?php } ?>
@@ -132,6 +134,7 @@ $totalProdutos = 0; ?>
                                                         </li>
                                                     </ul>
                                                 </td>
+
                                                 <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
                                                     <?php if ($qrCode) : ?>
                                                         <td style="width: 25%; padding: 0;text-align:center;">
@@ -141,6 +144,8 @@ $totalProdutos = 0; ?>
                                                         </td>
                                                     <?php endif ?>
                                                 <?php } ?>
+
+                                            
                                             </tr>
                                         </tbody>
                                     </table>
@@ -295,6 +300,7 @@ $totalProdutos = 0; ?>
                                                 </td>
                                                 <td>Assinatura do Responsável
                                                     <hr>
+                                                    <?php echo $result->nome ?>
                                                 </td>
                                             </tr>
                                         </tbody>
