@@ -33,7 +33,7 @@
                 <div class="widget-content nopadding tab-content">
 
                     <form action="" id="formCliente" method="post" class="form-horizontal">
-
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly">
                             <label style="width: auto" for="senha" class="control-label">Senha<span class="required">*</span></label>
                             <div class="controls" style="margin: 0">

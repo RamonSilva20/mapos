@@ -43,7 +43,7 @@ $parse_email = $this->input->get('e');
 
         <div id="loginbox">
             <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
-
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                 <div class="d-flex flex-column">
                     <div class="right-login">
                         <div class="container">

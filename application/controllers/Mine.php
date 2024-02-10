@@ -8,6 +8,7 @@ class Mine extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Conecte_model');
+        $this->load->helper('Security_helper');
     }
 
     public function index()

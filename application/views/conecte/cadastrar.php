@@ -81,6 +81,7 @@
             <div class="widget-content nopadding tab-content">
 
                 <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal" style="display: grid;grid-template-columns: 1fr 1fr">
+                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">
                         <label for="nomeCliente" class="control-label"><span class="required"></span></label>
                         <div class="controls">

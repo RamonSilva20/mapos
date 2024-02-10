@@ -27,27 +27,20 @@
                 <h5>Cadastro de OS</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-
-
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
-
                             <div class="span12" id="divCadastrarOs">
-
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                                     <div class="span12" style="padding: 1%;">
                                         <div class="span12 alert alert-info">
                                             <h5 class="text-center">Preencha os campos abaixo detalhando o que você precisa. Campos com asterisco são obrigatórios.</h5>
                                         </div>
-
                                     </div>
-
-
                                     <div class="span12" style="padding: 1%; margin-left: 0">
 
                                         <div class="span12">
@@ -62,14 +55,13 @@
                                             <label for="defeito">Defeito</label>
                                             <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
                                         </div>
-
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span12">
                                             <label for="observacoes">Observações</label>
                                             <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                         </div>
-
+                                        
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex;justify-content: center">
@@ -81,16 +73,9 @@
                                     </div>
                                 </form>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-                .
-
             </div>
 
         </div>
