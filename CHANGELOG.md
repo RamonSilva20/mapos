@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.43.0] - 2024-02-10
+### Security Fix
+- Proteção contra CSFR na área do cliente. [@Fesantt](https://github.com/Fesantt)
+
 ## [4.42.0] - 2023-10-25
 ### Fixed
 - Erro na aba OS. [@barretowiisk](https://github.com/barretowiisk)
