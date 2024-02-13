@@ -231,10 +231,10 @@ class Mine extends CI_Controller
                     log_info($_SERVER['REMOTE_ADDR'] . ' Efetuou login no sistema');
                     echo json_encode(['result' => true]);
                 } else {
-                    echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.']);
+                    echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
                 }
             } else {
-                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.']);
+                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
             }
         }
     }
