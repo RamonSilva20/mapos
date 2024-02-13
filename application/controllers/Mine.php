@@ -707,6 +707,9 @@ class Mine extends CI_Controller
     // Cadastro de OS pelo cliente
     public function adicionarOs()
     {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('descricaoProduto', 'Descrição', 'required');
@@ -871,6 +874,9 @@ class Mine extends CI_Controller
 
     public function downloadanexo($id = null)
     {
+        if (!session_id() || !$this->session->userdata('conectado')) {
+            redirect('mine');
+        }
         if ($id != null && is_numeric($id)) {
             $this->db->where('idAnexos', $id);
             $file = $this->db->get('anexos', 1)->row();
