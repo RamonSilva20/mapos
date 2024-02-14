@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [4.44.0] - 2024-02-13
+### Security Fix
+- Correção Area do cliente. [@Fesantt](https://github.com/Fesantt)
+- Correção Login Mine e Administração. [@Fesantt](https://github.com/Fesantt)
+- Adicionando verificação captcha no formulário de cadastro de cliente. [@juliolobo](https://github.com/juliolobo)
+
 ## [4.43.0] - 2024-02-10
 ### Security Fix
 - Proteção contra CSFR na área do cliente. [@Fesantt](https://github.com/Fesantt)
