@@ -460,6 +460,8 @@ $config['csrf_exclude_uris'] = [
   "relatorios.*+",
   "mapos.*+",
   "configurar.*+",
+  "usuarios.*+",
+  "financeiro.*+",
   "email.*+"
 ];
 
