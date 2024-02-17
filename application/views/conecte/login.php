@@ -161,6 +161,9 @@ $parse_email = $this->input->get('e');
                                     showConfirmButton: false,
                                     timer: 4000
                                 })
+
+                                var newCsrfToken = data.MAPOS_TOKEN; 
+                                $("input[name='<?= $this->security->get_csrf_token_name(); ?>']").val(newCsrfToken);
                             }
                         }
                     });
