@@ -809,7 +809,7 @@ class Mine extends CI_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } elseif (strtolower($this->input->post('captcha')) != strtolower($this->session->userdata('captchaWord'))) {
-            $this->session->set_flashdata('error', 'Os caracteres da imagem não foram preenchidos corretamente ou o tempo máximo para preenchimento foi ultrapassado!');
+            $this->session->set_flashdata('error', 'Os caracteres da imagem não foram preenchidos corretamente!');
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
@@ -840,36 +840,7 @@ class Mine extends CI_Controller
             }
         }
 
-        $arrFont = ['ZXX_Noise.otf', 'karabine.ttf', 'capture.ttf', 'captcha.ttf'];
-        shuffle($arrFont);
-
-        $vals = [
-            'img_path'      => './assets/captcha-images/',
-            'img_url'       => base_url().'assets/captcha-images/',
-            'font_path'     => './assets/font/'.$arrFont[0],
-            'img_width'     => 150,
-            'img_height'    => 45,
-            'expiration'    => 7200,
-            'word_length'   => 6,
-            'font_size'     => 20,
-            'img_id'        => 'Imageid',
-            'pool'          => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            'colors' => [
-                'background' => [255, 255, 255],
-                'border' => [255, 255, 255],
-                'text' => [0, 0, 0],
-                'grid' => [255, 40, 40],
-            ]
-        ];
-
-        $cap = create_captcha($vals);
-        $this->session->set_userdata('captchaWord', $cap['word']);
-
-        $data = [
-            'captchaImage' => $cap['image']
-        ];
-
-        $this->load->view('conecte/cadastrar', $data);
+        $this->load->view('conecte/cadastrar', $this->data);
     }
 
     public function downloadanexo($id = null)
@@ -1064,6 +1035,25 @@ class Mine extends CI_Controller
             ];
             $this->email_model->add('email_queue', $email);
         }
+    }
+
+    public function captcha()
+    {
+        header("Content-type: image/jpeg");
+
+        $arrFont = ['font-ZXX_Noise.otf', 'font-karabine.ttf', 'font-capture.ttf', 'font-captcha.ttf'];
+        shuffle($arrFont);
+
+        $codigoCaptcha = substr(md5(time()) ,0, 7);
+        $img           = imagecreatefromjpeg('./assets/img/captcha_bg.jpg');
+        $corCaptcha    = imagecolorallocate($img, 255, 0, 0);
+        $font          = './assets/font-awesome/'.$arrFont[0];
+
+        imagettftext($img, 23, 0, 5, rand(30, 35), $corCaptcha, $font, $codigoCaptcha);
+        imagepng($img);
+        imagedestroy($img);
+
+        $this->session->set_userdata('captchaWord', $codigoCaptcha);
     }
 }
 
