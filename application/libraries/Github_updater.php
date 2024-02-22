@@ -91,19 +91,7 @@ class Github_updater
                             }
                         }
                         // Otherwise copy the file from the update.
-                        else {
-                            $arrFilename = explode('/', $file->filename);
-                            if(is_array($arrFilename) && count($arrFilename) > 0) {
-                                $diretorio = '';
-                                for ($i = 0; $i < (count($arrFilename) - 1); $i++) {
-                                    $diretorio .= $arrFilename[$i].'/';
-                                }
-                                
-                                if(!file_exists($diretorio)) {
-                                    mkdir($diretorio, 0755, true);
-                                }
-                            }
-                            
+                        else {                            
                             copy($dir.'/'.$file->filename, $file->filename);
                         }
                     }
