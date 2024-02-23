@@ -160,7 +160,7 @@ $periodo = $this->input->get('periodo');
                                 $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
                             }
 
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) 
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                 echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
