@@ -45,10 +45,12 @@ $periodo = $this->input->get('periodo');
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
                     <option value="dia" <?= $this->input->get('periodo') === 'dia' ? 'selected' : '' ?>>Dia</option>
-                    <option value="semana" <?= $this->input->get('periodo') === 'semana' ? 'selected' : '' ?>>Semana
-                    </option>
+                    <option value="semana" <?= $this->input->get('periodo') === 'semana' ? 'selected' : '' ?>>Semana</option>
+                    <option value="mesAnterior" <?= $this->input->get('periodo') === 'mesAnterior' ? 'selected' : '' ?>>Mês Anterior</option>
                     <option value="mes" <?= $this->input->get('periodo') === 'mes' ? 'selected' : '' ?>>Mês</option>
+                    <option value="mesPosterior" <?= $this->input->get('periodo') === 'mesPosterior' ? 'selected' : '' ?>>Mês Posterior</option>
                     <option value="ano" <?= $this->input->get('periodo') === 'ano' ? 'selected' : '' ?>>Ano</option>
+                    <option value="personalizado" <?= $this->input->get('periodo') === 'personalizado' ? 'selected' : '' ?>>Personalizado</option>
                 </select>
             </div>
 
@@ -942,23 +944,45 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         $(".datepicker").datepicker();
         $('#periodo').on('change', function(event) {
             const period = $('#periodo').val();
+            const today = dayjs().locale('pt-br');
 
             switch (period) {
                 case 'dia':
-                    $('#vencimento_de').val(dayjs().locale('pt-br').format('DD/MM/YYYY'));
-                    $('#vencimento_ate').val(dayjs().locale('pt-br').format('DD/MM/YYYY'));
+                    $('#vencimento_de').val(today.format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(today.format('DD/MM/YYYY'));
                     break;
                 case 'semana':
-                    $('#vencimento_de').val(dayjs().startOf('week').locale('pt-br').format('DD/MM/YYYY'));
-                    $('#vencimento_ate').val(dayjs().endOf('week').locale('pt-br').format('DD/MM/YYYY'));
+                    $('#vencimento_de').val(today.startOf('week').format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(today.endOf('week').format('DD/MM/YYYY'));
+                    break;
+                case 'mesAnterior':
+                    const startOfPreviousMonth = today.subtract(1, 'month').startOf('month');
+                    const endOfPreviousMonth = today.subtract(1, 'month').endOf('month');
+
+                    $('#vencimento_de').val(startOfPreviousMonth.format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(endOfPreviousMonth.format('DD/MM/YYYY'));
                     break;
                 case 'mes':
-                    $('#vencimento_de').val(dayjs().startOf('month').locale('pt-br').format('DD/MM/YYYY'));
-                    $('#vencimento_ate').val(dayjs().endOf('month').locale('pt-br').format('DD/MM/YYYY'));
+                    const startOfCurrentMonth = today.startOf('month');
+                    const endOfCurrentMonth = today.endOf('month');
+
+                    $('#vencimento_de').val(startOfCurrentMonth.format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(endOfCurrentMonth.format('DD/MM/YYYY'));
+                    break;
+                case 'mesPosterior':
+                    const startOfNextMonth = today.add(1, 'month').startOf('month');
+                    const endOfNextMonth = today.add(1, 'month').endOf('month');
+
+                    $('#vencimento_de').val(startOfNextMonth.format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(endOfNextMonth.format('DD/MM/YYYY'));
                     break;
                 case 'ano':
-                    $('#vencimento_de').val(dayjs().startOf('year').locale('pt-br').format('DD/MM/YYYY'));
-                    $('#vencimento_ate').val(dayjs().endOf('year').locale('pt-br').format('DD/MM/YYYY'));
+                    $('#vencimento_de').val(today.startOf('year').format('DD/MM/YYYY'));
+                    $('#vencimento_ate').val(today.endOf('year').format('DD/MM/YYYY'));
+                    break;
+                case 'personalizado':
+                    $('#vencimento_de').val('00/00/0000');
+                    $('#vencimento_ate').val('00/00/0000');
                     break;
             }
         });
