@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  mapos:
+    image: mapos:latest
+    networks:
+      - proxy
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - mapos_data:/var/www/html
+    environment:
+      - DASHBOARD_URL=${MAPOS_URL} # ALTERE AQUI
+      - TZ=America/Sao_Paulo
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        # HTTP
+        - "traefik.http.routers.mapos-http.rule=Host(`${MAPOS_URL}`)" # ALTERE AQUI
+        - "traefik.http.routers.mapos-http.entrypoints=web"
+        - "traefik.http.routers.mapos-http.service=mapos-service"
+        # HTTPS
+        - "traefik.http.routers.mapos-https.rule=Host(`${MAPOS_URL}`)" # ALTERE AQUI
+        - "traefik.http.routers.mapos-https.entrypoints=websecure"
+        - "traefik.http.routers.mapos-https.tls=true"
+        - "traefik.http.routers.mapos-https.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.mapos-https.service=mapos-service"
+        - "traefik.http.services.mapos-service.loadbalancer.server.port=80"
+      placement:
+        constraints:
+          - node.role == manager
+
+  mysql:
+    image: mysql:latest
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - proxy
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_MAPOS_DATABASE} # ALTERE AQUI
+      - MYSQL_ROOT_PASSWORD=${MYSQL_MAPOS_ROOT_PASSWORD} # ALTERE AQUI
+      - MYSQL_USER=${MYSQL_MAPOS_USER} # ALTERE AQUI
+      - MYSQL_PASSWORD=${MYSQL_MAPOS_PASSWORD} # ALTERE AQUI
+      - TZ=America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+volumes:
+  mapos_data:
+    external: true
+    name: mapos_data
+  mysql_data:
+    external: true
+    name: mysql_data
+
+networks:
+  proxy:
+    external: true
+    name: proxy

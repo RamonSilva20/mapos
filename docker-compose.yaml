@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  mapos:
+    image: mapos:latest
+    container_name: mapos
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - mapos_data:/var/www/html
+    environment:
+      - DASHBOARD_URL=${MAPOS_URL} # ALTERE AQUI
+      - TZ=America/Sao_Paulo
+    labels:
+      - traefik.enable=true
+      # HTTPS
+      - traefik.http.routers.mapos-secure.rule=Host(`${MAPOS_URL}`) # ALTERE AQUI
+      - traefik.http.routers.mapos-secure.entrypoints=websecure
+      - traefik.http.routers.mapos-secure.tls=true
+      - traefik.http.routers.mapos-secure.tls.certresolver=letsencryptresolver
+      - traefik.http.routers.mapos-secure.service=mapos-service
+      # HTTP
+      - traefik.http.routers.mapos-insecure.rule=Host(`${MAPOS_URL}`) # ALTERE AQUI
+      - traefik.http.routers.mapos-insecure.entrypoints=web
+      - traefik.http.routers.mapos-insecure.service=mapos-service
+      - traefik.http.services.mapos-service.loadbalancer.server.port=80
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: unless-stopped
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - proxy
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_MAPOS_DATABASE} # ALTERE AQUI
+      - MYSQL_ROOT_PASSWORD=${MYSQL_MAPOS_ROOT_PASSWORD} # ALTERE AQUI
+      - MYSQL_USER=${MYSQL_MAPOS_USER} # ALTERE AQUI
+      - MYSQL_PASSWORD=${MYSQL_MAPOS_PASSWORD} # ALTERE AQUI
+      - TZ=America/Sao_Paulo
+    ports:
+      - "3306:3306"
+
+volumes:
+  mapos_data:
+  mysql_data:
+
+networks:
+  proxy:
+    external: true
