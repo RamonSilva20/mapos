@@ -11,9 +11,9 @@
 ```shell
 apt install zip -y && wget --quiet --show-progress -O $(pwd)/MapOS.zip $(curl -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest | grep "zipball_url" | awk -F\" '{print $4}') && unzip -q $(pwd)/MapOS.zip -d $(pwd)/mapos-temp/ && rm $(pwd)/MapOS.zip && mv -i $(pwd)/mapos-temp/RamonSilva20-mapos-* $(pwd)/mapos/ && rm -rf $(pwd)/mapos-temp && cd $(pwd)/mapos
 ```
-- Execute o comando abaixo para baixar e extrair os arquivos necessarios do docker para a raiz do mapos em sua vps
+- Execute os comandos abaixo para baixar os arquivos necessarios do docker para a raiz do mapos em sua vps
 ```shell
-wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/docker-compose.yaml
+wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/docker-compose.yaml && wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/Dockerfile && wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/supervisord.conf
 ```
 - Gere a imagem do **MAPOS**
 ```shell
