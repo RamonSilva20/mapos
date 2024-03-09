@@ -13,7 +13,7 @@ apt install zip -y && wget --quiet --show-progress -O $(pwd)/MapOS.zip $(curl -s
 ```
 - Execute o comando abaixo para baixar e extrair os arquivos necessarios do docker para a raiz do mapos em sua vps
 ```shell
-wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/docker-compose-swarm.yaml
+wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/docker-compose-swarm.yaml && wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/Dockerfile && wget https://raw.githubusercontent.com/JobasFernandes/mapos/docker/supervisord.conf
 ```
 - Gere a imagem do **MAPOS**
 ```shell
