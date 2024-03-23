@@ -1138,7 +1138,6 @@ foreach ($servicos as $s) {
                     type: "POST",
                     url: "<?php echo base_url(); ?>index.php/os/excluirServico",
                     data: "idServico=" + idServico + "&idOs=" + idOS,
-                    data: "idServico=" + idServico,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
