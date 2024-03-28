@@ -4,7 +4,7 @@
         "ext-curl": "*",
         "ext-gd": "*",
         "mercadopago/dx-php": "^2.2.1",
-        "gerencianet/gerencianet-sdk-php": "^2.4.1",
+        "efipay/sdk-php-apis-efi": "^1.8",
         "codeigniter/framework": "^3.1",
         "mpdf/mpdf": "^8.0.10",
         "filp/whoops": "^2.7",
