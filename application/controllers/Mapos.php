@@ -538,6 +538,9 @@ class Mapos extends MY_Controller
                 case 'Aguardando Peças':
                     $cor = '#FF7F00';
                     break;
+                case 'Aprovado':
+                    $cor = '#808080';
+                    break;
                 default:
                     $cor = '#E0E4CC';
                     break;
