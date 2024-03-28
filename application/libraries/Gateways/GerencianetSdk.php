@@ -61,13 +61,13 @@ class GerencianetSdk extends BasePaymentGateway
             'cobrancas/emails/cobranca',
             [
                 'cobranca' => $cobranca,
-                'emitente' => $emitente[0],
+                'emitente' => $emitente,
                 'paymentGatewaysConfig' => $this->ci->config->item('payment_gateways'),
             ],
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = "Cobrança - " . $emitente->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -77,7 +77,7 @@ class GerencianetSdk extends BasePaymentGateway
         $remetentes = [$cobranca->email];
         foreach ($remetentes as $remetente) {
             $headers = [
-                'From' => $emitente[0]->email,
+                'From' => $emitente->email,
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];
