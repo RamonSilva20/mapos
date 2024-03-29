@@ -1,6 +1,6 @@
 <?php
 
-use Gerencianet\Gerencianet;
+use Efi\EfiPay;
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
 
@@ -23,7 +23,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         $gerenciaNetConfig = $this->ci->config->item('payment_gateways')['GerencianetSdk'];
         $this->gerenciaNetConfig = $gerenciaNetConfig;
-        $this->gerenciaNetApi = new Gerencianet([
+        $this->gerenciaNetApi = new EfiPay([
             'client_id' => $gerenciaNetConfig['credentials']['client_id'],
             'client_secret' => $gerenciaNetConfig['credentials']['client_secret'],
             'sandbox' => $gerenciaNetConfig['production'] !== true,
@@ -62,13 +62,13 @@ class GerencianetSdk extends BasePaymentGateway
             'cobrancas/emails/cobranca',
             [
                 'cobranca' => $cobranca,
-                'emitente' => $emitente[0],
+                'emitente' => $emitente,
                 'paymentGatewaysConfig' => $this->ci->config->item('payment_gateways'),
             ],
             true
         );
 
-        $assunto = "Cobrança - " . $emitente[0]->nome;
+        $assunto = "Cobrança - " . $emitente->nome;
         if ($cobranca->os_id) {
             $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
@@ -78,7 +78,7 @@ class GerencianetSdk extends BasePaymentGateway
         $remetentes = [$cobranca->email];
         foreach ($remetentes as $remetente) {
             $headers = [
-                'From' => $emitente[0]->email,
+                'From' => $emitente->email,
                 'Subject' => $assunto,
                 'Return-Path' => ''
             ];
@@ -269,7 +269,7 @@ class GerencianetSdk extends BasePaymentGateway
             ]
         ];
 
-        $result = $this->gerenciaNetApi->oneStep([], $body);
+        $result = $this->gerenciaNetApi->createOneStepCharge([], $body);
         if (intval($result['code']) !== 200) {
             throw new \Exception('Erro ao chamar GerenciaNet!');
         }
