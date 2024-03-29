@@ -638,7 +638,8 @@ foreach ($produtos as $p) {
             dateFormat: 'dd/mm/yy'
         });
         $('.editor').trumbowyg({
-            lang: 'pt_br'
+            lang: 'pt_br',
+            semantic: { 'strikethrough': 's', }
         });
     });
 </script>
