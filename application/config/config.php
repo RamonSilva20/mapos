@@ -465,7 +465,8 @@ $config['csrf_exclude_uris'] = [
   "email.*+",
   "permissoes.*+",
   "auditoria.*+",
-  "tools.*+"
+  "tools.*+",
+  "api.*+"
 ];
 
 /*
