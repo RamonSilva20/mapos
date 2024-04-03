@@ -9,17 +9,17 @@ $config['app_version'] = '4.44.0';
 /**
  * Nome do sistema
  */
-$config['app_name'] = 'Map-OS';
+$config['app_name'] = $_ENV['APP_NAME'] ?? 'Map-OS';
 
 /**
  * Descrição do sistema
  */
-$config['app_subname'] = 'Sistema de Controle de Ordens de Serviço';
+$config['app_subname'] = $_ENV['APP_SUBNAME'] ?? 'Sistema de Controle de Ordens de Serviço';
 
 /**
  * Definição da hora local.
  */
-date_default_timezone_set('America/Sao_Paulo');
+date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo');
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +43,7 @@ date_default_timezone_set('America/Sao_Paulo');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'enter_baseurl';
+$config['base_url'] = $_ENV['APP_BASEURL'] ?? 'http://localhost:8000/';
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +72,7 @@ $config['index_page'] = 'index.php';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']     = 'REQUEST_URI';
+$config['uri_protocol'] = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ $config['language'] = 'english';
 | See http://php.net/htmlspecialchars for a list of supported charsets.
 |
 */
-$config['charset'] = 'UTF-8';
+$config['charset'] = $_ENV['APP_CHARSET'] ?? 'UTF-8';
 
 /*
 |--------------------------------------------------------------------------
@@ -345,7 +345,7 @@ $config['cache_query_string'] = false;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '40ad83e080dc2a7';
+$config['encryption_key'] = $_ENV['APP_ENCRYPTION_KEY'];
 
 /*
 |--------------------------------------------------------------------------
@@ -398,13 +398,13 @@ $config['encryption_key'] = '40ad83e080dc2a7';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'database';
-$config['sess_cookie_name'] = 'app_session';
-$config['sess_expiration'] = 7200;
-$config['sess_save_path'] = 'ci_sessions';
-$config['sess_match_ip'] = false;
-$config['sess_time_to_update'] = 300;
-$config['sess_regenerate_destroy'] = false;
+$config['sess_driver'] = $_ENV['APP_SESS_DRIVER'] ?? 'database';
+$config['sess_cookie_name'] = $_ENV['APP_SESS_COOKIE_NAME'] ?? 'app_session';
+$config['sess_expiration'] = $_ENV['APP_SESS_EXPIRATION'] ?? 7200;
+$config['sess_save_path'] = $_ENV['APP_SESS_SAVE_PATH'] ?? 'ci_sessions';
+$config['sess_match_ip'] = isset($_ENV['APP_SESS_MATCH_IP']) ? filter_var($_ENV['APP_SESS_MATCH_IP'], FILTER_VALIDATE_BOOLEAN) : false;
+$config['sess_time_to_update'] = $_ENV['APP_SESS_TIME_TO_UPDATE'] ?? 300;
+$config['sess_regenerate_destroy'] = isset($_ENV['APP_SESS_REGENERATE_DESTROY']) ? filter_var($_ENV['APP_SESS_REGENERATE_DESTROY'], FILTER_VALIDATE_BOOLEAN) : false;
 
 /*
 |--------------------------------------------------------------------------
@@ -421,11 +421,11 @@ $config['sess_regenerate_destroy'] = false;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
-$config['cookie_path']		= '/';
-$config['cookie_secure']	= false;
-$config['cookie_httponly'] 	= false;
+$config['cookie_prefix'] = $_ENV['APP_COOKIE_PREFIX'] ?? '';
+$config['cookie_domain'] = $_ENV['APP_COOKIE_DOMAIN'] ?? '';
+$config['cookie_path'] = $_ENV['APP_COOKIE_PATH'] ?? '/';
+$config['cookie_secure'] = isset($_ENV['APP_COOKIE_SECURE']) ? filter_var($_ENV['APP_COOKIE_SECURE'], FILTER_VALIDATE_BOOLEAN) : false;
+$config['cookie_httponly'] = isset($_ENV['APP_COOKIE_HTTPONLY']) ? filter_var($_ENV['APP_COOKIE_HTTPONLY'], FILTER_VALIDATE_BOOLEAN) : false;
 
 /*
 |--------------------------------------------------------------------------
@@ -441,31 +441,31 @@ $config['cookie_httponly'] 	= false;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = true;
-$config['csrf_token_name'] = 'MAPOS_TOKEN';
-$config['csrf_cookie_name'] = 'MAPOS_COOKIE';
-$config['csrf_expire'] = 7200;
-$config['csrf_regenerate'] = true;
+$config['csrf_protection'] = isset($_ENV['APP_CSRF_PROTECTION']) ? filter_var($_ENV['APP_CSRF_PROTECTION'], FILTER_VALIDATE_BOOLEAN) : true;
+$config['csrf_token_name'] = $_ENV['APP_CSRF_TOKEN_NAME'] ?? 'MAPOS_TOKEN';
+$config['csrf_cookie_name'] = $_ENV['APP_CSRF_COOKIE_NAME'] ?? 'MAPOS_COOKIE';
+$config['csrf_expire'] = $_ENV['APP_CSRF_EXPIRE'] ?? 7200;
+$config['csrf_regenerate'] = isset($_ENV['APP_CSRF_REGENERATE']) ? filter_var($_ENV['APP_CSRF_REGENERATE'], FILTER_VALIDATE_BOOLEAN) : true;
 $config['csrf_exclude_uris'] = [
-  "os.*+",
-  "servicos.*+",
-  "produtos.*+",
-  "clientes.*+",
-  "vendas.*+",
-  "garantias.*+",
-  "arquivos.*+",
-  "lancamentos.*+",
-  "cobrancas.*+",
-  "configurar.*+",
-  "relatorios.*+",
-  "mapos.*+",
-  "configurar.*+",
-  "usuarios.*+",
-  "financeiro.*+",
-  "email.*+",
-  "permissoes.*+",
-  "auditoria.*+",
-  "tools.*+"
+    "os.*+",
+    "servicos.*+",
+    "produtos.*+",
+    "clientes.*+",
+    "vendas.*+",
+    "garantias.*+",
+    "arquivos.*+",
+    "lancamentos.*+",
+    "cobrancas.*+",
+    "configurar.*+",
+    "relatorios.*+",
+    "mapos.*+",
+    "configurar.*+",
+    "usuarios.*+",
+    "financeiro.*+",
+    "email.*+",
+    "permissoes.*+",
+    "auditoria.*+",
+    "tools.*+"
 ];
 
 /*
@@ -488,7 +488,7 @@ $config['csrf_exclude_uris'] = [
 | by the output class.  Do not 'echo' any values with compression enabled.
 |
 */
-$config['compress_output'] = false;
+$config['compress_output'] = isset($_ENV['APP_COMPRESS_OUTPUT']) ? filter_var($_ENV['APP_COMPRESS_OUTPUT'], FILTER_VALIDATE_BOOLEAN) : false;
 
 /*
 |--------------------------------------------------------------------------
@@ -501,7 +501,7 @@ $config['compress_output'] = false;
 | helper' page of the user guide for information regarding date handling.
 |
 */
-$config['time_reference'] = 'local';
+$config['time_reference'] = $_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo';
 
 /*
 |--------------------------------------------------------------------------
@@ -519,4 +519,4 @@ $config['time_reference'] = 'local';
 | Comma-separated:	'10.0.1.200,192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
-$config['proxy_ips'] = '';
+$config['proxy_ips'] = $_ENV['APP_PROXY_IPS'] ?? '';
