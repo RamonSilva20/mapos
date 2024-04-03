@@ -4,7 +4,7 @@ $().ready(function () {
     }, 2500); // O valor é representado em milisegundos.
 });
 
-// Removendo o atributo tittle para dispositivos moveis. 
+// Removendo o atributo tittle para dispositivos moveis.
 $(document).ready(function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         $(".tip-top").removeAttr("title");
@@ -28,4 +28,11 @@ function initTimer() {
 
     // O metodo nativo setInterval executa uma determinada funcao em um determinado tempo
     setInterval(showTimer, 1000);
+}
+
+function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) {
+        return match[2];
+    }
 }

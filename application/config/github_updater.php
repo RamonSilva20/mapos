@@ -35,12 +35,7 @@ $config['current_commit'] = '53d35385917658bab3e048622325429d993f00de';
 * 'application/views/admin/test.php'
 * and any other path with the term 'admin' in it.
 */
-$config['ignored_files'] = [
-    'application/config',
-    'application/database',
-    'application/email',
-    'index.php',
-];
+$config['ignored_files'] = [];
 
 /**
 * Flag to indicate if the downloaded and extracted update files
