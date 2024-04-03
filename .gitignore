@@ -27,3 +27,4 @@ application/logs/*
 ci_sessions/
 
 uploads
+.env

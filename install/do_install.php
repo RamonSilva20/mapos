@@ -35,10 +35,15 @@ if (!empty($_POST)) {
     }
 
     //check for valid database connection
-    $mysqli = @new mysqli($host, $dbuser, $dbpassword, $dbname);
+    try {
+        $mysqli = @new mysqli($host, $dbuser, $dbpassword, $dbname);
 
-    if (mysqli_connect_errno()) {
-        echo json_encode(["success" => false, "message" => $mysqli->connect_error]);
+        if (mysqli_connect_errno()) {
+            echo json_encode(["success" => false, "message" => $mysqli->connect_error]);
+            exit();
+        }
+    } catch (Exception $e) {
+        echo json_encode(["success" => false, "message" => $e->getMessage()]);
         exit();
     }
 
@@ -52,11 +57,9 @@ if (!empty($_POST)) {
      * check the db config file
      * if db already configured, we'll assume that the installation has completed
      */
-    $db_file_path = ".." . $settings['writeable_directories']['database'];
-    $db_file = file_get_contents($db_file_path);
-    $is_installed = strpos($db_file, "enter_hostname");
+    $is_installed = file_exists(".." . DIRECTORY_SEPARATOR . '.env');
 
-    if (!$is_installed) {
+    if ($is_installed) {
         echo json_encode(["success" => false, "message" => "Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente."]);
         exit();
     }
@@ -78,31 +81,28 @@ if (!empty($_POST)) {
     $mysqli->close();
     // database created
 
-    // set the database config file
-    $db_file = str_replace('enter_hostname', $host, $db_file);
-    $db_file = str_replace('enter_db_username', $dbuser, $db_file);
-    $db_file = str_replace('enter_db_password', $dbpassword, $db_file);
-    $db_file = str_replace('enter_database_name', $dbname, $db_file);
+    $env_file_path = ".." . DIRECTORY_SEPARATOR . '.env.example';
+    $env_file = file_get_contents($env_file_path);
 
-    file_put_contents($db_file_path, $db_file);
+    // set the database config file
+    $env_file = str_replace('enter_hostname', $host, $env_file);
+    $env_file = str_replace('enter_db_username', $dbuser, $env_file);
+    $env_file = str_replace('enter_db_password', $dbpassword, $env_file);
+    $env_file = str_replace('enter_database_name', $dbname, $env_file);
 
     // set random enter_encryption_key
-    $config_file_path = ".." . $settings['writeable_directories']['config'];
     $encryption_key = substr(md5(rand()), 0, 15);
-    $config_file = file_get_contents($config_file_path);
-    $config_file = str_replace('enter_encryption_key', $encryption_key, $config_file);
-    $config_file = str_replace('enter_baseurl', $base_url, $config_file);
-
-    file_put_contents($config_file_path, $config_file);
-
+    $env_file = str_replace('enter_encryption_key', $encryption_key, $env_file);
+    $env_file = str_replace('enter_baseurl', $base_url, $env_file);
 
     // set the environment = production
-    $index_file_path = ".." . $settings['writeable_directories']['index'];
-    $index_file = file_get_contents($index_file_path);
-    $index_file = preg_replace('/pre_installation/', 'production', $index_file, 1); //replace the first occurence of 'pre_installation'
+    $env_file = str_replace('pre_installation', 'production', $env_file);
 
-    file_put_contents($index_file_path, $index_file);
+    if (file_put_contents(".." . DIRECTORY_SEPARATOR . '.env', $env_file)) {
+        echo json_encode(["success" => true, "message" => "Instalação bem sucedida."]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Erro ao criar arquivo env."]);
+    };
 
-    echo json_encode(["success" => true, "message" => "Instalação bem sucedida."]);
     exit();
 }

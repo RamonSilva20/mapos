@@ -6,13 +6,13 @@ $config['payment_gateways'] = [
     'GerencianetSdk' => [
         'name' => 'GerenciaNet (Efí)',
         'library_name' => 'GerencianetSdk',
-        'production' => false,
+        'production' => isset($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION']) ? filter_var($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION'], FILTER_VALIDATE_BOOLEAN) : false,
         'credentials' => [
-            'client_id' => '',
-            'client_secret' => ''
+            'client_id' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'] ?? '',
+            'client_secret' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'] ?? ''
         ],
-        'timeout' => 30,
-        'boleto_expiration' => 'P3D',
+        'timeout' => $_ENV['PAYMENT_GATEWAYS_EFI_TIMEOUT'] ?? 30,
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
@@ -44,15 +44,15 @@ $config['payment_gateways'] = [
         'name' => 'MercadoPago',
         'library_name' => 'MercadoPago',
         'credentials' => [
-            'access_token' => '',
-            'public_key' => '',
-            'client_secret' => '',
-            'client_id' => '',
-            'integrator_id' => '',
-            'platform_id' => '',
-            'corporation_id' => ''
+            'access_token' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN'] ?? '',
+            'public_key' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY'] ?? '',
+            'client_secret' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID'] ?? '',
+            'client_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'] ?? '',
+            'integrator_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_INTEGRATOR_ID'] ?? '',
+            'platform_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PLATFORM_ID'] ?? '',
+            'corporation_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CORPORATION_ID'] ?? ''
         ],
-        'boleto_expiration' => 'P3D',
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
@@ -74,12 +74,12 @@ $config['payment_gateways'] = [
     'Asaas' => [
         'name' => 'Asaas',
         'library_name' => 'Asaas',
-        'production' => false,
-        'notify' => false,
+        'production' => isset($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION']) ? filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION'], FILTER_VALIDATE_BOOLEAN) : false,
+        'notify' => isset($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY']) ? filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY'], FILTER_VALIDATE_BOOLEAN) : false,
         'credentials' => [
-            'api_key' => '',
+            'api_key' => $_ENV['PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY'] ?? '',
         ],
-        'boleto_expiration' => 'P3D',
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
