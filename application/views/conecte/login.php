@@ -28,11 +28,43 @@
             }
         }
     </script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Add CSRF token input to each form and ajax requests
+            var csrfTokenName = "<?= config_item("csrf_token_name") ?>";
+
+            var forms = document.querySelectorAll("form");
+            forms.forEach(function(form) {
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = csrfTokenName;
+                csrfInput.value = getCookie("<?= config_item("csrf_cookie_name") ?>");
+                form.appendChild(csrfInput);
+            });
+
+            $.ajaxSetup({
+                credentials: "include",
+                beforeSend: function(jqXHR, settings) {
+                    if (typeof settings.data === 'object') {
+                        settings.data[csrfTokenName] = getCookie("<?= config_item("csrf_cookie_name") ?>");
+                    } else {
+                        settings.data += '&' + $.param({
+                            [csrfTokenName]: getCookie("<?= config_item("csrf_cookie_name") ?>")
+                        });
+                    }
+
+                    return true;
+                }
+            });
+        });
+    </script>
 </head>
+
 <?php
 $parse_email = $this->input->get('e');
-    $parse_cpfcnpj = $this->input->get('c');
-    ?>
+$parse_cpfcnpj = $this->input->get('c');
+?>
 
 <body>
     <div class="main-login">
@@ -43,7 +75,7 @@ $parse_email = $this->input->get('e');
 
         <div id="loginbox">
             <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
-            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                 <div class="d-flex flex-column">
                     <div class="right-login">
                         <div class="container">
@@ -162,7 +194,7 @@ $parse_email = $this->input->get('e');
                                     timer: 4000
                                 })
 
-                                var newCsrfToken = data.MAPOS_TOKEN; 
+                                var newCsrfToken = data.MAPOS_TOKEN;
                                 $("input[name='<?= $this->security->get_csrf_token_name(); ?>']").val(newCsrfToken);
                             }
                         }

@@ -19,37 +19,68 @@
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Add CSRF token input to each form and ajax requests
+            var csrfTokenName = "<?= config_item("csrf_token_name") ?>";
+
+            var forms = document.querySelectorAll("form");
+            forms.forEach(function(form) {
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = csrfTokenName;
+                csrfInput.value = getCookie("<?= config_item("csrf_cookie_name") ?>");
+                form.appendChild(csrfInput);
+            });
+
+            $.ajaxSetup({
+                credentials: "include",
+                beforeSend: function(jqXHR, settings) {
+                    if (typeof settings.data === 'object') {
+                        settings.data[csrfTokenName] = getCookie("<?= config_item("csrf_cookie_name") ?>");
+                    } else {
+                        settings.data += '&' + $.param({
+                            [csrfTokenName]: getCookie("<?= config_item("csrf_cookie_name") ?>")
+                        });
+                    }
+
+                    return true;
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
     <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
-            <div class="widget-box" style="align-items: center;padding: 0 15px">
-                <div class="widget-title">
-                    <h5 style="padding-left: 10px">Recuperar Senha do Sistema</h5>
-                </div>
-                <div class="widget-content nopadding tab-content">
+        <div class="widget-box" style="align-items: center;padding: 0 15px">
+            <div class="widget-title">
+                <h5 style="padding-left: 10px">Recuperar Senha do Sistema</h5>
+            </div>
+            <div class="widget-content nopadding tab-content">
 
-                    <form action="<?php echo base_url() . "index.php/mine/gerarTokenResetarSenha" ?>" id="formCliente" method="post" class="form-horizontal">
+                <form action="<?php echo base_url() . "index.php/mine/gerarTokenResetarSenha" ?>" id="formCliente" method="post" class="form-horizontal">
 
-                        <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly;border-bottom: 0px">
-                            <label style="width: auto" for="email" class="control-label">Email<span class="required">*</span></label>
-                            <div class="controls" style="margin: 0">
-                                <input id="email" type="text" name="email" value="" />
+                    <div class="control-group" style="display: flex;margin-bottom: 7pxpx;grid-column-gap: 5px;justify-content: space-evenly;border-bottom: 0px">
+                        <label style="width: auto" for="email" class="control-label">Email<span class="required">*</span></label>
+                        <div class="controls" style="margin: 0">
+                            <input id="email" type="text" name="email" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-top: 15px">
+                        <div class="span12">
+                            <div class="span6 offset3" style="display:flex;justify-content: center">
+                                <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-mail-send'></i></span><span class="button__text2">Enviar</span></button>
+                                <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
                             </div>
                         </div>
-
-                        <div class="form-actions" style="background-color:transparent;border:none;padding: 10px;margin-top: 15px">
-                            <div class="span12">
-                                <div class="span6 offset3" style="display:flex;justify-content: center">
-                                    <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-mail-send'></i></span><span class="button__text2">Enviar</span></button>
-                                    <a href="<?php echo base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
@@ -107,8 +138,8 @@
     <!--Footer-part-->
     <div class="row-fluid">
         <div id="footer" class="span12" style="padding: 10px"> <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
-            <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
-        </a></div>
+                <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+            </a></div>
     </div>
 
     <!-- javascript
