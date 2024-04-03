@@ -219,7 +219,7 @@ SET /p senha=Informe a Senha (****):
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
 IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step06 && GOTO step00
-IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\.env
+IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\.env
 PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_PROTOCOL=', 'EMAIL_PROTOCOL=%protocolo%'} | Set-Content -Path '%dirEmail%'"
 PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_HOST=', 'EMAIL_SMTP_HOST=%hostsmtp%'} | Set-Content -Path '%dirEmail%'"
 PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_CRYPTO=', 'EMAIL_SMTP_CRYPTO=%criptografia%'} | Set-Content -Path '%dirEmail%'"

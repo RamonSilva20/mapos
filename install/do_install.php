@@ -57,7 +57,7 @@ if (!empty($_POST)) {
      * check the db config file
      * if db already configured, we'll assume that the installation has completed
      */
-    $is_installed = file_exists(".." . DIRECTORY_SEPARATOR . '.env');
+    $is_installed = file_exists(".." . DIRECTORY_SEPARATOR . 'application'. DIRECTORY_SEPARATOR . '.env');
 
     if ($is_installed) {
         echo json_encode(["success" => false, "message" => "Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente."]);
@@ -81,7 +81,7 @@ if (!empty($_POST)) {
     $mysqli->close();
     // database created
 
-    $env_file_path = ".." . DIRECTORY_SEPARATOR . '.env.example';
+    $env_file_path = ".." . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env.example';
     $env_file = file_get_contents($env_file_path);
 
     // set the database config file
@@ -98,7 +98,7 @@ if (!empty($_POST)) {
     // set the environment = production
     $env_file = str_replace('pre_installation', 'production', $env_file);
 
-    if (file_put_contents(".." . DIRECTORY_SEPARATOR . '.env', $env_file)) {
+    if (file_put_contents(".." . DIRECTORY_SEPARATOR . 'application'. DIRECTORY_SEPARATOR . '.env', $env_file)) {
         echo json_encode(["success" => true, "message" => "Instalação bem sucedida."]);
     } else {
         echo json_encode(["success" => false, "message" => "Erro ao criar arquivo env."]);

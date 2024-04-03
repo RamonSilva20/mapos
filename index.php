@@ -56,8 +56,10 @@
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-if (file_exists('.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$envFile = __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env';
+if (file_exists($envFile)) {
+    $envFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'application';
+    $dotenv = Dotenv\Dotenv::createImmutable($envFilePath);
     $dotenv->load();
 }
 

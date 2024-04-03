@@ -58,7 +58,7 @@ if (!empty($_SERVER['HTTPS'])) {
  */
 $db_file_path = "../application/config/database.php";
 $db_file = file_get_contents($db_file_path);
-$is_installed = file_exists(".." . DIRECTORY_SEPARATOR . '.env');
+$is_installed = file_exists(".." . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env');
 
 $installed = null;
 if ($is_installed) {
