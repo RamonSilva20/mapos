@@ -85,6 +85,13 @@
         </ul>
       </li>
       <li class="dropdown">
+        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Portais Fiscais"><i class='bx bx-note iconN'></i><span style="font-weight: 500;" class="text"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="https://amei.sebrae.com.br/auth/realms/externo/protocol/openid-connect/auth?client_id=emissor-nfe-frontend&redirect_uri=https%3A%2F%2Femissornfe.sebrae.com.br%2F&state=e56f0e34-733c-4cf7-b925-fca10828520a&response_mode=fragment&response_type=code&scope=openid&nonce=d9022e43-1991-497e-8738-5b370b3226eb" target="_blank">NF-e</a></li>
+          <li><a href="https://www.nfse.gov.br/EmissorNacional/Login?ReturnUrl=%2fEmissorNacional" target="_blank">NFS-e</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
         <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
         <ul class="dropdown-menu">
           <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
