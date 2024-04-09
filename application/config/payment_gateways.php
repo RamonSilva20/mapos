@@ -27,7 +27,11 @@ $config['payment_gateways'] = [
             'new' => 'Cobrança / Assinatura gerada',
             'waiting' => 'Aguardando a confirmação do pagamento',
             'paid' => 'Pagamento confirmado',
+<<<<<<< HEAD
             'idenfied' => 'Pagamento identificado',
+=======
+            'identified' => 'Pagamento confirmado',
+>>>>>>> c491ce5ae2995d55543900fb4bda67571758a30a
             'unpaid' => 'Não foi possível confirmar o pagamento da cobrança',
             'refunded' => 'Pagamento devolvido pelo lojista ou pelo intermediador Gerencianet',
             'contested' => 'Pagamento em processo de contestação',

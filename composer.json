@@ -4,7 +4,11 @@
         "ext-curl": "*",
         "ext-gd": "*",
         "mercadopago/dx-php": "^2.2.1",
+<<<<<<< HEAD
         "efipay/sdk-php-apis-efi": "^1.8",
+=======
+        "gerencianet/gerencianet-sdk-php": "^5",
+>>>>>>> c491ce5ae2995d55543900fb4bda67571758a30a
         "codeigniter/framework": "^3.1",
         "mpdf/mpdf": "^8.0.10",
         "filp/whoops": "^2.7",
@@ -13,7 +17,11 @@
         "phpoffice/phpword": "^0.18.0",
         "piggly/php-pix": "^2.0",
         "codephix/asaas-sdk": "dev-master",
+<<<<<<< HEAD
         "vlucas/phpdotenv": "^5.6"
+=======
+        "efipay/sdk-php-apis-efi": "^1"
+>>>>>>> c491ce5ae2995d55543900fb4bda67571758a30a
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",

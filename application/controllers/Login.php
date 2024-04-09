@@ -48,7 +48,7 @@ class Login extends CI_Controller
 
                 // Verificar credenciais do usuário
                 if (password_verify($password, $user->senha)) {
-                    $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
+                    $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true, 'assinatura' => $user->assinaturaImg];
                     $this->session->set_userdata($session_admin_data);
                     log_info('Efetuou login no sistema');
                     $json = ['result' => true];

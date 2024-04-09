@@ -1,12 +1,13 @@
-<?php
-    $tab = isset($_GET['tab']) ? $_GET['tab'] : 0;
-?>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/signature_pad.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/assinaturas.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 
 <style>
     .ui-datepicker {
@@ -17,13 +18,6 @@
         margin-top: 0;
         margin-bottom: 0;
     }
-
-    #assCliente-pad {
-        border: 1px solid #333333;
-    }
-    .buttons-a {
-        margin-top: 10px;
-    }
 </style>
 
 <div class="row-fluid" style="margin-top:0">
@@ -33,21 +27,21 @@
                 <span class="icon">
                     <i class="fas fa-diagnoses"></i>
                 </span>
-                <h5>Detalhes OS</h5>
+                <h5>Assinar</h5>
             </div>
             <div class="widget-content nopadding tab-content">
 
 
                 <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
                     <ul class="nav nav-tabs">
-                        <li <?=$tab != 5 ? 'class="active" ' : ''?>id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
+                        <li id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
                         <li id="tabProdutos"><a href="#tab2" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab3" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab4" data-toggle="tab">Anexos</a></li>
-                        <li <?=$tab == 5 ? 'class="active" ' : ''?>id="tabAssinar"><a href="#tab5" data-toggle="tab">Assinatura</a></li>
+                        <li class="active" id="tabAssinar"><a href="#tab5" data-toggle="tab">Assinatura</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane<?=$tab != 5 ? ' active' : ''?>" id="tab1">
+                        <div class="tab-pane active" id="tab1">
 
                             <div class="span12" id="divCadastrarOs">
 
@@ -214,7 +208,8 @@ foreach ($servicos as $s) {
                                 } ?>
 
                                 <div class="span12" id="divAnexos" style="margin-left: 0">
-                                    <?php foreach ($anexos as $a) {
+                                    <?php
+                                    foreach ($anexos as $a) {
                                         if ($a->thumb == null) {
                                             $thumb = base_url() . 'assets/img/icon-file.png';
                                             $link = base_url() . 'assets/img/icon-file.png';
@@ -223,46 +218,74 @@ foreach ($servicos as $s) {
                                             $link = $a->url . '/' . $a->anexo;
                                         }
                                         echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                            <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                            <img src="' . $thumb . '" alt="">
-                                            </a>
-                                            <span>' . $a->anexo . '</span>
-                                            </div>';
-                                    }?>
-                                </div>
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . $thumb . '" alt="">
+                                                    </a>
+                                                    <span>' . $a->anexo . '</span>
+                                                </div>';
+                                    }
+?>
+        </div>
 
-                            </div>
-                        </div>
+</div>
+</div>
 
-                        <!--Assinaturas-->
-                        <div class="tab-pane<?=$tab == 5 ? ' active' : ''?>" id="tab5">
+<!--Assinaturas-->
+<div class="tab-pane" id="tab5">
                             <div class="span12" style="padding: 1%; margin-left: 0">
-                                <h3>Autorizar e assinar Ordem de Serviço</h3>
-                                <p style="margin-left: 10px;">Ao assinar e enviar sua assinatura você estará autorizando a execução da ordem de serviço!</p>
-                                <div class="span11">
-                                    <div class="span10" id="assinaturaCliente" style="text-align:center;">
-                                      <?php if(!$result->assClienteImg): ?>
-                                        <canvas id="assCliente-pad" width="600" height="300"></canvas>
-                                        <h4>Assinatura do Cliente</h4>
-                                      <?php else: ?>
-                                        <img src="<?=base_url() . 'assets/assinaturas/' . $result->assClienteImg?>" width="600" alt="">
-                                        <h4>Assinatura do Cliente</h4>
-                                        <p>Em <?=date('d/m/Y H:i:s', strtotime($result->assClienteData))?></p>
-                                        <p>IP: <?=$result->assClienteIp ?></p>
-                                      <?php endif; ?>
-                                    </div>
-                                  <?php if(!$result->assClienteImg): ?>
-                                    <div class="span10" style="text-align:center; margin-left:0;">
-                                        <div class="buttons-a">
-                                            <button id="limparAssCliente" type="button" class="btn btn-danger">Limpar Assinatura</button>
-                                            <button id="salvarAssCliente" type="button" class="btn btn-success">Enviar Assinatura</button>
+                                <h3>Assine os Termos de Serviço</h3>
+                                <style>
+                                    
+                                    #signature-pad{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    #signature-pad2{
+                                        margin-left: 30px;
+                                        border: 1px solid #000;
+                                    }
+                                    .buttons-a{
+                                        margin-left: 30px;
+                                        margin-top: 10px;
+                                    }
+
+                                    .p-2{
+                                        margin-left: 30px;
+                                    }
+                                </style>
+
+                                
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-8 col-md-offset-2">,
+                                            <div id="signature-container">
+                                                <h4 class="p-2">Assinatura do Cliente</h4>
+                                                <canvas id="signature-pad" width="600" height="300"></canvas>
+                                                <br>
+                                                <h4 class="p-2">Assinatura do Técnico</h4>
+                                                <canvas id="signature-pad2" width="600" height="300"></canvas>
+                                            
+                                                <br>
+                                                <div class="buttons-a">
+                                                    <button id="clear-button1" type="button" class="btn btn-danger">Limpar Assinatura Cliente</button>
+                                                    <button id="clear-button2" type="button" class="btn btn-danger">Limpar Assinatura Técnico</button>  
+                                                    <button id="save-button" type="button" class="btn btn-success">Enviar Assinaturas</button>                               
+                                                </div>
+
+                                                
+                                                
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                  <?php endif; ?>
-                                </div>
+                               
+
                             </div>
                         </div>
                         <!-- Fim tab assinaturas -->
+                        
+
+
 
                     </div>
 
@@ -380,8 +403,7 @@ foreach ($servicos as $s) {
 <script type="text/javascript">
     $(document).ready(function() {
         $('.editor').trumbowyg({
-            lang: 'pt_br',
-            semantic: { 'strikethrough': 's', }
+            lang: 'pt_br'
         });
     });
 
@@ -392,7 +414,86 @@ foreach ($servicos as $s) {
         $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
         $("#download").attr('href', "<?php echo base_url(); ?>index.php/mine/downloadanexo/" + id);
     });
+</script>
 
-    window.base_url = <?php echo json_encode(base_url()); ?>;
-    window.idOs     = $("#os_id").val();
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM está totalmente carregado');
+        var canvas = document.getElementById('signature-pad');
+        var signaturePad = new SignaturePad(canvas);
+
+        var canvas2 = document.getElementById('signature-pad2');
+        var signaturePad2 = new SignaturePad(canvas2);
+
+        var clearButton1 = document.getElementById('clear-button1');
+        var clearButton2 = document.getElementById('clear-button2');
+        var saveButton = document.getElementById('save-button');
+
+        
+        clearButton1.addEventListener('click', function(event) {
+                signaturePad.clear();
+        });
+        clearButton2.addEventListener('click', function(event) {
+                signaturePad2.clear();
+        });
+
+        saveButton.addEventListener('click', function(event) {
+            if (signaturePad.isEmpty() && signaturePad2.isEmpty() ) {
+                alert('Por favor, assine primeiro.');
+            } else {
+                var dataURL = signaturePad.toDataURL();
+                var dataURL2 = signaturePad2.toDataURL();
+                var customerName = '<?php echo $result->nomeCliente ?>';
+		        var nOs = '<?php echo $result->idOs ?>';
+                var tecnico = '<?php echo $result->nome ?>';
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'upload_assinatura_cliente.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.log("Erro: " + xhr.status);
+                }
+                };
+                var params = "image=" + encodeURIComponent(dataURL) + "&name=" + encodeURIComponent(customerName);
+                xhr.send(params);
+                console.log("Img = " + dataURL);
+
+
+                $.ajax({
+                        url: '<?php echo base_url('index.php/SignaturePad/upload_signature') ?>',
+                        type: 'POST',
+                        data: {
+                            imageData: dataURL,
+                            clientName: customerName,
+                            imageData2: dataURL2,
+			                nOs: nOs,
+                            tecnico: tecnico
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            Swal.fire({
+                                type: "success",
+                                title: "Atenção",
+                                text: "Assinatura Enviada com Sucesso"
+                            });
+                            signaturePad.clear();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR, textStatus, errorThrown);
+                            Swal.fire({
+                                type: "error",
+                                title: "Atenção",
+                                text: "Ocorreu um erro ao enviar sua assinatura"
+                            });
+                        }
+                    });
+            }
+        });
+
+    });
+
+    
+
 </script>

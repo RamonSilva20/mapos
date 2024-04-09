@@ -75,7 +75,7 @@ class Conecte_model extends CI_Model
         $this->db->where('clientes_id', $cliente);
         $this->db->order_by('expire_at','desc');
         $this->db->limit($perpage, $start);
-        $this->db->order_by('idCobranca', 'desc');
+        $this->db->order_by('idCobrancas', 'desc');
         if ($where) {
             $this->db->where($where);
         }
