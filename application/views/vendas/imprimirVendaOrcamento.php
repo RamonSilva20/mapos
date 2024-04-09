@@ -72,16 +72,17 @@
                                     <td style="width: 85%; padding-left: 0">
                                         <ul>
                                             <li>
-                                                <span>
+                                            <span>
                                                     <h5>Cliente</h5>
-                                                    <?php echo $result->nomeCliente ?> -
-                                                    <?php echo $result->documento ?></br>
-                                                    <?php echo $result->rua ?>,
-                                                    <?php echo $result->numero ?>,
-                                                    <?php echo $result->bairro ?>,
-                                                    <?php echo $result->cidade ?> -
-                                                    <?php echo $result->estado ?>
-                                                </span>
+                                                    <span>
+                                                        <?php echo $result->nomeCliente ?></span><br />
+                                                    <span>
+                                                        <?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?></span><br/>
+                                                        <?php echo $result->cidade ?> - <?php echo $result->estado ?> - CEP: <?php echo $result->cep ?><br/>
+                                                        <span>Email:
+                                                        <?php echo $result->emailCliente ?></span></br>
+                                                        Contato <?php echo $result->contato ?>
+                                                        - Celular :<?php echo $result->celular ?></span><br/>
                                             </li>
                                         </ul>
                                     </td>
