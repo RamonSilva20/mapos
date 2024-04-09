@@ -5,6 +5,8 @@
   <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
+  <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
   <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap-responsive.min.css" />
@@ -38,6 +40,7 @@
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/datatables.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
+  <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
   <script type="text/javascript">
     shortcut.add("escape", function() {
       location.href = '<?= base_url(); ?>';
@@ -67,35 +70,6 @@
     //shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
     window.BaseUrl = "<?= base_url() ?>";
-
-    $(document).ready(function() {
-      // Add CSRF token input to each form and ajax requests
-      var csrfTokenName = "<?= config_item("csrf_token_name") ?>";
-
-      var forms = document.querySelectorAll("form");
-      forms.forEach(function(form) {
-        var csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = csrfTokenName;
-        csrfInput.value = getCookie("<?= config_item("csrf_cookie_name") ?>");
-        form.appendChild(csrfInput);
-      });
-
-      $.ajaxSetup({
-        credentials: "include",
-        beforeSend: function(jqXHR, settings) {
-          if (typeof settings.data === 'object') {
-            settings.data[csrfTokenName] = getCookie("<?= config_item("csrf_cookie_name") ?>");
-          } else {
-            settings.data += '&' + $.param({
-              [csrfTokenName]: getCookie("<?= config_item("csrf_cookie_name") ?>")
-            });
-          }
-
-          return true;
-        }
-      });
-    });
   </script>
 </head>
 

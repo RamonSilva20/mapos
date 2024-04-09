@@ -6,6 +6,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
+    <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
@@ -18,36 +20,7 @@
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // Add CSRF token input to each form and ajax requests
-            var csrfTokenName = "<?= config_item("csrf_token_name") ?>";
-
-            var forms = document.querySelectorAll("form");
-            forms.forEach(function(form) {
-                var csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = csrfTokenName;
-                csrfInput.value = getCookie("<?= config_item("csrf_cookie_name") ?>");
-                form.appendChild(csrfInput);
-            });
-
-            $.ajaxSetup({
-                credentials: "include",
-                beforeSend: function(jqXHR, settings) {
-                    if (typeof settings.data === 'object') {
-                        settings.data[csrfTokenName] = getCookie("<?= config_item("csrf_cookie_name") ?>");
-                    } else {
-                        settings.data += '&' + $.param({
-                            [csrfTokenName]: getCookie("<?= config_item("csrf_cookie_name") ?>")
-                        });
-                    }
-
-                    return true;
-                }
-            });
-        });
-    </script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>
 
 <body>

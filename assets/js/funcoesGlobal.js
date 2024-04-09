@@ -29,10 +29,3 @@ function initTimer() {
     // O metodo nativo setInterval executa uma determinada funcao em um determinado tempo
     setInterval(showTimer, 1000);
 }
-
-function getCookie(name) {
-    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    if (match) {
-        return match[2];
-    }
-}
