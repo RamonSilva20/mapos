@@ -73,7 +73,7 @@
                                         <ul>
                                             <li>
                                             <span>
-                                                    <h5>Cliente</h5>
+                                            <h5>Cliente</h5>
                                                     <span>
                                                         <?php echo $result->nomeCliente ?></span><br />
                                                     <span>
