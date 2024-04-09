@@ -6,6 +6,7 @@ function getCookie(name) {
 }
 
 function setCsrfTokenInAllForms(csrfTokenName, csrfCookieName) {
+    $('input[name="' + csrfTokenName + '"]').remove();
     var forms = document.querySelectorAll("form");
     forms.forEach(function (form) {
         var csrfInput = document.createElement('input');
