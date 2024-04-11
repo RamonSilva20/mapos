@@ -74,14 +74,23 @@
                                             <li>
                                                 <span>
                                                     <h5>Cliente</h5>
-                                                    <?php echo $result->nomeCliente ?> -
-                                                    <?php echo $result->documento ?></br>
-                                                    <?php echo $result->rua ?>,
-                                                    <?php echo $result->numero ?>,
-                                                    <?php echo $result->bairro ?>,
-                                                    <?php echo $result->cidade ?> -
-                                                    <?php echo $result->estado ?>
-                                                </span>
+                                                    <span>
+                                                        <?php echo $result->nomeCliente ?>
+                                                    </span><br />
+                                                    <span>
+                                                        <?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?>
+                                                    </span><br/>
+                                                    <span>
+                                                        <?php echo $result->cidade ?> - <?php echo $result->estado ?> - CEP: <?php echo $result->cep ?>
+                                                    </span><br/>
+                                                    <span>
+                                                        Email: <?php echo $result->emailCliente ?>
+                                                    </span></br>
+                                                    <?php if ($result->contato) { ?>
+                                                        <span>Contato: <?php echo $result->contato ?> </span>
+                                                    <?php } ?>
+                                                    <span>Celular: <?php echo $result->celular ?></span>
+							                    </span>
                                             </li>
                                         </ul>
                                     </td>
