@@ -4,6 +4,22 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.45.0] - 2024-04-10
+### Fixed
+- Implementado uso correto de CSRF. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Ajustes do Github_updater.php e captcha. [@juliolobo](https://github.com/juliolobo)
+- Estava faltando a abertura de uma chave no if. [@juliolobo](https://github.com/juliolobo)
+- Adicionando xss_clean aos textarea. [@juliolobo](https://github.com/juliolobo)
+- Adicionando Controllers faltantes ao CSFR. [@juliolobo](https://github.com/juliolobo)
+- Informando ao Log de qual OS o serviço foi excluido. [@juliolobo](https://github.com/juliolobo)
+- Atualização do gerencianet para Efipay. [@cabralwms](https://github.com/cabralwms)
+- Ajustes ao adicionar "riscado" em algum texto pelo editor trumbowyg. [@juliolobo](https://github.com/juliolobo)
+- Correção do Calendário Status Aprovado. [@cabralwms](https://github.com/cabralwms)
+- Corrigindo buscas por cpf, autocomplete com cpf. [@cabralwms](https://github.com/cabralwms)
+- Padronizar dados Clientes em Vendas. [@cabralwms](https://github.com/cabralwms)
+
+### Added
+- Uso de variáveis de ambiente (.env) para configuração do sistema. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
 ## [4.44.0] - 2024-02-13
 ### Security Fix
