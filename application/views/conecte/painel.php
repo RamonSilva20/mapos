@@ -22,6 +22,15 @@
             <a href="<?php echo base_url() ?>index.php/mine/compras">
                 <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </a>
+            <li class="card"> 
+            <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
+                <div class="lord-icon05">
+                <i class='bx bx-credit-card-front iconBx05'></i>
+                </div>
+            </a>
+            <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
+                <div style="font-size: 1.2em" class="numbers">Cobranças&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </a>
         </li>
         <li class="card"> 
             <a href="<?php echo base_url() ?>index.php/mine/conta">
@@ -118,7 +127,8 @@
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
-                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i></a>';
+                            echo '<a href="' . base_url() . 'index.php/mine/imprimirOs/' . $o->idOs . '" class="btn"> <i class="fas fa-print"></i></a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -161,7 +171,8 @@
                     echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
                     echo '<td>' . $p->nome . '</td>';
                     echo '<td>' . $faturado . '</td>';
-                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a></td>';
+                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a>';
+                    echo '<a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-print" ></i> </a></td>';
                     echo '</tr>';
                 }
             } else {
