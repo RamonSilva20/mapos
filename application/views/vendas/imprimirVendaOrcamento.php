@@ -97,8 +97,44 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <hr>
                     </div>
+
+                    <div style="margin-top: 0; padding-top: 0">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <?php if ($result->dataVenda != null) { ?>
+                                    <tr>
+                                        <td>
+                                            <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                        </td>
+
+                                        <td>
+                                            <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->garantia) { ?>
+                                                <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                            <?php } ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->status == 'Finalizado') { ?>
+                                                <b>VENC. DA GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td colspan="4"> 
+                                        <b>OBSERVAÇÕES: </b>
+                                        <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <hr />
+
                     <div style="margin-top: 0; padding-top: 0">
                         <?php if ($produtos != null) { ?>
                             <table class="table table-bordered table-condensed" id="tblProdutos">
@@ -149,21 +185,6 @@
                     <?php
                         } ?>
                     </div>
-                    <hr />
-                        <h5 style="text-align: left">Observações:</h5>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 100%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
