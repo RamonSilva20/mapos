@@ -363,6 +363,16 @@ $config = [
             'rules' => 'trim',
         ],
         [
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'garantia',
+            'label' => 'Garantia',
+            'rules' => 'trim',
+        ],
+        [
             'field' => 'clientes_id',
             'label' => 'clientes',
             'rules' => 'trim|required',

@@ -59,7 +59,8 @@
                         <th>Data Final</th>
                         <th>Venc. Garantia</th>
                         <th>Status</th>
-                        <th style="text-align:right">Visualizar / Imprimir</th>
+                        <th>Visualizar / Imprimir</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,10 +128,8 @@
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
-                            echo '<td style="text-align:right">';
-                            echo '<a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i></a> ';
-                            echo '<a href="' . base_url() . 'index.php/mine/imprimirOs/' . $o->idOs . '" class="btn"> <i class="fas fa-print"></i></a>';
-                            echo '</td>';
+                            echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i></a>';
+                            echo '<a href="' . base_url() . 'index.php/mine/imprimirOs/' . $o->idOs . '" class="btn"> <i class="fas fa-print"></i></a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -153,88 +152,29 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Responsável</th>
                         <th>Data de Venda</th>
-                        <th>Vencimento da Garantia</th>
+                        <th>Responsável</th>
                         <th>Faturado</th>
-                        <th>Status</th>
-                        <th style="text-align:right">Visualizar / Imprimir</th>
+                        <th>Visualizar / Imprimir</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
             if ($compras != null) {
-                foreach ($compras as $c) {
-                    $vencGarantia = '';
-
-                            if ($c->garantia && is_numeric($c->garantia)) {
-                                $vencGarantia = dateInterval($c->dataVenda, $c->garantia);
-                            }
-                            $corGarantia = '';
-                            if (!empty($vencGarantia)) {
-                                $dataGarantia = explode('/', $vencGarantia);
-                                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#4d9c79';
-                                } else {
-                                    $corGarantia = '#f24c6f';
-                                }
-                            } elseif ($o->garantia == "0") {
-                                $vencGarantia = 'Sem Garantia';
-                                $corGarantia = '';
-                            } else {
-                                $vencGarantia = '';
-                                $corGarantia = '';
-                            }
-                    if ($c->faturado == 1) {
+                foreach ($compras as $p) {
+                    if ($p->faturado == 1) {
                         $faturado = 'Sim';
                     } else {
                         $faturado = 'Não';
                     }
-                    
-                    switch ($c->status) {
-                        case 'Aberta':
-                            $cor = '#00cd00';
-                            break;
-                        case 'Em Andamento':
-                            $cor = '#436eee';
-                            break;
-                        case 'Orçamento':
-                            $cor = '#CDB380';
-                            break;
-                        case 'Negociação':
-                            $cor = '#AEB404';
-                            break;
-                        case 'Cancelada':
-                            $cor = '#CD0000';
-                            break;
-                        case 'Finalizada':
-                            $cor = '#256';
-                            break;
-                        case 'Faturada':
-                            $cor = '#B266FF';
-                            break;
-                        case 'Aguardando Peças':
-                            $cor = '#FF7F00';
-                            break;
-                        case 'Aprovada':
-                            $cor = '#808080';
-                            break;
-                        default:
-                            $cor = '#E0E4CC';
-                            break;
-                    }
                     echo '<tr>';
-                    echo '<td>' . $c->idVendas . '</td>';
-                    echo '<td>' . $c->nome . '</td>';
-                    echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+                    echo '<td>' . $p->idVendas . '</td>';
+                    echo '<td>' . date('d/m/Y', strtotime($p->dataVenda)) . '</td>';
+                    echo '<td>' . $p->nome . '</td>';
                     echo '<td>' . $faturado . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $c->status . '</span> </td>';
-                    echo '<td style="text-align:right">';
-                    echo '<a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $c->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a> ';
-                    echo '<a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $c->idVendas . '" class="btn"> <i class="fas fa-print" ></i> </a>';
-                    echo '</td>';
+                    echo '<td> <a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a>';
+                    echo '<a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $p->idVendas . '" class="btn"> <i class="fas fa-print" ></i> </a></td>';
                     echo '</tr>';
                 }
             } else {

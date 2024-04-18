@@ -47,6 +47,26 @@
                                         </div>
                                     </div>
 
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
+                                            <label for="status">Status<span class="required">*</span></label>
+                                            <select class="span12" name="status" id="status" value="">
+                                                <option value="Orçamento">Orçamento</option>
+                                                <option value="Aberta">Aberta</option>
+                                                <option value="Em Andamento">Em Andamento</option>
+                                                <option value="Finalizada">Finalizada</option>
+                                                <option value="Cancelada">Cancelada</option>
+                                                <option value="Aguardando Peças">Aguardando Peças</option>
+                                                <option value="Aprovada">Aprovada</option>
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <label for="garantia">Garantia (dias)</label>
+                                            <input id="garantia" type="number" placeholder="Status s/g inserir nº/0" min="0" max="9999" class="span12" name="garantia" value="" />
+                                            <?php echo form_error('garantia'); ?>
+                                        </div>
+                                    </div>
+
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>

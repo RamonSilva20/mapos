@@ -33,7 +33,7 @@
                                             <?php echo $result->idVendas ?>
                                         </h3>
                                         <div class="span2" style="margin-left: 0">
-                                            <label for="dataFinal">Data Final</label>
+                                            <label for="dataVenda">Data da Venda</label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
                                         </div>
                                         <div class="span5">
@@ -49,7 +49,54 @@
                                         </div>
                                     </div>
 
-
+                                    <div class="span12" style="padding: 1%; margin-left: 0">
+                                        <div class="span3">
+                                            <label for="status">Status<span class="required">*</span></label>
+                                            <select class="span12" name="status" id="status" value="">
+                                                <option <?php if ($result->status == 'Orçamento') {
+                                                    echo 'selected';
+                                                } ?> value="Orçamento">Orçamento
+                                                </option>
+                                                <option <?php if ($result->status == 'Aberta') {
+                                                    echo 'selected';
+                                                } ?> value="Aberta">Aberta
+                                                </option>
+                                                <option <?php if ($result->status == 'Faturada') {
+                                                    echo 'selected';
+                                                } ?> value="Faturada">Faturada
+                                                </option>
+                                                <option <?php if ($result->status == 'Negociação') {
+                                                    echo 'selected';
+                                                } ?> value="Negociação">Negociação
+                                                </option>
+                                                <option <?php if ($result->status == 'Em Andamento') {
+                                                    echo 'selected';
+                                                } ?> value="Em Andamento">Em Andamento
+                                                </option>
+                                                <option <?php if ($result->status == 'Finalizada') {
+                                                    echo 'selected';
+                                                } ?> value="Finalizada">Finalizada
+                                                </option>
+                                                <option <?php if ($result->status == 'Cancelado') {
+                                                    echo 'selected';
+                                                } ?> value="Cancelada">Cancelada
+                                                </option>
+                                                <option <?php if ($result->status == 'Aguardando Peças') {
+                                                    echo 'selected';
+                                                } ?> value="Aguardando Peças">Aguardando Peças
+                                                </option>
+                                                <option <?php if ($result->status == 'Aprovada') {
+                                                    echo 'selected';
+                                                } ?> value="Aprovada">Aprovada
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <label for="garantia">Garantia (dias)</label>
+                                            <input id="garantia" type="number" placeholder="Status s/g inserir nº/0" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
+                                            <?php echo form_error('garantia'); ?>
+                                        </div>
+                                    </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
@@ -65,8 +112,8 @@
                                         <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
                                     </div>
 
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span8 offset2" style="text-align: center;display:flex; flex-wrap: wrap">
+                                    <div class="span12" style="padding: 0%; margin-left: 0">
+                                        <div class="span12" style="display:flex; justify-content: center;">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
                                                     <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>

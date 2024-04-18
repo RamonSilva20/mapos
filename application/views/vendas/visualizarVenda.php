@@ -106,45 +106,80 @@
                             </tbody>
                         </table>
                     </div>
+
                     <div style="margin-top: 0; padding-top: 0">
-                        <?php if ($produtos != null) { ?>
-                            <table class="table table-bordered table-condensed" id="tblProdutos">
-                                <thead>
+                        <table class="table table-condensed">
+                            <tbody>
+                                <?php if ($result->dataVenda != null) { ?>
                                     <tr>
-                                        <th style="font-size: 15px">Cód. de barra</th>
-                                        <th style="font-size: 15px">Produto</th>
-                                        <th style="font-size: 15px">Quantidade</th>
-                                        <th style="font-size: 15px">Preço unit.</th>
-                                        <th style="font-size: 15px">Sub-total</th>
+                                        <td>
+                                            <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                        </td>
+
+                                        <td>
+                                            <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->garantia) { ?>
+                                                <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                            <?php } ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->status == 'Finalizado') { ?>
+                                                <b>VENC. DA GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                            <?php } ?>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
-                                        echo '<tr>';
-                                        echo '<td>' . $p->codDeBarra . '</td>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        <?php
-                        } ?>
-                        <hr />
-                        <h4 style="text-align: right">Total: R$
-                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
-                        </h4>
-                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                            ?>
+                                <?php } ?>
+                                <tr>
+                                    <td colspan="4"> 
+                                        <b>OBSERVAÇÕES: </b>
+                                        <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <hr />
+
+                    <?php if ($produtos != null) { ?>
+                        <table class="table table-bordered table-condensed" id="tblProdutos">
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 15px">Cód. de barra</th>
+                                    <th style="font-size: 15px">Produto</th>
+                                    <th style="font-size: 15px">Quantidade</th>
+                                    <th style="font-size: 15px">Preço unit.</th>
+                                    <th style="font-size: 15px">Sub-total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($produtos as $p) {
+                                    $totalProdutos = $totalProdutos + $p->subTotal;
+                                    echo '<tr>';
+                                    echo '<td>' . $p->codDeBarra . '</td>';
+                                    echo '<td>' . $p->descricao . '</td>';
+                                    echo '<td>' . $p->quantidade . '</td>';
+                                    echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                    echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                    echo '</tr>';
+                                } ?>
+                                <tr>
+                                    <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                    <td><strong>R$
+                                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php } ?>
+                    <hr />
+                    <h4 style="text-align: right">Total: R$
+                        <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                    </h4>
+                    <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                        ?>
                         <h4 style="text-align: right">Desconto: R$
                             <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
                         </h4>
@@ -152,24 +187,7 @@
                             <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
                         </h4>
                     <?php
-                        } ?>
-                    </div>
-                    <hr />
-                    <h4 style="text-align: left">Observações:
-                    </h4>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td style="width: 100%; padding-left: 0">
-                                    <ul>
-                                        <li>
-                                            <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    } ?>
                     <hr />
                 </div>
             </div>

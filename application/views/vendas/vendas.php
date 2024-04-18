@@ -22,10 +22,12 @@
             <thead>
                 <tr>
                     <th>Nº</th>
-                    <th>Data</th>
                     <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Vencimento da Garantia</th>
                     <th>Faturado</th>
-                    <th>Ações</th>
+                    <th>Status</th>
+                    <th style="text-align:center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,17 +40,75 @@
                     }
                     foreach ($results as $r) {
                         $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
+                        $vencGarantia = '';
+
+                                if ($r->garantia && is_numeric($r->garantia)) {
+                                    $vencGarantia = dateInterval($r->dataVenda, $r->garantia);
+                                }
+                                $corGarantia = '';
+                                if (!empty($vencGarantia)) {
+                                    $dataGarantia = explode('/', $vencGarantia);
+                                    $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
+                                    if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                                        $corGarantia = '#4d9c79';
+                                    } else {
+                                        $corGarantia = '#f24c6f';
+                                    }
+                                } elseif ($r->garantia == "0") {
+                                    $vencGarantia = 'Sem Garantia';
+                                    $corGarantia = '';
+                                } else {
+                                    $vencGarantia = '';
+                                    $corGarantia = '';
+                                }
+
                         if ($r->faturado == 1) {
                             $faturado = 'Sim';
                         } else {
                             $faturado = 'Não';
                         }
+                        
+                        switch ($r->status) {
+                            case 'Aberta':
+                                $cor = '#00cd00';
+                                break;
+                            case 'Em Andamento':
+                                $cor = '#436eee';
+                                break;
+                            case 'Orçamento':
+                                $cor = '#CDB380';
+                                break;
+                            case 'Negociação':
+                                $cor = '#AEB404';
+                                break;
+                            case 'Cancelada':
+                                $cor = '#CD0000';
+                                break;
+                            case 'Finalizada':
+                                $cor = '#256';
+                                break;
+                            case 'Faturada':
+                                $cor = '#B266FF';
+                                break;
+                            case 'Aguardando Peças':
+                                $cor = '#FF7F00';
+                                break;
+                            case 'Aprovada':
+                                $cor = '#808080';
+                                break;
+                            default:
+                                $cor = '#E0E4CC';
+                                break;
+                        }
+
                         echo '<tr>';
                         echo '<td>' . $r->idVendas . '</td>';
-                        echo '<td>' . $dataVenda . '</td>';
                         echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
+                        echo '<td>' . $dataVenda . '</td>';
+                        echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                         echo '<td>' . $faturado . '</td>';
-                        echo '<td>';
+                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                        echo '<td style="text-align:right">';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
                             echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
