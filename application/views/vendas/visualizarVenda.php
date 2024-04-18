@@ -117,7 +117,7 @@
                                         </td>
 
                                         <td>
-                                            <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                            <b>DATA DA VENDA: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
                                         </td>
 
                                         <td>
