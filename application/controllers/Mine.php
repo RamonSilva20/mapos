@@ -632,9 +632,22 @@ class Mine extends CI_Controller
 
         $data['menuVendas'] = 'vendas';
         $data['custom_error'] = '';
+        $this->CI = &get_instance();
+        $this->CI->load->database();
+        
+        
         $this->load->model('mapos_model');
+        $this->load->model('os_model');
+        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $data['emitente'] = $this->mapos_model->getEmitente();
+        $data['qrCode'] = $this->os_model->getQrCode(
+            $id,
+            $data['pix_key'],
+            $data['emitente']
+        );
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
+        
         $this->load->model('vendas_model');
-
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
@@ -657,11 +670,21 @@ class Mine extends CI_Controller
 
         $data['menuVendas'] = 'vendas';
         $data['custom_error'] = '';
+        $this->CI = &get_instance();
+        $this->CI->load->database();
         $this->load->model('mapos_model');
         $this->load->model('vendas_model');
+        $this->load->model('os_model');
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
+        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $data['qrCode'] = $this->os_model->getQrCode(
+            $id,
+            $data['pix_key'],
+            $data['emitente']
+        );
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
 
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
