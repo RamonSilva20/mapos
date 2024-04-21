@@ -74,6 +74,27 @@
     </div>
   </div>
 
+  <div class="section clearfix">
+    <p>4. Selecione o tempo de expiração do token JWT da API. (recomendamos 1 dia)</p>
+    <hr />
+    <div>
+      <div class="form-group clearfix">
+        <div class="form-group clearfix">
+          <label for="base_url" class=" col-md-3">Expiração Token JWT (API)</label>
+          <div class="col-md-9">
+            <select name="token_expire_time" id="">
+              <option value="60">1  minuto</option>
+              <option value="3600">1 hora</option>
+              <option value="86400" selected>1 dia</option>
+              <option value="604800">1 semana</option>
+              <option value="2592000">1 mês</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="panel-footer">
     <button type="submit" class="btn btn-info form-next">
       <span class="loader hide"> Por favor, espere...</span>

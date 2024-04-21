@@ -43,6 +43,8 @@
 $route['default_controller'] = "mapos";
 $route['404_override'] = '';
 
+// Rotas da API
+require(APPPATH.'config/routes_api.php');
 
 
 /* End of file routes.php */
