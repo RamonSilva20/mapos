@@ -100,7 +100,7 @@ class ServicosController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível adicionar o Serviço. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_put($id)
@@ -149,7 +149,7 @@ class ServicosController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível editar o Serviço. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_delete($id)
@@ -182,6 +182,6 @@ class ServicosController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível excluir o Serviço. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

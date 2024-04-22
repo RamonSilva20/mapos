@@ -114,6 +114,10 @@ class UsuariosController extends REST_Controller
         ];
 
         if ($this->usuarios_model->add('usuarios', $data) == true) {
+
+            $this->load->model('api_model');
+            $data = $this->api_model->lastRow('usuarios', 'idUsuarios');
+            
             $this->response([
                 'status'  => true,
                 'message' => 'Usuário adicionado com sucesso!',
@@ -207,7 +211,7 @@ class UsuariosController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível editar o Usuário.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_delete($id)
@@ -357,7 +361,7 @@ class UsuariosController extends REST_Controller
     public function conta_get()
     {
         $usuarioLogado = $this->logged_user();
-        $usuarioLogado->usuario->url_image_user = base_url().'assets/userImage/'.$usuarioLogado->usuario->url_image_user;
+        $usuarioLogado->usuario->url_image_user = !is_null($usuarioLogado->usuario->url_image_user) ? base_url().'assets/userImage/'.$usuarioLogado->usuario->url_image_user : null;
         unset($usuarioLogado->usuario->senha);
 
         $this->response([

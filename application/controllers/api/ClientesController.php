@@ -124,7 +124,7 @@ class ClientesController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível adicionar o Cliente.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_put($id)
@@ -178,7 +178,7 @@ class ClientesController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível editar o Cliente.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_delete($id)
@@ -219,6 +219,6 @@ class ClientesController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível excluir o Cliente.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

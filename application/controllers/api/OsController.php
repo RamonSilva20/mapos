@@ -197,7 +197,7 @@ class OsController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível adicionar a OS. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_put($id)
@@ -322,7 +322,7 @@ class OsController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível editar a OS.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function index_delete($id)
@@ -389,12 +389,14 @@ class OsController extends REST_Controller
         $this->response([
             'status' => false,
             'message' => 'Não foi possível excluir a OS Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function desconto_post($id)
     {
-        if ($this->input->post('desconto') == "" || $this->input->post('valor_desconto')) {
+        $_POST = (array) json_decode(file_get_contents("php://input"), true);
+
+        if (empty($this->input->post('desconto')) || empty($this->input->post('valor_desconto'))) {
             $this->response([
                 'status' => false,
                 'message' => 'Campos Desconto e Valor com desconto obrigatórios'
@@ -404,10 +406,10 @@ class OsController extends REST_Controller
         $data = [
             'tipo_desconto' => $this->input->post('tipoDesconto') ?: 'real',
             'desconto' => $this->input->post('desconto'),
-            'valor_desconto' => $this->input->post('resultado')
+            'valor_desconto' => $this->input->post('valor_desconto')
         ];
 
-        $editavel = $this->os_model->isEditable($id);
+        $editavel = $this->isEditable($id);
 
         if (!$editavel) {
             $this->response([
@@ -427,7 +429,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Ocorreu um erro ao tentar adicionar desconto à OS.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
     
     public function produtos_post($id)
@@ -491,7 +493,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível adicionar o Produto. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
     
     public function produtos_put($id, $idProdutos_os)
@@ -538,7 +540,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível editar o Produto da OS. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function produtos_delete($id, $idProdutos_os)
@@ -581,7 +583,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível excluir o Produto da OS. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function servicos_post($id)
@@ -634,7 +636,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível adicionar o Serviço. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
     
     public function servicos_put($id, $idServicos_os)
@@ -673,7 +675,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível editar o Serviço da OS. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function servicos_delete($id, $idServicos_os)
@@ -698,7 +700,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível excluir o Serviço da OS. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function anotacoes_post($id)
@@ -734,7 +736,7 @@ class OsController extends REST_Controller
 
             $this->response([
                 'status'  => true,
-                'message' => 'Serviço adicinado com sucesso!',
+                'message' => 'Anotação adicinada com sucesso!',
                 'result'  => $result
             ], REST_Controller::HTTP_CREATED);
         }
@@ -742,7 +744,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível adicionar Anotação. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function anotacoes_delete($id, $idAnotacao)
@@ -760,7 +762,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Não foi possível excluir a Anotação. Avise ao Administrador.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function anexos_post($id)
@@ -779,7 +781,7 @@ class OsController extends REST_Controller
                 $this->response([
                     'status'  => false,
                     'message' => 'Não foi anexar o arquivo.'
-                ], REST_Controller::HTTP_INTERNAL_ERROR);
+                ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -842,14 +844,23 @@ class OsController extends REST_Controller
                 'status'  => false,
                 'message' => 'Ocorreu um erro ao processar o arquivo.',
                 'result'  => $error
-            ], REST_Controller::HTTP_INTERNAL_ERROR);
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        $anexo = $this->Api_model->lastRow('anexos', 'idAnexos');
+
+        $retorno = [
+            'idAnexos' => $anexo->idAnexos,
+            'url' => $url,
+            'anexo' => $new_file_name,
+            'thumb' => 'thumb_'.$new_file_name
+        ];
         
         $this->log_app('Adicionou anexo(s) a uma OS. ID (OS): ' . $id);
         $this->response([
             'status'  => true,
             'message' => 'Arquivo anexado com sucesso!',
-            'result'  => ['url' => $url, 'anexo' => $new_file_name, 'thumb' => 'thumb_'.$new_file_name]
+            'result'  => $retorno
         ], REST_Controller::HTTP_CREATED);
     }
 
@@ -881,7 +892,7 @@ class OsController extends REST_Controller
         $this->response([
             'status'  => false,
             'message' => 'Erro ao tentar excluir anexo.'
-        ], REST_Controller::HTTP_INTERNAL_ERROR);
+        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     private function calcTotal($id)
@@ -904,7 +915,7 @@ class OsController extends REST_Controller
         }
 
         if($totalProdutos != 0 || $totalServicos != 0 ){
-            return $ordem->valor_desconto != 0 ? $ordem->valor_desconto : ($totalProdutos + $totalServicos);
+            return number_format(($ordem->valor_desconto != 0 ? $ordem->valor_desconto : ($totalProdutos + $totalServicos)), 2, '.');
         }
         
         return 0;
@@ -965,7 +976,7 @@ class OsController extends REST_Controller
     {
         if ($produtos = $this->os_model->getProdutos($id)) {
             $this->load->model('produtos_model');
-            if ($this->data['configuration']['control_estoque']) {
+            if ($this->getConfig('control_estoque')) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
                     log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade . '. Motivo: Cancelamento/Exclusão');
@@ -978,7 +989,7 @@ class OsController extends REST_Controller
     {
         if ($produtos = $this->os_model->getProdutos($id)) {
             $this->load->model('produtos_model');
-            if ($this->data['configuration']['control_estoque']) {
+            if ($this->getConfig('control_estoque')) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
                     log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' baixa do estoque. Quantidade: ' . $p->quantidade . '. Motivo: Mudou status que já estava Cancelado para outro');
@@ -1017,5 +1028,20 @@ class OsController extends REST_Controller
         $textoFinal = strip_tags($textoFinal);
 
         return $textoFinal;
+    }
+
+    public function isEditable($id = null)
+    {
+        if (!$this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            return false;
+        }
+        
+        if ($os = $this->os_model->getById($id)) {
+            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
+            if ($osT) {
+                return $this->getConfig('control_editos') == '1';
+            }
+        }
+        return true;
     }
 }
