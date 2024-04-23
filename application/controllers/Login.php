@@ -16,12 +16,13 @@ class Login extends CI_Controller
     public function sair()
     {
         $this->session->sess_destroy();
+
         return redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function verificarLogin()
     {
-        header('Access-Control-Allow-Origin: ' . base_url());
+        header('Access-Control-Allow-Origin: '.base_url());
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Max-Age: 1000');
         header('Access-Control-Allow-Headers: Content-Type');
@@ -43,7 +44,7 @@ class Login extends CI_Controller
                 if ($this->chk_date($user->dataExpiracao)) {
                     $json = ['result' => false, 'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'];
                     echo json_encode($json);
-                    die();
+                    exit();
                 }
 
                 // Verificar credenciais do usuário
@@ -62,13 +63,13 @@ class Login extends CI_Controller
                 echo json_encode($json);
             }
         }
-        die();
+        exit();
     }
 
     private function chk_date($data_banco)
     {
         $data_banco = new DateTime($data_banco);
-        $data_hoje = new DateTime("now");
+        $data_hoje = new DateTime('now');
 
         return $data_banco < $data_hoje;
     }

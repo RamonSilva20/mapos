@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -9,7 +11,7 @@ $config['payment_gateways'] = [
         'production' => isset($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION']) ? filter_var($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION'], FILTER_VALIDATE_BOOLEAN) : false,
         'credentials' => [
             'client_id' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'] ?? '',
-            'client_secret' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'] ?? ''
+            'client_secret' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'] ?? '',
         ],
         'timeout' => $_ENV['PAYMENT_GATEWAYS_EFI_TIMEOUT'] ?? 30,
         'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'] ?? 'P3D',
@@ -20,8 +22,8 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'new' => 'Cobrança / Assinatura gerada',
@@ -38,7 +40,7 @@ $config['payment_gateways'] = [
             'active' => 'Assinatura ativa Todas as cobranças estão sendo geradas',
             'finished' => 'Carnê está finalizado',
             'up_to_date' => 'Carnê encontra-se em dia',
-        ]
+        ],
     ],
     'MercadoPago' => [
         'name' => 'MercadoPago',
@@ -50,14 +52,14 @@ $config['payment_gateways'] = [
             'client_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'] ?? '',
             'integrator_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_INTEGRATOR_ID'] ?? '',
             'platform_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PLATFORM_ID'] ?? '',
-            'corporation_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CORPORATION_ID'] ?? ''
+            'corporation_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CORPORATION_ID'] ?? '',
         ],
         'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
                 'value' => 'boleto',
-            ]
+            ],
         ],
         'transaction_status' => [
             'pending' => 'O usuário ainda não concluiu o processo de pagamento',
@@ -68,8 +70,8 @@ $config['payment_gateways'] = [
             'rejected' => 'O pagamento foi rejeitado, o usuário pode tentar o pagamento novamente',
             'cancelled' => 'O pagamento foi cancelado por uma das partes ou porque o prazo para pagamento expirou',
             'refunded' => 'O pagamento foi reembolsado ao usuário',
-            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador'
-        ]
+            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador',
+        ],
     ],
     'Asaas' => [
         'name' => 'Asaas',
@@ -87,8 +89,8 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'PENDING' => 'Aguardando pagamento',
@@ -104,6 +106,6 @@ $config['payment_gateways'] = [
             'DUNNING_REQUESTED' => 'Em processo de recuperação',
             'DUNNING_RECEIVED' => 'Recuperada',
             'AWAITING_RISK_ANALYSIS' => 'Pagamento em análise',
-        ]
-    ]
+        ],
+    ],
 ];

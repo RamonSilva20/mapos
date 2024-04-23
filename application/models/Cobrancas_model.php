@@ -1,4 +1,6 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -7,9 +9,7 @@ class Cobrancas_model extends CI_Model
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     *
      */
-
     public function __construct()
     {
         parent::__construct();
@@ -26,7 +26,7 @@ class Cobrancas_model extends CI_Model
         }
 
         $query = $this->db->get();
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -59,6 +59,7 @@ class Cobrancas_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 

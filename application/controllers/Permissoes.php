@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -7,14 +9,12 @@ class Permissoes extends MY_Controller
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     *
      */
-
     public function __construct()
     {
         parent::__construct();
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
             redirect(base_url());
         }
@@ -41,6 +41,7 @@ class Permissoes extends MY_Controller
         $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/permissoes';
+
         return $this->layout();
     }
 
@@ -51,7 +52,7 @@ class Permissoes extends MY_Controller
 
         $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {
             $nomePermissao = $this->input->post('nome');
             $cadastro = date('Y-m-d');
@@ -143,6 +144,7 @@ class Permissoes extends MY_Controller
         }
 
         $this->data['view'] = 'permissoes/adicionarPermissao';
+
         return $this->layout();
     }
 
@@ -153,7 +155,7 @@ class Permissoes extends MY_Controller
 
         $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {
             $nomePermissao = $this->input->post('nome');
             $situacao = $this->input->post('situacao');
@@ -235,8 +237,8 @@ class Permissoes extends MY_Controller
 
             if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
                 $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
-                log_info('Alterou uma permissão. ID: ' . $this->input->post('idPermissao'));
-                redirect(site_url('permissoes/editar/') . $this->input->post('idPermissao'));
+                log_info('Alterou uma permissão. ID: '.$this->input->post('idPermissao'));
+                redirect(site_url('permissoes/editar/').$this->input->post('idPermissao'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
             }
@@ -245,13 +247,14 @@ class Permissoes extends MY_Controller
         $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/editarPermissao';
+
         return $this->layout();
     }
 
     public function desativar()
     {
         $id = $this->input->post('id');
-        if (!$id) {
+        if (! $id) {
             $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
             redirect(site_url('permissoes/gerenciar/'));
         }
@@ -259,7 +262,7 @@ class Permissoes extends MY_Controller
             'situacao' => false,
         ];
         if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $id)) {
-            log_info('Desativou uma permissão. ID: ' . $id);
+            log_info('Desativou uma permissão. ID: '.$id);
             $this->session->set_flashdata('success', 'Permissão desativada com sucesso!');
         } else {
             $this->session->set_flashdata('error', 'Erro ao desativar permissão!');

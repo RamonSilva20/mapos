@@ -7,9 +7,7 @@ class Os_model extends CI_Model
     /**
      * author: Ramon Silva
      * email: silva018-mg@yahoo.com.br
-     *
      */
-
     public function __construct()
     {
         parent::__construct();
@@ -17,7 +15,7 @@ class Os_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente');
+        $this->db->select($fields.',clientes.nomeCliente, clientes.celular as celular_cliente');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->limit($perpage, $start);
@@ -28,7 +26,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -50,7 +48,7 @@ class Os_model extends CI_Model
             }
         }
 
-        $this->db->select($fields . ',clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
+        $this->db->select($fields.',clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
@@ -87,7 +85,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -146,6 +144,7 @@ class Os_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 
@@ -189,7 +188,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -205,7 +204,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -222,7 +221,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'], 'id' => $row['idClientes']];
+                $row_set[] = ['label' => $row['nomeCliente'].' | Telefone: '.$row['telefone'].' | Celular: '.$row['celular'].' | Documento: '.$row['documento'], 'id' => $row['idClientes']];
             }
             echo json_encode($row_set);
         }
@@ -237,7 +236,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
+                $row_set[] = ['label' => $row['nome'].' | Telefone: '.$row['telefone'], 'id' => $row['idUsuarios']];
             }
             echo json_encode($row_set);
         }
@@ -265,7 +264,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('servicos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'], 'id' => $row['idServicos'], 'preco' => $row['preco']];
+                $row_set[] = ['label' => $row['nome'].' | Preço: R$ '.$row['preco'], 'id' => $row['idServicos'], 'preco' => $row['preco']];
             }
             echo json_encode($row_set);
         }
@@ -285,6 +284,7 @@ class Os_model extends CI_Model
     public function getAnexos($os)
     {
         $this->db->where('os_id', $os);
+
         return $this->db->get('anexos')->result();
     }
 
@@ -307,10 +307,11 @@ class Os_model extends CI_Model
 
     public function criarTextoWhats($textoBase, $troca)
     {
-        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}", "{EMITENTE}", "{TELEFONE_EMITENTE}", "{OBS_OS}", "{DEFEITO_OS}", "{LAUDO_OS}", "{DATA_FINAL}", "{DATA_INICIAL}", "{DATA_GARANTIA}"];
+        $procura = ['{CLIENTE_NOME}', '{NUMERO_OS}', '{STATUS_OS}', '{VALOR_OS}', '{DESCRI_PRODUTOS}', '{EMITENTE}', '{TELEFONE_EMITENTE}', '{OBS_OS}', '{DEFEITO_OS}', '{LAUDO_OS}', '{DATA_FINAL}', '{DATA_INICIAL}', '{DATA_GARANTIA}'];
         $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
+
         return $textoBase;
     }
 
@@ -339,15 +340,16 @@ class Os_model extends CI_Model
 
     public function isEditable($id = null)
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
             return false;
         }
         if ($os = $this->getById($id)) {
-            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
+            $osT = (int) ($os->status === 'Faturado' || $os->status === 'Cancelado' || $os->faturado == 1);
             if ($osT) {
                 return $this->data['configuration']['control_editos'] == '1';
             }
         }
+
         return true;
     }
 
@@ -367,7 +369,7 @@ class Os_model extends CI_Model
         $pix = (new StaticPayload())
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s OS %s", substr($emitente->nome, 0, 18), $id), true)
+            ->setDescription(sprintf('%s OS %s', substr($emitente->nome, 0, 18), $id), true)
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);

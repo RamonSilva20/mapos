@@ -10,6 +10,6 @@ class Migration_add_pix_key extends CI_Migration
 
     public function down()
     {
-        $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 11");
+        $this->db->query('DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 11');
     }
 }

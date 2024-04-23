@@ -1,26 +1,31 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Github_updater
 {
     const API_URL = 'https://api.github.com/repos/';
+
     const GITHUB_URL = 'https://github.com/';
+
     const GITHUB_UPDATER_CONFIG_FILE = 'application/config/github_updater.php';
+
     const CONFIG_FILE = 'application/config/config.php';
 
     public function __construct()
     {
-        $this->ci =& get_instance();
+        $this->ci = &get_instance();
         $this->ci->load->config('github_updater');
         ini_set('MAX_EXECUTION_TIME', '-1');
     }
 
     /**
-    * Checks if the current version is up to date
-    *
-    * @return bool true if there is an update and false otherwise
-    */
+     * Checks if the current version is up to date
+     *
+     * @return bool true if there is an update and false otherwise
+     */
     public function has_update()
     {
         $branches = json_decode(
@@ -33,7 +38,7 @@ class Github_updater
             })
         );
 
-        if (!$branchToUpdateFrom) {
+        if (! $branchToUpdateFrom) {
             throw new Exception('The branch to update from GitHub does not exist!');
         }
 
@@ -41,11 +46,11 @@ class Github_updater
     }
 
     /**
-    * If there is an update available get an array of all of the
-    * commit messages between the versions
-    *
-    * @return array of the messages or false if no update
-    */
+     * If there is an update available get an array of all of the
+     * commit messages between the versions
+     *
+     * @return array of the messages or false if no update
+     */
     public function get_update_comments()
     {
         $hash = $this->getCurrentCommitHash();
@@ -66,10 +71,10 @@ class Github_updater
     }
 
     /**
-    * Performs an update if one is available.
-    *
-    * @return bool true on success, false on failure
-    */
+     * Performs an update if one is available.
+     *
+     * @return bool true on success, false on failure
+     */
     public function update()
     {
         $hash = $this->getCurrentCommitHash();
@@ -83,7 +88,7 @@ class Github_updater
                 // Loop through the list of changed files for this commit
                 foreach ($files as $file) {
                     // If the file isn't in the ignored list then perform the update
-                    if (!$this->_is_ignored($file->filename)) {
+                    if (! $this->_is_ignored($file->filename)) {
                         // If the status is removed then delete the file
                         if ($file->status === 'removed') {
                             if (file_exists($file->filename)) {
@@ -91,7 +96,7 @@ class Github_updater
                             }
                         }
                         // Otherwise copy the file from the update.
-                        else {                            
+                        else {
                             copy($dir.'/'.$file->filename, $file->filename);
                         }
                     }
@@ -104,7 +109,7 @@ class Github_updater
                 }
 
                 if ($this->commandExists('composer')) {
-                    shell_exec("cd ../../ && composer install --no-dev");
+                    shell_exec('cd ../../ && composer install --no-dev');
                 }
 
                 // Update the current commit hash
@@ -138,7 +143,7 @@ class Github_updater
         $lines = file(self::GITHUB_UPDATER_CONFIG_FILE, FILE_IGNORE_NEW_LINES);
         $count = count($lines);
 
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $configline = '$config[\'current_commit\']';
 
             if (strstr($lines[$i], $configline)) {
@@ -160,7 +165,7 @@ class Github_updater
         $lines = file(self::CONFIG_FILE, FILE_IGNORE_NEW_LINES);
         $count = count($lines);
 
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $configline = '$config[\'app_version\']';
 
             if (strstr($lines[$i], $configline)) {
@@ -205,12 +210,12 @@ class Github_updater
     private function _connect($url)
     {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC) ;
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'User-Agent: Mapos'
+            'User-Agent: Mapos',
         ]);
 
         $response = curl_exec($ch);
@@ -225,10 +230,10 @@ class Github_updater
     }
 
     /**
-    * Get the latest commit hash of the branch that it needs to update from.
-    *
-    * @return string The branch to update from latest commit hash.
-    */
+     * Get the latest commit hash of the branch that it needs to update from.
+     *
+     * @return string The branch to update from latest commit hash.
+     */
     private function getCurrentCommitHash()
     {
         $branches = json_decode(
@@ -241,7 +246,7 @@ class Github_updater
             })
         );
 
-        if (!$branchToUpdateFrom) {
+        if (! $branchToUpdateFrom) {
             throw new Exception('The branch to update from GitHub does not exist!');
         }
 
@@ -249,10 +254,10 @@ class Github_updater
     }
 
     /**
-    * Get mapos current version.
-    *
-    * @return string Mapos current version.
-    */
+     * Get mapos current version.
+     *
+     * @return string Mapos current version.
+     */
     private function getCurrentVersion()
     {
         $latestRelease = json_decode(
@@ -261,19 +266,19 @@ class Github_updater
 
         $version = $latestRelease->tag_name;
 
-        if (!$version) {
+        if (! $version) {
             throw new Exception('Error getting mapos version from GitHub!');
         }
 
-        return str_replace("v", "", $version);
+        return str_replace('v', '', $version);
     }
 
     /**
-    * Determines if a command exists on the current environment
-    *
-    * @param string $command The command to check
-    * @return bool True if the command has been found ; otherwise, false.
-    */
+     * Determines if a command exists on the current environment
+     *
+     * @param  string  $command  The command to check
+     * @return bool True if the command has been found ; otherwise, false.
+     */
     private function commandExists($command)
     {
         $whereIsCommand = (PHP_OS == 'WINNT') ? 'where' : 'which';
@@ -281,9 +286,9 @@ class Github_updater
         $process = proc_open(
             "$whereIsCommand $command",
             [
-                0 => ["pipe", "r"], //STDIN
-                1 => ["pipe", "w"], //STDOUT
-                2 => ["pipe", "w"], //STDERR
+                0 => ['pipe', 'r'], //STDIN
+                1 => ['pipe', 'w'], //STDOUT
+                2 => ['pipe', 'w'], //STDERR
             ],
             $pipes
         );
@@ -303,11 +308,11 @@ class Github_updater
 
     private function deleteDirectory($dir)
     {
-        if (!file_exists($dir)) {
+        if (! file_exists($dir)) {
             return true;
         }
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return unlink($dir);
         }
 
@@ -316,7 +321,7 @@ class Github_updater
                 continue;
             }
 
-            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+            if (! $this->deleteDirectory($dir.DIRECTORY_SEPARATOR.$item)) {
                 return false;
             }
         }

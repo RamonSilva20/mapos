@@ -1,10 +1,12 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Migration_create_base extends CI_Migration
 {
     public function up()
     {
-        ## Create Table ci_sessions
+        //# Create Table ci_sessions
         $this->dbforge->add_field([
             'id' => [
                 'type' => 'VARCHAR',
@@ -28,16 +30,16 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->create_table("ci_sessions", true);
+        $this->dbforge->create_table('ci_sessions', true);
         $this->db->query('ALTER TABLE  `ci_sessions` ENGINE = InnoDB');
 
-        ## Create Table clientes
+        //# Create Table clientes
         $this->dbforge->add_field([
             'idClientes' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nomeCliente' => [
                 'type' => 'VARCHAR',
@@ -110,17 +112,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idClientes", true);
-        $this->dbforge->create_table("clientes", true);
+        $this->dbforge->add_key('idClientes', true);
+        $this->dbforge->create_table('clientes', true);
         $this->db->query('ALTER TABLE  `clientes` ENGINE = InnoDB');
 
-        ## Create Table categorias
+        //# Create Table categorias
         $this->dbforge->add_field([
             'idCategorias' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'categoria' => [
                 'type' => 'VARCHAR',
@@ -142,17 +144,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idCategorias", true);
-        $this->dbforge->create_table("categorias", true);
+        $this->dbforge->add_key('idCategorias', true);
+        $this->dbforge->create_table('categorias', true);
         $this->db->query('ALTER TABLE  `categorias` ENGINE = InnoDB');
 
-        ## Create Table contas
+        //# Create Table contas
         $this->dbforge->add_field([
             'idContas' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'conta' => [
                 'type' => 'VARCHAR',
@@ -189,17 +191,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idContas", true);
-        $this->dbforge->create_table("contas", true);
+        $this->dbforge->add_key('idContas', true);
+        $this->dbforge->create_table('contas', true);
         $this->db->query('ALTER TABLE  `contas` ENGINE = InnoDB');
 
-        ## Create Table lancamentos
+        //# Create Table lancamentos
         $this->dbforge->add_field([
             'idLancamentos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'descricao' => [
                 'type' => 'VARCHAR',
@@ -266,8 +268,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idLancamentos", true);
-        $this->dbforge->create_table("lancamentos", true);
+        $this->dbforge->add_key('idLancamentos', true);
+        $this->dbforge->create_table('lancamentos', true);
         $this->db->query('ALTER TABLE  `lancamentos` ENGINE = InnoDB');
         $this->db->query('ALTER TABLE  `lancamentos` ADD INDEX `fk_lancamentos_clientes1` (`clientes_id` ASC)');
         $this->db->query('ALTER TABLE  `lancamentos` ADD INDEX `fk_lancamentos_categorias1_idx` (`categorias_id` ASC)');
@@ -291,13 +293,13 @@ class Migration_create_base extends CI_Migration
 			ON UPDATE NO ACTION
 		');
 
-        ## Create Table permissoes
+        //# Create Table permissoes
         $this->dbforge->add_field([
             'idPermissao' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nome' => [
                 'type' => 'VARCHAR',
@@ -318,17 +320,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idPermissao", true);
-        $this->dbforge->create_table("permissoes", true);
+        $this->dbforge->add_key('idPermissao', true);
+        $this->dbforge->create_table('permissoes', true);
         $this->db->query('ALTER TABLE  `permissoes` ENGINE = InnoDB');
 
-        ## Create Table usuarios
+        //# Create Table usuarios
         $this->dbforge->add_field([
             'idUsuarios' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nome' => [
                 'type' => 'VARCHAR',
@@ -409,8 +411,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idUsuarios", true);
-        $this->dbforge->create_table("usuarios", true);
+        $this->dbforge->add_key('idUsuarios', true);
+        $this->dbforge->create_table('usuarios', true);
         $this->db->query('ALTER TABLE  `usuarios` ENGINE = InnoDB');
         $this->db->query('ALTER TABLE  `usuarios` ADD INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC)');
         $this->db->query('ALTER TABLE  `usuarios` ADD CONSTRAINT `fk_usuarios_permissoes1`
@@ -420,13 +422,13 @@ class Migration_create_base extends CI_Migration
 			ON UPDATE NO ACTION
 		');
 
-        ## Create Table garantias
+        //# Create Table garantias
         $this->dbforge->add_field([
             'idGarantias' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'dataGarantia' => [
                 'type' => 'DATE',
@@ -447,8 +449,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idGarantias", true);
-        $this->dbforge->create_table("garantias", true);
+        $this->dbforge->add_key('idGarantias', true);
+        $this->dbforge->create_table('garantias', true);
         $this->db->query('ALTER TABLE  `garantias` ADD INDEX `fk_garantias_usuarios1` (`usuarios_id` ASC)');
         $this->db->query('ALTER TABLE  `garantias` ADD CONSTRAINT `fk_garantias_usuarios1`
 			FOREIGN KEY (`usuarios_id`)
@@ -458,13 +460,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `garantias` ENGINE = InnoDB');
 
-        ## Create Table os
+        //# Create Table os
         $this->dbforge->add_field([
             'idOs' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'dataInicial' => [
                 'type' => 'DATE',
@@ -531,8 +533,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idOs", true);
-        $this->dbforge->create_table("os", true);
+        $this->dbforge->add_key('idOs', true);
+        $this->dbforge->create_table('os', true);
         $this->db->query('ALTER TABLE  `os` ADD INDEX `fk_os_clientes1` (`clientes_id` ASC)');
         $this->db->query('ALTER TABLE  `os` ADD INDEX `fk_os_usuarios1` (`usuarios_id` ASC)');
         $this->db->query('ALTER TABLE  `os` ADD INDEX `fk_os_lancamentos1` (`lancamento` ASC)');
@@ -557,13 +559,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `os` ENGINE = InnoDB');
 
-        ## Create Table produtos
+        //# Create Table produtos
         $this->dbforge->add_field([
             'idProdutos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'codDeBarra' => [
                 'type' => 'VARCHAR',
@@ -611,17 +613,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idProdutos", true);
-        $this->dbforge->create_table("produtos", true);
+        $this->dbforge->add_key('idProdutos', true);
+        $this->dbforge->create_table('produtos', true);
         $this->db->query('ALTER TABLE  `produtos` ENGINE = InnoDB');
 
-        ## Create Table produtos_os
+        //# Create Table produtos_os
         $this->dbforge->add_field([
             'idProdutos_os' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'quantidade' => [
                 'type' => 'INT',
@@ -654,8 +656,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idProdutos_os", true);
-        $this->dbforge->create_table("produtos_os", true);
+        $this->dbforge->add_key('idProdutos_os', true);
+        $this->dbforge->create_table('produtos_os', true);
         $this->db->query('ALTER TABLE  `produtos_os` ADD INDEX `fk_produtos_os_os1` (`os_id` ASC)');
         $this->db->query('ALTER TABLE  `produtos_os` ADD INDEX `fk_produtos_os_produtos1` (`produtos_id` ASC)');
         $this->db->query('ALTER TABLE  `produtos_os` ADD CONSTRAINT `fk_produtos_os_os1`
@@ -672,13 +674,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `produtos_os` ENGINE = InnoDB');
 
-        ## Create Table servicos
+        //# Create Table servicos
         $this->dbforge->add_field([
             'idServicos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nome' => [
                 'type' => 'VARCHAR',
@@ -696,17 +698,17 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idServicos", true);
-        $this->dbforge->create_table("servicos", true);
+        $this->dbforge->add_key('idServicos', true);
+        $this->dbforge->create_table('servicos', true);
         $this->db->query('ALTER TABLE  `servicos` ENGINE = InnoDB');
 
-        ## Create Table servicos_os
+        //# Create Table servicos_os
         $this->dbforge->add_field([
             'idServicos_os' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'servico' => [
                 'type' => 'VARCHAR',
@@ -738,8 +740,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idServicos_os", true);
-        $this->dbforge->create_table("servicos_os", true);
+        $this->dbforge->add_key('idServicos_os', true);
+        $this->dbforge->create_table('servicos_os', true);
         $this->db->query('ALTER TABLE  `servicos_os` ADD INDEX `fk_servicos_os_os1` (`os_id` ASC)');
         $this->db->query('ALTER TABLE  `servicos_os` ADD INDEX `fk_servicos_os_servicos1` (`servicos_id` ASC)');
         $this->db->query('ALTER TABLE  `servicos_os` ADD CONSTRAINT `fk_servicos_os_os1`
@@ -756,13 +758,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `servicos_os` ENGINE = InnoDB');
 
-        ## Create Table vendas
+        //# Create Table vendas
         $this->dbforge->add_field([
             'idVendas' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'dataVenda' => [
                 'type' => 'DATE',
@@ -799,8 +801,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idVendas", true);
-        $this->dbforge->create_table("vendas", true);
+        $this->dbforge->add_key('idVendas', true);
+        $this->dbforge->create_table('vendas', true);
         $this->db->query('ALTER TABLE  `vendas` ADD INDEX `fk_vendas_clientes1` (`clientes_id` ASC)');
         $this->db->query('ALTER TABLE  `vendas` ADD INDEX `fk_vendas_usuarios1` (`usuarios_id` ASC)');
         $this->db->query('ALTER TABLE  `vendas` ADD INDEX `fk_vendas_lancamentos1` (`lancamentos_id` ASC)');
@@ -824,13 +826,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `vendas` ENGINE = InnoDB');
 
-        ## Create Table itens_de_vendas
+        //# Create Table itens_de_vendas
         $this->dbforge->add_field([
             'idItens' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'subTotal' => [
                 'type' => 'VARCHAR',
@@ -858,8 +860,8 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idItens", true);
-        $this->dbforge->create_table("itens_de_vendas", true);
+        $this->dbforge->add_key('idItens', true);
+        $this->dbforge->create_table('itens_de_vendas', true);
         $this->db->query('ALTER TABLE  `itens_de_vendas` ADD INDEX `fk_itens_de_vendas_vendas1` (`vendas_id` ASC)');
         $this->db->query('ALTER TABLE  `itens_de_vendas` ADD INDEX `fk_itens_de_vendas_produtos1` (`produtos_id` ASC)');
         $this->db->query('ALTER TABLE  `itens_de_vendas` ADD CONSTRAINT `fk_itens_de_vendas_vendas1`
@@ -876,13 +878,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `itens_de_vendas` ENGINE = InnoDB');
 
-        ## Create Table anexos
+        //# Create Table anexos
         $this->dbforge->add_field([
             'idAnexos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'anexo' => [
                 'type' => 'VARCHAR',
@@ -910,8 +912,8 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idAnexos", true);
-        $this->dbforge->create_table("anexos", true);
+        $this->dbforge->add_key('idAnexos', true);
+        $this->dbforge->create_table('anexos', true);
         $this->db->query('ALTER TABLE  `anexos` ADD INDEX `fk_anexos_os1` (`os_id` ASC)');
         $this->db->query('ALTER TABLE  `anexos` ADD CONSTRAINT `fk_anexos_os1`
 			FOREIGN KEY (`os_id`)
@@ -921,13 +923,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `anexos` ENGINE = InnoDB');
 
-        ## Create Table documentos
+        //# Create Table documentos
         $this->dbforge->add_field([
             'idDocumentos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'documento' => [
                 'type' => 'VARCHAR',
@@ -973,17 +975,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idDocumentos", true);
-        $this->dbforge->create_table("documentos", true);
+        $this->dbforge->add_key('idDocumentos', true);
+        $this->dbforge->create_table('documentos', true);
         $this->db->query('ALTER TABLE  `documentos` ENGINE = InnoDB');
 
-        ## Create Table marcas
+        //# Create Table marcas
         $this->dbforge->add_field([
             'idMarcas' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'marca' => [
                 'type' => 'VARCHAR',
@@ -1000,17 +1002,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idMarcas", true);
-        $this->dbforge->create_table("marcas", true);
+        $this->dbforge->add_key('idMarcas', true);
+        $this->dbforge->create_table('marcas', true);
         $this->db->query('ALTER TABLE  `marcas` ENGINE = InnoDB');
 
-        ## Create Table equipamentos
+        //# Create Table equipamentos
         $this->dbforge->add_field([
             'idEquipamentos' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'equipamento' => [
                 'type' => 'VARCHAR',
@@ -1067,8 +1069,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idEquipamentos", true);
-        $this->dbforge->create_table("equipamentos", true);
+        $this->dbforge->add_key('idEquipamentos', true);
+        $this->dbforge->create_table('equipamentos', true);
         $this->db->query('ALTER TABLE  `equipamentos` ADD INDEX `fk_equipanentos_marcas1_idx` (`marcas_id` ASC)');
         $this->db->query('ALTER TABLE  `equipamentos` ADD INDEX `fk_equipanentos_clientes1_idx` (`clientes_id` ASC)');
         $this->db->query('ALTER TABLE  `equipamentos` ADD CONSTRAINT `fk_equipanentos_marcas1`
@@ -1085,13 +1087,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `equipamentos` ENGINE = InnoDB');
 
-        ## Create Table equipamentos_os
+        //# Create Table equipamentos_os
         $this->dbforge->add_field([
             'idEquipamentos_os' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'defeito_declarado' => [
                 'type' => 'VARCHAR',
@@ -1119,8 +1121,8 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idEquipamentos_os", true);
-        $this->dbforge->create_table("equipamentos_os", true);
+        $this->dbforge->add_key('idEquipamentos_os', true);
+        $this->dbforge->create_table('equipamentos_os', true);
         $this->db->query('ALTER TABLE  `equipamentos_os` ADD INDEX `fk_equipamentos_os_equipanentos1_idx` (`equipamentos_id` ASC)');
         $this->db->query('ALTER TABLE  `equipamentos_os` ADD INDEX `fk_equipamentos_os_os1_idx` (`os_id` ASC)');
         $this->db->query('ALTER TABLE  `equipamentos_os` ADD CONSTRAINT `fk_equipamentos_os_equipanentos1`
@@ -1137,13 +1139,13 @@ class Migration_create_base extends CI_Migration
 		');
         $this->db->query('ALTER TABLE  `equipamentos_os` ENGINE = InnoDB');
 
-        ## Create Table logs
+        //# Create Table logs
         $this->dbforge->add_field([
             'idLogs' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'usuario' => [
                 'type' => 'VARCHAR',
@@ -1169,17 +1171,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("idLogs", true);
-        $this->dbforge->create_table("logs", true);
+        $this->dbforge->add_key('idLogs', true);
+        $this->dbforge->create_table('logs', true);
         $this->db->query('ALTER TABLE  `logs` ENGINE = InnoDB');
 
-        ## Create Table emitente
+        //# Create Table emitente
         $this->dbforge->add_field([
             'id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nome' => [
                 'type' => 'VARCHAR',
@@ -1237,17 +1239,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("id", true);
-        $this->dbforge->create_table("emitente", true);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('emitente', true);
         $this->db->query('ALTER TABLE  `emitente` ENGINE = InnoDB');
 
-        ## Create Table email_queue
+        //# Create Table email_queue
         $this->dbforge->add_field([
             'id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'to' => [
                 'type' => 'VARCHAR',
@@ -1281,17 +1283,17 @@ class Migration_create_base extends CI_Migration
                 'null' => true,
             ],
         ]);
-        $this->dbforge->add_key("id", true);
-        $this->dbforge->create_table("email_queue", true);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('email_queue', true);
         $this->db->query('ALTER TABLE  `email_queue` ENGINE = InnoDB');
 
-        ## Create Table anotacoes_os
+        //# Create Table anotacoes_os
         $this->dbforge->add_field([
             'idAnotacoes' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'anotacao' => [
                 'type' => 'VARCHAR',
@@ -1308,17 +1310,17 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idAnotacoes", true);
-        $this->dbforge->create_table("anotacoes_os", true);
+        $this->dbforge->add_key('idAnotacoes', true);
+        $this->dbforge->create_table('anotacoes_os', true);
         $this->db->query('ALTER TABLE `anotacoes_os` ENGINE = InnoDB');
 
-        ## Create Table configuracoes
+        //# Create Table configuracoes
         $this->dbforge->add_field([
             'idConfig' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'config' => [
                 'type' => 'VARCHAR',
@@ -1331,20 +1333,18 @@ class Migration_create_base extends CI_Migration
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idConfig", true);
-        $this->dbforge->create_table("configuracoes", true);
+        $this->dbforge->add_key('idConfig', true);
+        $this->dbforge->create_table('configuracoes', true);
         $this->db->query('ALTER TABLE `configuracoes` ADD CONSTRAINT `unique_valor` UNIQUE (`config`)');
         $this->db->query('ALTER TABLE `configuracoes` ENGINE = InnoDB');
 
-
-
-        ## Create Table anotacoes_os
+        //# Create Table anotacoes_os
         $this->dbforge->add_field([
             'idPag' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => false,
-                'auto_increment' => true
+                'auto_increment' => true,
             ],
             'nome' => [
                 'type' => 'VARCHAR',
@@ -1371,95 +1371,95 @@ class Migration_create_base extends CI_Migration
                 'constraint' => 200,
                 'null' => false,
             ],
-            
+
             'default_pag' => [
                 'type' => 'INT',
                 'null' => false,
             ],
         ]);
-        $this->dbforge->add_key("idPag", true);
-        $this->dbforge->create_table("pagamento", true);
+        $this->dbforge->add_key('idPag', true);
+        $this->dbforge->create_table('pagamento', true);
         $this->db->query('ALTER TABLE `pagamento` ENGINE = InnoDB');
     }
 
     public function down()
     {
-        ### Drop table configuracoes ##
-        $this->dbforge->drop_table("configuracoes", true);
+        //## Drop table configuracoes ##
+        $this->dbforge->drop_table('configuracoes', true);
 
-        ### Drop table anotacoes_os ##
-        $this->dbforge->drop_table("anotacoes_os", true);
+        //## Drop table anotacoes_os ##
+        $this->dbforge->drop_table('anotacoes_os', true);
 
-        ### Drop table email_queue ##
-        $this->dbforge->drop_table("email_queue", true);
+        //## Drop table email_queue ##
+        $this->dbforge->drop_table('email_queue', true);
 
-        ### Drop table emitente ##
-        $this->dbforge->drop_table("emitente", true);
+        //## Drop table emitente ##
+        $this->dbforge->drop_table('emitente', true);
 
-        ### Drop table logs ##
-        $this->dbforge->drop_table("logs", true);
+        //## Drop table logs ##
+        $this->dbforge->drop_table('logs', true);
 
-        ### Drop table equipamentos_os ##
-        $this->dbforge->drop_table("equipamentos_os", true);
+        //## Drop table equipamentos_os ##
+        $this->dbforge->drop_table('equipamentos_os', true);
 
-        ### Drop table equipamentos ##
-        $this->dbforge->drop_table("equipamentos", true);
+        //## Drop table equipamentos ##
+        $this->dbforge->drop_table('equipamentos', true);
 
-        ### Drop table marcas ##
-        $this->dbforge->drop_table("marcas", true);
+        //## Drop table marcas ##
+        $this->dbforge->drop_table('marcas', true);
 
-        ### Drop table documentos ##
-        $this->dbforge->drop_table("documentos", true);
+        //## Drop table documentos ##
+        $this->dbforge->drop_table('documentos', true);
 
-        ### Drop table anexos ##
-        $this->dbforge->drop_table("anexos", true);
+        //## Drop table anexos ##
+        $this->dbforge->drop_table('anexos', true);
 
-        ### Drop table itens_de_vendas ##
-        $this->dbforge->drop_table("itens_de_vendas", true);
+        //## Drop table itens_de_vendas ##
+        $this->dbforge->drop_table('itens_de_vendas', true);
 
-        ### Drop table vendas ##
-        $this->dbforge->drop_table("vendas", true);
+        //## Drop table vendas ##
+        $this->dbforge->drop_table('vendas', true);
 
-        ### Drop table servicos_os ##
-        $this->dbforge->drop_table("servicos_os", true);
+        //## Drop table servicos_os ##
+        $this->dbforge->drop_table('servicos_os', true);
 
-        ### Drop table servicos ##
-        $this->dbforge->drop_table("servicos", true);
+        //## Drop table servicos ##
+        $this->dbforge->drop_table('servicos', true);
 
-        ### Drop table produtos_os ##
-        $this->dbforge->drop_table("produtos_os", true);
+        //## Drop table produtos_os ##
+        $this->dbforge->drop_table('produtos_os', true);
 
-        ### Drop table produtos ##
-        $this->dbforge->drop_table("produtos", true);
+        //## Drop table produtos ##
+        $this->dbforge->drop_table('produtos', true);
 
-        ### Drop table os ##
-        $this->dbforge->drop_table("os", true);
+        //## Drop table os ##
+        $this->dbforge->drop_table('os', true);
 
-        ### Drop table garantias ##
-        $this->dbforge->drop_table("garantias", true);
+        //## Drop table garantias ##
+        $this->dbforge->drop_table('garantias', true);
 
-        ### Drop table usuarios ##
-        $this->dbforge->drop_table("usuarios", true);
+        //## Drop table usuarios ##
+        $this->dbforge->drop_table('usuarios', true);
 
-        ### Drop table permissoes ##
-        $this->dbforge->drop_table("permissoes", true);
+        //## Drop table permissoes ##
+        $this->dbforge->drop_table('permissoes', true);
 
-        ### Drop table lancamentos ##
-        $this->dbforge->drop_table("lancamentos", true);
+        //## Drop table lancamentos ##
+        $this->dbforge->drop_table('lancamentos', true);
 
-        ### Drop table contas ##
-        $this->dbforge->drop_table("contas", true);
+        //## Drop table contas ##
+        $this->dbforge->drop_table('contas', true);
 
-        ### Drop table clientes ##
-        $this->dbforge->drop_table("categorias", true);
+        //## Drop table clientes ##
+        $this->dbforge->drop_table('categorias', true);
 
-        ### Drop table clientes ##
-        $this->dbforge->drop_table("clientes", true);
+        //## Drop table clientes ##
+        $this->dbforge->drop_table('clientes', true);
 
-        ### Drop table ci_sessions ##
-        $this->dbforge->drop_table("ci_sessions", true);
+        //## Drop table ci_sessions ##
+        $this->dbforge->drop_table('ci_sessions', true);
 
-        ### Drop table pagamento ##
-        $this->dbforge->drop_table("pagamento", true);
+        //## Drop table pagamento ##
+        $this->dbforge->drop_table('pagamento', true);
     }
 }

@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -7,9 +9,7 @@ class Garantias extends MY_Controller
     /**
      * author: Wilmerson Felipe
      * email: will.phelipe@gmail.com
-     *
      */
-
     public function __construct()
     {
         parent::__construct();
@@ -26,7 +26,7 @@ class Garantias extends MY_Controller
 
     public function gerenciar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar Termo de Garantia.');
             redirect(base_url());
         }
@@ -41,12 +41,13 @@ class Garantias extends MY_Controller
         $this->data['results'] = $this->garantias_model->get('garantias', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'garantias/garantias';
+
         return $this->layout();
     }
 
     public function adicionar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar Termo de Garantia.');
             redirect(base_url());
         }
@@ -67,24 +68,25 @@ class Garantias extends MY_Controller
             if (is_numeric($id = $this->garantias_model->add('garantias', $data, true))) {
                 log_info('Adicionou uma garantia');
                 $this->session->set_flashdata('success', 'Termo de Garantia adicionado com sucesso.');
-                redirect(site_url('garantias/editar/') . $id);
+                redirect(site_url('garantias/editar/').$id);
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
 
         $this->data['view'] = 'garantias/adicionarGarantia';
+
         return $this->layout();
     }
 
     public function editar()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar termo de garantia');
             redirect(base_url());
         }
@@ -93,7 +95,7 @@ class Garantias extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('garantias') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
         } else {
             $data = [
                 'textoGarantia' => $this->input->post('textoGarantia'),
@@ -102,8 +104,8 @@ class Garantias extends MY_Controller
 
             if ($this->garantias_model->edit('garantias', $data, 'idGarantias', $this->input->post('idGarantias')) == true) {
                 $this->session->set_flashdata('success', 'Termo de garantia editada com sucesso!');
-                log_info('Alterou uma garantia. ID: ' . $this->input->post('idGarantias'));
-                redirect(site_url('garantias/editar/') . $this->input->post('idGarantias'));
+                log_info('Alterou uma garantia. ID: '.$this->input->post('idGarantias'));
+                redirect(site_url('garantias/editar/').$this->input->post('idGarantias'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -111,17 +113,18 @@ class Garantias extends MY_Controller
 
         $this->data['result'] = $this->garantias_model->getById($this->uri->segment(3));
         $this->data['view'] = 'garantias/editarGarantia';
+
         return $this->layout();
     }
 
     public function visualizar()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar o termo de garantia.');
             redirect(base_url());
         }
@@ -132,17 +135,18 @@ class Garantias extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->data['view'] = 'garantias/visualizarGarantia';
+
         return $this->layout();
     }
 
     public function imprimir()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para imprimir o Termo de Garantia.');
             redirect(base_url());
         }
@@ -157,12 +161,12 @@ class Garantias extends MY_Controller
 
     public function imprimirGarantiaOs()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para imprimir o Termo de Garantia.');
             redirect(base_url());
         }
@@ -177,7 +181,7 @@ class Garantias extends MY_Controller
 
     public function excluir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dGarantia')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dGarantia')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir termo de garantia');
             redirect(base_url());
         }
@@ -185,13 +189,13 @@ class Garantias extends MY_Controller
         $id = $this->input->post('idGarantias');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir termo de garantia.');
-            redirect(base_url() . 'index.php/garantias/gerenciar/');
+            redirect(base_url().'index.php/garantias/gerenciar/');
         }
 
         if ($this->garantias_model->delete('garantias', 'idGarantias', $id) == true) {
             $this->garantias_model->delete('garantias', 'idGarantias', $id);
             $this->session->set_flashdata('success', 'Termo de garantia excluída com sucesso!');
-            log_info('Removeu uma garantia. ID: ' . $id);
+            log_info('Removeu uma garantia. ID: '.$id);
         } else {
             $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia.<br />Verifique se tem alguma OS vinculada a esse termo e remova antes de tentar excluir novamente.');
         }

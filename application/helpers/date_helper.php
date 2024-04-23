@@ -9,7 +9,7 @@ function dateInterval($startDate, $finalDate)
     $obj_data->setTime(0, 0, 0);
 
     // Realizar a soma de dias
-    $intervalo = new DateInterval('P' . intval($finalDate) . 'D');
+    $intervalo = new DateInterval('P'.intval($finalDate).'D');
     $obj_data->add($intervalo);
 
     // Formatar a data obtida
