@@ -95,6 +95,10 @@ if (!empty($_POST)) {
     $env_file = str_replace('enter_encryption_key', $encryption_key, $env_file);
     $env_file = str_replace('enter_baseurl', $base_url, $env_file);
 
+    // set random enter_jwt_key
+    $env_file = str_replace('enter_jwt_key', base64_encode(openssl_random_pseudo_bytes(32)), $env_file);
+    $env_file = str_replace('token_expire_time', $_POST["token_expire_time"], $env_file);
+
     // set the environment = production
     $env_file = str_replace('pre_installation', 'production', $env_file);
 
