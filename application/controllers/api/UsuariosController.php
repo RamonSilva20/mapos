@@ -272,7 +272,7 @@ class UsuariosController extends REST_Controller
             if ($this->chk_date($user->dataExpiracao)) {
                 $this->response([
                     'status'  => false,
-                    'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'
+                    'message' => 'Os dados de acesso estão incorretos!'
                 ], REST_Controller::HTTP_UNAUTHORIZED);
             }
 
@@ -308,7 +308,7 @@ class UsuariosController extends REST_Controller
         
         $this->response([
             'status'  => false,
-            'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas!'
+            'message' => 'Os dados de acesso estão incorretos!'
         ], REST_Controller::HTTP_UNAUTHORIZED);
     }
 

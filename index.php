@@ -54,10 +54,15 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+$composerAutoloadFile = __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composerAutoloadFile)) {
+    require_once $composerAutoloadFile;
+} else {
+    throw new \Exception('Arquivo autoload não encontrado, necessário executar composer install!');
+}
 
 $envFile = __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env';
-if (file_exists($envFile)) {
+if (file_exists($envFile) && file_exists($composerAutoloadFile)) {
     $envFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'application';
     $dotenv = Dotenv\Dotenv::createImmutable($envFilePath);
     $dotenv->load();
