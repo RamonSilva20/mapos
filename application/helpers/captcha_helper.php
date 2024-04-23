@@ -119,7 +119,7 @@ if (! function_exists('create_captcha')) {
         while ($filename = @readdir($current_dir)) {
             if (in_array(substr($filename, -4), ['.jpg', '.png'])
                 && (str_replace(['.jpg', '.png'], '', $filename) + $expiration) < $now) {
-                @unlink($img_path.$filename);
+                @unlink($img_path . $filename);
             }
         }
 
@@ -294,19 +294,19 @@ if (! function_exists('create_captcha')) {
         // -----------------------------------
         //  Generate the image
         // -----------------------------------
-        $img_url = rtrim($img_url, '/').'/';
+        $img_url = rtrim($img_url, '/') . '/';
 
         if (function_exists('imagejpeg')) {
-            $img_filename = $now.'.jpg';
-            imagejpeg($im, $img_path.$img_filename);
+            $img_filename = $now . '.jpg';
+            imagejpeg($im, $img_path . $img_filename);
         } elseif (function_exists('imagepng')) {
-            $img_filename = $now.'.png';
-            imagepng($im, $img_path.$img_filename);
+            $img_filename = $now . '.png';
+            imagepng($im, $img_path . $img_filename);
         } else {
             return false;
         }
 
-        $img = '<img '.($img_id === '' ? '' : 'id="'.$img_id.'"').' src="'.$img_url.$img_filename.'" style="width: '.$img_width.'px; height: '.$img_height.'px; border: 0;" alt=" " />';
+        $img = '<img ' . ($img_id === '' ? '' : 'id="' . $img_id . '"') . ' src="' . $img_url . $img_filename . '" style="width: ' . $img_width . 'px; height: ' . $img_height . 'px; border: 0;" alt=" " />';
         imagedestroy($im);
 
         return ['word' => $word, 'time' => $now, 'image' => $img, 'filename' => $img_filename];

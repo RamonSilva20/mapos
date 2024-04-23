@@ -2,23 +2,14 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-/**
- * Classe de Usuário.
- *
- * @extends REST_Controller
- */
-require APPPATH.'/libraries/REST_Controller.php';
+require APPPATH . '/libraries/REST_Controller.php';
 
 class UsuariosController extends REST_Controller
 {
-    /**
-     * __construct function.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
+
         $this->load->library('Authorization_Token');
         $this->load->model('Mapos_model');
         $this->load->model('usuarios_model');
@@ -199,7 +190,7 @@ class UsuariosController extends REST_Controller
         }
 
         if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id) == true) {
-            $this->log_app('Alterou um usuário. ID: '.$id);
+            $this->log_app('Alterou um usuário. ID: ' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Cliente editado com sucesso!',
@@ -232,7 +223,7 @@ class UsuariosController extends REST_Controller
 
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $id);
 
-        $this->log_app('Removeu um usuário. ID: '.$id);
+        $this->log_app('Removeu um usuário. ID: ' . $id);
 
         $this->response([
             'status' => true,
@@ -277,7 +268,7 @@ class UsuariosController extends REST_Controller
             // Verificar credenciais do usuário
             if (password_verify($password, $user->senha)) {
                 $this->log_app('Efetuou login no sistema', $user->nome);
-                $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = '.$user->permissoes_id, 1, true);
+                $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true);
                 $permissoes = unserialize($permissoes['permissoes']);
 
                 $token_data = [
@@ -328,7 +319,7 @@ class UsuariosController extends REST_Controller
                     'permissao' => $user->permissoes_id,
                 ];
 
-                $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = '.$user->permissoes_id, 1, true);
+                $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true);
                 $permissoes = unserialize($permissoes['permissoes']);
 
                 $result = [
@@ -358,7 +349,7 @@ class UsuariosController extends REST_Controller
     public function conta_get()
     {
         $usuarioLogado = $this->logged_user();
-        $usuarioLogado->usuario->url_image_user = ! is_null($usuarioLogado->usuario->url_image_user) ? base_url().'assets/userImage/'.$usuarioLogado->usuario->url_image_user : null;
+        $usuarioLogado->usuario->url_image_user = ! is_null($usuarioLogado->usuario->url_image_user) ? base_url() . 'assets/userImage/' . $usuarioLogado->usuario->url_image_user : null;
         unset($usuarioLogado->usuario->senha);
 
         $this->response([

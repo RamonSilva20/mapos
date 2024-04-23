@@ -93,10 +93,10 @@ class Format
 
         // If the provided data is already formatted we should probably convert it to an array
         if ($from_type !== null) {
-            if (method_exists($this, '_from_'.$from_type)) {
-                $data = call_user_func([$this, '_from_'.$from_type], $data);
+            if (method_exists($this, '_from_' . $from_type)) {
+                $data = call_user_func([$this, '_from_' . $from_type], $data);
             } else {
-                throw new Exception('Format class does not support conversion from "'.$from_type.'".');
+                throw new Exception('Format class does not support conversion from "' . $from_type . '".');
             }
         }
 
@@ -375,12 +375,12 @@ class Format
         // We only honour a jsonp callback which are valid javascript identifiers
         elseif (preg_match('/^[a-z_\$][a-z0-9\$_]*(\.[a-z_\$][a-z0-9\$_]*)*$/i', $callback)) {
             // Return the data as encoded json with a callback
-            return $callback.'('.json_encode($data, JSON_UNESCAPED_UNICODE).');';
+            return $callback . '(' . json_encode($data, JSON_UNESCAPED_UNICODE) . ');';
         }
 
         // An invalid jsonp callback function provided.
         // Though I don't believe this should be hardcoded here
-        $data['warning'] = 'INVALID JSONP CALLBACK: '.$callback;
+        $data['warning'] = 'INVALID JSONP CALLBACK: ' . $callback;
 
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }

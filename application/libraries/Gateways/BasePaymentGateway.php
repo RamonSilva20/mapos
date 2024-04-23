@@ -46,7 +46,7 @@ abstract class BasePaymentGateway implements PaymentGateway
         foreach ($entity as $key => $value) {
             if (in_array($key, $list)) {
                 if ((empty($value) || strlen($value) < 2) && ! is_numeric($value)) {
-                    $error_list .= '-'.$key."\n";
+                    $error_list .= '-' . $key . "\n";
                     $check = true;
                 }
             }

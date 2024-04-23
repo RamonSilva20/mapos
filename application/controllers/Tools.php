@@ -39,7 +39,7 @@ class Tools extends CI_Controller
 
     public function message($to = 'World')
     {
-        echo "Hello {$to}!".PHP_EOL;
+        echo "Hello {$to}!" . PHP_EOL;
     }
 
     public function help()
@@ -50,7 +50,7 @@ class Tools extends CI_Controller
         $result .= "php index.php tools seeder \"file_name\"            Creates a new seed file.\n";
         $result .= "php index.php tools seed \"file_name\"              Run the specified seed file.\n";
 
-        echo $result.PHP_EOL;
+        echo $result . PHP_EOL;
     }
 
     public function migration($name)
@@ -66,7 +66,7 @@ class Tools extends CI_Controller
             if ($this->migration->version($version) === false) {
                 show_error($this->migration->error_string());
             } else {
-                echo 'Migrations run successfully'.PHP_EOL;
+                echo 'Migrations run successfully' . PHP_EOL;
             }
 
             return;
@@ -75,7 +75,7 @@ class Tools extends CI_Controller
         if ($this->migration->latest() === false) {
             show_error($this->migration->error_string());
         } else {
-            echo 'Migrations run successfully'.PHP_EOL;
+            echo 'Migrations run successfully' . PHP_EOL;
         }
     }
 
@@ -89,7 +89,7 @@ class Tools extends CI_Controller
         if ($name) {
             $this->seeder->call($name);
 
-            echo 'Seeds run successfully'.PHP_EOL;
+            echo 'Seeds run successfully' . PHP_EOL;
 
             return;
         }
@@ -104,7 +104,7 @@ class Tools extends CI_Controller
             $this->seeder->call($seed);
         }
 
-        echo 'Seeds run successfully'.PHP_EOL;
+        echo 'Seeds run successfully' . PHP_EOL;
     }
 
     protected function make_migration_file($name)
@@ -112,11 +112,11 @@ class Tools extends CI_Controller
         $date = new DateTime();
         $timestamp = $date->format('YmdHis');
 
-        $path = APPPATH."database/migrations/$timestamp".'_'."$name.php";
+        $path = APPPATH . "database/migrations/$timestamp" . '_' . "$name.php";
 
         $my_migration = fopen($path, 'w') or exit('Unable to create migration file!');
 
-        $migration_stub_path = APPPATH.'database/stubs/migration.stub';
+        $migration_stub_path = APPPATH . 'database/stubs/migration.stub';
 
         $migration_stub = file_get_contents($migration_stub_path) or exit('Unable to open migration stub!');
 
@@ -126,18 +126,18 @@ class Tools extends CI_Controller
 
         fclose($my_migration);
 
-        echo "$path migration has successfully been created.".PHP_EOL;
+        echo "$path migration has successfully been created." . PHP_EOL;
     }
 
     protected function make_seed_file($name)
     {
         $className = ucfirst($name);
 
-        $path = APPPATH."database/seeds/$className.php";
+        $path = APPPATH . "database/seeds/$className.php";
 
         $my_seed = fopen($path, 'w') or exit('Unable to create seed file!');
 
-        $seed_stub_path = APPPATH.'database/stubs/seed.stub';
+        $seed_stub_path = APPPATH . 'database/stubs/seed.stub';
 
         $seed_stub = file_get_contents($seed_stub_path) or exit('Unable to open seed stub!');
 
@@ -147,6 +147,6 @@ class Tools extends CI_Controller
 
         fclose($my_seed);
 
-        echo "$path seeder has successfully been created.".PHP_EOL;
+        echo "$path seeder has successfully been created." . PHP_EOL;
     }
 }

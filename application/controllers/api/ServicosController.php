@@ -4,7 +4,7 @@ if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-require APPPATH.'libraries/REST_Controller.php';
+require APPPATH . 'libraries/REST_Controller.php';
 
 class ServicosController extends REST_Controller
 {
@@ -172,7 +172,7 @@ class ServicosController extends REST_Controller
         $this->servicos_model->delete('servicos_os', 'servicos_id', $id);
 
         if ($this->servicos_model->delete('servicos', 'idServicos', $id) == true) {
-            $this->log_app('Removeu um Serviço. ID'.$id);
+            $this->log_app('Removeu um Serviço. ID' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Serviço excluído com sucesso!',

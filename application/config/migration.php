@@ -81,4 +81,4 @@ $config['migration_version'] = '';
 | Also, writing permission is required within the migrations path.
 |
 */
-$config['migration_path'] = APPPATH.'database/migrations/';
+$config['migration_path'] = APPPATH . 'database/migrations/';

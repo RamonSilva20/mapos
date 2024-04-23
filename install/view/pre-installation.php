@@ -110,7 +110,7 @@
                 <?php echo $value; ?>
               </td>
               <td class="text-center">
-                <?php if (is_writable('..'.$value)) { ?>
+                <?php if (is_writable('..' . $value)) { ?>
                   <i class="status fa fa-check-circle-o"></i>
                   <?php
                 } else {

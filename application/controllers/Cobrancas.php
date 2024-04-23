@@ -116,7 +116,7 @@ class Cobrancas extends MY_Controller
             $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
 
             if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
-                log_info('Removeu uma cobrança. ID'.$this->input->post('excluir_id'));
+                log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
                 $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';

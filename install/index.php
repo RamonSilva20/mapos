@@ -1,6 +1,6 @@
 <?php
 
-$settings_file = __DIR__.DIRECTORY_SEPARATOR.'settings.json';
+$settings_file = __DIR__ . DIRECTORY_SEPARATOR . 'settings.json';
 
 if (! file_exists($settings_file)) {
     exit('Arquivo de configuração não encontrado!');
@@ -39,17 +39,17 @@ foreach ($settings['extensions'] as $value) {
 }
 
 foreach ($settings['writeable_directories'] as $value) {
-    if (! is_writable('..'.$value)) {
+    if (! is_writable('..' . $value)) {
         $all_requirement_success = false;
     }
 }
 
-$dashboard_url = $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'];
+$dashboard_url = $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
 $dashboard_url = preg_replace('/install.*/', '', $dashboard_url); //remove everything after index.php
 if (! empty($_SERVER['HTTPS'])) {
-    $dashboard_url = 'https://'.$dashboard_url;
+    $dashboard_url = 'https://' . $dashboard_url;
 } else {
-    $dashboard_url = 'http://'.$dashboard_url;
+    $dashboard_url = 'http://' . $dashboard_url;
 }
 
 /*
@@ -58,7 +58,7 @@ if (! empty($_SERVER['HTTPS'])) {
  */
 $db_file_path = '../application/config/database.php';
 $db_file = file_get_contents($db_file_path);
-$is_installed = file_exists('..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'.env');
+$is_installed = file_exists('..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env');
 
 $installed = null;
 if ($is_installed) {

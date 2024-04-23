@@ -68,7 +68,7 @@ class Garantias extends MY_Controller
             if (is_numeric($id = $this->garantias_model->add('garantias', $data, true))) {
                 log_info('Adicionou uma garantia');
                 $this->session->set_flashdata('success', 'Termo de Garantia adicionado com sucesso.');
-                redirect(site_url('garantias/editar/').$id);
+                redirect(site_url('garantias/editar/') . $id);
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
@@ -95,7 +95,7 @@ class Garantias extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('garantias') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
                 'textoGarantia' => $this->input->post('textoGarantia'),
@@ -104,8 +104,8 @@ class Garantias extends MY_Controller
 
             if ($this->garantias_model->edit('garantias', $data, 'idGarantias', $this->input->post('idGarantias')) == true) {
                 $this->session->set_flashdata('success', 'Termo de garantia editada com sucesso!');
-                log_info('Alterou uma garantia. ID: '.$this->input->post('idGarantias'));
-                redirect(site_url('garantias/editar/').$this->input->post('idGarantias'));
+                log_info('Alterou uma garantia. ID: ' . $this->input->post('idGarantias'));
+                redirect(site_url('garantias/editar/') . $this->input->post('idGarantias'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -189,13 +189,13 @@ class Garantias extends MY_Controller
         $id = $this->input->post('idGarantias');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir termo de garantia.');
-            redirect(base_url().'index.php/garantias/gerenciar/');
+            redirect(base_url() . 'index.php/garantias/gerenciar/');
         }
 
         if ($this->garantias_model->delete('garantias', 'idGarantias', $id) == true) {
             $this->garantias_model->delete('garantias', 'idGarantias', $id);
             $this->session->set_flashdata('success', 'Termo de garantia excluída com sucesso!');
-            log_info('Removeu uma garantia. ID: '.$id);
+            log_info('Removeu uma garantia. ID: ' . $id);
         } else {
             $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia.<br />Verifique se tem alguma OS vinculada a esse termo e remova antes de tentar excluir novamente.');
         }

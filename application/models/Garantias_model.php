@@ -17,7 +17,7 @@ class Garantias_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', usuarios.nome, usuarios.idUsuarios');
+        $this->db->select($fields . ', usuarios.nome, usuarios.idUsuarios');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->join('usuarios', 'usuarios.idUsuarios = garantias.usuarios_id');
@@ -108,7 +108,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -122,7 +122,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'].' | Telefone: '.$row['telefone'], 'id' => $row['idClientes']];
+                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idClientes']];
             }
             echo json_encode($row_set);
         }
@@ -137,7 +137,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'].' | Telefone: '.$row['telefone'], 'id' => $row['idUsuarios']];
+                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
             }
             echo json_encode($row_set);
         }

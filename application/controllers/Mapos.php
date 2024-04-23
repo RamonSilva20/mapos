@@ -93,18 +93,18 @@ class Mapos extends MY_Controller
         $prefs = [
             'format' => 'zip',
             'foreign_key_checks' => false,
-            'filename' => 'backup'.date('d-m-Y').'.sql',
+            'filename' => 'backup' . date('d-m-Y') . '.sql',
         ];
 
         $backup = $this->dbutil->backup($prefs);
 
         $this->load->helper('file');
-        write_file(base_url().'backup/backup.zip', $backup);
+        write_file(base_url() . 'backup/backup.zip', $backup);
 
         log_info('Efetuou backup do banco de dados.');
 
         $this->load->helper('download');
-        force_download('backup'.date('d-m-Y H:m:s').'.zip', $backup);
+        force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
     }
 
     public function emitente()
@@ -130,7 +130,7 @@ class Mapos extends MY_Controller
 
         $this->load->library('upload');
 
-        $image_upload_folder = FCPATH.'assets/uploads';
+        $image_upload_folder = FCPATH . 'assets/uploads';
 
         if (! file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
@@ -166,7 +166,7 @@ class Mapos extends MY_Controller
 
         $this->load->library('upload');
 
-        $image_upload_folder = FCPATH.'assets/userImage/';
+        $image_upload_folder = FCPATH . 'assets/userImage/';
 
         if (! file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
@@ -229,7 +229,7 @@ class Mapos extends MY_Controller
             $telefone = $this->input->post('telefone');
             $email = $this->input->post('email');
             $image = $this->do_upload();
-            $logo = base_url().'assets/uploads/'.$image;
+            $logo = base_url() . 'assets/uploads/' . $image;
 
             $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
@@ -303,10 +303,10 @@ class Mapos extends MY_Controller
             redirect(site_url('mapos/emitente'));
         }
         $this->load->helper('file');
-        delete_files(FCPATH.'assets/uploads/');
+        delete_files(FCPATH . 'assets/uploads/');
 
         $image = $this->do_upload();
-        $logo = base_url().'assets/uploads/'.$image;
+        $logo = base_url() . 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
@@ -333,8 +333,8 @@ class Mapos extends MY_Controller
 
         $usuario = $this->mapos_model->getById($id);
 
-        if (is_file(FCPATH.'assets/userImage/'.$usuario->url_image_user)) {
-            unlink(FCPATH.'assets/userImage/'.$usuario->url_image_user);
+        if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
+            unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
         }
 
         $image = $this->do_upload_user();
@@ -391,7 +391,7 @@ class Mapos extends MY_Controller
         $this->load->model('email_model');
         $this->email_model->delete('email_queue', 'id', $id);
 
-        log_info('Removeu um e-mail da fila de envio. ID: '.$id);
+        log_info('Removeu um e-mail da fila de envio. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'E-mail removido da fila de envio!');
         redirect(site_url('mapos/emails/'));
@@ -428,7 +428,7 @@ class Mapos extends MY_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="alert">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
                 'app_name' => $this->input->post('app_name'),
@@ -560,17 +560,17 @@ class Mapos extends MY_Controller
                 'color' => $cor,
                 'extendedProps' => [
                     'id' => $os->idOs,
-                    'cliente' => '<b>Cliente:</b> '.$os->nomeCliente,
-                    'dataInicial' => '<b>Data Inicial:</b> '.date('d/m/Y', strtotime($os->dataInicial)),
-                    'dataFinal' => '<b>Data Final:</b> '.date('d/m/Y', strtotime($os->dataFinal)),
-                    'garantia' => '<b>Garantia:</b> '.$os->garantia.' dias',
-                    'status' => '<b>Status da OS:</b> '.$os->status,
-                    'description' => '<b>Descrição/Produto:</b> '.strip_tags(html_entity_decode($os->descricaoProduto)),
-                    'defeito' => '<b>Defeito:</b> '.strip_tags(html_entity_decode($os->defeito)),
-                    'observacoes' => '<b>Observações:</b> '.strip_tags(html_entity_decode($os->observacoes)),
-                    'total' => '<b>Valor Total:</b> R$ '.number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto: </b>R$ '.number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> '.($os->faturado ? 'R$ '.number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : 'PENDENTE'),
+                    'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
+                    'dataInicial' => '<b>Data Inicial:</b> ' . date('d/m/Y', strtotime($os->dataInicial)),
+                    'dataFinal' => '<b>Data Final:</b> ' . date('d/m/Y', strtotime($os->dataFinal)),
+                    'garantia' => '<b>Garantia:</b> ' . $os->garantia . ' dias',
+                    'status' => '<b>Status da OS:</b> ' . $os->status,
+                    'description' => '<b>Descrição/Produto:</b> ' . strip_tags(html_entity_decode($os->descricaoProduto)),
+                    'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
+                    'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
+                    'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
+                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ ' . number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : 'PENDENTE'),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ],
             ];

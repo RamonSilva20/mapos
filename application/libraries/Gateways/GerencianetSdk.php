@@ -68,11 +68,11 @@ class GerencianetSdk extends BasePaymentGateway
             true
         );
 
-        $assunto = 'Cobrança - '.$emitente->nome;
+        $assunto = 'Cobrança - ' . $emitente->nome;
         if ($cobranca->os_id) {
-            $assunto .= ' - OS #'.$cobranca->os_id;
+            $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
-            $assunto .= ' - Venda #'.$cobranca->vendas_id;
+            $assunto .= ' - Venda #' . $cobranca->vendas_id;
         }
 
         $remetentes = [$cobranca->email];
@@ -121,7 +121,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($databaseResult == true) {
             $this->ci->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID'.$id);
+            log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
             throw new \Exception('Erro ao atualizar cobrança!');
@@ -296,7 +296,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: '.$result['data']['charge_id']);
+            log_info('Cobrança criada com successo. ID: ' . $result['data']['charge_id']);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }
@@ -389,7 +389,7 @@ class GerencianetSdk extends BasePaymentGateway
                 'id' => $response['data']['charge_id'],
             ],
             [
-                'message' => 'Pagamento referente a '.$title,
+                'message' => 'Pagamento referente a ' . $title,
                 'expire_at' => $expirationDate,
                 'request_delivery_address' => false,
                 'payment_method' => 'all',
@@ -420,7 +420,7 @@ class GerencianetSdk extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: '.$result['data']['charge_id']);
+            log_info('Cobrança criada com successo. ID: ' . $result['data']['charge_id']);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }

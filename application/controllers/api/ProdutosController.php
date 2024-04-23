@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require APPPATH.'/libraries/REST_Controller.php';
+require APPPATH . '/libraries/REST_Controller.php';
 
 class ProdutosController extends REST_Controller
 {
@@ -191,7 +191,7 @@ class ProdutosController extends REST_Controller
         $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
 
         if ($this->produtos_model->delete('produtos', 'idProdutos', $id) == true) {
-            $this->log_app('Removeu um Produto. ID'.$id);
+            $this->log_app('Removeu um Produto. ID' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Produto excluído com sucesso!',

@@ -68,11 +68,11 @@ class Asaas extends BasePaymentGateway
             true
         );
 
-        $assunto = 'Cobrança - '.$emitente->nome;
+        $assunto = 'Cobrança - ' . $emitente->nome;
         if ($cobranca->os_id) {
-            $assunto .= ' - OS #'.$cobranca->os_id;
+            $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
-            $assunto .= ' - Venda #'.$cobranca->vendas_id;
+            $assunto .= ' - Venda #' . $cobranca->vendas_id;
         }
 
         $remetentes = [$cobranca->email];
@@ -122,7 +122,7 @@ class Asaas extends BasePaymentGateway
 
         if ($databaseResult == true) {
             $this->ci->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID'.$id);
+            log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
             throw new \Exception('Erro ao atualizar cobrança!');
@@ -147,7 +147,7 @@ class Asaas extends BasePaymentGateway
             if ($result && ! empty($result->errors)) {
                 // A resposta da API inclui erros
                 foreach ($result->errors as $error) {
-                    throw new \Exception('Erro ao chamar Asaas.\n\n'.$error->description);
+                    throw new \Exception('Erro ao chamar Asaas.\n\n' . $error->description);
                 }
             } elseif (! $result) {
                 // A chamada para a API falhou de alguma forma
@@ -236,7 +236,7 @@ class Asaas extends BasePaymentGateway
         if ($result && ! empty($result->errors)) {
             // A resposta da API inclui erros
             foreach ($result->errors as $error) {
-                throw new \Exception('Erro na criação da cobrança: '.$error->description);
+                throw new \Exception('Erro na criação da cobrança: ' . $error->description);
             }
         } elseif (! $result) {
             // A chamada para a API falhou de alguma forma
@@ -257,7 +257,7 @@ class Asaas extends BasePaymentGateway
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
             'payment_gateway' => 'Asaas',
-            'message' => 'Pagamento referente a '.$title,
+            'message' => 'Pagamento referente a ' . $title,
         ];
 
         if ($tipo === PaymentGateway::PAYMENT_TYPE_OS) {
@@ -268,7 +268,7 @@ class Asaas extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: '.$result->id);
+            log_info('Cobrança criada com successo. ID: ' . $result->id);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }
@@ -352,7 +352,7 @@ class Asaas extends BasePaymentGateway
         if ($result && ! empty($result->errors)) {
             // A resposta da API inclui erros
             foreach ($result->errors as $error) {
-                throw new \Exception('Erro na criação da cobrança: '.$error->description);
+                throw new \Exception('Erro na criação da cobrança: ' . $error->description);
             }
         } elseif (! $result) {
             // A chamada para a API falhou de alguma forma
@@ -371,7 +371,7 @@ class Asaas extends BasePaymentGateway
             'payment_url' => $result->url,
             'link' => $result->url,
             'message' => $result->description,
-            'message' => 'Pagamento referente a '.$title,
+            'message' => 'Pagamento referente a ' . $title,
         ];
 
         if ($tipo === PaymentGateway::PAYMENT_TYPE_OS) {
@@ -382,7 +382,7 @@ class Asaas extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: '.$result->id);
+            log_info('Cobrança criada com successo. ID: ' . $result->id);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }
@@ -407,7 +407,7 @@ class Asaas extends BasePaymentGateway
     {
         $cliente = (array) $this->ci->clientes_model->getById($clienteId);
         if (! $cliente) {
-            throw new Exception('Cliente não encontrado: '.$clienteId);
+            throw new Exception('Cliente não encontrado: ' . $clienteId);
         }
 
         if (isset($cliente['asaas_id'])) {

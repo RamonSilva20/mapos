@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require APPPATH.'/libraries/REST_Controller.php';
+require APPPATH . '/libraries/REST_Controller.php';
 
 class OsController extends REST_Controller
 {
@@ -39,13 +39,13 @@ class OsController extends REST_Controller
         }
         if ($de) {
             $de = explode('/', $de);
-            $de = $de[2].'-'.$de[1].'-'.$de[0];
+            $de = $de[2] . '-' . $de[1] . '-' . $de[0];
 
             $where_array['de'] = $de;
         }
         if ($ate) {
             $ate = explode('/', $ate);
-            $ate = $ate[2].'-'.$ate[1].'-'.$ate[0];
+            $ate = $ate[2] . '-' . $ate[1] . '-' . $ate[0];
 
             $where_array['ate'] = $ate;
         }
@@ -122,11 +122,11 @@ class OsController extends REST_Controller
 
         try {
             $dataInicial = explode('/', $dataInicial);
-            $dataInicial = $dataInicial[2].'-'.$dataInicial[1].'-'.$dataInicial[0];
+            $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
 
             if ($dataFinal) {
                 $dataFinal = explode('/', $dataFinal);
-                $dataFinal = $dataFinal[2].'-'.$dataFinal[1].'-'.$dataFinal[0];
+                $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
             } else {
                 $dataFinal = date('Y/m/d');
             }
@@ -186,7 +186,7 @@ class OsController extends REST_Controller
                 $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
             }
 
-            $this->log_app('Adicionou uma OS. ID: '.$id);
+            $this->log_app('Adicionou uma OS. ID: ' . $id);
 
             $this->response([
                 'status' => true,
@@ -240,11 +240,11 @@ class OsController extends REST_Controller
 
         try {
             $dataInicial = explode('/', $dataInicial);
-            $dataInicial = $dataInicial[2].'-'.$dataInicial[1].'-'.$dataInicial[0];
+            $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
 
             if ($dataFinal) {
                 $dataFinal = explode('/', $dataFinal);
-                $dataFinal = $dataFinal[2].'-'.$dataFinal[1].'-'.$dataFinal[0];
+                $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
             } else {
                 $dataFinal = date('Y/m/d');
             }
@@ -311,7 +311,7 @@ class OsController extends REST_Controller
                 $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
             }
 
-            $this->log_app('Alterou uma OS. ID: '.$id);
+            $this->log_app('Alterou uma OS. ID: ' . $id);
 
             $this->response([
                 'status' => true,
@@ -380,7 +380,7 @@ class OsController extends REST_Controller
         }
 
         if ($this->os_model->delete('os', 'idOs', $id) == true) {
-            $this->log_app('Removeu uma OS ID'.$id);
+            $this->log_app('Removeu uma OS ID' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'OS excluída com sucesso!',
@@ -420,7 +420,7 @@ class OsController extends REST_Controller
         }
 
         if ($this->os_model->edit('os', $data, 'idOs', $id) == true) {
-            $this->log_app('Adicionou um desconto na OS. ID: '.$id);
+            $this->log_app('Adicionou um desconto na OS. ID: ' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Desconto adicionado com sucesso!',
@@ -478,7 +478,7 @@ class OsController extends REST_Controller
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
-            $this->log_app('Adicionou produto a uma OS. ID (OS): '.$id);
+            $this->log_app('Adicionou produto a uma OS. ID (OS): ' . $id);
 
             $result = $lastProdutoOs;
             unset($result->descricao);
@@ -573,7 +573,7 @@ class OsController extends REST_Controller
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
-            $this->log_app('Removeu produto de uma OS. ID (OS): '.$id);
+            $this->log_app('Removeu produto de uma OS. ID (OS): ' . $id);
 
             $this->response([
                 'status' => true,
@@ -621,7 +621,7 @@ class OsController extends REST_Controller
             $this->db->where('idOs', $id);
             $this->db->update('os');
 
-            $this->log_app('Adicionou serviço a uma OS. ID (OS): '.$id);
+            $this->log_app('Adicionou serviço a uma OS. ID (OS): ' . $id);
 
             $result = $lastServicoOs;
             unset($result->servico);
@@ -683,7 +683,7 @@ class OsController extends REST_Controller
     {
         $this->logged_user();
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $idServicos_os) == true) {
-            $this->log_app('Removeu Serviço de uma OS. ID (OS): '.$id);
+            $this->log_app('Removeu Serviço de uma OS. ID (OS): ' . $id);
             $this->CI = &get_instance();
             $this->CI->load->database();
             $this->db->set('desconto', 0.00);
@@ -721,14 +721,14 @@ class OsController extends REST_Controller
         }
 
         $data = [
-            'anotacao' => "[{$this->logged_user()->usuario->nome}] ".$this->input->post('anotacao'),
+            'anotacao' => "[{$this->logged_user()->usuario->nome}] " . $this->input->post('anotacao'),
             'data_hora' => date('Y-m-d H:i:s'),
             'os_id' => $id,
         ];
 
         if ($this->os_model->add('anotacoes_os', $data) == true) {
             $lastAnotacao = $this->Api_model->lastRow('anotacoes_os', 'idAnotacoes');
-            $this->log_app('Adicionou anotação a uma OS. ID (OS): '.$id);
+            $this->log_app('Adicionou anotação a uma OS. ID (OS): ' . $id);
 
             $result = [
                 'idAnotacoes' => $lastAnotacao->idAnotacoes,
@@ -752,7 +752,7 @@ class OsController extends REST_Controller
     {
         $this->logged_user();
         if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $idAnotacao) == true) {
-            $this->log_app('Removeu anotação de uma OS. ID (OS): '.$id);
+            $this->log_app('Removeu anotação de uma OS. ID (OS): ' . $id);
 
             $this->response([
                 'status' => true,
@@ -771,13 +771,13 @@ class OsController extends REST_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $directory = FCPATH.'assets'.DIRECTORY_SEPARATOR.'anexos'.DIRECTORY_SEPARATOR.date('m-Y').DIRECTORY_SEPARATOR.'OS-'.$id;
+        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $id;
 
         // If it exist, check if it's a directory
-        if (! is_dir($directory.DIRECTORY_SEPARATOR.'thumbs')) {
+        if (! is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
             // make directory for images and thumbs
             try {
-                mkdir($directory.DIRECTORY_SEPARATOR.'thumbs', 0755, true);
+                mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true);
             } catch (Exception $e) {
                 $this->response([
                     'status' => false,
@@ -804,16 +804,16 @@ class OsController extends REST_Controller
                 $upload_data = $this->upload->data();
 
                 // Gera um nome de arquivo aleatório mantendo a extensão original
-                $new_file_name = uniqid().'.'.pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
-                $new_file_path = $upload_data['file_path'].$new_file_name;
-                $url = base_url('assets'.DIRECTORY_SEPARATOR.'anexos'.DIRECTORY_SEPARATOR.date('m-Y').DIRECTORY_SEPARATOR.'OS-'.$id);
+                $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
+                $new_file_path = $upload_data['file_path'] . $new_file_name;
+                $url = base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $id);
 
                 rename($upload_data['full_path'], $new_file_path);
 
                 if ($upload_data['is_image'] == 1) {
                     $resize_conf = [
                         'source_image' => $new_file_path,
-                        'new_image' => $upload_data['file_path'].'thumbs'.DIRECTORY_SEPARATOR.'thumb_'.$new_file_name,
+                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
                         'width' => 200,
                         'height' => 125,
                     ];
@@ -824,7 +824,7 @@ class OsController extends REST_Controller
                         $error['resize'][] = $this->image_lib->display_errors();
                     } else {
                         $success[] = $upload_data;
-                        $result = $this->os_model->anexar($id, $new_file_name, $url, 'thumb_'.$new_file_name, $directory);
+                        $result = $this->os_model->anexar($id, $new_file_name, $url, 'thumb_' . $new_file_name, $directory);
                         if (! $result) {
                             $error['db'][] = 'Erro ao inserir no banco de dados.';
                         }
@@ -854,10 +854,10 @@ class OsController extends REST_Controller
             'idAnexos' => $anexo->idAnexos,
             'url' => $url,
             'anexo' => $new_file_name,
-            'thumb' => 'thumb_'.$new_file_name,
+            'thumb' => 'thumb_' . $new_file_name,
         ];
 
-        $this->log_app('Adicionou anexo(s) a uma OS. ID (OS): '.$id);
+        $this->log_app('Adicionou anexo(s) a uma OS. ID (OS): ' . $id);
         $this->response([
             'status' => true,
             'message' => 'Arquivo anexado com sucesso!',
@@ -873,14 +873,14 @@ class OsController extends REST_Controller
             $file = $this->db->get('anexos', 1)->row();
 
             if ($file->os_id == $id) {
-                unlink($file->path.DIRECTORY_SEPARATOR.$file->anexo);
+                unlink($file->path . DIRECTORY_SEPARATOR . $file->anexo);
 
                 if ($file->thumb != null) {
-                    unlink($file->path.DIRECTORY_SEPARATOR.'thumbs'.DIRECTORY_SEPARATOR.$file->thumb);
+                    unlink($file->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file->thumb);
                 }
 
                 if ($this->os_model->delete('anexos', 'idAnexos', $idAnexo) == true) {
-                    $this->log_app('Removeu anexo de uma OS. ID (OS): '.$id);
+                    $this->log_app('Removeu anexo de uma OS. ID (OS): ' . $id);
 
                     $this->response([
                         'status' => true,
@@ -966,7 +966,7 @@ class OsController extends REST_Controller
                 ];
                 $this->email_model->add('email_queue', $email);
             } else {
-                $this->log_app('Email não adicionado a Lista de envio de e-mails. Verifique se o remetente esta cadastrado. OS ID: '.$idOs);
+                $this->log_app('Email não adicionado a Lista de envio de e-mails. Verifique se o remetente esta cadastrado. OS ID: ' . $idOs);
             }
         }
 
@@ -980,7 +980,7 @@ class OsController extends REST_Controller
             if ($this->getConfig('control_estoque')) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '+');
-                    log_info('ESTOQUE: Produto id '.$p->produtos_id.' voltou ao estoque. Quantidade: '.$p->quantidade.'. Motivo: Cancelamento/Exclusão');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' voltou ao estoque. Quantidade: ' . $p->quantidade . '. Motivo: Cancelamento/Exclusão');
                 }
             }
         }
@@ -993,7 +993,7 @@ class OsController extends REST_Controller
             if ($this->getConfig('control_estoque')) {
                 foreach ($produtos as $p) {
                     $this->produtos_model->updateEstoque($p->produtos_id, $p->quantidade, '-');
-                    log_info('ESTOQUE: Produto id '.$p->produtos_id.' baixa do estoque. Quantidade: '.$p->quantidade.'. Motivo: Mudou status que já estava Cancelado para outro');
+                    log_info('ESTOQUE: Produto id ' . $p->produtos_id . ' baixa do estoque. Quantidade: ' . $p->quantidade . '. Motivo: Mudou status que já estava Cancelado para outro');
                 }
             }
         }
@@ -1008,7 +1008,7 @@ class OsController extends REST_Controller
             $os->nomeCliente,
             $os->idOs,
             $os->status,
-            'R$ '.($os->desconto != 0 && $os->valor_desconto != 0 ? number_format($os->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')),
+            'R$ ' . ($os->desconto != 0 && $os->valor_desconto != 0 ? number_format($os->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')),
             strip_tags($os->descricaoProduto),
             ($emitente ? $emitente->nome : ''),
             ($emitente ? $emitente->telefone : ''),
@@ -1019,7 +1019,7 @@ class OsController extends REST_Controller
                 strtotime($os->dataFinal)),
             date('d/m/Y',
                 strtotime($os->dataInicial)),
-            $os->garantia.' dias',
+            $os->garantia . ' dias',
         ];
 
         $textoBase = $this->getConfig('notifica_whats');

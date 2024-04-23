@@ -63,7 +63,7 @@ class Permission
     private function loadPermission($id = null)
     {
         if ($id != null) {
-            $this->CI->db->select($this->table.'.'.$this->select);
+            $this->CI->db->select($this->table . '.' . $this->select);
             $this->CI->db->where($this->pk, $id);
             $this->CI->db->limit(1);
             $array = $this->CI->db->get($this->table)->row_array();

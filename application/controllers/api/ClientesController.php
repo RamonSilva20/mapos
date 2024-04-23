@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require APPPATH.'/libraries/REST_Controller.php';
+require APPPATH . '/libraries/REST_Controller.php';
 
 class ClientesController extends REST_Controller
 {
@@ -210,7 +210,7 @@ class ClientesController extends REST_Controller
         }
 
         if ($this->clientes_model->delete('clientes', 'idClientes', $id) == true) {
-            $this->log_app('Removeu um cliente. ID'.$id);
+            $this->log_app('Removeu um cliente. ID' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Cliente excluído com sucesso!',

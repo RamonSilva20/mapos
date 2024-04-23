@@ -9,7 +9,7 @@ if (! function_exists('convertUrlToUploadsPath')) {
             return;
         }
 
-        return FCPATH.'assets'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.basename($url);
+        return FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . basename($url);
     }
 }
 
@@ -19,7 +19,7 @@ if (! function_exists('limitarTexto')) {
         $contador = strlen($texto);
 
         if ($contador >= $limite) {
-            $texto = substr($texto, 0, strrpos(substr($texto, 0, $limite), ' ')).'...';
+            $texto = substr($texto, 0, strrpos(substr($texto, 0, $limite), ' ')) . '...';
 
             return $texto;
         } else {

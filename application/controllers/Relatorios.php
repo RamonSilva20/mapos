@@ -72,7 +72,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
-        pdf_create($html, 'relatorio_clientes'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_clientes' . date('d/m/y'), true);
     }
 
     public function clientesRapid()
@@ -139,7 +139,7 @@ class Relatorios extends MY_Controller
         $this->load->helper('mpdf');
 
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
-        pdf_create($html, 'relatorio_clientes'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_clientes' . date('d/m/y'), true);
     }
 
     public function produtosRapid()
@@ -156,7 +156,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
-        pdf_create($html, 'relatorio_produtos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
     public function produtosRapidMin()
@@ -173,7 +173,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
-        pdf_create($html, 'relatorio_produtos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
     public function produtosCustom()
@@ -195,7 +195,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
-        pdf_create($html, 'relatorio_produtos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
     public function produtosEtiquetas()
@@ -207,7 +207,7 @@ class Relatorios extends MY_Controller
                 $data['produtos'] = $this->Relatorios_model->produtosEtiquetas($de, $ate);
                 $this->load->helper('mpdf');
                 $html = $this->load->view('relatorios/imprimir/imprimirEtiquetas', $data, true);
-                pdf_create($html, 'etiquetas_'.$de.'_'.$ate, true);
+                pdf_create($html, 'etiquetas_' . $de . '_' . $ate, true);
             } else {
                 $this->session->set_flashdata('error', 'O campo "<b>De</b>" não pode ser maior doque o campo "<b>Até</b>"!');
                 redirect('produtos');
@@ -278,7 +278,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
-        pdf_create($html, 'relatorio_produtos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
     public function skuCustom()
@@ -332,7 +332,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
-        pdf_create($html, 'relatorio_produtos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_produtos' . date('d/m/y'), true);
     }
 
     public function servicos()
@@ -363,7 +363,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
-        pdf_create($html, 'relatorio_servicos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_servicos' . date('d/m/y'), true);
     }
 
     public function servicosRapid()
@@ -380,7 +380,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
-        pdf_create($html, 'relatorio_servicos'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_servicos' . date('d/m/y'), true);
     }
 
     public function os()
@@ -503,7 +503,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
-        pdf_create($html, 'relatorio_os'.date('d/m/y'), true, true);
+        pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
     public function osCustom()
@@ -616,7 +616,7 @@ class Relatorios extends MY_Controller
         $emitente = $this->Mapos_model->getEmitente();
         $usuario = is_array($user) ? $user[0]->nome : $user;
 
-        $data['title'] = 'Relatório de OS - '.$title;
+        $data['title'] = 'Relatório de OS - ' . $title;
         $data['os'] = $os;
         $data['total_produtos'] = $totalProdutos;
         $data['total_servicos'] = $totalServicos;
@@ -630,7 +630,7 @@ class Relatorios extends MY_Controller
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
-        pdf_create($html, 'relatorio_os'.date('d/m/y'), true, true);
+        pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
     public function financeiro()
@@ -710,7 +710,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
-        pdf_create($html, 'relatorio_os'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_os' . date('d/m/y'), true);
     }
 
     public function financeiroCustom()
@@ -782,7 +782,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
-        pdf_create($html, 'relatorio_financeiro'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_financeiro' . date('d/m/y'), true);
     }
 
     public function vendas()
@@ -886,7 +886,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
-        pdf_create($html, 'relatorio_vendas'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
     }
 
     public function vendasCustom()
@@ -978,7 +978,7 @@ class Relatorios extends MY_Controller
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
-        pdf_create($html, 'relatorio_vendas'.date('d/m/y'), true);
+        pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
     }
 
     public function receitasBrutasMei()
@@ -1005,15 +1005,15 @@ class Relatorios extends MY_Controller
 
         $format = $this->input->get('format') ?: 'docx';
 
-        $templatePath = realpath(FCPATH.'assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx');
+        $templatePath = realpath(FCPATH . 'assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx');
         if (! $templatePath) {
             $this->session->set_flashdata('error', 'Modelo de relatório não encontrado!');
 
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH.'assets'.DIRECTORY_SEPARATOR.'relatorios'.DIRECTORY_SEPARATOR.'temp.docx';
-        $generatedFilePath = FCPATH.'assets'.DIRECTORY_SEPARATOR.'relatorios'.DIRECTORY_SEPARATOR."RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
+        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasRapid();
@@ -1040,7 +1040,7 @@ class Relatorios extends MY_Controller
             unlink($generatedFilePath);
 
             return $this->output
-                ->set_header('Content-disposition: inline;filename='."relatorio_receitas_brutas_mei_rapido.$format")
+                ->set_header('Content-disposition: inline;filename=' . "relatorio_receitas_brutas_mei_rapido.$format")
                 ->set_content_type(get_mime_by_extension($generatedFilePath))
                 ->set_status_header(200)
                 ->set_output($fileContents)
@@ -1062,15 +1062,15 @@ class Relatorios extends MY_Controller
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
 
-        $templatePath = realpath(FCPATH.'assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx');
+        $templatePath = realpath(FCPATH . 'assets/relatorios/RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI.docx');
         if (! $templatePath) {
             $this->session->set_flashdata('error', 'Modelo de relatório não encontrado!');
 
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH.'assets'.DIRECTORY_SEPARATOR.'relatorios'.DIRECTORY_SEPARATOR.'temp.docx';
-        $generatedFilePath = FCPATH.'assets'.DIRECTORY_SEPARATOR.'relatorios'.DIRECTORY_SEPARATOR."RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
+        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasCustom($dataInicial, $dataFinal);
@@ -1104,7 +1104,7 @@ class Relatorios extends MY_Controller
             unlink($generatedFilePath);
 
             return $this->output
-                ->set_header('Content-disposition: inline;filename='."relatorio_receitas_brutas_mei_custom_%s_até_%s.$format")
+                ->set_header('Content-disposition: inline;filename=' . "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format")
                 ->set_content_type(get_mime_by_extension($generatedFilePath))
                 ->set_status_header(200)
                 ->set_output($fileContents)

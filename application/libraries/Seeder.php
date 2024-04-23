@@ -27,7 +27,7 @@ class Seeder
      */
     public function call($seeder)
     {
-        $file = APPPATH.'database/seeds/'.$seeder.'.php';
+        $file = APPPATH . 'database/seeds/' . $seeder . '.php';
         require_once $file;
         $obj = new $seeder;
         $obj->run();

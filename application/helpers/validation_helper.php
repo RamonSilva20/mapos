@@ -58,7 +58,7 @@ if (! function_exists('valid_cnpj')) {
         $segundo_digito = ($segundo_calculo % 11) < 2 ? 0 : 11 - ($segundo_calculo % 11);
 
         // Concatena o segundo dígito ao CNPJ
-        $cnpj = $primeiros_numeros_cnpj.$segundo_digito;
+        $cnpj = $primeiros_numeros_cnpj . $segundo_digito;
 
         // Verifica se o CNPJ gerado é idêntico ao enviado
         if ($cnpj === $cnpj_original) {

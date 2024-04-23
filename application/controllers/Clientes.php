@@ -64,7 +64,7 @@ class Clientes extends MY_Controller
         }
 
         if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
@@ -116,7 +116,7 @@ class Clientes extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $senha = $this->input->post('senha');
             if ($senha != null) {
@@ -160,8 +160,8 @@ class Clientes extends MY_Controller
 
             if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                 $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
-                log_info('Alterou um cliente. ID'.$this->input->post('idClientes'));
-                redirect(site_url('clientes/editar/').$this->input->post('idClientes'));
+                log_info('Alterou um cliente. ID' . $this->input->post('idClientes'));
+                redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -219,7 +219,7 @@ class Clientes extends MY_Controller
         }
 
         $this->clientes_model->delete('clientes', 'idClientes', $id);
-        log_info('Removeu um cliente. ID'.$id);
+        log_info('Removeu um cliente. ID' . $id);
 
         $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
         redirect(site_url('clientes/gerenciar/'));

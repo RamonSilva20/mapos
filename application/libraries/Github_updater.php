@@ -29,7 +29,7 @@ class Github_updater
     public function has_update()
     {
         $branches = json_decode(
-            $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/branches')
+            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/branches')
         );
 
         $branchToUpdateFrom = current(
@@ -57,7 +57,7 @@ class Github_updater
 
         if ($hash !== $this->ci->config->item('current_commit')) {
             $messages = [];
-            $response = json_decode($this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/compare/'.$this->ci->config->item('current_commit').'...'.$hash));
+            $response = json_decode($this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/compare/' . $this->ci->config->item('current_commit') . '...' . $hash));
             $commits = $response->commits;
 
             foreach ($commits as $commit) {
@@ -81,7 +81,7 @@ class Github_updater
         $currentVersion = $this->getCurrentVersion();
 
         if ($hash !== $this->ci->config->item('current_commit')) {
-            $commits = json_decode($this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/compare/'.$this->ci->config->item('current_commit').'...'.$hash));
+            $commits = json_decode($this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/compare/' . $this->ci->config->item('current_commit') . '...' . $hash));
             $files = $commits->files;
 
             if ($dir = $this->_get_and_extract($hash)) {
@@ -97,7 +97,7 @@ class Github_updater
                         }
                         // Otherwise copy the file from the update.
                         else {
-                            copy($dir.'/'.$file->filename, $file->filename);
+                            copy($dir . '/' . $file->filename, $file->filename);
                         }
                     }
                 }
@@ -147,7 +147,7 @@ class Github_updater
             $configline = '$config[\'current_commit\']';
 
             if (strstr($lines[$i], $configline)) {
-                $lines[$i] = $configline.' = \''.$hash.'\';';
+                $lines[$i] = $configline . ' = \'' . $hash . '\';';
                 $file = implode(PHP_EOL, $lines);
                 $handle = @fopen(self::GITHUB_UPDATER_CONFIG_FILE, 'w');
                 fwrite($handle, $file);
@@ -169,7 +169,7 @@ class Github_updater
             $configline = '$config[\'app_version\']';
 
             if (strstr($lines[$i], $configline)) {
-                $lines[$i] = $configline.' = \''.$version.'\';';
+                $lines[$i] = $configline . ' = \'' . $version . '\';';
                 $file = implode(PHP_EOL, $lines);
                 $handle = @fopen(self::CONFIG_FILE, 'w');
                 fwrite($handle, $file);
@@ -184,7 +184,7 @@ class Github_updater
 
     private function _get_and_extract($hash)
     {
-        copy(self::GITHUB_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/zipball/'.$this->ci->config->item('github_branch'), "{$hash}.zip");
+        copy(self::GITHUB_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/zipball/' . $this->ci->config->item('github_branch'), "{$hash}.zip");
 
         $unzip = new ZipArchive();
 
@@ -199,7 +199,7 @@ class Github_updater
         $files = scandir('.');
 
         foreach ($files as $file) {
-            if (strpos($file, $this->ci->config->item('github_user').'-'.$this->ci->config->item('github_repo')) !== false) {
+            if (strpos($file, $this->ci->config->item('github_user') . '-' . $this->ci->config->item('github_repo')) !== false) {
                 return $file;
             }
         }
@@ -237,7 +237,7 @@ class Github_updater
     private function getCurrentCommitHash()
     {
         $branches = json_decode(
-            $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/branches')
+            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/branches')
         );
 
         $branchToUpdateFrom = current(
@@ -261,7 +261,7 @@ class Github_updater
     private function getCurrentVersion()
     {
         $latestRelease = json_decode(
-            $this->_connect(self::API_URL.$this->ci->config->item('github_user').'/'.$this->ci->config->item('github_repo').'/releases/latest')
+            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/releases/latest')
         );
 
         $version = $latestRelease->tag_name;
@@ -321,7 +321,7 @@ class Github_updater
                 continue;
             }
 
-            if (! $this->deleteDirectory($dir.DIRECTORY_SEPARATOR.$item)) {
+            if (! $this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
         }

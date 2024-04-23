@@ -39,7 +39,7 @@ class Api_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                $usuarios[$row->idUsuarios]['label'] = $row->nome.' | Telefone: '.$row->telefone;
+                $usuarios[$row->idUsuarios]['label'] = $row->nome . ' | Telefone: ' . $row->telefone;
                 $usuarios[$row->idUsuarios]['idUsuarios'] = $row->idUsuarios;
             }
 

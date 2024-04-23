@@ -80,11 +80,11 @@ class MercadoPago extends BasePaymentGateway
             true
         );
 
-        $assunto = 'Cobrança - '.$emitente[0]->nome;
+        $assunto = 'Cobrança - ' . $emitente[0]->nome;
         if ($cobranca->os_id) {
-            $assunto .= ' - OS #'.$cobranca->os_id;
+            $assunto .= ' - OS #' . $cobranca->os_id;
         } else {
-            $assunto .= ' - Venda #'.$cobranca->vendas_id;
+            $assunto .= ' - Venda #' . $cobranca->vendas_id;
         }
 
         $remetentes = [$cobranca->email];
@@ -133,7 +133,7 @@ class MercadoPago extends BasePaymentGateway
 
         if ($databaseResult == true) {
             $this->ci->session->set_flashdata('success', 'Cobrança atualizada com sucesso!');
-            log_info('Alterou um status de cobrança. ID'.$id);
+            log_info('Alterou um status de cobrança. ID' . $id);
         } else {
             $this->ci->session->set_flashdata('error', 'Erro ao atualizar cobrança!');
             throw new \Exception('Erro ao atualizar cobrança!');
@@ -272,7 +272,7 @@ class MercadoPago extends BasePaymentGateway
 
         if ($id = $this->ci->cobrancas_model->add('cobrancas', $data, true)) {
             $data['idCobranca'] = $id;
-            log_info('Cobrança criada com successo. ID: '.$payment->id);
+            log_info('Cobrança criada com successo. ID: ' . $payment->id);
         } else {
             throw new \Exception('Erro ao salvar cobrança!');
         }

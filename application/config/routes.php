@@ -47,7 +47,7 @@ $route['404_override'] = '';
 
 // Rotas da API
 if (filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
-    require APPPATH.'config/routes_api.php';
+    require APPPATH . 'config/routes_api.php';
 }
 
 /* End of file routes.php */

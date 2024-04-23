@@ -12,10 +12,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @version: 0.0.1
  */
 
-require_once APPPATH.'third_party/php-jwt/JWT.php';
-require_once APPPATH.'third_party/php-jwt/BeforeValidException.php';
-require_once APPPATH.'third_party/php-jwt/ExpiredException.php';
-require_once APPPATH.'third_party/php-jwt/SignatureInvalidException.php';
+require_once APPPATH . 'third_party/php-jwt/JWT.php';
+require_once APPPATH . 'third_party/php-jwt/BeforeValidException.php';
+require_once APPPATH . 'third_party/php-jwt/ExpiredException.php';
+require_once APPPATH . 'third_party/php-jwt/SignatureInvalidException.php';
 
 use Firebase\JWT\JWT;
 
@@ -73,7 +73,7 @@ class Authorization_Token
             try {
                 return JWT::encode($data, $this->token_key, $this->token_algorithm);
             } catch (Exception $e) {
-                return 'Message: '.$e->getMessage();
+                return 'Message: ' . $e->getMessage();
             }
         } else {
             return 'Token Data Undefined!';

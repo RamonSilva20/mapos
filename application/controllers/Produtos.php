@@ -56,7 +56,7 @@ class Produtos extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('produtos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $precoCompra = $this->input->post('precoCompra');
             $precoCompra = str_replace(',', '', $precoCompra);
@@ -102,7 +102,7 @@ class Produtos extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('produtos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $precoCompra = $this->input->post('precoCompra');
             $precoCompra = str_replace(',', '', $precoCompra);
@@ -122,8 +122,8 @@ class Produtos extends MY_Controller
 
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
-                log_info('Alterou um produto. ID: '.$this->input->post('idProdutos'));
-                redirect(site_url('produtos/editar/').$this->input->post('idProdutos'));
+                log_info('Alterou um produto. ID: ' . $this->input->post('idProdutos'));
+                redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
             }
@@ -152,7 +152,7 @@ class Produtos extends MY_Controller
 
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('produtos/editar/').$this->input->post('idProdutos'));
+            redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
         }
 
         $this->data['view'] = 'produtos/visualizarProduto';
@@ -170,14 +170,14 @@ class Produtos extends MY_Controller
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
-            redirect(base_url().'index.php/produtos/gerenciar/');
+            redirect(base_url() . 'index.php/produtos/gerenciar/');
         }
 
         $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
         $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
         $this->produtos_model->delete('produtos', 'idProdutos', $id);
 
-        log_info('Removeu um produto. ID: '.$id);
+        log_info('Removeu um produto. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Produto excluido com sucesso!');
         redirect(site_url('produtos/gerenciar/'));
@@ -202,8 +202,8 @@ class Produtos extends MY_Controller
 
         if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $idProduto) == true) {
             $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
-            log_info('Atualizou estoque de um produto. ID: '.$idProduto);
-            redirect(site_url('produtos/visualizar/').$idProduto);
+            log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
+            redirect(site_url('produtos/visualizar/') . $idProduto);
         } else {
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
         }

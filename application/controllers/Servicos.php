@@ -56,7 +56,7 @@ class Servicos extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('servicos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $preco = $this->input->post('preco');
             $preco = str_replace(',', '', $preco);
@@ -90,7 +90,7 @@ class Servicos extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('servicos') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $preco = $this->input->post('preco');
             $preco = str_replace(',', '', $preco);
@@ -102,8 +102,8 @@ class Servicos extends MY_Controller
 
             if ($this->servicos_model->edit('servicos', $data, 'idServicos', $this->input->post('idServicos')) == true) {
                 $this->session->set_flashdata('success', 'Serviço editado com sucesso!');
-                log_info('Alterou um serviço. ID: '.$this->input->post('idServicos'));
-                redirect(site_url('servicos/editar/').$this->input->post('idServicos'));
+                log_info('Alterou um serviço. ID: ' . $this->input->post('idServicos'));
+                redirect(site_url('servicos/editar/') . $this->input->post('idServicos'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
             }
@@ -132,7 +132,7 @@ class Servicos extends MY_Controller
         $this->servicos_model->delete('servicos_os', 'servicos_id', $id);
         $this->servicos_model->delete('servicos', 'idServicos', $id);
 
-        log_info('Removeu um serviço. ID: '.$id);
+        log_info('Removeu um serviço. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Serviço excluido com sucesso!');
         redirect(site_url('servicos/gerenciar/'));

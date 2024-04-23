@@ -2,14 +2,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-/**
- * Classe ApiController.
- *
- * @extends REST_Controller
- */
-require APPPATH.'/libraries/REST_Controller.php';
+require APPPATH . '/libraries/REST_Controller.php';
 
-// class UsuarioController extends REST_Controller
 class ApiController extends REST_Controller
 {
     public function __construct()
@@ -100,17 +94,17 @@ class ApiController extends REST_Controller
                 'color' => $cor,
                 'extendedProps' => [
                     'id' => $os->idOs,
-                    'cliente' => '<b>Cliente:</b> '.$os->nomeCliente,
-                    'dataInicial' => '<b>Data Inicial:</b> '.date('d/m/Y', strtotime($os->dataInicial)),
-                    'dataFinal' => '<b>Data Final:</b> '.date('d/m/Y', strtotime($os->dataFinal)),
-                    'garantia' => '<b>Garantia:</b> '.$os->garantia.' dias',
-                    'status' => '<b>Status da OS:</b> '.$os->status,
-                    'description' => '<b>Descrição/Produto:</b> '.strip_tags(html_entity_decode($os->descricaoProduto)),
-                    'defeito' => '<b>Defeito:</b> '.strip_tags(html_entity_decode($os->defeito)),
-                    'observacoes' => '<b>Observações:</b> '.strip_tags(html_entity_decode($os->observacoes)),
-                    'total' => '<b>Valor Total:</b> R$ '.number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto: </b>R$ '.number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> '.($os->faturado ? 'R$ '.number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : 'PENDENTE'),
+                    'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
+                    'dataInicial' => '<b>Data Inicial:</b> ' . date('d/m/Y', strtotime($os->dataInicial)),
+                    'dataFinal' => '<b>Data Final:</b> ' . date('d/m/Y', strtotime($os->dataFinal)),
+                    'garantia' => '<b>Garantia:</b> ' . $os->garantia . ' dias',
+                    'status' => '<b>Status da OS:</b> ' . $os->status,
+                    'description' => '<b>Descrição/Produto:</b> ' . strip_tags(html_entity_decode($os->descricaoProduto)),
+                    'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
+                    'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
+                    'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
+                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
+                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ ' . number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : 'PENDENTE'),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ],
             ];

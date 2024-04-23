@@ -34,7 +34,7 @@ class Usuarios extends MY_Controller
     {
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = base_url().'index.php/usuarios/gerenciar/';
+        $this->data['configuration']['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
         $this->data['configuration']['total_rows'] = $this->usuarios_model->count('usuarios');
 
         $this->pagination->initialize($this->data['configuration']);
@@ -52,7 +52,7 @@ class Usuarios extends MY_Controller
         $this->data['custom_error'] = '';
 
         if ($this->form_validation->run('usuarios') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">' . validation_errors() . '</div>' : false);
         } else {
             $data = [
                 'nome' => set_value('nome'),
@@ -114,11 +114,11 @@ class Usuarios extends MY_Controller
         $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
 
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0) {
                 $this->session->set_flashdata('error', 'O usuário super admin não pode ser desativado!');
-                redirect(base_url().'index.php/usuarios/editar/'.$this->input->post('idUsuarios'));
+                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
             }
 
             $senha = $this->input->post('senha');
@@ -165,8 +165,8 @@ class Usuarios extends MY_Controller
 
             if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
                 $this->session->set_flashdata('success', 'Usuário editado com sucesso!');
-                log_info('Alterou um usuário. ID: '.$this->input->post('idUsuarios'));
-                redirect(site_url('usuarios/editar/').$this->input->post('idUsuarios'));
+                log_info('Alterou um usuário. ID: ' . $this->input->post('idUsuarios'));
+                redirect(site_url('usuarios/editar/') . $this->input->post('idUsuarios'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
             }
@@ -186,7 +186,7 @@ class Usuarios extends MY_Controller
         $id = $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $id);
 
-        log_info('Removeu um usuário. ID: '.$id);
+        log_info('Removeu um usuário. ID: ' . $id);
 
         redirect(site_url('usuarios/gerenciar/'));
     }

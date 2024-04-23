@@ -115,7 +115,7 @@ class JWT
         // token can actually be used. If it's not yet that time, abort.
         if (isset($payload->nbf) && $payload->nbf > ($timestamp + static::$leeway)) {
             throw new BeforeValidException(
-                'Cannot handle token prior to '.date(DateTime::ISO8601, $payload->nbf)
+                'Cannot handle token prior to ' . date(DateTime::ISO8601, $payload->nbf)
             );
         }
 
@@ -124,7 +124,7 @@ class JWT
         // correctly used the nbf claim).
         if (isset($payload->iat) && $payload->iat > ($timestamp + static::$leeway)) {
             throw new BeforeValidException(
-                'Cannot handle token prior to '.date(DateTime::ISO8601, $payload->iat)
+                'Cannot handle token prior to ' . date(DateTime::ISO8601, $payload->iat)
             );
         }
 
@@ -231,7 +231,7 @@ class JWT
                 }
                 // returns 1 on success, 0 on failure, -1 on error.
                 throw new DomainException(
-                    'OpenSSL error: '.openssl_error_string()
+                    'OpenSSL error: ' . openssl_error_string()
                 );
             case 'hash_hmac':
             default:
@@ -273,7 +273,7 @@ class JWT
              *them to strings) before decoding, hence the preg_replace() call.
              */
             $max_int_length = strlen((string) PHP_INT_MAX) - 1;
-            $json_without_bigints = preg_replace('/:\s*(-?\d{'.$max_int_length.',})/', ': "$1"', $input);
+            $json_without_bigints = preg_replace('/:\s*(-?\d{' . $max_int_length . ',})/', ': "$1"', $input);
             $obj = json_decode($json_without_bigints);
         }
 
@@ -352,7 +352,7 @@ class JWT
         throw new DomainException(
             isset($messages[$errno])
             ? $messages[$errno]
-            : 'Unknown JSON error: '.$errno
+            : 'Unknown JSON error: ' . $errno
         );
     }
 

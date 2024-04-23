@@ -115,14 +115,14 @@ class Financeiro extends MY_Controller
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
         if ($this->form_validation->run('receita') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $vencimento = $this->input->post('vencimento');
             $recebimento = $this->input->post('recebimento');
 
             if ($recebimento != null) {
                 $recebimento = explode('/', $recebimento);
-                $recebimento = $recebimento[2].'-'.$recebimento[1].'-'.$recebimento[0];
+                $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
             }
 
             if ($vencimento == null) {
@@ -131,7 +131,7 @@ class Financeiro extends MY_Controller
 
             try {
                 $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
+                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
@@ -231,10 +231,10 @@ class Financeiro extends MY_Controller
 
             try {
                 $dia_pgto = explode('/', $dia_pgto);
-                $dia_pgto = $dia_pgto[2].'-'.$dia_pgto[1].'-'.$dia_pgto[0];
+                $dia_pgto = $dia_pgto[2] . '-' . $dia_pgto[1] . '-' . $dia_pgto[0];
 
                 $dia_base_pgto = explode('/', $dia_base_pgto);
-                $dia_base_pgto = $dia_base_pgto[2].'-'.$dia_base_pgto[1].'-'.$dia_base_pgto[0];
+                $dia_base_pgto = $dia_base_pgto[2] . '-' . $dia_base_pgto[1] . '-' . $dia_base_pgto[0];
             } catch (Exception $e) {
                 $dia_pgto = date('Y/m/d');
                 $dia_base_pgto = date('Y/m/d');
@@ -244,7 +244,7 @@ class Financeiro extends MY_Controller
                 try {
 
                     $recebimento = explode('/', $recebimento);
-                    $recebimento = $recebimento[2].'-'.$recebimento[1].'-'.$recebimento[0];
+                    $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
                 } catch (Exception) {
                 }
             }
@@ -273,7 +273,7 @@ class Financeiro extends MY_Controller
                     }
 
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc').' - Parcelamento de R$'.$descricao_parc_valor.'  ['.$loops.'/'.$qtdparcelas_parc.']',
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . '  [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
@@ -302,7 +302,7 @@ class Financeiro extends MY_Controller
             } else {
                 $desconto_entrada = '0';
                 $data1 = [
-                    'descricao' => $this->input->post('descricao_parc').' - Entrada do parc. de R$'.$descricao_parc_valor.' ',
+                    'descricao' => $this->input->post('descricao_parc') . ' - Entrada do parc. de R$' . $descricao_parc_valor . ' ',
                     'valor' => $entrada,
                     'desconto' => $desconto_entrada,
                     'valor_desconto' => $entrada,
@@ -340,7 +340,7 @@ class Financeiro extends MY_Controller
                     }
 
                     $data = [
-                        'descricao' => $this->input->post('descricao_parc').' - Parcelamento de R$'.$descricao_parc_valor.' ['.$loops.'/'.$qtdparcelas_parc.']',
+                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . ' [' . $loops . '/' . $qtdparcelas_parc . ']',
                         'valor' => $total_com_desconto,
                         'desconto' => $desconto_por_parcela,
                         'tipo_desconto' => 'real',
@@ -388,14 +388,14 @@ class Financeiro extends MY_Controller
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
         if ($this->form_validation->run('despesa') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $vencimento = $this->input->post('vencimento');
             $pagamento = $this->input->post('pagamento');
 
             if ($pagamento != null) {
                 $pagamento = explode('/', $pagamento);
-                $pagamento = $pagamento[2].'-'.$pagamento[1].'-'.$pagamento[0];
+                $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
             }
 
             if ($vencimento == null) {
@@ -404,7 +404,7 @@ class Financeiro extends MY_Controller
 
             try {
                 $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
+                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
@@ -466,17 +466,17 @@ class Financeiro extends MY_Controller
         $this->form_validation->set_rules('pagamento', '', 'trim');
 
         if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">'.validation_errors().'</div>' : false);
+            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $vencimento = $this->input->post('vencimento');
             $pagamento = $this->input->post('pagamento');
 
             try {
                 $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2].'-'.$vencimento[1].'-'.$vencimento[0];
+                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
 
                 $pagamento = explode('/', $pagamento);
-                $pagamento = $pagamento[2].'-'.$pagamento[1].'-'.$pagamento[0];
+                $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
@@ -516,7 +516,7 @@ class Financeiro extends MY_Controller
             }
             if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
-                log_info('Alterou um lançamento no financeiro. ID'.$this->input->post('id'));
+                log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar editar lançamento!');
@@ -568,7 +568,7 @@ class Financeiro extends MY_Controller
         } else {
             $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
             if ($result) {
-                log_info('Removeu um lançamento. ID: '.$id);
+                log_info('Removeu um lançamento. ID: ' . $id);
                 $json = ['result' => true];
                 echo json_encode($json);
             } else {
@@ -597,8 +597,8 @@ class Financeiro extends MY_Controller
     protected function getThisYear()
     {
         $dias = date('z');
-        $primeiro = date('Y-m-d', strtotime('-'.($dias).' day'));
-        $ultimo = date('Y-m-d', strtotime('+'.(364 - $dias).' day'));
+        $primeiro = date('Y-m-d', strtotime('-' . ($dias) . ' day'));
+        $ultimo = date('Y-m-d', strtotime('+' . (364 - $dias) . ' day'));
 
         return [$primeiro, $ultimo];
     }
@@ -618,9 +618,9 @@ class Financeiro extends MY_Controller
         $mes = date('m');
         $ano = date('Y');
         $qtdDiasMes = date('t');
-        $inicia = $ano.'-'.$mes.'-01';
+        $inicia = $ano . '-' . $mes . '-01';
 
-        $ate = $ano.'-'.$mes.'-'.$qtdDiasMes;
+        $ate = $ano . '-' . $mes . '-' . $qtdDiasMes;
 
         return [$inicia, $ate];
     }

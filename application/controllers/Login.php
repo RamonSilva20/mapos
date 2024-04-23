@@ -22,7 +22,7 @@ class Login extends CI_Controller
 
     public function verificarLogin()
     {
-        header('Access-Control-Allow-Origin: '.base_url());
+        header('Access-Control-Allow-Origin: ' . base_url());
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Max-Age: 1000');
         header('Access-Control-Allow-Headers: Content-Type');

@@ -69,13 +69,13 @@ class Relatorios_model extends CI_Model
     {
         $whereData = '';
         if ($dataInicial != null) {
-            $whereData .= 'AND dataCadastro >= '.$this->db->escape($dataInicial);
+            $whereData .= 'AND dataCadastro >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= 'AND dataCadastro <= '.$this->db->escape($dataFinal);
+            $whereData .= 'AND dataCadastro <= ' . $this->db->escape($dataFinal);
         }
         if ($tipo != null) {
-            $whereData .= 'AND fornecedor = '.$this->db->escape($tipo);
+            $whereData .= 'AND fornecedor = ' . $this->db->escape($tipo);
         }
         $query = "SELECT idClientes, nomeCliente, sexo, pessoa_fisica,
         documento, telefone, celular, contato, email, fornecedor,
@@ -141,10 +141,10 @@ class Relatorios_model extends CI_Model
         $wherePreco = '';
         $whereEstoque = '';
         if ($precoInicial != null) {
-            $wherePreco = 'AND precoVenda BETWEEN '.$this->db->escape($precoInicial).' AND '.$this->db->escape($precoFinal);
+            $wherePreco = 'AND precoVenda BETWEEN ' . $this->db->escape($precoInicial) . ' AND ' . $this->db->escape($precoFinal);
         }
         if ($estoqueInicial != null) {
-            $whereEstoque = 'AND estoque BETWEEN '.$this->db->escape($estoqueInicial).' AND '.$this->db->escape($estoqueFinal);
+            $whereEstoque = 'AND estoque BETWEEN ' . $this->db->escape($estoqueInicial) . ' AND ' . $this->db->escape($estoqueFinal);
         }
         $query = "
             SELECT produtos.*,
@@ -161,7 +161,7 @@ class Relatorios_model extends CI_Model
 
     public function produtosEtiquetas($de, $ate)
     {
-        $query = 'SELECT * FROM produtos WHERE idProdutos BETWEEN '.$this->db->escape($de).' AND '.$this->db->escape($ate).' ORDER BY idProdutos';
+        $query = 'SELECT * FROM produtos WHERE idProdutos BETWEEN ' . $this->db->escape($de) . ' AND ' . $this->db->escape($ate) . ' ORDER BY idProdutos';
 
         $this->db->order_by('descricao', 'asc');
 
@@ -288,19 +288,19 @@ class Relatorios_model extends CI_Model
         $whereResponsavel = '';
         $whereStatus = '';
         if ($dataInicial != null) {
-            $whereData .= 'AND dataInicial >= '.$this->db->escape($dataInicial);
+            $whereData .= 'AND dataInicial >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= 'AND dataInicial <= '.$this->db->escape($dataFinal);
+            $whereData .= 'AND dataInicial <= ' . $this->db->escape($dataFinal);
         }
         if ($cliente != null) {
-            $whereCliente = 'AND clientes_id = '.$this->db->escape($cliente);
+            $whereCliente = 'AND clientes_id = ' . $this->db->escape($cliente);
         }
         if ($responsavel != null) {
-            $whereResponsavel = 'AND usuarios_id = '.$this->db->escape($responsavel);
+            $whereResponsavel = 'AND usuarios_id = ' . $this->db->escape($responsavel);
         }
         if ($status != null) {
-            $whereStatus = 'AND status = '.$this->db->escape($status);
+            $whereStatus = 'AND status = ' . $this->db->escape($status);
         }
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
@@ -394,16 +394,16 @@ class Relatorios_model extends CI_Model
         $whereResponsavel = '';
         $whereStatus = '';
         if ($dataInicial != null) {
-            $whereData .= 'AND dataVenda >= '.$this->db->escape($dataInicial);
+            $whereData .= 'AND dataVenda >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= 'AND dataVenda <= '.$this->db->escape($dataFinal);
+            $whereData .= 'AND dataVenda <= ' . $this->db->escape($dataFinal);
         }
         if ($cliente != null) {
-            $whereCliente = 'AND clientes_id = '.$this->db->escape($cliente);
+            $whereCliente = 'AND clientes_id = ' . $this->db->escape($cliente);
         }
         if ($responsavel != null) {
-            $whereResponsavel = 'AND usuarios_id = '.$this->db->escape($responsavel);
+            $whereResponsavel = 'AND usuarios_id = ' . $this->db->escape($responsavel);
         }
 
         $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas

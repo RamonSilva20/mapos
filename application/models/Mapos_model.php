@@ -255,8 +255,8 @@ class Mapos_model extends CI_Model
         }
         $sql = '
             SELECT
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = '.date('d').') AND EXTRACT(MONTH FROM data_pagamento) = '.date('m')." AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_".date('m').'_REC,
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = '.date('d').') AND EXTRACT(MONTH FROM data_pagamento) = '.date('m')." AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_".date('m').'_DES
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_" . date('m') . '_REC,
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_" . date('m') . '_DES
             FROM lancamentos
             WHERE EXTRACT(YEAR FROM data_pagamento) = ?
         ';
