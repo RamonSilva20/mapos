@@ -2,10 +2,6 @@
 
 class Relatorios_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     */
     public function __construct()
     {
         parent::__construct();
@@ -110,7 +106,7 @@ class Relatorios_model extends CI_Model
     public function produtosRapid()
     {
         $query = '
-            SELECT produtos.*, 
+            SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
             SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
@@ -124,7 +120,7 @@ class Relatorios_model extends CI_Model
     public function produtosRapidMin()
     {
         $query = '
-            SELECT produtos.*, 
+            SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
             SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos

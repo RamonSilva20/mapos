@@ -10,10 +10,6 @@ if (! defined('BASEPATH')) {
 
 class Relatorios extends MY_Controller
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     */
     public function __construct()
     {
         parent::__construct();

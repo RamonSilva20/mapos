@@ -6,10 +6,6 @@ if (! defined('BASEPATH')) {
 
 class ResetSenhas_model extends CI_Model
 {
-    /**
-     * author: Wilmerson
-     * email: will.phelipe@gmail.com
-     */
     public function getById($email)
     {
         $this->db->where('email', $email);

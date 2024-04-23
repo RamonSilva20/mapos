@@ -8,10 +8,6 @@ if (! defined('BASEPATH')) {
 
 class Vendas_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     */
     public function __construct()
     {
         parent::__construct();

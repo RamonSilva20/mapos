@@ -6,10 +6,6 @@ if (! defined('BASEPATH')) {
 
 class Garantias_model extends CI_Model
 {
-    /**
-     * author: Wilmerson Felipe
-     * email: will.phelipe@gmail.com
-     */
     public function __construct()
     {
         parent::__construct();
