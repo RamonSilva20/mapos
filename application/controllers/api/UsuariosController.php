@@ -308,7 +308,7 @@ class UsuariosController extends REST_Controller
         
         $this->response([
             'status'  => false,
-            'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas!'
+            'message' => 'Os dados de acesso estão incorretos!'
         ], REST_Controller::HTTP_UNAUTHORIZED);
     }
 
