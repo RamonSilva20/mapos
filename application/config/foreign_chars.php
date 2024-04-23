@@ -1,4 +1,6 @@
-<?php  if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -55,11 +57,11 @@ $foreign_characters = [
     '/Ź|Ż|Ž/' => 'Z',
     '/ź|ż|ž/' => 'z',
     '/Æ|Ǽ/' => 'AE',
-    '/ß/'=> 'ss',
+    '/ß/' => 'ss',
     '/Ĳ/' => 'IJ',
     '/ĳ/' => 'ij',
     '/Œ/' => 'OE',
-    '/ƒ/' => 'f'
+    '/ƒ/' => 'f',
 ];
 
 /* End of file foreign_chars.php */

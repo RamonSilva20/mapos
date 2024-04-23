@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 $active_group = 'default';
@@ -22,5 +23,5 @@ $db['default'] = [
     'compress' => false,
     'stricton' => false,
     'failover' => [],
-    'save_queries' => true
+    'save_queries' => true,
 ];

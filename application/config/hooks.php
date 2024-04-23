@@ -1,4 +1,6 @@
-<?php  if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -17,15 +19,15 @@ $hook['display_override'][] = [
     'class' => '',
     'function' => 'compress',
     'filename' => 'compress.php',
-    'filepath' => 'hooks'
+    'filepath' => 'hooks',
 ];
 
 $hook['pre_system'][] = [
-    'class'    => 'WhoopsHook',
+    'class' => 'WhoopsHook',
     'function' => 'bootWhoops',
     'filename' => 'whoops.php',
     'filepath' => 'hooks',
-    'params'   => []
+    'params' => [],
 ];
 
 /* End of file hooks.php */

@@ -1,4 +1,6 @@
-<?php  if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -41,7 +43,6 @@
 
 $autoload['packages'] = [];
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Libraries
@@ -56,7 +57,6 @@ $autoload['packages'] = [];
 
 $autoload['libraries'] = ['database', 'session', 'permission'];
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Helper Files
@@ -67,7 +67,6 @@ $autoload['libraries'] = ['database', 'session', 'permission'];
 */
 
 $autoload['helper'] = ['url', 'audit', 'date', 'dd', 'validation', 'general', 'captcha'];
-
 
 /*
 | -------------------------------------------------------------------
@@ -84,7 +83,6 @@ $autoload['helper'] = ['url', 'audit', 'date', 'dd', 'validation', 'general', 'c
 
 $autoload['config'] = [];
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Language files
@@ -100,7 +98,6 @@ $autoload['config'] = [];
 
 $autoload['language'] = [];
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Models
@@ -112,7 +109,6 @@ $autoload['language'] = [];
 */
 
 $autoload['model'] = [];
-
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */

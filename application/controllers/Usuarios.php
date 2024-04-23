@@ -1,20 +1,16 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Usuarios extends MY_Controller
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar os usuários.');
             redirect(base_url());
         }
@@ -42,6 +38,7 @@ class Usuarios extends MY_Controller
         $this->data['results'] = $this->usuarios_model->get($this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'usuarios/usuarios';
+
         return $this->layout();
     }
 
@@ -85,12 +82,13 @@ class Usuarios extends MY_Controller
         $this->load->model('permissoes_model');
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
         $this->data['view'] = 'usuarios/adicionarUsuario';
+
         return $this->layout();
     }
 
     public function editar()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
@@ -175,6 +173,7 @@ class Usuarios extends MY_Controller
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
 
         $this->data['view'] = 'usuarios/editarUsuario';
+
         return $this->layout();
     }
 

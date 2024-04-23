@@ -9,6 +9,6 @@ class Migration_controle_editar_vendas extends CI_Migration
 
     public function down()
     {
-        $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 13");
+        $this->db->query('DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 13');
     }
 }

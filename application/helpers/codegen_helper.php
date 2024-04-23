@@ -1,9 +1,8 @@
 <?php
 
-if (!defined('BASEPATH')) {
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
-
 
 function p($a)
 {
@@ -18,7 +17,6 @@ function v($a)
     echo '</pre>';
 }
 
-
 function clean_header($array)
 {
     $CI = get_instance();
@@ -26,6 +24,7 @@ function clean_header($array)
     foreach ($array as $a) {
         $arr[] = humanize($a);
     }
+
     return $arr;
 }
 
@@ -34,5 +33,6 @@ function validate_money($valor)
     if (preg_match("/^([0-9]*)\.(\d{2})$/", $valor)) {
         return true;
     }
+
     return false;
 }

@@ -6,7 +6,7 @@ class Configuracoes extends Seeder
 
     public function run()
     {
-        echo "Running Configuracoes Seeder";
+        echo 'Running Configuracoes Seeder';
 
         $configs = [
             [

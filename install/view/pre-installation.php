@@ -64,10 +64,10 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($settings["extensions"] as $value) { ?>
+          <?php foreach ($settings['extensions'] as $value) { ?>
             <tr>
               <td>
-                <?php echo($value); ?>
+                <?php echo $value; ?>
               </td>
               <td>
                 <?php if (extension_loaded($value)) { ?>
@@ -85,7 +85,7 @@
                 <?php } ?>
               </td>
             </tr>
-          <?php }; ?>
+          <?php } ?>
         </tbody>
       </table>
     </div>
@@ -104,13 +104,13 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($settings["writeable_directories"] as $value) { ?>
+          <?php foreach ($settings['writeable_directories'] as $value) { ?>
             <tr>
               <td>
                 <?php echo $value; ?>
               </td>
               <td class="text-center">
-                <?php if (is_writeable(".." . $value)) { ?>
+                <?php if (is_writable('..' . $value)) { ?>
                   <i class="status fa fa-check-circle-o"></i>
                   <?php
                 } else {
@@ -120,15 +120,15 @@
                 } ?>
               </td>
             </tr>
-          <?php }; ?>
+          <?php } ?>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="panel-footer">
-    <button <?php if (!$all_requirement_success) {
-        echo "disabled=disabled" ;
+    <button <?php if (! $all_requirement_success) {
+        echo 'disabled=disabled';
     } ?> class="btn btn-info
       form-next"><i class='fa fa-chevron-right'></i> Próximo</button>
     </div>

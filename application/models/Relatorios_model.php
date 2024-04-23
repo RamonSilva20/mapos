@@ -2,12 +2,6 @@
 
 class Relatorios_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -24,7 +18,8 @@ class Relatorios_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -70,13 +65,13 @@ class Relatorios_model extends CI_Model
     {
         $whereData = '';
         if ($dataInicial != null) {
-            $whereData .= "AND dataCadastro >= " . $this->db->escape($dataInicial);
+            $whereData .= 'AND dataCadastro >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= "AND dataCadastro <= " . $this->db->escape($dataFinal);
+            $whereData .= 'AND dataCadastro <= ' . $this->db->escape($dataFinal);
         }
         if ($tipo != null) {
-            $whereData .= "AND fornecedor = " . $this->db->escape($tipo);
+            $whereData .= 'AND fornecedor = ' . $this->db->escape($tipo);
         }
         $query = "SELECT idClientes, nomeCliente, sexo, pessoa_fisica,
         documento, telefone, celular, contato, email, fornecedor,
@@ -104,47 +99,48 @@ class Relatorios_model extends CI_Model
         if ($array) {
             return $result->result_array();
         }
+
         return $result->result();
     }
 
     public function produtosRapid()
     {
-        $query = "
-            SELECT produtos.*, 
+        $query = '
+            SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
             SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             GROUP BY produtos.idProdutos
             ORDER BY descricao
-        ";
+        ';
 
         return $this->db->query($query)->result();
     }
 
     public function produtosRapidMin()
     {
-        $query = "
-            SELECT produtos.*, 
+        $query = '
+            SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
             SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
             WHERE estoque <= estoqueMinimo
             GROUP BY produtos.idProdutos
             ORDER BY descricao
-        ";
+        ';
 
         return $this->db->query($query)->result();
     }
 
     public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
     {
-        $wherePreco = "";
-        $whereEstoque = "";
+        $wherePreco = '';
+        $whereEstoque = '';
         if ($precoInicial != null) {
-            $wherePreco = "AND precoVenda BETWEEN " . $this->db->escape($precoInicial) . " AND " . $this->db->escape($precoFinal);
+            $wherePreco = 'AND precoVenda BETWEEN ' . $this->db->escape($precoInicial) . ' AND ' . $this->db->escape($precoFinal);
         }
         if ($estoqueInicial != null) {
-            $whereEstoque = "AND estoque BETWEEN " . $this->db->escape($estoqueInicial) . " AND " . $this->db->escape($estoqueFinal);
+            $whereEstoque = 'AND estoque BETWEEN ' . $this->db->escape($estoqueInicial) . ' AND ' . $this->db->escape($estoqueFinal);
         }
         $query = "
             SELECT produtos.*,
@@ -161,7 +157,7 @@ class Relatorios_model extends CI_Model
 
     public function produtosEtiquetas($de, $ate)
     {
-        $query = "SELECT * FROM produtos WHERE idProdutos BETWEEN " . $this->db->escape($de) . " AND " . $this->db->escape($ate) . " ORDER BY idProdutos";
+        $query = 'SELECT * FROM produtos WHERE idProdutos BETWEEN ' . $this->db->escape($de) . ' AND ' . $this->db->escape($ate) . ' ORDER BY idProdutos';
 
         $this->db->order_by('descricao', 'asc');
 
@@ -218,8 +214,8 @@ class Relatorios_model extends CI_Model
         ";
         $this->db->query($query);
 
-        $this->db->from("results");
-        $this->db->order_by("dataOcorrencia", "desc");
+        $this->db->from('results');
+        $this->db->order_by('dataOcorrencia', 'desc');
         if ($dataInicial) {
             $this->db->where('dataOcorrencia >=', $dataInicial);
         }
@@ -253,7 +249,7 @@ class Relatorios_model extends CI_Model
 
     public function servicosCustom($precoInicial = null, $precoFinal = null)
     {
-        $query = "SELECT * FROM servicos WHERE preco BETWEEN ? AND ? ORDER BY nome";
+        $query = 'SELECT * FROM servicos WHERE preco BETWEEN ? AND ? ORDER BY nome';
 
         return $this->db->query($query, [$precoInicial, $precoFinal])->result();
     }
@@ -283,24 +279,24 @@ class Relatorios_model extends CI_Model
 
     public function osCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $status = null, $array = false)
     {
-        $whereData = "";
-        $whereCliente = "";
-        $whereResponsavel = "";
-        $whereStatus = "";
+        $whereData = '';
+        $whereCliente = '';
+        $whereResponsavel = '';
+        $whereStatus = '';
         if ($dataInicial != null) {
-            $whereData .= "AND dataInicial >= " . $this->db->escape($dataInicial);
+            $whereData .= 'AND dataInicial >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= "AND dataInicial <= " . $this->db->escape($dataFinal);
+            $whereData .= 'AND dataInicial <= ' . $this->db->escape($dataFinal);
         }
         if ($cliente != null) {
-            $whereCliente = "AND clientes_id = " . $this->db->escape($cliente);
+            $whereCliente = 'AND clientes_id = ' . $this->db->escape($cliente);
         }
         if ($responsavel != null) {
-            $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
+            $whereResponsavel = 'AND usuarios_id = ' . $this->db->escape($responsavel);
         }
         if ($status != null) {
-            $whereStatus = "AND status = " . $this->db->escape($status);
+            $whereStatus = 'AND status = ' . $this->db->escape($status);
         }
         $query = 'CREATE TEMPORARY TABLE IF NOT EXISTS total_produtos SELECT SUM(subTotal) as total_produto, os_id FROM produtos_os GROUP BY os_id; ';
         $this->db->query($query);
@@ -389,21 +385,21 @@ class Relatorios_model extends CI_Model
 
     public function vendasCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $array = false)
     {
-        $whereData = "";
-        $whereCliente = "";
-        $whereResponsavel = "";
-        $whereStatus = "";
+        $whereData = '';
+        $whereCliente = '';
+        $whereResponsavel = '';
+        $whereStatus = '';
         if ($dataInicial != null) {
-            $whereData .= "AND dataVenda >= " . $this->db->escape($dataInicial);
+            $whereData .= 'AND dataVenda >= ' . $this->db->escape($dataInicial);
         }
         if ($dataFinal != null) {
-            $whereData .= "AND dataVenda <= " . $this->db->escape($dataFinal);
+            $whereData .= 'AND dataVenda <= ' . $this->db->escape($dataFinal);
         }
         if ($cliente != null) {
-            $whereCliente = "AND clientes_id = " . $this->db->escape($cliente);
+            $whereCliente = 'AND clientes_id = ' . $this->db->escape($cliente);
         }
         if ($responsavel != null) {
-            $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
+            $whereResponsavel = 'AND usuarios_id = ' . $this->db->escape($responsavel);
         }
 
         $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas
@@ -421,7 +417,7 @@ class Relatorios_model extends CI_Model
 
     public function receitasBrutasRapid()
     {
-        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+        $emitente = $this->db->query('SELECT * FROM emitente LIMIT 1')->row_array();
 
         $inicio = (new DateTime())->modify('first day of this month');
         $fim = (new DateTime())->modify('last day of this month');
@@ -455,7 +451,7 @@ class Relatorios_model extends CI_Model
 
         $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
 
-        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+        $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 
         return [
             'cnpj' => $emitente['cnpj'],
@@ -471,13 +467,13 @@ class Relatorios_model extends CI_Model
             'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
             'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
             'totalMes' => number_format($totalMes, 2, ',', '.'),
-            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+            'localEdata' => sprintf('%s, %s', $emitente['cidade'], (new DateTime())->format('d/m/Y')),
         ];
     }
 
     public function receitasBrutasCustom($dataInicial = null, $dataFinal = null)
     {
-        $emitente = $this->db->query("SELECT * FROM emitente LIMIT 1")->row_array();
+        $emitente = $this->db->query('SELECT * FROM emitente LIMIT 1')->row_array();
 
         $query = "
             SELECT
@@ -511,7 +507,7 @@ class Relatorios_model extends CI_Model
 
         $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
 
-        $periodo = sprintf("%s à %s", $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
+        $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 
         return [
             'cnpj' => $emitente['cnpj'],
@@ -527,7 +523,7 @@ class Relatorios_model extends CI_Model
             'servicosTotalComNf' => number_format($servicosTotalComNf, 2, ',', '.'),
             'servicosTotal' => number_format($servicosTotal, 2, ',', '.'),
             'totalMes' => number_format($totalMes, 2, ',', '.'),
-            'localEdata' => sprintf("%s, %s", $emitente['cidade'], (new DateTime())->format('d/m/Y')),
+            'localEdata' => sprintf('%s, %s', $emitente['cidade'], (new DateTime())->format('d/m/Y')),
         ];
     }
 }
