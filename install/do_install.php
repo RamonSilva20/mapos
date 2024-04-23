@@ -98,6 +98,7 @@ if (!empty($_POST)) {
     // set random enter_jwt_key
     $env_file = str_replace('enter_jwt_key', base64_encode(openssl_random_pseudo_bytes(32)), $env_file);
     $env_file = str_replace('token_expire_time', $_POST["token_expire_time"], $env_file);
+    $env_file = str_replace('api_enabled', (string) $_POST["api_enabled"], $env_file);
 
     // set the environment = production
     $env_file = str_replace('pre_installation', 'production', $env_file);
