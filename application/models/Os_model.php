@@ -40,7 +40,7 @@ class Os_model extends CI_Model
             if (array_key_exists('pesquisa', $where)) {
                 $this->db->select('idClientes');
                 $this->db->like('nomeCliente', $where['pesquisa']);
-                $this->db->limit(5);
+                $this->db->limit(25);
                 $clientes = $this->db->get('clientes')->result();
 
                 foreach ($clientes as $c) {
@@ -182,7 +182,7 @@ class Os_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('codDeBarra', $q);
         $this->db->or_like('descricao', $q);
         $query = $this->db->get('produtos');
@@ -197,7 +197,7 @@ class Os_model extends CI_Model
     public function autoCompleteProdutoSaida($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('codDeBarra', $q);
         $this->db->or_like('descricao', $q);
         $this->db->where('saida', 1);
@@ -213,7 +213,7 @@ class Os_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nomeCliente', $q);
         $this->db->or_like('telefone', $q);
         $this->db->or_like('celular', $q);
@@ -230,8 +230,9 @@ class Os_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nome', $q);
+        $this->db->or_like('documento', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
@@ -245,7 +246,7 @@ class Os_model extends CI_Model
     public function autoCompleteTermoGarantia($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('LOWER(refGarantia)', $q);
         $query = $this->db->get('garantias');
         if ($query->num_rows() > 0) {
@@ -259,7 +260,7 @@ class Os_model extends CI_Model
     public function autoCompleteServico($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nome', $q);
         $query = $this->db->get('servicos');
         if ($query->num_rows() > 0) {
