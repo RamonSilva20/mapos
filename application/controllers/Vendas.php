@@ -29,12 +29,32 @@ class Vendas extends MY_Controller
 
         $this->load->library('pagination');
 
+        $where_array = [];
+
+        $pesquisa = $this->input->get('pesquisa');
+        $status = $this->input->get('status');
+        $de = $this->input->get('data');
+        $ate = $this->input->get('data2');
+
+        if ($pesquisa) {
+            $where_array['pesquisa'] = $pesquisa;
+        }
+        if ($status) {
+            $where_array['status'] = $status;
+        }
+        if ($de) {
+            $where_array['de'] = $de;
+        }
+        if ($ate) {
+            $where_array['ate'] = $ate;
+        }
+
         $this->data['configuration']['base_url'] = site_url('vendas/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->vendas_model->count('vendas');
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->vendas_model->get('vendas', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->vendas_model->get('vendas', '*', $where_array, $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'vendas/vendas';
 

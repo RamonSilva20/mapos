@@ -59,11 +59,11 @@
                                                 </option>
                                                 <option <?php if ($result->status == 'Aberta') {
                                                     echo 'selected';
-                                                } ?> value="Aberta">Aberta
+                                                } ?> value="Aberto">Aberto
                                                 </option>
                                                 <option <?php if ($result->status == 'Faturada') {
                                                     echo 'selected';
-                                                } ?> value="Faturada">Faturada
+                                                } ?> value="Faturado">Faturado
                                                 </option>
                                                 <option <?php if ($result->status == 'Negociação') {
                                                     echo 'selected';
@@ -75,11 +75,11 @@
                                                 </option>
                                                 <option <?php if ($result->status == 'Finalizada') {
                                                     echo 'selected';
-                                                } ?> value="Finalizada">Finalizada
+                                                } ?> value="Finalizado">Finalizado
                                                 </option>
                                                 <option <?php if ($result->status == 'Cancelado') {
                                                     echo 'selected';
-                                                } ?> value="Cancelada">Cancelada
+                                                } ?> value="Cancelado">Cancelado
                                                 </option>
                                                 <option <?php if ($result->status == 'Aguardando Peças') {
                                                     echo 'selected';
@@ -87,7 +87,7 @@
                                                 </option>
                                                 <option <?php if ($result->status == 'Aprovada') {
                                                     echo 'selected';
-                                                } ?> value="Aprovada">Aprovada
+                                                } ?> value="Aprovado">Aprovado
                                                 </option>
                                             </select>
                                         </div>
