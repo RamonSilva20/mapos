@@ -4,6 +4,12 @@ use Piggly\Pix\StaticPayload;
 
 class Os_model extends CI_Model
 {
+    /**
+     * author: Ramon Silva
+     * email: silva018-mg@yahoo.com.br
+     *
+     */
+
     public function __construct()
     {
         parent::__construct();
@@ -22,7 +28,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = ! $one ? $query->result() : $query->row();
+        $result = !$one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -34,8 +40,7 @@ class Os_model extends CI_Model
             if (array_key_exists('pesquisa', $where)) {
                 $this->db->select('idClientes');
                 $this->db->like('nomeCliente', $where['pesquisa']);
-                $this->db->like('documento', $where['pesquisa']);
-                $this->db->limit(25);
+                $this->db->limit(5);
                 $clientes = $this->db->get('clientes')->result();
 
                 foreach ($clientes as $c) {
@@ -81,7 +86,7 @@ class Os_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = ! $one ? $query->result() : $query->row();
+        $result = !$one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -140,7 +145,6 @@ class Os_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
-
             return true;
         }
 
@@ -178,7 +182,7 @@ class Os_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('codDeBarra', $q);
         $this->db->or_like('descricao', $q);
         $query = $this->db->get('produtos');
@@ -193,7 +197,7 @@ class Os_model extends CI_Model
     public function autoCompleteProdutoSaida($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('codDeBarra', $q);
         $this->db->or_like('descricao', $q);
         $this->db->where('saida', 1);
@@ -209,7 +213,7 @@ class Os_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('nomeCliente', $q);
         $this->db->or_like('telefone', $q);
         $this->db->or_like('celular', $q);
@@ -226,7 +230,7 @@ class Os_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
@@ -241,7 +245,7 @@ class Os_model extends CI_Model
     public function autoCompleteTermoGarantia($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('LOWER(refGarantia)', $q);
         $query = $this->db->get('garantias');
         if ($query->num_rows() > 0) {
@@ -255,7 +259,7 @@ class Os_model extends CI_Model
     public function autoCompleteServico($q)
     {
         $this->db->select('*');
-        $this->db->limit(25);
+        $this->db->limit(5);
         $this->db->like('nome', $q);
         $query = $this->db->get('servicos');
         if ($query->num_rows() > 0) {
@@ -280,7 +284,6 @@ class Os_model extends CI_Model
     public function getAnexos($os)
     {
         $this->db->where('os_id', $os);
-
         return $this->db->get('anexos')->result();
     }
 
@@ -303,11 +306,10 @@ class Os_model extends CI_Model
 
     public function criarTextoWhats($textoBase, $troca)
     {
-        $procura = ['{CLIENTE_NOME}', '{NUMERO_OS}', '{STATUS_OS}', '{VALOR_OS}', '{DESCRI_PRODUTOS}', '{EMITENTE}', '{TELEFONE_EMITENTE}', '{OBS_OS}', '{DEFEITO_OS}', '{LAUDO_OS}', '{DATA_FINAL}', '{DATA_INICIAL}', '{DATA_GARANTIA}'];
+        $procura = ["{CLIENTE_NOME}", "{NUMERO_OS}", "{STATUS_OS}", "{VALOR_OS}", "{DESCRI_PRODUTOS}", "{EMITENTE}", "{TELEFONE_EMITENTE}", "{OBS_OS}", "{DEFEITO_OS}", "{LAUDO_OS}", "{DATA_FINAL}", "{DATA_INICIAL}", "{DATA_GARANTIA}"];
         $textoBase = str_replace($procura, $troca, $textoBase);
         $textoBase = strip_tags($textoBase);
         $textoBase = htmlentities(urlencode($textoBase));
-
         return $textoBase;
     }
 
@@ -336,16 +338,15 @@ class Os_model extends CI_Model
 
     public function isEditable($id = null)
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
             return false;
         }
         if ($os = $this->getById($id)) {
-            $osT = (int) ($os->status === 'Faturado' || $os->status === 'Cancelado' || $os->faturado == 1);
+            $osT = (int)($os->status === "Faturado" || $os->status === "Cancelado" || $os->faturado == 1);
             if ($osT) {
                 return $this->data['configuration']['control_editos'] == '1';
             }
         }
-
         return true;
     }
 
@@ -365,7 +366,7 @@ class Os_model extends CI_Model
         $pix = (new StaticPayload())
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf('%s OS %s', substr($emitente->nome, 0, 18), $id), true)
+            ->setDescription(sprintf("%s OS %s", substr($emitente->nome, 0, 18), $id), true)
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);
