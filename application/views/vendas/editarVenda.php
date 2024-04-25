@@ -57,11 +57,11 @@
                                                     echo 'selected';
                                                 } ?> value="Orçamento">Orçamento
                                                 </option>
-                                                <option <?php if ($result->status == 'Aberta') {
+                                                <option <?php if ($result->status == 'Aberto') {
                                                     echo 'selected';
                                                 } ?> value="Aberto">Aberto
                                                 </option>
-                                                <option <?php if ($result->status == 'Faturada') {
+                                                <option <?php if ($result->status == 'Faturado') {
                                                     echo 'selected';
                                                 } ?> value="Faturado">Faturado
                                                 </option>
@@ -73,7 +73,7 @@
                                                     echo 'selected';
                                                 } ?> value="Em Andamento">Em Andamento
                                                 </option>
-                                                <option <?php if ($result->status == 'Finalizada') {
+                                                <option <?php if ($result->status == 'Finalizado') {
                                                     echo 'selected';
                                                 } ?> value="Finalizado">Finalizado
                                                 </option>
@@ -85,7 +85,7 @@
                                                     echo 'selected';
                                                 } ?> value="Aguardando Peças">Aguardando Peças
                                                 </option>
-                                                <option <?php if ($result->status == 'Aprovada') {
+                                                <option <?php if ($result->status == 'Aprovado') {
                                                     echo 'selected';
                                                 } ?> value="Aprovado">Aprovado
                                                 </option>
