@@ -471,7 +471,7 @@ class Financeiro extends MY_Controller
                 $vencimento = explode('/', $vencimento);
                 $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
 
-                if($pagamento) {
+                if ($pagamento) {
                     $pagamento = explode('/', $pagamento);
                     $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
                 }
