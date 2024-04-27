@@ -12,14 +12,22 @@
                         echo '<a title="Editar Venda" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/vendas/editar/' . $result->idVendas . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
-                    <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
-                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Orçamento</span></a>
-                    <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
-                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
-                    <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
-                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
-                    <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
-                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
+                    <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse"
+                        href="<?php echo site_url() ?>/vendas/imprimirVendaOrcamento/<?php echo $result->idVendas; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span
+                            class="button__text">Orçamento</span></a>
+                    <a target="_blank" title="Imprimir Papel A4" class="button btn btn-mini btn-inverse"
+                        href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel
+                            A4</span></a>
+                    <a target="_blank" title="Imprimir Cupom Não Fiscal" class="button btn btn-mini btn-inverse"
+                        href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
+                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP
+                            Não Fiscal</span></a>
+                    <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal"
+                        class="button btn btn-mini btn-info">
+                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar
+                            Pagamento</span></a></i>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -28,27 +36,30 @@
                         <table class="table">
                             <tbody>
                                 <?php if ($emitente == null) { ?>
-                                    <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<< /td>
-                                    </tr> <?php
+                                <tr>
+                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a
+                                            href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                        <<<< /td>
+                                </tr> <?php
                                 } else { ?> <tr>
-                                        <td style="width: 25%"><img src="<?php echo "$emitente->url_logo"; ?>"></td>
-                                        <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente->nome; ?></span> </br><span>
-                                                <?php echo $emitente->cnpj; ?> </br>
-                                                <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
-                                        <td style="width: 18%; text-align: center">Venda: <span>
-                                                <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
-                                                <?php echo date('d/m/Y'); ?></span>
-                                            <?php if ($result->faturado) : ?>
-                                                <br>
-                                                Vencimento:
-                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
+                                    <td style="width: 25%"><img src="<?php echo "$emitente->url_logo"; ?>"></td>
+                                    <td> <span style="font-size: 20px; ">
+                                            <?php echo $emitente->nome; ?></span> </br><span>
+                                            <?php echo $emitente->cnpj; ?> </br>
+                                            <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?>
+                                        </span> </br> <span> E-mail:
+                                            <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span>
+                                    </td>
+                                    <td style="width: 18%; text-align: center">Venda: <span>
+                                            <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
+                                            <?php echo date('d/m/Y'); ?></span>
+                                        <?php if ($result->faturado) : ?>
+                                        <br>
+                                        Vencimento:
+                                        <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                                 <?php
                                 } ?>
                             </tbody>
@@ -65,19 +76,21 @@
                                                         <?php echo $result->nomeCliente ?>
                                                     </span><br />
                                                     <span>
-                                                        <?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?>
-                                                    </span><br/>
+                                                        <?php echo $result->rua ?>, <?php echo $result->numero ?>,
+                                                        <?php echo $result->bairro ?>
+                                                    </span><br />
                                                     <span>
-                                                        <?php echo $result->cidade ?> - <?php echo $result->estado ?> - CEP: <?php echo $result->cep ?>
-                                                    </span><br/>
+                                                        <?php echo $result->cidade ?> - <?php echo $result->estado ?> -
+                                                        CEP: <?php echo $result->cep ?>
+                                                    </span><br />
                                                     <span>
                                                         Email: <?php echo $result->emailCliente ?>
                                                     </span></br>
                                                     <?php if ($result->contato) { ?>
-                                                        <span>Contato: <?php echo $result->contato ?> </span>
+                                                    <span>Contato: <?php echo $result->contato ?> </span>
                                                     <?php } ?>
                                                     <span>Celular: <?php echo $result->celular ?></span>
-							                    </span>
+                                                </span>
                                             </li>
                                         </ul>
                                     </td>
@@ -97,11 +110,14 @@
                                         </ul>
                                     </td>
                                     <?php if ($qrCode) : ?>
-                                        <td style="width: 15%; padding: 0;text-align:center;">
-                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
-                                        </td>
+                                    <td style="width: 15%; padding: 0;text-align:center;">
+                                        <img style="margin:12px 0px 0px 0px"
+                                            src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px"
+                                            alt="QR Code de Pagamento" /></br>
+                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>"
+                                            alt="QR Code de Pagamento" /></br>
+                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
+                                    </td>
                                     <?php endif ?>
                                 </tr>
                             </tbody>
@@ -112,39 +128,41 @@
                         <table class="table table-condensed">
                             <tbody>
                                 <?php if ($result->dataVenda != null) { ?>
-                                    <tr>
-                                        <td>
-                                            <b>STATUS VENDA: </b><?php echo $result->status ?>
-                                        </td>
+                                <tr>
+                                    <td>
+                                        <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                    </td>
 
-                                        <td>
-                                            <b>DATA DA VENDA: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
-                                        </td>
+                                    <td>
+                                        <b>DATA DA VENDA:
+                                        </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                    </td>
 
-                                        <td>
-                                            <?php if ($result->garantia) { ?>
-                                                <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
-                                            <?php } ?>
-                                        </td>
+                                    <td>
+                                        <?php if ($result->garantia) { ?>
+                                        <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                        <?php } ?>
+                                    </td>
 
-                                        <td>
-                                            <?php if ($result->status == 'Finalizado') { ?>
-                                                <b>VENC. DA GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
-                                            <?php } ?>
-                                        </td>
-                                    </tr>
+                                    <td>
+                                        <?php if ($result->status == 'Finalizado') { ?>
+                                        <b>VENC. DA
+                                            GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
                                 <?php } ?>
                                 <tr>
-                                    <td colspan="4"> 
+                                    <td colspan="4">
                                         <b>OBSERVAÇÕES: </b>
                                         <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    <hr />
+                        <hr />
 
-                    <?php if ($produtos != null) { ?>
+                        <?php if ($produtos != null) { ?>
                         <table class="table table-bordered table-condensed" id="tblProdutos">
                             <thead>
                                 <tr>
@@ -174,12 +192,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                    <?php } ?>
-                    <hr />
-                    <h4 style="text-align: right">Total: R$
-                        <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
-                    </h4>
-                    <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                        <?php } ?>
+                        <hr />
+                        <h4 style="text-align: right">Total: R$
+                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                        </h4>
+                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
                         ?>
                         <h4 style="text-align: right">Desconto: R$
                             <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
@@ -187,13 +205,14 @@
                         <h4 style="text-align: right">Total Com Desconto: R$
                             <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
                         </h4>
-                    <?php
+                        <?php
                     } ?>
-                    <hr />
+                        <hr />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <?= $modalGerarPagamento ?>
+            <?= $modalGerarPagamento ?>
+        </div>
     </div>
-</div>
+    

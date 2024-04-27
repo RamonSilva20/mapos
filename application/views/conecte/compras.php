@@ -1,67 +1,67 @@
 <?php
 
 if (!$results) { ?>
-    <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon">
-                <i class="fas fa-tags"></i>
-            </span>
-            <h5>Compras</h5>
+<div class="widget-box">
+    <div class="widget-title" style="margin: -20px 0 0">
+        <span class="icon">
+            <i class="fas fa-tags"></i>
+        </span>
+        <h5>Compras</h5>
 
-        </div>
-
-        <div class="widget-content nopadding tab-content">
-
-
-            <table id="tabela" class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Data da Compra</th>
-                        <th>Vendedor</th>
-                        <th>Faturado</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td colspan="6">Nenhuma compra cadastrada</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
+
+    <div class="widget-content nopadding tab-content">
+
+
+        <table id="tabela" class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Data da Compra</th>
+                    <th>Vendedor</th>
+                    <th>Faturado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td colspan="6">Nenhuma compra cadastrada</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <?php
 } else { ?>
 
 
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon">
-                <i class="fas fa-shopping-cart"></i>
-            </span>
-            <h5>Compras</h5>
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon">
+            <i class="fas fa-shopping-cart"></i>
+        </span>
+        <h5>Compras</h5>
 
-        </div>
+    </div>
 
-        <div class="widget-content nopadding tab-content">
+    <div class="widget-content nopadding tab-content">
 
-            <table id="tabela" class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Vendedor</th>
-                        <th>Data da Compra</th>
-                        <th>Vencimento da Garantia</th>
-                        <th>Faturado</th>
-                        <th>Status</th>
-                        <th>Visualizar / Imprimir</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($results as $r) {
+        <table id="tabela" class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Vendedor</th>
+                    <th>Data da Compra</th>
+                    <th>Vencimento da Garantia</th>
+                    <th>Faturado</th>
+                    <th>Status</th>
+                    <th>Visualizar / Imprimir</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($results as $r) {
                         $vencGarantia = '';
 
                         if ($r->garantia && is_numeric($r->garantia)) {
@@ -135,10 +135,10 @@ if (!$results) { ?>
                   </td>';
                         echo '</tr>';
                     } ?>
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>
 
 <?php echo $this->pagination->create_links();
 } ?>

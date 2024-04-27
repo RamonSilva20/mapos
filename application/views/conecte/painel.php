@@ -13,7 +13,7 @@
             </a>
         </li>
 
-        <li class="card"> 
+        <li class="card">
             <a href="<?php echo base_url() ?>index.php/mine/compras">
                 <div class="lord-icon05">
                     <i class='bx bx-cart-alt iconBx05'></i>
@@ -22,17 +22,17 @@
             <a href="<?php echo base_url() ?>index.php/mine/compras">
                 <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </a>
-            <li class="card"> 
+        <li class="card">
             <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
                 <div class="lord-icon05">
-                <i class='bx bx-credit-card-front iconBx05'></i>
+                    <i class='bx bx-credit-card-front iconBx05'></i>
                 </div>
             </a>
             <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
                 <div style="font-size: 1.2em" class="numbers">Cobranças&nbsp;&nbsp;&nbsp;&nbsp;</div>
             </a>
         </li>
-        <li class="card"> 
+        <li class="card">
             <a href="<?php echo base_url() ?>index.php/mine/conta">
                 <div class="lord-icon07">
                     <i class='bx bx-user-circle iconBx07'></i></span>
@@ -40,14 +40,15 @@
             </a>
             <a href="<?php echo base_url() ?>index.php/mine/conta">
                 <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
-            </a></li>
+            </a>
+        </li>
     </ul>
 </div>
 
 <div class="span12" style="margin-left: 0">
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
-          <span class="icon"><i class="fas fa-signal"></i></span>
+            <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Ordens de Serviço</h5>
         </div>
         <div class="widget-content">
@@ -147,7 +148,7 @@
 
     <div class="widget-box">
         <div class="widget-title" style="margin: -20px 0 0">
-          <span class="icon"><i class="fas fa-signal"></i></span>
+            <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Compras</h5>
         </div>
         <div class="widget-content">
