@@ -128,7 +128,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    <hr />
 
                         <?php if ($produtos != null) { ?>
 
@@ -171,7 +170,6 @@
                             </table>
                         <?php } ?>
 
-
                         <hr />
 
                         <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($result->desconto != 0 && $result->valor_desconto != 0 ? $result->valor_desconto : $totalProdutos, 2, ',', '.'); ?></h4>
@@ -187,7 +185,7 @@
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
     <script>
-        // window.print();
+        window.print();
     </script>
 
 </body>

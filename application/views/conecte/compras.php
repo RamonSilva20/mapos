@@ -47,7 +47,6 @@ if (!$results) { ?>
 
         <div class="widget-content nopadding tab-content">
 
-
             <table id="tabela" class="table table-bordered ">
                 <thead>
                     <tr>
@@ -92,7 +91,7 @@ if (!$results) { ?>
                         }
                     
                     switch ($r->status) {
-                        case 'Aberta':
+                        case 'Aberto':
                             $cor = '#00cd00';
                             break;
                         case 'Em Andamento':
@@ -104,19 +103,19 @@ if (!$results) { ?>
                         case 'Negociação':
                             $cor = '#AEB404';
                             break;
-                        case 'Cancelada':
+                        case 'Cancelado':
                             $cor = '#CD0000';
                             break;
-                        case 'Finalizada':
+                        case 'Finalizado':
                             $cor = '#256';
                             break;
-                        case 'Faturada':
+                        case 'Faturado':
                             $cor = '#B266FF';
                             break;
                         case 'Aguardando Peças':
                             $cor = '#FF7F00';
                             break;
-                        case 'Aprovada':
+                        case 'Aprovado':
                             $cor = '#808080';
                             break;
                         default:

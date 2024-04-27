@@ -55,9 +55,10 @@
                 <thead>
                     <tr>
                         <th>Nº</th>
+                        <th>Cliente</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Venc. Garantia</th>
+                        <th>Venc. da Garantia</th>
                         <th>Status</th>
                         <th style="text-align:right">Visualizar / Imprimir</th>
                     </tr>
@@ -123,6 +124,7 @@
 
                             echo '<tr>';
                             echo '<td>' . $o->idOs . '</td>';
+                            echo '<td>' . $o->nome . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
                             echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
                             echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
@@ -154,9 +156,9 @@
                     <tr>
                         <th>#</th>
                         <th>Responsável</th>
-                        <th>Data de Venda</th>
-                        <th>Vencimento da Garantia</th>
+                        <th>Data da Venda</th>
                         <th>Faturado</th>
+                        <th>Venc. da Garantia</th>
                         <th>Status</th>
                         <th style="text-align:right">Visualizar / Imprimir</th>
                     </tr>
@@ -193,7 +195,7 @@
                     }
                     
                     switch ($c->status) {
-                        case 'Aberta':
+                        case 'Aberto':
                             $cor = '#00cd00';
                             break;
                         case 'Em Andamento':
@@ -205,19 +207,19 @@
                         case 'Negociação':
                             $cor = '#AEB404';
                             break;
-                        case 'Cancelada':
+                        case 'Cancelado':
                             $cor = '#CD0000';
                             break;
-                        case 'Finalizada':
+                        case 'Finalizado':
                             $cor = '#256';
                             break;
-                        case 'Faturada':
+                        case 'Faturado':
                             $cor = '#B266FF';
                             break;
                         case 'Aguardando Peças':
                             $cor = '#FF7F00';
                             break;
-                        case 'Aprovada':
+                        case 'Aprovado':
                             $cor = '#808080';
                             break;
                         default:
@@ -228,8 +230,8 @@
                     echo '<td>' . $c->idVendas . '</td>';
                     echo '<td>' . $c->nome . '</td>';
                     echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                     echo '<td>' . $faturado . '</td>';
+                    echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
                     echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $c->status . '</span> </td>';
                     echo '<td style="text-align:right">';
                     echo '<a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $c->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a> ';
