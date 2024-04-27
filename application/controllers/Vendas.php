@@ -268,9 +268,9 @@ class Vendas extends MY_Controller
             $this->data['configuration']['pix_key'],
             $this->data['emitente']
         );
-
-        $this->load->view('vendas/imprimirVendaOrcamento', $this->data);
+        
         $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
+        $this->load->view('vendas/imprimirVendaOrcamento', $this->data);
     }
 
     public function excluir()
