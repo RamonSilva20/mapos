@@ -40,6 +40,7 @@ class Os_model extends CI_Model
             if (array_key_exists('pesquisa', $where)) {
                 $this->db->select('idClientes');
                 $this->db->like('nomeCliente', $where['pesquisa']);
+                $this->db->or_like('documento', $where['pesquisa']);
                 $this->db->limit(25);
                 $clientes = $this->db->get('clientes')->result();
 
