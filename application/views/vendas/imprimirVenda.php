@@ -90,23 +90,20 @@
                                                     <span>
                                                         Email: <?php echo $result->emailCliente ?>
                                                     </span></br>
-                                                    <?php if ($result->contato) { ?>
+                                                        <?php if ($result->contato) { ?>
                                                     <span>Contato: <?php echo $result->contato ?> </span>
-                                                    <?php } ?>
+                                                        <?php } ?>
                                                     <span>Celular: <?php echo $result->celular ?></span>
                                                 </span>
                                             </li>
                                         </ul>
-                                    </td>
+                                </td>
                                     <?php if ($qrCode) : ?>
                                     <td style="width: 25%; padding: 0;text-align:center;">
-                                        <img style="margin:12px 0px 0px 0px"
-                                            src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px"
-                                            alt="QR Code de Pagamento" /></br>
-                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>"
-                                            alt="QR Code de Pagamento" /></br>
+                                        <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                         <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
-                                    </td>
+                                </td>
                                     <?php endif ?>
                                 </tr>
                             </tbody>
@@ -119,30 +116,30 @@
                                 <?php if ($result->dataVenda != null) { ?>
                                 <tr>
                                     <td>
-                                        <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                        <b>Status Venda: </b><?php echo $result->status ?>
                                     </td>
 
                                     <td>
-                                        <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
                                     </td>
 
                                     <td>
                                         <?php if ($result->garantia) { ?>
-                                        <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                        <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
                                         <?php } ?>
                                     </td>
 
                                     <td>
                                         <?php if ($result->status == 'Finalizado') { ?>
-                                        <b>VENC. DA
-                                            GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                        <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
                                         <?php } ?>
                                     </td>
                                 </tr>
-                                <?php } ?>
+                                    <?php 
+                                    } ?>
                                 <tr>
                                     <td colspan="4">
-                                        <b>OBSERVAÇÕES: </b>
+                                        <b>Observações: </b>
                                         <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
@@ -181,22 +178,22 @@
                                     <hr />
                                 </tbody>
                             </table>
-                            <?php
-                        } ?>
+                                <?php
+                                } ?>
                             <hr />
                             <h4 style="text-align: right">Total: R$
                                 <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                             </h4>
-                            <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                            ?>
+                                <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
+                                ?>
                             <h4 style="text-align: right">Desconto: R$
                                 <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
                             </h4>
                             <h4 style="text-align: right">Total Com Desconto: R$
                                 <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
                             </h4>
-                            <?php
-                        } ?>
+                                <?php
+                                } ?>
                         </div>
                         </tbody>
                         </table>
@@ -208,7 +205,7 @@
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
     <script>
-    window.print();
+        window.print();
     </script>
 </body>
 

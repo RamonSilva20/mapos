@@ -100,29 +100,29 @@
                                 <?php if ($result->dataVenda != null) { ?>
                                     <tr>
                                         <td>
-                                            <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                            <b>Status Venda: </b><?php echo $result->status ?>
                                         </td>
 
                                         <td>
-                                            <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                            <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->garantia) { ?>
-                                                <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                                <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
                                             <?php } ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->status == 'Finalizado') { ?>
-                                                <b>VENC. DA GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
                                             <?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
                                 <tr>
                                     <td colspan="4"> 
-                                        <b>OBSERVAÇÕES: </b>
+                                        <b>Observações: </b>
                                         <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>

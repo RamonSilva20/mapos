@@ -25,9 +25,7 @@
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
                                 <?php if ($custom_error == true) { ?>
-                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados
-                                    incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente
-                                    e responsável.</div>
+                                <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
@@ -45,8 +43,7 @@
                                             <div class="addclient">
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
                                                 <a href="<?php echo base_url(); ?>index.php/clientes/adicionar"
-                                                    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar
-                                                    Cliente</a><?php } ?>
+                                                    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?>
                                             </div>
                                         </div>
                                         <div class="span5">

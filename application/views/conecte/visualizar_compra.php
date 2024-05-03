@@ -92,16 +92,13 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <?php if ($qrCode) : ?>
+                                        <?php if ($qrCode) : ?>
                                     <td style="width: 15%; padding: 0;text-align:center;">
-                                        <img style="margin:12px 0px 0px 0px"
-                                            src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px"
-                                            alt="QR Code de Pagamento" /></br>
-                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>"
-                                            alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                                         <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
                                     </td>
-                                    <?php endif ?>
+                                        <?php endif ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -113,30 +110,29 @@
                                 <?php if ($result->dataVenda != null) { ?>
                                 <tr>
                                     <td>
-                                        <b>STATUS VENDA: </b><?php echo $result->status ?>
+                                        <b>Status Venda: </b><?php echo $result->status ?>
                                     </td>
 
                                     <td>
-                                        <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
                                     </td>
 
                                     <td>
                                         <?php if ($result->garantia) { ?>
-                                        <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                        <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
                                         <?php } ?>
                                     </td>
 
                                     <td>
                                         <?php if ($result->status == 'Finalizado') { ?>
-                                        <b>VENC. DA
-                                            GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                        <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
                                         <?php } ?>
                                     </td>
                                 </tr>
                                 <?php } ?>
                                 <tr>
                                     <td colspan="4">
-                                        <b>OBSERVAÇÕES: </b>
+                                        <b>Observações: </b>
                                         <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
@@ -175,22 +171,22 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <?php
-                        } ?>
+                                <?php
+                                } ?>
 
                         <hr />
 
                         <h4 style="text-align: right">Valor Total: R$
                             <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
                         </h4>
-                        <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
+                            <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
                         <h4 style="text-align: right">Desconto: R$
                             <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
                         </h4>
                         <h4 style="text-align: right">Total Com Desconto: R$
                             <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
                         </h4>
-                        <?php } ?>
+                            <?php } ?>
                     </div>
                 </div>
             </div>

@@ -71,57 +71,57 @@ if (!$results) { ?>
                         if (!empty($vencGarantia)) {
                             $dataGarantia = explode('/', $vencGarantia);
                             $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                            if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                $corGarantia = '#4d9c79';
-                            } else {
-                                $corGarantia = '#f24c6f';
-                            }
-                        } elseif ($r->garantia == "0") {
-                            $vencGarantia = 'Sem Garantia';
-                            $corGarantia = '';
-                        } else {
-                            $vencGarantia = '';
-                            $corGarantia = '';
-                        }
-                        $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
-                        if ($r->faturado == 1) {
-                            $faturado = 'Sim';
-                        } else {
-                            $faturado = 'Não';
-                        }
+                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                                    $corGarantia = '#4d9c79';
+                                } else {
+                                    $corGarantia = '#f24c6f';
+                                }
+                                } elseif ($r->garantia == "0") {
+                                    $vencGarantia = 'Sem Garantia';
+                                    $corGarantia = '';
+                                } else {
+                                    $vencGarantia = '';
+                                    $corGarantia = '';
+                                }
+                            $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
+                                if ($r->faturado == 1) {
+                                    $faturado = 'Sim';
+                                } else {
+                                    $faturado = 'Não';
+                                }
                     
-                    switch ($r->status) {
-                        case 'Aberto':
-                            $cor = '#00cd00';
-                            break;
-                        case 'Em Andamento':
-                            $cor = '#436eee';
-                            break;
-                        case 'Orçamento':
-                            $cor = '#CDB380';
-                            break;
-                        case 'Negociação':
-                            $cor = '#AEB404';
-                            break;
-                        case 'Cancelado':
-                            $cor = '#CD0000';
-                            break;
-                        case 'Finalizado':
-                            $cor = '#256';
-                            break;
-                        case 'Faturado':
-                            $cor = '#B266FF';
-                            break;
-                        case 'Aguardando Peças':
-                            $cor = '#FF7F00';
-                            break;
-                        case 'Aprovado':
-                            $cor = '#808080';
-                            break;
-                        default:
-                            $cor = '#E0E4CC';
-                            break;
-                    }
+                                switch ($r->status) {
+                                    case 'Aberto':
+                                        $cor = '#00cd00';
+                                        break;
+                                    case 'Em Andamento':
+                                        $cor = '#436eee';
+                                        break;
+                                    case 'Orçamento':
+                                        $cor = '#CDB380';
+                                        break;
+                                    case 'Negociação':
+                                        $cor = '#AEB404';
+                                        break;
+                                    case 'Cancelado':
+                                        $cor = '#CD0000';
+                                        break;
+                                    case 'Finalizado':
+                                        $cor = '#256';
+                                        break;
+                                    case 'Faturado':
+                                        $cor = '#B266FF';
+                                        break;
+                                    case 'Aguardando Peças':
+                                        $cor = '#FF7F00';
+                                        break;
+                                    case 'Aprovado':
+                                        $cor = '#808080';
+                                        break;
+                                    default:
+                                        $cor = '#E0E4CC';
+                                        break;
+                                }
                         echo '<tr>';
                         echo '<td>' . $r->idVendas . '</td>';
                         echo '<td>' . $r->nome . '</td>';

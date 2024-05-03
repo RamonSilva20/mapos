@@ -16,8 +16,7 @@ select {
             <div class="span3">
                 <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="button btn btn-mini btn-success"
                     style="max-width: 160px">
-                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Nova
-                        Venda</span>
+                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Nova Venda</span>
                 </a>
             </div>
             <?php } ?>
@@ -84,14 +83,14 @@ select {
                                 if ($r->garantia && is_numeric($r->garantia)) {
                                     $vencGarantia = dateInterval($r->dataVenda, $r->garantia);
                                 }
-                                $corGarantia = '';
+                                    $corGarantia = '';
                                 if (!empty($vencGarantia)) {
                                     $dataGarantia = explode('/', $vencGarantia);
                                     $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                    if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                        $corGarantia = '#4d9c79';
+                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                                    $corGarantia = '#4d9c79';
                                     } else {
-                                        $corGarantia = '#f24c6f';
+                                    $corGarantia = '#f24c6f';
                                     }
                                 } elseif ($r->garantia == "0") {
                                     $vencGarantia = 'Sem Garantia';
@@ -104,64 +103,64 @@ select {
                                 if ($r->faturado == 1) {
                                     $faturado = 'Sim';
                                 } else {
-                                $faturado = 'Não';
+                                    $faturado = 'Não';
                                 }
                         
                                 switch ($r->status) {
                                     case 'Aberto':
-                                    $cor = '#00cd00';
-                                    break;
+                                        $cor = '#00cd00';
+                                        break;
                                     case 'Em Andamento':
-                                    $cor = '#436eee';
-                                    break;
+                                        $cor = '#436eee';
+                                        break;
                                     case 'Orçamento':
-                                    $cor = '#CDB380';
-                                    break;
+                                        $cor = '#CDB380';
+                                        break;
                                     case 'Negociação':
-                                    $cor = '#AEB404';
-                                    break;
+                                        $cor = '#AEB404';
+                                        break;
                                     case 'Cancelado':
-                                    $cor = '#CD0000';
-                                    break;
+                                        $cor = '#CD0000';
+                                        break;
                                     case 'Finalizado':
-                                    $cor = '#256';
-                                    break;
+                                        $cor = '#256';
+                                        break;
                                     case 'Faturado':
-                                    $cor = '#B266FF';
-                                    break;
+                                        $cor = '#B266FF';
+                                        break;
                                     case 'Aguardando Peças':
-                                    $cor = '#FF7F00';
-                                    break;
+                                        $cor = '#FF7F00';
+                                        break;
                                     case 'Aprovado':
-                                    $cor = '#808080';
-                                    break;
+                                        $cor = '#808080';
+                                        break;
                                     default:
-                                    $cor = '#E0E4CC';
-                                    break;
+                                        $cor = '#E0E4CC';
+                                        break;
                                 }
 
-                            echo '<tr>';
-                            echo '<td>' . $r->idVendas . '</td>';
-                            echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
-                            echo '<td>' . $dataVenda . '</td>';
-                            echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                            echo '<td>' . $faturado . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                            echo '<td style="text-align:right">';
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirTermica/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="' . $r->idVendas . '" class="btn-nwe4" title="Excluir Venda"><i class="bx bx-trash-alt bx-xs"></i></a>';
-                            }
-                            echo '</td>';
-                            echo '</tr>';
-                } ?>
+                                    echo '<tr>';
+                                    echo '<td>' . $r->idVendas . '</td>';
+                                    echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
+                                    echo '<td>' . $dataVenda . '</td>';
+                                    echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+                                    echo '<td>' . $faturado . '</td>';
+                                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                                    echo '<td style="text-align:right">';
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirTermica/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
+                                }
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';
+                                }
+                                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
+                                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="' . $r->idVendas . '" class="btn-nwe4" title="Excluir Venda"><i class="bx bx-trash-alt bx-xs"></i></a>';
+                                }
+                                    echo '</td>';
+                                    echo '</tr>';
+                    } ?>
                 </tbody>
             </table>
         </div>
