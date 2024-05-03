@@ -14,6 +14,7 @@
                 <li><a data-toggle="tab" href="#menu3">Notificações</a></li>
                 <li><a data-toggle="tab" href="#menu4">Atualizações</a></li>
                 <li><a data-toggle="tab" href="#menu5">OS</a></li>
+                <li><a data-toggle="tab" href="#menu6">API</a></li>
             </ul>
             <form action="<?php echo current_url(); ?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
@@ -245,6 +246,56 @@
                                     <label> <input <?= @in_array("Aguardando Peças", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aguardando Peças"> <span class="lbl"> Aguardando Peças </span> </label>
                                     <label> <input <?= @in_array("Aprovado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aprovado"> <span class="lbl"> Aprovado </span> </label>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="span8">
+                                <div class="span9">
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Menu API -->
+                    <div id="menu6" class="tab-pane fade">
+                        <div class="control-group">
+                            <label for="apiEnabled" class="control-label">Ativar acesso à API</label>
+                            <div class="controls">
+                                <select name="apiEnabled" id="apiEnabled">
+                                    <option value="true">Ativar</option>
+                                    <option value="false" <?= !filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar acesso à API.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="apiEnabled" class="control-label">URL API</label>
+                            <div class="controls">
+                                <span class="span10" id="urlApi" style="margin-top:7px;"><?= $_ENV['APP_BASEURL'] ?>index.php/api/v1</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="apiExpireTime" class="control-label">Tempo de expiração</label>
+                            <div class="controls">
+                                <select name="apiExpireTime" id="apiExpireTime">
+                                    <option value="60" <?= $_ENV['API_TOKEN_EXPIRE_TIME'] == 60 ? 'selected' : '' ?>>1 minuto</option>
+                                    <option value="3600" <?= $_ENV['API_TOKEN_EXPIRE_TIME'] == 3600 ? 'selected' : '' ?>>1 hora</option>
+                                    <option value="86400" <?= $_ENV['API_TOKEN_EXPIRE_TIME'] == 86400 ? 'selected' : '' ?>>1 dia</option>
+                                    <option value="604800" <?= $_ENV['API_TOKEN_EXPIRE_TIME'] == 604800 ? 'selected' : '' ?>>1 semana</option>
+                                    <option value="2592000" <?= $_ENV['API_TOKEN_EXPIRE_TIME'] == 2592000 ? 'selected' : '' ?>>1 mês</option>
+                                </select>
+                                <span class="help-inline">Tempo de duração da sessão na API.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="resetJwtToken" class="control-label">Resetar token JWT</label>
+                            <div class="controls">
+                                <select name="resetJwtToken" id="resetJwtToken">
+                                    <option value="nao" selected>Não</option>
+                                    <option value="sim">Sim</option>
+                                </select>
+                                <span class="help-inline">Gerar um novo token JWT.</span>
                             </div>
                         </div>
                         <div class="form-actions">

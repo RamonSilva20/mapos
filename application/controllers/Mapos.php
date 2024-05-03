@@ -426,6 +426,15 @@ class Mapos extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
+            $env_file_path = dirname(__FILE__,2) . DIRECTORY_SEPARATOR . '.env';
+            $env_file = file_get_contents($env_file_path);
+            $env_file = str_replace("API_ENABLED={$_ENV['API_ENABLED']}", "API_ENABLED={$this->input->post('apiEnabled')}", $env_file);
+            $env_file = str_replace("API_TOKEN_EXPIRE_TIME={$_ENV['API_TOKEN_EXPIRE_TIME']}", "API_TOKEN_EXPIRE_TIME={$this->input->post('apiExpireTime')}", $env_file);
+            if ($this->input->post('resetJwtToken') == 'sim') {
+                $env_file = str_replace('API_JWT_KEY="'.$_ENV['API_JWT_KEY'].'"', 'API_JWT_KEY="'.base64_encode(openssl_random_pseudo_bytes(32)).'"', $env_file);
+            }
+            file_put_contents($env_file_path, $env_file);
+
             $data = [
                 'app_name' => $this->input->post('app_name'),
                 'per_page' => $this->input->post('per_page'),
