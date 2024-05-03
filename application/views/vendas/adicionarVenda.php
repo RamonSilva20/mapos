@@ -6,6 +6,11 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<style>
+    .ui-menu {
+        z-index: 9999 !important;
+    }
+</style>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -33,22 +38,19 @@
                                             <label for="dataInicial">Data da Venda<span class="required">*</span></label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
                                             <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
                                               <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
                                         </div>
-                                    </div>
-
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
                                                 <option value="Orçamento">Orçamento</option>
@@ -61,12 +63,11 @@
                                                 <option value="Aprovado">Aprovado</option>
                                             </select>
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" placeholder="Em Dias" min="0" max="9999" class="span12" name="garantia" value="" />
                                             <?php echo form_error('garantia'); ?>
                                         </div>
-                                    </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">

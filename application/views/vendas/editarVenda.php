@@ -7,6 +7,11 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<style>
+    .ui-menu {
+        z-index: 9999 !important;
+    }
+</style>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -36,62 +41,32 @@
                                             <label for="dataFinal">Data Final</label>
                                             <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                         </div>
-                                        <div class="span5">
+                                        <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
-                                    </div>
-                                    
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-                                                } ?> value="Orçamento">Orçamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-                                                } ?> value="Aberto">Aberto
-                                                </option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-                                                } ?> value="Faturado">Faturado
-                                                </option>
-                                                <option <?php if ($result->status == 'Negociação') {
-                                                    echo 'selected';
-                                                } ?> value="Negociação">Negociação
-                                                </option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-                                                } ?> value="Em Andamento">Em Andamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-                                                } ?> value="Finalizado">Finalizado
-                                                </option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-                                                } ?> value="Cancelado">Cancelado
-                                                </option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') {
-                                                    echo 'selected';
-                                                } ?> value="Aguardando Peças">Aguardando Peças
-                                                </option>
-                                                <option <?php if ($result->status == 'Aprovado') {
-                                                    echo 'selected';
-                                                } ?> value="Aprovado">Aprovado
-                                                </option>
+                                                <option <?= $result->status == 'Orçamento' ? 'selected' : '' ?> value="Orçamento">Orçamento</option>
+                                                <option <?= $result->status == 'Aberto' ? 'selected' : '' ?> value="Aberto">Aberto</option>
+                                                <option <?= $result->status == 'Faturado' ? 'selected' : '' ?> value="Faturado">Faturado</option>
+                                                <option <?= $result->status == 'Negociação' ? 'selected' : '' ?> value="Negociação">Negociação</option>
+                                                <option <?= $result->status == 'Em Andamento' ? 'selected' : '' ?> value="Em Andamento">Em Andamento</option>
+                                                <option <?= $result->status == 'Finalizado' ? 'selected' : '' ?> value="Finalizado">Finalizado</option>
+                                                <option <?= $result->status == 'Cancelado' ? 'selected' : '' ?> value="Cancelado">Cancelado</option>
+                                                <option <?= $result->status == 'Aguardando Peças' ? 'selected' : '' ?>value="Aguardando Peças">Aguardando Peças</option>
+                                                <option <?= $result->status == 'Aprovado' ? 'selected' : '' ?> value="Aprovado">Aprovado</option>
                                             </select>
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" placeholder="Em dias" min="0" max="9999"
                                                 class="span12" name="garantia"
@@ -115,18 +90,25 @@
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span8 offset2" style="text-align: center;display:flex; flex-wrap: wrap">
+                                        <div class="span12" style="display:flex; justify-content: center;">
                                             <?php if ($result->faturado == 0) { ?>
                                                 <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
-                                                    <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
-                                            <?php
-                                            } ?>
+                                                    <span class="button__icon"><i class='bx bx-dollar'></i></span> 
+                                                    <span class="button__text2">Faturar</span>
+                                                </a>
+                                            <?php } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
-                                                <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                                <span class="button__icon"><i class="bx bx-sync"></i></span>
+                                                <span class="button__text2">Atualizar</span>
+                                            </button>
                                             <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
-                                                <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
+                                                <span class="button__icon"><i class="bx bx-show"></i></span>
+                                                <span class="button__text2">Visualizar</span>
+                                            </a>
                                             <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
-                                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                                <span class="button__icon"><i class="bx bx-undo"></i></span>
+                                                <span class="button__text2">Voltar</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </form>
@@ -314,7 +296,7 @@ foreach ($produtos as $p) {
             <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
                 <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
             <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></button>
-        </div>
+        </div>        
     </form>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
