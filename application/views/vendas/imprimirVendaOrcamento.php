@@ -94,72 +94,48 @@
                                             </li>
                                         </ul>
                                     </td>
+                                    <?php if ($qrCode) : ?>
+                                        <td style="width: 25%; padding: 0;text-align:center;">
+                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
+                                        </td>
+                                    <?php endif ?>
                                 </tr>
                             </tbody>
                         </table>
-                        <hr>
                     </div>
+
                     <div style="margin-top: 0; padding-top: 0">
-                        <?php if ($produtos != null) { ?>
-                            <table class="table table-bordered table-condensed" id="tblProdutos">
-                                <thead>
-                                    <tr>
-                                        <th style="font-size: 12px">Cód</th>
-                                        <th style="font-size: 12px">Produto</th>
-                                        <th style="font-size: 12px">Qt</th>
-                                        <th style="font-size: 12px">V. UN R$</th>
-                                        <th style="font-size: 12px">S.Total R$</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
-                                        echo '<tr>';
-                                        echo '<td>' . $p->codDeBarra . '</td>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                        echo '<td> ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                        echo '<hr />';
-                                    } ?>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
-                                    </tr>
-                                    <hr />
-                                </tbody>
-                            </table>
-                        <?php
-                        } ?>
-                        <hr />
-                        <h4 style="text-align: right">Total: R$
-                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
-                        </h4>
-                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                            ?>
-                        <h4 style="text-align: right">Desconto: R$
-                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
-                        </h4>
-                        <h4 style="text-align: right">Total Com Desconto: R$
-                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
-                        </h4>
-                    <?php
-                        } ?>
-                    </div>
-                    <hr />
-                        <h5 style="text-align: left">Observações:</h5>
-                        <table class="table">
+                        <table class="table table-condensed">
                             <tbody>
+                                <?php if ($result->dataVenda != null) { ?>
+                                    <tr>
+                                        <td>
+                                            <b>Status Venda: </b><?php echo $result->status ?>
+                                        </td>
+
+                                        <td>
+                                            <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->garantia) { ?>
+                                                <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                            <?php } ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->status == 'Finalizado') { ?>
+                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                                 <tr>
-                                    <td style="width: 100%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span><?php echo htmlspecialchars_decode($result->observacoes_cliente) ?></span><br />
-                                            </li>
-                                        </ul>
+                                    <td colspan="4"> 
+                                            <b>Observações: </b>
+                                        <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
                             </tbody>
