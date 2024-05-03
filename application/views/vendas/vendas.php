@@ -14,16 +14,14 @@ select {
         <form method="get" action="<?php echo base_url(); ?>index.php/vendas/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aVenda')) { ?>
             <div class="span3">
-                <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="button btn btn-mini btn-success"
-                    style="max-width: 160px">
+                <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
                     <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Nova Venda</span>
                 </a>
             </div>
             <?php } ?>
 
             <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar"
-                    class="span12" value="">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
             </div>
             <div class="span2">
                 <select name="status" id="" class="span12">
@@ -40,10 +38,8 @@ select {
                 </select>
             </div>
             <div class="span3">
-                <input type="date" name="data" autocomplete="off" id="data" placeholder="De" class="span6 datepicker"
-                    value="">
-                <input type="date" name="data2" autocomplete="off" id="data2" placeholder="Até" class="span6 datepicker"
-                    value="">
+                <input type="date" name="data" autocomplete="off" id="data" placeholder="De" class="span6 datepicker" value="">
+                <input type="date" name="data2" autocomplete="off" id="data2" placeholder="Até" class="span6 datepicker" value="">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px">
@@ -89,9 +85,9 @@ select {
                                     $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
                                 if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
                                     $corGarantia = '#4d9c79';
-                                    } else {
+                                } else {
                                     $corGarantia = '#f24c6f';
-                                    }
+                                }
                                 } elseif ($r->garantia == "0") {
                                     $vencGarantia = 'Sem Garantia';
                                     $corGarantia = '';
@@ -169,8 +165,7 @@ select {
 <?php echo $this->pagination->create_links(); ?>
 
 <!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url() ?>index.php/vendas/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

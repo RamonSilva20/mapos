@@ -34,23 +34,18 @@
                                         </h3>
                                         <div class="span2" style="margin-left: 0">
                                             <label for="dataVenda">Data da Venda</label>
-                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda"
-                                                value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
+                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
                                         </div>
                                         <div class="span5">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente"
-                                                value="<?php echo $result->nomeCliente ?>" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id"
-                                                value="<?php echo $result->clientes_id ?>" />
+                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                         </div>
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico"
-                                                value="<?php echo $result->nome ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id"
-                                                value="<?php echo $result->usuarios_id ?>" />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
                                     </div>
 
@@ -124,23 +119,16 @@
                                     <div class="span12" style="padding: 0%; margin-left: 0">
                                         <div class="span12" style="display:flex; justify-content: center;">
                                             <?php if ($result->faturado == 0) { ?>
-                                            <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal"
-                                                class="button btn btn-danger">
-                                                <span class="button__icon"><i class='bx bx-dollar'></i></span> <span
-                                                    class="button__text2">Faturar</span></a>
+                                            <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-danger">
+                                                <span class="button__icon"><i class='bx bx-dollar'></i></span> <span class="button__text2">Faturar</span></a>
                                             <?php
                                             } ?>
                                             <button class="button btn btn-primary" id="btnContinuar">
-                                                <span class="button__icon"><i class="bx bx-sync"></i></span><span
-                                                    class="button__text2">Atualizar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>"
-                                                class="button btn btn-primary">
-                                                <span class="button__icon"><i class="bx bx-show"></i></span><span
-                                                    class="button__text2">Visualizar</span></a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas"
-                                                class="button btn btn-warning">
-                                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span
-                                                    class="button__text2">Voltar</span></a>
+                                                <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
+                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
+                                                <span class="button__icon"><i class="bx bx-show"></i></span><span class="button__text2">Visualizar</span></a>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
+                                                <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
@@ -149,46 +137,36 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <div class="span11">
-                                    <form id="formProdutos"
-                                        action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto"
-                                        method="post">
+                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
-                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto"
-                                                value="<?php echo $result->idVendas ?>" />
+                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
                                             <input type="hidden" name="estoque" id="estoque" value="" />
                                             <label for="">Produto</label>
-                                            <input type="text" class="span12" name="produto" id="produto"
-                                                placeholder="Digite o nome do produto" />
+                                            <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
                                         </div>
                                         <div class="span2">
                                             <label for="">Preço</label>
-                                            <input type="text" placeholder="Preço" id="preco" name="preco"
-                                                class="span12 money" />
+                                            <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" />
                                         </div>
                                         <div class="span2">
                                             <label for="">Quantidade</label>
-                                            <input type="text" placeholder="Quantidade" id="quantidade"
-                                                name="quantidade" class="span12" />
+                                            <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp</label>
                                             <button class="button btn btn-success" id="btnAdicionarProduto">
-                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span
-                                                    class="button__text2">Adicionar</span></button>
+                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="span11">
                                     <form id="formDesconto"
-                                        action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto"
-                                        method="POST">
+                                        action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
                                         <div class="span1">
-                                            <input type="hidden" name="idVendas" id="idVendas"
-                                                value="<?php echo $result->idVendas; ?>" />
+                                            <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
                                             <label for="">Desconto</label>
-                                            <input style="width: 4em;" id="desconto" name="desconto" type="text"
-                                                placeholder="0.00" maxlength="6" size="2" /><br />
+                                            <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="0.00" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
                                         <div class="span1">
@@ -203,15 +181,12 @@
                                         </div>
                                         <div class="span2">
                                             <label for="">Total com Desconto</label>
-                                            <input class="span12 money" id="resultado" type="text"
-                                                data-affixes-stay="true" data-thousands="" data-decimal="."
-                                                name="resultado" value="" readonly />
+                                            <input class="span12 money" id="resultado" type="text" data-affixes-stay="true" data-thousands="" data-decimal="." name="resultado" value="" readonly />
                                         </div>
                                         <div class="span2">
                                             <label for="">&nbsp;</label>
                                             <button class="button btn btn-success" id="btnAdicionarDesconto">
-                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span
-                                                    class="button__text2">Aplicar</span></button>
+                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Aplicar</span></button>
                                         </div>
                                     </form>
                                 </div>
@@ -246,10 +221,8 @@ foreach ($produtos as $p) {
                                         <tr>
                                             <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td>
-                                                <div align="center"><strong>R$:
-                                                        <?php echo number_format($total, 2, '.', ''); ?></strong></div>
-                                                <input type="hidden" id="total-venda"
-                                                    value="<?php echo number_format($total, 2, '.', ''); ?>">
+                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, '.', ''); ?></strong></div>
+                                                <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2, '.', ''); ?>">
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
@@ -265,13 +238,11 @@ foreach ($produtos as $p) {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" style="text-align: right"><strong>Total Com
-                                                    Desconto:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Total Com Desconto:</strong></td>
                                             <td>
                                                 <div align="center"><strong>R$:
                                                         <?php echo number_format($result->valor_desconto, 2, '.', ''); ?></strong>
-                                                </div><input type="hidden" id="total-desconto"
-                                                    value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
+                                                </div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
                                             </td>
                                         </tr>
                                         <?php

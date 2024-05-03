@@ -77,11 +77,11 @@
                             if (!empty($vencGarantia)) {
                                 $dataGarantia = explode('/', $vencGarantia);
                                 $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                            if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
                                     $corGarantia = '#4d9c79';
-                                } else {
+                            } else {
                                     $corGarantia = '#f24c6f';
-                                }
+                            }
                             } elseif ($o->garantia == "0") {
                                 $vencGarantia = 'Sem Garantia';
                                 $corGarantia = '';

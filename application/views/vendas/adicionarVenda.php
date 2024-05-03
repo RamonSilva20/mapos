@@ -30,28 +30,19 @@
                                 <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span2">
-                                            <label for="dataInicial">Data da Venda<span
-                                                    class="required">*</span></label>
-                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda"
-                                                value="<?php echo date('d/m/Y'); ?>" />
+                                            <label for="dataInicial">Data da Venda<span class="required">*</span></label><input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y'); ?>" />
                                         </div>
                                         <div class="span5">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id"
-                                                value="" />
-                                            <div class="addclient">
-                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-                                                <a href="<?php echo base_url(); ?>index.php/clientes/adicionar"
-                                                    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?>
-                                            </div>
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
+                                        <div class="addclient">
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?><a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?>
                                         </div>
+                                    </div>
                                         <div class="span5">
-                                            <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico"
-                                                value="<?= $this->session->userdata('nome_admin'); ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id"
-                                                value="<?= $this->session->userdata('id_admin'); ?>" />
+                                            <label for="tecnico">Vendedor<span class="required">*</span></label><input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
                                         </div>
                                     </div>
 
@@ -71,38 +62,28 @@
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia (dias)</label>
-                                            <input id="garantia" type="number" placeholder="Em Dias" min="0" max="9999"
-                                                class="span12" name="garantia" value="" />
+                                            <input id="garantia" type="number" placeholder="Em Dias" min="0" max="9999" class="span12" name="garantia" value="" />
                                             <?php echo form_error('garantia'); ?>
                                         </div>
                                     </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes">
-                                            <h4>Observações</h4>
+                                        <h4>Observações</h4>
                                         </label>
-                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30"
-                                            rows="5"></textarea>
+                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                     </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes_cliente">
                                             <h4>Observações para o Cliente</h4>
                                         </label>
-                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente"
-                                            cols="30" rows="5"></textarea>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"></textarea>
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex;justify-content: center">
-                                            <button class="button btn btn-success" id="btnContinuar"><span
-                                                    class="button__icon"><i
-                                                        class='bx bx-chevrons-right'></i></span><span
-                                                    class="button__text2">Continuar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas"
-                                                class="button btn btn-mini btn-warning"><span class="button__icon"><i
-                                                        class="bx bx-undo"></i></span> <span
-                                                    class="button__text2">Voltar</span></a>
+                                            <button class="button btn btn-success" id="btnContinuar"><span class="button__icon"><iclass='bx bx-chevrons-right'></i></span><span class="button__text2">Continuar</span></button>
+                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-mini btn-warning"><span class="button__icon"><iclass="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                                         </div>
                                     </div>
                                 </form>
