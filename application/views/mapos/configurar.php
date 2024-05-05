@@ -15,6 +15,7 @@
                 <li><a data-toggle="tab" href="#menu4">Atualizações</a></li>
                 <li><a data-toggle="tab" href="#menu5">OS</a></li>
                 <li><a data-toggle="tab" href="#menu6">API</a></li>
+                <li><a data-toggle="tab" href="#menu7">E-mail</a></li>
             </ul>
             <form action="<?php echo current_url(); ?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
@@ -74,6 +75,167 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Menu Financeiro -->
+                    <div id="menu1" class="tab-pane fade">
+                        <div class="control-group">
+                            <label for="control_baixa" class="control-label">Controle de baixa retroativa</label>
+                            <div class="controls">
+                                <select name="control_baixa" id="control_baixa">
+                                    <option value="1">Ativar</option>
+                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar o controle de baixa financeira, com data retroativa.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="control_editos" class="control-label">Controle de edição de OS</label>
+                            <div class="controls">
+                                <select name="control_editos" id="control_editos">
+                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Ativar</option>
+                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir OS faturada e/ou cancelada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="control_edit_vendas" class="control-label">Controle de edição de Vendas</label>
+                            <div class="controls">
+                                <select name="control_edit_vendas" id="control_edit_vendas">
+                                    <option value="1" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Ativar</option>
+                                    <option value="0" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir vendas faturada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="pix_key" class="control-label">Chave Pix para Recebimento de Pagamentos</label>
+                            <div class="controls">
+                                <input type="text" name="pix_key" value="<?= $configuration['pix_key'] ?>">
+                                <span class="help-inline">Chave Pix para Recebimento de Pagamentos</span>
+                            </div>
+                        </div>
+
+                        <!-- Configrações do EFI -->
+                        <hr>
+                        <h5 style="margin-left:10px;">Configrações do EFI (antiga GerenciaNet)</h5>
+                        <div class="control-group">
+                            <label for="EFI_PRODUCTION" class="control-label">Ambiente</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_EFI_PRODUCTION" id="EFI_PRODUCTION">
+                                    <option value="false" <?= !filter_var($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Sandbox</option>
+                                    <option value="true" <?= filter_var($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Produção</option>
+                                </select>
+                                <span class="help-inline">Sandbox é um ambiente para testes.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EFI_CREDENTIAIS_CLIENT_ID" class="control-label">CLIENT_ID</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID" value="<?= $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'] ?>" id="EFI_CREDENTIAIS_CLIENT_ID">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://app.sejaefi.com.br/api/aplicacoes" target="_blank" rel="noopener noreferrer">"API" -> "Aplicações"</a></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EFI_CREDENTIAIS_CLIENT_SECRET" class="control-label">CLIENT_SECRET</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET" value="<?= $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'] ?>" id="EFI_CREDENTIAIS_CLIENT_SECRET">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://app.sejaefi.com.br/api/aplicacoes" target="_blank" rel="noopener noreferrer">"API" -> "Aplicações"</a></span>
+                            </div>
+                        </div>
+
+                        <!-- Configrações do Mercado Pago -->
+                        <hr>
+                        <h5 style="margin-left:10px;">Configrações do Mercado Pago</h5>
+                        <div class="control-group">
+                            <label for="MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY" class="control-label">PUBLIC_KEY</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY" value="<?= $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY'] ?>" id="MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://www.mercadopago.com.br/settings/account/credentials" target="_blank" rel="noopener noreferrer">"Seu Negócio" -> "Configurações" -> "Credenciais"</a></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN" class="control-label">ACCESS_TOKEN</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN" value="<?= $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN'] ?>" id="MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://www.mercadopago.com.br/settings/account/credentials" target="_blank" rel="noopener noreferrer">"Seu Negócio" -> "Configurações" -> "Credenciais"</a></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="MERCADO_PAGO_CREDENTIALS_CLIENT_ID" class="control-label">CLIENT_ID</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID" value="<?= $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID'] ?>" id="MERCADO_PAGO_CREDENTIALS_CLIENT_ID">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://www.mercadopago.com.br/settings/account/credentials" target="_blank" rel="noopener noreferrer">"Seu Negócio" -> "Configurações" -> "Credenciais"</a></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET" class="control-label">CLIENT_SECRET</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET" value="<?= $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'] ?>" id="MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET">
+                                <span class="help-inline">Pode ser encontrado no menu <a href="https://www.mercadopago.com.br/settings/account/credentials" target="_blank" rel="noopener noreferrer">"Seu Negócio" -> "Configurações" -> "Credenciais"</a></span>
+                            </div>
+                        </div>
+
+                        <!-- Configrações do ASAAS -->
+                        <hr>
+                        <h5 style="margin-left:10px;">Configrações do ASAAS</h5>
+                        <div class="control-group">
+                            <label for="ASAAS_PRODUCTION" class="control-label">Ambiente</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_ASAAS_PRODUCTION" id="ASAAS_PRODUCTION">
+                                    <option value="false" <?= !filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Sandbox</option>
+                                    <option value="true" <?= filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Produção</option>
+                                </select>
+                                <span class="help-inline">Sandbox é um ambiente para testes.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ASAAS_NOTIFY" class="control-label">Notify</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_ASAAS_NOTIFY" id="ASAAS_NOTIFY">
+                                    <option value="false" <?= !filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Desativado</option>
+                                    <option value="true" <?= filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Ativado</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar o Notify do Asaas.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ASAAS_CREDENTIAIS_API_KEY" class="control-label">API_KEY</label>
+                            <div class="controls">
+                                <input type="text" name="PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY" value="<?= $_ENV['PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY'] ?>" id="ASAAS_CREDENTIAIS_API_KEY">
+                                <span class="help-inline">Pode ser encontrado no menu "Minha Conta", clique em "Integração" e depois em "Gerar API Key"</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <div class="span8">
+                                <div class="span9">
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Menu Produtos -->
+                    <div id="menu2" class="tab-pane fade">
+                        <div class="control-group">
+                            <label for="control_estoque" class="control-label">Controlar Estoque</label>
+                            <div class="controls">
+                                <select name="control_estoque" id="control_estoque">
+                                    <option value="1">Ativar</option>
+                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="span8">
+                                <div class="span9">
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Menu Notificações -->
                     <div id="menu3" class="tab-pane fade">
                         <div class="control-group">
@@ -128,75 +290,6 @@
                                 Para itálico use: _palavra_
                                 Para riscado use: ~palavra~
                                 </span>
-                        </div>
-                        <div class="form-actions">
-                            <div class="span8">
-                                <div class="span9">
-                                  <button type="submit" class="button btn btn-primary">
-                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Menu Financeiro -->
-                    <div id="menu1" class="tab-pane fade">
-                        <div class="control-group">
-                            <label for="control_baixa" class="control-label">Controle de baixa retroativa</label>
-                            <div class="controls">
-                                <select name="control_baixa" id="control_baixa">
-                                    <option value="1">Ativar</option>
-                                    <option value="0" <?= $configuration['control_baixa'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou desativar o controle de baixa financeira, com data retroativa.</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="control_editos" class="control-label">Controle de edição de OS</label>
-                            <div class="controls">
-                                <select name="control_editos" id="control_editos">
-                                    <option value="1" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Ativar</option>
-                                    <option value="0" <?= $configuration['control_editos'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir OS faturada e/ou cancelada.</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="control_edit_vendas" class="control-label">Controle de edição de Vendas</label>
-                            <div class="controls">
-                                <select name="control_edit_vendas" id="control_edit_vendas">
-                                    <option value="1" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Ativar</option>
-                                    <option value="0" <?= $configuration['control_edit_vendas'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou desativar a permissão para alterar ou excluir vendas faturada.</span>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="pix_key" class="control-label">Chave Pix para Recebimento de Pagamentos</label>
-                            <div class="controls">
-                                <input type="text" name="pix_key" value="<?= $configuration['pix_key'] ?>">
-                                <span class="help-inline">Chave Pix para Recebimento de Pagamentos</span>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <div class="span8">
-                                <div class="span9">
-                                  <button type="submit" class="button btn btn-primary">
-                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Menu Produtos -->
-                    <div id="menu2" class="tab-pane fade">
-                        <div class="control-group">
-                            <label for="control_estoque" class="control-label">Controlar Estoque</label>
-                            <div class="controls">
-                                <select name="control_estoque" id="control_estoque">
-                                    <option value="1">Ativar</option>
-                                    <option value="0" <?= $configuration['control_estoque'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                </select>
-                                <span class="help-inline">Ativar ou desativar o controle de estoque.</span>
-                            </div>
                         </div>
                         <div class="form-actions">
                             <div class="span8">
@@ -296,6 +389,62 @@
                                     <option value="sim">Sim</option>
                                 </select>
                                 <span class="help-inline">Gerar um novo token JWT.</span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="span8">
+                                <div class="span9">
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Menu E-mail -->
+                    <div id="menu7" class="tab-pane fade">
+                        <div class="control-group">
+                            <label for="EMAIL_PROTOCOL" class="control-label">Protocolo de E-mail</label>
+                            <div class="controls">
+                                <input type="text" name="EMAIL_PROTOCOL" value="<?= $_ENV['EMAIL_PROTOCOL'] ?>" id="EMAIL_PROTOCOL">
+                                <span class="help-inline">Informe o protocolo que será utilizado</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EMAIL_SMTP_HOST" class="control-label">Endereço do Host</label>
+                            <div class="controls">
+                                <input type="text" name="EMAIL_SMTP_HOST" value="<?= $_ENV['EMAIL_SMTP_HOST'] ?>" id="EMAIL_SMTP_HOST">
+                                <span class="help-inline">Informe o endereço do host</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EMAIL_SMTP_CRYPTO" class="control-label">Tipo de criptografia</label>
+                            <div class="controls">
+                                <select name="EMAIL_SMTP_CRYPTO" id="EMAIL_SMTP_CRYPTO">
+                                    <option value="tls" <?= $_ENV['EMAIL_SMTP_CRYPTO'] == 'tls' ? 'selected' : ''; ?>>tls</option>
+                                    <option value="ssl" <?= $_ENV['EMAIL_SMTP_CRYPTO'] == 'ssl' ? 'selected' : ''; ?>>ssl</option>
+                                </select>
+                                <span class="help-inline">Tipo de criptografia que será utilizada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EMAIL_SMTP_PORT" class="control-label">Porta</label>
+                            <div class="controls">
+                                <input type="text" name="EMAIL_SMTP_PORT" value="<?= $_ENV['EMAIL_SMTP_PORT'] ?>" id="EMAIL_SMTP_PORT">
+                                <span class="help-inline">Informe a porta que será utilizada.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EMAIL_SMTP_USER" class="control-label">Usuário</label>
+                            <div class="controls">
+                                <input type="text" name="EMAIL_SMTP_USER" value="<?= $_ENV['EMAIL_SMTP_USER'] ?>" id="EMAIL_SMTP_USER">
+                                <span class="help-inline">Informe nome de usuáriodo e-mail.</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="EMAIL_SMTP_PASS" class="control-label">Senha</label>
+                            <div class="controls">
+                                <input type="password" name="EMAIL_SMTP_PASS" value="<?= $_ENV['EMAIL_SMTP_PASS'] ?>" id="EMAIL_SMTP_PASS">
+                                <span class="help-inline">Informe a senha do e-mail.</span>
                             </div>
                         </div>
                         <div class="form-actions">
