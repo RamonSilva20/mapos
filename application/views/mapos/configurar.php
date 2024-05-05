@@ -142,6 +142,19 @@
                                 <span class="help-inline">Pode ser encontrado no menu <a href="https://app.sejaefi.com.br/api/aplicacoes" target="_blank" rel="noopener noreferrer">"API" -> "Aplicações"</a></span>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label for="EFI_BOLETO_EXPIRATION" class="control-label">Dias para vencimento do boleto</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION" id="EFI_BOLETO_EXPIRATION">
+                                    <?php for ($i = 1; $i <= 30; $i++) :
+                                        $diasEFI = "P{$i}D";
+                                    ?>
+                                        <option value="<?= $diasEFI ?>" <?= $diasEFI == $_ENV['PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <span class="help-inline">A quantidade de dias selecionado será somado a data que a cobrança for gerada.</span>
+                            </div>
+                        </div>
 
                         <!-- Configrações do Mercado Pago -->
                         <hr>
@@ -172,6 +185,19 @@
                             <div class="controls">
                                 <input type="text" name="PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET" value="<?= $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'] ?>" id="MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET">
                                 <span class="help-inline">Pode ser encontrado no menu <a href="https://www.mercadopago.com.br/settings/account/credentials" target="_blank" rel="noopener noreferrer">"Seu Negócio" -> "Configurações" -> "Credenciais"</a></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="MERCADO_PAGO_BOLETO_EXPIRATION" class="control-label">Dias para vencimento do boleto</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION" id="MERCADO_PAGO_BOLETO_EXPIRATION">
+                                    <?php for ($i = 1; $i <= 30; $i++) :
+                                        $diasMP = "P{$i}D";
+                                    ?>
+                                        <option value="<?= $diasMP ?>" <?= $diasMP == $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <span class="help-inline">A quantidade de dias selecionado será somado a data que a cobrança for gerada.</span>
                             </div>
                         </div>
 
@@ -205,6 +231,19 @@
                                 <span class="help-inline">Pode ser encontrado no menu "Minha Conta", clique em "Integração" e depois em "Gerar API Key"</span>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label for="ASAAS_BOLETO_EXPIRATION" class="control-label">Dias para vencimento do boleto</label>
+                            <div class="controls">
+                                <select name="PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION" id="ASAAS_BOLETO_EXPIRATION">
+                                    <?php for ($i = 1; $i <= 30; $i++) :
+                                        $diasASAAS = "P{$i}D";
+                                    ?>
+                                        <option value="<?= $diasASAAS ?>" <?= $diasASAAS == $_ENV['PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <span class="help-inline">A quantidade de dias selecionado será somado a data que a cobrança for gerada.</span>
+                            </div>
+                        </div>
 
                         <div class="form-actions">
                             <div class="span8">
@@ -215,6 +254,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Menu Produtos -->
                     <div id="menu2" class="tab-pane fade">
                         <div class="control-group">
