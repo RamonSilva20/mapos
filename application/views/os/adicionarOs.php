@@ -7,6 +7,7 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+
 <style>
     .ui-menu {
         z-index: 9999 !important;
