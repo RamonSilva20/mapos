@@ -272,7 +272,7 @@
                         <div class="control-group">
                             <label for="apiEnabled" class="control-label">URL API</label>
                             <div class="controls">
-                                <span class="span10" id="urlApi" style="margin-top:7px;"><?= $_ENV['APP_BASEURL'] ?>index.php/api/v1</span>
+                                <span class="span10" id="urlApi" style="margin-top:7px;"><?= trim($_ENV['APP_BASEURL'], '/') . '/' ?>index.php/api/v1</span>
                             </div>
                         </div>
                         <div class="control-group">
