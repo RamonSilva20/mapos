@@ -28,8 +28,8 @@ class Os extends MY_Controller
 
         $pesquisa = $this->input->get('pesquisa');
         $status = $this->input->get('status');
-        $de = $this->input->get('data');
-        $ate = $this->input->get('data2');
+        $inputDe = $this->input->get('data');
+        $inputAte = $this->input->get('data2');
 
         if ($pesquisa) {
             $where_array['pesquisa'] = $pesquisa;
@@ -37,14 +37,14 @@ class Os extends MY_Controller
         if ($status) {
             $where_array['status'] = $status;
         }
-        if ($de) {
-            $de = explode('/', $de);
+        if ($inputDe) {
+            $de = explode('/', $inputDe);
             $de = $de[2] . '-' . $de[1] . '-' . $de[0];
 
             $where_array['de'] = $de;
         }
-        if ($ate) {
-            $ate = explode('/', $ate);
+        if ($inputAte) {
+            $ate = explode('/', $inputAte);
             $ate = $ate[2] . '-' . $ate[1] . '-' . $ate[0];
 
             $where_array['ate'] = $ate;
@@ -52,6 +52,10 @@ class Os extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->os_model->count('os');
+        if(count($where_array) > 0) {
+            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
+            $this->data['configuration']['first_url'] = base_url("index.php/os/gerenciar")."\?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
+        }
 
         $this->pagination->initialize($this->data['configuration']);
 
