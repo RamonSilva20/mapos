@@ -426,14 +426,36 @@ class Mapos extends MY_Controller
         if ($this->form_validation->run() == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
         } else {
-            $env_file_path = dirname(__FILE__,2) . DIRECTORY_SEPARATOR . '.env';
-            $env_file = file_get_contents($env_file_path);
-            $env_file = str_replace("API_ENABLED={$_ENV['API_ENABLED']}", "API_ENABLED={$this->input->post('apiEnabled')}", $env_file);
-            $env_file = str_replace("API_TOKEN_EXPIRE_TIME={$_ENV['API_TOKEN_EXPIRE_TIME']}", "API_TOKEN_EXPIRE_TIME={$this->input->post('apiExpireTime')}", $env_file);
-            if ($this->input->post('resetJwtToken') == 'sim') {
-                $env_file = str_replace('API_JWT_KEY="'.$_ENV['API_JWT_KEY'].'"', 'API_JWT_KEY="'.base64_encode(openssl_random_pseudo_bytes(32)).'"', $env_file);
+            // Edição do .env
+            $dataDotEnv = [
+                'PAYMENT_GATEWAYS_EFI_PRODUCTION' => $this->input->post('PAYMENT_GATEWAYS_EFI_PRODUCTION'),
+                'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID' => $this->input->post('PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'),
+                'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET' => $this->input->post('PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'),
+                'PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'),
+                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY'),
+                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN'),
+                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID'),
+                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'),
+                'PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'),
+                'PAYMENT_GATEWAYS_ASAAS_PRODUCTION' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_PRODUCTION'),
+                'PAYMENT_GATEWAYS_ASAAS_NOTIFY' =>  $this->input->post('PAYMENT_GATEWAYS_ASAAS_NOTIFY'),
+                'PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY' =>  $this->input->post('PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY'),
+                'PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'),
+                'API_ENABLED' => $this->input->post('apiEnabled'),
+                'API_TOKEN_EXPIRE_TIME' => $this->input->post('apiExpireTime'),
+                'API_JWT_KEY' => $this->input->post('resetJwtToken'),
+                'EMAIL_PROTOCOL' => $this->input->post('EMAIL_PROTOCOL'),
+                'EMAIL_SMTP_HOST' => $this->input->post('EMAIL_SMTP_HOST'),
+                'EMAIL_SMTP_CRYPTO' => $this->input->post('EMAIL_SMTP_CRYPTO'),
+                'EMAIL_SMTP_PORT' => $this->input->post('EMAIL_SMTP_PORT'),
+                'EMAIL_SMTP_USER' => $this->input->post('EMAIL_SMTP_USER'),
+                'EMAIL_SMTP_PASS' => $this->input->post('EMAIL_SMTP_PASS'),
+            ];
+
+            if (!$this->editDontEnv($dataDotEnv)) {
+                $this->data['custom_error'] = '<div class="alert">Falha ao editar o .env</div>';
             }
-            file_put_contents($env_file_path, $env_file);
+            // FIM Edição do .env
 
             $data = [
                 'app_name' => $this->input->post('app_name'),
@@ -595,5 +617,23 @@ class Mapos extends MY_Controller
         return $tipoDesconto === 'porcento'
             ? $valorTotal * ($desconto / 100)
             : $desconto;
+    }
+
+    private function editDontEnv(array $data)
+    {
+        $env_file_path = dirname(__FILE__,2) . DIRECTORY_SEPARATOR . '.env';
+        $env_file = file_get_contents($env_file_path);
+
+        foreach($data as $constante => $valor) {
+            if ($constante == 'API_JWT_KEY' && $valor == 'sim') {
+                $base64 = base64_encode(openssl_random_pseudo_bytes(32));
+                $valor = '"'.$base64.'"';
+                $env_file = str_replace("$constante=".'"'.$_ENV[$constante].'"', "$constante={$valor}", $env_file);
+            } else {
+                $env_file = str_replace("$constante={$_ENV[$constante]}", "$constante={$valor}", $env_file);
+            }
+        }
+
+        return file_put_contents($env_file_path, $env_file) ? true : false;
     }
 }
