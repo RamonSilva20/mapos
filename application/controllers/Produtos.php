@@ -27,14 +27,20 @@ class Produtos extends MY_Controller
             redirect(base_url());
         }
 
+        $pesquisa = $this->input->get('pesquisa');
+
         $this->load->library('pagination');
 
         $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
+        if($pesquisa) {
+            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
+            $this->data['configuration']['first_url'] = base_url("index.php/produtos")."\?pesquisa={$pesquisa}";
+        }
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', '*', $pesquisa, $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'produtos/produtos';
 

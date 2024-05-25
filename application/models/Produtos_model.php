@@ -14,7 +14,8 @@ class Produtos_model extends CI_Model
         $this->db->order_by('idProdutos', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where);
+            $this->db->like('codDeBarra', $where);
+            $this->db->or_like('descricao', $where);
         }
 
         $query = $this->db->get();
