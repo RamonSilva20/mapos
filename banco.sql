@@ -360,6 +360,8 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `clientes_id` INT(11) NOT NULL,
   `usuarios_id` INT(11) NULL,
   `lancamentos_id` INT(11) NULL,
+  `status` VARCHAR(45) NULL,
+  `garantia` INT(11) NULL,
   PRIMARY KEY (`idVendas`),
   INDEX `fk_vendas_clientes1` (`clientes_id` ASC),
   INDEX `fk_vendas_usuarios1` (`usuarios_id` ASC),

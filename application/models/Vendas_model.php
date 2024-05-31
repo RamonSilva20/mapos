@@ -13,20 +13,111 @@ class Vendas_model extends CI_Model
         parent::__construct();
     }
 
-    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
+        $lista_clientes = [];
+        if ($where) {
+            if (array_key_exists('pesquisa', $where)) {
+                $this->db->select('idClientes');
+                $this->db->like('nomeCliente', $where['pesquisa']);
+                $this->db->limit(25);
+                $clientes = $this->db->get('clientes')->result();
+
+                foreach ($clientes as $c) {
+                    array_push($lista_clientes, $c->idClientes);
+                }
+            }
+        }
         $this->db->select($fields . ', clientes.nomeCliente, clientes.idClientes');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->join('clientes', 'clientes.idClientes = ' . $table . '.clientes_id');
         $this->db->order_by('idVendas', 'desc');
+        
+        // condicionais da pesquisa
         if ($where) {
-            $this->db->where($where);
+            // condicional de status
+            if (array_key_exists('status', $where)) {
+                $this->db->where_in('vendas.status', $where['status']);
+            }
+
+            // condicional de clientes
+            if (array_key_exists('pesquisa', $where)) {
+                if ($lista_clientes != null) {
+                    $this->db->where_in('vendas.clientes_id', $lista_clientes);
+                }
+            }
+
+            // condicional data Venda
+            if (array_key_exists('de', $where)) {
+                $this->db->where('vendas.dataVenda >=', $where['de']);
+            }
+            // condicional data final
+            if (array_key_exists('ate', $where)) {
+                $this->db->where('vendas.dataVenda <=', $where['ate']);
+            }
         }
+        $query = $this->db->get();
+
+        $result = !$one ? $query->result() : $query->row();
+
+        return $result;
+    }
+
+    public function getVendas($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
+    {
+        $lista_clientes = [];
+        if ($where) {
+            if (array_key_exists('pesquisa', $where)) {
+                $this->db->select('idClientes');
+                $this->db->like('nomeCliente', $where['pesquisa']);
+                $this->db->limit(25);
+                $clientes = $this->db->get('clientes')->result();
+
+                foreach ($clientes as $c) {
+                    array_push($lista_clientes, $c->idClientes);
+                }
+            }
+        }
+
+        $this->db->select($fields . ',clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
+        $this->db->from($table);
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = vendas.garantias_id', 'left');
+        $this->db->join('produtos_vendas', 'produtos_vendas.vendas_id = vendas.idVendas', 'left');
+        $this->db->join('servicos_vendas', 'servicos_vendas.vendas_id = vendas.idVendas', 'left');
+
+        // condicionais da pesquisa
+
+        // condicional de status
+        if (array_key_exists('status', $where)) {
+            $this->db->where_in('status', $where['status']);
+        }
+
+        // condicional de clientes
+        if (array_key_exists('pesquisa', $where)) {
+            if ($lista_clientes != null) {
+                $this->db->where_in('vendas.clientes_id', $lista_clientes);
+            }
+        }
+
+        // condicional data inicial
+        if (array_key_exists('de', $where)) {
+            $this->db->where('dataInicial >=', $where['de']);
+        }
+        // condicional data final
+        if (array_key_exists('ate', $where)) {
+            $this->db->where('dataFinal <=', $where['ate']);
+        }
+
+        $this->db->limit($perpage, $start);
+        $this->db->order_by('vendas.idVendas', 'desc');
+        $this->db->group_by('vendas.idVendas');
 
         $query = $this->db->get();
 
-        $result = ! $one ? $query->result() : $query->row();
+        $result = !$one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -133,7 +224,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
@@ -147,12 +238,13 @@ class Vendas_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nomeCliente', $q);
+        $this->db->or_like('documento', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idClientes']];
+                $row_set[] = ['label'=>$row['nomeCliente'].' | Celular: '.$row['celular'].' | Documento: '.$row['documento'],'id'=>$row['idClientes']];
             }
             echo json_encode($row_set);
         } else {
@@ -164,7 +256,7 @@ class Vendas_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
