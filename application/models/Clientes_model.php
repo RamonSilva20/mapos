@@ -14,7 +14,10 @@ class Clientes_model extends CI_Model
         $this->db->order_by('idClientes', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where);
+            $this->db->like('nomeCliente', $where);
+            $this->db->or_like('documento', $where);
+            $this->db->or_like('email', $where);
+            $this->db->or_like('telefone', $where);
         }
 
         $query = $this->db->get();
