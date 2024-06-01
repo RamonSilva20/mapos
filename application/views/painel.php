@@ -182,7 +182,7 @@
                                 } else {
                                     $corGarantia = '#f24c6f';
                                 }
-                                } elseif ($c->garantia == "0") {
+                                } elseif ($o->garantia == "0") {
                                     $vencGarantia = 'Sem Garantia';
                                     $corGarantia = '';
                                 } else {
