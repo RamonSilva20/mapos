@@ -58,7 +58,7 @@
                         <th>Nº</th>
                         <th>Cliente</th>
                         <th>Data da Venda</th>
-                        <th>Vencimento da Garantia</th>
+                        <th>Venc. da Garantia</th>
                         <th>Faturado</th>
                         <th>Status</th>
                         <th style="text-align:center">Ações</th>
