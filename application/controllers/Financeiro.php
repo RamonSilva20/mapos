@@ -106,52 +106,42 @@ class Financeiro extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
-    
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
         $urlAtual = $this->input->post('urlAtual');
-    
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $vencimento = $this->input->post('vencimento');
             $recebimento = $this->input->post('recebimento');
-    
             if ($recebimento != null) {
                 $recebimento = explode('/', $recebimento);
                 $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
             }
-    
             if ($vencimento == null) {
                 $vencimento = date('d/m/Y');
             }
-    
             try {
                 $vencimento = explode('/', $vencimento);
                 $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-    
             // Formatação correta dos valores
             $valor = str_replace(',', '.', $this->input->post('valor'));
-            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));
-    
+            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));   
             $desconto = $valor_desconto;
             $total_sem_desconto = $valor + $valor_desconto;
             $valor = $total_sem_desconto;
             $total_com_desconto = $valor - $valor_desconto;
             $valor_desconto = $total_com_desconto;
-    
             // Verifica se o valor está em formato monetário
             if (!is_numeric($valor_desconto)) {
                 $valor_desconto = str_replace([',', '.'], ['', ''], $valor_desconto);
             }
-    
             if (!is_numeric($valor)) {
                 $valor = str_replace([',', '.'], ['', ''], $valor);
             }
-    
             // Criação do array de dados
             $data = [
                 'descricao' => set_value('descricao'),
@@ -168,14 +158,12 @@ class Financeiro extends MY_Controller
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
-    
             if (set_value('idFornecedor')) {
                 $data['clientes_id'] = set_value('idFornecedor');
             }
             if (set_value('idCliente')) {
                 $data['clientes_id'] = set_value('idCliente');
             }
-    
             // Inserção dos dados no banco
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
@@ -185,7 +173,6 @@ class Financeiro extends MY_Controller
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
         }
-    
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento.');
         redirect($urlAtual);
     }    
