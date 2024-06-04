@@ -175,7 +175,7 @@ class Financeiro extends MY_Controller
         }
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento.');
         redirect($urlAtual);
-    }    
+    }
 
     public function adicionarReceita_parc()
     {
