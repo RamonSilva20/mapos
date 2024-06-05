@@ -32,7 +32,8 @@
                                                 <?php echo $emitente->nome; ?></span> </br><span>
                                                 <?php echo $emitente->cnpj; ?> </br>
                                                 <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
+                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?> </br>
+                                                Responsável: <?php echo $result->nome ?></span></td>
                                         <td style="width: 18%; text-align: center">#Venda: <span>
                                                 <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span></td>
@@ -63,21 +64,13 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td style="width: 50%; padding-left: 0">
-                                        <ul>
-                                            <li>
-                                                <span>
-                                                    <h5>Vendedor</h5>
-                                                </span>
-                                                <span>
-                                                    <?php echo $result->nome ?></span> <br />
-                                                <span>Telefone:
-                                                    <?php echo $result->telefone_usuario ?></span><br />
-                                                <span>Email:
-                                                    <?php echo $result->email_usuario ?></span>
-                                            </li>
-                                        </ul>
-                                    </td>
+                                    <?php if ($qrCode) : ?>
+                                        <td style="width: 12%; padding: 0;text-align:center;">
+                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
+                                        </td>
+                                    <?php endif ?>
                                 </tr>
                             </tbody>
                         </table>
