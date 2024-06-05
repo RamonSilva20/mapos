@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_fields_to_vendas_table extends CI_Migration {
+class Migration_add_garantia_status_to_vendas_table extends CI_Migration {
 
     public function up()
     {
