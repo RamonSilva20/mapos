@@ -2209,7 +2209,7 @@ abstract class REST_Controller extends CI_Controller
 
         $this->load->library('Authorization_Token');
         $token = explode(' ', $headers[$token_header]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1]);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1], $reGenToken);
 
         if (! $reGenToken && ! $decodedToken->status) {
             $this->response([

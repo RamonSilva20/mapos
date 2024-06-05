@@ -50,9 +50,9 @@ class ApiController extends REST_Controller
         }
 
         $this->load->model('os_model');
-        $status = $this->input->get('status') ?: null;
-        $start = $this->input->get('start') ?: date('Y-m-01');
-        $end = $this->input->get('end') ?: date('Y-m-t');
+        $status = $this->get('status', true) ?: null;
+        $start = $this->get('start', true) ?: date('Y-m-01');
+        $end = $this->get('end', true) ?: date('Y-m-t');
 
         $allOs = $this->mapos_model->calendario($start, $end, $status);
 
@@ -150,8 +150,8 @@ class ApiController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        $perPage = $this->input->get('perPage') ?: 20;
-        $page = $this->input->get('page') ?: 0;
+        $perPage = $this->get('perPage', true) ?: 20;
+        $page = $this->get('page', true) ?: 0;
         $start = $page ? ($perPage * $page) : 0;
 
         $this->load->model('Audit_model');

@@ -26,10 +26,10 @@ class OsController extends REST_Controller
 
         $where_array = [];
 
-        $pesquisa = trim($this->input->get('search'));
-        $status = $this->input->get('status');
-        $de = $this->input->get('from');
-        $ate = $this->input->get('to');
+        $pesquisa = trim($this->get('search', true));
+        $status = $this->get('status', true);
+        $de = $this->get('from', true);
+        $ate = $this->get('to', true);
 
         if ($pesquisa) {
             $where_array['pesquisa'] = $pesquisa;
@@ -51,8 +51,8 @@ class OsController extends REST_Controller
         }
 
         if (! $id) {
-            $perPage = $this->input->get('perPage') ?: 20;
-            $page = $this->input->get('page') ?: 0;
+            $perPage = $this->get('perPage', true) ?: 20;
+            $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
             $oss = $this->os_model->getOs(
@@ -116,9 +116,9 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $dataInicial = $this->input->post('dataInicial');
-        $dataFinal = $this->input->post('dataFinal');
-        $termoGarantiaId = $this->input->post('termoGarantia');
+        $dataInicial = $this->post('dataInicial', true);
+        $dataFinal = $this->post('dataFinal', true);
+        $termoGarantiaId = $this->post('termoGarantia', true);
 
         try {
             $dataInicial = explode('/', $dataInicial);
@@ -131,7 +131,7 @@ class OsController extends REST_Controller
                 $dataFinal = date('Y/m/d');
             }
 
-            $termoGarantiaId = (! $termoGarantiaId == null || ! $termoGarantiaId == '') ? $this->input->post('garantias_id') : null;
+            $termoGarantiaId = (! $termoGarantiaId == null || ! $termoGarantiaId == '') ? $this->post('garantias_id', true) : null;
         } catch (Exception $e) {
             $dataInicial = date('Y/m/d');
             $dataFinal = date('Y/m/d');
@@ -139,16 +139,16 @@ class OsController extends REST_Controller
 
         $data = [
             'dataInicial' => $dataInicial,
-            'clientes_id' => $this->input->post('clientes_id'),
-            'usuarios_id' => $this->input->post('usuarios_id'),
+            'clientes_id' => $this->post('clientes_id', true),
+            'usuarios_id' => $this->post('usuarios_id', true),
             'dataFinal' => $dataFinal,
-            'garantia' => $this->input->post('garantia'),
+            'garantia' => $this->post('garantia', true),
             'garantias_id' => $termoGarantiaId,
-            'descricaoProduto' => $this->input->post('descricaoProduto'),
-            'defeito' => $this->input->post('defeito'),
-            'status' => $this->input->post('status'),
-            'observacoes' => $this->input->post('observacoes'),
-            'laudoTecnico' => $this->input->post('laudoTecnico'),
+            'descricaoProduto' => $this->post('descricaoProduto', true),
+            'defeito' => $this->post('defeito', true),
+            'status' => $this->post('status', true),
+            'observacoes' => $this->post('observacoes', true),
+            'laudoTecnico' => $this->post('laudoTecnico', true),
             'faturado' => 0,
         ];
 
@@ -234,9 +234,9 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $dataInicial = $this->put('dataInicial');
-        $dataFinal = $this->put('dataFinal');
-        $termoGarantiaId = $this->put('termoGarantia');
+        $dataInicial = $this->put('dataInicial', true);
+        $dataFinal = $this->put('dataFinal', true);
+        $termoGarantiaId = $this->put('termoGarantia', true);
 
         try {
             $dataInicial = explode('/', $dataInicial);
@@ -257,16 +257,16 @@ class OsController extends REST_Controller
 
         $data = [
             'dataInicial' => $dataInicial,
-            'clientes_id' => $this->put('clientes_id'),
-            'usuarios_id' => $this->put('usuarios_id'),
+            'clientes_id' => $this->put('clientes_id', true),
+            'usuarios_id' => $this->put('usuarios_id', true),
             'dataFinal' => $dataFinal,
-            'garantia' => $this->put('garantia'),
+            'garantia' => $this->put('garantia', true),
             'garantias_id' => $termoGarantiaId,
-            'descricaoProduto' => $this->put('descricaoProduto'),
-            'defeito' => $this->put('defeito'),
-            'status' => $this->put('status'),
-            'observacoes' => $this->put('observacoes'),
-            'laudoTecnico' => $this->put('laudoTecnico'),
+            'descricaoProduto' => $this->put('descricaoProduto', true),
+            'defeito' => $this->put('defeito', true),
+            'status' => $this->put('status', true),
+            'observacoes' => $this->put('observacoes', true),
+            'laudoTecnico' => $this->put('laudoTecnico', true),
             'faturado' => 0,
         ];
 
@@ -277,7 +277,7 @@ class OsController extends REST_Controller
             $this->debitarEstoque($id);
         }
 
-        if ($this->os_model->edit('os', $data, 'idOs', $id) == true) {
+        if ($this->os_model->edit('os', $data, 'idOs', $id)) {
             $this->load->model('mapos_model');
             $this->load->model('usuarios_model');
 
@@ -379,7 +379,7 @@ class OsController extends REST_Controller
             $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
         }
 
-        if ($this->os_model->delete('os', 'idOs', $id) == true) {
+        if ($this->os_model->delete('os', 'idOs', $id)) {
             $this->log_app('Removeu uma OS ID' . $id);
             $this->response([
                 'status' => true,
@@ -395,9 +395,7 @@ class OsController extends REST_Controller
 
     public function desconto_post($id)
     {
-        $_POST = (array) json_decode(file_get_contents('php://input'), true);
-
-        if (empty($this->input->post('desconto')) || empty($this->input->post('valor_desconto'))) {
+        if (empty($this->post('desconto', true)) || empty($this->post('valor_desconto', true))) {
             $this->response([
                 'status' => false,
                 'message' => 'Campos Desconto e Valor com desconto obrigatórios',
@@ -405,9 +403,9 @@ class OsController extends REST_Controller
         }
 
         $data = [
-            'tipo_desconto' => $this->input->post('tipoDesconto') ?: 'real',
-            'desconto' => $this->input->post('desconto'),
-            'valor_desconto' => $this->input->post('valor_desconto'),
+            'tipo_desconto' => $this->post('tipoDesconto', true) ?: 'real',
+            'desconto' => $this->post('desconto', true),
+            'valor_desconto' => $this->post('valor_desconto', true),
         ];
 
         $editavel = $this->isEditable($id);
@@ -419,7 +417,7 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->os_model->edit('os', $data, 'idOs', $id) == true) {
+        if ($this->os_model->edit('os', $data, 'idOs', $id)) {
             $this->log_app('Adicionou um desconto na OS. ID: ' . $id);
             $this->response([
                 'status' => true,
@@ -450,10 +448,10 @@ class OsController extends REST_Controller
         }
 
         $data = [
-            'produtos_id' => $this->input->post('idProduto'),
-            'preco' => $this->input->post('preco'),
-            'quantidade' => $this->input->post('quantidade'),
-            'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
+            'produtos_id' => $this->post('idProduto', true),
+            'preco' => $this->post('preco', true),
+            'quantidade' => $this->post('quantidade', true),
+            'subTotal' => $this->post('preco', true) * $this->post('quantidade', true),
             'os_id' => $id,
         ];
 
@@ -465,12 +463,12 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($this->os_model->add('produtos_os', $data) == true) {
+        if ($this->os_model->add('produtos_os', $data)) {
             $lastProdutoOs = $this->Api_model->lastRow('produtos_os', 'idProdutos_os');
 
             $this->load->model('produtos_model');
 
-            $this->produtoEstoque($this->input->post('idProduto'), $this->input->post('quantidade'), '-');
+            $this->produtoEstoque($this->post('idProduto', true), $this->post('quantidade', true), '-');
 
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
@@ -482,7 +480,7 @@ class OsController extends REST_Controller
 
             $result = $lastProdutoOs;
             unset($result->descricao);
-            $result->produto = $this->produtos_model->getById($this->input->post('idProduto'));
+            $result->produto = $this->produtos_model->getById($this->post('idProduto', true));
 
             $this->response([
                 'status' => true,
@@ -507,27 +505,25 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $inputData = json_decode(trim(file_get_contents('php://input')));
-
         $ddAntigo = $this->Api_model->getRowById('produtos_os', 'idProdutos_os', $idProdutos_os);
 
-        $subTotal = $inputData->preco * $inputData->quantidade;
+        $subTotal = $this->put('preco', true) * $this->put('quantidade', true);
 
         $data = [
-            'quantidade' => $inputData->quantidade,
-            'preco' => $inputData->preco,
+            'quantidade' => $this->put('quantidade', true),
+            'preco' => $this->put('preco', true),
             'subTotal' => $subTotal,
         ];
 
-        if ($this->os_model->edit('produtos_os', $data, 'idProdutos_os', $idProdutos_os) == true) {
-            $operacao = $ddAntigo->quantidade > $inputData->quantidade ? '+' : '-';
-            $diferenca = $operacao == '+' ? $ddAntigo->quantidade - $inputData->quantidade : $inputData->quantidade - $ddAntigo->quantidade;
+        if ($this->os_model->edit('produtos_os', $data, 'idProdutos_os', $idProdutos_os)) {
+            $operacao = $ddAntigo->quantidade > $this->put('quantidade', true) ? '+' : '-';
+            $diferenca = $operacao == '+' ? $ddAntigo->quantidade - $this->put('quantidade', true) : $this->put('quantidade', true) - $ddAntigo->quantidade;
 
             if ($diferenca) {
                 $this->produtoEstoque($ddAntigo->produtos_id, $diferenca, $operacao);
             }
 
-            $this->log_app("Atualizou a quantidade do produto id <b>{$ddAntigo->produtos_id}</b> na OS id <b>{$id}</b> de <b>{$ddAntigo->quantidade}</b> para <b>{$inputData->quantidade}</b>");
+            $this->log_app("Atualizou a quantidade do produto id <b>{$ddAntigo->produtos_id}</b> na OS id <b>{$id}</b> de <b>{$ddAntigo->quantidade}</b> para <b>{$this->put('quantidade', true)}</b>");
 
             $data['idProdutos_os'] = $idProdutos_os;
 
@@ -564,7 +560,7 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($this->os_model->delete('produtos_os', 'idProdutos_os', $idProdutos_os) == true) {
+        if ($this->os_model->delete('produtos_os', 'idProdutos_os', $idProdutos_os)) {
             $this->produtoEstoque($ddAntigo->produtos_id, $ddAntigo->quantidade, '+');
 
             $this->db->set('desconto', 0.00);
@@ -603,14 +599,14 @@ class OsController extends REST_Controller
         }
 
         $data = [
-            'servicos_id' => $this->input->post('idServico'),
-            'quantidade' => $this->input->post('quantidade'),
-            'preco' => $this->input->post('preco'),
-            'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
+            'servicos_id' => $this->post('idServico', true),
+            'quantidade' => $this->post('quantidade', true),
+            'preco' => $this->post('preco', true),
+            'subTotal' => $this->post('preco', true) * $this->post('quantidade', true),
             'os_id' => $id,
         ];
 
-        if ($this->os_model->add('servicos_os', $data) == true) {
+        if ($this->os_model->add('servicos_os', $data)) {
             $lastServicoOs = $this->Api_model->lastRow('servicos_os', 'idServicos_os');
 
             $this->load->model('servicos_model');
@@ -625,7 +621,7 @@ class OsController extends REST_Controller
 
             $result = $lastServicoOs;
             unset($result->servico);
-            $result->servico = $this->servicos_model->getById($this->input->post('idServico'));
+            $result->servico = $this->servicos_model->getById($this->post('idServico', true));
 
             $this->response([
                 'status' => true,
@@ -649,20 +645,19 @@ class OsController extends REST_Controller
                 'message' => 'Informe a OS e o Serviço',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
-        $inputData = json_decode(trim(file_get_contents('php://input')));
 
         $ddAntigo = $this->Api_model->getRowById('servicos_os', 'idServicos_os', $idServicos_os);
 
-        $subTotal = $inputData->preco * $inputData->quantidade;
+        $subTotal = $this->put('preco', true) * $this->put('quantidade', true);
 
         $data = [
-            'quantidade' => $inputData->quantidade,
-            'preco' => $inputData->preco,
+            'quantidade' => $this->put('quantidade', true),
+            'preco' => $this->put('preco', true),
             'subTotal' => $subTotal,
         ];
 
-        if ($this->os_model->edit('servicos_os', $data, 'idServicos_os', $idServicos_os) == true) {
-            $this->log_app("Atualizou a quantidade do Serviço id <b>{$ddAntigo->servicos_id}</b> na OS id <b>{$id}</b> para <b>{$inputData->quantidade}</b>");
+        if ($this->os_model->edit('servicos_os', $data, 'idServicos_os', $idServicos_os)) {
+            $this->log_app("Atualizou a quantidade do Serviço id <b>{$ddAntigo->servicos_id}</b> na OS id <b>{$id}</b> para <b>{$this->put('quantidade', true)}</b>");
 
             $data['idServicos_os'] = $idServicos_os;
 
@@ -682,7 +677,7 @@ class OsController extends REST_Controller
     public function servicos_delete($id, $idServicos_os)
     {
         $this->logged_user();
-        if ($this->os_model->delete('servicos_os', 'idServicos_os', $idServicos_os) == true) {
+        if ($this->os_model->delete('servicos_os', 'idServicos_os', $idServicos_os)) {
             $this->log_app('Removeu Serviço de uma OS. ID (OS): ' . $id);
             $this->CI = &get_instance();
             $this->CI->load->database();
@@ -721,18 +716,18 @@ class OsController extends REST_Controller
         }
 
         $data = [
-            'anotacao' => "[{$this->logged_user()->usuario->nome}] " . $this->input->post('anotacao'),
+            'anotacao' => "[{$this->logged_user()->usuario->nome}] " . $this->post('anotacao', true),
             'data_hora' => date('Y-m-d H:i:s'),
             'os_id' => $id,
         ];
 
-        if ($this->os_model->add('anotacoes_os', $data) == true) {
+        if ($this->os_model->add('anotacoes_os', $data)) {
             $lastAnotacao = $this->Api_model->lastRow('anotacoes_os', 'idAnotacoes');
             $this->log_app('Adicionou anotação a uma OS. ID (OS): ' . $id);
 
             $result = [
                 'idAnotacoes' => $lastAnotacao->idAnotacoes,
-                'anotacao' => $this->input->post('anotacao'),
+                'anotacao' => $this->post('anotacao', true),
             ];
 
             $this->response([
@@ -751,7 +746,7 @@ class OsController extends REST_Controller
     public function anotacoes_delete($id, $idAnotacao)
     {
         $this->logged_user();
-        if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $idAnotacao) == true) {
+        if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $idAnotacao)) {
             $this->log_app('Removeu anotação de uma OS. ID (OS): ' . $id);
 
             $this->response([
@@ -879,7 +874,7 @@ class OsController extends REST_Controller
                     unlink($file->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file->thumb);
                 }
 
-                if ($this->os_model->delete('anexos', 'idAnexos', $idAnexo) == true) {
+                if ($this->os_model->delete('anexos', 'idAnexos', $idAnexo)) {
                     $this->log_app('Removeu anexo de uma OS. ID (OS): ' . $id);
 
                     $this->response([

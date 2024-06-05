@@ -138,9 +138,7 @@ class ClientesController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        $inputData = json_decode(trim(file_get_contents('php://input')));
-
-        if (isset($inputData->documento) && ! verific_cpf_cnpj($inputData->documento)) {
+        if ($this->put('documento', true) && ! verific_cpf_cnpj($this->put('documento', true))) {
             $this->response([
                 'status' => false,
                 'message' => 'CPF/CNPJ inválido. Verifique o número do documento e tente novamente.',
@@ -148,24 +146,24 @@ class ClientesController extends REST_Controller
         }
 
         $data = [
-            'nomeCliente' => $inputData->nomeCliente,
-            'contato' => $inputData->contato,
-            'documento' => $inputData->documento,
-            'telefone' => $inputData->telefone,
-            'celular' => $inputData->celular,
-            'email' => $inputData->email,
-            'rua' => $inputData->rua,
-            'numero' => $inputData->numero,
-            'complemento' => $inputData->complemento,
-            'bairro' => $inputData->bairro,
-            'cidade' => $inputData->cidade,
-            'estado' => $inputData->estado,
-            'cep' => $inputData->cep,
-            'fornecedor' => $inputData->fornecedor == true ? 1 : 0,
+            'nomeCliente' => $this->put('nomeCliente', true),
+            'contato' => $this->put('contato', true),
+            'documento' => $this->put('documento', true),
+            'telefone' => $this->put('telefone', true),
+            'celular' => $this->put('celular', true),
+            'email' => $this->put('email', true),
+            'rua' => $this->put('rua', true),
+            'numero' => $this->put('numero', true),
+            'complemento' => $this->put('complemento', true),
+            'bairro' => $this->put('bairro', true),
+            'cidade' => $this->put('cidade', true),
+            'estado' => $this->put('estado', true),
+            'cep' => $this->put('cep', true),
+            'fornecedor' => $this->put('fornecedor', true) == true ? 1 : 0,
         ];
 
         if ($this->put('senha')) {
-            $data['senha'] = password_hash($this->put('senha'), PASSWORD_DEFAULT);
+            $data['senha'] = password_hash($this->put('senha', true), PASSWORD_DEFAULT);
         }
 
         if ($this->clientes_model->edit('clientes', $data, 'idClientes', $id) == true) {
