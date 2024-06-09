@@ -241,9 +241,7 @@ class UsuariosController extends REST_Controller
      */
     public function login_post()
     {
-//        $_POST = (array) json_decode(file_get_contents('php://input'), true);
-
-        dd($this->post());
+        $_POST = (array) json_decode(file_get_contents('php://input'), true);
 
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
@@ -257,8 +255,8 @@ class UsuariosController extends REST_Controller
         }
 
         $this->load->model('Mapos_model');
-        $email = $this->post('email');
-        $password = $this->post('password');
+        $email = $this->post('email', true);
+        $password = $this->post('password', true);
         $user = $this->Mapos_model->check_credentials($email);
 
         if ($user) {
