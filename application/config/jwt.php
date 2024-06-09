@@ -18,13 +18,6 @@ $config['jwt_algorithm'] = 'HS256';
 
 /*
 |-----------------------
-| Token Request Header Name
-|--------------------------------------------------------------------------
-*/
-$config['token_header'] = 'Authorization';
-
-/*
-|-----------------------
 | Token Expire Time
 
 | https://www.tools4noobs.com/online_tools/hh_mm_ss_to_seconds/
