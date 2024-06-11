@@ -25,11 +25,11 @@ class ProdutosController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->input->get('search'));
+            $search = trim($this->get('search', true));
             $where = $search ? "codDeBarra LIKE '%{$search}%' OR descricao LIKE '%{$search}%'" : '';
 
-            $perPage = $this->input->get('perPage') ?: 20;
-            $page = $this->input->get('page') ?: 0;
+            $perPage = $this->get('perPage', true) ?: 20;
+            $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
             $produtos = $this->produtos_model->get('produtos', '*', $where, $perPage, $start);
@@ -79,23 +79,23 @@ class ProdutosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $precoCompra = $this->input->post('precoCompra');
+        $precoCompra = $this->post('precoCompra', true);
         $precoCompra = str_replace(',', '', $precoCompra);
-        $precoVenda = $this->input->post('precoVenda');
+        $precoVenda = $this->post('precoVenda', true);
         $precoVenda = str_replace(',', '', $precoVenda);
         $data = [
-            'codDeBarra' => $this->input->post('codDeBarra'),
-            'descricao' => $this->input->post('descricao'),
-            'unidade' => $this->input->post('unidade'),
+            'codDeBarra' => $this->post('codDeBarra', true),
+            'descricao' => $this->post('descricao', true),
+            'unidade' => $this->post('unidade', true),
             'precoCompra' => $precoCompra,
             'precoVenda' => $precoVenda,
-            'estoque' => $this->input->post('estoque'),
-            'estoqueMinimo' => $this->input->post('estoqueMinimo') ? $this->input->post('estoqueMinimo') : 0,
-            'saida' => $this->input->post('saida') ? $this->input->post('saida') : 0,
-            'entrada' => $this->input->post('entrada') ? $this->input->post('entrada') : 0,
+            'estoque' => $this->post('estoque', true),
+            'estoqueMinimo' => $this->post('estoqueMinimo', true) ? $this->post('estoqueMinimo', true) : 0,
+            'saida' => $this->post('saida', true) ? $this->post('saida', true) : 0,
+            'entrada' => $this->post('entrada', true) ? $this->post('entrada', true) : 0,
         ];
 
-        if ($this->produtos_model->add('produtos', $data) == true) {
+        if ($this->produtos_model->add('produtos', $data)) {
             $this->response([
                 'status' => true,
                 'message' => 'Produto adicionado com sucesso!',
@@ -127,36 +127,34 @@ class ProdutosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $inputData = json_decode(trim(file_get_contents('php://input')));
-
-        if (! isset($inputData->descricao) ||
-        ! isset($inputData->unidade) ||
-        ! isset($inputData->precoCompra) ||
-        ! isset($inputData->precoVenda) ||
-        ! isset($inputData->estoque)) {
+        if (! $this->put('descricao', true) ||
+        ! $this->put('unidade', true) ||
+        ! $this->put('precoCompra', true) ||
+        ! $this->put('precoVenda', true) ||
+        ! $this->put('estoque', true)) {
             $this->response([
                 'status' => false,
                 'message' => 'Preencha todos os campos obrigatórios!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $precoCompra = $inputData->precoCompra;
+        $precoCompra = $this->put('precoCompra', true);
         $precoCompra = str_replace(',', '', $precoCompra);
-        $precoVenda = $inputData->precoVenda;
+        $precoVenda = $this->put('precoVenda', true);
         $precoVenda = str_replace(',', '', $precoVenda);
         $data = [
-            'codDeBarra' => isset($inputData->codDeBarra) ? $inputData->codDeBarra : 0,
-            'descricao' => $inputData->descricao,
-            'unidade' => $inputData->unidade,
+            'codDeBarra' => $this->put('codDeBarra', true) ?: 0,
+            'descricao' => $this->put('descricao', true),
+            'unidade' => $this->put('unidade', true),
             'precoCompra' => $precoCompra,
             'precoVenda' => $precoVenda,
-            'estoque' => $inputData->estoque,
-            'estoqueMinimo' => isset($inputData->estoqueMinimo) ? $inputData->estoqueMinimo : 0,
-            'saida' => isset($inputData->saida) ? $inputData->saida : 0,
-            'entrada' => isset($inputData->entrada) ? $inputData->entrada : 0,
+            'estoque' => $this->put('estoque', true),
+            'estoqueMinimo' => $this->put('estoqueMinimo', true) ?: 0,
+            'saida' => $this->put('saida', true) ?: 0,
+            'entrada' => $this->put('entrada', true) ?: 0
         ];
 
-        if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $id) == true) {
+        if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $id)) {
             $this->response([
                 'status' => true,
                 'message' => 'Produto editado com sucesso!',
@@ -190,7 +188,7 @@ class ProdutosController extends REST_Controller
         $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
         $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
 
-        if ($this->produtos_model->delete('produtos', 'idProdutos', $id) == true) {
+        if ($this->produtos_model->delete('produtos', 'idProdutos', $id)) {
             $this->log_app('Removeu um Produto. ID' . $id);
             $this->response([
                 'status' => true,

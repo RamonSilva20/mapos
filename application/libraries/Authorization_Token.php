@@ -85,7 +85,7 @@ class Authorization_Token
      *
      * @return : user informations
      */
-    public function validateToken($token)
+    public function validateToken($token, $regenToken = false)
     {
         /**
          * Request All Headers
@@ -117,7 +117,7 @@ class Authorization_Token
                          * Check Token Time Valid
                          */
                         $time_difference = strtotime('now') - $token_decode->API_TIME;
-                        if ($time_difference >= $this->token_expire_time) {
+                        if ($time_difference >= $this->token_expire_time && $regenToken == false) {
                             return ['status' => false, 'message' => 'Token Time Expire.'];
 
                         } else {

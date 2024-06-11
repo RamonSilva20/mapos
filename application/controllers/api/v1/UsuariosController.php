@@ -26,14 +26,14 @@ class UsuariosController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->input->get('search'));
+            $search = trim($this->get('search', true));
 
             if ($search) {
                 $this->load->model('api_model');
                 $usuarios = $this->api_model->searchUsuario($search);
             } else {
-                $perPage = $this->input->get('perPage') ?: 20;
-                $page = $this->input->get('page') ?: 0;
+                $perPage = $this->get('perPage', true) ?: 20;
+                $page = $this->get('page', true) ?: 0;
                 $start = $page ? ($perPage * $page) : 0;
 
                 $usuarios = $this->usuarios_model->get($perPage, $start);
@@ -84,26 +84,26 @@ class UsuariosController extends REST_Controller
         }
 
         $data = [
-            'nome' => $this->input->post('nome'),
-            'rg' => $this->input->post('rg'),
-            'cpf' => $this->input->post('cpf'),
-            'cep' => $this->input->post('cep'),
-            'rua' => $this->input->post('rua'),
-            'numero' => $this->input->post('numero'),
-            'bairro' => $this->input->post('bairro'),
-            'cidade' => $this->input->post('cidade'),
-            'estado' => $this->input->post('estado'),
-            'email' => $this->input->post('email'),
-            'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-            'telefone' => $this->input->post('telefone'),
-            'celular' => $this->input->post('celular'),
-            'dataExpiracao' => $this->input->post('dataExpiracao'),
-            'situacao' => $this->input->post('situacao'),
-            'permissoes_id' => $this->input->post('permissoes_id'),
+            'nome' => $this->post('nome', true),
+            'rg' => $this->post('rg', true),
+            'cpf' => $this->post('cpf', true),
+            'cep' => $this->post('cep', true),
+            'rua' => $this->post('rua', true),
+            'numero' => $this->post('numero', true),
+            'bairro' => $this->post('bairro', true),
+            'cidade' => $this->post('cidade', true),
+            'estado' => $this->post('estado', true),
+            'email' => $this->post('email', true),
+            'senha' => password_hash($this->post('senha', true), PASSWORD_DEFAULT),
+            'telefone' => $this->post('telefone', true),
+            'celular' => $this->post('celular', true),
+            'dataExpiracao' => $this->post('dataExpiracao', true),
+            'situacao' => $this->post('situacao', true),
+            'permissoes_id' => $this->post('permissoes_id', true),
             'dataCadastro' => date('Y-m-d'),
         ];
 
-        if ($this->usuarios_model->add('usuarios', $data) == true) {
+        if ($this->usuarios_model->add('usuarios', $data)) {
 
             $this->load->model('api_model');
             $data = $this->api_model->lastRow('usuarios', 'idUsuarios');
@@ -136,21 +136,19 @@ class UsuariosController extends REST_Controller
             }
         }
 
-        $_POST = (array) json_decode(file_get_contents('php://input'), true);
-
-        if (! isset($_POST['nome']) ||
-            ! isset($_POST['rg']) ||
-            ! isset($_POST['cpf']) ||
-            ! isset($_POST['cep']) ||
-            ! isset($_POST['rua']) ||
-            ! isset($_POST['numero']) ||
-            ! isset($_POST['bairro']) ||
-            ! isset($_POST['cidade']) ||
-            ! isset($_POST['estado']) ||
-            ! isset($_POST['email']) ||
-            ! isset($_POST['telefone']) ||
-            ! isset($_POST['situacao']) ||
-            ! isset($_POST['permissoes_id'])
+        if (! $this->put(['nome'], true) ||
+            ! $this->put(['rg'], true) ||
+            ! $this->put(['cpf'], true) ||
+            ! $this->put(['cep'], true) ||
+            ! $this->put(['rua'], true) ||
+            ! $this->put(['numero'], true) ||
+            ! $this->put(['bairro'], true) ||
+            ! $this->put(['cidade'], true) ||
+            ! $this->put(['estado'], true) ||
+            ! $this->put(['email'], true) ||
+            ! $this->put(['telefone'], true) ||
+            ! $this->put(['situacao'], true) ||
+            ! $this->put(['permissoes_id'], true)
         ) {
             $this->response([
                 'status' => false,
@@ -158,38 +156,36 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($this->input->post($id) == 1 && $this->input->post('situacao') == 0) {
+        if ($id == 1 && $this->put('situacao', true) == 0) {
             $this->response([
                 'status' => false,
                 'message' => 'error', 'O usuário super admin não pode ser desativado!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $senha = $this->input->post('senha');
-
         $data = [
-            'nome' => $this->input->post('nome'),
-            'rg' => $this->input->post('rg'),
-            'cpf' => $this->input->post('cpf'),
-            'cep' => $this->input->post('cep'),
-            'rua' => $this->input->post('rua'),
-            'numero' => $this->input->post('numero'),
-            'bairro' => $this->input->post('bairro'),
-            'cidade' => $this->input->post('cidade'),
-            'estado' => $this->input->post('estado'),
-            'email' => $this->input->post('email'),
-            'telefone' => $this->input->post('telefone'),
-            'celular' => $this->input->post('celular'),
-            'dataExpiracao' => $this->input->post('dataExpiracao'),
-            'situacao' => $this->input->post('situacao'),
-            'permissoes_id' => $this->input->post('permissoes_id'),
+            'nome' => $this->put('nome', true),
+            'rg' => $this->put('rg', true),
+            'cpf' => $this->put('cpf', true),
+            'cep' => $this->put('cep', true),
+            'rua' => $this->put('rua', true),
+            'numero' => $this->put('numero', true),
+            'bairro' => $this->put('bairro', true),
+            'cidade' => $this->put('cidade', true),
+            'estado' => $this->put('estado', true),
+            'email' => $this->put('email', true),
+            'telefone' => $this->put('telefone', true),
+            'celular' => $this->put('celular', true),
+            'dataExpiracao' => $this->put('dataExpiracao', true),
+            'situacao' => $this->put('situacao', true),
+            'permissoes_id' => $this->put('permissoes_id', true),
         ];
 
-        if ($this->input->post('senha') != null) {
-            $data['senha'] = $this->input->post('senha');
+        if ($this->put('senha', true)) {
+            $data['senha'] = $this->put('senha', true);
         }
 
-        if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id) == true) {
+        if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
             $this->log_app('Alterou um usuário. ID: ' . $id);
             $this->response([
                 'status' => true,
@@ -218,6 +214,13 @@ class UsuariosController extends REST_Controller
             $this->response([
                 'status' => false,
                 'message' => 'Informe o ID do Usuário!',
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        if ($id == 1) {
+            $this->response([
+                'status' => false,
+                'message' => 'error', 'O usuário super admin não pode ser deletado!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
@@ -252,8 +255,8 @@ class UsuariosController extends REST_Controller
         }
 
         $this->load->model('Mapos_model');
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
+        $email = $this->post('email', true);
+        $password = $this->post('password', true);
         $user = $this->Mapos_model->check_credentials($email);
 
         if ($user) {

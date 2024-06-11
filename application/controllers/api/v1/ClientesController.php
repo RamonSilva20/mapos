@@ -25,11 +25,11 @@ class ClientesController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->input->get('search'));
+            $search = trim($this->get('search', true));
             $where = $search ? "nomeCliente LIKE '%{$search}%' OR documento LIKE '%{$search}%' OR telefone LIKE '%{$search}%' OR celular LIKE '%{$search}%' OR email LIKE '%{$search}%' OR contato LIKE '%{$search}%'" : '';
 
-            $perPage = $this->input->get('perPage') ?: 20;
-            $page = $this->input->get('page') ?: 0;
+            $perPage = $this->get('perPage', true) ?: 20;
+            $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
             $clientes = $this->clientes_model->get('clientes', '*', $where, $perPage, $start);
@@ -90,28 +90,28 @@ class ClientesController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $senhaCliente = $this->input->post('senha') ?: preg_replace('/[^\p{L}\p{N}\s]/', '', $this->input->post('documento'));
-        $cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', $this->input->post('documento'));
+        $senhaCliente = $this->post('senha', true) ?: preg_replace('/[^\p{L}\p{N}\s]/', '', $this->post('documento', true));
+        $cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', $this->post('documento', true));
         $pessoaFisica = strlen($cpf_cnpj) == 11 ? true : false;
 
         $data = [
-            'nomeCliente' => $this->input->post('nomeCliente'),
-            'contato' => $this->input->post('contato'),
+            'nomeCliente' => $this->post('nomeCliente', true),
+            'contato' => $this->post('contato', true),
             'pessoa_fisica' => $pessoaFisica,
-            'documento' => $this->input->post('documento'),
-            'telefone' => $this->input->post('telefone'),
-            'celular' => $this->input->post('celular'),
-            'email' => $this->input->post('email'),
+            'documento' => $this->post('documento', true),
+            'telefone' => $this->post('telefone', true),
+            'celular' => $this->post('celular', true),
+            'email' => $this->post('email', true),
             'senha' => password_hash($senhaCliente, PASSWORD_DEFAULT),
-            'rua' => $this->input->post('rua'),
-            'numero' => $this->input->post('numero'),
-            'complemento' => $this->input->post('complemento'),
-            'bairro' => $this->input->post('bairro'),
-            'cidade' => $this->input->post('cidade'),
-            'estado' => $this->input->post('estado'),
-            'cep' => $this->input->post('cep'),
+            'rua' => $this->post('rua', true),
+            'numero' => $this->post('numero', true),
+            'complemento' => $this->post('complemento', true),
+            'bairro' => $this->post('bairro', true),
+            'cidade' => $this->post('cidade', true),
+            'estado' => $this->post('estado', true),
+            'cep' => $this->post('cep', true),
             'dataCadastro' => date('Y-m-d'),
-            'fornecedor' => $this->input->post('fornecedor') == true ? 1 : 0,
+            'fornecedor' => $this->post('fornecedor', true) == true ? 1 : 0,
         ];
 
         if ($this->clientes_model->add('clientes', $data) == true) {
@@ -138,9 +138,7 @@ class ClientesController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        $inputData = json_decode(trim(file_get_contents('php://input')));
-
-        if (isset($inputData->documento) && ! verific_cpf_cnpj($inputData->documento)) {
+        if ($this->put('documento', true) && ! verific_cpf_cnpj($this->put('documento', true))) {
             $this->response([
                 'status' => false,
                 'message' => 'CPF/CNPJ inválido. Verifique o número do documento e tente novamente.',
@@ -148,24 +146,24 @@ class ClientesController extends REST_Controller
         }
 
         $data = [
-            'nomeCliente' => $inputData->nomeCliente,
-            'contato' => $inputData->contato,
-            'documento' => $inputData->documento,
-            'telefone' => $inputData->telefone,
-            'celular' => $inputData->celular,
-            'email' => $inputData->email,
-            'rua' => $inputData->rua,
-            'numero' => $inputData->numero,
-            'complemento' => $inputData->complemento,
-            'bairro' => $inputData->bairro,
-            'cidade' => $inputData->cidade,
-            'estado' => $inputData->estado,
-            'cep' => $inputData->cep,
-            'fornecedor' => $inputData->fornecedor == true ? 1 : 0,
+            'nomeCliente' => $this->put('nomeCliente', true),
+            'contato' => $this->put('contato', true),
+            'documento' => $this->put('documento', true),
+            'telefone' => $this->put('telefone', true),
+            'celular' => $this->put('celular', true),
+            'email' => $this->put('email', true),
+            'rua' => $this->put('rua', true),
+            'numero' => $this->put('numero', true),
+            'complemento' => $this->put('complemento', true),
+            'bairro' => $this->put('bairro', true),
+            'cidade' => $this->put('cidade', true),
+            'estado' => $this->put('estado', true),
+            'cep' => $this->put('cep', true),
+            'fornecedor' => $this->put('fornecedor', true) == true ? 1 : 0,
         ];
 
         if ($this->put('senha')) {
-            $data['senha'] = password_hash($this->put('senha'), PASSWORD_DEFAULT);
+            $data['senha'] = password_hash($this->put('senha', true), PASSWORD_DEFAULT);
         }
 
         if ($this->clientes_model->edit('clientes', $data, 'idClientes', $id) == true) {

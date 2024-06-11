@@ -26,11 +26,11 @@ class ServicosController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->input->get('search'));
+            $search = trim($this->get('search', true));
             $where = $search ? "nome LIKE '%{$search}%' OR descricao LIKE '%{$search}%'" : '';
 
-            $perPage = $this->input->get('perPage') ?: 20;
-            $page = $this->input->get('page') ?: 0;
+            $perPage = $this->get('perPage', true) ?: 20;
+            $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
             $servicos = $this->servicos_model->get('servicos', '*', $where, $perPage, $start);
@@ -80,16 +80,16 @@ class ServicosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $preco = $this->input->post('preco');
+        $preco = $this->post('preco', true);
         $preco = str_replace(',', '', $preco);
 
         $data = [
-            'nome' => $this->input->post('nome'),
-            'descricao' => $this->input->post('descricao') ? $this->input->post('descricao') : '',
+            'nome' => $this->post('nome', true),
+            'descricao' => $this->post('descricao', true) ? $this->post('descricao', true) : '',
             'preco' => $preco,
         ];
 
-        if ($this->servicos_model->add('servicos', $data) == true) {
+        if ($this->servicos_model->add('servicos', $data)) {
             $this->response([
                 'status' => true,
                 'message' => 'Serviço adicionado com sucesso!',
@@ -122,23 +122,23 @@ class ServicosController extends REST_Controller
 
         $inputData = json_decode(trim(file_get_contents('php://input')));
 
-        if (! isset($inputData->nome) || ! isset($inputData->preco)) {
+        if (! $this->put('nome', true) || ! $this->put('preco', true)) {
             $this->response([
                 'status' => false,
                 'message' => 'Preencha todos os campos obrigatórios!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $preco = $inputData->preco;
+        $preco = $this->put('preco', true);
         $preco = str_replace(',', '', $preco);
 
         $data = [
-            'nome' => $inputData->nome,
-            'descricao' => isset($inputData->descricao) ? $inputData->descricao : '',
+            'nome' => $this->put('nome', true),
+            'descricao' => $this->put('descricao', true) ? $this->put('descricao', true) : '',
             'preco' => $preco,
         ];
 
-        if ($this->servicos_model->edit('servicos', $data, 'idServicos', $id) == true) {
+        if ($this->servicos_model->edit('servicos', $data, 'idServicos', $id)) {
             $this->response([
                 'status' => true,
                 'message' => 'Serviço editado com sucesso!',
@@ -171,7 +171,7 @@ class ServicosController extends REST_Controller
 
         $this->servicos_model->delete('servicos_os', 'servicos_id', $id);
 
-        if ($this->servicos_model->delete('servicos', 'idServicos', $id) == true) {
+        if ($this->servicos_model->delete('servicos', 'idServicos', $id)) {
             $this->log_app('Removeu um Serviço. ID' . $id);
             $this->response([
                 'status' => true,
