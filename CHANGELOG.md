@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.46.0] - 2024-04-11
+### Fixed
+- Autenticação em rede local [@juliolobo](https://github.com/juliolobo)
+
+### Security Fix
+- XSS Clean em requisições da API
+
 ## [4.45.0] - 2024-04-10
 ### Fixed
 - Implementado uso correto de CSRF. [@Pr3d4dor](https://github.com/Pr3d4dor)
