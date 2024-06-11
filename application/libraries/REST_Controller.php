@@ -2199,7 +2199,7 @@ abstract class REST_Controller extends CI_Controller
         $this->CI->load->config('jwt');
         $token_header = $this->CI->config->item('token_header');
 
-        if (! isset($headers[$token_header])) {
+        if (! isset($_SERVER["HTTP_AUTHORIZATION"])) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça login para acessar a API.',
@@ -2208,8 +2208,8 @@ abstract class REST_Controller extends CI_Controller
         }
 
         $this->load->library('Authorization_Token');
-        $token = explode(' ', $headers[$token_header]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1], $reGenToken);
+        $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1]);
 
         if (! $reGenToken && ! $decodedToken->status) {
             $this->response([
