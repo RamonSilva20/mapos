@@ -51,6 +51,10 @@ class Vendas extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('vendas/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->vendas_model->count('vendas');
+        if(count($where_array) > 0) {
+            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
+            $this->data['configuration']['first_url'] = base_url("index.php/vendas/gerenciar")."\?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
+        }
 
         $this->pagination->initialize($this->data['configuration']);
 
