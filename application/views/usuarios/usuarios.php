@@ -46,8 +46,22 @@
                         echo '<td>' . $r->cpf . '</td>';
                         echo '<td>' . $r->telefone . '</td>';
                         echo '<td>' . $r->permissao . '</td>';
+                        // Verifica se $r->situacao contém os valores esperados
                         $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';
-                        echo '<td>' . $situacao . '</td>';
+                        if ($situacao == 'Ativo') {
+                            $situacaoClasse = 'situacao-ativo';
+                            $situacaoCor = '#00cd00'; // Verde
+                        } elseif ($situacao == 'Inativo') {
+                            $situacaoClasse = 'situacao-inativo';
+                            $situacaoCor = '#ff0000'; // Azul
+                        } else {
+                            // Caso não corresponda a nenhum dos valores esperados
+                            $situacaoClasse = '';
+                            $situacaoCor = '';
+                        }
+
+                        // Exibição da situação com a classe e a cor definidas
+                        echo '<td><span class="badge ' . $situacaoClasse . '" style="background-color: ' . $situacaoCor . ';">' . ucfirst($situacao) . '</span></td>';
                         echo '<td>' . $r->dataExpiracao . '</td>';
                         echo '<td>
                                 <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
