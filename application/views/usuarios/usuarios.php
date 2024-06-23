@@ -27,6 +27,7 @@
                     <th>CPF</th>
                     <th>Telefone</th>
                     <th>Nível</th>
+                    <th>Situação</th>
                     <th>Validade</th>
                     <th>Ações</th>
                 </tr>
@@ -45,6 +46,8 @@
                         echo '<td>' . $r->cpf . '</td>';
                         echo '<td>' . $r->telefone . '</td>';
                         echo '<td>' . $r->permissao . '</td>';
+                        $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';
+                        echo '<td>' . $situacao . '</td>';
                         echo '<td>' . $r->dataExpiracao . '</td>';
                         echo '<td>
                                 <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
