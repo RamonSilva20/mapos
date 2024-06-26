@@ -539,9 +539,6 @@ class Vendas extends MY_Controller
 
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $this->input->post('valor'));
-                $this->db->where('idVendas', $venda);
-                $this->db->update('vendas');
-                
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idVendas', $venda_id);
                 $this->db->update('vendas');
