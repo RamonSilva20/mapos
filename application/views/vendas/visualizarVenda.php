@@ -128,8 +128,8 @@
                                         </td>
 
                                         <td>
-                                            <?php if ($result->status == 'Finalizado') { ?>
-                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
+                                            <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
+                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataVenda, $result->garantia); ?>
                                             <?php } ?>
                                         </td>
                                     </tr>
