@@ -542,6 +542,11 @@ class Vendas extends MY_Controller
                 $this->db->where('idVendas', $venda);
                 $this->db->update('vendas');
 
+                 // Atualizar o status da venda para "Faturado"
+                $this->db->set('status', 'Faturado');
+                $this->db->where('idVendas', $venda_id);
+                $this->db->update('vendas');
+
                 log_info('Faturou uma venda.');
 
                 $this->session->set_flashdata('success', 'Venda faturada com sucesso!');

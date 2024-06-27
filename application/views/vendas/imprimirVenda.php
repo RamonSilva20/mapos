@@ -117,7 +117,7 @@
                                         </td>
 
                                         <td>
-                                            <?php if ($result->status == 'Finalizado') { ?>
+                                            <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
                                                 <b>Venc. da Garantia:</b><?php echo date('d/m/Y', strtotime($result->dataVenda . ' + ' . $result->garantia . ' days')); ?>
                                             <?php } ?>
                                         </td>
