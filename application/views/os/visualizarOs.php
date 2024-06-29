@@ -143,7 +143,7 @@
                                             <?php } ?>
                                         </td>
 
-                                        <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento'])): ?>
+                                        <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto'])): ?>
                                             <td>
                                                 <b>VENC. DA GARANTIA:</b>
                                                     <?= dateInterval($result->dataFinal, $result->garantia); ?>

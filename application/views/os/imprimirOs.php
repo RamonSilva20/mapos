@@ -132,7 +132,7 @@ $totalProdutos = 0; ?>
                                                         </li>
                                                     </ul>
                                                 </td>
-                                                <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado']) && $qrCode): ?>
+                                                <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado', 'Aberto', 'Em Andamento', 'Aguardando Peças']) && $qrCode): ?>
                                                     <td style="width: 25%; padding: 0; text-align: center;">
                                                         <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
                                                         <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
@@ -168,7 +168,7 @@ $totalProdutos = 0; ?>
                                                     <?php endif; ?>
                                                     <td>
                                                         <b>
-                                                            <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento'])): ?>
+                                                            <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto', 'Em Andamento', 'Aguardando Peças'])): ?>
                                                                 VENC. DA GARANTIA:
                                                         </b>
                                                             <?= dateInterval($result->dataFinal, $result->garantia); ?>
