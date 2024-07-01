@@ -132,15 +132,13 @@ $totalProdutos = 0; ?>
                                                         </li>
                                                     </ul>
                                                 </td>
-                                                <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
-                                                    <?php if ($qrCode) : ?>
-                                                        <td style="width: 25%; padding: 0;text-align:center;">
-                                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
-                                                        </td>
-                                                    <?php endif ?>
-                                                <?php } ?>
+                                                <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado', 'Aberto', 'Em Andamento', 'Aguardando Peças']) && $qrCode): ?>
+                                                    <td style="width: 25%; padding: 0; text-align: center;">
+                                                        <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
+                                                        <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
+                                                        <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= $chaveFormatada ?></span>
+                                                    </td>
+                                                <?php endif; ?>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -148,36 +146,40 @@ $totalProdutos = 0; ?>
                                 <div style="margin-top: 0; padding-top: 0">
                                     <table class="table table-condensed">
                                         <tbody>
-                                            <?php if ($result->dataInicial != null) { ?>
+                                            <?php if ($result->dataInicial != null): ?>
                                                 <tr>
                                                     <td>
                                                         <b>STATUS OS: </b>
-                                                        <?php echo $result->status ?>
+                                                        <?= $result->status ?>
                                                     </td>
                                                     <td>
                                                         <b>DATA INICIAL: </b>
-                                                        <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                                            <?= date('d/m/Y', strtotime($result->dataInicial)); ?>
                                                     </td>
                                                     <td>
                                                         <b>DATA FINAL: </b>
-                                                        <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                                            <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                                                     </td>
-                                                    <?php if ($result->garantia) {
-                                                        ?>
-                                                        <td>
-                                                            <b>GARANTIA: </b>
-                                                            <?php echo $result->garantia . ' dia(s)'; ?>
-                                                        </td>
-                                                    <?php
-                                                    } ?>
+                                                        <?php if ($result->garantia): ?>
+                                                    <td>
+                                                        <b>GARANTIA: </b>
+                                                        <?= $result->garantia . ' dia(s)'; ?>
+                                                    </td>
+                                                    <?php endif; ?>
                                                     <td>
                                                         <b>
-                                                            <?php if ($result->status == 'Finalizado') { ?>
+                                                            <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto', 'Em Andamento', 'Aguardando Peças'])): ?>
                                                                 VENC. DA GARANTIA:
                                                         </b>
-                                                        <?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
-                                                </tr>
-                                            <?php } ?>
+                                                            <?= dateInterval($result->dataFinal, $result->garantia); ?>
+                                                            <?php endif; ?>
+                                                    </td>
+                                                    </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                                             <?php if ($result->descricaoProduto != null) { ?>
                                                 <tr>
                                                     <td colspan="5">
