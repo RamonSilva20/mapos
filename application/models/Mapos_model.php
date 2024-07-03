@@ -1,12 +1,7 @@
 <?php
+
 class Mapos_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -23,7 +18,8 @@ class Mapos_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -34,6 +30,7 @@ class Mapos_model extends CI_Model
         $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
         $this->db->where('idUsuarios', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -46,6 +43,7 @@ class Mapos_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
+
         return false;
     }
 
@@ -56,6 +54,7 @@ class Mapos_model extends CI_Model
         $this->db->like('nomeCliente', $termo);
         $this->db->or_like('telefone', $termo);
         $this->db->or_like('celular', $termo);
+        $this->db->or_like('documento', $termo);
         $this->db->limit(15);
         $data['clientes'] = $this->db->get('clientes')->result();
 
@@ -124,6 +123,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aberto');
         $this->db->limit(10);
+
         return $this->db->get()->result();
     }
 
@@ -134,6 +134,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aguardando Peças');
         $this->db->limit(10);
+
         return $this->db->get()->result();
     }
 
@@ -144,6 +145,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Em Andamento');
         $this->db->limit(10);
+
         return $this->db->get()->result();
     }
 
@@ -163,7 +165,7 @@ class Mapos_model extends CI_Model
         $this->db->where('os.dataFinal <=', $end);
         $this->db->group_by('os.idOs');
 
-        if (!empty($status)) {
+        if (! empty($status)) {
             $this->db->where('os.status', $status);
         }
 
@@ -172,13 +174,15 @@ class Mapos_model extends CI_Model
 
     public function getProdutosMinimo()
     {
-        $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10";
+        $sql = 'SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10';
+
         return $this->db->query($sql)->result();
     }
 
     public function getOsEstatisticas()
     {
-        $sql = "SELECT status, COUNT(status) as total FROM os GROUP BY status ORDER BY status";
+        $sql = 'SELECT status, COUNT(status) as total FROM os GROUP BY status ORDER BY status';
+
         return $this->db->query($sql)->result();
     }
 
@@ -191,6 +195,7 @@ class Mapos_model extends CI_Model
         if ($this->db->query($sql) !== false) {
             return $this->db->query($sql)->row();
         }
+
         return false;
     }
 
@@ -198,7 +203,7 @@ class Mapos_model extends CI_Model
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
-        if (!$numbersOnly) {
+        if (! $numbersOnly) {
             $numbersOnly = date('Y');
         }
 
@@ -234,25 +239,27 @@ class Mapos_model extends CI_Model
         if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
             return $this->db->query($sql, [intval($numbersOnly)])->row();
         }
+
         return false;
     }
 
     public function getEstatisticasFinanceiroDia($year)
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
-        if (!$numbersOnly) {
+        if (! $numbersOnly) {
             $numbersOnly = date('Y');
         }
-        $sql = "
+        $sql = '
             SELECT
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = " . date('d') . ") AND EXTRACT(MONTH FROM data_pagamento) = " . date('m') . " AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_" . date('m') . "_REC,
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = " . date('d') . ") AND EXTRACT(MONTH FROM data_pagamento) = " . date('m') . " AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_" . date('m') . "_DES
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_" . date('m') . '_REC,
+                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_" . date('m') . '_DES
             FROM lancamentos
             WHERE EXTRACT(YEAR FROM data_pagamento) = ?
-        ";
+        ';
         if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
             return $this->db->query($sql, [intval($numbersOnly)])->row();
         }
+
         return false;
     }
 
@@ -260,7 +267,7 @@ class Mapos_model extends CI_Model
     {
         $numbersOnly = preg_replace('/[^0-9]/', '', $year);
 
-        if (!$numbersOnly) {
+        if (! $numbersOnly) {
             $numbersOnly = date('Y');
         }
 
@@ -296,6 +303,7 @@ class Mapos_model extends CI_Model
         if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
             return $this->db->query($sql, [intval($numbersOnly)])->row();
         }
+
         return false;
     }
 
@@ -318,6 +326,7 @@ class Mapos_model extends CI_Model
         $this->db->set('telefone', $telefone);
         $this->db->set('email', $email);
         $this->db->set('url_logo', $logo);
+
         return $this->db->insert('emitente');
     }
 
@@ -335,6 +344,7 @@ class Mapos_model extends CI_Model
         $this->db->set('telefone', $telefone);
         $this->db->set('email', $email);
         $this->db->where('id', $id);
+
         return $this->db->update('emitente');
     }
 
@@ -342,6 +352,7 @@ class Mapos_model extends CI_Model
     {
         $this->db->set('url_logo', $logo);
         $this->db->where('id', $id);
+
         return $this->db->update('emitente');
     }
 
@@ -349,6 +360,7 @@ class Mapos_model extends CI_Model
     {
         $this->db->set('url_image_user', $imageUserPath);
         $this->db->where('idUsuarios', $id);
+
         return $this->db->update('usuarios');
     }
 
@@ -357,13 +369,15 @@ class Mapos_model extends CI_Model
         $this->db->where('email', $email);
         $this->db->where('situacao', 1);
         $this->db->limit(1);
+
         return $this->db->get('usuarios')->row();
     }
 
     /**
      * Salvar configurações do sistema
-     * @param array $data
-     * @return boolean
+     *
+     * @param  array  $data
+     * @return bool
      */
     public function saveConfiguracao($data)
     {
@@ -376,6 +390,7 @@ class Mapos_model extends CI_Model
         } catch (Exception $e) {
             return false;
         }
+
         return true;
     }
 }

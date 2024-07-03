@@ -1,15 +1,11 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Produtos extends MY_Controller
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -26,27 +22,34 @@ class Produtos extends MY_Controller
 
     public function gerenciar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
             redirect(base_url());
         }
+
+        $pesquisa = $this->input->get('pesquisa');
 
         $this->load->library('pagination');
 
         $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
+        if($pesquisa) {
+            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
+            $this->data['configuration']['first_url'] = base_url("index.php/produtos")."\?pesquisa={$pesquisa}";
+        }
 
         $this->pagination->initialize($this->data['configuration']);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', '*', $pesquisa, $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'produtos/produtos';
+
         return $this->layout();
     }
 
     public function adicionar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar produtos.');
             redirect(base_url());
         }
@@ -58,9 +61,9 @@ class Produtos extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $precoCompra = $this->input->post('precoCompra');
-            $precoCompra = str_replace(",", "", $precoCompra);
+            $precoCompra = str_replace(',', '', $precoCompra);
             $precoVenda = $this->input->post('precoVenda');
-            $precoVenda = str_replace(",", "", $precoVenda);
+            $precoVenda = str_replace(',', '', $precoVenda);
             $data = [
                 'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => set_value('descricao'),
@@ -82,17 +85,18 @@ class Produtos extends MY_Controller
             }
         }
         $this->data['view'] = 'produtos/adicionarProduto';
+
         return $this->layout();
     }
 
     public function editar()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar produtos.');
             redirect(base_url());
         }
@@ -103,9 +107,9 @@ class Produtos extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $precoCompra = $this->input->post('precoCompra');
-            $precoCompra = str_replace(",", "", $precoCompra);
+            $precoCompra = str_replace(',', '', $precoCompra);
             $precoVenda = $this->input->post('precoVenda');
-            $precoVenda = str_replace(",", "", $precoVenda);
+            $precoVenda = str_replace(',', '', $precoVenda);
             $data = [
                 'codDeBarra' => set_value('codDeBarra'),
                 'descricao' => $this->input->post('descricao'),
@@ -130,17 +134,18 @@ class Produtos extends MY_Controller
         $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
 
         $this->data['view'] = 'produtos/editarProduto';
+
         return $this->layout();
     }
 
     public function visualizar()
     {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
             redirect(base_url());
         }
@@ -153,12 +158,13 @@ class Produtos extends MY_Controller
         }
 
         $this->data['view'] = 'produtos/visualizarProduto';
+
         return $this->layout();
     }
 
     public function excluir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir produtos.');
             redirect(base_url());
         }
@@ -181,7 +187,7 @@ class Produtos extends MY_Controller
 
     public function atualizar_estoque()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para atualizar estoque de produtos.');
             redirect(base_url());
         }

@@ -6,7 +6,7 @@ class Configuracoes extends Seeder
 
     public function run()
     {
-        echo "Running Configuracoes Seeder";
+        echo 'Running Configuracoes Seeder';
 
         $configs = [
             [
@@ -60,6 +60,21 @@ class Configuracoes extends Seeder
                 'idConfig' => 11,
                 'config' => 'pix_key',
                 'valor' => '',
+            ],
+            [
+                'idConfig' => 12,
+                'config' => 'os_status_list',
+                'valor' => '[\"Aberto\",\"Faturado\",\"Negocia\\u00e7\\u00e3o\",\"Em Andamento\",\"Or\\u00e7amento\",\"Finalizado\",\"Cancelado\",\"Aguardando Pe\\u00e7as\"]',
+            ],
+            [
+                'idConfig' => 13,
+                'config' => 'control_edit_vendas',
+                'valor' => '1',
+            ],
+            [
+                'idConfig' => 15,
+                'config' => 'control_2vias',
+                'valor' => '0',
             ],
         ];
 

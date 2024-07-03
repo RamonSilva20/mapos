@@ -6,7 +6,7 @@ class Usuarios extends Seeder
 
     public function run()
     {
-        echo "Running Usuarios Seeder";
+        echo 'Running Usuarios Seeder';
 
         //seed records manually
         $data = [

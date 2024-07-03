@@ -143,11 +143,12 @@
                                             <?php } ?>
                                         </td>
 
-                                        <td>
-                                            <?php if ($result->status == 'Finalizado') { ?>
-                                                <b>VENC. DA GARANTIA:</b><?php echo dateInterval($result->dataFinal, $result->garantia); ?>
-                                            <?php } ?>
-                                        </td>
+                                        <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto'])): ?>
+                                            <td>
+                                                <b>VENC. DA GARANTIA:</b>
+                                                    <?= dateInterval($result->dataFinal, $result->garantia); ?>
+                                            </td>
+                                       <?php endif; ?>
                                     </tr>
                                 <?php } ?>
 

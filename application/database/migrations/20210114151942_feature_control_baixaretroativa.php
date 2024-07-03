@@ -10,6 +10,6 @@ class Migration_Feature_control_baixaretroativa extends CI_Migration
 
     public function down()
     {
-        $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 8");
+        $this->db->query('DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 8');
     }
 }

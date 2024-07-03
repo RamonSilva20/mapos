@@ -210,30 +210,22 @@ IF ERRORLEVEL 1 SET stepnext=step06 && GOTO step00
 CHOICE /C SN /M "Gostaria de configurar os dados de e-mail?"
 IF ERRORLEVEL 2 ECHO "* Dados de Email nao alterado." && SET stepnext=step07 && GOTO step00
 IF ERRORLEVEL 1 ECHO.
-SET /p protocolo=Informe o Protocolo (Padrao: SMTP): 
-SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com): 
-SET /p criptografia=Informe a Criptografia (SSL/TLS): 
-SET /p porta=Informe a Porta (Ex: 587): 
-SET /p email=Informe o Email (Ex: nome@seudominio.com): 
-SET /p senha=Informe a Senha (****): 
+SET /p protocolo=Informe o Protocolo (Padrao: SMTP):
+SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com):
+SET /p criptografia=Informe a Criptografia (SSL/TLS):
+SET /p porta=Informe a Porta (Ex: 587):
+SET /p email=Informe o Email (Ex: nome@seudominio.com):
+SET /p senha=Informe a Senha (****):
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
 IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step06 && GOTO step00
-IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\config\email.php
-PowerShell -command "&Set-Content -Path '%dirEmail%' -Value '<?php'"
-ECHO $config['protocol']         = '%protocolo%';>>%dirEmail%
-ECHO $config['smtp_host']        = '%hostsmtp%';>>%dirEmail%
-ECHO $config['smtp_crypto']      = '%criptografia%';>>%dirEmail%
-ECHO $config['smtp_port']        = %porta%;>>%dirEmail%
-ECHO $config['smtp_user']        = '%email%';>>%dirEmail%
-ECHO $config['smtp_pass']        = '%senha%';>>%dirEmail%
-ECHO $config['validate']         = true;>>%dirEmail%
-ECHO $config['mailtype']         = 'html';>>%dirEmail%
-ECHO $config['charset']          = 'utf-8';>>%dirEmail%
-ECHO $config['newline']          = "\r\n";>>%dirEmail%
-ECHO $config['bcc_batch_mode']   = false;>>%dirEmail%
-ECHO $config['wordwrap']         = false;>>%dirEmail%
-ECHO $config['priority']         = 3;>>%dirEmail%
+IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\.env
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_PROTOCOL=', 'EMAIL_PROTOCOL=%protocolo%'} | Set-Content -Path '%dirEmail%'"
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_HOST=', 'EMAIL_SMTP_HOST=%hostsmtp%'} | Set-Content -Path '%dirEmail%'"
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_CRYPTO=', 'EMAIL_SMTP_CRYPTO=%criptografia%'} | Set-Content -Path '%dirEmail%'"
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_PORT=', 'EMAIL_SMTP_PORT=%porta%'} | Set-Content -Path '%dirEmail%'"
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_USER=', 'EMAIL_SMTP_USER=%email%'} | Set-Content -Path '%dirEmail%'"
+PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_PASS=', 'EMAIL_SMTP_PASS=%senha%'} | Set-Content -Path '%dirEmail%'"
 SET stepnext=step07
 GOTO step00
 :: <=== Fim STEP06 ===>
@@ -265,7 +257,7 @@ GOTO step00
 :step08
 CHOICE /C SN /M "Gostaria de alterar o numero da proxima OS?"
 IF ERRORLEVEL 2 echo "* Nao alterado valor da proxima OS." && SET stepnext=stepfim && GOTO step00
-IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1): 
+IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1):
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
 SET stepnext=stepfim
 GOTO step00

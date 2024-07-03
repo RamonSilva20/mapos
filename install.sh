@@ -191,12 +191,12 @@ fi
             read -p "Informe o Email (Ex: nome@seudominio.com): " email
             read -p "Informe a Senha (****): " senha
 
-            sed -i "s/\$config\['protocol'\].*/\$config\['protocol'\] = '$protocolo';/" $dirHtdocs/mapos/application/config/email.php
-            sed -i "s/\$config\['smtp_host'\].*/\$config\['smtp_host'\] = '$hostsmtp';/" $dirHtdocs/mapos/application/config/email.php
-            sed -i "s/\$config\['smtp_crypto'\].*/\$config\['smtp_crypto'\] = '$criptografia';/" $dirHtdocs/mapos/application/config/email.php
-            sed -i "s/\$config\['smtp_port'\].*/\$config\['smtp_port'\] = '$porta';/" $dirHtdocs/mapos/application/config/email.php
-            sed -i "s/\$config\['smtp_user'\].*/\$config\['smtp_user'\] = '$email';/" $dirHtdocs/mapos/application/config/email.php
-            sed -i "s/\$config\['smtp_pass'\].*/\$config\['smtp_pass'\] = '$senha';/" $dirHtdocs/mapos/application/config/email.php
+            sed -i "s/\EMAIL_PROTOCOL.*/\EMAIL_PROTOCOL='$protocolo'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_SMTP_HOST.*/\EMAIL_SMTP_HOST='$hostsmtp'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_SMTP_CRYPTO.*/\EMAIL_SMTP_CRYPTO='$criptografia'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_SMTP_PORT.*/\EMAIL_SMTP_PORT='$porta'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_SMTP_USER.*/\EMAIL_SMTP_USER='$email'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_SMTP_PASS.*/\EMAIL_SMTP_PASS='$senha'/" $dirHtdocs/mapos/application/.env
             echo
             echo "* Dados de Email alterados com sucesso."
         fi

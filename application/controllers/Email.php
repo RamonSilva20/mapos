@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -12,7 +14,7 @@ class Email extends CI_Controller
 
     public function process()
     {
-        if (!$this->input->is_cli_request()) {
+        if (! $this->input->is_cli_request()) {
             show_404();
         }
 
@@ -21,7 +23,7 @@ class Email extends CI_Controller
 
     public function retry()
     {
-        if (!$this->input->is_cli_request()) {
+        if (! $this->input->is_cli_request()) {
             show_404();
         }
 

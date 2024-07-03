@@ -5,6 +5,8 @@
   <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
+  <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
   <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/bootstrap-responsive.min.css" />
@@ -38,6 +40,7 @@
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/datatables.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
+  <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
   <script type="text/javascript">
     shortcut.add("escape", function() {
       location.href = '<?= base_url(); ?>';
@@ -67,87 +70,87 @@
     //shortcut.add("F11", function() {});
     shortcut.add("F12", function() {});
     window.BaseUrl = "<?= base_url() ?>";
-</script>
+  </script>
 </head>
 
 <body>
-<!--top-Header-menu-->
-<div class="navebarn">
-  <div id="user-nav" class="navbar navbar-inverse">
-    <ul class="nav">
-      <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
-        <ul class="dropdown-menu">
-        <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text">Área do Cliente</span></a></li>
-          <li class=""><a title="Meu Perfil" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text">Meu Perfil</span></a></li>
-          <li class="divider"></li>
-          <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class='bx bx-log-out-circle'></i> <span class="text">Sair do Sistema</span></a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
-          <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
-          <li><a href="<?= site_url('relatorios/servicos') ?>">Serviços</a></li>
-          <li><a href="<?= site_url('relatorios/os') ?>">Ordens de Serviço</a></li>
-          <li><a href="<?= site_url('relatorios/vendas') ?>">Vendas</a></li>
-          <li><a href="<?= site_url('relatorios/financeiro') ?>">Financeiro</a></li>
-          <li><a href="<?= site_url('relatorios/sku') ?>">SKU</a></li>
-          <li><a href="<?= site_url('relatorios/receitasBrutasMei') ?>">Receitas Brutas - MEI</a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Configurações"><i class='bx bx-cog iconN'></i><span class="text"></span></a>
-        <ul class="dropdown-menu">
-        <li><a href="<?= site_url('mapos/configurar') ?>">Sistema</a></li>
-        <li><a href="<?= site_url('usuarios') ?>">Usuários</a></li>
-        <li><a href="<?= site_url('mapos/emitente') ?>">Emitente</a></li>
-        <li><a href="<?= site_url('permissoes') ?>">Permissões</a></li>
-        <li><a href="<?= site_url('auditoria') ?>">Auditoria</a></li>
-        <li><a href="<?= site_url('mapos/emails') ?>">Emails</a></li>
-        <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
-        </ul>
-      </li>
-</ul>
-</div>
+  <!--top-Header-menu-->
+  <div class="navebarn">
+    <div id="user-nav" class="navbar navbar-inverse">
+      <ul class="nav">
+        <li class="dropdown">
+          <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Perfis"><i class='bx bx-user-circle iconN'></i><span class="text"></span></a>
+          <ul class="dropdown-menu">
+            <li class=""><a title="Área do Cliente" href="<?= site_url(); ?>/mine" target="_blank"> <span class="text">Área do Cliente</span></a></li>
+            <li class=""><a title="Meu Perfil" href="<?= site_url('mapos/minhaConta'); ?>"><span class="text">Meu Perfil</span></a></li>
+            <li class="divider"></li>
+            <li class=""><a title="Sair do Sistema" href="<?= site_url('login/sair'); ?>"><i class='bx bx-log-out-circle'></i> <span class="text">Sair do Sistema</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Relatórios"><i class='bx bx-pie-chart-alt-2 iconN'></i><span class="text"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="<?= site_url('relatorios/clientes') ?>">Clientes</a></li>
+            <li><a href="<?= site_url('relatorios/produtos') ?>">Produtos</a></li>
+            <li><a href="<?= site_url('relatorios/servicos') ?>">Serviços</a></li>
+            <li><a href="<?= site_url('relatorios/os') ?>">Ordens de Serviço</a></li>
+            <li><a href="<?= site_url('relatorios/vendas') ?>">Vendas</a></li>
+            <li><a href="<?= site_url('relatorios/financeiro') ?>">Financeiro</a></li>
+            <li><a href="<?= site_url('relatorios/sku') ?>">SKU</a></li>
+            <li><a href="<?= site_url('relatorios/receitasBrutasMei') ?>">Receitas Brutas - MEI</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="tip-right dropdown-toggle" data-toggle="dropdown" title="Configurações"><i class='bx bx-cog iconN'></i><span class="text"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="<?= site_url('mapos/configurar') ?>">Sistema</a></li>
+            <li><a href="<?= site_url('usuarios') ?>">Usuários</a></li>
+            <li><a href="<?= site_url('mapos/emitente') ?>">Emitente</a></li>
+            <li><a href="<?= site_url('permissoes') ?>">Permissões</a></li>
+            <li><a href="<?= site_url('auditoria') ?>">Auditoria</a></li>
+            <li><a href="<?= site_url('mapos/emails') ?>">Emails</a></li>
+            <li><a href="<?= site_url('mapos/backup') ?>">Backup</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
 
-<!-- New User -->
-<div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
-  <div class="user-names userT0"> 
-    <?php
-      function saudacao()
-      {
+    <!-- New User -->
+    <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
+      <div class="user-names userT0">
+        <?php
+        function saudacao()
+        {
           $hora = date('H');
           if ($hora >= 00 && $hora < 12) {
-              return 'Bom dia, ';
+            return 'Bom dia, ';
           } elseif ($hora >= 12 && $hora < 18) {
-              return 'Boa tarde, ';
+            return 'Boa tarde, ';
           } else {
-              return 'Boa noite, ';
+            return 'Boa noite, ';
           }
-      }
+        }
 
-      $login = '';
-  echo saudacao($login); // Irá retornar conforme o horário
-  ?>
-  </div>
-  <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
+        $login = '';
+        echo saudacao($login); // Irá retornar conforme o horário
+        ?>
+      </div>
+      <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
 
-  <section style="display:block;position:absolute;right:10px">
-  <div class="profile">
-    <div class="profile-img">
-      <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
+      <section style="display:block;position:absolute;right:10px">
+        <div class="profile">
+          <div class="profile-img">
+            <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
-</section>
+  <!-- End User -->
 
-</div>
-</div>
-<!-- End User -->
-
-<!--start-top-serch-->
-<div style="display: none" id="search">
+  <!--start-top-serch-->
+  <div style="display: none" id="search">
     <form action="<?= site_url('mapos/pesquisar') ?>">
       <input type="text" name="termo" placeholder="Pesquisar..." />
       <button type="submit" class="tip-bottom" title="Pesquisar"><i class="fas fa-search fa-white"></i></button>

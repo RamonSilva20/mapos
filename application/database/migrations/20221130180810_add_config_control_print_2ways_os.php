@@ -9,6 +9,6 @@ class Migration_add_config_control_print_2ways_os extends CI_Migration
 
     public function down()
     {
-        $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 15");
+        $this->db->query('DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 15');
     }
 }

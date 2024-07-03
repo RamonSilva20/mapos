@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.44.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.46.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -114,12 +114,14 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
 * Composer
 
 ### Doações
-
 Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
 
 Doações podem ser realizadas nos links:
 * [catarse/mapos](https://www.catarse.me/mapos) - Mensal
 * [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
+
+### Estrelas
+[![Estrelas](https://api.star-history.com/svg?repos=RamonSilva20/mapos&type=Date)](https://star-history.com/#RamonSilva20/mapos&Date)
 
 ### Contribuidores
 [![Contribuidores](https://contrib.rocks/image?repo=RamonSilva20/mapos)](https://github.com/RamonSilva20/mapos/graphs/contributors)

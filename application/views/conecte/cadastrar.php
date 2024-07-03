@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <title>Área do Cliente - <?= $this->config->item('app_name') ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?= $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
+    <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
@@ -14,6 +17,8 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>
 
 <body>
@@ -171,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="control-group span12" style="background-color:transparent;border:none;padding: 10px;margin-left: 0;margin-bottom: 0;">
                     <div style="display:flex; justify-content: center; flex-direction: column; align-items: center;">
                         <img src="<?= base_url() ?>index.php/mine/captcha" alt="">

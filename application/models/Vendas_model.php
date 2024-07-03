@@ -8,32 +8,117 @@ if (! defined('BASEPATH')) {
 
 class Vendas_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
     }
 
-
-    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    public function get($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', clientes.nomeCliente, clientes.idClientes');
+        $lista_clientes = [];
+        if ($where) {
+            if (array_key_exists('pesquisa', $where)) {
+                $this->db->select('idClientes');
+                $this->db->like('nomeCliente', $where['pesquisa']);
+                $this->db->limit(25);
+                $clientes = $this->db->get('clientes')->result();
+
+                foreach ($clientes as $c) {
+                    array_push($lista_clientes, $c->idClientes);
+                }
+            }
+        }
+        $this->db->select($fields . ', clientes.nomeCliente, clientes.idClientes');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
-        $this->db->join('clientes', 'clientes.idClientes = '.$table.'.clientes_id');
+        $this->db->join('clientes', 'clientes.idClientes = ' . $table . '.clientes_id');
         $this->db->order_by('idVendas', 'desc');
+        
+        // condicionais da pesquisa
         if ($where) {
-            $this->db->where($where);
+            // condicional de status
+            if (array_key_exists('status', $where)) {
+                $this->db->where_in('vendas.status', $where['status']);
+            }
+
+            // condicional de clientes
+            if (array_key_exists('pesquisa', $where)) {
+                if ($lista_clientes != null) {
+                    $this->db->where_in('vendas.clientes_id', $lista_clientes);
+                }
+            }
+
+            // condicional data Venda
+            if (array_key_exists('de', $where)) {
+                $this->db->where('vendas.dataVenda >=', $where['de']);
+            }
+            // condicional data final
+            if (array_key_exists('ate', $where)) {
+                $this->db->where('vendas.dataVenda <=', $where['ate']);
+            }
         }
+        $query = $this->db->get();
+
+        $result = !$one ? $query->result() : $query->row();
+
+        return $result;
+    }
+
+    public function getVendas($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
+    {
+        $lista_clientes = [];
+        if ($where) {
+            if (array_key_exists('pesquisa', $where)) {
+                $this->db->select('idClientes');
+                $this->db->like('nomeCliente', $where['pesquisa']);
+                $this->db->limit(25);
+                $clientes = $this->db->get('clientes')->result();
+
+                foreach ($clientes as $c) {
+                    array_push($lista_clientes, $c->idClientes);
+                }
+            }
+        }
+
+        $this->db->select($fields . ',clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
+        $this->db->from($table);
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = vendas.garantias_id', 'left');
+        $this->db->join('produtos_vendas', 'produtos_vendas.vendas_id = vendas.idVendas', 'left');
+        $this->db->join('servicos_vendas', 'servicos_vendas.vendas_id = vendas.idVendas', 'left');
+
+        // condicionais da pesquisa
+
+        // condicional de status
+        if (array_key_exists('status', $where)) {
+            $this->db->where_in('status', $where['status']);
+        }
+
+        // condicional de clientes
+        if (array_key_exists('pesquisa', $where)) {
+            if ($lista_clientes != null) {
+                $this->db->where_in('vendas.clientes_id', $lista_clientes);
+            }
+        }
+
+        // condicional data inicial
+        if (array_key_exists('de', $where)) {
+            $this->db->where('dataInicial >=', $where['de']);
+        }
+        // condicional data final
+        if (array_key_exists('ate', $where)) {
+            $this->db->where('dataFinal <=', $where['ate']);
+        }
+
+        $this->db->limit($perpage, $start);
+        $this->db->order_by('vendas.idVendas', 'desc');
+        $this->db->group_by('vendas.idVendas');
 
         $query = $this->db->get();
 
-        $result =  !$one  ? $query->result() : $query->row();
+        $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -46,6 +131,7 @@ class Vendas_model extends CI_Model
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -56,6 +142,7 @@ class Vendas_model extends CI_Model
                 return $this->data['configuration']['control_edit_vendas'] == '1';
             }
         }
+
         return true;
     }
 
@@ -69,6 +156,7 @@ class Vendas_model extends CI_Model
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -78,6 +166,7 @@ class Vendas_model extends CI_Model
         $this->db->from('itens_de_vendas');
         $this->db->join('produtos', 'produtos.idProdutos = itens_de_vendas.produtos_id');
         $this->db->where('vendas_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -86,6 +175,7 @@ class Vendas_model extends CI_Model
         $this->db->select('cobrancas.*');
         $this->db->from('cobrancas');
         $this->db->where('vendas_id', $id);
+
         return $this->db->get()->result();
     }
 
@@ -96,6 +186,7 @@ class Vendas_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
 
@@ -133,12 +224,12 @@ class Vendas_model extends CI_Model
     public function autoCompleteProduto($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('descricao', $q);
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -147,16 +238,17 @@ class Vendas_model extends CI_Model
     public function autoCompleteCliente($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nomeCliente', $q);
+        $this->db->or_like('documento', $q);
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
+                $row_set[] = ['label'=>$row['nomeCliente'].' | Celular: '.$row['celular'].' | Documento: '.$row['documento'],'id'=>$row['idClientes']];
             }
             echo json_encode($row_set);
         } else {
-            $row_set[] = ['label'=> 'Adicionar cliente...', 'id' => null];
+            $row_set[] = ['label' => 'Adicionar cliente...', 'id' => null];
             echo json_encode($row_set);
         }
     }
@@ -164,13 +256,13 @@ class Vendas_model extends CI_Model
     public function autoCompleteUsuario($q)
     {
         $this->db->select('*');
-        $this->db->limit(5);
+        $this->db->limit(25);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']];
+                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
             }
             echo json_encode($row_set);
         }
@@ -200,7 +292,7 @@ class Vendas_model extends CI_Model
         $pix = (new StaticPayload())
             ->setAmount($amount)
             ->setTid($id)
-            ->setDescription(sprintf("%s Venda %s", substr($emitente->nome, 0, 18), $id), true)
+            ->setDescription(sprintf('%s Venda %s', substr($emitente->nome, 0, 18), $id), true)
             ->setPixKey(getPixKeyType($pixKey), $pixKey)
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);

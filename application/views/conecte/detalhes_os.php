@@ -338,7 +338,8 @@ foreach ($servicos as $s) {
 <script type="text/javascript">
     $(document).ready(function() {
         $('.editor').trumbowyg({
-            lang: 'pt_br'
+            lang: 'pt_br',
+            semantic: { 'strikethrough': 's', }
         });
     });
 

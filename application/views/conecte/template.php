@@ -6,6 +6,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
+    <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
@@ -17,6 +19,8 @@
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>
 
 <body>
@@ -48,7 +52,7 @@
                 <img src="<?php echo base_url() ?>assets/img/logo-two.png">
             </div>
             <div class="title1">
-                <img src="<?= base_url()?>assets/img/logo-mapos-branco.png">
+                <img src="<?= base_url() ?>assets/img/logo-mapos-branco.png">
             </div>
         </div>
         <a href="#" class="visible-phone">
@@ -64,20 +68,20 @@
             <div class="menu">
                 <ul class="menu-links" style="position: relative;">
                     <li class="<?php if (isset($menuPainel)) {
-                        echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/painel"><i class='bx bx-home-alt iconX'></i> <span class="title">Painel</span></a></li>
+                                    echo 'active';
+                                }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/painel"><i class='bx bx-home-alt iconX'></i> <span class="title">Painel</span></a></li>
                     <li class="<?php if (isset($menuConta)) {
-                        echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/conta"><i class="bx bx-user-circle iconX"></i> <span class="title">Minha Contas</span></a></li>
+                                    echo 'active';
+                                }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/conta"><i class="bx bx-user-circle iconX"></i> <span class="title">Minha Contas</span></a></li>
                     <li class="<?php if (isset($menuOs)) {
-                        echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconX'></i> <span class="title">Ordens de Serviço</span></a></li>
+                                    echo 'active';
+                                }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/os"><i class='bx bx-spreadsheet iconX'></i> <span class="title">Ordens de Serviço</span></a></li>
                     <li class="<?php if (isset($menuVendas)) {
-                        echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconX'></i> <span class="title">Compras</span></a></li>
+                                    echo 'active';
+                                }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/compras"><i class='bx bx-cart-alt iconX'></i> <span class="title">Compras</span></a></li>
                     <li class="<?php if (isset($menuCobrancas)) {
-                        echo 'active';
-                    }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class='bx bx-credit-card-front iconX'></i> <span class="title">Cobranças</span></a></li>
+                                    echo 'active';
+                                }; ?>"><a class="tip-bottom" title="" href="<?php echo base_url() ?>index.php/mine/cobrancas"><i class='bx bx-credit-card-front iconX'></i> <span class="title">Cobranças</span></a></li>
                 </ul>
             </div>
 
@@ -131,4 +135,5 @@
     <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/matrix.js"></script>
 </body>
+
 </html>

@@ -1,20 +1,16 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Permissoes extends MY_Controller
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
             redirect(base_url());
         }
@@ -41,6 +37,7 @@ class Permissoes extends MY_Controller
         $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/permissoes';
+
         return $this->layout();
     }
 
@@ -143,6 +140,7 @@ class Permissoes extends MY_Controller
         }
 
         $this->data['view'] = 'permissoes/adicionarPermissao';
+
         return $this->layout();
     }
 
@@ -245,13 +243,14 @@ class Permissoes extends MY_Controller
         $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/editarPermissao';
+
         return $this->layout();
     }
 
     public function desativar()
     {
         $id = $this->input->post('id');
-        if (!$id) {
+        if (! $id) {
             $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
             redirect(site_url('permissoes/gerenciar/'));
         }

@@ -78,3 +78,7 @@
 textarea {
         resize: vertical;
     }
+
+.ui-menu {
+    z-index: 9999 !important;
+}

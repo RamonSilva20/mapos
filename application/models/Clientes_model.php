@@ -1,12 +1,7 @@
 <?php
+
 class Clientes_model extends CI_Model
 {
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -19,12 +14,16 @@ class Clientes_model extends CI_Model
         $this->db->order_by('idClientes', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where);
+            $this->db->like('nomeCliente', $where);
+            $this->db->or_like('documento', $where);
+            $this->db->or_like('email', $where);
+            $this->db->or_like('telefone', $where);
         }
 
         $query = $this->db->get();
 
-        $result = !$one ? $query->result() : $query->row();
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -32,6 +31,7 @@ class Clientes_model extends CI_Model
     {
         $this->db->where('idClientes', $id);
         $this->db->limit(1);
+
         return $this->db->get('clientes')->row();
     }
 
@@ -78,24 +78,28 @@ class Clientes_model extends CI_Model
         $this->db->where('clientes_id', $id);
         $this->db->order_by('idOs', 'desc');
         $this->db->limit(10);
+
         return $this->db->get('os')->result();
     }
 
     /**
      * Retorna todas as OS vinculados ao cliente
-     * @param int $id
+     *
+     * @param  int  $id
      * @return array
      */
     public function getAllOsByClient($id)
     {
         $this->db->where('clientes_id', $id);
+
         return $this->db->get('os')->result();
     }
 
     /**
      * Remover todas as OS por cliente
-     * @param array $os
-     * @return boolean
+     *
+     * @param  array  $os
+     * @return bool
      */
     public function removeClientOs($os)
     {
@@ -113,24 +117,28 @@ class Clientes_model extends CI_Model
         } catch (Exception $e) {
             return false;
         }
+
         return true;
     }
 
     /**
      * Retorna todas as Vendas vinculados ao cliente
-     * @param int $id
+     *
+     * @param  int  $id
      * @return array
      */
     public function getAllVendasByClient($id)
     {
         $this->db->where('clientes_id', $id);
+
         return $this->db->get('vendas')->result();
     }
 
     /**
      * Remover todas as Vendas por cliente
-     * @param array $vendas
-     * @return boolean
+     *
+     * @param  array  $vendas
+     * @return bool
      */
     public function removeClientVendas($vendas)
     {
@@ -145,6 +153,7 @@ class Clientes_model extends CI_Model
         } catch (Exception $e) {
             return false;
         }
+
         return true;
     }
 }

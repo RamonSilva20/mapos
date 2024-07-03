@@ -13,15 +13,13 @@
       <div class="form-group clearfix">
         <label for="dbuser" class=" col-md-3">Usuário</label>
         <div class=" col-md-9">
-          <input type="text" value="" id="dbuser" name="dbuser" class="form-control" autocomplete="off"
-          placeholder="Nome de usuário do banco de dados" />
+          <input type="text" value="" id="dbuser" name="dbuser" class="form-control" autocomplete="off" placeholder="Nome de usuário do banco de dados" />
         </div>
       </div>
       <div class="form-group clearfix">
         <label for="dbpassword" class=" col-md-3">Senha</label>
         <div class=" col-md-9">
-          <input type="password" value="" id="dbpassword" name="dbpassword" class="form-control"
-          autocomplete="off" placeholder="Senha do usuário do banco de dados" />
+          <input type="password" value="" id="dbpassword" name="dbpassword" class="form-control" autocomplete="off" placeholder="Senha do usuário do banco de dados" />
         </div>
       </div>
       <div class="form-group clearfix">
@@ -66,9 +64,36 @@
         <div class="form-group clearfix">
           <label for="base_url" class=" col-md-3">URL</label>
           <div class="col-md-9">
-            <input type="text" value="" id="base_url" name="base_url" class="form-control"
-            placeholder="URL do sistema" />
+            <input type="text" value="" id="base_url" name="base_url" class="form-control" placeholder="URL do sistema" />
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section clearfix">
+    <p>4. REST API (Usada no aplicativo).</p>
+    <hr />
+    <div>
+      <div class="form-group clearfix">
+        <label for="api_enabled" class=" col-md-3">Habilitar?</label>
+        <div class="col-md-9">
+          <select name="api_enabled" id="" autocomplete="off">
+            <option value="true">Sim</option>
+            <option value="false" selected>Não</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label for="token_expire_time" class=" col-md-3">Expiração Token JWT</label>
+        <div class="col-md-9">
+          <select name="token_expire_time" id="" autocomplete="off">
+            <option value="60">1 minuto</option>
+            <option value="3600">1 hora</option>
+            <option value="86400" selected>1 dia</option>
+            <option value="604800">1 semana</option>
+            <option value="2592000">1 mês</option>
+          </select>
         </div>
       </div>
     </div>

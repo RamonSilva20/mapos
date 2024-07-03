@@ -13,7 +13,7 @@ class Seeder
 
     public function __construct()
     {
-        $this->CI =& get_instance();
+        $this->CI = &get_instance();
         $this->CI->load->database();
         $this->CI->load->dbforge();
         $this->db = $this->CI->db;
@@ -23,7 +23,7 @@ class Seeder
     /**
      * Run another seeder
      *
-     * @param string $seeder Seeder classname
+     * @param  string  $seeder  Seeder classname
      */
     public function call($seeder)
     {

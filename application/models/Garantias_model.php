@@ -1,24 +1,19 @@
-<?php if (! defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Garantias_model extends CI_Model
 {
-    /**
-     * author: Wilmerson Felipe
-     * email: will.phelipe@gmail.com
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
     }
 
-    
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields.', usuarios.nome, usuarios.idUsuarios');
+        $this->db->select($fields . ', usuarios.nome, usuarios.idUsuarios');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->join('usuarios', 'usuarios.idUsuarios = garantias.usuarios_id');
@@ -26,10 +21,11 @@ class Garantias_model extends CI_Model
         if ($where) {
             $this->db->where($where);
         }
-        
+
         $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
+
+        $result = ! $one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -40,6 +36,7 @@ class Garantias_model extends CI_Model
         $this->db->join('usuarios', 'usuarios.idUsuarios = garantias.usuarios_id');
         $this->db->where('garantias.idGarantias', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
@@ -53,10 +50,10 @@ class Garantias_model extends CI_Model
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios');
         $this->db->where('garantias.idGarantias', $id);
         $this->db->limit(1);
+
         return $this->db->get()->row();
     }
 
-     
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -64,12 +61,13 @@ class Garantias_model extends CI_Model
             if ($returnId == true) {
                 return $this->db->insert_id($table);
             }
+
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -78,10 +76,10 @@ class Garantias_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function delete($table, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -89,7 +87,7 @@ class Garantias_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
 
@@ -106,7 +104,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('produtos');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['descricao'].' | Preço: R$ '.$row['precoVenda'].' | Estoque: '.$row['estoque'],'estoque'=>$row['estoque'],'id'=>$row['idProdutos'],'preco'=>$row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }
@@ -120,7 +118,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']];
+                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idClientes']];
             }
             echo json_encode($row_set);
         }
@@ -135,7 +133,7 @@ class Garantias_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']];
+                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
             }
             echo json_encode($row_set);
         }

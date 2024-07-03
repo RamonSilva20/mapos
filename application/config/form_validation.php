@@ -1,4 +1,6 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $config = [
     'clientes' => [
@@ -12,7 +14,7 @@ $config = [
             'label' => 'CPF/CNPJ',
             'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . get_instance()->uri->segment(3) . '.idClientes]',
             'errors' => [
-                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
+                'verific_cpf_cnpj' => 'O campo %s não é um CPF ou CNPJ válido.',
             ],
         ],
         [
@@ -54,7 +56,7 @@ $config = [
             'field' => 'cep',
             'label' => 'CEP',
             'rules' => 'trim',
-        ]
+        ],
     ],
     'servicos' => [
         [
@@ -71,7 +73,7 @@ $config = [
             'field' => 'preco',
             'label' => '',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'produtos' => [
         [
@@ -103,7 +105,7 @@ $config = [
             'field' => 'estoqueMinimo',
             'label' => 'Estoque Minimo',
             'rules' => 'trim',
-        ]
+        ],
     ],
     'usuarios' => [
         [
@@ -121,7 +123,7 @@ $config = [
             'label' => 'CPF',
             'rules' => 'required|trim|verific_cpf_cnpj|is_unique[usuarios.cpf]',
             'errors' => [
-                'verific_cpf_cnpj' => "O campo %s não é um CPF válido."
+                'verific_cpf_cnpj' => 'O campo %s não é um CPF válido.',
             ],
         ],
         [
@@ -173,7 +175,7 @@ $config = [
             'field' => 'situacao',
             'label' => 'Situacao',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'os' => [
         [
@@ -191,7 +193,7 @@ $config = [
             'label' => 'Garantia',
             'rules' => 'trim|numeric',
             'errors' => [
-                'numeric' => 'Por favor digite apenas número.'
+                'numeric' => 'Por favor digite apenas número.',
             ],
         ],
         [
@@ -233,7 +235,7 @@ $config = [
             'field' => 'laudoTecnico',
             'label' => 'Laudo Tecnico',
             'rules' => 'trim',
-        ]
+        ],
     ],
     'tiposUsuario' => [
         [
@@ -245,7 +247,7 @@ $config = [
             'field' => 'situacao',
             'label' => 'Situacao',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'receita' => [
         [
@@ -273,7 +275,7 @@ $config = [
             'field' => 'tipo',
             'label' => 'Tipo',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'despesa' => [
         [
@@ -300,7 +302,7 @@ $config = [
             'field' => 'tipo',
             'label' => 'Tipo',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'garantias' => [
         [
@@ -322,7 +324,7 @@ $config = [
             'field' => 'textoGarantia',
             'label' => 'textoGarantia',
             'rules' => 'required|trim',
-        ]
+        ],
     ],
     'pagamentos' => [
         [
@@ -349,7 +351,7 @@ $config = [
             'field' => 'accessToken',
             'label' => 'accessToken',
             'rules' => 'trim',
-        ]
+        ],
     ],
     'vendas' => [
         [
@@ -371,7 +373,7 @@ $config = [
             'field' => 'usuarios_id',
             'label' => 'usuarios_id',
             'rules' => 'trim|required',
-        ]
+        ],
     ],
     'anotacoes_os' => [
         [
@@ -383,7 +385,7 @@ $config = [
             'field' => 'os_id',
             'label' => 'ID Os',
             'rules' => 'trim|required|integer',
-        ]
+        ],
     ],
     'adicionar_produto_os' => [
         [

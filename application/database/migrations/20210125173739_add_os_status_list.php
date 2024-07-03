@@ -10,6 +10,6 @@ class Migration_add_os_status_list extends CI_Migration
 
     public function down()
     {
-        $this->db->query("DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 12");
+        $this->db->query('DELETE FROM `configuracoes` WHERE `configuracoes`.`idConfig` = 12');
     }
 }

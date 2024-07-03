@@ -4,7 +4,7 @@ $().ready(function () {
     }, 2500); // O valor é representado em milisegundos.
 });
 
-// Removendo o atributo tittle para dispositivos moveis. 
+// Removendo o atributo tittle para dispositivos moveis.
 $(document).ready(function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         $(".tip-top").removeAttr("title");

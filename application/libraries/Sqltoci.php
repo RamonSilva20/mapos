@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('BASEPATH')) {
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -11,23 +11,35 @@ if (!defined('BASEPATH')) {
  *
  * @author Fastworkx S.R.L. <development@fastworkx.com>
  * @license Free to use and abuse
- * @version 0.1.0 Beta
  *
+ * @version 0.1.0 Beta
  */
 class Sqltoci
 {
     public $db_user;
+
     public $db_pass;
+
     public $db_host;
+
     public $db_name;
+
     public $email;
+
     public $tables = '*';
+
     public $newline = '\n';
+
     public $write_file = true;
+
     public $file_name = '';
+
     public $file_per_table = true;
+
     public $path = 'migrations';
+
     public $skip_tables = [];
+
     public $add_view = false;
 
     /*
@@ -53,7 +65,7 @@ class Sqltoci
      * Init Config if there is any passed
      *
      *
-     * @param type $params
+     * @param  type  $params
      */
     public function init_config($params = [])
     { //apply config
@@ -69,8 +81,8 @@ class Sqltoci
     /**
      * Generate the file.
      *
-     * @param string $tables
-     * @return boolean|string
+     * @param  string  $tables
+     * @return bool|string
      */
     public function generate($tables = null)
     {
@@ -81,33 +93,33 @@ class Sqltoci
         $return = '';
         /* open file */
         if ($this->write_file) {
-            if (!is_dir($this->path) or !is_really_writable($this->path)) {
-                $msg = "Unable to write migration file: " . $this->path;
+            if (! is_dir($this->path) or ! is_really_writable($this->path)) {
+                $msg = 'Unable to write migration file: ' . $this->path;
                 log_message('error', $msg);
                 echo $msg;
+
                 return;
             }
 
-            if (!$this->file_per_table) {
+            if (! $this->file_per_table) {
                 $file_path = $this->path . '/' . $this->file_name . '.sql';
                 $file = fopen($file_path, 'w+');
 
-                if (!$file) {
-                    $msg = "no file";
+                if (! $file) {
+                    $msg = 'no file';
                     log_message('error', $msg);
                     echo $msg;
+
                     return false;
                 }
             }
         }
-
 
         // if default, then run all tables, otherwise just do the list provided
         if ($this->tables == '*') {
             $query = $this->ci->db_master->query('SHOW full TABLES FROM ' . $this->ci->db_master->protect_identifiers($this->ci->db_master->database));
 
             $retval = [];
-
 
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $row) {
@@ -121,7 +133,7 @@ class Sqltoci
 
                         /* check if views to be migrated */
                         if ($this->add_view) {
-                            ## not implemented ##
+                            //# not implemented ##
                             //$retval[] = $row[$tablename];
                         } else {
                             /* skip views */
@@ -140,21 +152,21 @@ class Sqltoci
             $this->tables = is_array($tables) ? $tables : explode(',', $tables);
         }
 
-        ## if write file, check if we can
+        //# if write file, check if we can
         if ($this->write_file) {
             /* make subdir */
             $path = $this->path . '/' . $this->file_name;
 
-            if (!@is_dir($path)) {
-                if (!@mkdir($path, DIR_WRITE_MODE, true)) {
+            if (! @is_dir($path)) {
+                if (! @mkdir($path, DIR_WRITE_MODE, true)) {
                     return false;
                 }
 
                 @chmod($path, DIR_WRITE_MODE);
             }
 
-            if (!is_dir($path) or !is_really_writable($path)) {
-                $msg = "Unable to write backup per table file: " . $path;
+            if (! is_dir($path) or ! is_really_writable($path)) {
+                $msg = 'Unable to write backup per table file: ' . $path;
                 log_message('error', $msg);
 
                 return;
@@ -164,7 +176,7 @@ class Sqltoci
             $file_path = $path . '/001_create_base.php';
             $file = fopen($file_path, 'w+');
 
-            if (!$file) {
+            if (! $file) {
                 $msg = 'No File';
                 log_message('error', $msg);
                 echo $msg;
@@ -172,7 +184,6 @@ class Sqltoci
                 return false;
             }
         }
-
 
         $up = '';
         $down = '';
@@ -192,7 +203,7 @@ class Sqltoci
             $engines = $q->row_array();
 
             $key = '';
-            $up .= PHP_EOL."\n\t\t" . '## Create Table ' . $table . "\n";
+            $up .= PHP_EOL . "\n\t\t" . '## Create Table ' . $table . "\n";
             $up .= "\t\t" . '$this->dbforge->add_field(array(';
 
             foreach ($columns as $column) {
@@ -202,7 +213,7 @@ class Sqltoci
                 $column_default = $column['Default'];
                 $column_unsigned = false;
                 $unsigned = 'unsigned';
-                
+
                 //si tiene constraint
                 if (strpos($column['Type'], '(')) {
                     //verificar si tiene 'unsigned'
@@ -217,9 +228,9 @@ class Sqltoci
                     if ($column_type == 'ENUM' || $column_type == 'SET') {
                         //reemplazamos comilla simple por doole
                         $column['Type'] = str_replace('\'', '"', substr($column['Type'], strpos($column['Type'], '(')));
-                        
+
                         //concadenamos
-                        $column_type = $column_type.$column['Type'];
+                        $column_type = $column_type . $column['Type'];
                         $column_constraint = false;
                     } else {
                         $column['Type'] = substr($column['Type'], strpos($column['Type'], '(') + 1);
@@ -229,41 +240,41 @@ class Sqltoci
                     $column_type = strtoupper($column['Type']);
                     $column_constraint = false;
                 }
-                
+
                 //si tiene DEAFAULT generar  sql texto plano para escapar el strin en caso e.g. CURRENT_TIMESTAMP
                 if ($column_default == 'CURRENT_TIMESTAMP') {
-                    $up .= PHP_EOL."\t\t\t"."'`$column[Field]` $column[Type] " . ($column['Null'] == 'NO' ? 'NOT NULL' : 'NULL') .
+                    $up .= PHP_EOL . "\t\t\t" . "'`$column[Field]` $column[Type] " . ($column['Null'] == 'NO' ? 'NOT NULL' : 'NULL') .
                     (
-                        #  if its timestamp column, don't '' around default value .... crap way, but should work for now
+                        //  if its timestamp column, don't '' around default value .... crap way, but should work for now
                         $column['Default'] ? ' DEFAULT ' . ($column['Type'] == 'timestamp' ? $column['Default'] : '' . $column['Default'] . '') : ''
                     )
                     . " $column[Extra]',";
                 } else {
-                    $up .= PHP_EOL.
-                    "\t\t\t".'\'' . $column['Field'] . '\' => array('.PHP_EOL.
-                    "\t\t\t\t".'\'type\' => \'' . $column_type . '\','.PHP_EOL.
+                    $up .= PHP_EOL .
+                    "\t\t\t" . '\'' . $column['Field'] . '\' => array(' . PHP_EOL .
+                    "\t\t\t\t" . '\'type\' => \'' . $column_type . '\',' . PHP_EOL .
                     (
                         $column_constraint ?
-                        "\t\t\t\t".'\'constraint\' => ' . $column_constraint . ','.PHP_EOL :
+                        "\t\t\t\t" . '\'constraint\' => ' . $column_constraint . ',' . PHP_EOL :
                         ''
-                    ).
+                    ) .
                     (
                         $column_unsigned ?
-                        "\t\t\t\t".'\''.$unsigned.'\' => TRUE,'.PHP_EOL :
+                        "\t\t\t\t" . '\'' . $unsigned . '\' => TRUE,' . PHP_EOL :
                         ''
-                    ).
-                    "\t\t\t\t".'\'null\' => ' . $column_null . ','.PHP_EOL.
+                    ) .
+                    "\t\t\t\t" . '\'null\' => ' . $column_null . ',' . PHP_EOL .
                     (
                         $column_default != null ?
-                        "\t\t\t\t".'\'default\' => \'' . $column_default . '\','.PHP_EOL :
+                        "\t\t\t\t" . '\'default\' => \'' . $column_default . '\',' . PHP_EOL :
                         ''
-                    ).
+                    ) .
                     (
                         $column['Extra'] ?
-                    "\t\t\t\t".'\''.$column['Extra'].'\' => TRUE'.PHP_EOL :
-                    ''.PHP_EOL
-                    ).
-                    "\t\t\t".'),';
+                    "\t\t\t\t" . '\'' . $column['Extra'] . '\' => TRUE' . PHP_EOL :
+                    '' . PHP_EOL
+                    ) .
+                    "\t\t\t" . '),';
                 }
 
                 if ($column['Key'] == 'PRI') {
@@ -271,13 +282,12 @@ class Sqltoci
                 }
             }
 
-            $up .= PHP_EOL."\t\t));". PHP_EOL.$key.PHP_EOL."\t\t" . '$this->dbforge->create_table("' . $table . '", TRUE);' . PHP_EOL;
+            $up .= PHP_EOL . "\t\t));" . PHP_EOL . $key . PHP_EOL . "\t\t" . '$this->dbforge->create_table("' . $table . '", TRUE);' . PHP_EOL;
 
             if (isset($engines['Engine']) and $engines['Engine']) {
                 $up .= "\t\t" . '$this->db->query(\'ALTER TABLE  ' . $this->ci->db_master->protect_identifiers($table) .
-                        ' ENGINE = ' . $engines['Engine']. '\');';
+                        ' ENGINE = ' . $engines['Engine'] . '\');';
             }
-
 
             $down .= "\t\t" . '### Drop table ' . $table . ' ##' . "\n";
             $down .= "\t\t" . '$this->dbforge->drop_table("' . $table . '", TRUE);' . "\n";
@@ -286,7 +296,7 @@ class Sqltoci
             $q->free_result();
         }
 
-        ### generate the text ##
+        //## generate the text ##
         $return .= '<?php ';
         $return .= 'defined(\'BASEPATH\') OR exit(\'No direct script access allowed\');' . "\n\n";
         $return .= 'class Migration_create_base extends CI_Migration {' . "\n";
@@ -300,11 +310,12 @@ class Sqltoci
         $return .= $down . "\n";
         $return .= "\t" . '}' . "\n" . '}';
 
-        ## write the file, or simply return if write_file false
+        //# write the file, or simply return if write_file false
         if ($this->write_file) {
             fwrite($file, $return);
             fclose($file);
-            echo "Create file migration with success!";
+            echo 'Create file migration with success!';
+
             return true;
         } else {
             return $return;

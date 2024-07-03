@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -6,13 +8,13 @@ $config['payment_gateways'] = [
     'GerencianetSdk' => [
         'name' => 'GerenciaNet (Efí)',
         'library_name' => 'GerencianetSdk',
-        'production' => false,
+        'production' => isset($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION']) ? filter_var($_ENV['PAYMENT_GATEWAYS_EFI_PRODUCTION'], FILTER_VALIDATE_BOOLEAN) : false,
         'credentials' => [
-            'client_id' => '',
-            'client_secret' => ''
+            'client_id' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'] ?? '',
+            'client_secret' => $_ENV['PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'] ?? '',
         ],
-        'timeout' => 30,
-        'boleto_expiration' => 'P3D',
+        'timeout' => $_ENV['PAYMENT_GATEWAYS_EFI_TIMEOUT'] ?? 30,
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
@@ -20,13 +22,14 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'new' => 'Cobrança / Assinatura gerada',
             'waiting' => 'Aguardando a confirmação do pagamento',
             'paid' => 'Pagamento confirmado',
+            'idenfied' => 'Pagamento identificado',
             'unpaid' => 'Não foi possível confirmar o pagamento da cobrança',
             'refunded' => 'Pagamento devolvido pelo lojista ou pelo intermediador Gerencianet',
             'contested' => 'Pagamento em processo de contestação',
@@ -37,26 +40,26 @@ $config['payment_gateways'] = [
             'active' => 'Assinatura ativa Todas as cobranças estão sendo geradas',
             'finished' => 'Carnê está finalizado',
             'up_to_date' => 'Carnê encontra-se em dia',
-        ]
+        ],
     ],
     'MercadoPago' => [
         'name' => 'MercadoPago',
         'library_name' => 'MercadoPago',
         'credentials' => [
-            'access_token' => '',
-            'public_key' => '',
-            'client_secret' => '',
-            'client_id' => '',
-            'integrator_id' => '',
-            'platform_id' => '',
-            'corporation_id' => ''
+            'access_token' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN'] ?? '',
+            'public_key' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY'] ?? '',
+            'client_secret' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID'] ?? '',
+            'client_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'] ?? '',
+            'integrator_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_INTEGRATOR_ID'] ?? '',
+            'platform_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PLATFORM_ID'] ?? '',
+            'corporation_id' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CORPORATION_ID'] ?? '',
         ],
-        'boleto_expiration' => 'P3D',
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
                 'value' => 'boleto',
-            ]
+            ],
         ],
         'transaction_status' => [
             'pending' => 'O usuário ainda não concluiu o processo de pagamento',
@@ -67,18 +70,18 @@ $config['payment_gateways'] = [
             'rejected' => 'O pagamento foi rejeitado, o usuário pode tentar o pagamento novamente',
             'cancelled' => 'O pagamento foi cancelado por uma das partes ou porque o prazo para pagamento expirou',
             'refunded' => 'O pagamento foi reembolsado ao usuário',
-            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador'
-        ]
+            'charged_back' => 'Foi feito um estorno no cartão de crédito do comprador',
+        ],
     ],
     'Asaas' => [
         'name' => 'Asaas',
         'library_name' => 'Asaas',
-        'production' => false,
-        'notify' => false,
+        'production' => isset($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION']) ? filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_PRODUCTION'], FILTER_VALIDATE_BOOLEAN) : false,
+        'notify' => isset($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY']) ? filter_var($_ENV['PAYMENT_GATEWAYS_ASAAS_NOTIFY'], FILTER_VALIDATE_BOOLEAN) : false,
         'credentials' => [
-            'api_key' => '',
+            'api_key' => $_ENV['PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY'] ?? '',
         ],
-        'boleto_expiration' => 'P3D',
+        'boleto_expiration' => $_ENV['PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'] ?? 'P3D',
         'payment_methods' => [
             [
                 'name' => 'Boleto',
@@ -86,8 +89,8 @@ $config['payment_gateways'] = [
             ],
             [
                 'name' => 'Link',
-                'value' => 'link'
-            ]
+                'value' => 'link',
+            ],
         ],
         'transaction_status' => [
             'PENDING' => 'Aguardando pagamento',
@@ -103,6 +106,6 @@ $config['payment_gateways'] = [
             'DUNNING_REQUESTED' => 'Em processo de recuperação',
             'DUNNING_RECEIVED' => 'Recuperada',
             'AWAITING_RISK_ANALYSIS' => 'Pagamento em análise',
-        ]
-    ]
+        ],
+    ],
 ];
