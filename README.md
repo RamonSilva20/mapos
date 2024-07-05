@@ -112,7 +112,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos-github)
 * [filp/whoops](https://github.com/filp/whoops)
 
 ### Requerimentos
-* PHP = 8.1
+* PHP = 8.2
 * MySQL
 * Composer
 
