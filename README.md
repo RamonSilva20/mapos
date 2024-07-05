@@ -53,15 +53,18 @@ URL: http://localhost:8000/
     ##### Obs: Cuide da pasta `docker/data`, onde é pasta que o mysql do docker salva os arquivos. Se for deletada você perderá seu banco de dados.
     ##### Obs2: O PhpMyAdmin também e instalado e pode ser acessado em `http://localhost:8080/`.
 
-### Instalação Automatizada (Windows 10/11)
+### Instalação Automatizada
+Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https://www.youtube.com/watch?v=aZE-LW_YOE4)
+#### Windows 10/11
 1. Execute o Prompt de Comando ou PowerShell como Administrador;
 2. Execute o comando: `PowerShell -command "& { iwr https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.bat -OutFile MapOS_Install.bat }; .\MapOS_Install.bat"`
-3. Tutorial Instalação: https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33
+3. Siga as instrunções na tela.
 
-### Instalação Automatizada (Ubuntu/Debian)
+#### Linux (Ubuntu/Debian)
 1. Abra o Terminal ou acesse seu servidor via SSH;
 2. Eleve o privilégio aplicando `sudo su` (Recomendado);
 3. Execute o comando: `curl -o MapOS_Install.sh -L https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.sh && chmod +x MapOS_Install.sh && ./MapOS_Install.sh`
+4. Siga as instruções na tela.
 
 ### Atualização
 
