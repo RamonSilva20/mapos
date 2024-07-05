@@ -59,7 +59,7 @@ CLS
 ::::::::::::::::::::::::::::
 :: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
 :: Versao Instalador: v2.6.20240705
-:: Publicado na versao 4.45.0 do MapOS
+:: Publicado na versao 4.46.0 do MapOS
 ::::::::::::::::::::::::::::
 
 :: <=== Controle de STEPs ===>
