@@ -381,7 +381,7 @@ class GerencianetSdk extends BasePaymentGateway
         ];
 
         $settings = [
-            "payment_method" => "all", // "banking_billet", "credit_card", "all"
+            "payment_method" => "all",
             "expire_at" => $expirationDate,
             "request_delivery_address" => false,
             'message' => 'Pagamento referente a ' . $title,
