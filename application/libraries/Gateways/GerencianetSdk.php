@@ -364,37 +364,37 @@ class GerencianetSdk extends BasePaymentGateway
             throw new \Exception($err);
         }
 
-        $response = $this->gerenciaNetApi->createCharge(
-            [],
-            [
-                'items' => [
-                    [
-                        'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
-                        'amount' => 1,
-                        'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
-                    ],
-                ],
-            ]
-        );
-        if (intval($response['code']) !== 200) {
-            throw new \Exception('Erro ao chamar GerenciaNet!');
-        }
-
         $expirationDate = (new DateTime())->add(new DateInterval('P3D'));
         $expirationDate = ($expirationDate->format('Y-m-d'));
         $title = $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id";
 
-        $result = $this->gerenciaNetApi->linkCharge(
+        $items = [
             [
-                'id' => $response['data']['charge_id'],
+                'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
+                'amount' => 1,
+                'value' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
             ],
-            [
-                'message' => 'Pagamento referente a ' . $title,
-                'expire_at' => $expirationDate,
-                'request_delivery_address' => false,
-                'payment_method' => 'all',
-            ]
-        );
+        ];
+
+        $metadata = [
+            "notification_url" => "http://mapos.com.br/"
+        ];
+
+        $settings = [
+            "payment_method" => "all",
+            "expire_at" => $expirationDate,
+            "request_delivery_address" => false,
+            'message' => 'Pagamento referente a ' . $title,
+        ];
+
+        $body = [
+            "items" => $items,
+            "metadata" => $metadata,
+            "settings" => $settings,
+        ];
+
+        $result = $this->gerenciaNetApi->createOneStepLink($params = [], $body);
+
         if (intval($result['code']) !== 200) {
             throw new \Exception('Erro ao chamar GerenciaNet!');
         }
