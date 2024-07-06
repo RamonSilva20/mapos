@@ -47,20 +47,28 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td style="width: 50%; padding-left: 0">
+                                <td style="width: 50%; padding-left: 0">
                                         <ul>
                                             <li>
                                                 <span>
                                                     <h5>Cliente</h5>
                                                     <span>
-                                                        <?php echo $result->nomeCliente ?></span><br />
+                                                        <?php echo $result->nomeCliente ?>
+                                                    </span><br />
                                                     <span>
-                                                        <?php echo $result->rua ?>,
-                                                        <?php echo $result->numero ?>,
-                                                        <?php echo $result->bairro ?></span><br />
+                                                        <?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?>
+                                                    </span><br/>
                                                     <span>
-                                                        <?php echo $result->cidade ?> -
-                                                        <?php echo $result->estado ?></span>
+                                                        <?php echo $result->cidade ?> - <?php echo $result->estado ?> - CEP: <?php echo $result->cep ?>
+                                                    </span><br/>
+                                                    <span>
+                                                        Email: <?php echo $result->emailCliente ?>
+                                                    </span></br>
+                                                    <?php if ($result->contato) { ?>
+                                                        <span>Contato: <?php echo $result->contato ?> </span>
+                                                    <?php } ?>
+                                                    <span>Celular: <?php echo $result->celular ?></span>
+							                    </span>
                                             </li>
                                         </ul>
                                     </td>
@@ -74,12 +82,45 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div style="margin-top: 0; padding-top: 0">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <?php if ($result->dataVenda != null) { ?>
+                                    <tr>
+                                        <td>
+                                            <b>Status Venda: </b><?php echo $result->status ?>
+                                        </td>
 
+                                        <td>
+                                            <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->garantia) { ?>
+                                                <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                            <?php } ?>
+                                        </td>
+
+                                        <td>
+                                            <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
+                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td colspan="4"> 
+                                            <b>Observações: </b>
+                                        <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div style="margin-top: 0; padding-top: 0">
-
-
                         <?php if ($produtos != null) { ?>
 
                             <table class="table table-bordered table-condensed" id="tblProdutos" style="margin-top: 0; padding-top: 0">
