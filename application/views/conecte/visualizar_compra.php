@@ -82,7 +82,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
                     
                     <div style="margin-top: 0; padding-top: 0">
                         <table class="table table-condensed">
@@ -119,6 +118,7 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
 
                     <div style="margin-top: 0; padding-top: 0">
                         <?php if ($produtos != null) { ?>
