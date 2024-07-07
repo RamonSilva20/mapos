@@ -129,6 +129,29 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
+                                    <?php if ($qrCode) : ?>
+                                        <tr>
+                                            <td colspan="5" style="text-align:center;">
+                                                <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
+                                                <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
+                                                <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>'; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endif ?>
+                            <?php } ?>
+                                </table>
+                                    <table class="table table-bordered table-condensed" style="font-size: 15px">
+                                <tbody>
+                                    <tr>
+
+                                        <td colspan="5">
+                                            <b><p class="text-center">Assinatura do Recebedor</p></b><br />
+                                            <hr>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
                             </table>
                         <?php
                         } ?>

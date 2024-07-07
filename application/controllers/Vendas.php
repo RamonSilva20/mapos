@@ -246,6 +246,13 @@ class Vendas extends MY_Controller
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['qrCode'] = $this->vendas_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
+        
+        $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
         $this->load->view('vendas/imprimirVendaTermica', $this->data);
     }
