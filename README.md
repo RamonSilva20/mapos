@@ -68,10 +68,10 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 
 ### Atualização
 
-1. Faça o backup dos arquivos e do banco de dados:
-    1.1 - logado como administrador vá em `configurações > backup`.
-    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
-    1.3 - dentro da pasta `application` copie o arquivo `.env`.
+1. Faça o backup dos arquivos e do banco de dados:;
+    1.1 - logado como administrador vá em `configurações > backup`.;
+    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.;
+    1.3 - dentro da pasta `application` copie o arquivo `.env`.;
 2. Substitua os arquivos pelos da nova versão.
 3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
 4. Restaure os backups para seus locais devidos.
