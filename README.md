@@ -83,15 +83,15 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 
 1. Pare o docker de rodar;
 2. Faça o backup dos arquivos e do banco de dados:
-    1.1 - logado como administrador vá em `configurações > backup`.
-    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
-    1.3 - dentro da pasta `application` copie o arquivo `.env`.
-3. Substitua os arquivos pelos da nova versão;
-4. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
-5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
+3. Logado como administrador vá em `configurações > backup`.
+4. Dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
+5. Dentro da pasta `application` copie o arquivo `.env`.
+6. Substitua os arquivos pelos da nova versão;
+7. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
+8. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
     Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
-6. Restaure os backups para seus locais devidos;
-7. Pronto, sua atualização está concluída;
+9. Restaure os backups para seus locais devidos;
+10. Pronto, sua atualização está concluída;
 
 ### Atualização via sistema
 
