@@ -32,7 +32,7 @@
 
                                         <td> <span style="font-size: 17px;">
 
-                                                <?php echo $emitente->nome; ?></span> </br>
+                                                <b><?php echo $emitente->nome; ?></b></span> </br>
                                             <span style="font-size: 12px; ">
                                                 <span class="icon">
                                                     <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
@@ -50,9 +50,9 @@
                                                                 Vendedor: <?php echo $result->nome ?>
                                                             </span>
                                         </td>
-                                        <td style="width: 18%; text-align: center">#Orçamento: <span>
-                                                <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
-                                                <?php echo date('d/m/Y'); ?><br>Válido por até 10 dias.</span>
+                                        <td style="width: 18%; text-align: center"><b>#Orçamento: </b><span>
+                                                <?php echo $result->idVendas ?></span></br> </br> <span><b>Emissão: </b>
+                                                <?php echo date('d/m/Y'); ?><br><b>Válido por até 10 dias.</b></span>
                                         </td>
                                     </tr>
                                 <?php
@@ -66,7 +66,7 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5><b>Cliente</b></h5>
+                                                    <h5><b><b>CLIENTE</b></b></h5>
                                                     <span>
                                                         <?php echo $result->nomeCliente ?>
                                                     </span><br />
