@@ -68,16 +68,16 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 
 ### Atualização
 
-1. Faça o backup dos arquivos e do banco de dados:;
-    1.1 - logado como administrador vá em `configurações > backup`.;
-    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.;
-    1.3 - dentro da pasta `application` copie o arquivo `.env`.;
-2. Substitua os arquivos pelos da nova versão.
-3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
-4. Restaure os backups para seus locais devidos.
-5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. 
+1. Faça o backup dos arquivos e do banco de dados:
+    1.1 - logado como administrador vá em `configurações > backup`.
+   1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
+   1.3 - dentro da pasta `application` copie o arquivo `.env`.;
+3. Substitua os arquivos pelos da nova versão.
+4. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
+5. Restaure os backups para seus locais devidos.
+6. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. 
     Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
-6. Pronto, sua atualização está concluída;
+7. Pronto, sua atualização está concluída;
 
 ### Atualização (Docker)
 
