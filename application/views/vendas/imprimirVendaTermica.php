@@ -31,25 +31,25 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="4" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<< /td>
-                                    </tr> <?php
-                                } else { ?> <tr>
+                                        <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <<<</td> </tr> <?php } else { ?> 
+                                    <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
-                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <b><?php echo $emitente->nome; ?></b></span> </br><span>
                                                 <?php echo 'CNPJ: ' . $emitente->cnpj; ?> </br>
                                                 <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br>
                                             <span><?php echo 'Fone: ' . $emitente->telefone; ?></span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" style="width: 100%;">#Venda: <span>
+                                        <td colspan="4" style="width: 100%;"><b>#Venda: </b><span>
                                                 <?php echo $result->idVendas ?></span>
                                             <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y'); ?></span>
                                             <?php if ($result->faturado) : ?>
                                                 <br>
-                                                Vencimento:
-                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
+                                                <b>Venc. Garantia: </b>
+                                                <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -64,7 +64,7 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5>Cliente</h5>
+                                                    <h5><b>CLIENTE</b></h5>
                                                     <span>
                                                         <?php echo $result->nomeCliente ?></span><br />
                                                     <span>

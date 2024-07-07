@@ -30,14 +30,14 @@
                                 <?php } else { ?>
                                     <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
-                                        <td> <span style="font-size: 17px;"><?php echo $emitente->nome; ?></span> </br>
+                                        <td> <span style="font-size: 17px;"><b><?php echo $emitente->nome; ?></b></span> </br>
                                             <span style="font-size: 12px; ">
                                                 <span class="icon">
                                                     <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
                                                     <?php echo $emitente->cnpj; ?> </br>
                                                     <span class="icon">
-                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
-                                                        <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?>
+                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro?></br>
+                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->cidade . ' - ' . $emitente->uf; ?>
                                                     </span> </br> <span>
                                                         <span class="icon">
                                                             <i class="fas fa-comments" style="margin:5px 1px"></i>
@@ -49,15 +49,9 @@
                                                                 Vendedor: <?php echo $result->nome ?>
                                                             </span>
                                         </td>
-                                        <td style="width: 18%; text-align: center">#Venda: <span>
+                                        <td style="width: 18%; text-align: center"><b>#Venda: </b><span>
                                                 <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span>
-
-                                            <?php if ($result->faturado) : ?>
-                                                <br>
-                                                Vencimento:
-                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
-                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -70,10 +64,10 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5>Cliente</h5>
+                                                    <h5><b>CLIENTE</b></h5>
                                                     <span><?php echo $result->nomeCliente ?></span><br />
                                                     <span><?php echo $result->rua ?>, <?php echo $result->numero ?></br>
-                                                        <?php echo $result->bairro ?></span><br />
+                                                        <?php echo $result->bairro ?></span></br>
                                                     <span><?php echo $result->cidade ?> - <?php echo $result->estado ?> -
                                                         CEP: <?php echo $result->cep ?></span><br />
                                                     <span>Email: <?php echo $result->emailCliente ?></span></br>
@@ -85,41 +79,43 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <?php if ($qrCode) : ?>
-                                        <td style="width: 25%; padding: 0;text-align:center;">
-                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>' ;?>
-                                        </td>
-                                    <?php endif ?>
+                                    <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado', 'Aberto', 'Em Andamento', 'Aguardando Peças']) && $qrCode): ?>
+                                            <td style="width: 25%; padding: 0; text-align: center;">
+                                                <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
+                                                <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
+                                                 <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= $chaveFormatada ?></span>
+                                            </td>
+                                    <?php endif; ?>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <hr />
-                    <div style="margin-top: 0; padding-top: 0">
+                        
+                        <div style="margin-top: 0; padding-top: 0">
                         <table class="table table-condensed">
                             <tbody>
                                 <?php if ($result->dataVenda != null) { ?>
                                     <tr>
                                         <td>
-                                            <b>Status Venda: </b><?php echo $result->status ?>
+                                            <b>Status Venda: </b>
+                                            <?php echo $result->status ?>
                                         </td>
 
                                         <td>
-                                            <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                            <b>Data da Venda: </b>
+                                            <?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->garantia) { ?>
-                                                <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                                <b>Garantia: </b>
+                                                <?php echo $result->garantia . ' dia(s)'; ?>
                                             <?php } ?>
                                         </td>
 
                                         <td>
-                                            <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
-                                                <b>Venc. da Garantia:</b><?php echo date('d/m/Y', strtotime($result->dataVenda . ' + ' . $result->garantia . ' days')); ?>
-                                            <?php } ?>
+                                            <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto', 'Em Andamento', 'Aguardando Peças'])): ?>
+                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -132,7 +128,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                    
                     <div style="margin-top: 0; padding-top: 0">
                         <?php if ($produtos != null) { ?>
                             <table class="table table-bordered table-condensed" id="tblProdutos">

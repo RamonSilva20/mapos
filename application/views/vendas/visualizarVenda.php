@@ -31,26 +31,35 @@
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<< /td>
-                                    </tr> <?php
-                                } else { ?> <tr>
-                                        <td style="width: 25%"><img src="<?php echo "$emitente->url_logo"; ?>"></td>
-                                        <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente->nome; ?></span> </br><span>
-                                                <?php echo $emitente->cnpj; ?> </br>
-                                                <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
-                                        <td style="width: 18%; text-align: center">Venda: <span>
-                                                <?php echo $result->idVendas ?></span></br> </br> <span>Emissão:
+                                    </tr>
+                                <?php } else { ?>
+                                    <tr>
+                                    <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> " style="max-height: 100px"></td>
+                                        <td> <span style="font-size: 17px;"><b><?php echo $emitente->nome; ?></b></span> </br>
+                                            <span style="font-size: 12px; ">
+                                                <span class="icon">
+                                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
+                                                    <?php echo $emitente->cnpj; ?> </br>
+                                                    <span class="icon">
+                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
+                                                        <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?>
+                                                    </span> </br> <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-comments" style="margin:5px 1px"></i>
+                                                            E-mail:
+                                                            <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?>
+                                                            </br>
+                                                            <span class="icon">
+                                                                <i class="fas fa-user-check"></i>
+                                                                Vendedor: <?php echo $result->nome ?>
+                                                            </span>
+                                        </td>
+                                        <td style="width: 18%; text-align: center"><b>#Venda: </b><span>
+                                                <b><?php echo $result->idVendas ?></b></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span>
-                                            <?php if ($result->faturado) : ?>
-                                                <br>
-                                                Vencimento:
-                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
-                                            <?php endif; ?>
                                         </td>
                                     </tr>
-                                <?php
-                                } ?>
+                                <?php } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -60,7 +69,7 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5>Cliente</h5>
+                                                    <h5><b>CLIENTE</b></h5>
                                                     <span>
                                                         <?php echo $result->nomeCliente ?>
                                                     </span><br />
@@ -85,7 +94,7 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5>Vendedor</h5>
+                                                    <h5><b>VENDEDOR</b></h5>
                                                 </span>
                                                 <span>
                                                     <?php echo $result->nome ?></span> <br />
@@ -106,7 +115,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
 
                     <div style="margin-top: 0; padding-top: 0">
                         <table class="table table-condensed">
@@ -129,7 +137,7 @@
 
                                         <td>
                                             <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
-                                                <b>Venc. da Garantia:</b><?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                                <b>Venc. da Garantia:</b> <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
                                             <?php } ?>
                                         </td>
                                     </tr>
@@ -142,6 +150,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
 
                     <div style="margin-top: 0; padding-top: 0">
                         <?php if ($produtos != null) { ?>
