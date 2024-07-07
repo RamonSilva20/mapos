@@ -9,11 +9,36 @@ fi
 
 ##############################################################
 ## Script desenvolvido por Bruno Barreto e Leonardo Bernardi
-## Versao Instalador: v1.0.20230916
-## Publicado na versao 4.41.0 do MapOS
+## Versao Instalador: v2.6.20240705
+## Publicado na versao 4.46.0 do MapOS
 ##############################################################
 
-# <=== Inicio STEP00 ===>
+# <=== Controle de STEPs ===>
+# stepSET - Definicao de Variaveis
+# etapa0 - Display
+# etapa1 - Boas Vindas
+# etapa2 - Selecao de Versao
+# etapa3 - Download de Dependências
+# etapa4 - Instalação XAMPP
+# etapa5 - Instalação MAP-OS
+# etapa6 - Instalação Composer
+# etapa7 - Configuração pelo Browser
+# etapa8 - Configuração de dados de E-mail
+# etapa9 - Auto Disparador de E-mail
+# etapa10 - Alterar Número da OS
+# <=== Controle de STEPs ===>
+
+# <=== Inicio SET Diretorios ===>
+    installCommand="sudo apt-get -y"
+    dirDefault=/opt/InstaladorMAPOS
+    urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
+    dirXampp=/opt/lampp
+    dirMaposConfig=/opt/lampp/htdocs/mapos/application/.env
+    dirHtdocs=/opt/lampp/htdocs
+    dirMySQL=/opt/lampp/bin/mysql
+# <=== Fim SET Diretorios ===>
+
+# <=== Inicio Display ===>
     clear
     echo "**************************************************"
     echo "**************************************************"
@@ -22,59 +47,63 @@ fi
     echo "**                                              **"
     echo "**           SCRIPT AUTO INSTALADOR             **"
     echo "**    MAP-OS - SISTEMA DE ORDEM DE SERVICO      **"
-    echo "**          LINUX (Debian / Ubuntu)             **"
+    echo "**        LINUX (Debian / Ubuntu) x64           **"
     echo "**                                              **"
     echo "**                                              **"
     echo "**                                              **"
     echo "**************************************************"
     echo "**************************************************"
     echo
+# <=== Fim Display ===>
 
-    # <=== Inicio SET Diretorios ===>
-        comando_instalar="sudo apt-get"
-        dirDefault=/opt/InstaladorMAPOS
-        urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.4/xampp-linux-x64-8.2.4-0-installer.run/download"
-        dirXampp=/opt/lampp
-        dirHtdocs=/opt/lampp/htdocs
-        dirMySQL=/opt/lampp/bin/mysql
-    # <=== Fim SET Diretorios ===>
-# <=== Fim STEP00 ===>
-
-# <=== Inicio Termos de Aceite ===>
-    echo "AVISO IMPORTANTE!"
-    echo "Recomendamos que, se houver instalações anteriores do Map-OS, faça backup de todos os dados importantes antes de prosseguir com a instalacao. Ao continuar com a instalacao, você concorda que nao responsabilizara os desenvolvedores do script por quaisquer perdas de dados que possam ocorrer."
+# <=== Inicio Boas Vindas ===>
+    echo "Ola, seja bem vindo."
+    echo "Esse script foi desenvolvido com o intuito de auxiliar na instalacao padrao do Sistema MAP-OS e os componentes necessarios de forma automatizada."
+    echo "Reforcamos que nao recomendamos a instalacao em localhost para uso de PRODUCAO, apenas para TESTE ou DESENVOLVIMENTO devido a riscos de perdas de dados e seguranca."
     echo
-    read -p "Aceita os termos acima? (S/N): " resposta
+    read -p "Continuar com a instalacao? (S/N): " resposta
     if [ "$resposta" = "N" ] || [ "$resposta" = "n" ]; then
         exit 0
     elif [ "$resposta" = "S" ] || [ "$resposta" = "s" ]; then
         echo
     fi
+# <=== Fim Boas Vindas ===>
+
+# <=== Inicio Boas Vindas ===>
+    clear
+    echo "# DESEJA INSTALAR O MAP-OS RELEASE OU MASTER?"
+    echo "1- Release (Versao Estavel)"
+    echo "2- Master (Versao Desenvolvimento)"
+    echo "9 - Sair"
+    echo
+    read -p "Digite uma opcao: (1,2,9): " resposta
+    if [ "$resposta" = "1" ]; then
+        downMapos=release
+    elif [ "$resposta" = "2" ]; then
+        downMapos=master 
+    elif [ "$resposta" = "9" ]; then
+        exit 0
+    fi
 # <=== Fim Termos de Aceite ===>
 
-# <=== Inicio STEP01 ===>
+# <=== Inicio Download de Dependências ===>
     clear
-    echo "01 BAIXANDO DEPENDENCIAS..."
-    echo
-    echo "01.1 Verificando pasta de instalacao"
+    echo "# BAIXANDO DEPENDENCIAS..."
     if [ ! -d "$dirDefault" ]; then
         mkdir $dirDefault
     fi
-    echo
-    echo "01.2 Verificando Ferramentas"
-    $comando_instalar install -y wget unzip curl &> /dev/null
-# <=== Fim STEP01 ===>
+    $installCommand install -y wget unzip curl &> /dev/null
+# <=== Fim Download de Dependências ===>
 
-# <=== Inicio STEP02 ===>
+# <=== Inicio Instalação XAMPP ===>
     clear
-    echo "02 SERVIDOR WEB XAMPP..."
+    echo "# SERVIDOR WEB XAMPP..."
     echo
-    echo "02.1 Verificando Instalacao XAMPP"
     if [ -d "$dirXampp" ]
     then
         echo "* XAMPP ja esta instalado."
     else
-        echo "* Por favor aguarde, baixando instalador."
+        echo "* Por favor aguarde, baixando XAMPP"
         wget --quiet --show-progress "$urlXampp" -O $dirDefault/xampp-installer.run
         echo
         echo "* Por favor aguarde, a instalacao pode levar ate 5 min."
@@ -82,11 +111,11 @@ fi
         sudo $dirDefault/xampp-installer.run --mode unattended
         echo
         echo "* Por favor aguarde, instalando Extensões PHP"
-        $comando_instalar install -y php-curl php-gd php-zip php-xml &> /dev/null
+        $installCommand install -y php-curl php-gd php-zip php-xml &> /dev/null
         $dirXampp/lampp restart
     fi
     echo
-    echo "02.2 Verificando Inicializado com o sistema"
+    echo "* Verificando Inicializado com o sistema"
     if [ -d "/etc/init.d/start_xampp" ]
     then
         echo "* XAMPP ja inicia com o sistema"
@@ -103,35 +132,42 @@ fi
         sudo systemctl enable xampp.service
         echo "* Configurado inicializacao automatica"
     fi
-# <=== Fim STEP02 ===>
+# <=== Fim Instalação XAMPP ===>
 
-#  <=== Inicio STEP03 ===>
+#  <=== Inicio Instalação MAP-OS ===>
     clear
-    echo "03 INSTALACAO SISTEMA MAP-OS..."
-    echo "03.1 Verificando MapOS GitHUB"
+    echo "# INSTALACAO SISTEMA MAP-OS..."
     if [ -d "$dirHtdocs/mapos" ]
     then
         echo "* Map-OS presente no sistema."
     else
         echo "* Baixando a ultima versao do projeto."
-        wget --quiet --show-progress -O $dirDefault/MapOS.zip $(curl -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest | grep "zipball_url" | awk -F\" '{print $4}')
+
+        if [ "$downMapos" = "release" ]; then
+            wget --quiet --show-progress -O $dirDefault/MapOS.zip $(curl -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest | grep "zipball_url" | awk -F\" '{print $4}')
+        elif [ "$downMapos" = "master" ]; then
+            wget --quiet --show-progress -O $dirDefault/MapOS.zip https://github.com/RamonSilva20/mapos/archive/refs/heads/master.zip
+        fi
         echo
         echo "* Extraindo projeto."
         unzip -q $dirDefault/MapOS.zip -d $dirHtdocs/
-        mv -i $dirHtdocs/RamonSilva20-mapos-* $dirHtdocs/mapos
+        mv -i $dirHtdocs/*mapos* $dirHtdocs/mapos
         echo
         echo "* Atribuindo permissões."
         sudo chmod 777 $dirHtdocs/mapos/updates/
+        sudo chmod 777 $dirHtdocs/mapos/application/
         sudo chmod 777 $dirHtdocs/mapos/index.php
         sudo chmod 777 $dirHtdocs/mapos/application/config/config.php
         sudo chmod 777 $dirHtdocs/mapos/application/config/database.php
+        sudo chmod 777 $dirHtdocs/mapos/application/config/.env
+        sudo chmod 777 $dirHtdocs/mapos/application/config/.env.example
         echo
         echo "* Criando banco de dados."
         $dirMySQL -u root -e "CREATE DATABASE mapos;"
     fi
-# <=== Fim STEP03 ===>
+# <=== Fim Instalação MAP-OS ===>
 
-# <=== Inicio STEP04 ===>
+# <=== Inicio Instalação Composer ===>
     clear
     echo "04 COMPLEMENTO COMPOSER..."
     echo
@@ -144,7 +180,7 @@ fi
         sudo apt install composer -y &> /dev/null
     fi
     echo
-    echo "04.2 Verificando complemento"
+    echo "* Verificando complemento"
     if [ -f "$dirHtdocs/mapos/application/vendor" ]
     then
         echo "* Complementos ja instalados."
@@ -152,32 +188,43 @@ fi
         echo "* Instalando complementos."
         cd $dirHtdocs/mapos
         composer install --no-dev -n &> /dev/null
+        composer update -n &> /dev/null
     fi
-# <=== Fim STEP04 ===>
+# <=== Fim Instalação Composer ===>
 
-# <=== Inicio STEP05 ===>
+# <=== Inicio Configuração pelo Browser ===>
     clear
-    echo "05 CONFIGURANDO MAPOS..."
+    echo "# CONFIGURANDO MAPOS..."
+    echo "Acesse o MapOS via navegador http://localhost/mapos"
+    echo "Clique me PROXIMO e insira os dados abaixo:"
     echo
-    echo "05.1 Configurar MapOS (Browser)"
-    echo "Acesse o MapOS via Browser"
-    echo "Insira as configurações abaixo:"
-    echo
-    echo "Host: localhost (ou IP/Dominio)"
+    echo "Host: localhost"
     echo "Usuario: root"
     echo "Senha: \"Em Branco\""
     echo "Banco de Dados: mapos"
-    echo "URL: http://localhost/mapos (ou IP/Dominio)"
-    read -n 1 -s -r -p "Pressione qualquer tecla para continuar..."
-# <=== Inicio STEP05 ===>
+    echo
+    echo Nome: "Digite seu Nome Completo"
+    echo Email: "Informe seu E-mail para Login"
+    echo Senha: "Insira sua senha para acesso"
+    echo
+    echo "URL: http://localhost/mapos"
+    echo
+    echo "Obs: Caso a instalacao nao tenha sido bem sucedida, encerre o script e execute novamente."
+    read -p "Gostaria de seguir com a Autoconfiguracao Opcional? (S/N)" resposta
+    if [ "$resposta" = "N" ] || [ "$resposta" = "n" ]; then
+        exit 0
+    elif [ "$resposta" = "S" ] || [ "$resposta" = "s" ]; then
+        echo
+    fi
+# <=== Inicio Configuração pelo Browser ===>
 
-# <=== Inicio STEP06 ===>
+# <=== Inicio Configurações Personalizadas ===>
     clear
     echo  "************************************************"
     echo  "****     CONFIGURAÇÕES PERSONALIZADAS       ****"
     echo  "************************************************"
 
-    # <=== Inicio Configuracao de Email ===>
+    # <=== Inicio Configuração de dados de E-mail ===>
         echo
         read -p "Gostaria de configurar os dados de e-mail? (S/N): " resposta
         if [ "$resposta" = "N" ] || [ "$resposta" = "n" ]; then
@@ -191,16 +238,16 @@ fi
             read -p "Informe o Email (Ex: nome@seudominio.com): " email
             read -p "Informe a Senha (****): " senha
 
-            sed -i "s/\EMAIL_PROTOCOL.*/\EMAIL_PROTOCOL='$protocolo'/" $dirHtdocs/mapos/application/.env
-            sed -i "s/\EMAIL_SMTP_HOST.*/\EMAIL_SMTP_HOST='$hostsmtp'/" $dirHtdocs/mapos/application/.env
-            sed -i "s/\EMAIL_SMTP_CRYPTO.*/\EMAIL_SMTP_CRYPTO='$criptografia'/" $dirHtdocs/mapos/application/.env
-            sed -i "s/\EMAIL_SMTP_PORT.*/\EMAIL_SMTP_PORT='$porta'/" $dirHtdocs/mapos/application/.env
-            sed -i "s/\EMAIL_SMTP_USER.*/\EMAIL_SMTP_USER='$email'/" $dirHtdocs/mapos/application/.env
-            sed -i "s/\EMAIL_SMTP_PASS.*/\EMAIL_SMTP_PASS='$senha'/" $dirHtdocs/mapos/application/.env
+            sed -i "s/\EMAIL_PROTOCOL.*/\EMAIL_PROTOCOL='$protocolo'/" $dirMaposConfig
+            sed -i "s/\EMAIL_SMTP_HOST.*/\EMAIL_SMTP_HOST='$hostsmtp'/" $dirMaposConfig
+            sed -i "s/\EMAIL_SMTP_CRYPTO.*/\EMAIL_SMTP_CRYPTO='$criptografia'/" $dirMaposConfig
+            sed -i "s/\EMAIL_SMTP_PORT.*/\EMAIL_SMTP_PORT='$porta'/" $dirMaposConfig
+            sed -i "s/\EMAIL_SMTP_USER.*/\EMAIL_SMTP_USER='$email'/" $dirMaposConfig
+            sed -i "s/\EMAIL_SMTP_PASS.*/\EMAIL_SMTP_PASS='$senha'/" $dirMaposConfig
             echo
             echo "* Dados de Email alterados com sucesso."
         fi
-    # <=== Fim Configuracao de Email ===>
+    # <=== Fim Configuração de dados de E-mail ===>
 
     # <=== Inicio Configuracao da Cron ===>
         echo
@@ -225,7 +272,7 @@ fi
         echo "* Número da próxima OS alterado para $nOS"
     fi
     # <=== Fim Configuracao da Cron ===>
-# <=== Fim STEP06 ===>
+# <=== Fim Configurações Personalizadas ===>
 
 # Mensagem de status
 clear

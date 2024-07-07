@@ -1,6 +1,7 @@
 TITLE Instalador Map-OS Windows 10/11
 @ECHO OFF
 CLS
+
 ECHO =============================
 ECHO Running Admin shell
 ECHO =============================
@@ -57,13 +58,40 @@ CLS
 
 ::::::::::::::::::::::::::::
 :: Script desenvolvido por Bruno Barreto e Leonardo Bernardi
-:: Versao Instalador: v2.4.20230920
-:: Publicado na versao 4.41.0 do MapOS
+:: Versao Instalador: v2.6.20240705
+:: Publicado na versao 4.46.0 do MapOS
 ::::::::::::::::::::::::::::
 
-SET stepnext=stepTermos
-:: <=== Inicio STEP00 ===>
-:step00
+:: <=== Controle de STEPs ===>
+:: stepSET - Definicao de Variaveis
+:: etapa0 - Display
+:: etapa1 - Boas Vindas
+:: etapa2 - Selecao de Versao
+:: etapa3 - Download de Dependências
+:: etapa4 - Instalação XAMPP
+:: etapa5 - Instalação MAP-OS
+:: etapa6 - Instalação Composer
+:: etapa7 - Configuração pelo Browser
+:: etapa8 - Configuração de dados de E-mail
+:: etapa9 - Auto Disparador de E-mail
+:: etapa10 - Alterar Número da OS
+:: <=== Controle de STEPs ===>
+
+:: <=== Definições de SETs ===>
+SET step=0
+SET dirDefault=%temp%\InstaladorMAPOS
+SET urlWget=https://eternallybored.org/misc/wget/1.21.4/32/wget.exe
+SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.12/xampp-windows-x64-8.2.12-0-VS16-installer.exe"
+SET urlComposer=https://getcomposer.org/Composer-Setup.exe
+SET dirXampp=C:\xampp
+SET dirHtdocs=C:\xampp\htdocs
+SET dirMySQL=C:\xampp\mysql\bin
+SET dirPHP=C:\xampp\php
+SET dirMaposConfig=C:\xampp\htdocs\mapos\application\.env
+:: <=== Fim SET Diretorios ===>
+
+:: <=== Inicio Display ===>
+:etapa0
 CLS
 ECHO  **************************************************
 ECHO  **************************************************
@@ -72,216 +100,248 @@ ECHO  **                                              **
 ECHO  **                                              **
 ECHO  **           SCRIPT AUTO INSTALADOR             **
 ECHO  **    MAP-OS - SISTEMA DE ORDEM DE SERVICO      **
-ECHO  **             Windows 10/11                    **
+ECHO  **            Windows 10/11 x64                 **
 ECHO  **                                              **
 ECHO  **                                              **
 ECHO  **                                              **
 ECHO  **************************************************
 ECHO  **************************************************
 ECHO.
-:: <=== Inicio SET Diretorios ===>
-SET dirDefault=C:\InstaladorMAPOS
-SET urlWget=https://eternallybored.org/misc/wget/1.21.4/32/wget.exe
-SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.4/xampp-windows-x64-8.2.4-0-VS16-installer.exe"
-SET urlComposer=https://getcomposer.org/Composer-Setup.exe
-SET dirXampp=C:\xampp
-SET dirHtdocs=C:\xampp\htdocs
-SET dirMySQL=C:\xampp\mysql\bin
-SET dirPHP=C:\xampp\php
-:: <=== Fim SET Diretorios ===>
-GOTO %stepnext%
-:: <=== Fim STEP00 ===>
+SET /a step+=1
+GOTO etapa%step%
+:: <=== Fim Display ===>
 
-:: <=== Inicio Termos de Aceite ===>
-:stepTermos
-ECHO AVISO IMPORTANTE!
+:: <=== Inicio Boas Vindas ===>
+:etapa1
+ECHO Ola, seja bem vindo.
+ECHO Esse script foi desenvolvido com o intuito de auxiliar na instalacao padrao do Sistema MAP-OS e os componentes necessarios de forma automatizada.
+ECHO Reforcamos que nao recomendamos a instalacao em localhost para uso de PRODUCAO, apenas para TESTE ou DESENVOLVIMENTO devido a riscos de perdas de dados e seguranca.
 ECHO.
-ECHO Ao seguir com a execucao desse script, voce esta ciente de que caso exista uma instalacao previa do XAMPP ou MySQL no seu sistema, ela podera ser completamente removida. Isso pode resultar na perda permanente de todos os dados contidos nessas instalacoes.
-ECHO.
-ECHO Portanto, recomendamos que voce faca backup de todos os dados importantes antes de prosseguir com a instalacao. Ao continuar com a instalacao, voce concorda que nao responsabilizara os desenvolvedores do script por quaisquer perdas de dados que possam ocorrer como resultado da remocao dessas instalacoes.
-ECHO.
-CHOICE /C SN /M "Aceita os termos acima?"
-IF ERRORLEVEL 2 SET stepnext=stepNaoAceite && GOTO step00
-IF ERRORLEVEL 1 SET stepnext=step01 && GOTO step00
-PAUSE
-:: <=== Fim Termos de Aceite ===>
+CHOICE /C SN /M "Continuar com a instalacao?"
+IF ERRORLEVEL 2 GOTO etapaNaoAceite
+IF ERRORLEVEL 1 GOTO etapa0
+:: <=== Fim Boas Vindas ===>
 
-:: <=== Inicio STEP01 ===>
-:step01
-ECHO 01 BAIXANDO DEPENDENCIAS...
+:: <=== Inicio Selecao de Versao ===>
+:etapa2
+IF EXIST "%dirDefault%\MapOS.zip" GOTO etapa0
+ECHO # DESEJA INSTALAR O MAP-OS RELEASE OU MASTER?
+ECHO 1- Release (Versao Estavel)
+ECHO 2- Master (Versao Desenvolvimento)
+ECHO 9- Sair
 ECHO.
-ECHO 01.1 Verificando pasta de instalacao
+CHOICE /C 129 /M "Digite uma opcao:"
+IF ERRORLEVEL 9 GOTO sair
+IF ERRORLEVEL 2 SET downMapos=master && GOTO etapa0
+IF ERRORLEVEL 1 SET downMapos=release && GOTO etapa0
+GOTO etapa0
+:: <=== Fim Selecao de Versao ===>
+
+:: <=== Inicio Download de Dependências ===>
+:etapa3
+ECHO # BAIXANDO DEPENDENCIAS...
+ECHO.
+ECHO Verificando pasta de instalacao
 IF not EXIST %dirDefault% mkdir %dirDefault% >NUL 2>&1
-ECHO 01.2 Verificando Wget
+ECHO Verificando Wget
 IF not EXIST "%dirDefault%\wget.exe" PowerShell -command "& { iwr %urlWget% -OutFile %dirDefault%\wget.exe }" >NUL 2>&1
-ECHO 01.3 Verificando Xampp
+ECHO Verificando Xampp
 IF not EXIST "%dirDefault%\xampp.exe" %dirDefault%\wget --quiet --show-progress %urlXampp% -O %dirDefault%\xampp.exe
-ECHO 01.4 Verificando Composer
+ECHO Verificando Composer
 IF not EXIST "%dirDefault%\composer.exe" PowerShell -command "& { iwr %urlComposer% -OutFile %dirDefault%\composer.exe }" >NUL 2>&1
-ECHO 01.5 Verificando MapOS GitHUB
-IF not EXIST "%dirDefault%\MapOS.zip" FOR /F "eol= tokens=2 delims=, " %%A IN (' cURL -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest ^| findstr /I /C:"zipball_url" ') DO PowerShell -command "& { iwr %%A -OutFile %dirDefault%\MapOS.zip }"
-SET stepnext=step02
-GOTO step00
-:: <=== Fim STEP01 ===>
+ECHO Verificando MapOS GitHUB
+IF EXIST "%dirDefault%\MapOS.zip" GOTO etapa0
+IF %downMapos%==master (
+    ECHO Baixando a versao MASTER
+    PowerShell -command "& { iwr https://github.com/RamonSilva20/mapos/archive/refs/heads/master.zip -OutFile %dirDefault%\MapOS.zip }"
+) ELSE (
+    ECHO Baixando a versao RELEASE
+    FOR /F "eol= tokens=2 delims=, " %%A IN (' cURL -s https://api.github.com/repos/RamonSilva20/mapos/releases/latest ^| findstr /I /C:"zipball_url" ') DO PowerShell -command "& { iwr %%A -OutFile %dirDefault%\MapOS.zip }"
+)
+GOTO etapa0
+:: <=== Fim Download de Dependências ===>
 
-:: <=== Inicio STEP02 ===>
-:step02
-ECHO 02 SERVIDOR WEB XAMPP...
+:: <=== Inicio Instalação XAMPP ===>
+:etapa4
+ECHO # SERVIDOR WEB XAMPP...
 ECHO.
-ECHO 02.1 Executando instalador XAMPP
-IF EXIST "%dirXampp%\xampp-control.exe" SET stepnext=step03 && GOTO step00
+ECHO Executando instalador XAMPP
+IF EXIST "%dirXampp%\xampp-control.exe" GOTO etapa0
 ECHO * Por favor aguarde, a instalacao pode levar ate 5 min.
 START /wait %dirDefault%\xampp.exe --mode unattended
-IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\xampp.exe && ECHO Falha na instalacao do XAMPP, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
-ECHO 02.2 Configurando XAMPP
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\xampp.exe && ECHO Falha na instalacao do XAMPP, efetuando novo download. && SET step=1 && GOTO etapa0 )
+ECHO.
+ECHO Configurando XAMPP
 ECHO.>> %dirXampp%\xampp-control.ini
 ECHO [Autostart]>> %dirXampp%\xampp-control.ini
 ECHO Apache=1 >> %dirXampp%\xampp-control.ini
 ECHO MySQL=1 >> %dirXampp%\xampp-control.ini
-ECHO 02.3 Ativando Extensoes do PHP
+ECHO.
+ECHO Ativando Extensoes do PHP
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=gd', 'extension=gd'} | Set-Content -Path '%dirPHP%\php.ini'"
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace ';extension=zip', 'extension=zip'} | Set-Content -Path '%dirPHP%\php.ini'"
-ECHO 02.4 Configurando PHP TimeZone
+ECHO.
+ECHO Configurando PHP TimeZone
 PowerShell -command "&{(Get-Content -Path '%dirPHP%\php.ini') -replace 'date.timezone=Europe/Berlin', 'date.timezone=America/Fortaleza'} | Set-Content -Path '%dirPHP%\php.ini'"
-ECHO 02.5 Iniciar Apache e MySQL
+ECHO.
+ECHO Reiniciar Servicos Apache, MySQL e Xampp
 TASKKILL /F /IM httpd.exe /T >NUL 2>&1
-TASKLIST | find "mysqld.exe" >NUL 2>&1
+TASKKILL /F /IM mysqld.exe /T >NUL 2>&1
 TASKKILL /F /IM xampp-control.exe /T >NUL 2>&1
 TIMEOUT /T 5 >NUL
 start %dirXampp%\xampp-control.exe >NUL 2>&1
-SET stepnext=step03
-GOTO step00
-:: <=== Fim STEP02 ===>
+GOTO etapa0
+:: <=== Fim Instalação XAMPP ===>
 
-:: <=== Inicio STEP03 ===>
-:step03
-ECHO 03 INSTALACAO SISTEMA MAP-OS...
+:: <=== Inicio Instalação MAP-OS ===>
+:etapa5
+ECHO # INSTALACAO SISTEMA MAP-OS...
 ECHO.
-ECHO 03.1 Extracao dos arquivos MAP-OS
-IF EXIST %dirHtdocs%\mapos\index.php SET stepnext=step04 && GOTO step00
+ECHO Extracao dos arquivos MAP-OS
+IF EXIST %dirHtdocs%\mapos\index.php GOTO etapa0
 PowerShell -ExecutionPolicy Bypass -Command "Expand-Archive %dirDefault%\MapOS.zip %dirHtdocs%" -Force
-IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\MapOS.zip && ECHO Falha na extracao do Map-OS, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
-ECHO 03.2 Correcao da Pasta MAP-OS
-FOR /F "tokens=4" %%B IN ( ' dir "%dirHtdocs%\" ^| findstr /I /C:"RamonSilva20" ' ) DO IF NOT EXIST %dirHtdocs%\mapos rename %dirHtdocs%\%%B mapos
-SET stepnext=step04
-GOTO step00
-:: <=== Fim STEP03 ===>
-
-:: <=== Inicio STEP04 ===>
-:step04
-ECHO 04 COMPLEMENTO COMPOSER...
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\MapOS.zip && ECHO Falha na extracao do Map-OS, efetuando novo download. && SET step=1 && GOTO etapa0 )
 ECHO.
-ECHO 04.1 Executando instalador COMPOSER
+ECHO Correcao da Pasta MAP-OS
+IF EXIST %dirHtdocs%\mapos-master (
+    rename %dirHtdocs%\mapos-master mapos
+) ELSE (
+    FOR /F "tokens=4" %%B IN ( ' dir "%dirHtdocs%\" ^| findstr /I /C:"RamonSilva20" ' ) DO IF NOT EXIST %dirHtdocs%\mapos rename %dirHtdocs%\%%B mapos
+)
+GOTO etapa0
+:: <=== Fim Instalação MAP-OS ===>
+
+:: <=== Inicio Instalação Composer ===>
+:etapa6
+ECHO # COMPLEMENTO COMPOSER...
+ECHO.
+ECHO Executando instalador COMPOSER
 PowerShell composer --version >NUL 2>&1
-IF %ErrorLevel% EQU 0 ( GOTO step04-2 )
+IF %ErrorLevel% EQU 0 ( GOTO composerinstall )
 START /wait %dirDefault%\composer.exe /SILENT /ALLUSERS
-IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\composer.exe && ECHO Falha na execucao do COMPOSER, efetuando novo download. && SET stepnext=step01 && GOTO step00 )
-TIMEOUT /T 5 >NUL
-:step04-2
-ECHO 04.2 Instalacao do complemento COMPOSER
-IF NOT EXIST %dirHtdocs%\mapos\application\vendor START /I /D %dirHtdocs%\mapos /WAIT PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev
-SET stepnext=step05
-GOTO step00
-:: <=== Fim STEP04 ===>
-
-:: <=== Inicio STEP05 ===>
-:step05
-ECHO 05 CONFIGURANDO MAPOS...
+IF %ErrorLevel% GTR 0 ( DEL %dirDefault%\composer.exe && ECHO Falha na execucao do COMPOSER, efetuando novo download. && SET step=1 && GOTO etapa0 )
+TIMEOUT /T 10 >NUL
+:composerinstall
 ECHO.
-ECHO 05.1 Criar Banco de Dados (mapos)
+ECHO Execucao do comando Composer Install no MAP-OS
+IF NOT EXIST %dirHtdocs%\mapos\application\vendor START /I /WAIT /D %dirHtdocs%\mapos PowerShell C:\ProgramData\ComposerSetup\bin\composer install --no-dev && TIMEOUT /T 10 >NUL
+GOTO etapa0
+:: <=== Fim Instalação Composer ===>
+
+:: <=== Inicio Configuração pelo Browser ===>
+:etapa7
 %dirMySQL%\mysql.exe -u "root" -e "create database `mapos`;" >NUL 2>&1
-ECHO 05.2 Configurar MapOS (Browser)
-ECHO 05.2.1 Insira as configuracoes abaixo:
+ECHO # CONFIGURANDO MAPOS...
+ECHO Clique em "Proximo" e insira os dados abaixo:
 ECHO.
 ECHO Host: localhost
 ECHO Usuario: root
 ECHO Senha: "Em Branco"
 ECHO Banco de Dados: mapos
+ECHO.
+ECHO Nome: "Digite seu Nome Completo"
+ECHO Email: "Informe seu E-mail para Login"
+ECHO Senha: "Insira sua senha para acesso"
+ECHO.
 ECHO URL: http://localhost/mapos
+TIMEOUT /T 3 >NUL
 start /B http://localhost/mapos
 ECHO.
-CHOICE /C SN /M "Configuracao do MapOS Finalizada?"
-IF ERRORLEVEL 2 SET stepnext=step05 && GOTO step00
-IF ERRORLEVEL 1 SET stepnext=step06 && GOTO step00
-:: <=== Fim STEP05 ===>
+ECHO Obs: Caso a instalacao nao tenha sido bem sucedida, encerre o script e execute novamente.
+CHOICE /C SN /M "Gostaria de seguir com a Autoconfiguracao Opcional? "
+IF ERRORLEVEL 2 GOTO etapaFim
+IF ERRORLEVEL 1 GOTO etapa0
+:: <=== Fim Configuração pelo Browser ===>
 
-:: <=== Inicio STEP06 ===>
-:step06
-CHOICE /C SN /M "Gostaria de configurar os dados de e-mail?"
-IF ERRORLEVEL 2 ECHO "* Dados de Email nao alterado." && SET stepnext=step07 && GOTO step00
+:: <=== Inicio Configuração de dados de E-mail ===>
+:etapa8
+CHOICE /C SN /M "Gostaria de configurar os dados de E-mail?"
+IF ERRORLEVEL 2 GOTO etapa0
 IF ERRORLEVEL 1 ECHO.
-SET /p protocolo=Informe o Protocolo (Padrao: SMTP):
-SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com):
-SET /p criptografia=Informe a Criptografia (SSL/TLS):
-SET /p porta=Informe a Porta (Ex: 587):
-SET /p email=Informe o Email (Ex: nome@seudominio.com):
-SET /p senha=Informe a Senha (****):
+SET /p protocolo=Informe o Protocolo (Padrao: SMTP): 
+SET /p hostsmtp=Informe o endereco do Host SMTP (Ex: smtp.seudominio.com): 
+SET /p criptografia=Informe a Criptografia (SSL/TLS): 
+SET /p porta=Informe a Porta (Ex: 587): 
+SET /p email=Informe o Email (Ex: nome@seudominio.com): 
+SET /p senha=Informe a Senha (****): 
 ECHO.
 CHOICE /C SN /M "Confirma a informacoes acima?"
-IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step06 && GOTO step00
-IF ERRORLEVEL 1 SET dirEmail=%dirHtdocs%\mapos\application\.env
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_PROTOCOL=', 'EMAIL_PROTOCOL=%protocolo%'} | Set-Content -Path '%dirEmail%'"
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_HOST=', 'EMAIL_SMTP_HOST=%hostsmtp%'} | Set-Content -Path '%dirEmail%'"
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_CRYPTO=', 'EMAIL_SMTP_CRYPTO=%criptografia%'} | Set-Content -Path '%dirEmail%'"
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_PORT=', 'EMAIL_SMTP_PORT=%porta%'} | Set-Content -Path '%dirEmail%'"
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_USER=', 'EMAIL_SMTP_USER=%email%'} | Set-Content -Path '%dirEmail%'"
-PowerShell -command "&{(Get-Content -Path '%dirEmail%') -replace 'EMAIL_SMTP_PASS=', 'EMAIL_SMTP_PASS=%senha%'} | Set-Content -Path '%dirEmail%'"
-SET stepnext=step07
-GOTO step00
-:: <=== Fim STEP06 ===>
+IF ERRORLEVEL 2 SET step=7 && GOTO etapa0
+IF ERRORLEVEL 1 ECHO Configurando dados de E-mail
+FOR /F %%A IN (' findstr /b /c:"EMAIL_PROTOCOL" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_PROTOCOL=%protocolo%'} | Set-Content -Path '%dirMaposConfig%'"
+FOR /F %%A IN (' findstr /b /c:"EMAIL_SMTP_HOST" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_SMTP_HOST=%hostsmtp%'} | Set-Content -Path '%dirMaposConfig%'"
+FOR /F %%A IN (' findstr /b /c:"EMAIL_SMTP_CRYPTO" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_SMTP_CRYPTO=%criptografia%'} | Set-Content -Path '%dirMaposConfig%'"
+FOR /F %%A IN (' findstr /b /c:"EMAIL_SMTP_PORT" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_SMTP_PORT=%porta%'} | Set-Content -Path '%dirMaposConfig%'"
+FOR /F %%A IN (' findstr /b /c:"EMAIL_SMTP_USER" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_SMTP_USER=%email%'} | Set-Content -Path '%dirMaposConfig%'"
+FOR /F %%A IN (' findstr /b /c:"EMAIL_SMTP_PASS" "%dirMaposConfig%" ') DO PowerShell -command "&{(Get-Content -Path '%dirMaposConfig%') -replace '%%A', 'EMAIL_SMTP_PASS=%senha%'} | Set-Content -Path '%dirMaposConfig%'"
+GOTO etapa0
+:: <=== Fim Configuração de dados de E-mail ===>
 
-:: <=== Inicio STEP07 ===>
-:step07
-CHOICE /C SN /M "Gostaria de ativar disparo automatico de Emails?"
-IF ERRORLEVEL 2 ECHO "* Nao configurado disparo automatico." && SET stepnext=step08 && GOTO step00
-IF ERRORLEVEL 1 ECHO.
+:: <=== Inicio Auto Disparador de E-mail ===>
+:etapa9
+SCHTASKS /query /FO LIST /TN "MaposEnvioEmail" | findstr /I /C:"MaposEnvioEmail" >NUL 2>&1
+IF %ERRORLEVEL% EQU 0 ( GOTO desativarDisparo ) ELSE ( GOTO ativarDisparo )
+
+:desativarDisparo
+CHOICE /C SN /M "Disparo automatico de E-mails ja ativado, deseja desativar?"
+IF ERRORLEVEL 2 GOTO etapa0
+IF ERRORLEVEL 1 SCHTASKS /Delete /TN "MaposEnvioEmail" /F && SCHTASKS /Delete /TN "MaposReenvioEmail" /F
+GOTO etapa0
+
+:ativarDisparo
+CHOICE /C SN /M "Deseja de ativar disparo automatico de Emails (Agendador de Tarefas do Windows)?"
+IF ERRORLEVEL 2 GOTO etapa0
+IF ERRORLEVEL 1 ECHO Ativando disparador automatico de E-mails
 SET ps=%dirDefault%\schedule.ps1
-ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/process' -WorkingDirectory 'C:\xampp\htdocs\mapos'>%ps%
+ECHO $action = New-ScheduledTaskAction '%dirPHP%\php.exe' -Argument 'index.php email/process' -WorkingDirectory '%dirHtdocs%\mapos'>%ps%
 ECHO $trigger = New-ScheduledTaskTrigger -AtStartup>>%ps%
-ECHO $task = Register-ScheduledTask -TaskName "MaposEnvioEmail" -Description "Comando responsável por verificar e disparar os e-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
+ECHO $task = Register-ScheduledTask -TaskName "MaposEnvioEmail" -Description "Comando responsável por verificar e disparar os E-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
 ECHO $task.Triggers.Repetition.Interval= 'PT2M'>>%ps%
 PowerShell -command "&Add-Content -Path '%ps%' -Value '$task | Set-ScheduledTask'"
-ECHO $action = New-ScheduledTaskAction 'C:\xampp\php\php.exe' -Argument 'index.php email/retry' -WorkingDirectory 'C:\xampp\htdocs\mapos'>>%ps%
+ECHO $action = New-ScheduledTaskAction '%dirPHP%\php.exe' -Argument 'index.php email/retry' -WorkingDirectory '%dirHtdocs%\mapos'>>%ps%
 ECHO $trigger = New-ScheduledTaskTrigger -AtStartup>>%ps%
-ECHO $task = Register-ScheduledTask -TaskName "MaposReenvioEmail" -Description "Comando responsável por verificar e disparar os e-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
+ECHO $task = Register-ScheduledTask -TaskName "MaposReenvioEmail" -Description "Comando responsável por verificar e disparar os E-mails pendentes no sistema Mapos. Criado por Bruno Barreto e Leonardo Bernardi" -Trigger $trigger -Action $action -RunLevel Highest>>%ps%
 ECHO $task.Triggers.Repetition.Interval= 'PT5M'>>%ps%
 PowerShell -command "&Add-Content -Path '%ps%' -Value '$task | Set-ScheduledTask'"
 PowerShell -command "&%ps%"
-ECHO Agendador de Tarefas do Windows Configurada com Sucesso!
+ECHO Agendador de Tarefas do Windows Configurado com Sucesso!
 TIMEOUT /T 3 >NUL
-SET stepnext=step08
-GOTO step00
-:: <=== Fim STEP07 ===>
+GOTO etapa0
+:: <=== Fim Auto Disparador de E-mail ===>
 
-:: <=== Inicio STEP08 ===>
-:step08
+:: <=== Inicio Alterar Número da OS ===>
+:etapa10
+FOR /F  %%A IN (' %dirMySQL%\mysql.exe -u root -e "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA='mapos' AND TABLE_NAME='os'" --batch --raw --silent ') do ECHO A proxima OS criada sera %%A
 CHOICE /C SN /M "Gostaria de alterar o numero da proxima OS?"
-IF ERRORLEVEL 2 echo "* Nao alterado valor da proxima OS." && SET stepnext=stepfim && GOTO step00
-IF ERRORLEVEL 1 SET /p nOS=Informe o numero (Padrao: 1):
+IF ERRORLEVEL 2 GOTO etapaFim
+IF ERRORLEVEL 1 SET /p nOS=Informe o numero para a proxima OS:
 %dirMySQL%\mysql.exe -u "root" -e "use mapos; ALTER TABLE os AUTO_INCREMENT=%nOS%;" >NUL 2>&1
-SET stepnext=stepfim
-GOTO step00
-:: <=== Fim STEP08 ===>
+GOTO etapaFim
+:: <=== Fim Alterar Número da OS ===>
 
 :: <=== Inicio STEP FIM ===>
-:stepfim
+:etapaFim
+CLS
 ECHO  ************************************************
 ECHO  ****    MAPOS CONFIGURADO COM SUCESSO       ****
+ECHO  ****      AGRADECEMOS A PREFERENCIA         ****
 ECHO  ************************************************
-GOTO StepSair
+TIMEOUT /T 5 >NUL
+GOTO stepSair
 :: <=== Inicio STEP FIM ===>
 
 :: <=== Inicio STEP NAO ACEITE ===>
-:stepNaoAceite
+:etapaNaoAceite
 ECHO  ************************************************
-ECHO  ****  TERMOS DE INSTALACAO NAO CONFIRMADO   ****
+ECHO  ****    TERMO DE INSTALACAO NAO ACEITO      ****
+ECHO  ****      AGRADECEMOS A PREFERENCIA         ****
 ECHO  ************************************************
 ECHO.
 TIMEOUT /T 5 >NUL
-GOTO StepSair
+GOTO stepSair
 :: <=== Inicio STEP NAO ACEITE ===>
 
 :: <=== Inicio SAIR ===>
-:StepSair
+:stepSair
 GOTO:=EOF
 :: <=== Fim SAIR ===>
