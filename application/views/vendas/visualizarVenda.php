@@ -137,7 +137,7 @@
 
                                         <td>
                                             <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
-                                                <b>Venc. da Garantia:</b> <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                                <b>Venc. da Garantia: </b> <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
                                             <?php } ?>
                                         </td>
                                     </tr>
