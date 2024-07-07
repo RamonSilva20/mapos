@@ -48,7 +48,7 @@ Configure do jeito que quiser.
 3. Por favor, insira a URL.
 URL: http://localhost:8000/
 ```
-6. Configure o email de envio no arquivo email.php.
+6. Configure o email de envio em Configurações > Sistema > E-mail .
 
     ##### Obs: Cuide da pasta `docker/data`, onde é pasta que o mysql do docker salva os arquivos. Se for deletada você perderá seu banco de dados.
     ##### Obs2: O PhpMyAdmin também e instalado e pode ser acessado em `http://localhost:8080/`.
@@ -65,21 +65,29 @@ URL: http://localhost:8000/
 
 ### Atualização
 
-1. Faça o backup dos arquivos e do banco de dados;
-2. Substitua os arquivos pelos da nova versão;
+1. Faça o backup dos arquivos e do banco de dados:
+    1.1 - logado como administrador vá em `configurações > backup`.
+    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
+    1.3 - dentro da pasta `application` copie o arquivo `.env`.
+2. Substitua os arquivos pelos da nova versão.
 3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
-4. Volte as configurações nos arquivos database.php e config.php;
-5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
+4. Restaure os backups para seus locais devidos.
+5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. 
+    Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
 6. Pronto, sua atualização está concluída;
 
 ### Atualização (Docker)
 
 1. Pare o docker de rodar;
-2. Faça o backup dos arquivos e do banco de dados;
+2. Faça o backup dos arquivos e do banco de dados:
+    1.1 - logado como administrador vá em `configurações > backup`.
+    1.2 - dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
+    1.3 - dentro da pasta `application` copie o arquivo `.env`.
 3. Substitua os arquivos pelos da nova versão;
-4. Volte as configurações nos arquivos database.php e config.php;
-5. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
-6. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
+4. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
+5. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
+    Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
+6. Restaure os backups para seus locais devidos;
 7. Pronto, sua atualização está concluída;
 
 ### Atualização via sistema
