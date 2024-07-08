@@ -129,7 +129,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
+                                <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
                                     <?php if ($qrCode) : ?>
                                         <tr>
                                             <td colspan="5" style="text-align:center;">
