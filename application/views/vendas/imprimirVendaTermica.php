@@ -14,7 +14,6 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
     <style>
         .table {
-
             width: 72mm;
             margin: 0 auto;
         }
@@ -33,7 +32,7 @@
                                     <tr>
                                         <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php } else { ?> 
-                                    <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <td style="width: 25%; text-align: center;"><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
                                                 <b><?php echo $emitente->nome; ?></b></span> </br><span>
@@ -129,32 +128,28 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
-                                    <?php if ($qrCode) : ?>
-                                        <tr>
-                                            <td colspan="5" style="text-align:center;">
-                                                <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
-                                                <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
-                                                <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>'; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endif ?>
+                                <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado', 'Aberto', 'Em Andamento', 'Aguardando Peças']) && $qrCode): ?>
+                                    <tr>
+                                        <td colspan="4" style="text-align: center;">
+                                            <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
+                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
+                                            <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= $chaveFormatada ?></span>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
                             <?php } ?>
-                                </table>
-                                    <table class="table table-bordered table-condensed" style="font-size: 15px">
+                            </table>
+                            <table class="table table-bordered table-condensed" style="font-size: 15px">
                                 <tbody>
                                     <tr>
-
                                         <td colspan="5">
                                             <b><p class="text-center">Assinatura do Recebedor</p></b><br />
                                             <hr>
                                         </td>
-
                                     </tr>
                                 </tbody>
                             </table>
-                        <?php
-                        } ?>
+                        <?php ?>
                         <hr />
                     </div>
                 </div>
