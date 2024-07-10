@@ -10,13 +10,29 @@
                 <div class="buttons">
                     <?php if ($editavel) {
                         echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
-    <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
+                            <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span>
+                        </a>';
                     } ?>
 
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
-                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Papel A4</span></a>
-                    <a target="_blank" title="Imprimir OS" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
-                        <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">CP Não Fiscal</span></a>
+                    <div class="button-container">
+                        <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse">
+                            <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span>
+                        </a>
+                        <div class="cascading-buttons">
+                            <a target="_blank" title="Impressão em Ofício A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                                <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Ofício A4</span>
+                            </a>
+                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
+                                <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
+                            </a>
+                            <?php if ($result->garantias_id) { ?>
+                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->garantias_id; ?>">
+                                    <span class="button__icon"><i class="bx bx-paperclip"></i></span> <span class="button__text">Termo Garantia</span>
+                                </a>
+                            <?php } ?>
+                        </div>
+                    </div>
+
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
@@ -24,16 +40,18 @@
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                         if (!empty($zapnumber)) {
                             echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://api.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
-        <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span></a>';
+                                <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span>
+                            </a>';
                         }
                     } ?>
 
                     <a title="Enviar por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
-                        <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span></a>
-                    <?php if ($result->garantias_id) { ?> <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->garantias_id; ?>">
-                            <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Garantia</span></a> <?php } ?>
+                        <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">Via E-mail</span>
+                    </a>
+
                     <a href="#modal-gerar-pagamento" id="btn-forma-pagamento" role="button" data-toggle="modal" class="button btn btn-mini btn-info">
-                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span></a></i>
+                        <span class="button__icon"><i class='bx bx-qr'></i></span><span class="button__text">Gerar Pagamento</span>
+                    </a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
