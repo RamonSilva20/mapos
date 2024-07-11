@@ -14,7 +14,6 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
     <style>
         .table {
-
             width: 72mm;
             margin: 0 auto;
         }
@@ -31,25 +30,25 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="4" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
-                                            <<<< /td>
-                                    </tr> <?php
-                                } else { ?> <tr>
+                                        <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <<<</td> </tr> <?php } else { ?> 
+                                    <td style="width: 25%; text-align: center;"><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
-                                                <?php echo $emitente->nome; ?></span> </br><span>
+                                                <b><?php echo $emitente->nome; ?></b></span> </br><span>
                                                 <?php echo 'CNPJ: ' . $emitente->cnpj; ?> </br>
                                                 <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br>
                                             <span><?php echo 'Fone: ' . $emitente->telefone; ?></span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" style="width: 100%;">#Venda: <span>
+                                        <td colspan="4" style="width: 100%;"><b>#Venda: </b><span>
                                                 <?php echo $result->idVendas ?></span>
                                             <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y'); ?></span>
                                             <?php if ($result->faturado) : ?>
                                                 <br>
-                                                Vencimento:
-                                                <?php echo date('d/m/Y', strtotime($result->data_vencimento)); ?>
+                                                <b>Venc. Garantia: </b>
+                                                <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -64,7 +63,7 @@
                                         <ul>
                                             <li>
                                                 <span>
-                                                    <h5>Cliente</h5>
+                                                    <h5><b>CLIENTE</b></h5>
                                                     <span>
                                                         <?php echo $result->nomeCliente ?></span><br />
                                                     <span>
@@ -129,9 +128,28 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <?php if (in_array($result->status, ['Finalizado', 'Orçamento', 'Faturado', 'Aberto', 'Em Andamento', 'Aguardando Peças']) && $qrCode): ?>
+                                    <tr>
+                                        <td colspan="4" style="text-align: center;">
+                                            <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
+                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
+                                            <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= $chaveFormatada ?></span>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php } ?>
                             </table>
-                        <?php
-                        } ?>
+                            <table class="table table-bordered table-condensed" style="font-size: 15px">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <b><p class="text-center">Assinatura do Recebedor</p></b><br />
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <?php ?>
                         <hr />
                     </div>
                 </div>
