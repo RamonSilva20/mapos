@@ -3792,6 +3792,15 @@ form {
     font-size: 1.05em;
   }
 
+  .widget-title .buttons .button-container>.btn {
+    width      : 32px !important;
+    min-width  : 32px;
+    white-space: nowrap;
+    overflow   : hidden;
+    position   : relative;
+    left       : 3px;
+  }
+
   .row-fluid select[class*="span"] {
     width     : 100% !important;
     margin-top: 0px;
@@ -4284,4 +4293,28 @@ fieldset[disabled] .btn-info.active {
 
 .table th, .table td{
   border-left: 0px solid #ddd;
+}
+
+/* Ajuste botões de impressão */
+.button-container {
+  position: relative;
+  display: inline-block;
+  margin: none;
+}
+
+.cascading-buttons {
+  display: none;
+  position: absolute;
+  top: 85%;
+  left: 0;
+  border-top: none;
+  z-index: 1;
+}
+
+.button-container:hover .cascading-buttons {
+  display: block;
+}
+
+.button-container .cascading-buttons a {
+  margin: 0 0 3px 0;
 }
