@@ -52,7 +52,7 @@ class OsController extends REST_Controller
 
         if (! $id) {
             $perPage = $this->get('perPage', true) ?: 20;
-            $page = $this->get('page', true) ?: 0;
+            $page = $this->get('page', true) ? ($this->get('page', true) * $perPage) : 0;
             $start = $page ? ($perPage * $page) : 0;
 
             $oss = $this->os_model->getOs(
