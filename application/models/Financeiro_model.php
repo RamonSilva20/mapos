@@ -28,6 +28,20 @@ class Financeiro_model extends CI_Model
 
         return $result;
     }
+	
+	
+		public function  getLancamento($id)
+	
+	{
+
+		$this->db->select('*');
+		 $this->db->from('lancamentos');
+		 $this->db->where('idLancamentos', $id);
+		
+		
+		 return (array) $this->db->get()->row();
+	}
+	
 
     public function getTotals($where = '')
     {

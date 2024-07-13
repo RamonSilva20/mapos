@@ -10,6 +10,10 @@ class Financeiro extends MY_Controller
     {
         parent::__construct();
         $this->load->model('financeiro_model');
+		$this->load->model('mapos_model');
+		$this->load->model('os_model');
+		$this->load->model('clientes_model');
+        $this->load->model('usuarios_model');
         $this->load->helper('codegen_helper');
         $this->data['menuLancamentos'] = 'financeiro';
     }
@@ -561,6 +565,166 @@ class Financeiro extends MY_Controller
                 echo json_encode($json);
             }
         }
+    }
+	
+	public function imprimirRecibo () {
+	
+if (empty($this->uri->segment(3))) { $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar imprimir o recibo.');
+        redirect(base_url());
+  
+} else {
+		// Consulta dados do lançamento
+		 $data['result'] = $this->financeiro_model->getLancamento($this->uri->segment(3)); 
+		 
+		 //Verifica se o numero do lançameto existe
+		 if (empty($data['result'])) { $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar imprimir o recibo. Lançamento não existe');
+        redirect(base_url());
+		 }
+		 	
+		 
+		 $data['cliente'] =  $this->financeiro_model->getById($data['result']['clientes_id']);
+		 $emitente = $this->mapos_model->getEmitente();		
+			 
+		
+		 $data = array(
+			 'id' => 3,
+			 'qrCode' => $this->os_model->getQrCode(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $emitente
+        ),
+             'emitente' => $emitente ,
+			 'chaveFormatada' => $this->formatarChave($this->data['configuration']['pix_key']),
+             'lancamento'   => $this->financeiro_model->getLancamento($this->uri->segment(3)),
+			 'cliente' => $data['cliente'] =  $this->financeiro_model->getById($data['result']['clientes_id']),
+			 'valorporescrito' => 	 $this->numberToText($this->financeiro_model->getLancamento($this->uri->segment(3))['valor']));
+			 	 
+			 
+			 $this->load->view('financeiro/imprimirRecibo', $data);
+		 
+		 
+		 
+}
+	}
+
+    public function formatarChave($chave)
+    {
+        if ($this->validarCPF($chave)) {
+            return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
+        } elseif ($this->validarCNPJ($chave)) {
+            return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
+        } elseif (strlen($chave) === 11) {
+            return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
+        }
+
+        return $chave;
+    }
+	
+	
+	public function numberToText($value, $uppercase = 0) {
+		
+		//author Newerton Vargas de Araujo  Written by Newerton Vargas de Araujo
+		//https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F52f84a06eec3&operation=register&redirect=https%3A%2F%2Fnewerton.medium.com%2Fphp-valor-do-real-por-extenso-75de2d28df48&user=Newerton+Vargas+de+Araujo&userId=52f84a06eec3&source=post_page-52f84a06eec3----75de2d28df48---------------------post_header-----------
+
+
+    if (strpos($value, ",") > 0) {
+        $value = str_replace(".", "", $value);
+        $value = str_replace(",", ".", $value);
+    }
+ 
+    $singular = ["centavo", "real", "mil", "milhão", "bilhão", "trilhão", "quatrilhão"];
+    $plural = ["centavos", "reais", "mil", "milhões", "bilhões", "trilhões", "quatrilhões"];
+ 
+    $c = ["", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"];
+    $d = ["", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"];
+    $d10 = ["dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezesete", "dezoito", "dezenove"];
+    $u = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
+ 
+    $z = 0;
+ 
+    $value = number_format($value, 2, ".", ".");
+    $integer = explode(".", $value);
+    $cont = count($integer);
+ 
+    for ($i = 0; $i < $cont; $i++)
+        for ($ii = strlen($integer[$i]); $ii < 3; $ii++)
+            $integer[$i] = "0" . $integer[$i];
+ 
+    $fim = $cont - ($integer[$cont - 1] > 0 ? 1 : 2);
+    $rt = '';
+    for ($i = 0; $i < $cont; $i++) {
+        $value = $integer[$i];
+        $rc = (($value > 100) && ($value < 200)) ? "cento" : $c[$value[0]];
+        $rd = ($value[1] < 2) ? "" : $d[$value[1]];
+        $ru = ($value > 0) ? (($value[1] == 1) ? $d10[$value[2]] : $u[$value[2]]) : "";
+ 
+        $r = $rc . (($rc && ($rd || $ru)) ? " e " : "") . $rd . (($rd &&
+                $ru) ? " e " : "") . $ru;
+        $t = $cont - 1 - $i;
+        $r .= $r ? " " . ($value > 1 ? $plural[$t] : $singular[$t]) : "";
+        if ($value == "000"
+        )
+            $z++;
+        elseif ($z > 0)
+            $z--;
+        if (($t == 1) && ($z > 0) && ($integer[0] > 0))
+            $r .= ( ($z > 1) ? " de " : "") . $plural[$t];
+        if ($r)
+            $rt = $rt . ((($i > 0) && ($i <= $fim) &&
+                    ($integer[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r;
+    }
+ 
+ return trim($rt ? $rt : "zero");
+}
+
+ public function validarCPF($cpf)
+    {
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0; $i < 9; $i++) {
+            $soma1 += $cpf[$i] * (10 - $i);
+        }
+        $resto1 = $soma1 % 11;
+        $dv1 = ($resto1 < 2) ? 0 : 11 - $resto1;
+        if ($dv1 != $cpf[9]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $soma2 += $cpf[$i] * (11 - $i);
+        }
+        $resto2 = $soma2 % 11;
+        $dv2 = ($resto2 < 2) ? 0 : 11 - $resto2;
+
+        return $dv2 == $cpf[10];
+    }
+
+    public function validarCNPJ($cnpj)
+    {
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+        if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
+            return false;
+        }
+        $soma1 = 0;
+        for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma1 += $cnpj[$i] * $pos;
+        }
+        $dv1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
+        if ($dv1 != $cnpj[12]) {
+            return false;
+        }
+        $soma2 = 0;
+        for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
+            $pos = ($pos < 2) ? 9 : $pos;
+            $soma2 += $cnpj[$i] * $pos;
+        }
+        $dv2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
+
+        return $dv2 == $cnpj[13];
     }
 
     public function autoCompleteClienteFornecedor()
