@@ -940,7 +940,7 @@ class Financeiro extends MY_Controller
         for ($i = 0; $i < $cont; $i++) {
             for ($ii = strlen($integer[$i]); $ii < 3; $ii++) {
                 $integer[$i] = "0" . $integer[$i];
-            };
+            }
         }
 
         $fim = $cont - ($integer[$cont - 1] > 0 ? 1 : 2);

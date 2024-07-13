@@ -1,10 +1,11 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/dayjs.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/dayjs.min.js"></script>
 
-<?php $situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
+<?php
+$situacao = $this->input->get("situacao");
+$periodo = $this->input->get("periodo");
 ?>
 
 <style type="text/css">
@@ -32,7 +33,12 @@ $periodo = $this->input->get('periodo');
                 </span>
                 <h5>Lançamentos Financeiros</h5>
     </div>
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+    <?php if (
+        $this->permission->checkPermission(
+            $this->session->userdata("permissao"),
+            "aLancamento"
+        )
+    ) { ?>
         <div class="" style="display:flex">
             <a href="#modalReceita" data-toggle="modal" role="button" class="button btn btn-mini btn-success" style="width: 230px">
                 <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2" title="Cadastrar nova receita ou despesa"> Receita/Despesa</span></a>
@@ -44,33 +50,71 @@ $periodo = $this->input->get('periodo');
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
-                    <option value="dia" <?= $this->input->get('periodo') === 'dia' ? 'selected' : '' ?>>Dia</option>
-                    <option value="semana" <?= $this->input->get('periodo') === 'semana' ? 'selected' : '' ?>>Semana</option>
-                    <option value="mesAnterior" <?= $this->input->get('periodo') === 'mesAnterior' ? 'selected' : '' ?>>Mês Anterior</option>
-                    <option value="mes" <?= $this->input->get('periodo') === 'mes' ? 'selected' : '' ?>>Mês</option>
-                    <option value="mesPosterior" <?= $this->input->get('periodo') === 'mesPosterior' ? 'selected' : '' ?>>Mês Posterior</option>
-                    <option value="ano" <?= $this->input->get('periodo') === 'ano' ? 'selected' : '' ?>>Ano</option>
-                    <option value="personalizado" <?= $this->input->get('periodo') === 'personalizado' ? 'selected' : '' ?>>Personalizado</option>
+                    <option value="dia" <?= $this->input->get("periodo") ===
+                    "dia"
+                        ? "selected"
+                        : "" ?>>Dia</option>
+                    <option value="semana" <?= $this->input->get("periodo") ===
+                    "semana"
+                        ? "selected"
+                        : "" ?>>Semana</option>
+                    <option value="mesAnterior" <?= $this->input->get(
+                        "periodo"
+                    ) === "mesAnterior"
+                        ? "selected"
+                        : "" ?>>Mês Anterior</option>
+                    <option value="mes" <?= $this->input->get("periodo") ===
+                    "mes"
+                        ? "selected"
+                        : "" ?>>Mês</option>
+                    <option value="mesPosterior" <?= $this->input->get(
+                        "periodo"
+                    ) === "mesPosterior"
+                        ? "selected"
+                        : "" ?>>Mês Posterior</option>
+                    <option value="ano" <?= $this->input->get("periodo") ===
+                    "ano"
+                        ? "selected"
+                        : "" ?>>Ano</option>
+                    <option value="personalizado" <?= $this->input->get(
+                        "periodo"
+                    ) === "personalizado"
+                        ? "selected"
+                        : "" ?>>Personalizado</option>
                 </select>
             </div>
 
             <div class="span2">
                 <label>Vencimento (de)</label>
-                <input id="vencimento_de" type="text" class="span12 datepicker" name="vencimento_de" value="<?= $this->input->get('vencimento_de') ? $this->input->get('vencimento_de') : date('d/m/Y') ?>">
+                <input id="vencimento_de" type="text" class="span12 datepicker" name="vencimento_de" value="<?= $this->input->get(
+                    "vencimento_de"
+                )
+                    ? $this->input->get("vencimento_de")
+                    : date("d/m/Y") ?>">
             </div>
 
             <div class="span2">
                 <label>Vencimento (até)</label>
-                <input id="vencimento_ate" type="text" class="span12 datepicker" name="vencimento_ate" value="<?= $this->input->get('vencimento_ate') ? $this->input->get('vencimento_ate') : date('d/m/Y') ?>">
+                <input id="vencimento_ate" type="text" class="span12 datepicker" name="vencimento_ate" value="<?= $this->input->get(
+                    "vencimento_ate"
+                )
+                    ? $this->input->get("vencimento_ate")
+                    : date("d/m/Y") ?>">
             </div>
 
             <div class="span2">
                 <label>Tipo</label>
                 <select name="tipo" class="span12">
                     <option value="">Todos</option>
-                    <option value="receita" <?= $this->input->get('tipo') === 'receita' ? 'selected' : '' ?>>Receita
+                    <option value="receita" <?= $this->input->get("tipo") ===
+                    "receita"
+                        ? "selected"
+                        : "" ?>>Receita
                     </option>
-                    <option value="despesa" <?= $this->input->get('tipo') === 'despesa' ? 'selected' : '' ?>>Despesa
+                    <option value="despesa" <?= $this->input->get("tipo") ===
+                    "despesa"
+                        ? "selected"
+                        : "" ?>>Despesa
                     </option>
                 </select>
             </div>
@@ -79,14 +123,20 @@ $periodo = $this->input->get('periodo');
                 <label>Status</label>
                 <select name="status" class="span12">
                     <option value="">Todos (Pendente e Pago)</option>
-                    <option value="0" <?= $this->input->get('status') === '0' ? 'selected' : '' ?>>Pendente</option>
-                    <option value="1" <?= $this->input->get('status') === '1' ? 'selected' : '' ?>>Pago</option>
+                    <option value="0" <?= $this->input->get("status") === "0"
+                        ? "selected"
+                        : "" ?>>Pendente</option>
+                    <option value="1" <?= $this->input->get("status") === "1"
+                        ? "selected"
+                        : "" ?>>Pago</option>
                 </select>
             </div>
 
             <div class="span2">
                 <label>Cliente/Fornecedor</label>
-                <input id="cliente_busca" type="text" class="span12" name="cliente" value="<?= $this->input->get('cliente') ?>">
+                <input id="cliente_busca" type="text" class="span12" name="cliente" value="<?= $this->input->get(
+                    "cliente"
+                ) ?>">
             </div>
 
             <div class="span2 pull-right">
@@ -121,73 +171,163 @@ $periodo = $this->input->get('periodo');
                     </thead>
                     <tbody>
                         <?php
-
                         if (!$results) {
                             echo '<tr>
               <td colspan="9" >Nenhum lançamento encontrado</td>
             </tr>';
                         }
                         foreach ($results as $r) {
-                            $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
-                           
+                            $vencimento = date(
+                                "d/m/Y",
+                                strtotime($r->data_vencimento)
+                            );
+
                             if ($r->baixado == 0) {
-                                $status = 'Pendente';
+                                $status = "Pendente";
                             } else {
-                                $status = 'Pago';
-                            };
-                            if ($r->tipo == 'receita') {
-                                $label = 'success';
-                            } else {
-                                $label = 'important';
+                                $status = "Pago";
                             }
-                            echo '<tr>';
-                            echo '<td>' . $r->idLancamentos . '</td>';
-                            echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                            echo '<td>' . $r->cliente_fornecedor . '</td>';
-                            echo '<td>' . $r->descricao . '</td>';
-                            echo '<td>' . $vencimento . '</td>';
-                            echo '<td>' . $status . '</td>';
-                            echo '<td>' . $r->observacoes . '</td>';
-                            echo '<td>' . $r->forma_pgto . '</td>';
-                            echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; //valor total sem o desconto
-                            echo  $r->tipo_desconto == "real" ? '<td>' . "R$ ".$r->desconto . '</td>' : ($r->tipo_desconto == "porcento" ? '<td>' . $r->desconto." %" . '</td>' : '<td>' . "0" . '</td>'); // valor do desconto
-                            echo $r->valor_desconto != 0 ? '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>' : '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; // valor total  com o desconto
-                           
-                            echo '<td>';
+                            if ($r->tipo == "receita") {
+                                $label = "success";
+                            } else {
+                                $label = "important";
+                            }
+                            echo "<tr>";
+                            echo "<td>" . $r->idLancamentos . "</td>";
+                            echo '<td><span class="label label-' .
+                                $label .
+                                '">' .
+                                ucfirst($r->tipo) .
+                                "</span></td>";
+                            echo "<td>" . $r->cliente_fornecedor . "</td>";
+                            echo "<td>" . $r->descricao . "</td>";
+                            echo "<td>" . $vencimento . "</td>";
+                            echo "<td>" . $status . "</td>";
+                            echo "<td>" . $r->observacoes . "</td>";
+                            echo "<td>" . $r->forma_pgto . "</td>";
+                            echo '<td> R$ ' .
+                                number_format($r->valor, 2, ",", ".") .
+                                "</td>"; //valor total sem o desconto
+                            echo $r->tipo_desconto == "real"
+                                ? "<td>" . "R$ " . $r->desconto . "</td>"
+                                : ($r->tipo_desconto == "porcento"
+                                    ? "<td>" . $r->desconto . " %" . "</td>"
+                                    : "<td>" . "0" . "</td>"); // valor do desconto
+                            echo $r->valor_desconto != 0
+                                ? '<td> R$ ' .
+                                    number_format(
+                                        $r->valor_desconto,
+                                        2,
+                                        ",",
+                                        "."
+                                    ) .
+                                    "</td>"
+                                : '<td> R$ ' .
+                                    number_format($r->valor, 2, ",", ".") .
+                                    "</td>"; // valor total  com o desconto
+
+                            echo "<td>";
                             if ($r->data_pagamento == "0000-00-00") {
                                 $data_pagamento = "";
                             } else {
-                                $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
+                                $data_pagamento = date(
+                                    "d/m/Y",
+                                    strtotime($r->data_pagamento)
+                                );
                             }
 
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                            if (
+                                $this->permission->checkPermission(
+                                    $this->session->userdata("permissao"),
+                                    "eLancamento"
+                                )
+                            ) {
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' .
+                                    $r->idLancamentos .
+                                    '" descricao="' .
+                                    $r->descricao .
+                                    '" valor="' .
+                                    $r->valor .
+                                    '" vencimento="' .
+                                    date(
+                                        "d/m/Y",
+                                        strtotime($r->data_vencimento)
+                                    ) .
+                                    '" pagamento="' .
+                                    $data_pagamento .
+                                    '" baixado="' .
+                                    $r->baixado .
+                                    '" cliente="' .
+                                    $r->cliente_fornecedor .
+                                    '" formaPgto="' .
+                                    $r->forma_pgto .
+                                    '" tipo="' .
+                                    $r->tipo .
+                                    '" observacoes="' .
+                                    $r->observacoes .
+                                    '" descontos_editar="' .
+                                    $r->desconto .
+                                    '" valor_desconto_editar="' .
+                                    $r->desconto .
+                                    '" usuario="' .
+                                    $r->nome .
+                                    '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
                             }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                                echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
+                            if (
+                                $this->permission->checkPermission(
+                                    $this->session->userdata("permissao"),
+                                    "dLancamento"
+                                )
+                            ) {
+                                echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' .
+                                    $r->idLancamentos .
+                                    '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
+                                if ($r->tipo == "receita") {
+                                    echo '<a style="margin-right: 1%" href="' .
+                                        base_url() .
+                                        "index.php/financeiro/imprimirRecibo/" .
+                                        $r->idLancamentos .
+                                        '" target="_blank" class="btn-nwe6" title="Imprimir Recibo"><i class="bx bx-printer bx-xs"></i></a>';
+                                }
                             }
 
-                            echo '</td>';
-                            echo '</tr>';
-                        } ?>
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
                             <td colspan="6" style="text-align: left; color: green">
-                                <strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format(
+                                    $totals["receitas"],
+                                    2,
+                                    ",",
+                                    "."
+                                ); ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
                             <td colspan="6" style="text-align: left; color: red">
-                                <strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format(
+                                    $totals["despesas"],
+                                    2,
+                                    ",",
+                                    "."
+                                ); ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right"><strong>Saldo:</strong></td>
                             <td colspan="6" style="text-align: left;">
-                                <strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?php echo number_format(
+                                    $totals["receitas"] - $totals["despesas"],
+                                    2,
+                                    ",",
+                                    "."
+                                ); ?></strong>
                             </td>
                         </tr>
                     
@@ -195,48 +335,118 @@ $periodo = $this->input->get('periodo');
                             <td colspan="7" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="7" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_receita,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_despesa,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa;
-echo number_format($sub_receita_despesa, 2, ',', '.') ?></strong></td>
+                      <td colspan="7" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php
+                      $sub_receita_despesa =
+                          $estatisticas_financeiro->total_receita -
+                          $estatisticas_financeiro->total_despesa;
+                      echo number_format($sub_receita_despesa, 2, ",", ".");
+                      ?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa;
-echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
+                      <td colspan="7" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php
+                      $soma_receita_despesa =
+                          $estatisticas_financeiro->total_receita +
+                          $estatisticas_financeiro->total_despesa;
+                      echo number_format($soma_receita_despesa, 2, ",", ".");
+                      ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format($estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total Receitas Pendentes: R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_receita_pendente,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_despesa_pendente,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente;
-echo number_format($sub_recpendente_despependente, 2, ',', '.')?></td>
+                      <td colspan="7" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php
+                      $sub_recpendente_despependente =
+                          $estatisticas_financeiro->total_receita_pendente -
+                          $estatisticas_financeiro->total_despesa_pendente;
+                      echo number_format(
+                          $sub_recpendente_despependente,
+                          2,
+                          ",",
+                          "."
+                      );
+                      ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente;
-echo number_format($sub_recpendente_despependente, 2, ',', '.')?></strong></td>
+                      <td colspan="7" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php
+                      $sub_recpendente_despependente =
+                          $estatisticas_financeiro->total_receita_pendente +
+                          $estatisticas_financeiro->total_despesa_pendente;
+                      echo number_format(
+                          $sub_recpendente_despependente,
+                          2,
+                          ",",
+                          "."
+                      );
+                      ?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_valor_desconto,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_valor_desconto_pendente,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente;
-echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
+                      <td colspan="7" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php
+                      $soma_descontos_pagos =
+                          $estatisticas_financeiro->total_valor_desconto +
+                          $estatisticas_financeiro->total_valor_desconto_pendente;
+                      echo number_format($soma_descontos_pagos, 2, ",", ".");
+                      ?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_receita_sem_desconto,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format(
+                          $estatisticas_financeiro->total_despesa_sem_desconto,
+                          2,
+                          ",",
+                          "."
+                      ); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -249,7 +459,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova receita e despesa -->
 <div id="modalReceita" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formReceita" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita" method="post">
+    <form id="formReceita" action="<?php echo base_url(); ?>index.php/financeiro/adicionarReceita" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Adicionar Receita/Despesa</h3>
@@ -271,7 +481,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url(); ?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -300,7 +510,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 		            
           <div class="span3">  
           <label for="valor_desconto">Val.Desc <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00", 2, ',', '.') ?>"/>
+          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format(
+              "0.00",
+              2,
+              ",",
+              "."
+          ); ?>"/>
         </div>
 
                 <div class="span4" style="margin-left: 0">
@@ -371,7 +586,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova receita e despesa parcelada -->
 <div id="modalReceitaParcelada" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form id="formReceita_parc" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita_parc" method="post">
+  <form id="formReceita_parc" action="<?php echo base_url(); ?>index.php/financeiro/adicionarReceita_parc" method="post">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Adicionar Receita/Despesa Parcelada</h3>
@@ -388,7 +603,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
           <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url(); ?>"/>
     	</div>	
     	        
     		<div class="span6" style="margin-left: 0"> 
@@ -416,7 +631,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 		         
           <div class="span3" style="margin-left: 0">  
 	        <label for="desconto_parc">Desconto <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format("0.00", 2, ',', '.') ?>" style="float: left;" />
+            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format(
+                "0.00",
+                2,
+                ",",
+                "."
+            ); ?>" style="float: left;" />
 	      </div>
 			
     		<div id="divParcelamento" class="span2" style="margin-left: 0">
@@ -463,7 +683,9 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 	    	<div class="span4" style="margin-left: 1">
 	    		<label for="dia_pgto">Data da Entrada*</label>
-	    		<input class="span12 datepicker" id="dia_pgto" type="text" name="dia_pgto" value="<?php echo date('d/m/Y'); ?>"  autocomplete="off"  required/>
+	    		<input class="span12 datepicker" id="dia_pgto" type="text" name="dia_pgto" value="<?php echo date(
+           "d/m/Y"
+       ); ?>"  autocomplete="off"  required/>
 	    	</div>
 	    	
 	    	<div class="span4" style="margin-left: 1">
@@ -489,7 +711,9 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL)
 <div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formDespesa" action="<?php // echo base_url()?>index.php/financeiro/adicionarDespesa" method="post">
+    <form id="formDespesa" action="<?php
+// echo base_url()
+?>index.php/financeiro/adicionarDespesa" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
@@ -501,7 +725,9 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php  // echo current_url()?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php
+// echo current_url()
+?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -568,7 +794,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formEditar" action="<?php echo base_url() ?>index.php/financeiro/editar" method="post">
+    <form id="formEditar" action="<?php echo base_url(); ?>index.php/financeiro/editar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Editar Lançamento</h3>
@@ -597,7 +823,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="idEditar" name="id" value="" />
-                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?php echo number_format("0.00", 2, ',', '.') ?>" required />
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?php echo number_format(
+                        "0.00",
+                        2,
+                        ",",
+                        "."
+                    ); ?>" required />
                 </div>
 
         <div class="span4">  
@@ -608,7 +839,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             <div class="span2">  
             <label for="valor_desconto">Val.Desc</label>
-            <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00", 2, ',', '.') ?>" />
+            <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format(
+                "0.00",
+                2,
+                ",",
+                "."
+            ); ?>" />
             </div>
 
                 <div class="span4" style="margin-left: 0">
@@ -685,7 +921,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
 
@@ -930,7 +1166,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             });
             return false;
         });
-        let controlBaixa = "<?php echo $configuration['control_baixa']; ?>";
+        let controlBaixa = "<?php echo $configuration["control_baixa"]; ?>";
         let datePickerOptions = {
             dateFormat: 'dd/mm/yy',
         };
