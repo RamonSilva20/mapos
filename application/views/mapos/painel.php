@@ -547,7 +547,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
+            <h5 class="cardHeader">Ordens de Serviços Em Aberto</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -601,7 +601,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Aguardando Peças</h5>
+            <h5 class="cardHeader">Ordens de Serviços Aguardando Peças</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
