@@ -15,7 +15,7 @@ class Mapos extends MY_Controller
     {
         $status = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento');
         $this->data['ordens_status'] = $this->mapos_model->getOsStatus($status);
-        $vstatus = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento');
+        $vstatus = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento', 'Finalizado');
         $this->data['vendasstatus'] = $this->mapos_model->getVendasStatus($vstatus);
         $this->data['lancamentos'] = $this->mapos_model->getLancamentos();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();

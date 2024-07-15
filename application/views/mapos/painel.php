@@ -593,8 +593,8 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
+                        <th>Data da Venda</th>
+                        <th>Venc. Garantia</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -603,72 +603,78 @@
                     <?php if ($vendasstatus != null) : ?>
                         <?php foreach ($vendasstatus as $v) : ?>
                             <?php
-                                    switch ($v->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                                ?>
+                            $dataVenda = date('d/m/Y', strtotime($v->dataVenda));
+                            $vencGarantia = '';
+                            $corGarantia = '';
+
+                            if ($v->garantia && is_numeric($v->garantia)) {
+                                // Adiciona o número de dias da garantia à data da venda
+                                $dataVendaDateTime = new DateTime($v->dataVenda);
+                                $dataVendaDateTime->add(new DateInterval('P' . $v->garantia . 'D'));
+                                $vencGarantia = $dataVendaDateTime->format('d/m/Y');
+
+                                // Verifica a cor da garantia com base na data atual
+                                $dataGarantiaFormatada = $dataVendaDateTime->format('Y-m-d');
+                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('Y-m-d'))) {
+                                    $corGarantia = '#4d9c79';
+                                } else {
+                                    $corGarantia = '#f24c6f';
+                                }
+                            } elseif ($v->garantia == "0") {
+                                $vencGarantia = 'Sem Garantia';
+                            }
+
+                            switch ($v->status) {
+                                case 'Aberto':
+                                    $cor = '#00cd00';
+                                    break;
+                                case 'Em Andamento':
+                                    $cor = '#436eee';
+                                    break;
+                                case 'Orçamento':
+                                    $cor = '#CDB380';
+                                    break;
+                                case 'Negociação':
+                                    $cor = '#AEB404';
+                                    break;
+                                case 'Cancelado':
+                                    $cor = '#CD0000';
+                                    break;
+                                case 'Finalizado':
+                                    $cor = '#256';
+                                    break;
+                                case 'Faturado':
+                                    $cor = '#B266FF';
+                                    break;
+                                case 'Aguardando Peças':
+                                    $cor = '#FF7F00';
+                                    break;
+                                case 'Aprovado':
+                                    $cor = '#808080';
+                                    break;
+                                default:
+                                    $cor = '#E0E4CC';
+                                    break;
+                            }
+                            ?>
                             <tr>
-                                <td>
-                                    <?= $v->idVendas ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $v->nomeCliente ?>
-                                </td>
-
-                                <td>
-                                    <?= date('d/m/Y', strtotime($v->dataVenda)) ?>
-                                </td>
-                                <td><?php if ($v->dataVenda != null) {
-                                        echo date('d/m/Y', strtotime($v->dataVenda));
-                                    } else {
-                                        echo "";
-                                    } ?>
-                                </td>
-                                    <td>
-                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span>
-                                    </td>
+                                <td><?= $v->idVendas ?></td>
+                                <td class="cli1"><?= $v->nomeCliente ?></td>
+                                <td><?= $dataVenda ?></td>
+                                <td><span class="badge" style="background-color: <?= $corGarantia ?>; border-color: <?= $corGarantia ?>"><?= $vencGarantia ?></span></td>
+                                <td><span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span></td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
                                         <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= $v->idVendas ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                   
+                                            <i class="bx bx-show"></i>
+                                        </a>
                                     <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="5">Nenhuma Venda.</td>
+                            <td colspan="6">Nenhuma Venda.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
