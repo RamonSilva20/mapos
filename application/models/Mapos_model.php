@@ -116,69 +116,26 @@ class Mapos_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function getOsAbertas()
+    public function getOsStatus($status)
     {
         $this->db->select('os.*, clientes.nomeCliente');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aberto');
-        $this->db->limit(5);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsOrcamentos()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Orçamento');
-        $this->db->limit(5);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsAguardandoPecas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aguardando Peças');
-        $this->db->limit(5);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsAndamento()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Em Andamento');
-        $this->db->limit(5);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsAprovadas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aprovado');
-        $this->db->limit(5);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsFinalizadas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Finalizado');
+        $this->db->where_in('os.status', $status);
         $this->db->order_by('os.idOs', 'DESC');
-        $this->db->limit(5);
+        $this->db->limit(10);
+
+        return $this->db->get()->result();
+    }
+    
+    public function getVendasStatus($vstatus)
+    {
+        $this->db->select('vendas.*, clientes.nomeCliente');
+        $this->db->from('vendas');
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->where_in('vendas.status', $vstatus);
+        $this->db->order_by('vendas.idVendas', 'DESC');
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }

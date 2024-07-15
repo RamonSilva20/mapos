@@ -13,12 +13,10 @@ class Mapos extends MY_Controller
 
     public function index()
     {
-        $this->data['ordens_orcamentos'] = $this->mapos_model->getOsOrcamentos();
-        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-        $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
-        $this->data['ordens_andamento'] = $this->mapos_model->getOsAndamento();
-        $this->data['ordens_aprovadas'] = $this->mapos_model->getOsAprovadas();
-        $this->data['ordens_finalizadas'] = $this->mapos_model->getOsFinalizadas();
+        $status = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento');
+        $this->data['ordens_status'] = $this->mapos_model->getOsStatus($status);
+        $vstatus = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento');
+        $this->data['vendasstatus'] = $this->mapos_model->getVendasStatus($vstatus);
         $this->data['lancamentos'] = $this->mapos_model->getLancamentos();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
         $this->data['os'] = $this->mapos_model->getOsEstatisticas();

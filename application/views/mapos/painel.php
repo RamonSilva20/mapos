@@ -1,12 +1,12 @@
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
 
 <script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
 <script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 
 <link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
@@ -494,7 +494,7 @@
 <div class="span12A" style="margin-left: 0">
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Orçamentos</h5>
+            <h5 class="cardHeader">Ordens de Serviços</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -504,12 +504,47 @@
                         <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Cliente</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($ordens_orcamentos != null) : ?>
-                        <?php foreach ($ordens_orcamentos as $o) : ?>
+                    <?php if ($ordens_status != null) : ?>
+                        <?php foreach ($ordens_status as $o) : ?>
+                                <?php
+                                    switch ($o->status) {
+                                        case 'Aberto':
+                                            $cor = '#00cd00';
+                                            break;
+                                        case 'Em Andamento':
+                                            $cor = '#436eee';
+                                            break;
+                                        case 'Orçamento':
+                                            $cor = '#CDB380';
+                                            break;
+                                        case 'Negociação':
+                                            $cor = '#AEB404';
+                                            break;
+                                        case 'Cancelado':
+                                            $cor = '#CD0000';
+                                            break;
+                                        case 'Finalizado':
+                                            $cor = '#256';
+                                            break;
+                                        case 'Faturado':
+                                            $cor = '#B266FF';
+                                            break;
+                                        case 'Aguardando Peças':
+                                            $cor = '#FF7F00';
+                                            break;
+                                        case 'Aprovado':
+                                            $cor = '#808080';
+                                            break;
+                                        default:
+                                            $cor = '#E0E4CC';
+                                            break;
+                                    }
+                                ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -527,6 +562,9 @@
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
+                                    <td>
+                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                    </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
                                         <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
@@ -547,247 +585,90 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Aberto</h5>
+            <h5 class="cardHeader">Status de Vendas</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>N°</th>
+                        <th>Cliente</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Cliente</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($ordens != null) : ?>
-                        <?php foreach ($ordens as $o) : ?>
+                    <?php if ($vendasstatus != null) : ?>
+                        <?php foreach ($vendasstatus as $v) : ?>
+                            <?php
+                                    switch ($v->status) {
+                                        case 'Aberto':
+                                            $cor = '#00cd00';
+                                            break;
+                                        case 'Em Andamento':
+                                            $cor = '#436eee';
+                                            break;
+                                        case 'Orçamento':
+                                            $cor = '#CDB380';
+                                            break;
+                                        case 'Negociação':
+                                            $cor = '#AEB404';
+                                            break;
+                                        case 'Cancelado':
+                                            $cor = '#CD0000';
+                                            break;
+                                        case 'Finalizado':
+                                            $cor = '#256';
+                                            break;
+                                        case 'Faturado':
+                                            $cor = '#B266FF';
+                                            break;
+                                        case 'Aguardando Peças':
+                                            $cor = '#FF7F00';
+                                            break;
+                                        case 'Aprovado':
+                                            $cor = '#808080';
+                                            break;
+                                        default:
+                                            $cor = '#E0E4CC';
+                                            break;
+                                    }
+                                ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= $v->idVendas ?>
                                 </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= $v->nomeCliente ?>
                                 </td>
+
                                 <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                    <?= date('d/m/Y', strtotime($v->dataVenda)) ?>
+                                </td>
+                                <td><?php if ($v->dataVenda != null) {
+                                        echo date('d/m/Y', strtotime($v->dataVenda));
+                                    } else {
+                                        echo "";
+                                    } ?>
+                                </td>
+                                    <td>
+                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span>
+                                    </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+                                        <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= $v->idVendas ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
+                                   
                                     <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="5">Nenhuma OS em aberto.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Aguardando Peças</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Cliente</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens1 != null) : ?>
-                        <?php foreach ($ordens1 as $o) : ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
-                                </td>
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i></a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS Aguardando Peças.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Andamento</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Cliente</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_andamento != null) : ?>
-                        <?php foreach ($ordens_andamento as $o) : ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
-                                </td>
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i></a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS em Andamento.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Aprovadas</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Cliente</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_aprovadas != null) : ?>
-                        <?php foreach ($ordens_aprovadas as $o) : ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
-                                </td>
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i></a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS Aprovada.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Finalizadas</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Cliente</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_finalizadas != null) : ?>
-                        <?php foreach ($ordens_finalizadas as $o) : ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
-                                </td>
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i></a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS Finalizada.</td>
+                            <td colspan="5">Nenhuma Venda.</td>
                         </tr>
                     <?php endif ?>
                 </tbody>
