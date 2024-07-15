@@ -122,7 +122,18 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aberto');
-        $this->db->limit(10);
+        $this->db->limit(5);
+
+        return $this->db->get()->result();
+    }
+
+    public function getOsOrcamentos()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Orçamento');
+        $this->db->limit(5);
 
         return $this->db->get()->result();
     }
@@ -133,7 +144,7 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aguardando Peças');
-        $this->db->limit(10);
+        $this->db->limit(5);
 
         return $this->db->get()->result();
     }
@@ -144,9 +155,44 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Em Andamento');
-        $this->db->limit(10);
+        $this->db->limit(5);
 
         return $this->db->get()->result();
+    }
+
+    public function getOsAprovadas()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Aprovado');
+        $this->db->limit(5);
+
+        return $this->db->get()->result();
+    }
+
+    public function getOsFinalizadas()
+    {
+        $this->db->select('os.*, clientes.nomeCliente');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->where('os.status', 'Finalizado');
+        $this->db->order_by('os.idOs', 'DESC');
+        $this->db->limit(5);
+
+        return $this->db->get()->result();
+    }
+
+    public function getLancamentos()
+    {
+        $this->db->select('idLancamentos, tipo, cliente_fornecedor, descricao, data_vencimento, forma_pgto, valor_desconto, baixado');
+        $this->db->from('lancamentos');
+        $this->db->where('baixado', 0);
+        $this->db->order_by('idLancamentos', 'DESC');
+        $this->db->limit(10);
+
+        $query = $this->db->get();
+        return $query->result();
     }
 
     public function calendario($start, $end, $status = null)

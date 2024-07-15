@@ -1,8 +1,10 @@
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
 
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
+
 <script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
 <script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
 
@@ -490,61 +492,56 @@
 
 <!-- Start Staus OS -->
 <div class="span12A" style="margin-left: 0">
-    <div class="AAA">
-        <div class="widget-box0 widbox-blak">
-            <div>
-                <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
-            </div>
-            <div class="widget-content">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Cod.</th>
-                            <th>Produto</th>
-                            <th>Preço de Venda</th>
-                            <th>Estoque</th>
-                            <th class="ph3">Estoque Mínimo</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($produtos != null) : ?>
-                            <?php foreach ($produtos as $p) : ?>
-                                <tr>
-                                    <td>
-                                        <?= $p->idProdutos ?>
-                                    </td>
-                                    <td class="cli1">
-                                        <?= $p->descricao ?>
-                                    </td>
-                                    <td>R$
-                                        <?= $p->precoVenda ?>
-                                    </td>
-                                    <td>
-                                        <?= $p->estoque ?>
-                                    </td>
-                                    <td class="ph3">
-                                        <?= $p->estoqueMinimo ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
-                                                <i class="bx bx-edit"></i>
-                                            </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
-                                                <i class="bx bx-plus-circle"></i></a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        <?php else : ?>
+    <div class="widget-box0 widbox-blak">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviços Em Orçamentos</h5>
+        </div>
+        <div class="widget-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Cliente</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($ordens_orcamentos != null) : ?>
+                        <?php foreach ($ordens_orcamentos as $o) : ?>
                             <tr>
-                                <td colspan="6">Nenhum produto com estoque baixo.</td>
+                                <td>
+                                    <?= $o->idOs ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                </td>
+
+                                <td><?php if ($o->dataFinal != null) {
+                                    echo date('d/m/Y', strtotime($o->dataFinal));
+                                } else {
+                                    echo "";
+                                } ?></td>
+
+                                <td class="cli1">
+                                    <?= $o->nomeCliente ?>
+                                </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                            <i class="bx bx-show"></i> </a>
+                                    <?php endif ?>
+                                </td>
                             </tr>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-            </div>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5">Nenhuma OS em Orçamento.</td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -653,7 +650,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Em Andamento</h5>
+            <h5 class="cardHeader">Ordens de Serviços Em Andamento</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -699,6 +696,207 @@
             </table>
         </div>
     </div>
+
+    <div class="widget-box0 widbox-blak">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviços Aprovadas</h5>
+        </div>
+        <div class="widget-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Cliente</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($ordens_aprovadas != null) : ?>
+                        <?php foreach ($ordens_aprovadas as $o) : ?>
+                            <tr>
+                                <td>
+                                    <?= $o->idOs ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
+                                </td>
+                                <td class="cli1">
+                                    <?= $o->nomeCliente ?>
+                                </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                            <i class="bx bx-show"></i></a>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5">Nenhuma OS Aprovada.</td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="widget-box0 widbox-blak">
+        <div>
+            <h5 class="cardHeader">Ordens de Serviços Finalizadas</h5>
+        </div>
+        <div class="widget-content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Data Inicial</th>
+                        <th>Data Final</th>
+                        <th>Cliente</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($ordens_finalizadas != null) : ?>
+                        <?php foreach ($ordens_finalizadas as $o) : ?>
+                            <tr>
+                                <td>
+                                    <?= $o->idOs ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
+                                </td>
+                                <td>
+                                    <?= date('d/m/Y', strtotime($o->dataFinal)) ?>
+                                </td>
+                                <td class="cli1">
+                                    <?= $o->nomeCliente ?>
+                                </td>
+                                <td>
+                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                            <i class="bx bx-show"></i></a>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5">Nenhuma OS Finalizada.</td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="widget-box0 widbox-blak">
+        <div>
+            <h5 class="cardHeader">Últimos Lançamentos Pendentes</h5>
+        </div>
+        <div class="widget-content">
+            <table class="table table-bordered lanc-table">
+                <thead>
+                    <tr>
+                        <th class="tipo-col">Tipo</th>
+                        <th class="cliente-col">Cliente/Fornecedor</th>
+                        <th class="descricao-col">Descrição</th>
+                        <th class="vencimento-col">Vencimento</th>
+                        <th class="valor-col">V.T. Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($lancamentos)): ?>
+                        <?php foreach ($lancamentos as $lancamento): ?>
+                            <tr>
+                                <td>
+                                    <?php if ($lancamento->tipo == 'receita'): ?>
+                                        <span class="label label-success"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
+                                    <?php elseif ($lancamento->tipo == 'despesa'): ?>
+                                        <span class="label label-important"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
+                                    <?php else: ?>
+                                        <?php echo ucfirst($lancamento->tipo); ?>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-truncate"><?php echo $lancamento->cliente_fornecedor; ?></td>
+                                <td class="text-truncate"><?php echo $lancamento->descricao; ?></td>
+                                <td><?php echo date_format(date_create($lancamento->data_vencimento), 'd/m/Y'); ?></td>
+                                <td>R$ <?php echo number_format($lancamento->valor_desconto, 2, ',', '.'); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5">Nenhum lançamento encontrado.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="AAA">
+        <div class="widget-box0 widbox-blak">
+            <div>
+                <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cod.</th>
+                            <th>Produto</th>
+                            <th>Preço de Venda</th>
+                            <th>Estoque</th>
+                            <th class="ph3">Estoque Mínimo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($produtos != null) : ?>
+                            <?php foreach ($produtos as $p) : ?>
+                                <tr>
+                                    <td>
+                                        <?= $p->idProdutos ?>
+                                    </td>
+                                    <td class="cli1">
+                                        <?= $p->descricao ?>
+                                    </td>
+                                    <td>R$
+                                        <?= $p->precoVenda ?>
+                                    </td>
+                                    <td>
+                                        <?= $p->estoque ?>
+                                    </td>
+                                    <td class="ph3">
+                                        <?= $p->estoqueMinimo ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
+                                                <i class="bx bx-plus-circle"></i></a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="6">Nenhum produto com estoque baixo.</td>
+                            </tr>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 <!-- Fim Staus OS -->
 
