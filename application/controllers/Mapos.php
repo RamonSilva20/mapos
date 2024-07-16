@@ -421,8 +421,6 @@ class Mapos extends MY_Controller
         $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
         $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required|trim', ['required' => 'Selecione ao menos uma das opções!']);
         $this->form_validation->set_rules('control_2vias', 'Controle Impressão 2 Vias', 'required|trim');
-        $this->form_validation->set_rules('usar_assinatura', 'Sistema de assinaturas de OS', 'required|trim');
-        $this->form_validation->set_rules('status_assinatura', 'Status após assinatura do cliente', 'required|trim');
         $this->form_validation->set_rules('pix_key', 'Chave Pix', 'trim|valid_pix_key', [
             'valid_pix_key' => 'Chave Pix inválida!',
         ]);
