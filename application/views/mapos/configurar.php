@@ -358,13 +358,13 @@
                         <div class="control-group">
                             <div class="span8" style="margin-left: 3em;">
                                 <label for="control_2vias" class="control-label">Controle de Impressão em 2 Vias</label>
-                                    <div class="controls">
-                                        <select name="control_2vias" id="control_2vias">
-                                            <option value="1">Ativar</option>
-                                            <option value="0" <?= $configuration['control_2vias'] == '0' ? 'selected' : ''; ?>>Desativar</option>
-                                        </select>
-                                        <span class="help-inline">Ativar ou desativar impressão de OS em 2 vias.</span>
-                                    </div>
+                                <div class="controls">
+                                    <select name="control_2vias" id="control_2vias">
+                                        <option value="1">Ativar</option>
+                                        <option value="0" <?= $configuration['control_2vias'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                    </select>
+                                    <span class="help-inline">Ativar ou desativar impressão de OS em 2 vias.</span>
+                                </div>
                             </div>
                             <div class="span8">
                                 <span6 class="span10" style="margin-left: 2em;"> Defina a vizualização padrão, onde o que ficar checado será exibida na listagem de OS por padrão. </span6>
@@ -378,6 +378,16 @@
                                     <label> <input <?= @in_array("Cancelado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Cancelado"> <span class="lbl"> Cancelado</span> </label>
                                     <label> <input <?= @in_array("Aguardando Peças", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aguardando Peças"> <span class="lbl"> Aguardando Peças </span> </label>
                                     <label> <input <?= @in_array("Aprovado", json_decode($configuration['os_status_list'])) == 'true' ? 'checked' : ''; ?> name="os_status_list[]" class="marcar" type="checkbox" value="Aprovado"> <span class="lbl"> Aprovado </span> </label>
+                                </div>
+                            </div>
+                            <div class="span8">
+                                <label for="imprmirAnexos" class="control-label">Imprimir Anexos na A4?</label>
+                                <div class="controls">
+                                    <select name="imprmirAnexos" id="imprmirAnexos">
+                                        <option value="true">Sim</option>
+                                        <option value="false" <?= !filter_var($_ENV['IMPRIMIR_ANEXOS'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'selected' : ''; ?>>Não</option>
+                                    </select>
+                                    <span class="help-inline">Gostaria de imprimir os Anexos na impressão A4?</span>
                                 </div>
                             </div>
                         </div>
