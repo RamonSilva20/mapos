@@ -587,7 +587,7 @@
     
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Em Aberto</h5>
+            <h5 class="cardHeader">Ordens de Serviços Em Aberto</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -682,7 +682,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Aprovadas</h5>
+            <h5 class="cardHeader">Ordens de Serviços Aprovadas</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
@@ -776,7 +776,7 @@
 
     <div class="widget-box0 widbox-blak">
         <div>
-            <h5 class="cardHeader">Ordens de Serviço Finalizadas</h5>
+            <h5 class="cardHeader">Ordens de Serviços Finalizadas</h5>
         </div>
         <div class="widget-content">
             <table class="table table-bordered">
