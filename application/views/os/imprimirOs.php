@@ -124,7 +124,7 @@
                 <?php endif; ?>
 
                 <?php if ($result->laudoTecnico) : ?>
-                    <div class="subtitle">LAUDO TÉCNICO</div>
+                    <div class="subtitle">PARECER TÉCNICO</div>
                     <div class="dados">
                         <div>
                             <?= htmlspecialchars_decode($result->laudoTecnico) ?>
@@ -199,11 +199,16 @@
                 <?php if ($totalProdutos != 0 || $totalServico != 0) : ?>
                     <div class="pagamento">
                         <div class="qrcode">
-                            <div><img width="130px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></div>
-                            <div style="display: flex; flex-wrap: wrap; align-content: center;">
-                                <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
-                                <div class="chavePix">Chave Pix: <b><?= $chaveFormatada ?></b></div>
-                            </div>
+                            <?php if ($this->data['configuration']['pix_key']) : ?>
+                                <div><img width="130px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></div>
+                                <div style="display: flex; flex-wrap: wrap; align-content: center;">
+                                    <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
+                                    <div class="chavePix">Chave Pix: <b><?= $chaveFormatada ?></b></div>
+                                </div>
+                            <?php else: ?>
+                                <div></div>
+                                <div></div>
+                            <?php endif; ?>
                         </div>
                         <div>
                             <div class="tabela">
@@ -364,7 +369,7 @@
                     <?php endif; ?>
 
                     <?php if ($result->laudoTecnico) : ?>
-                        <div class="subtitle">LAUDO TÉCNICO</div>
+                        <div class="subtitle">PARECER TÉCNICO</div>
                         <div class="dados">
                             <div>
                                 <?= htmlspecialchars_decode($result->laudoTecnico) ?>
