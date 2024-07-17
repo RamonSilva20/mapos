@@ -82,3 +82,56 @@ textarea {
 .ui-menu {
     z-index: 9999 !important;
 }
+
+.numero-col {
+    width: 2%;
+}
+
+.data-inicial-col {
+    width: 10%;
+}
+
+.data-final-col {
+    width: 10%;
+}
+
+.acoes-col {
+    width: 5%;
+}
+
+.tipo-col {
+    width: 10%;
+}
+
+.cliente-col {
+    width: 25%;
+}
+
+.descricao-col {
+    width: 30%;
+}
+
+.vencimento-col {
+    width: 11%;
+}
+
+.valor-col {
+    width: 8%;
+}
+
+.text-truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lanc-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.lanc-table tbody > tr > td,
+.lanc-table tbody > tr > th {
+    padding: 7px;
+}
