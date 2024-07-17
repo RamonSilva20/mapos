@@ -620,15 +620,27 @@ class Mapos extends MY_Controller {
         $env_file_path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . '.env';
         $env_file = file_get_contents($env_file_path);
 
+        $imprimir_anexos_exists = strpos($env_file, 'IMPRIMIR_ANEXOS') !== false;
+
         foreach ($data as $constante => $valor) {
             if ($constante == 'API_JWT_KEY' && $valor == 'sim') {
                 $base64 = base64_encode(openssl_random_pseudo_bytes(32));
                 $valor = '"' . $base64 . '"';
-                $env_file = str_replace("$constante=" . '"' . $_ENV[$constante] . '"', "$constante={$valor}", $env_file);
+            }
+
+            if ($imprimir_anexos_exists) {
+                if (isset($_ENV[$constante])) {
+                    $env_file = str_replace("$constante=" . (strpos($_ENV[$constante], '"') !== false ? '"' . $_ENV[$constante] . '"' : $_ENV[$constante]), "$constante={$valor}", $env_file);
+                }
             } else {
-                $env_file = str_replace("$constante={$_ENV[$constante]}", "$constante={$valor}", $env_file);
+                if (isset($_ENV[$constante])) {
+                    $env_file = str_replace("$constante=" . (strpos($_ENV[$constante], '"') !== false ? '"' . $_ENV[$constante] . '"' : $_ENV[$constante]), "$constante={$valor}", $env_file);
+                } else {
+                    $env_file .= "\n$constante={$valor}";
+                }
             }
         }
-        return file_put_contents($env_file_path, $env_file) ? true : false;
+
+        return file_put_contents($env_file_path, $env_file) !== false;
     }
 }
