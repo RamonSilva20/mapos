@@ -122,7 +122,7 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Orçamento');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -133,7 +133,7 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aberto');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -145,7 +145,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Finalizado');
         $this->db->order_by('os.idOs', 'DESC');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -156,7 +156,7 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aprovado');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -167,7 +167,7 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aguardando Peças');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -190,7 +190,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where_in('os.status', $status);
         $this->db->order_by('os.idOs', 'DESC');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
@@ -202,7 +202,7 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->where_in('vendas.status', $vstatus);
         $this->db->order_by('vendas.idVendas', 'DESC');
-        $this->db->limit(5);
+        $this->db->limit(10);
 
         return $this->db->get()->result();
     }
