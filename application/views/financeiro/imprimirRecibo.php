@@ -6,7 +6,7 @@ date_default_timezone_set('America/Sao_Paulo');
 <html lang="pt-br">
 
 <head>
-    <title>Câmeras_CFTV</title>
+    <title><?php echo $emitente->nome; ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
