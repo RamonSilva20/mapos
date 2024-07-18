@@ -628,6 +628,9 @@ class Mapos extends MY_Controller {
             } else {
                 if (isset($_ENV[$constante])) {
                     $env_file = str_replace("$constante={$_ENV[$constante]}", "$constante={$valor}", $env_file);
+                } else {
+                    file_put_contents($env_file_path, $env_file . "\n{$constante}={$valor}\n");
+                    $env_file = file_get_contents($env_file_path);
                 }
             }
         }
