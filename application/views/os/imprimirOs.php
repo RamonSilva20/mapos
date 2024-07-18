@@ -288,6 +288,8 @@
                 </header>
                 <section>
                     <div class="title">
+                        <!-- VIA EMPRESA  -->
+                        <?php $totalServico = 0; $totalProdutos = 0; ?>
                         <?php if ($configuration['control_2vias']) : ?><span class="via">Via Empresa</span><?php endif; ?>
                         ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
                         <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
