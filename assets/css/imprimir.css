@@ -93,6 +93,10 @@ section .title .via {
     left: 5px;
 }
 
+.via{
+    display: none;
+}
+
 section .title .emissao {
     font-size: 13px;
     position: absolute;
@@ -234,6 +238,11 @@ footer .assinaturas span {
         background: initial;
         page-break-after: always;
     }
+
+    .via{
+        display: block;
+    }
+    
     #anexos {
         display: block;
     }
