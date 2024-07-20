@@ -501,7 +501,6 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -553,10 +552,6 @@
                                     <?= $o->nomeCliente ?>
                                 </td>
 
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-
                                 <td><?php if ($o->dataFinal != null) {
                                     echo date('d/m/Y', strtotime($o->dataFinal));
                                 } else {
@@ -595,7 +590,6 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -647,10 +641,6 @@
                                     <?= $o->nomeCliente ?>
                                 </td>
 
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-
                                 <td><?php if ($o->dataFinal != null) {
                                     echo date('d/m/Y', strtotime($o->dataFinal));
                                 } else {
@@ -690,7 +680,6 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -742,10 +731,6 @@
                                     <?= $o->nomeCliente ?>
                                 </td>
 
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-
                                 <td><?php if ($o->dataFinal != null) {
                                     echo date('d/m/Y', strtotime($o->dataFinal));
                                 } else {
@@ -784,7 +769,6 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -836,10 +820,6 @@
                                     <?= $o->nomeCliente ?>
                                 </td>
 
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
-
                                 <td><?php if ($o->dataFinal != null) {
                                     echo date('d/m/Y', strtotime($o->dataFinal));
                                 } else {
@@ -878,7 +858,6 @@
                     <tr>
                         <th>N°</th>
                         <th>Cliente</th>
-                        <th>Data Inicial</th>
                         <th>Data Final</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -928,9 +907,6 @@
                                 <td class="cli1">
                                     <?= $o->nomeCliente ?>
                                 </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($o->dataInicial)) ?>
-                                </td>
 
                                 <td><?php if ($o->dataFinal != null) {
                                     echo date('d/m/Y', strtotime($o->dataFinal));
@@ -964,15 +940,14 @@
             <h5 class="cardHeader">Status de Vendas</h5>
         </div>
         <div class="widget-content">
-            <table class="table table-bordered">
+            <table class="table table-bordered lanc-table">
                 <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
+                        <th class="numero-col">N°</th>
+                        <th class="cliente-col">Cliente</th>
+                        <th class="data-final-col">Data da Venda</th>
+                        <th class="status-col">Status</th>
+                        <th class="acoes-col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1020,16 +995,10 @@
                                 <td class="cli1">
                                     <?= $v->nomeCliente ?>
                                 </td>
-
                                 <td>
                                     <?= date('d/m/Y', strtotime($v->dataVenda)) ?>
                                 </td>
-                                <td><?php if ($v->dataVenda != null) {
-                                        echo date('d/m/Y', strtotime($v->dataVenda));
-                                    } else {
-                                        echo "";
-                                    } ?>
-                                </td>
+                                
                                     <td>
                                         <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span>
                                     </td>

@@ -84,7 +84,7 @@ textarea {
 }
 
 .numero-col {
-    width: 2%;
+    width: 3%;
 }
 
 .data-inicial-col {
@@ -104,19 +104,23 @@ textarea {
 }
 
 .cliente-col {
-    width: 25%;
+    width: 20%;
+}
+
+.status-col {
+    width: 12%;
 }
 
 .descricao-col {
-    width: 30%;
+    width: 20%;
 }
 
 .vencimento-col {
-    width: 11%;
+    width: 10%;
 }
 
 .valor-col {
-    width: 8%;
+    width: 10%;
 }
 
 .text-truncate {
