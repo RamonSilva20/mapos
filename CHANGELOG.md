@@ -4,9 +4,60 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.46.0] - 2024-04-11
+## [4.46.0] - 2024-07-20
+### Added
+- Desenvolvimento de API para o APP. [@juliolobo](https://github.com/juliolobo)
+- Adicionado opção de alterar configurações da API no menu configurações. [@juliolobo](https://github.com/juliolobo)
+- Melhorias no setor de vendas para admin. [@cabralwms](https://github.com/cabralwms)
+- Adicionadas configurações dos gateways de pagamento e de email no menu configurações. [@juliolobo](https://github.com/juliolobo)
+- Padronizando area do cliente com vendas. [@cabralwms](https://github.com/cabralwms)
+- Adicionado campo situação nos usuarios. [@cabralwms](https://github.com/cabralwms)
+- Padronizando area cliente compras. [@cabralwms](https://github.com/cabralwms)
+- Atualização de instruções. [@exosinfor](https://github.com/exosinfor)
+- Padronização do emitente. [@barretowiisk](https://github.com/barretowiisk)
+- Agrupamento botão imprimir. [@barretowiisk](https://github.com/barretowiisk)
+- Melhorias visualizar OS/PIX. [@barretowiisk](https://github.com/barretowiisk)
+- Nova página imprimirOs. [@juliolobo](https://github.com/juliolobo)
+- Adicionado condicional para QRCode. [@juliolobo](https://github.com/juliolobo)
+- Atualização painel com informações (BÔNUS). [@juliolobo](https://github.com/juliolobo)
+
 ### Fixed
-- Autenticação em rede local [@juliolobo](https://github.com/juliolobo)
+- Correção no painel cliente. [@cabralwms](https://github.com/cabralwms)
+- Refatoraçaõ de código. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Só trata data de pagamento se a mesma for informada. [@juliolobo](https://github.com/juliolobo)
+- Erro ao buscar pelo cliente na lista de OS. [@juliolobo](https://github.com/juliolobo)
+- Removendo busca por documento em autoCompleteUsuario na Os_model. [@juliolobo](https://github.com/juliolobo)
+- Correção sobreposição do menu autocomplete OS. [@cabralwms](https://github.com/cabralwms)
+- Ajustado seed de configurações. [@gdk-dev](https://github.com/gdk-dev)
+- Mantendo os valores pesquisados na pagination de OS. [@juliolobo](https://github.com/juliolobo)
+- Adicionado busca e ajuste na paginação. [@juliolobo](https://github.com/juliolobo)
+- Removido email do técnico da mensagem. [@juliolobo](https://github.com/juliolobo)
+- Correção lançamento de valor com centavos. [@cabralwms](https://github.com/cabralwms)
+- Correção migration vendas. [@cabralwms](https://github.com/cabralwms)
+- Ajustes de segurança de requisições da API. [@juliolobo](https://github.com/juliolobo)
+- Usando $_SERVER["HTTP_AUTHORIZATION"] para o App autenticar no mapos na rede local. [@juliolobo](https://github.com/juliolobo)
+- Persistindo busca na paginação da listagem de vendas. [@juliolobo](https://github.com/juliolobo)
+- Passando possibilidade de reGenToken na validação do token. [@juliolobo](https://github.com/juliolobo)
+- Correção em REST controller. [@Wilmerson](https://github.com/willph)
+- Adicionando uma coluna para exibir se é fornecedor ou cliente. [@janeiaraujo](https://github.com/janeiaraujo)
+- Correção faturar vendas. [@cabralwms](https://github.com/cabralwms)
+- Correção condição vendas finalizada e faturada. [@cabralwms](https://github.com/cabralwms)
+- Melhorias e correções em visualizar os, imprimir os e views OS. [@cabralwms](https://github.com/cabralwms).
+- Correção menor de escrição. [@exosinfor](https://github.com/exosinfor)
+- Atualização auto instalador. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em link de pagamento ASAAS. [@Wilmerson](https://github.com/willph)
+- Correção em calculo de margem dos produtos. [@lukasabino](https://github.com/lukasabino)
+- Correções setores de vendas admin, impressão e espaços. [@cabralwms](https://github.com/cabralwms)
+- Correção do calendário status aprovado. [@cabralwms](https://github.com/cabralwms)
+- Corrigindo buscas por cpf, autocomplete com cpf. [@cabralwms](https://github.com/cabralwms)
+- Padronizar dados clientes em vendas. [@cabralwms](https://github.com/cabralwms)
+- Ajuste na paginação de OS na API. [@juliolobo](https://github.com/juliolobo)
+- Ajuste IMPRIMIR_ANEXOS. [@juliolobo](https://github.com/juliolobo)
+- Ajuste para não exibir QRCode na via empresa caso não tenha cheve Pix. [@juliolobo](https://github.com/juliolobo)
+- Verifica se existe a variável no .env antes de tentar modificar. [@juliolobo](https://github.com/juliolobo)
+- Ajuste em imprimirOs. [@Wilmerson](https://github.com/willph)
+- Ajuste em imprimir.css. [@Wilmerson](https://github.com/willph)
+- Fix corrige, na tela do financeiro total de descontos aplicados. [@viniciusvams](https://github.com/viniciusvams)
 
 ### Security Fix
 - XSS Clean em requisições da API
@@ -21,9 +72,6 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Informando ao Log de qual OS o serviço foi excluido. [@juliolobo](https://github.com/juliolobo)
 - Atualização do gerencianet para Efipay. [@cabralwms](https://github.com/cabralwms)
 - Ajustes ao adicionar "riscado" em algum texto pelo editor trumbowyg. [@juliolobo](https://github.com/juliolobo)
-- Correção do Calendário Status Aprovado. [@cabralwms](https://github.com/cabralwms)
-- Corrigindo buscas por cpf, autocomplete com cpf. [@cabralwms](https://github.com/cabralwms)
-- Padronizar dados Clientes em Vendas. [@cabralwms](https://github.com/cabralwms)
 
 ### Added
 - Uso de variáveis de ambiente (.env) para configuração do sistema. [@Pr3d4dor](https://github.com/Pr3d4dor)
