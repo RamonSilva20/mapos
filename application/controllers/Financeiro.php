@@ -1,5 +1,4 @@
 <?php
-
 if (!defined("BASEPATH")) {
     exit("No direct script access allowed");
 }
@@ -408,7 +407,6 @@ class Financeiro extends MY_Controller
                 // if (empty($data['valor_desconto'])) {
                 //     $data['valor_desconto'] =  "0";
                 // }
-
                 $this->financeiro_model->add1("lancamentos", $data1);
 
                 $loops = 1;
@@ -456,7 +454,6 @@ class Financeiro extends MY_Controller
                     // if (empty($data['valor_desconto'])) {
                     //     $data['valor_desconto'] =  "0";
                     // }
-
                     if (
                         $this->financeiro_model->add("lancamentos", $data) ==
                         true
@@ -641,7 +638,6 @@ class Financeiro extends MY_Controller
             $valor_desconto = floatval(
                 $this->input->post("valor_desconto_editar")
             ); // valor do total + desconto
-
             $valor_total = $valor + $valor_desconto; //90 + 10=100
             $valor_com_desconto = $valor_total - $valor_desconto;
 

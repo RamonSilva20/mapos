@@ -1,6 +1,6 @@
 <?php
-
-if (!defined("BASEPATH")) {
+if (!defined("BASEPATH"))
+{
     exit("No direct script access allowed");
 }
 
@@ -11,29 +11,33 @@ class Financeiro_model extends CI_Model
         parent::__construct();
     }
 
-    public function get(
-        $table,
-        $fields,
-        $where = "",
-        $perpage = 0,
-        $start = 0,
-        $one = false,
-        $array = "array"
-    ) {
-        $this->db->select($fields . ", usuarios.*");
-        $this->db->from($table);
-        $this->db->join(
-            "usuarios",
-            "usuarios.idUsuarios = usuarios_id",
-            "left"
-        );
-        $this->db->order_by("data_vencimento", "asc");
-        $this->db->limit($perpage, $start);
-        if ($where) {
-            $this->db->where($where);
+    public function get($table, $fields, $where = "", $perpage = 0, $start = 0, $one = false, $array = "array")
+    {
+        $this
+            ->db
+            ->select($fields . ", usuarios.*");
+        $this
+            ->db
+            ->from($table);
+        $this
+            ->db
+            ->join("usuarios", "usuarios.idUsuarios = usuarios_id", "left");
+        $this
+            ->db
+            ->order_by("data_vencimento", "asc");
+        $this
+            ->db
+            ->limit($perpage, $start);
+        if ($where)
+        {
+            $this
+                ->db
+                ->where($where);
         }
 
-        $query = $this->db->get();
+        $query = $this
+            ->db
+            ->get();
 
         $result = !$one ? $query->result() : $query->row();
 
@@ -42,26 +46,45 @@ class Financeiro_model extends CI_Model
 
     public function getLancamento($id)
     {
-        $this->db->select("*");
-        $this->db->from("lancamentos");
-        $this->db->where("idLancamentos", $id);
+        $this
+            ->db
+            ->select("*");
+        $this
+            ->db
+            ->from("lancamentos");
+        $this
+            ->db
+            ->where("idLancamentos", $id);
 
-        return (array) $this->db->get()->row();
+        return (array)$this
+            ->db
+            ->get()
+            ->row();
     }
 
     public function getTotals($where = "")
     {
-        $this->db->select("
+        $this
+            ->db
+            ->select("
             SUM(case when tipo = 'despesa' then valor - desconto end) as despesas,
             SUM(case when tipo = 'receita' then (IF(valor_desconto = 0, valor, valor_desconto)) end) as receitas
         ");
-        $this->db->from("lancamentos");
+        $this
+            ->db
+            ->from("lancamentos");
 
-        if ($where) {
-            $this->db->where($where);
+        if ($where)
+        {
+            $this
+                ->db
+                ->where($where);
         }
 
-        return (array) $this->db->get()->row();
+        return (array)$this
+            ->db
+            ->get()
+            ->row();
     }
 
     public function getEstatisticasFinanceiro2()
@@ -75,21 +98,35 @@ class Financeiro_model extends CI_Model
                        SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor_desconto END) as total_receita_pendente,
                        SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor_desconto END) as total_despesa_pendente FROM lancamentos";
 
-        return $this->db->query($sql)->row();
+        return $this
+            ->db
+            ->query($sql)->row();
     }
 
     public function getById($id)
     {
-        $this->db->where("idClientes", $id);
-        $this->db->limit(1);
+        $this
+            ->db
+            ->where("idClientes", $id);
+        $this
+            ->db
+            ->limit(1);
 
-        return $this->db->get("clientes")->row();
+        return $this
+            ->db
+            ->get("clientes")
+            ->row();
     }
 
     public function add($table, $data)
     {
-        $this->db->insert($table, $data);
-        if ($this->db->affected_rows() == "1") {
+        $this
+            ->db
+            ->insert($table, $data);
+        if ($this
+            ->db
+            ->affected_rows() == "1")
+        {
             return true;
         }
 
@@ -98,8 +135,13 @@ class Financeiro_model extends CI_Model
 
     public function add1($table, $data1)
     {
-        $this->db->insert($table, $data1);
-        if ($this->db->affected_rows() == "1") {
+        $this
+            ->db
+            ->insert($table, $data1);
+        if ($this
+            ->db
+            ->affected_rows() == "1")
+        {
             return true;
         }
 
@@ -108,10 +150,17 @@ class Financeiro_model extends CI_Model
 
     public function edit($table, $data, $fieldID, $ID)
     {
-        $this->db->where($fieldID, $ID);
-        $this->db->update($table, $data);
+        $this
+            ->db
+            ->where($fieldID, $ID);
+        $this
+            ->db
+            ->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this
+            ->db
+            ->affected_rows() >= 0)
+        {
             return true;
         }
 
@@ -120,9 +169,16 @@ class Financeiro_model extends CI_Model
 
     public function delete($table, $fieldID, $ID)
     {
-        $this->db->where($fieldID, $ID);
-        $this->db->delete($table);
-        if ($this->db->affected_rows() == "1") {
+        $this
+            ->db
+            ->where($fieldID, $ID);
+        $this
+            ->db
+            ->delete($table);
+        if ($this
+            ->db
+            ->affected_rows() == "1")
+        {
             return true;
         }
 
@@ -131,26 +187,40 @@ class Financeiro_model extends CI_Model
 
     public function count($table, $where)
     {
-        $this->db->from($table);
-        if ($where) {
-            $this->db->where($where);
+        $this
+            ->db
+            ->from($table);
+        if ($where)
+        {
+            $this
+                ->db
+                ->where($where);
         }
 
-        return $this->db->count_all_results();
+        return $this
+            ->db
+            ->count_all_results();
     }
 
     public function autoCompleteClienteFornecedor($q)
     {
-        $this->db->select("DISTINCT(cliente_fornecedor) as cliente_fornecedor");
-        $this->db->limit(5);
-        $this->db->like("cliente_fornecedor", $q);
-        $query = $this->db->get("lancamentos");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = [
-                    "label" => $row["cliente_fornecedor"],
-                    "id" => $row["cliente_fornecedor"],
-                ];
+        $this
+            ->db
+            ->select("DISTINCT(cliente_fornecedor) as cliente_fornecedor");
+        $this
+            ->db
+            ->limit(5);
+        $this
+            ->db
+            ->like("cliente_fornecedor", $q);
+        $query = $this
+            ->db
+            ->get("lancamentos");
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result_array() as $row)
+            {
+                $row_set[] = ["label" => $row["cliente_fornecedor"], "id" => $row["cliente_fornecedor"], ];
             }
             echo json_encode($row_set);
         }
@@ -158,16 +228,23 @@ class Financeiro_model extends CI_Model
 
     public function autoCompleteClienteReceita($q)
     {
-        $this->db->select("idClientes, nomeCliente");
-        $this->db->limit(5);
-        $this->db->like("nomeCliente", $q);
-        $query = $this->db->get("clientes");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = [
-                    "label" => $row["nomeCliente"],
-                    "id" => $row["idClientes"],
-                ];
+        $this
+            ->db
+            ->select("idClientes, nomeCliente");
+        $this
+            ->db
+            ->limit(5);
+        $this
+            ->db
+            ->like("nomeCliente", $q);
+        $query = $this
+            ->db
+            ->get("clientes");
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result_array() as $row)
+            {
+                $row_set[] = ["label" => $row["nomeCliente"], "id" => $row["idClientes"], ];
             }
             echo json_encode($row_set);
         }

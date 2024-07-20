@@ -1,6 +1,6 @@
 <?php
-setlocale(LC_TIME, 'portuguese');
-date_default_timezone_set('America/Sao_Paulo');
+setlocale(LC_TIME, "portuguese");
+date_default_timezone_set("America/Sao_Paulo");
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -12,7 +12,7 @@ date_default_timezone_set('America/Sao_Paulo');
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link href="<?=base_url('assets/css/custom.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url("assets/css/custom.css") ?>" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
         body {
@@ -83,16 +83,12 @@ date_default_timezone_set('America/Sao_Paulo');
 <div class="row-fluid">
 <table class="table table-condensed">
 	                       <tbody>
-                                <?php if ($emitente == null)
-{ ?>
+                                <?php if ($emitente == null) { ?>
                                     <tr>
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             </td>
                                     </tr>
-                                <?php
-}
-else
-{ ?>
+                                <?php } else { ?>
                                     <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
                                         <td> <span style="font-size: 17px;"><?php echo $emitente->nome; ?></span> </br>
@@ -102,12 +98,22 @@ else
                                                     <?php echo $emitente->cnpj; ?> </br>
                                                     <span class="icon">
                                                         <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
-                                                        <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?>
+                                                        <?php echo $emitente->rua .
+                                                            ", nº:" .
+                                                            $emitente->numero .
+                                                            ", " .
+                                                            $emitente->bairro .
+                                                            " - " .
+                                                            $emitente->cidade .
+                                                            " - " .
+                                                            $emitente->uf; ?>
                                                     </span> </br> <span>
                                                         <span class="icon">
                                                             <i class="fas fa-comments" style="margin:5px 1px"></i>
                                                             E-mail:
-                                                            <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?>
+                                                            <?php echo $emitente->email .
+                                                                " - Fone: " .
+                                                                $emitente->telefone; ?>
                                                             </br>
                                                             <span class="icon">
                                                                 <i class="fas fa-user-check"></i>
@@ -118,15 +124,15 @@ else
                                        <?php if ($qrCode): ?>
                                         <td style="width: 25%; padding: 0;text-align:center;">
                                             <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?=$qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>'; ?>
+                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' .
+                                                $chaveFormatada .
+                                                "</span>"; ?>
                                         </td>
-                                    <?php
-    endif ?>
+                                    <?php endif; ?>
                                         </td>
                                     </tr>
-                                <?php
-} ?>
+                                <?php } ?>
                             </tbody>
 </table>
 
@@ -148,7 +154,13 @@ else
 
 <p><strong>DESCRI&Ccedil;&Atilde;O: </strong></p>
 
-<p>Recebi(emos) de <?=$lancamento['cliente_fornecedor'] ?> a import&acirc;ncia de R$<?=$lancamento['valor'] ?>  (<?=$valorporescrito ?>), atr&aacute;ves de <?=$lancamento['forma_pgto'] ?>, referente a <?=$lancamento['descricao'] ?>, firmo(amos) o presente.</p>
+<p>Recebi(emos) de <?= $lancamento[
+    "cliente_fornecedor"
+] ?> a import&acirc;ncia de R$<?= $lancamento[
+     "valor"
+ ] ?>  (<?= $valorporescrito ?>), atr&aacute;ves de <?= $lancamento[
+    "forma_pgto"
+] ?>, referente a <?= $lancamento["descricao"] ?>, firmo(amos) o presente.</p>
 
 <p>&nbsp;</p>
 
@@ -157,13 +169,13 @@ else
 <table class="table table-bordered table-condensed" style="padding-top:20px">
 	<tbody>
 		<tr> 
-			<td><?=$emitente->cidade ?> , <?php
-if ($lancamento['data_pagamento'] == '0000-00-00')
-{
-    $lancamento['data_pagamento'] = date("Y-m-d");
-}
+			<td><?= $emitente->cidade ?> , <?php
+ if ($lancamento["data_pagamento"] == "0000-00-00") {
+     $lancamento["data_pagamento"] = date("Y-m-d");
+ }
 
-echo strftime(" %d de %B de %Y", strtotime($lancamento['data_pagamento'])); ?>
+ echo strftime(" %d de %B de %Y", strtotime($lancamento["data_pagamento"]));
+ ?>
 			
 		</td>
 		</tr>
