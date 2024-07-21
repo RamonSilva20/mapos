@@ -91,43 +91,17 @@ date_default_timezone_set("America/Sao_Paulo");
                                 <?php } else { ?>
                                     <tr>
                                         <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
-                                        <td> <span style="font-size: 17px;"><?php echo $emitente->nome; ?></span> </br>
-                                            <span style="font-size: 12px; ">
-                                                <span class="icon">
-                                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i>
-                                                    <?php echo $emitente->cnpj; ?> </br>
-                                                    <span class="icon">
-                                                        <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i>
-                                                        <?php echo $emitente->rua .
-                                                            ", nº:" .
-                                                            $emitente->numero .
-                                                            ", " .
-                                                            $emitente->bairro .
-                                                            " - " .
-                                                            $emitente->cidade .
-                                                            " - " .
-                                                            $emitente->uf; ?>
-                                                    </span> </br> <span>
-                                                        <span class="icon">
-                                                            <i class="fas fa-comments" style="margin:5px 1px"></i>
-                                                            E-mail:
-                                                            <?php echo $emitente->email .
-                                                                " - Fone: " .
-                                                                $emitente->telefone; ?>
-                                                            </br>
-                                                            <span class="icon">
-                                                                <i class="fas fa-user-check"></i>
-                                                             
-                                                            </span>
+                                        <td>
+                                            <span style="font-size: 17px;"><?php echo $emitente->nome; ?></span> </br>
+                                            <span style="font-size: 12px; "><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i><?php echo $emitente->cnpj; ?></br><span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i><?php echo $emitente->rua.", nº:".$emitente->numero.", ".$emitente->bairro." - ".$emitente->cidade." - ".$emitente->uf; ?></span> </br> 
+                                            <span><span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i>E-mail:<?php echo $emitente->email." - Fone: ".$emitente->telefone; ?></br><span class="icon"><i class="fas fa-user-check"></i></span>
                                         </td>
                                         <td style="width: 18%; text-align: center"><span>
                                        <?php if ($qrCode): ?>
                                         <td style="width: 25%; padding: 0;text-align:center;">
                                             <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' .
-                                                $chaveFormatada .
-                                                "</span>"; ?>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: '.$chaveFormatada."</span>"; ?>
                                         </td>
                                     <?php endif; ?>
                                         </td>
@@ -151,17 +125,8 @@ date_default_timezone_set("America/Sao_Paulo");
 </div>
 
 <h1 style="text-align:center"><strong><i class="fas fa-file-invoice fa-xs"></i> Recibo de Pagamento</strong></h1>
-
 <p><strong>DESCRI&Ccedil;&Atilde;O: </strong></p>
-
-<p>Recebi(emos) de <?= $lancamento[
-    "cliente_fornecedor"
-] ?> a import&acirc;ncia de R$<?= $lancamento[
-     "valor"
- ] ?>  (<?= $valorporescrito ?>), atr&aacute;ves de <?= $lancamento[
-    "forma_pgto"
-] ?>, referente a <?= $lancamento["descricao"] ?>, firmo(amos) o presente.</p>
-
+<p>Recebi(emos) de <?= $lancamento["cliente_fornecedor"] ?> a import&acirc;ncia de R$<?= $lancamento["valor"] ?>  (<?= $valorporescrito ?>), atr&aacute;ves de <?= $lancamento["forma_pgto"] ?>, referente a <?= $lancamento["descricao"] ?>, firmo(amos) o presente.</p>
 <p>&nbsp;</p>
 
 &nbsp;
@@ -173,7 +138,6 @@ date_default_timezone_set("America/Sao_Paulo");
  if ($lancamento["data_pagamento"] == "0000-00-00") {
      $lancamento["data_pagamento"] = date("Y-m-d");
  }
-
  echo strftime(" %d de %B de %Y", strtotime($lancamento["data_pagamento"]));
  ?>
 			
@@ -185,10 +149,8 @@ date_default_timezone_set("America/Sao_Paulo");
 </div>
 </div>
 </div>
-
 </div>
 </div>
-
 <script type="text/javascript">
   window.print(); 
 </script>
