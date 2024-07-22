@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.46.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.47.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -75,7 +75,7 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 5. Substitua os arquivos pelos da nova versão.
 6. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
 7. Restaure os backups para seus locais devidos.
-8. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados. 
+8. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
     Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
 9. Pronto, sua atualização está concluída;
 

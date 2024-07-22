@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.47.0] - 2024-07-22
+### Changed
+- Mudança de licença MIT para Apache 2.0. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.46.0] - 2024-07-20
 ### Added
 - Desenvolvimento de API para o APP. [@juliolobo](https://github.com/juliolobo)
