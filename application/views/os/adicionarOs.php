@@ -33,6 +33,8 @@
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value="" />
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
+                                            <div class="addclient"><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
+                                              <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Cliente</a><?php } ?></div>
                                         </div>
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
@@ -114,11 +116,19 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.addclient').hide();
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?php echo base_url(); ?>index.php/vendas/autoCompleteCliente",
             minLength: 1,
+            close: function(ui) { if(ui.label == 'Adicionar cliente...')ui.target.value = '';},
             select: function(event, ui) {
-                $("#clientes_id").val(ui.item.id);
+                if(ui.item.label == 'Adicionar cliente...')
+                    $('.addclient').show();
+                else
+                    {
+                        $("#clientes_id").val(ui.item.id);
+                        $('.addclient').hide();
+                    }
             }
         });
         $("#tecnico").autocomplete({
