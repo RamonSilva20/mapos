@@ -54,12 +54,6 @@ class Audit_model extends CI_Model
 
         return false;
     }
-
-    public function save_log($data)
-    {
-        $this->db->insert('logs', $data);
-        return $this->db->affected_rows() == 1;
-    }
 }
 
 /* End of file Log_model.php */

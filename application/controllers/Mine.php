@@ -259,7 +259,7 @@ class Mine extends CI_Controller
                         'ip' => $_SERVER['REMOTE_ADDR']
                     ];
 
-                    $this->Audit_model->save_log($log_data);
+                    $this->Audit_model->add($log_data);
 
                     echo json_encode(['result' => true]);
                 } else {
