@@ -1,0 +1,137 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.checkout-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.checkout-header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.checkout-header img {
+    max-height: 50px;
+}
+
+.checkout-body {
+    padding: 20px;
+    background-color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code {
+    max-width: 250px;
+    margin: 20px auto;
+}
+
+.qr-code img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #4caf50;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(14px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 20px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  
+  /* Additional CSS for positioning */
+  .span3 a.btn {
+    display: block;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .span3 div {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+.copy-code {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.copy-code textarea {
+    border: none;
+    background: none;
+    width: 100%;
+    resize: none;
+    font-size: 14px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.btn-copy {
+    width: 100%;
+    font-size: 1rem;
+}
+
+.copy-success {
+    display: none;
+    margin-top: 10px;
+}
+
+.upload-success {
+    display: none;
+    margin-top: 10px;
+}

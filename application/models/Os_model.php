@@ -99,6 +99,19 @@ class Os_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function getByPaymentId($payment_url)
+    {
+        $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, clientes.contato as contato_cliente, garantias.refGarantia, garantias.textoGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
+        $this->db->where('os.payment_url', $payment_url);
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
+    }
+
     public function getByIdCobrancas($id)
     {
         $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, garantias.refGarantia, garantias.textoGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome,cobrancas.os_id,cobrancas.idCobranca,cobrancas.status');
@@ -371,5 +384,15 @@ class Os_model extends CI_Model
             ->setMerchantCity($emitente->cidade);
 
         return $pix->getQRCode();
+    }
+
+    public function addComprovante($data)
+    {
+        return $this->db->insert('comprovantes', $data);
+    }
+
+    public function getComprovanteByOsId($os_id = NULL)
+    {
+        return $this->db->get_where('comprovantes', ['os_id' => $os_id])->result();
     }
 }
