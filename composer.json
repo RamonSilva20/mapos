@@ -13,7 +13,9 @@
         "phpoffice/phpword": "^0.18.0",
         "piggly/php-pix": "^2.0",
         "codephix/asaas-sdk": "dev-master",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "ramsey/uuid": "^4.7",
+        "endroid/qr-code": "^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",

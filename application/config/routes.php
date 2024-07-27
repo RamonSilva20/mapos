@@ -43,6 +43,9 @@ if (! defined('BASEPATH')) {
 */
 
 $route['default_controller'] = 'mapos';
+$route['payment/(:any)'] = 'Payment/index/$1';
+$route['payment/details/(:any)'] = 'Payment/details/$1';
+$route['payment/upload_comprovante/(:any)'] = 'Payment/upload_comprovante/$1';
 $route['404_override'] = '';
 
 // Rotas da API
