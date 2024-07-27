@@ -61,7 +61,7 @@
                         <th>Vencimento da Garantia</th>
                         <th>Faturado</th>
                         <th>Status</th>
-                        <th style="text-align:center">Ações</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
             <tbody>
@@ -69,7 +69,7 @@
 
                     if (!$results) {
                         echo '<tr>
-                                <td colspan="5">Nenhuma Venda Cadastrada</td>
+                                <td colspan="7">Nenhuma Venda Cadastrada</td>
                             </tr>';
                     }
                     foreach ($results as $r) {
