@@ -41,6 +41,7 @@
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
                         <div class="controls">
                             <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo set_value('codDeBarra'); ?>" />
+                            <button type="button" class="btn btn-outline-light" onclick="atualizarCodigoDeBarra()"> <i class="icon-plus-sign tip-right" title="Gerar um código de barras no formato EAN-13."></i></button>
                         </div>
                     </div>
                     <div class="control-group">
@@ -112,7 +113,7 @@
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcLucro(precoCompra, margemLucro) {
-        var precoVenda = (precoCompra / (100 - margemLucro)*100).toFixed(2);
+        var precoVenda = (precoCompra / (100 - margemLucro) * 100).toFixed(2);
         return precoVenda;
     }
     $("#precoCompra").focusout(function() {
@@ -142,7 +143,7 @@
         }
     });
 
-    $('#precoVenda').focusout(function () {
+    $('#precoVenda').focusout(function() {
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
@@ -206,4 +207,30 @@
             }
         });
     });
+
+    function calcularDigitoVerificador(codigoParcial) {
+        let soma = codigoParcial.reduce((acc, digit, index) => {
+            return acc + ((index % 2 === 0) ? digit : digit * 3);
+        }, 0);
+
+        const digitoVerificador = (10 - (soma % 10)) % 10;
+        return digitoVerificador;
+    }
+
+    function atualizarCodigoDeBarra() {
+        // Gere 12 números aleatórios
+        let novoCodigoParcial = [];
+        for (let i = 0; i < 12; i++) {
+            novoCodigoParcial.push(Math.floor(Math.random() * 10));
+        }
+
+        // Calcular o dígito verificador
+        const digitoVerificador = calcularDigitoVerificador(novoCodigoParcial);
+
+        // Adicionar o dígito verificador ao código parcial
+        novoCodigoParcial.push(digitoVerificador);
+
+        // Atualizar o valor no campo de entrada
+        document.getElementById('codDeBarra').value = novoCodigoParcial.join('');
+    }
 </script>
