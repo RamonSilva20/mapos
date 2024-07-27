@@ -239,15 +239,34 @@ class Mine extends CI_Controller
             if ($cliente) {
                 // Verificar credenciais do usuário
                 if (password_verify($password, $cliente->senha)) {
-                    $session_mine_data = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
+                    $session_mine_data = [
+                        'nome' => $cliente->nomeCliente, 
+                        'cliente_id' => $cliente->idClientes, 
+                        'email' => $cliente->email, 
+                        'conectado' => true, 
+                        'isCliente' => true
+                    ];
                     $this->session->set_userdata($session_mine_data);
                     log_info($_SERVER['REMOTE_ADDR'] . ' Efetuou login no sistema');
+
+                    // Registrar login na auditoria
+                    $this->load->model('Audit_model');
+                    $log_data = [
+                        'usuario' => $cliente->nomeCliente,
+                        'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
+                        'data' => date('Y-m-d'),
+                        'hora' => date('H:i:s'),
+                        'ip' => $_SERVER['REMOTE_ADDR']
+                    ];
+
+                    $this->Audit_model->add($log_data);
+
                     echo json_encode(['result' => true]);
                 } else {
                     echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
                 }
             } else {
-                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
             }
         }
     }
