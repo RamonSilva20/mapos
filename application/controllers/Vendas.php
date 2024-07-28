@@ -508,9 +508,9 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $venda_id = $this->input->post('vendas_id');
-            $vencimento = $this->input->post('vencimento');
-            $recebimento = $this->input->post('recebimento');
+            $venda_id = $this->input->post('vendas_id', true); // Sanitize input
+            $vencimento = $this->input->post('vencimento', true); // Sanitize input
+            $recebimento = $this->input->post('recebimento', true); // Sanitize input
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -521,42 +521,55 @@ class Vendas extends MY_Controller
                     $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
                 }
             } catch (Exception $e) {
-                $vencimento = date('Y/m/d');
+                $vencimento = date('Y-m-d');
             }
+
             $vendas = $this->vendas_model->getById($venda_id);
+            $valorTotal = $this->input->post('valor', true); // Sanitize input
+            $desconto = $vendas->desconto ? $vendas->desconto : 0; // Desconto aplicado
+            $valorDesconto = $desconto > 0 ? $valorTotal - $desconto : $valorTotal; // Valor total menos desconto, ou valor total se não houver desconto
+
             $data = [
                 'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
-                'valor' => $this->input->post('valor'),
-                'desconto' => $vendas->desconto,
-                'tipo_desconto' => $vendas->tipo_desconto,
-                'valor_desconto' => $vendas->valor_desconto,
-                'clientes_id' => $this->input->post('clientes_id'),
+                'valor' => $valorTotal, // Usar o valor total da venda
+                'desconto' => $desconto, // Valor do desconto
+                'valor_desconto' => $valorDesconto, // Valor total menos desconto, ou valor total se não houver desconto
+                'clientes_id' => $this->input->post('clientes_id', true), // Sanitize input
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
                 'baixado' => $this->input->post('recebido') == 1 ? true : false,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo'),
+                'forma_pgto' => $this->input->post('formaPgto', true), // Sanitize input
+                'tipo' => $this->input->post('tipo', true), // Sanitize input
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
-            if ($this->vendas_model->add('lancamentos', $data) == true) {
-                $venda = $this->input->post('vendas_id');
+            $this->db->trans_begin(); // Start transaction
 
+            if ($this->vendas_model->add('lancamentos', $data)) {
                 $this->db->set('faturado', 1);
-                $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('valorTotal', $valorTotal); // Atualizar o valor total
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idVendas', $venda_id);
                 $this->db->update('vendas');
 
-                log_info('Faturou uma venda.');
-
-                $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
-                $json = ['result' => true];
-                echo json_encode($json);
-                exit();
+                if ($this->db->trans_status() === false) {
+                    $this->db->trans_rollback();
+                    $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
+                    $json = ['result' => false];
+                    echo json_encode($json);
+                    exit();
+                } else {
+                    $this->db->trans_commit();
+                    log_info('Faturou uma venda.');
+                    $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
+                    $json = ['result' => true];
+                    echo json_encode($json);
+                    exit();
+                }
             } else {
+                $this->db->trans_rollback();
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
                 $json = ['result' => false];
                 echo json_encode($json);
