@@ -508,9 +508,9 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $venda_id = $this->input->post('vendas_id', true); // Sanitize input
-            $vencimento = $this->input->post('vencimento', true); // Sanitize input
-            $recebimento = $this->input->post('recebimento', true); // Sanitize input
+            $venda_id = $this->input->post('vendas_id', true);
+            $vencimento = $this->input->post('vencimento', true);
+            $recebimento = $this->input->post('recebimento', true);
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -525,31 +525,31 @@ class Vendas extends MY_Controller
             }
 
             $vendas = $this->vendas_model->getById($venda_id);
-            $valorTotal = $this->input->post('valor', true); // Sanitize input
-            $desconto = $vendas->desconto ? $vendas->desconto : 0; // Desconto aplicado
-            $valorDesconto = $desconto > 0 ? $valorTotal - $desconto : $valorTotal; // Valor total menos desconto, ou valor total se não houver desconto
+            $valorTotal = $this->input->post('valor', true);
+            $desconto = $vendas->desconto ? $vendas->desconto : 0;
+            $valorDesconto = $desconto > 0 ? $valorTotal - $desconto : $valorTotal;
 
             $data = [
                 'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
-                'valor' => $valorTotal, // Usar o valor total da venda
-                'desconto' => $desconto, // Valor do desconto
-                'valor_desconto' => $valorDesconto, // Valor total menos desconto, ou valor total se não houver desconto
-                'clientes_id' => $this->input->post('clientes_id', true), // Sanitize input
+                'valor' => $valorTotal,
+                'desconto' => $desconto,
+                'valor_desconto' => $valorDesconto,
+                'clientes_id' => $this->input->post('clientes_id', true),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
                 'baixado' => $this->input->post('recebido') == 1 ? true : false,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto', true), // Sanitize input
-                'tipo' => $this->input->post('tipo', true), // Sanitize input
+                'forma_pgto' => $this->input->post('formaPgto', true),
+                'tipo' => $this->input->post('tipo', true),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
-            $this->db->trans_begin(); // Start transaction
+            $this->db->trans_begin();
 
             if ($this->vendas_model->add('lancamentos', $data)) {
                 $this->db->set('faturado', 1);
-                $this->db->set('valorTotal', $valorTotal); // Atualizar o valor total
+                $this->db->set('valorTotal', $valorTotal);
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idVendas', $venda_id);
                 $this->db->update('vendas');
