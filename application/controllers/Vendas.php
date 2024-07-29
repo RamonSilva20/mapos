@@ -497,7 +497,7 @@ class Vendas extends MY_Controller
 
     public function faturar()
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar Vendas');
             redirect(base_url());
         }
@@ -508,9 +508,9 @@ class Vendas extends MY_Controller
         if ($this->form_validation->run('receita') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $venda_id = $this->input->post('vendas_id', true);
-            $vencimento = $this->input->post('vencimento', true);
-            $recebimento = $this->input->post('recebimento', true);
+            $venda_id = $this->input->post('vendas_id');
+            $vencimento = $this->input->post('vencimento');
+            $recebimento = $this->input->post('recebimento');
 
             try {
                 $vencimento = explode('/', $vencimento);
@@ -525,56 +525,73 @@ class Vendas extends MY_Controller
             }
 
             $vendas = $this->vendas_model->getById($venda_id);
-            $valorTotal = $this->input->post('valor', true);
-            $desconto = $vendas->desconto ? $vendas->desconto : 0;
-            $valorDesconto = $desconto > 0 ? $valorTotal - $desconto : $valorTotal;
+
+            $valorTotal = getAmount($this->input->post('valor'));
+            $tipoDesconto = $vendas->tipo_desconto;
+            $valorDesconto = $vendas->desconto;
+
+            // Calcula o valor com desconto
+            if ($tipoDesconto == 'percentual') {
+                $valorDesconto = $valorTotal * ($valorDesconto / 100);
+            } else {
+                $valorDesconto = $valorDesconto;
+            }
+            $valorDesconto = $valorDesconto > $valorTotal ? $valorTotal : $valorDesconto;
+            $valorDesconto = $valorTotal - $valorDesconto;
 
             $data = [
                 'vendas_id' => $venda_id,
                 'descricao' => set_value('descricao'),
                 'valor' => $valorTotal,
-                'desconto' => $desconto,
+                'desconto' => $vendas->desconto,
+                'tipo_desconto' => $vendas->tipo_desconto,
                 'valor_desconto' => $valorDesconto,
-                'clientes_id' => $this->input->post('clientes_id', true),
+                'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
                 'baixado' => $this->input->post('recebido') == 1 ? true : false,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto', true),
-                'tipo' => $this->input->post('tipo', true),
+                'forma_pgto' => $this->input->post('formaPgto'),
+                'tipo' => $this->input->post('tipo'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
             ];
 
-            $this->db->trans_begin();
+            $this->db->trans_start();
 
-            if ($this->vendas_model->add('lancamentos', $data)) {
+            // Insere o registro e obtém o ID gerado
+            $this->db->insert('lancamentos', $data);
+            $idLancamentos = $this->db->insert_id();
+
+            if ($idLancamentos) {
+                // Atualiza a tabela vendas com o idLancamentos
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $valorTotal);
+                $this->db->set('desconto', $vendas->desconto);
+                $this->db->set('valor_desconto', $valorDesconto);
+                $this->db->set('lancamentos_id', $idLancamentos); // Atualiza com o idLancamentos
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idVendas', $venda_id);
                 $this->db->update('vendas');
 
-                if ($this->db->trans_status() === false) {
-                    $this->db->trans_rollback();
+                log_info('Faturou uma venda.');
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
                     $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
                     $json = ['result' => false];
-                    echo json_encode($json);
-                    exit();
                 } else {
-                    $this->db->trans_commit();
-                    log_info('Faturou uma venda.');
                     $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
                     $json = ['result' => true];
-                    echo json_encode($json);
-                    exit();
                 }
             } else {
                 $this->db->trans_rollback();
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
                 $json = ['result' => false];
-                echo json_encode($json);
-                exit();
             }
+
+            echo json_encode($json);
+            exit();
         }
 
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
