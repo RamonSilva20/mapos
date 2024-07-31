@@ -548,12 +548,15 @@ class Vendas extends MY_Controller
             $this->db->trans_begin();
 
             if ($this->vendas_model->add('lancamentos', $data)) {
+                $lancamentos_id = $this->db->insert_id(); // Obtém o ID do lançamento recém-inserido
+            
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $valorTotal);
+                $this->db->set('lancamentos_id', $lancamentos_id); // Salva o ID do lançamento
                 $this->db->set('status', 'Faturado');
                 $this->db->where('idVendas', $venda_id);
                 $this->db->update('vendas');
-
+            
                 if ($this->db->trans_status() === false) {
                     $this->db->trans_rollback();
                     $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
@@ -562,7 +565,7 @@ class Vendas extends MY_Controller
                     exit();
                 } else {
                     $this->db->trans_commit();
-                    log_info('Faturou uma venda.');
+                    log_info('Faturou a Venda de ID: ' . $venda_id);
                     $this->session->set_flashdata('success', 'Venda faturada com sucesso!');
                     $json = ['result' => true];
                     echo json_encode($json);
