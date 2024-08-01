@@ -548,21 +548,46 @@ class Financeiro extends MY_Controller
         $id = $this->input->post('id');
 
         if ($id == null || ! is_numeric($id)) {
-            $json = ['result' => false];
+            $json = ['result' => false, 'message' => 'ID inválido'];
             echo json_encode($json);
-        } else {
-            $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
-            if ($result) {
-                log_info('Removeu um lançamento. ID: ' . $id);
-                $json = ['result' => true];
-                echo json_encode($json);
-            } else {
-                $json = ['result' => false];
-                echo json_encode($json);
-            }
+            exit();
         }
-    }
 
+        // Começa a transação
+        $this->db->trans_start();
+
+        // Atualiza a tabela vendas, removendo o ID do lançamento e alterando o faturado e status
+        $this->db->set('lancamentos_id', null);
+        $this->db->set('faturado', 0);
+        $this->db->set('status', 'Finalizado');
+        $this->db->where('lancamentos_id', $id);
+        $this->db->update('vendas');
+
+        // Exclui o lançamento
+        $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
+
+        if ($result) {
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
+                $json = ['result' => false, 'message' => 'Erro na transação'];
+            } else {
+                log_info('Excluiu um lançamento. ID: ' . $id);
+                $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
+                $json = ['result' => true];
+            }
+        } else {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
+            $json = ['result' => false, 'message' => 'Erro ao excluir lançamento'];
+        }
+
+        echo json_encode($json);
+        exit();
+    }
+    
     public function autoCompleteClienteFornecedor()
     {
         if (isset($_GET['term'])) {
