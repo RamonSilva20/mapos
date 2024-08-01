@@ -165,6 +165,10 @@ $periodo = $this->input->get('periodo');
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
+                                if ($r->tipo == "receita") {
+                                    echo '<a style="margin-right: 1%" href="'.base_url()."index.php/financeiro/imprimirRecibo/".$r->idLancamentos.'" target="_blank" class="btn-nwe6" title="Imprimir Recibo"><i class="bx bx-printer bx-xs"></i></a>';
+                                }
+                            
                             }
 
                             echo '</td>';
