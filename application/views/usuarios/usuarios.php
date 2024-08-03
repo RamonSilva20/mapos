@@ -2,10 +2,12 @@
     select {
         width: 70px;
     }
+
     .situacao-ativo {
         background-color: #00cd00;
         color: white;
     }
+
     .situacao-inativo {
         background-color: #ff0000;
         color: white;
@@ -42,12 +44,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($results)): ?>
+                    <?php if (empty($results)) : ?>
                         <tr>
                             <td colspan="8">Nenhum Usuário Cadastrado</td>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($results as $r): ?>
+                    <?php else : ?>
+                        <?php foreach ($results as $r) : ?>
                             <tr>
                                 <td><?= $r->idUsuarios ?></td>
                                 <td><?= $r->nome ?></td>
@@ -59,7 +61,12 @@
                                 $situacaoClasse = ($r->situacao == 1) ? 'situacao-ativo' : 'situacao-inativo';
                                 ?>
                                 <td><span class="badge <?= $situacaoClasse ?>"><?= ucfirst($situacao) ?></span></td>
-                                <td><?= $r->dataExpiracao ?></td>
+                                <td>
+                                    <?php
+                                    $dataExpiracao = new DateTime($r->dataExpiracao);
+                                    echo $dataExpiracao->format('d/m/Y');
+                                    ?>
+                                </td>
                                 <td>
                                     <a href="<?= base_url('index.php/usuarios/editar/' . $r->idUsuarios) ?>" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
                                 </td>

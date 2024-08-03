@@ -126,13 +126,13 @@
                         <div class="control-group">
                             <label for="email" class="control-label">Email</label>
                             <div class="controls">
-                                <input id="email" type="text" name="email" value="<?php echo $result->email; ?>" />
+                                <input id="email" type="text" name="email" autocomplete="off" value="<?php echo $result->email; ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
-                                <input id="senha" type="password" name="senha" value="" placeholder="Não preencha se não quiser alterar." />
+                                <input id="senha" type="password" name="senha" autocomplete="new-password" value="" placeholder="Não preencha se não quiser alterar." />
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>

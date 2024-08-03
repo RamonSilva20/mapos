@@ -124,7 +124,7 @@ $periodo = $this->input->get('periodo');
 
                         if (!$results) {
                             echo '<tr>
-              <td colspan="9" >Nenhum lançamento encontrado</td>
+              <td colspan="12" >Nenhum lançamento encontrado</td>
             </tr>';
                         }
                         foreach ($results as $r) {
@@ -981,8 +981,8 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                     $('#vencimento_ate').val(today.endOf('year').format('DD/MM/YYYY'));
                     break;
                 case 'personalizado':
-                    $('#vencimento_de').val('00/00/0000');
-                    $('#vencimento_ate').val('00/00/0000');
+                    $('#vencimento_de').val('').prop('required', true);
+                    $('#vencimento_ate').val('').prop('required', true);
                     break;
             }
         });
