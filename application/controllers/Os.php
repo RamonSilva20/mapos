@@ -1016,23 +1016,30 @@ class Os extends MY_Controller
             $recebimento = $this->input->post('recebimento');
 
             try {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
-
+                $vencimento = DateTime::createFromFormat('d/m/Y', $vencimento)->format('Y-m-d');
                 if ($recebimento != null) {
-                    $recebimento = explode('/', $recebimento);
-                    $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
+                    $recebimento = DateTime::createFromFormat('d/m/Y', $recebimento)->format('Y-m-d');
                 }
             } catch (Exception $e) {
-                $vencimento = date('Y/m/d');
+                $vencimento = date('Y-m-d');
             }
-            $os = $this->os_model->getById($this->input->post('os_id'));
+
+            $os_id = $this->input->post('os_id');
+            $valorTotalData = $this->os_model->valorTotalOS($os_id);
+
+            $valorTotalServico = $valorTotalData['totalServico'];
+            $valorTotalProduto = $valorTotalData['totalProdutos'];
+            $valorDesconto = $valorTotalData['valor_desconto'];
+
+            $valorTotal = $valorTotalServico + $valorTotalProduto;
+            $valorTotalComDesconto = $valorTotal - $valorDesconto;
+
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => getAmount($this->input->post('valor')),
-                'tipo_desconto' => ($this->input->post('tipoDesconto')),
-                'desconto' => $os->desconto,
-                'valor_desconto' => $os->valor_desconto,
+                'valor' => $valorTotal,
+                'tipo_desconto' => 'real',
+                'desconto' => ($valorDesconto > 0) ? $valorTotalComDesconto : 0,
+                'valor_desconto' => ($valorDesconto > 0) ? $valorDesconto : $valorTotal,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -1042,37 +1049,55 @@ class Os extends MY_Controller
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
+                'os_id' => $os_id,
             ];
 
-            $editavel = $this->os_model->isEditable($this->input->post('idOs'));
-            if (! $editavel) {
+            $this->db->trans_start();
+
+            $editavel = $this->os_model->isEditable($os_id);
+            if (!$editavel) {
+                $this->db->trans_rollback();
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(400)
                     ->set_output(json_encode(['result' => false]));
             }
 
-            if ($this->os_model->add('lancamentos', $data) == true) {
-                $os = $this->input->post('os_id');
-
+            if ($this->os_model->add('lancamentos', $data)) {
                 $this->db->set('faturado', 1);
-                $this->db->set('valorTotal', $this->input->post('valor'));
+                $this->db->set('valorTotal', $valorTotal);
+
+                if ($valorDesconto > 0) {
+                    $this->db->set('desconto', $valorTotalComDesconto);
+                    $this->db->set('valor_desconto', $valorDesconto);
+                } else {
+                    $this->db->set('desconto', 0);
+                    $this->db->set('valor_desconto', $valorTotal);
+                }
+
                 $this->db->set('status', 'Faturado');
-                $this->db->where('idOs', $os);
+                $this->db->where('idOs', $os_id);
                 $this->db->update('os');
 
-                log_info('Faturou uma OS. ID: ' . $os);
+                log_info('Faturou uma OS. ID: ' . $os_id);
 
-                $this->session->set_flashdata('success', 'OS faturada com sucesso!');
-                $json = ['result' => true];
-                echo json_encode($json);
-                exit();
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
+                    $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
+                    $json = ['result' => false];
+                } else {
+                    $this->session->set_flashdata('success', 'OS faturada com sucesso!');
+                    $json = ['result' => true];
+                }
             } else {
+                $this->db->trans_rollback();
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
                 $json = ['result' => false];
-                echo json_encode($json);
-                exit();
             }
+
+            echo json_encode($json);
+            exit();
         }
 
         $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
