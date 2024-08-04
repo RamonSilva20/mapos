@@ -1034,13 +1034,12 @@ class Os extends MY_Controller
             $valorTotal = $valorTotalServico + $valorTotalProduto;
             $valorTotalComDesconto = $valorTotal - $valorDesconto;
 
-            // Prepara os dados para inserção na tabela 'lancamentos'
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => $valorTotal, // Valor total é sempre atribuído a 'valor'
+                'valor' => $valorTotal,
                 'tipo_desconto' => 'real',
-                'desconto' => ($valorDesconto > 0) ? $valorTotalComDesconto : 0, // Se houver desconto, usa valor com desconto, senão 0
-                'valor_desconto' => ($valorDesconto > 0) ? $valorDesconto : $valorTotal, // Se houver desconto, usa valor do desconto, senão valor total
+                'desconto' => ($valorDesconto > 0) ? $valorTotalComDesconto : 0,
+                'valor_desconto' => ($valorDesconto > 0) ? $valorDesconto : $valorTotal,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -1064,21 +1063,16 @@ class Os extends MY_Controller
                     ->set_output(json_encode(['result' => false]));
             }
 
-            // Inserção dos dados na tabela 'lancamentos'
             if ($this->os_model->add('lancamentos', $data)) {
-                // Atualização dos campos na tabela 'os'
                 $this->db->set('faturado', 1);
                 $this->db->set('valorTotal', $valorTotal);
 
-                // Atualiza tabela 'os'
                 if ($valorDesconto > 0) {
-                    // Se houver desconto
                     $this->db->set('desconto', $valorTotalComDesconto);
                     $this->db->set('valor_desconto', $valorDesconto);
                 } else {
-                    // Se não houver desconto
                     $this->db->set('desconto', 0);
-                    $this->db->set('valor_desconto', $valorTotal); // Valor total é atribuído a valor_desconto
+                    $this->db->set('valor_desconto', $valorTotal);
                 }
 
                 $this->db->set('status', 'Faturado');

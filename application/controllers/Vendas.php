@@ -562,10 +562,9 @@ class Vendas extends MY_Controller
 
             $valorDesconto = $valorDesconto > $valorTotal ? $valorTotal : $valorDesconto;
 
-            // Se não há desconto, o valor_desconto deve ser igual ao valorTotal
             $valorDesconto = $valorTotal - $valorDesconto;
             if ($valorDesconto == $valorTotal) {
-                $valorDesconto = $valorTotal; // Sem desconto
+                $valorDesconto = $valorTotal;
             }
 
             $data = [
@@ -573,7 +572,7 @@ class Vendas extends MY_Controller
                 'descricao' => set_value('descricao'),
                 'valor' => $valorTotal,
                 'desconto' => $vendas->desconto,
-                'tipo_desconto' => 'real', // Defina 'real' aqui
+                'tipo_desconto' => 'real',
                 'valor_desconto' => $valorDesconto,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
