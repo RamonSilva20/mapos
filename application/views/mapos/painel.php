@@ -1033,7 +1033,7 @@
                         <th class="cliente-col">Cliente/Fornecedor</th>
                         <th class="descricao-col">Descrição</th>
                         <th class="vencimento-col">Vencimento</th>
-                        <th class="valor-col">V.T. Pago</th>
+                        <th class="valor-col">V.T. Faturado</th>
                     </tr>
                 </thead>
                 <tbody>

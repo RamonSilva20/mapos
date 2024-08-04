@@ -573,7 +573,7 @@ class Vendas extends MY_Controller
                 'descricao' => set_value('descricao'),
                 'valor' => $valorTotal,
                 'desconto' => $vendas->desconto,
-                'tipo_desconto' => $vendas->tipo_desconto,
+                'tipo_desconto' => 'real', // Defina 'real' aqui
                 'valor_desconto' => $valorDesconto,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
