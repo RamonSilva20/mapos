@@ -1049,7 +1049,6 @@ class Os extends MY_Controller
                 'tipo' => $this->input->post('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
-                'os_id' => $os_id,
             ];
 
             $this->db->trans_start();
