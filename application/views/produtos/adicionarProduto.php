@@ -65,9 +65,19 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
-                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text" placeholder="%" maxlength="3" size="2" />
+                            <input id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
                             <strong><span style="color: red" id="errorAlert"></span><strong>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="Lucro" class="control-label">Lucro</label>
+                        <div class="controls">
+                            <select id="selectLucro" name="selectLucro" style="width: 10.5em;">
+                              <option value="markup">Markup</option>
+                              <option value="margemLucro">Margem de Lucro</option>
+                            </select>
+                            <input style="width: 4em;" id="Lucro" name="Lucro" type="text" placeholder="%" maxlength="3" size="2" />
+                            <i class="icon-info-sign tip-left" title="Markup: Porcentagem aplicada ao valor de compra | Margem de Lucro: Porcentagem aplicada ao valor de venda"></i>
                         </div>
                     </div>
                     <div class="control-group">
@@ -79,7 +89,7 @@
                     <div class="control-group">
                         <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
                         <div class="controls">
-                            <select id="unidade" name="unidade" style="width: 15em;"></select>
+                            <select id="unidade" name="unidade"></select>
                         </div>
                     </div>
                     <div class="control-group">
@@ -111,33 +121,53 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
-    function calcLucro(precoCompra, margemLucro) {
-        var precoVenda = (precoCompra / (100 - margemLucro)*100).toFixed(2);
+    function calcLucro(precoCompra, Lucro) {
+        var lucroTipo = $('#selectLucro').val();
+        var precoVenda;
+        
+        if (lucroTipo === 'markup') {
+            precoVenda = (precoCompra * (1 + Lucro / 100)).toFixed(2);
+        } else if (lucroTipo === 'margemLucro') {
+            precoVenda = (precoCompra / (1 - (Lucro / 100))).toFixed(2);
+        }
+        
         return precoVenda;
     }
-    $("#precoCompra").focusout(function() {
+    
+    function atualizarPrecoVenda() {
+        var precoCompra = Number($("#precoCompra").val());
+        var lucro = Number($("#Lucro").val());
+        
+        if (precoCompra > 0 && lucro >= 0) {
+            $('#precoVenda').val(calcLucro(precoCompra, lucro));
+        }
+    }
+    
+    $("#precoCompra, #Lucro, #selectLucro").on('input change', atualizarPrecoVenda);
+
+    $("#precoCompra, #Lucro").on('input change', function() {
         if ($("#precoCompra").val() == '0.00' && $('#precoVenda').val() != '') {
             $('#errorAlert').text('Você não pode preencher valor de compra e depois apagar.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
             $("#precoCompra").focus();
-        } else {
-            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
+        } else if ($("#precoCompra").val() != '' && $("#Lucro").val() != '') {
+            atualizarPrecoVenda();
         }
     });
 
-    $("#margemLucro").keyup(function() {
+    $("#Lucro").keyup(function() {
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#precoCompra").val() == null || $("#precoCompra").val() == '') {
             $('#errorAlert').text('Preencher valor da compra primeiro.').css("display", "inline").fadeOut(5000);
-            $('#margemLucro').val('');
+            $('#Lucro').val('');
             $('#precoVenda').val('');
             $("#precoCompra").focus();
 
-        } else if (Number($("#margemLucro").val()) >= 0) {
-            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
+        } else if (Number($("#Lucro").val()) >= 0) {
+            $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#Lucro").val())));
         } else {
             $('#errorAlert').text('Não é permitido número negativo.').css("display", "inline").fadeOut(5000);
-            $('#margemLucro').val('');
+            $('#Lucro').val('');
             $('#precoVenda').val('');
         }
     });
@@ -146,11 +176,7 @@
         if (Number($('#precoVenda').val()) < Number($("#precoCompra").val())) {
             $('#errorAlert').text('Preço de venda não pode ser menor que o preço de compra.').css("display", "inline").fadeOut(6000);
             $('#precoVenda').val('');
-            if ($("#margemLucro").val() != "" || $("#margemLucro").val() != null) {
-                $('#precoVenda').val(calcLucro(Number($("#precoCompra").val()), Number($("#margemLucro").val())));
-            }
         }
-
     });
 
     $(document).ready(function() {
