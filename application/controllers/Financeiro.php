@@ -588,13 +588,39 @@ class Financeiro extends MY_Controller
                 );
                 redirect(base_url());
             }
+            
+            // Obtém os dados do lançamento atual
+            $lancamento = $this->financeiro_model->getLancamento($this->uri->segment(3));
 
+            // Verifica se há um valor de desconto e, se houver, usa-o no lugar do valor original
+            if ($lancamento["valor_desconto"] > 0.00) {
+                $lancamento["valor"] = $lancamento["valor_desconto"];
+            }
             $data["cliente"] = $this->financeiro_model->getById(
                 $data["result"]["clientes_id"]
             );
             $emitente = $this->mapos_model->getEmitente();
 
-            $data = ["id" => 3,"qrCode" => $this->os_model->getQrCode($this->uri->segment(3),$this->data["configuration"]["pix_key"],$emitente),"emitente" => $emitente,"chaveFormatada" => $this->formatarChave($this->data["configuration"]["pix_key"]),"lancamento" => $this->financeiro_model->getLancamento($this->uri->segment(3)), "cliente" => ($data["cliente"] = $this->financeiro_model->getById($data["result"]["clientes_id"])),"valorporescrito" => $this->numberToText($this->financeiro_model->getLancamento($this->uri->segment(3))["valor"]),]; $this->load->view("financeiro/imprimirRecibo", $data);
+            // Cria o array de dados
+            $data = [
+                "id" => 3,
+                "qrCode" => $this->os_model->getQrCode(
+                    $this->uri->segment(3),
+                    $this->data["configuration"]["pix_key"],
+                    $emitente
+                ),
+                "emitente" => $emitente,
+                "chaveFormatada" => $this->formatarChave(
+                    $this->data["configuration"]["pix_key"]
+                ),
+                "lancamento" => $lancamento,
+                "cliente" => $this->financeiro_model->getById(
+                    $data["result"]["clientes_id"]
+                ),
+                "valorporescrito" => $this->numberToText(
+                    $lancamento["valor"]
+                ),
+            ];
         }
     }
 
