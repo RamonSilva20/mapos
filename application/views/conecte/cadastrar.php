@@ -58,7 +58,19 @@
             font-weight: 500;
         }
 
+        
+
+        .widget-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* gap:20px; */
+        }
+
         @media (max-width: 480px) {
+            .row-fluid {
+                display: block;
+            }
+            
             form {
                 display: block !important;
             }
@@ -70,16 +82,61 @@
             .btn-xs {
                 position: initial !important;
             }
+            .controls {
+                margin-left: 50%;
+            }
+
+            .btn {
+                position: absolute; /* Reposiciona o botão na posição absoluta */
+                width: auto; /* Define a largura automática do botão */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .widget-content {
+                display: block; /* Exibe os campos em bloco */
+            }
+
+            .control-group {
+                margin-bottom: 15px; /* Espaçamento entre os campos */
+            }
+
+            .controls {
+                margin-left: 0; /* Remove o deslocamento à esquerda */
+            }
+
+            .control-group input[type="text"],
+            .control-group input[type="password"],
+            .control-group select {
+                width: 100%; /* Faz os inputs ocuparem toda a largura disponível */
+            }
+
+            .btn {
+                position: static; /* Remove a posição absoluta do botão */
+                width: 100%; /* Faz o botão ocupar a largura total do campo */
+                margin-top: 10px; /* Adiciona espaçamento acima do botão */
+            }
+
+            .form-actions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-actions .span12 {
+                display: flex;
+                justify-content: center;
+            }
         }
     </style>
 
-    <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
+    <div class="row-fluid" style="width: 100vw;height: 96%;display: grid;align-items: center;justify-content: center">
         <div class="widget-box">
             <div class="widget-title">
                 <h5>Cadastre-se no Sistema</h5>
             </div>
             <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
-                <div class="widget-content nopadding tab-content" style="display: grid;grid-template-columns: 1fr 1fr">
+                <div class="widget-content nopadding tab-content">
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">
                         <label for="nomeCliente" class="control-label"><span class="required"></span></label>
