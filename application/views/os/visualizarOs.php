@@ -61,7 +61,7 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar <<<</a></td>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                     </tr>
                                 <?php } ?>
                                 <h3><i class='bx bx-file'></i> Ordem de Serviço #<?php echo sprintf('%04d', $result->idOs) ?></h3>
@@ -87,7 +87,7 @@
                                                 </span></br>
                                             <?php endif; ?>
                                             <?php
-                                            $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro .' - ']);
+                                            $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro . ' - ']);
                                             $endereco = implode(', ', $retorno_end);
                                             echo '<i class="fas fa-map-marker-alt"></i> ';
                                             if (!empty($endereco)) {
@@ -312,19 +312,19 @@
                             </table>
                         <?php } ?>
                         <table class="table table-bordered table-condensed">
-                        <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                            if ($result->valor_desconto != 0) {
-                                echo "<td>";
-                                echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
-                                echo "</td>";
-                            } else {
-                                echo "<td>";
-                                echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                echo "</td>";
-                            }
-                        } ?>
+                            <?php if ($totalProdutos != 0 || $totalServico != 0) {
+                                if ($result->valor_desconto != 0) {
+                                    echo "<td>";
+                                    echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                    echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
+                                    echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
+                                    echo "</td>";
+                                } else {
+                                    echo "<td>";
+                                    echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
+                                    echo "</td>";
+                                }
+                            } ?>
                         </table>
                     </div>
                 </div>
@@ -370,12 +370,12 @@
                 <img id="qrCodeImage" width="50%" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                 <?php echo '<span>Chave PIX: ' . $chaveFormatada . '</span>'; ?></br>
                 <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                        if ($result->valor_desconto != 0) {
-                            echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
-                        } else {
-                            echo "Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.');
-                        }
-                    } ?>
+                    if ($result->valor_desconto != 0) {
+                        echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
+                    } else {
+                        echo "Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.');
+                    }
+                } ?>
             </td>
         </div>
     </div>
@@ -387,23 +387,21 @@
         <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" style="color: #FFF">Fechar</button>
     </div>
 </div>
-
 <script src="https://cdn.rawgit.com/cozmo/jsQR/master/dist/jsQR.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on('click', '.anexo', function (event) {
+    $(document).ready(function() {
+        $(document).on('click', '.anexo', function(event) {
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
             var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
-
             $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
 
         });
 
-        $(document).on('click', '#excluir-anexo', function (event) {
+        $(document).on('click', '#excluir-anexo', function(event) {
             event.preventDefault();
 
             var link = $(this).attr('link');
@@ -417,11 +415,11 @@
                 url: link,
                 dataType: 'json',
                 data: "idOs=" + idOS,
-                success: function (data) {
+                success: function(data) {
                     if (data.result == true) {
                         $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
                     } else {
-                        Swal.fire({
+                        swal({
                             type: "error",
                             title: "Atenção",
                             text: data.mensagem
@@ -432,41 +430,62 @@
         });
     });
 
-    document.getElementById('copyButton').addEventListener('click', function () {
-        var qrCodeImage = document.getElementById('qrCodeImage');
+    $('#copyButton').on('click', function() {
+        var $qrCodeImage = $('#qrCodeImage');
         var canvas = document.createElement('canvas');
-        canvas.width = qrCodeImage.width;
-        canvas.height = qrCodeImage.height;
+        canvas.width = $qrCodeImage.width();
+        canvas.height = $qrCodeImage.height();
         var context = canvas.getContext('2d');
-        context.drawImage(qrCodeImage, 0, 0, qrCodeImage.width, qrCodeImage.height);
+        context.drawImage($qrCodeImage[0], 0, 0, $qrCodeImage.width(), $qrCodeImage.height());
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            navigator.clipboard.writeText(code.data).then(function () {
-                alert('QR Code copiado com sucesso: ' + code.data);
-            }).catch(function (err) {
-                console.error('Erro ao copiar QR Code: ', err);
+            navigator.clipboard.writeText(code.data).then(function() {
+                $('#modal-pix').modal('hide');
+                swal({
+                    type: "success",
+                    title: "Sucesso!",
+                    text: "QR Code copiado com sucesso: " + code.data,
+                    icon: "success",
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+
+            }).catch(function(err) {
+                swal({
+                    type: "error",
+                    title: "Atenção",
+                    text: "Erro ao copiar QR Code: ",
+                    err
+                });
             });
         } else {
-            alert('Não foi possível decodificar o QR Code.');
+            swal({
+                type: "error",
+                title: "Atenção",
+                text: "Não foi possível decodificar o QR Code.",
+            });
         }
     });
 
-    document.getElementById('pixWhatsApp').addEventListener('click', function () {
-        var zapnumber = <?= $zapnumber ?>;
-        var qrCodeImage = document.getElementById('qrCodeImage');
+    $('#pixWhatsApp').on('click', function() {
+        var $qrCodeImage = $('#qrCodeImage');
         var canvas = document.createElement('canvas');
-        canvas.width = qrCodeImage.width;
-        canvas.height = qrCodeImage.height;
+        canvas.width = $qrCodeImage.width();
+        canvas.height = $qrCodeImage.height();
         var context = canvas.getContext('2d');
-        context.drawImage(qrCodeImage, 0, 0, qrCodeImage.width, qrCodeImage.height);
+        context.drawImage($qrCodeImage[0], 0, 0, $qrCodeImage.width(), $qrCodeImage.height());
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + zapnumber + '&text=' + code.data;
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= isset($zapnumber) ? $zapnumber : "" ?> + '&text=' + code.data;
             window.open(whatsappLink, '_blank');
         } else {
-            alert('Não foi possível decodificar o QR Code.');
+            swal({
+                type: "error",
+                title: "Atenção",
+                text: "Não foi possível decodificar o QR Code.",
+            });
         }
     });
 </script>
