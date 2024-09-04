@@ -171,6 +171,10 @@ class Clientes extends MY_Controller
         }
 
         $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Cliente não existe!');
+            redirect('clientes');
+        }
         $this->data['view'] = 'clientes/editarCliente';
 
         return $this->layout();
@@ -190,6 +194,10 @@ class Clientes extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Cliente não existe!');
+            redirect('clientes');
+        }
         $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
         $this->data['result_vendas'] = $this->clientes_model->getAllVendasByClient($this->uri->segment(3));
         $this->data['view'] = 'clientes/visualizar';

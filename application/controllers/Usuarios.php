@@ -169,6 +169,10 @@ class Usuarios extends MY_Controller
         }
 
         $this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Usuário não existe!');
+            redirect('usuarios');
+        }
         $this->load->model('permissoes_model');
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
 

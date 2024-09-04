@@ -112,6 +112,11 @@ class Servicos extends MY_Controller
         }
 
         $this->data['result'] = $this->servicos_model->getById($this->uri->segment(3));
+        
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Serviço não existe!');
+            redirect('servicos');
+        }
 
         $this->data['view'] = 'servicos/editarServico';
 
