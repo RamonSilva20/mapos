@@ -284,6 +284,11 @@ class Os extends MY_Controller
         }
 
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Número de OS não existe!');
+            redirect('os');
+        }
 
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -320,6 +325,10 @@ class Os extends MY_Controller
 
         $this->load->model('mapos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Número de OS não existe!');
+            redirect('os');
+        }
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
@@ -428,6 +437,10 @@ class Os extends MY_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Número de OS não existe!');
+            redirect('os');
+        }
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
@@ -461,6 +474,10 @@ class Os extends MY_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Número de OS não existe!');
+            redirect('os');
+        }
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
@@ -489,6 +506,10 @@ class Os extends MY_Controller
         $this->load->model('mapos_model');
         $this->load->model('usuarios_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Número de OS não existe!');
+            redirect('os');
+        }
         if (! isset($this->data['result']->email)) {
             $this->session->set_flashdata('error', 'O cliente não tem e-mail cadastrado.');
             redirect(site_url('os'));

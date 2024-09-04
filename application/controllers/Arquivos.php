@@ -162,6 +162,10 @@ class Arquivos extends MY_Controller
         }
 
         $this->data['result'] = $this->arquivos_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Arquivo não existe!');
+            redirect('arquivos');
+        }
         $this->data['view'] = 'arquivos/editarArquivo';
 
         return $this->layout();

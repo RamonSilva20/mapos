@@ -241,6 +241,10 @@ class Permissoes extends MY_Controller
         }
 
         $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Permissão não existe!');
+            redirect('permissoes');
+        }
 
         $this->data['view'] = 'permissoes/editarPermissao';
 

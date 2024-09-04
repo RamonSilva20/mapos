@@ -132,6 +132,10 @@ class Produtos extends MY_Controller
         }
 
         $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Produto não existe!');
+            redirect('produtos');
+        }
 
         $this->data['view'] = 'produtos/editarProduto';
 

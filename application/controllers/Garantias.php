@@ -108,6 +108,10 @@ class Garantias extends MY_Controller
         }
 
         $this->data['result'] = $this->garantias_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Termo de garantia não existe!');
+            redirect('garantias');
+        }
         $this->data['view'] = 'garantias/editarGarantia';
 
         return $this->layout();
@@ -128,6 +132,10 @@ class Garantias extends MY_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['result'] = $this->garantias_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Termo de garantia não existe!');
+            redirect('garantias');
+        }
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->data['view'] = 'garantias/visualizarGarantia';
@@ -150,6 +158,10 @@ class Garantias extends MY_Controller
         $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->data['result'] = $this->garantias_model->getById($this->uri->segment(3));
+        if($this->data['result'] == null){
+            $this->session->set_flashdata('error', 'Termo de garantia não existe!');
+            redirect('garantias');
+        }
         $this->data['emitente'] = $this->mapos_model->getEmitente();
 
         $this->load->view('garantias/imprimirGarantia', $this->data);
