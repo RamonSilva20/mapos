@@ -139,7 +139,7 @@
                             <label class="control-label">Tipo de Cliente</label>
                             <div class="controls">
                                 <label for="fornecedor" class="btn btn-default">Fornecedor
-                                    <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="0">
+                                    <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox" value="1">
                                     <span class="badge">&check;</span>
                                 </label>
                             </div>
