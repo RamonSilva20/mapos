@@ -13,16 +13,14 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var dataTableEnabled = '<?= $configuration['control_datatable'] ?>';
-        var tabelaVazia = '<?= empty($results) ? '1' : '0' ?>'; // Verifica se a tabela está vazia
+        var tabelaVazia = '<?= empty($results) ? '1' : '0' ?>';
 
-        if (dataTableEnabled == '1' && tabelaVazia == '0') { // Só inicializa o DataTables se houver resultados
+        if (dataTableEnabled == '1' && tabelaVazia == '0') {
             $('#tabela').dataTable({
                 "ordering": false,
                 "info": false,
                 "language": {
-                    "url": "<?= base_url() ?>assets/js/dataTable_pt-br.json",
-                    "zeroRecords": "Termo de busca não encontrado!"
-
+                    "url": "<?= base_url() ?>assets/js/dataTable_pt-br.json"
                 }
             });
         }
