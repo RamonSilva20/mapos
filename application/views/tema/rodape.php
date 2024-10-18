@@ -12,18 +12,16 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var dataTableEnabled = '<?= $configuration['control_datatable'] ?>';
-        if(dataTableEnabled == '1') {
-            $('#tabela').dataTable( {
+        if (dataTableEnabled == '1') {
+            $('#tabela').dataTable({
                 "ordering": false,
                 "info": false,
                 "language": {
                     "url": "<?= base_url() ?>assets/js/dataTable_pt-br.json",
-                },
-                "oLanguage": {
-                    "sSearch": "Pesquisa rápida na tabela abaixo:"
+                    "search": "Pesquisa rápida na tabela abaixo:" // Substitui "oLanguage"
                 }
-            } );
+            });
         }
-    } );
+    });
 </script>
 </html>
