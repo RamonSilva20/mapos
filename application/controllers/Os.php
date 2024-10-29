@@ -137,7 +137,6 @@ class Os extends MY_Controller
 
                 $tecnico = $this->usuarios_model->getById($os->usuarios_id);
 
-                // Verificar configuração de notificação
                 if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
                     $remetentes = [];
                     switch ($this->data['configuration']['os_notification']) {
@@ -1038,8 +1037,8 @@ class Os extends MY_Controller
                 'descricao' => set_value('descricao'),
                 'valor' => $valorTotal,
                 'tipo_desconto' => 'real',
-                'desconto' => ($valorDesconto > 0) ? $valorTotalComDesconto : 0,
-                'valor_desconto' => ($valorDesconto > 0) ? $valorDesconto : $valorTotal,
+                'desconto' => ($valorDesconto > 0) ? $valorDesconto : 0.00,
+                'valor_desconto' => ($valorDesconto > 0) ? $valorTotalComDesconto : $valorTotal,
                 'clientes_id' => $this->input->post('clientes_id'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $recebimento,
@@ -1067,10 +1066,10 @@ class Os extends MY_Controller
                 $this->db->set('valorTotal', $valorTotal);
 
                 if ($valorDesconto > 0) {
-                    $this->db->set('desconto', $valorTotalComDesconto);
-                    $this->db->set('valor_desconto', $valorDesconto);
+                    $this->db->set('desconto', $valorDesconto);
+                    $this->db->set('valor_desconto', $valorTotalComDesconto);
                 } else {
-                    $this->db->set('desconto', 0);
+                    $this->db->set('desconto', 0.00);
                     $this->db->set('valor_desconto', $valorTotal);
                 }
 
