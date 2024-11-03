@@ -36,6 +36,7 @@
                     <div class="contatoEmitente">
                         <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span><br>
                         <span style="font-weight: bold;"><?= $emitente->email ?></span><br>
+                        <span style="word-break: break-word;">Vendedor: <b><?= $result->nome ?></b></span>
                     </div>
                 <?php endif; ?>
             </header>
