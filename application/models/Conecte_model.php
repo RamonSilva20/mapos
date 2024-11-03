@@ -25,7 +25,7 @@ class Conecte_model extends CI_Model
         $this->db->from('os');
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(5);
+        $this->db->limit(10);
         $this->db->order_by('idOs', 'desc');
 
         return $this->db->get()->result();
@@ -38,7 +38,7 @@ class Conecte_model extends CI_Model
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
         $this->db->order_by('idVendas', 'desc');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(5);
+        $this->db->limit(10);
         $this->db->order_by('idVendas', 'desc');
 
         return $this->db->get()->result();
@@ -141,6 +141,30 @@ class Conecte_model extends CI_Model
         }
 
         return false;
+    }
+
+    public function getQrCode($id, $pixKey, $emitente)
+    {
+        if (empty($id) || empty($pixKey) || empty($emitente)) {
+            return;
+        }
+
+        $result = $this->valorTotalOS($id);
+        $amount = $result['valor_desconto'] != 0 ? round(floatval($result['valor_desconto']), 2) : round(floatval($result['totalServico'] + $result['totalProdutos']), 2);
+
+        if ($amount <= 0) {
+            return;
+        }
+
+        $pix = (new StaticPayload())
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf('%s OS %s', substr($emitente->nome, 0, 18), $id), true)
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade);
+
+        return $pix->getQRCode();
     }
 }
 
