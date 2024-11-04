@@ -206,7 +206,7 @@
                 <img src="<?php echo base_url(); ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
                 <img id="qrCodeImage" width="50%" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                 <?php echo '<span>Chave PIX: ' . $chaveFormatada . '</span>'; ?></br>
-                <?php if ($totalProdutos != 0 || $totalServico != 0) {
+                <?php if ($totalProdutos != 0) {
                     if ($result->valor_desconto != 0) {
                         echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
                     } else {
