@@ -27,8 +27,21 @@ class Mapos extends MY_Controller {
         $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
         $this->data['menuPainel'] = 'Painel';
         $this->data['view'] = 'mapos/painel';
+		$this->data['google_calendarlink'] = $this->mapos_model->getConfigGoogleCalendar();
+		$this->data['mostrar_google_calendar'] = $this->checkConfigGoogleCalendar();
 
         return $this->layout();
+    }
+	
+    private function checkConfigGoogleCalendar()
+    {
+        $config_google_calendar = $this->mapos_model->getConfiguracao('google_calendar');
+
+        if ($config_google_calendar == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function minhaConta()
@@ -419,6 +432,8 @@ class Mapos extends MY_Controller {
         $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
         $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
         $this->form_validation->set_rules('control_edit_vendas', 'Controle de Edição de Vendas', 'required|trim');
+		$this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
+		$this->form_validation->set_rules('google_calendar', 'Controle de Visualização Google', 'required|trim');
         $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
         $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required|trim', ['required' => 'Selecione ao menos uma das opções!']);
         $this->form_validation->set_rules('control_2vias', 'Controle Impressão 2 Vias', 'required|trim');
@@ -473,6 +488,8 @@ class Mapos extends MY_Controller {
                 'control_editos' => $this->input->post('control_editos'),
                 'control_edit_vendas' => $this->input->post('control_edit_vendas'),
                 'control_datatable' => $this->input->post('control_datatable'),
+				'google_calendar' => $this->input->post('google_calendar'),
+				'google_calendarlink' => $this->input->post('google_calendarlink'),
                 'pix_key' => $this->input->post('pix_key'),
                 'os_status_list' => json_encode($this->input->post('os_status_list')),
                 'control_2vias' => $this->input->post('control_2vias'),

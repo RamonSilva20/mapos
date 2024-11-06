@@ -463,4 +463,22 @@ class Mapos_model extends CI_Model
 
         return true;
     }
+	
+	public function getConfigGoogleCalendar()
+	{
+	return $this->db->get_where('configuracoes', array('config' => 'google_calendarlink'))->row()->valor;
+	}
+	
+	public function getConfiguracao($nome)
+    {
+        $this->db->select('valor');
+        $this->db->where('config', $nome);
+        $query = $this->db->get('configuracoes');
+
+        if ($query->num_rows() == 1) {
+            return $query->row()->valor;
+        }
+
+        return null;
+    }
 }

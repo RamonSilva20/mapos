@@ -123,34 +123,56 @@
 </ul>
 <!--End-Action boxes-->
 
-<div class="row-fluid" style="margin-top: 0; display: flex">
-    <div class="Sspan12">
-        <div class="widget-box2">
-            <div>
-                <h5 class="cardHeader">Agenda</h5>
-            </div>
-            <div class="widget-content">
-                <table>
-                    <div id='source-calendar'>
-                        <form method="post">
-                            <select style="padding-left: 30px" class="span12" name="statusOsGet" id="statusOsGet" value="">
-                                <option value="">Todos os Status</option>
-                                <option value="Aberto">Aberto</option>
-                                <option value="Faturado">Faturado</option>
-                                <option value="Negociação">Negociação</option>
-                                <option value="Orçamento">Orçamento</option>
-                                <option value="Em Andamento">Em Andamento</option>
-                                <option value="Finalizado">Finalizado</option>
-                                <option value="Cancelado">Cancelado</option>
-                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                <option value="Aprovado">Aprovado</option>
-                            </select>
-                            <button type="button" class="btn-xs" id="btn-calendar"><i class="bx bx-search iconX2"></i></button>
-                        </form>
-                    </div>
-                </table>
-            </div>
-        </div>
+	<div class="row-fluid" style="margin-top: 0; display: flex">
+		<div class="Sspan12">
+			<div class="widget-box2">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#menu1">Calendário do Sistema</a></li>
+					<?php if ($mostrar_google_calendar): ?>
+					<li><a data-toggle="tab" href="#menu2">Calendário do Google</a></li>
+					<?php endif; ?>
+				</ul>
+				<div class="tab-content">
+					<div id="menu1" class="tab-pane fade in active">
+						<div>
+							<h5 class="cardHeader"></h5>
+						</div>
+						<div class="widget-content">
+							<table>
+								<div id='source-calendar'>
+									<form method="post">
+										<select style="padding-left: 30px" class="span12" name="statusOsGet" id="statusOsGet" value="">
+											<option value="">Todos os Status</option>
+											<option value="Aberto">Aberto</option>
+											<option value="Faturado">Faturado</option>
+											<option value="Negociação">Negociação</option>
+											<option value="Orçamento">Orçamento</option>
+											<option value="Em Andamento">Em Andamento</option>
+											<option value="Finalizado">Finalizado</option>
+											<option value="Cancelado">Cancelado</option>
+											<option value="Aguardando Peças">Aguardando Peças</option>
+											<option value="Aprovado">Aprovado</option>
+										</select>
+										<button type="button" class="btn-xs" id="btn-calendar"><i class="bx bx-search iconX2"></i></button>
+									</form>
+								</div>
+							</table>
+						</div>
+					</div>
+					<?php if ($mostrar_google_calendar): ?>
+					<div id="menu2" class="tab-pane fade">
+						<div>
+							<h5 class="cardHeader"></h5>
+						</div>
+						<div class="widget-content">
+							<table>
+								<iframe src="<?= $google_calendarlink ?>" style="border: 0" width="900" height="500" frameborder="0" scrolling="no"></iframe>
+							</table>
+						</div>
+					</div>
+					<?php endif; ?>
+				</div>
+			</div>
 
         <!-- New widget right -->
         <div class="new-statisc">
