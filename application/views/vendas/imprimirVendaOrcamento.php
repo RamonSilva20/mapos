@@ -195,7 +195,7 @@
                     <span>VENDA <b>#<?= str_pad($result->idVendas, 4, 0, STR_PAD_LEFT) ?></b></span>
                 </div>
                 <div class="vendedor">
-                    <span><b>Vendedor : <?php echo $result->nome; ?> </b></span>
+                    <span>Vendedor : <b><?php echo $result->nome; ?> </b></span>
                 </div>
             </footer>
         </div>
