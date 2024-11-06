@@ -206,6 +206,7 @@ footer .assinaturas span {
 
 footer .vendedor {
     display: flex;
+    text-align: center;
     justify-content: space-around;
 }
 
