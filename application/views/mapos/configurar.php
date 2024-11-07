@@ -66,6 +66,23 @@
                                 <span class="help-inline">Ativar ou desativar a visualização em tabelas dinâmicas</span>
                             </div>
                         </div>
+						<div class="control-group">
+                            <label for="google_calendar" class="control-label">Google Calendar</label>
+                            <div class="controls">
+                                <select name="google_calendar" id="google_calendar">
+									<option value="1" <?= $configuration['google_calendar'] == '1' ? 'selected' : ''; ?>>Ativar</option>
+									<option value="0" <?= $configuration['google_calendar'] == '0' ? 'selected' : ''; ?>>Desativar</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar o Google Calendar</span>
+                            </div>
+                        </div>
+						<div class="google_calendarlink">
+                            <label for="google_calendarlink" class="control-label">Google Calendar Link</label>
+                            <div class="controls">
+                                <input type="text" required name="google_calendarlink" value="<?= $configuration['google_calendarlink']; ?>">
+                                <span class="help-inline">Configurações das minhas agendas>"Seleciona sua agenda">Integrar agenda, e cole aqui o link exibido em "URL público para essa agenda"</span>
+                            </div>
+                        </div>
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
