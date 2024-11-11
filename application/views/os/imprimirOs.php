@@ -45,7 +45,7 @@
                 <div class="title">
                     <?php if ($configuration['control_2vias']) : ?><span class="via">Via cliente</span><?php endif; ?>
                     ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
+                    <span class="emissao">Emissão: <?= date('d/m/Y H:i:s') ?></span>
                 </div>
 
                 <?php if ($result->dataInicial != null): ?>
