@@ -7,7 +7,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [4.47.0] - 2024-07-22
 ### Changed
 - Mudança de licença MIT para Apache 2.0. [@Pr3d4dor](https://github.com/Pr3d4dor)
-
+- Adicionado a hora na impressão. [@fwsund](https://github.com/fwsund)
 ## [4.46.0] - 2024-07-20
 ### Added
 - Desenvolvimento de API para o APP. [@juliolobo](https://github.com/juliolobo)
