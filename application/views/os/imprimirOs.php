@@ -99,7 +99,7 @@
                 <?php if ($result->descricaoProduto) : ?>
                     <div class="subtitle">DESCRIÇÃO</div>
                     <div class="dados">
-                        <div>
+                        <div style="text-align: justify;">
                             <?= htmlspecialchars_decode($result->descricaoProduto) ?>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                 <?php if ($result->defeito) : ?>
                     <div class="subtitle">DEFEITO APRESENTADO</div>
                     <div class="dados">
-                        <div>
+                        <div style="text-align: justify;">
                             <?= htmlspecialchars_decode($result->defeito) ?>
                         </div>
                     </div>
@@ -117,20 +117,20 @@
                 <?php if ($result->observacoes) : ?>
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
-                        <div>
+                        <div style="text-align: justify;">
                             <?= htmlspecialchars_decode($result->observacoes) ?>
                         </div>
                     </div>
                 <?php endif; ?>
 
                 <?php if ($result->laudoTecnico) : ?>
-                    <div class="subtitle">PARECER TÉCNICO</div>
-                    <div class="dados">
-                        <div>
-                            <?= htmlspecialchars_decode($result->laudoTecnico) ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
+					<div class="subtitle">PARECER TÉCNICO</div>
+							<div class="dados">
+									<div style="text-align: justify;">
+						<?= htmlspecialchars_decode($result->laudoTecnico) ?>
+						</div>
+						</div>
+					<?php endif; ?>
 
                 <?php if ($produtos) : ?>
                     <div class="tabela">
