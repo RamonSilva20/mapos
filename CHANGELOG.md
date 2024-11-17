@@ -4,6 +4,25 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.48.0] - 2024-11-17
+### Added
+- Adicionando a hora as impressões de OS e Vendas. [@fwsund](https://github.com/fwsund)
+
+### Fixed
+- Correções e melhorias em servicos.php, clientes.php, produtos.php. [@apoionacional](https://github.com/apoionacional)
+- Mudando permissão para visualizarOs para gerar o zapnumber. [@juliolobo](https://github.com/juliolobo)
+- Correção auditoria para salvar com nome do cliente ao fazer login area do cliente. [@cabralwms](https://github.com/cabralwms)
+- Corrigindo nome do cliente para Responsável. [@cabralwms](https://github.com/cabralwms)
+- Corrigindo faturar com valores em Vendas. [@cabralwms](https://github.com/cabralwms)
+- Correções Lançamentos OS E Vendas. [@cabralwms](https://github.com/cabralwms)
+- Corrigindo campo que não existe. [@cabralwms](https://github.com/cabralwms)
+- ⚗️ fix: corrects product profit margin. [@sidneyferracinjr](https://github.com/sidneyferracinjr)
+- Ajuste no texto de Parceria. [@barretowiisk](https://github.com/barretowiisk)
+- Ajuste Layout Cadastre-se (Área do Cliente). [@barretowiisk](https://github.com/barretowiisk)
+- Correção de Bugs e Padronização Vendas e Area Cliente. [@cabralwms](https://github.com/cabralwms)
+- Update .htaccess. [@Wilmerson](https://github.com/willph)
+- Reorganizar Status das OS para um fluxo mais natural. [@exosinfor](https://github.com/exosinfor)
+
 ## [4.47.0] - 2024-07-22
 ### Changed
 - Mudança de licença MIT para Apache 2.0. [@Pr3d4dor](https://github.com/Pr3d4dor)
