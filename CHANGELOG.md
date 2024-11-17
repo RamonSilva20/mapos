@@ -9,7 +9,6 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Adicionando a hora as impressões de OS e Vendas. [@fwsund](https://github.com/fwsund)
 
 ### Fixed
-- Correções e melhorias em servicos.php, clientes.php, produtos.php. [@apoionacional](https://github.com/apoionacional)
 - Mudando permissão para visualizarOs para gerar o zapnumber. [@juliolobo](https://github.com/juliolobo)
 - Correção auditoria para salvar com nome do cliente ao fazer login area do cliente. [@cabralwms](https://github.com/cabralwms)
 - Corrigindo nome do cliente para Responsável. [@cabralwms](https://github.com/cabralwms)
