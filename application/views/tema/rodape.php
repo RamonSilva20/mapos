@@ -8,24 +8,22 @@
 <!--end-Footer-part-->
 <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
 <script src="<?= base_url() ?>assets/js/matrix.js"></script>
+</body>
 <script type="text/javascript">
     $(document).ready(function() {
-        var table = $('#tabela').DataTable({
-            info: false,
-            language: {
-                url: "<?= base_url() ?>assets/js/dataTable_pt-br.json"
-            },
-            pageLength: 6
-        });
-        $('#customSearch').on('keyup', function() {
-            table.search(this.value).draw();
-        });
-    });
+        var dataTableEnabled = '<?= $configuration['control_datatable'] ?>';
+        if(dataTableEnabled == '1') {
+            $('#tabela').dataTable( {
+                "ordering": false,
+                "info": false,
+                "language": {
+                    "url": "<?= base_url() ?>assets/js/dataTable_pt-br.json",
+                },
+                "oLanguage": {
+                    "sSearch": "Pesquisa rápida na tabela abaixo:"
+                }
+            } );
+        }
+    } );
 </script>
-<style>
-    #tabela_filter, #tabela_length {
-        display: none;
-    }
-</style>
-
 </html>
