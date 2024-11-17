@@ -42,7 +42,7 @@
             <section>
                 <div class="title">
                     ORÇAMENTO DA VENDA Nº#<?= str_pad($result->idVendas, 4, 0, STR_PAD_LEFT) ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
+                    <span class="emissao">Emissão: <?= date('d/m/Y H:i:s') ?></span>
                 </div>
 
                 <?php if ($result->dataVenda != null): ?>

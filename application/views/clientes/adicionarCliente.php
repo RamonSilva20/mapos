@@ -125,13 +125,13 @@
                         <div class="control-group">
                             <label for="email" class="control-label">Email</label>
                             <div class="controls">
-                                <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" />
+                                <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" autocomplete="off" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="senha" class="control-label">Senha</label>
                             <div class="controls">
-                                <input class="form-control" id="senha" type="password" name="senha" value="<?php echo set_value('senha'); ?>" />
+                                <input class="form-control" id="senha" type="password" name="senha" autocomplete="new-password" value="<?php echo set_value('senha'); ?>" />
                                 <img id="imgSenha" src="<?php echo base_url() ?>assets/img/eye.svg" alt="">
                             </div>
                         </div>

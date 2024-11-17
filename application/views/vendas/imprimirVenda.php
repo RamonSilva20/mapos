@@ -60,7 +60,7 @@
                             <tbody>
                                 <tr>
                                     <td class="text-center"><?= $result->status ?></td>
-                                    <td class="text-center"><?= date('d/m/Y', strtotime($result->dataVenda)) ?></td>
+                                    <td class="text-center"><?= date('d/m/Y H:i:s', strtotime($result->dataVenda)) ?></td>
                                     <td class="text-center">
                                         <?php if ($result->garantia > 0): ?>
                                             <?= $result->garantia . ' dia(s)' ?>
