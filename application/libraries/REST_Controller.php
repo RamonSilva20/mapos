@@ -2228,6 +2228,40 @@ abstract class REST_Controller extends CI_Controller
         return $this->user;
     }
 
+    public function logged_client($reGenToken = false)
+    {
+        $headers = $this->input->request_headers();
+
+        $this->CI = &get_instance();
+        $this->CI->load->config('jwt');
+        $token_header = $this->config->item('token_header');
+
+        if (! isset($_SERVER["HTTP_AUTHORIZATION"])) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça login para acessar a API.',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+            $this->response(['Authentication failed'], REST_Controller::HTTP_OK);
+        }
+
+        $this->load->library('Authorization_Token');
+        $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1], $reGenToken);
+
+        if (! $reGenToken && ! $decodedToken->status) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
+
+        $this->load->model('Clientes_model');
+        $this->client = $decodedToken;
+        $this->client->usuario = $this->Clientes_model->getById($decodedToken->data->uid);
+        
+        return $this->client;
+    }
+
     public function getConfig($config)
     {
         $this->CI = &get_instance();
