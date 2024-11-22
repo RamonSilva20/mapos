@@ -101,7 +101,7 @@ class ClientOsController extends REST_Controller
 
         $data = [
             'pix_key' => $data['pix_key'],
-            'result' => $os,
+            'os' => $os,
             'produtos' => $produtos,
             'servicos' => $servicos,
             'anexos' => $anexos,
@@ -113,9 +113,7 @@ class ClientOsController extends REST_Controller
         $this->response([
             'status' => true,
             'message' => 'Listando resultados',
-            'result' => [
-                'Os' => $data,
-            ],
+            'result' => $data,
         ], REST_Controller::HTTP_OK);
     }
 
