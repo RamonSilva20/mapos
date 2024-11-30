@@ -132,7 +132,7 @@
                             echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
                             echo '<td style="text-align:right">';
                             echo '<a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i></a> ';
-                            echo '<a href="' . base_url() . 'index.php/mine/imprimirOs/' . $o->idOs . '" class="btn"> <i class="fas fa-print"></i></a>';
+                            echo '<a href="' . base_url('index.php/mine/imprimirOs/' . $o->idOs) . '" class="btn" target="_blank"> <i class="fas fa-print"></i></a>';
                             echo '</td>';
                             echo '</tr>';
                         }
