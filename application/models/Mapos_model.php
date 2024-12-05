@@ -463,4 +463,26 @@ class Mapos_model extends CI_Model
 
         return true;
     }
+
+    public function updateUserTheme($userId, $theme)
+    {
+        $this->db->set('tema', $theme);
+        $this->db->where('idUsuarios', $userId);
+        return $this->db->update('usuarios');
+    }
+
+    public function getUserTheme($userId)
+    {
+        $this->db->select('tema');
+        $this->db->from('usuarios');
+        $this->db->where('idUsuarios', $userId);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row()->tema;
+        }
+        return null; // Retorna null caso não encontre
+    }
+
+
 }
