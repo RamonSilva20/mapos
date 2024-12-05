@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+
 <head>
   <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
   <meta charset="UTF-8" />
@@ -14,22 +15,22 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/matrix-media.css" />
   <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/fullcalendar.css" />
-  <?php if ($configuration['app_theme'] == 'white') { ?>
+  <?php if ($theme == 'white') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white.css" />
   <?php } ?>
-  <?php if ($configuration['app_theme'] == 'puredark') { ?>
+  <?php if ($theme == 'puredark') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-pure-dark.css" />
   <?php } ?>
-  <?php if ($configuration['app_theme'] == 'darkviolet') { ?>
+  <?php if ($theme == 'darkviolet') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-dark-violet.css" />
   <?php } ?>
-  <?php if ($configuration['app_theme'] == 'darkorange') { ?>
+  <?php if ($theme == 'darkorange') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-dark-orange.css" />
   <?php } ?>
-  <?php if ($configuration['app_theme'] == 'whitegreen') { ?>
+  <?php if ($theme == 'whitegreen') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white-green.css" />
   <?php } ?>
-  <?php if ($configuration['app_theme'] == 'whiteblack') { ?>
+  <?php if ($theme == 'whiteblack') { ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/tema-white-black.css" />
   <?php } ?>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>

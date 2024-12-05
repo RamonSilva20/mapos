@@ -477,6 +477,11 @@ class Mapos extends MY_Controller {
                 'os_status_list' => json_encode($this->input->post('os_status_list')),
                 'control_2vias' => $this->input->post('control_2vias'),
             ];
+            
+            $userId = $this->session->userdata('id_admin');
+            $theme = $this->input->post('app_theme');
+            $temaAtualizado = $this->mapos_model->updateUserTheme($userId, $theme);
+
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
                 redirect(site_url('mapos/configurar'));
@@ -489,6 +494,7 @@ class Mapos extends MY_Controller {
 
         return $this->layout();
     }
+
 
     public function atualizarBanco()
     {

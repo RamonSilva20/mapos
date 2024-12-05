@@ -49,12 +49,28 @@ class MY_Controller extends CI_Controller
     {
         $this->CI = &get_instance();
         $this->CI->load->database();
+    
         $configuracoes = $this->CI->db->get('configuracoes')->result();
-
+    
         foreach ($configuracoes as $c) {
             $this->data['configuration'][$c->config] = $c->valor;
         }
+    
+        $userId = $this->CI->session->userdata('id_admin');
+    
+        if ($userId) {
+            $tema = $this->CI->db->select('tema')
+                                  ->from('usuarios')
+                                  ->where('idUsuarios', $userId)
+                                  ->get()
+                                  ->row();
+    
+            if ($tema) {
+                $this->data['theme'] = $tema->tema;
+            }
+        }
     }
+    
 
     public function layout()
     {
