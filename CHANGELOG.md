@@ -4,6 +4,17 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.49.0] - 2024-12-05
+### Added
+- Implementado endpoints da área do cliente na API json. [@sarkozin](https://github.com/sarkozin)
+
+### Fixed
+- Correção em status da integração com a EFI. [@cabralwms](https://github.com/cabralwms)
+- Correção em impressão na área do cliente. [@cabralwms](https://github.com/cabralwms)
+
+### Changed
+- Atualização na lib symfony-var-dumper. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.48.0] - 2024-11-17
 ### Added
 - Adicionando a hora as impressões de OS e Vendas. [@fwsund](https://github.com/fwsund)
@@ -15,7 +26,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Corrigindo faturar com valores em Vendas. [@cabralwms](https://github.com/cabralwms)
 - Correções Lançamentos OS E Vendas. [@cabralwms](https://github.com/cabralwms)
 - Corrigindo campo que não existe. [@cabralwms](https://github.com/cabralwms)
-- ⚗️ fix: corrects product profit margin. [@sidneyferracinjr](https://github.com/sidneyferracinjr)
+- Corrigido margem de preço em produtos. [@sidneyferracinjr](https://github.com/sidneyferracinjr)
 - Ajuste no texto de Parceria. [@barretowiisk](https://github.com/barretowiisk)
 - Ajuste Layout Cadastre-se (Área do Cliente). [@barretowiisk](https://github.com/barretowiisk)
 - Correção de Bugs e Padronização Vendas e Area Cliente. [@cabralwms](https://github.com/cabralwms)
