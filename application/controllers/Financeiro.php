@@ -265,7 +265,7 @@ class Financeiro extends MY_Controller
                         'data_pagamento' => $recebimento ?: date_format($myDateTime, 'Y-m-d'),
                         'baixado' => 0,
                         'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'clientes_id ' => $this->input->post('idCliente_parc'),
+                        'clientes_id' => $this->input->post('idCliente_parc'),
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
