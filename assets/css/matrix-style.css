@@ -3919,7 +3919,6 @@ form {
   }
 
   #header {
-    background-color: #0d4c8c;
     margin-top      : -7px;
   }
 
@@ -3984,7 +3983,6 @@ form {
   }
 
   #user-nav {
-    width      : 100px;
     margin-left: 7px;
   }
 
@@ -4085,6 +4083,7 @@ form {
   .navebarn {
     align-items: flex-start;
     margin     : 8px 0 20px;
+    margin-top: -50px !important;
   }
 
   .bemv {
