@@ -51,7 +51,7 @@
             <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Ordens de Serviço</h5>
         </div>
-        <div class="widget-content">
+        <div class="widget-content nopadding tab-content">
             <table id="tabela" class="table table-bordered">
                 <thead>
                     <tr>
@@ -151,7 +151,7 @@
             <span class="icon"><i class="fas fa-signal"></i></span>
             <h5>Últimas Compras</h5>
         </div>
-        <div class="widget-content">
+        <div class="widget-content nopadding tab-content">
             <table id="tabela" class="table table-bordered">
                 <thead>
                     <tr>
@@ -241,7 +241,7 @@
                     echo '</tr>';
                 }
             } else {
-                echo '<tr><td colspan="5">Nenhum venda encontrada.</td></tr>';
+                echo '<tr><td colspan="5">Nenhuma compra encontrada.</td></tr>';
             }
 
             ?>
