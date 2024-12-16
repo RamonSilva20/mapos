@@ -271,15 +271,18 @@ class Mine extends CI_Controller
         }
     }
 
-    public function painel()
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
+
+    public function painel() {
+        if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
+        $cliente_id = $this->session->userdata('cliente_id');
+        
         $data['menuPainel'] = 'painel';
-        $data['compras'] = $this->Conecte_model->getLastCompras($this->session->userdata('cliente_id'));
-        $data['os'] = $this->Conecte_model->getLastOs($this->session->userdata('cliente_id'));
+        $data['compras'] = $this->Conecte_model->getLastCompras($cliente_id);
+        $data['os'] = $this->Conecte_model->getLastOs($cliente_id);
+        $data['os'] = $this->Conecte_model->getPagamentosConfirmados($cliente_id);
         $data['output'] = 'conecte/painel';
         $this->load->view('conecte/template', $data);
     }
@@ -328,6 +331,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             } else {
                 $data = [
@@ -343,6 +347,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             }
 
@@ -523,37 +528,59 @@ class Mine extends CI_Controller
         $this->load->view('conecte/template', $data);
     }
 
-    public function visualizarOs($id = null)
+    public function visualizarOs($parametro = null)
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
+        if ($parametro == null) {
             redirect('mine');
         }
 
-        $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
         $this->CI = &get_instance();
         $this->CI->load->database();
 
-        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        // Se o parâmetro for um token (não numérico)
+        if (!is_numeric($parametro)) {
+            $data['result'] = $this->os_model->getByToken($parametro);
+            if (!$data['result']) {
+                $this->session->set_flashdata('error', 'O.S. não encontrada ou token inválido.');
+                redirect('mine');  // Ou redirecione para uma página de erro personalizada
+            }
+        } else {
+            // Verificação de login apenas para acesso por ID
+            if (!session_id() || !$this->session->userdata('conectado')) {
+                redirect('mine');
+            }
+
+            $data['result'] = $this->os_model->getById($parametro);
+            
+            // Verifica se a OS pertence ao cliente logado
+            if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
+                log_message('error', 'Tentativa de acesso não autorizado à O.S. ID: ' . $parametro);
+                $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+                redirect('mine/painel');
+            }
+        }
+
+        // Resto do código permanece igual
+        $data['checklistSelecionado'] = isset($data['result']->checklist) && !empty($data['result']->checklist) ? json_decode($data['result']->checklist, true) : [];
+        
+        $configPix = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object();
+        $data['pix_key'] = $configPix ? $configPix->valor : '';
+        
+        $configAssinatura = $this->CI->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object();
+        $data['usar_assinatura'] = $configAssinatura ? $configAssinatura->valor : '';
+
+        $data['produtos'] = $this->os_model->getProdutos($data['result']->idOs);
+        $data['servicos'] = $this->os_model->getServicos($data['result']->idOs);
+        $data['anexos'] = $this->os_model->getAnexos($data['result']->idOs);
         $data['emitente'] = $this->mapos_model->getEmitente();
         $data['qrCode'] = $this->os_model->getQrCode(
-            $id,
+            $data['result']->idOs,
             $data['pix_key'],
             $data['emitente']
         );
         $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
-
-        if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
         $data['output'] = 'conecte/visualizar_os';
         $this->load->view('conecte/template', $data);
     }
@@ -640,25 +667,38 @@ class Mine extends CI_Controller
         }
 
         $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $data['emitente'] = $this->mapos_model->getEmitente();
-        $data['pix_key'] = $this->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->os_model->getQrCode(
-            $id,
-            $data['pix_key'],
-            $data['emitente']
-        );
-        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);      
+
+        $data['result'] = $this->os_model->getById($id);
+        if (!$data['result']) {
+            $this->session->set_flashdata('error', 'Ordem de Serviço não encontrada.');
+            redirect('mine/painel');
+        }
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
         }
+
+        $data['produtos'] = $this->os_model->getProdutos($id);
+        $data['servicos'] = $this->os_model->getServicos($id);
+        $data['emitente'] = $this->mapos_model->getEmitente();
+
+        $pixConfig = $this->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object();
+        $data['pix_key'] = $pixConfig ? $pixConfig->valor : '';
+
+        $data['qrCode'] = $this->os_model->getQrCode(
+            $id,
+            $data['pix_key'],
+            $data['emitente']
+        );
+
+        $data['checklistSelecionado'] = isset($data['result']->checklist) && !empty($data['result']->checklist) ? json_decode($data['result']->checklist, true) : [];
+        $assinaturaConfig = $this->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object();
+        $data['assinatura'] = $assinaturaConfig ? $assinaturaConfig->valor : '';
+
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
 
         $this->load->view('conecte/imprimirOs', $data);
     }
@@ -673,21 +713,24 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->CI = &get_instance();
         $this->CI->load->database();
+        
+        
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $this->load->model('vendas_model');        
-
-        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
-        $data['emitente'] = $this->mapos_model->getEmitente();
         $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->vendas_model->getQrCode(
+        $data['emitente'] = $this->mapos_model->getEmitente();
+        $data['qrCode'] = $this->os_model->getQrCode(
             $id,
             $data['pix_key'],
             $data['emitente']
         );
         $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
         
+        $this->load->model('vendas_model');
+        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+        $data['emitente'] = $this->mapos_model->getEmitente();
+
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
@@ -728,7 +771,7 @@ class Mine extends CI_Controller
 
         $this->load->view('conecte/imprimirVenda', $data);
     }
-
+    
     public function minha_ordem_de_servico($y = null, $when = null)
     {
         if (($y != null) && (is_numeric($y))) {
@@ -762,6 +805,7 @@ class Mine extends CI_Controller
         }
     }
 
+    // Cadastro de OS pelo cliente
     public function adicionarOs()
     {
         if (! session_id() || ! $this->session->userdata('conectado')) {
@@ -795,8 +839,8 @@ class Mine extends CI_Controller
 
             $data = [
                 'dataInicial' => date('Y-m-d'),
-                'clientes_id' => $this->session->userdata('cliente_id'),
-                'usuarios_id' => $id,
+                'clientes_id' => $this->session->userdata('cliente_id'), //set_value('idCliente'),
+                'usuarios_id' => $id, //set_value('idUsuario'),
                 'dataFinal' => date('Y-m-d'),
                 'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
                 'defeito' => $this->security->xss_clean($this->input->post('defeito')),
@@ -838,6 +882,9 @@ class Mine extends CI_Controller
             $this->load->model('mapos_model');
             $this->load->model('os_model');
 
+            $this->CI = &get_instance();
+            $this->CI->load->database();
+            $this->data['usar_assinatura'] = $this->CI->db->get_where('configuracoes', ['config' => 'usar_assinatura'])->row_object()->valor;
             $this->data['result'] = $this->os_model->getById($id);
             $this->data['produtos'] = $this->os_model->getProdutos($id);
             $this->data['servicos'] = $this->os_model->getServicos($id);
@@ -847,6 +894,8 @@ class Mine extends CI_Controller
                 $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
                 redirect('mine/painel');
             }
+            
+            $this->data['tab'] = isset($_GET['tab']) ? $_GET['tab'] : 0;
 
             $this->data['output'] = 'conecte/detalhes_os';
             $this->load->view('conecte/template', $this->data);
@@ -855,6 +904,7 @@ class Mine extends CI_Controller
         }
     }
 
+    // método para clientes se cadastratem
     public function cadastrar()
     {
         $this->load->model('clientes_model', '', true);
@@ -882,6 +932,7 @@ class Mine extends CI_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
+                'contato' => $this->input->post('contato'),
             ];
 
             $id = $this->clientes_model->add('clientes', $data);
@@ -1114,7 +1165,6 @@ class Mine extends CI_Controller
 
         $this->session->set_userdata('captchaWord', $codigoCaptcha);
     }
-    
 }
 
 /* End of file conecte.php */
