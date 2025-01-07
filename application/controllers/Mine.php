@@ -272,8 +272,9 @@ class Mine extends CI_Controller
     }
 
 
-    public function painel() {
-        if (!session_id() || !$this->session->userdata('conectado')) {
+    public function painel() 
+    {
+        if (! session_id() || ! $this->session->userdata('conectado')) {
             redirect('mine');
         }
 
