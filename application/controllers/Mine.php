@@ -328,6 +328,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             } else {
                 $data = [
@@ -343,6 +344,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             }
 
@@ -882,6 +884,7 @@ class Mine extends CI_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
+                'contato' => $this->input->post('contato'),
             ];
 
             $id = $this->clientes_model->add('clientes', $data);
