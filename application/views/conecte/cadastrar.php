@@ -225,6 +225,13 @@
                     </div>
 
                     <div class="control-group" class="control-label">
+                        <label for="contato" class="control-label"></label>
+                        <div class="controls">
+                            <input id="contato" type="text" placeholder="Contato*" name="contato" value="<?= set_value('contato') ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group" class="control-label">
                         <label for="estado" class="control-label"><span class="required"></span></label>
                         <div class="controls">
                             <select id="estado" name="estado">

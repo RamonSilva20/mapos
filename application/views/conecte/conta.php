@@ -33,6 +33,12 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td style="text-align: right; width: 30%"><strong>Contato</strong></td>
+                                        <td>
+                                            <?php echo $result->contato ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td style="text-align: right"><strong>Documento</strong></td>
                                         <td>
                                             <?php echo $result->documento ?>
