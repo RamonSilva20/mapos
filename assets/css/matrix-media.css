@@ -77,7 +77,7 @@ body {
 
 @media (max-width: 480px) {
 .cardBox {
-	grid-template-columns: repeat(2,1fr);
+	grid-template-columns: repeat(2,[col-start] minmax(100px, 1fr) [col-end]);
 	grid-gap: 13px;
 	margin-bottom: 0;
 }
