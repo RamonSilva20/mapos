@@ -225,7 +225,7 @@
                     </div>
 
                     <div class="control-group" class="control-label">
-                        <label for="contato" class="control-label"><span class="required"></span></label>
+                        <label for="contato" class="control-label"></label>
                         <div class="controls">
                             <input id="contato" type="text" placeholder="Contato*" name="contato" value="<?= set_value('contato') ?>" />
                         </div>
