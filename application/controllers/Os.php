@@ -113,10 +113,10 @@ class Os extends MY_Controller
             }
 
             $data = [
-                'dataInicial' => $dataInicial,
+                'dataInicial' => $this->formatarDataMysql($this->input->post('dataInicial')),
                 'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
-                'dataFinal' => $dataFinal,
+                'dataFinal' => $this->formatarDataMysql($this->input->post('dataFinal')),
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
@@ -216,8 +216,8 @@ class Os extends MY_Controller
             }
 
             $data = [
-                'dataInicial' => $dataInicial,
-                'dataFinal' => $dataFinal,
+                'dataInicial' => $this->formatarDataMysql($this->input->post('dataInicial')),
+                'dataFinal' => $this->formatarDataMysql($this->input->post('dataFinal')),
                 'garantia' => $this->input->post('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
@@ -1177,6 +1177,30 @@ class Os extends MY_Controller
             echo json_encode(['result' => true]);
         } else {
             echo json_encode(['result' => false]);
+        }
+    }
+
+    private function formatarDataMysql($data) 
+    {
+        if (empty($data)) {
+            return date('Y-m-d H:i:s'); // Retorna data atual se vazio
+        }
+
+        try {
+            // Tenta converter do formato brasileiro com hora
+            $date = DateTime::createFromFormat('d/m/Y H:i', $data);
+            if (!$date) {
+                // Tenta formato brasileiro sem hora
+                $date = DateTime::createFromFormat('d/m/Y', $data);
+            }
+            if (!$date) {
+                // Se ainda não conseguiu, tenta criar do formato que vier
+                $date = new DateTime($data);
+            }
+            
+            return $date->format('Y-m-d H:i:s');
+        } catch (Exception $e) {
+            return date('Y-m-d H:i:s'); // Retorna data atual se houver erro
         }
     }
 }

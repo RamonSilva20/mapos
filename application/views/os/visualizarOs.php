@@ -136,12 +136,12 @@
 
                                         <td>
                                             <b>DATA INICIAL: </b><br>
-                                            <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                            <?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?>
                                         </td>
 
                                         <td>
                                             <b>DATA FINAL: </b><br>
-                                            <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                            <?php echo $result->dataFinal ? date('d/m/Y H:i', strtotime($result->dataFinal)) : ''; ?>
                                         </td>
 
                                         <td>

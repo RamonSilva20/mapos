@@ -76,6 +76,11 @@ class Configuracoes extends Seeder
                 'config' => 'control_2vias',
                 'valor' => '0',
             ],
+            [
+                'idConfig' => 16,
+                'config' => 'os_datetime',
+                'valor' => '0',
+            ],
         ];
 
         foreach ($configs as $config) {

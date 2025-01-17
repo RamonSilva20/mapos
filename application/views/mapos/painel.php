@@ -1253,7 +1253,7 @@
             selectable: false,
             businessHours: true,
             dayMaxEvents: true, // allow "more" link when too many events
-            displayEventTime: false,
+            displayEventTime: true,
             events: {
                 url: "<?= base_url() . "index.php/mapos/calendario"; ?>",
                 method: 'GET',
