@@ -102,7 +102,7 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <label for="dataInicial">Data Inicial | <?php echo date('d/m/Y H:i', strtotime($result->dataInicial)); ?> |<span class="required">*</span></label>
+                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" <?php echo $configuration['os_datetime'] ? 'type="datetime-local"' : 'type="text"'; ?> name="dataInicial" value="<?php echo $configuration['os_datetime'] ? date('Y-m-d\TH:i', strtotime($result->dataInicial)) : date('d/m/Y', strtotime($result->dataInicial)); ?>" />
                                         </div>
                                         <div class="span3">
