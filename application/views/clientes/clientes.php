@@ -65,9 +65,9 @@
                         echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
                         echo '<td>' . $r->contato . '</td>';
                         echo '<td>' . $r->documento . '</td>';
-                        echo '<td>' . $r->telefone . '</td>';
-                        echo '<td>' . $r->celular . '</td>';
-                        echo '<td>' . $r->email . '</td>';
+                        echo '<td><a href="tel:+55' . preg_replace('/[^0-9]/', '', $r->telefone) . '" title="Iniciar ligação telefônica" aria-placeholder="Iniciar ligação telefônica">' . $r->telefone . '</a></td>';
+                        echo '<td><a href="https://wa.me/55' . preg_replace('/[^0-9]/', '', $r->celular) . '" target="_blank" title="Iniciar conversa no WhatsApp" aria-placeholder="Iniciar conversa no WhatsApp">' . $r->celular . '</a></td>';
+                        echo '<td><a href="mailto:' . $r->email . '" title="Enviar e-mail" aria-placeholder="Enviar e-mail">' . $r->email . '</a></td>';
 
                         // Verifica se é Fornecedor ou Cliente
                         if ($r->fornecedor == 1) {

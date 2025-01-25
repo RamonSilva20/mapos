@@ -308,6 +308,18 @@ class Mine extends CI_Controller
         $this->load->library('form_validation');
         $data['custom_error'] = '';
 
+        if (set_value('tipoCliente') == 1) {
+            $pessoa_fisica = true;
+        } else {
+            $pessoa_fisica = false;
+        }
+
+        if ($this->input->post('dataNascimento')) {
+            $nascimentoData = implode('-', array_reverse(explode('/', $this->input->post('dataNascimento'))));
+        } else {
+            $nascimentoData = null;
+        }
+
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
@@ -316,24 +328,36 @@ class Mine extends CI_Controller
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
                 $data = [
                     'nomeCliente' => $this->input->post('nomeCliente'),
+                    'nomeFantasia' => $this->input->post('nomeFantasia'),
+                    'sexo' => $this->input->post('sexo'),
+                    'dataNascimento' => $nascimentoData,
+                    'contato' => $this->input->post('contato'),
+                    'pessoa_fisica' => $pessoa_fisica,
                     'documento' => $this->input->post('documento'),
+                    'rg_ie' => $this->input->post('rg_ie'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
                     'email' => $this->input->post('email'),
                     'senha' => $senha,
                     'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
                     'complemento' => $this->input->post('complemento'),
+                    'numero' => $this->input->post('numero'),
                     'bairro' => $this->input->post('bairro'),
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
-                    'contato' => $this->input->post('contato'),
+                    'obsCliente' => $this->input->post('obsCliente')
                 ];
             } else {
                 $data = [
                     'nomeCliente' => $this->input->post('nomeCliente'),
+                    'nomeFantasia' => $this->input->post('nomeFantasia'),
+                    'sexo' => $this->input->post('sexo'),
+                    'dataNascimento' => $nascimentoData,
+                    'contato' => $this->input->post('contato'),
+                    'pessoa_fisica' => $pessoa_fisica,
                     'documento' => $this->input->post('documento'),
+                    'rg_ie' => $this->input->post('rg_ie'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
                     'email' => $this->input->post('email'),
@@ -344,7 +368,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
-                    'contato' => $this->input->post('contato'),
+                    'obsCliente' => $this->input->post('obsCliente')
                 ];
             }
 
@@ -864,6 +888,18 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $id = 0;
 
+        if (set_value('tipoCliente') == 1) {
+            $pessoa_fisica = true;
+        } else {
+            $pessoa_fisica = false;
+        }
+
+        if ($this->input->post('dataNascimento')) {
+            $nascimentoData = implode('-', array_reverse(explode('/', $this->input->post('dataNascimento'))));
+        } else {
+            $nascimentoData = null;
+        }
+
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } elseif (strtolower($this->input->post('captcha')) != strtolower($this->session->userdata('captchaWord'))) {
@@ -871,7 +907,13 @@ class Mine extends CI_Controller
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
+                'nomeFantasia' => set_value('nomeFantasia'),
+                'sexo' => set_value('sexo'),
+                'dataNascimento' => $nascimentoData,
+                'contato' => set_value('contato'),
+                'pessoa_fisica' => $pessoa_fisica,
                 'documento' => set_value('documento'),
+                'rg_ie' => set_value('rg_ie'),
                 'telefone' => set_value('telefone'),
                 'celular' => $this->input->post('celular'),
                 'email' => set_value('email'),
@@ -883,6 +925,7 @@ class Mine extends CI_Controller
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
+                'obsCliente' => set_value('obsCliente'),
                 'dataCadastro' => date('Y-m-d'),
                 'contato' => $this->input->post('contato'),
             ];

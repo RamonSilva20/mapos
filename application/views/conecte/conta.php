@@ -27,25 +27,47 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
+                                        <td style="text-align: right; width: 30%"><strong><?= $result->pessoa_fisica ? 'Nome:' : 'Razão Social:';?></strong></td>
                                         <td>
                                             <?php echo $result->nomeCliente ?>
                                         </td>
                                     </tr>
+                                    <?php if ( ! $result->pessoa_fisica) : ?>
+                                        <tr>
+                                            <td style="text-align: right; width: 30%"><strong>Nome Fantasia:</strong></td>
+                                            <td>
+                                                <?php echo $result->nomeFantasia ?>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                     <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Contato</strong></td>
-                                        <td>
-                                            <?php echo $result->contato ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Documento</strong></td>
+                                        <td style="text-align: right"><strong><?= $result->pessoa_fisica ? 'CPF:' : 'CNPJ:' ;?></strong></td>
                                         <td>
                                             <?php echo $result->documento ?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right"><strong>Data de Cadastro</strong></td>
+                                        <td style="text-align: right"><strong><?= $result->pessoa_fisica ? 'RG:' : 'IE:' ;?></strong></td>
+                                        <td>
+                                            <?php echo $result->rg_ie ?>
+                                        </td>
+                                    </tr>
+                                    <?php if ($result->pessoa_fisica) : ?>
+                                        <tr>
+                                            <td style="text-align: right;"><strong>Nascimento:</strong></td>
+                                            <td>
+                                                <?php echo date('d/m/Y', strtotime($result->dataNascimento)) ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right"><strong>Sexo:</strong></td>
+                                            <td>
+                                                <?php echo $result->sexo ?>
+                                            </td>
+                                        </tr>
+                                    <?php endif ; ?>
+                                    <tr>
+                                        <td style="text-align: right"><strong>Data de Cadastro:</strong></td>
                                         <td>
                                             <?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?>
                                         </td>
@@ -69,19 +91,25 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
+                                        <td style="text-align: right; width: 30%"><strong>Contato:</strong></td>
+                                        <td>
+                                            <?php echo $result->contato ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right; width: 30%"><strong>Telefone:</strong></td>
                                         <td>
                                             <?php echo $result->telefone ?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right"><strong>Celular</strong></td>
+                                        <td style="text-align: right"><strong>Celular:</strong></td>
                                         <td>
                                             <?php echo $result->celular ?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right"><strong>Email</strong></td>
+                                        <td style="text-align: right"><strong>Email:</strong></td>
                                         <td>
                                             <?php echo $result->email ?>
                                         </td>

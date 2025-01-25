@@ -15,16 +15,24 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-media.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
-    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
-    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>
 
 <body>
     <style>
         #imgSenha {
             width: 18px;
+            cursor: pointer;
+        }
+
+        #buscar_info_cnpj {
+            display:none;
+            width:18px;
+            height:18px;
+            font-size:16px;
+            border:none;
+            background-color:transparent;
+            padding-left: 0;
             cursor: pointer;
         }
 
@@ -139,95 +147,108 @@
                 <div class="widget-content nopadding tab-content">
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">
-                        <label for="nomeCliente" class="control-label"><span class="required"></span></label>
+                        <label for="email" class="control-label">Email</label>
                         <div class="controls">
-                            <input id="nomeCliente" type="text" placeholder="Nome*" name="nomeCliente" value="<?= set_value('nomeCliente') ?>" />
+                            <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="senha" class="control-label">Senha<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="senha" type="password" placeholder="Insira sua senha" name="senha" value="<?php echo set_value('senha'); ?>" />
+                            <img id="imgSenha" src="<?= base_url() ?>assets/img/eye.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="tipoCliente" class="control-label">Tipo<span class="required">*</span></label>
+                        <div class="controls">
+                            <select id="tipoCliente" name="tipoCliente">
+                                <option value="1" selected aria-selected="true">Pessoa Física</option>
+                                <option value="2">Pessoa Jurídica</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">
                         <?php if (isset($custom_error) && $custom_error != '') {
                             echo '<div class="alert alert-danger">' . $custom_error . '</div>';
                         } ?>
-                        <label for="documento" class="control-label"><span class="required"></span></label>
+                        <label for="documento" class="control-label">CPF</label>
                         <div class="controls">
-                            <input id="documento" class="cpfcnpj" type="text" placeholder="CPF/CNPJ*" name="documento" value="<?= set_value('documento') ?>" />
-                            <button style="top:70px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="telefone" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="telefone" type="text" placeholder="Telefone*" name="telefone" value="<?= set_value('telefone') ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="celular" class="control-label"></label>
-                        <div class="controls">
-                            <input id="celular" type="text" placeholder="Celular" name="celular" value="<?= set_value('celular') ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="email" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="email" type="text" placeholder="Email*" name="email" value="<?= set_value('email') ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="senha" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="senha" type="password" placeholder="Senha*" name="senha" value="<?= set_value('senha') ?>" />
-                            <img id="imgSenha" src="<?= base_url() ?>assets/img/eye.svg" alt="">
-                        </div>
-                    </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="cep" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="cep" type="text" placeholder="CEP*" name="cep" value="<?= set_value('cep') ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="rua" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="rua" type="text" placeholder="Rua*" name="rua" value="<?= set_value('rua') ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="numero" class="control-label"><span class="required"></span></label>
-                        <div class="controls">
-                            <input id="numero" type="text" placeholder="Número*" name="numero" value="<?= set_value('numero') ?>" />
+                            <input id="documento" class="" type="text" name="documento" value="<?php echo set_value('documento'); ?>" />
+                            <button id="buscar_info_cnpj" class="btn btn-mini" type="button">
+                                <span class="button_icon"><i class="bx bx-search-alt-2"></i></span></button>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="complemento" class="control-label"></label>
+                        <label for="rg_ie" class="control-label">RG</label>
                         <div class="controls">
-                            <input id="complemento" type="text" placeholder="Complemento" name="complemento" value="<?= set_value('complemento') ?>" />
+                            <input id="rg_ie" type="text" name="rg_ie" value="<?php echo set_value('rg_ie'); ?>" />
                         </div>
                     </div>
-                    <div class="control-group" class="control-label">
-                        <label for="bairro" class="control-label"><span class="required"></span></label>
+                    <div class="control-group">
+                        <label for="nomeCliente" class="control-label">Nome Completo<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="bairro" type="text" placeholder="Bairro*" name="bairro" value="<?= set_value('bairro') ?>" />
+                            <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo set_value('nomeCliente'); ?>" />
                         </div>
                     </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="cidade" class="control-label"><span class="required"></span></label>
+                    <div class="control-group" style="display: none;">
+                        <label for="nomeFantasia" class="control-label">Nome Fantasia</label>
                         <div class="controls">
-                            <input id="cidade" type="text" placeholder="Cidade*" name="cidade" value="<?= set_value('cidade') ?>" />
+                            <input id="nomeFantasia" type="text" name="nomeFantasia" value="<?php echo set_value('nomeFantasia'); ?>" />
                         </div>
                     </div>
-
-                    <div class="control-group" class="control-label">
-                        <label for="contato" class="control-label"></label>
+                    <div class="control-group">
+                        <label for="contato" class="control-label">Contato:</label>
                         <div class="controls">
-                            <input id="contato" type="text" placeholder="Contato*" name="contato" value="<?= set_value('contato') ?>" />
+                            <input class="contato" type="text" name="contato" value="<?php echo set_value('contato'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="telefone" class="control-label">Telefone</label>
+                        <div class="controls">
+                            <input id="telefone" type="text" name="telefone" value="<?php echo set_value('telefone'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="celular" class="control-label">Celular</label>
+                        <div class="controls">
+                            <input id="celular" type="text" name="celular" value="<?php echo set_value('celular'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="cep" class="control-label">CEP</label>
+                        <div class="controls">
+                            <input id="cep" type="text" name="cep" value="<?php echo set_value('cep'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="rua" class="control-label">Rua</label>
+                        <div class="controls">
+                            <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="numero" class="control-label">Número</label>
+                        <div class="controls">
+                            <input id="numero" type="text" name="numero" value="<?php echo set_value('numero'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="complemento" class="control-label">Complemento</label>
+                        <div class="controls">
+                            <input id="complemento" type="text" name="complemento" value="<?php echo set_value('complemento'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="bairro" class="control-label">Bairro</label>
+                        <div class="controls">
+                            <input id="bairro" type="text" name="bairro" value="<?php echo set_value('bairro'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="cidade" class="control-label">Cidade</label>
+                        <div class="controls">
+                            <input id="cidade" type="text" name="cidade" value="<?php echo set_value('cidade'); ?>" />
                         </div>
                     </div>
 
@@ -235,7 +256,22 @@
                         <label for="estado" class="control-label"><span class="required"></span></label>
                         <div class="controls">
                             <select id="estado" name="estado">
-                                <option value="">Selecione Seu Estado...</option>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="dataNascimento" class="control-label">Data de Nascimento</label>
+                        <div class="controls">
+                            <input id="dataNascimento" type="date" name="dataNascimento" value="<?php echo set_value('dataNascimento'); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="sexo" class="control-label">Sexo</label>
+                        <div class="controls">
+                            <select id="sexo" name="sexo">
+                                <option value="Masculino" selected aria-selected="true">Masculino</option>
+                                <option value="Feminino">Feminino</option>
                             </select>
                         </div>
                     </div>
@@ -266,9 +302,11 @@
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-    <script type="text/javascript" src="<?= base_url() ?>assets/js/funcoes.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>assets/js/funcoes.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
     <script type="text/javascript">
         <?php if ($this->session->flashdata('error') != null) { ?>
             console.log('Erro');
@@ -306,6 +344,53 @@
                     input.type = 'password';
                 }
             });
+
+            $("#email").focus();
+            $(function() {
+                $("#documento").mask("000.000.000-00", {
+                    onpaste: function (e) {
+                        e.preventDefault();
+                        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+                        $("#documento").val(clipboardCurrentData);
+                    }
+                });
+            });
+
+            $("#tipoCliente").change(function() {
+                // Definir máscara e exibir campos pertinente ao tipo de cliente selecionado.
+                if ($("#tipoCliente").val() == "1") {
+                    var mascara = "000.000.000-00";
+                    $("#documento").parent().prev(".control-label").text("CPF");
+                    $("#buscar_info_cnpj").css("display", "none");
+                    $("#rg_ie").parent().prev(".control-label").text("RG");
+                    $("#nomeCliente").parent().prev(".control-label").text("Nome Completo");
+                    $("#nomeFantasia").val("");
+                    $("#nomeFantasia").parent().parent().css("display", "none");
+                    $("#dataNascimento").val("");
+                    $("#dataNascimento").parent().parent().css("display", "block");
+                    $("#sexo").parent().parent().css("display", "block");
+                } else if ($("#tipoCliente").val() == "2") {
+                    var mascara = "00.000.000/0000-00";
+                    $("#documento").parent().prev(".control-label").text("CNPJ");
+                    $("#buscar_info_cnpj").css("display", "inline-block");
+                    $("#rg_ie").parent().prev(".control-label").text("IE");
+                    $("#nomeCliente").parent().prev(".control-label").text("Razão Social");
+                    $("#nomeFantasia").parent().parent().css("display", "block");
+                    $("#dataNascimento").val("");
+                    $("#dataNascimento").parent().parent().css("display", "none");
+                    $("#sexo").parent().parent().css("display", "none");
+                };
+                var inputOptions = {
+                    onpaste: function (e) {
+                        e.preventDefault();
+                        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+                        $("#documento").val(clipboardCurrentData);
+                    }
+                };
+                $("#documento").val("");
+                $("#documento").mask(mascara, inputOptions);
+            });
+
             $('#formCliente').validate({
                 rules: {
                     nomeCliente: {

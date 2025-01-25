@@ -22,16 +22,74 @@
                         <div class="widget-content">
                             <table class="table table-bordered" style="border: 1px solid #ddd">
                                 <tbody>
+                                <!-- Situação -->
                                 <tr>
-                                    <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
+                                    <td style="text-align: right; width: 30%"><strong>Situação:</strong></td>
+                                    <td>
+                                        <?php if($result->situacao == 1) : ?>
+                                            <span class="label label-success">Ativo</span>
+                                        <?php else : ?>
+                                            <span class="label label-important">Inativo</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <!-- Tipo de Pessoa -->
+                                <tr>
+                                    <td style="text-align: right; width: 30%"><strong>Tipo de Pessoa:</strong></td>
+                                    <td>
+                                        <?php if($result->pessoa_fisica == 1) : ?>
+                                            <span class="label label-warning">Pessoa Física</span>
+                                        <?php else : ?>
+                                            <span class="label label-info">Pessoa Jurídica</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; width: 30%"><strong><?= $result->pessoa_fisica ? 'Nome:' : 'Razão Social:'; ?></strong></td>
                                     <td>
                                         <?php echo $result->nomeCliente ?>
                                     </td>
                                 </tr>
+                                <?php if( ! $result->pessoa_fisica ) : ?>
+                                    <tr>
+                                        <td style="text-align: right;"><strong>Nome Fantasia:</strong></td>
+                                        <td>
+                                            <?= $result->nomeFantasia ?>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
                                 <tr>
-                                    <td style="text-align: right"><strong>Documento</strong></td>
+                                    <td style="text-align: right"><strong><?= $result->pessoa_fisica ? 'CPF:' : 'CNPJ:'; ?></strong></td>
                                     <td>
                                         <?php echo $result->documento ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right"><strong><?= $result->pessoa_fisica ? 'RG:' : 'Inscr. Estadual:'; ?></strong></td>
+                                    <td>
+                                        <?= $result->rg_ie ?>
+                                    </td>
+                                </tr>
+                                <?php if( $result->pessoa_fisica ) : ?>
+                                    <tr>
+                                        <td style="text-align: right"><strong>Data de Nascimento:</strong></td>
+                                        <td>
+                                            <?= date('d/m/Y', strtotime($result->dataNascimento)) ?>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                                <?php if( $result->pessoa_fisica ) : ?>
+                                    <tr>
+                                        <td style="text-align: right"><strong>Sexo:</strong></td>
+                                        <td>
+                                            <?= $result->sexo ; ?>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                                <tr>
+                                    <td style="text-align: right"><strong>Observações:</strong></td>
+                                    <td>
+                                        <?= $result->obsCliente ; ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -43,7 +101,7 @@
                                 <tr>
                                     <td style="text-align: right"><strong>Tipo do Cliente</strong></td>
                                     <td>
-                                        <?php echo $result->fornecedor == true ? 'Fornecedor' : 'Cliente'; ?>
+                                        <span class="label label-<?= $result->fornecedor ? 'primary' : 'success' ; ?>"><?= $result->fornecedor ? 'Fornecedor' : 'Cliente' ; ?></span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -73,19 +131,19 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
                                     <td>
-                                        <?php echo $result->telefone ?>
+                                        <a href="tel:+55<?= preg_replace('/[^0-9]/', '', $result->telefone) ;?>" title="Iniciar ligação telefônica" aria-placeholder="Iniciar ligação telefônica"><?php echo $result->telefone ?></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Celular</strong></td>
                                     <td>
-                                        <?php echo $result->celular ?>
+                                        <a href="https://wa.me/55<?= preg_replace('/[^0-9]/', '', $result->celular) ;?>" target="_blank" title="Iniciar conversa no WhatsApp" aria-placeholder="Iniciar conversa no WhatsApp"><?php echo $result->celular ?></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Email</strong></td>
                                     <td>
-                                        <?php echo $result->email ?>
+                                        <a href="mailto:<?= $result->email ;?>" title="Enviar e-mail" aria-placeholder="Enviar e-mail"><?php echo $result->email ?></a>
                                     </td>
                                 </tr>
                                 </tbody>

@@ -89,20 +89,41 @@
                 echo '<div class="alert alert-danger">' . $custom_error . '</div>';
             } ?>
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
+                <?php echo form_hidden('idClientes', $result->idClientes) ?>
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">
                         <div class="control-group">
-                            <label for="documento" class="control-label">CPF/CNPJ</label>
+                            <label for="tipoCliente" class="control-label">Tipo<span class="required">*</span></label>
                             <div class="controls">
-                                <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
-                                <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar(CNPJ)</button>
+                                <select id="tipoCliente" name="tipoCliente">
+                                    <option value="1" <?php echo ($result->pessoa_fisica == 1 ? 'selected' : ''); ?>>Pessoa Física</option>
+                                    <option value="2" <?php echo ($result->pessoa_fisica == 0 ? 'selected' : ''); ?>>Pessoa Jurídica</option>
+                                </select>
                             </div>
                         </div>
                         <div class="control-group">
-                            <?php echo form_hidden('idClientes', $result->idClientes) ?>
-                            <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
+                            <label for="documento" class="control-label">CPF</label>
+                            <div class="controls">
+                                <input id="documento" class="" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                                <button id="buscar_info_cnpj" class="btn btn-xs" type="button" style="display: none;">Buscar(CNPJ)</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="rg_ie" class="control-label">RG</label>
+                            <div class="controls">
+                                <input id="rg_ie" type="text" name="rg_ie" value="<?php echo $result->rg_ie; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="nomeCliente" class="control-label">Nome Completo<span class="required">*</span></label>
                             <div class="controls">
                                 <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo $result->nomeCliente; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group" style="display: none;">
+                            <label for="nomeFantasia" class="control-label">Nome Fantasia</label>
+                            <div class="controls">
+                                <input id="nomeFantasia" type="text" name="nomeFantasia" value="<?php echo $result->nomeFantasia; ?>" />
                             </div>
                         </div>
                         <div class="control-group">
@@ -192,6 +213,36 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label for="dataNascimento" class="control-label">Data de Nascimento</label>
+                            <div class="controls">
+                                <input id="dataNascimento" type="date" name="dataNascimento" value="<?php echo $result->dataNascimento; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sexo" class="control-label">Sexo</label>
+                            <div class="controls">
+                                <select id="sexo" name="sexo">
+                                    <option value="Masculino" <?php echo ($result->sexo == 'Masculino' ? 'selected' : ''); ?>>Masculino</option>
+                                    <option value="Feminino" <?php echo ($result->sexo == 'Feminino' ? 'selected' : ''); ?>>Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="obsCliente" class="control-label">Observações</label>
+                            <div class="controls">
+                                <textarea id="obsCliente" name="obsCliente"><?php echo $result->obsCliente; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="situacao" class="control-label">Situação</label>
+                            <div class="controls">
+                                <select id="situacao" name="situacao">
+                                    <option value="1" <?php echo ($result->situacao == 1 ? 'selected' : ''); ?>>Ativo</option>
+                                    <option value="0" <?php echo ($result->situacao == 0 ? 'selected' : ''); ?>>Inativo</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -235,6 +286,72 @@
             }
 
         });
+        
+        $("#tipoCliente").focus();
+        $(function() {
+            var pessoa_fisica = <?php echo $result->pessoa_fisica ; ?>;
+            if (pessoa_fisica) {
+                $("#documento").mask("000.000.000-00", {
+                    onpaste: function (e) {
+                        e.preventDefault();
+                        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+                        $("#documento").val(clipboardCurrentData);
+                    }
+                });
+            } else {
+                $("#documento").mask("00.000.000/0000-00", {
+                    onpaste: function (e) {
+                        e.preventDefault();
+                        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+                        $("#documento").val(clipboardCurrentData);
+                    }
+                });
+                $("#documento").parent().prev(".control-label").text("CNPJ");
+                $("#buscar_info_cnpj").css("display", "inline-block");
+                $("#rg_ie").parent().prev(".control-label").text("IE");
+                $("#nomeCliente").parent().prev(".control-label").text("Razão Social");
+                $("#nomeFantasia").parent().parent().css("display", "block");
+                $("#dataNascimento").val("");
+                $("#dataNascimento").parent().parent().css("display", "none");
+                $("#sexo").parent().parent().css("display", "none");
+            }
+        });
+
+        $("#tipoCliente").change(function() {
+            // Definir máscara e exibir campos pertinente ao tipo de cliente selecionado.
+            if ($("#tipoCliente").val() == "1") {
+                var mascara = "000.000.000-00";
+                $("#documento").parent().prev(".control-label").text("CPF");
+                $("#buscar_info_cnpj").css("display", "none");
+                $("#rg_ie").parent().prev(".control-label").text("RG");
+                $("#nomeCliente").parent().prev(".control-label").text("Nome Completo");
+                $("#nomeFantasia").val("");
+                $("#nomeFantasia").parent().parent().css("display", "none");
+                $("#dataNascimento").val("");
+                $("#dataNascimento").parent().parent().css("display", "block");
+                $("#sexo").parent().parent().css("display", "block");
+            } else if ($("#tipoCliente").val() == "2") {
+                var mascara = "00.000.000/0000-00";
+                $("#documento").parent().prev(".control-label").text("CNPJ");
+                $("#buscar_info_cnpj").css("display", "inline-block");
+                $("#rg_ie").parent().prev(".control-label").text("IE");
+                $("#nomeCliente").parent().prev(".control-label").text("Razão Social");
+                $("#nomeFantasia").parent().parent().css("display", "block");
+                $("#dataNascimento").val("");
+                $("#dataNascimento").parent().parent().css("display", "none");
+                $("#sexo").parent().parent().css("display", "none");
+            };
+            var inputOptions = {
+                onpaste: function (e) {
+                    e.preventDefault();
+                    var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
+                    $("#documento").val(clipboardCurrentData);
+                }
+            };
+            $("#documento").val("");
+            $("#documento").mask(mascara, inputOptions);            
+        });
+
         $('#formCliente').validate({
             rules: {
                 nomeCliente: {

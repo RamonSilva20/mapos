@@ -58,12 +58,18 @@ class Clientes extends MY_Controller
 
         $senhaCliente = $this->input->post('senha') ? $this->input->post('senha') : preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
 
-        $cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
+        //$cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
 
-        if (strlen($cpf_cnpj) == 11) {
+        if (set_value('tipoCliente') == 1) {
             $pessoa_fisica = true;
         } else {
             $pessoa_fisica = false;
+        }
+
+        if ($this->input->post('dataNascimento')) {
+            $nascimentoData = implode('-', array_reverse(explode('/', $this->input->post('dataNascimento'))));
+        } else {
+            $nascimentoData = null;
         }
 
         if ($this->form_validation->run('clientes') == false) {
@@ -71,9 +77,12 @@ class Clientes extends MY_Controller
         } else {
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
+                'nomeFantasia' => set_value('nomeFantasia'),
+                'sexo' => set_value('sexo'),
                 'contato' => set_value('contato'),
                 'pessoa_fisica' => $pessoa_fisica,
                 'documento' => set_value('documento'),
+                'rg_ie' => set_value('rg_ie'),
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),
                 'email' => set_value('email'),
@@ -85,8 +94,11 @@ class Clientes extends MY_Controller
                 'cidade' => set_value('cidade'),
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
+                'obsCliente' => set_value('obsCliente'),
                 'dataCadastro' => date('Y-m-d'),
                 'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                'situacao' => (set_value('situacao') == true ? 1 : 0),
+                'dataNascimento' => $nascimentoData
             ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
@@ -118,17 +130,36 @@ class Clientes extends MY_Controller
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
+        //$cpf_cnpj = preg_replace('/[^\p{L}\p{N}\s]/', '', set_value('documento'));
+
+        if ($this->input->post('tipoCliente') == 1) {
+            $pessoa_fisica = true;
+        } else {
+            $pessoa_fisica = false;
+        }
+
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
+            $nascimentoData = $this->input->post('dataNascimento');
+            if ($nascimentoData) {
+                $nascimentoData = implode('-', array_reverse(explode('/', $nascimentoData)));
+            } else {
+                $nascimentoData = null;
+            }
+
             $senha = $this->input->post('senha');
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
                 $data = [
                     'nomeCliente' => $this->input->post('nomeCliente'),
+                    'nomeFantasia' => $this->input->post('nomeFantasia'),
+                    'sexo' => $this->input->post('sexo'),
                     'contato' => $this->input->post('contato'),
+                    'pessoa_fisica' => $pessoa_fisica,
                     'documento' => $this->input->post('documento'),
+                    'rg_ie' => $this->input->post('rg_ie'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
                     'email' => $this->input->post('email'),
@@ -140,13 +171,20 @@ class Clientes extends MY_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'obsCliente' => $this->input->post('obsCliente'),
                     'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                    'situacao' => (set_value('situacao') == true ? 1 : 0),
+                    'dataNascimento' => $nascimentoData
                 ];
             } else {
                 $data = [
                     'nomeCliente' => $this->input->post('nomeCliente'),
+                    'nomeFantasia' => $this->input->post('nomeFantasia'),
+                    'sexo' => $this->input->post('sexo'),
                     'contato' => $this->input->post('contato'),
+                    'pessoa_fisica' => $pessoa_fisica,
                     'documento' => $this->input->post('documento'),
+                    'rg_ie' => $this->input->post('rg_ie'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
                     'email' => $this->input->post('email'),
@@ -157,7 +195,10 @@ class Clientes extends MY_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'obsCliente' => $this->input->post('obsCliente'),
                     'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                    'situacao' => (set_value('situacao') == true ? 1 : 0),
+                    'dataNascimento' => $nascimentoData
                 ];
             }
 
