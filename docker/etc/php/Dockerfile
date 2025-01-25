@@ -1,4 +1,4 @@
-FROM php:8.2.5-fpm
+FROM php:8.3-fpm
 
 # Install extension
 RUN apt update && apt upgrade -y \

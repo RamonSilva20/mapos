@@ -1,24 +1,24 @@
 {
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "ext-curl": "*",
         "ext-gd": "*",
-        "mercadopago/dx-php": "^2.2.1",
-        "efipay/sdk-php-apis-efi": "^1.8",
-        "codeigniter/framework": "^3.1",
-        "mpdf/mpdf": "^8.0.10",
-        "filp/whoops": "^2.7",
+        "mercadopago/dx-php": "^2.6.2",
+        "efipay/sdk-php-apis-efi": "^1.11.0",
+        "codeigniter/framework": "^3.1.13",
+        "mpdf/mpdf": "^8.2.5",
+        "filp/whoops": "^2.17.0",
         "mk-j/php_xlsxwriter": "^0.38.0",
-        "mpdf/qrcode": "^1.1",
-        "phpoffice/phpword": "^0.18.0",
-        "piggly/php-pix": "^2.0",
-        "vlucas/phpdotenv": "^5.6",
-        "codephix/asaas-sdk": "^2.0"
+        "mpdf/qrcode": "^1.2.1",
+        "phpoffice/phpword": "^0.18.3",
+        "piggly/php-pix": "^2.0.2",
+        "vlucas/phpdotenv": "^5.6.1",
+        "codephix/asaas-sdk": "^2.0.10"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "symfony/var-dumper": "^6.4",
-        "fakerphp/faker": "^1.23"
+        "friendsofphp/php-cs-fixer": "^3.68.1",
+        "symfony/var-dumper": "^6.4.15",
+        "fakerphp/faker": "^1.24.1"
     },
     "scripts": {
         "format": [
@@ -38,5 +38,6 @@
             "type": "vcs",
             "url": "https://github.com/codephix/asaas-sdk"
         }
-    ]
+    ],
+    "type": "project"
 }

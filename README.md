@@ -119,9 +119,9 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * [filp/whoops](https://github.com/filp/whoops)
 
 ### Requerimentos
-* PHP = 8.2
-* MySQL
-* Composer
+* PHP >= 8.3
+* MySQL = 5.7
+* Composer >= 2
 
 ### Doações
 Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
