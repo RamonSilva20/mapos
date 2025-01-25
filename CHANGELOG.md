@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.50.0] - 2025-01-25
+###
+- Campo contato no cadastro na área do cliente. [@cabralwms](https://github.com/cabralwms)
+
 ## [4.49.1] - 2025-01-04
 ### Fixed
 - Correção Faturar Parcelado Lançamentos. [@cabralwms](https://github.com/cabralwms)
