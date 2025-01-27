@@ -79,8 +79,22 @@ textarea {
         resize: vertical;
     }
 
-.ui-menu {
+.ui-autocomplete, .ui-menu, .ui-menu-item, .ui-corner-all, .ui-widget, .ui-widget-header, .ui-widget-content {
     z-index: 9999 !important;
+}
+
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .4em;
+    margin: .8em 0 .2em;
+    line-height: 1.5;
+}
+
+.ui-menu .ui-menu-item a {
+    display: block;
+    padding: .2em .4em;
+    text-decoration: none;
+    cursor: pointer !important;
 }
 
 .numero-col {

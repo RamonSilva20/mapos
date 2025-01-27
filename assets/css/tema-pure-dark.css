@@ -110,6 +110,42 @@ body {
     color: var(--branco);
 }
 
+.ui-autocomplete, .ui-menu, .ui-widget, .ui-widget-header, .ui-widget-content {
+    /* background: var(--dark-2) !important;
+    background-color: var(--dark-2) !important;
+    color: var(--dark-cinz2) !important; */
+    background: var(--dark-2) !important;
+    background-color: var(--dark-2) !important;
+    color: var(--branco) !important;
+    border          : 1px solid rgb(20 20 26) !important;
+    border-radius   : 6px !important;
+    box-shadow      : 0 15px 18px rgb(0 0 0 / 31%) !important;
+    background-clip : padding-box !important;
+}
+
+.ui-corner-all {
+    background: var(--dark-2) !important;
+    background-color: var(--dark-2) !important;
+    color: var(--branco) !important;
+}
+
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active {
+    background: var(--dark-cinz) !important;
+    background-color: var(--dark-cinz) !important;
+    color: var(--dark-1) !important;
+}
+
+.ui-autocomplete-category {
+    color: var(--branco) !important;
+}
+
+.ui-menu-item:last-child>a{
+    background: var(--dark-cinz2) !important;
+    background-color: var(--dark-cinz2) !important;
+    color: var(--branco) !important;
+}
+
 /* SIDEBAR */
 #sidebar {
     background  : var(--wid-dark);

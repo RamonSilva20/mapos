@@ -32,8 +32,13 @@ body {
   --dark-1    : #14141a;
   --dark-2    : #272835;
   --dark-cinz : #8788a4;
+  --dark-cinz2: #646464;
+
   --dark-azul : #1086dd;
   --dark-viol : #52459f;
+  --dark-input: #2e2f3e;
+  --dark-select: #2e2f3e;
+  --dark-list: #2e2f3e;
 
   /* === Tema white green === */
   --white-gre0  : #c8e2d5;

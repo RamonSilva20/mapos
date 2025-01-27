@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
@@ -114,14 +114,53 @@
         </div>
     </div>
 </div>
+
+<?= $modalAdicionarCliente; ?>
+
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#cliente").autocomplete({
+        $.widget( "custom.catcomplete", $.ui.autocomplete, {
+            _create: function() {
+                this._super();
+                this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+            },
+            _renderMenu: function( ul, items ) {
+                var that = this,
+                    currentCategory = "";
+                $.each( items, function( index, item ) {
+                    var li;
+                    if ( item.category != currentCategory ) {
+                        ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                        currentCategory = item.category;
+                    }
+                    li = that._renderItemData( ul, item );
+                    if ( item.category ) {
+                        li.attr( "aria-label", item.category + " : " + item.label );
+                    }
+                });
+            }
+        });
+        $("#cliente").catcomplete({
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
-                $("#clientes_id").val(ui.item.id);
+                if (ui.item.label == 'Adicionar cliente...') {
+                    $('#modalAdicionarCliente').modal('show');
+                } else {
+                    $("#clientes_id").val(ui.item.id);
+                }
             }
+        });
+        // Abrir modal com foco no campo nome do cliente
+        $('#modalAdicionarCliente').on('shown.bs.modal', function() {
+            $('#nomeCliente').focus();
+        });
+        // Função para limpar os campos após clicar no botão fechar do modal
+        $('#modalAdicionarCliente').on('hidden.bs.modal', function() {
+            $('#formAdicionarCliente').trigger('reset');
+            $('#formAdicionarCliente').validate().resetForm();
+            $('#cliente').val('');
+            $('#cliente').focus();
         });
         $("#tecnico").autocomplete({
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
@@ -180,10 +219,11 @@
         });
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
-        });
+        }).mask('00/00/0000');
         $('.editor').trumbowyg({
             lang: 'pt_br',
             semantic: { 'strikethrough': 's', }
         });
+        $("#cliente").focus();
     });
 </script>

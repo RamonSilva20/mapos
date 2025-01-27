@@ -214,11 +214,28 @@ class Os_model extends CI_Model
         $this->db->or_like('telefone', $q);
         $this->db->or_like('celular', $q);
         $this->db->or_like('documento', $q);
+        $this->db->order_by('pessoa_fisica', 'asc');
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'], 'id' => $row['idClientes']];
+                $row_set[] = [
+                    'label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'],
+                    'id' => $row['idClientes'],
+                    'category' => $row['pessoa_fisica'] == 1 ? 'Pessoa Física' : 'Pessoa Jurídica',
+                ];
             }
+            $row_set[] = [
+                'label' => 'Adicionar cliente...',
+                'id' => '0',
+                'category' => ''
+            ];
+            echo json_encode($row_set);
+        } else {
+            $row_set[] = [
+                'label' => 'Adicionar cliente...',
+                'id' => '0',
+                'category' => ''
+            ];
             echo json_encode($row_set);
         }
     }

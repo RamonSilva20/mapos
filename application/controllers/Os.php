@@ -170,6 +170,11 @@ class Os extends MY_Controller
             }
         }
 
+        $this->data['modalAdicionarCliente'] = $this->load->view(
+            'clientes/modalAdicionarCliente',
+            [],
+            true,
+        );
         $this->data['view'] = 'os/adicionarOs';
 
         return $this->layout();
@@ -348,6 +353,72 @@ class Os extends MY_Controller
         }
 
         return $this->layout();
+    }
+
+    // Função para adicionar cliente via modal
+    public function adicionarCliente()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar Cliente');
+            redirect(base_url());
+        }
+
+        $this->load->library('form_validation');
+
+        $senhaCliente = $this->input->post('senha') ? $this->input->post('senha') : preg_replace('/[^\p{L}\p{N}\s]/', '', $this->input->post('documento'));
+        $pessoaFisica = $this->input->post('tipoCliente') == 1 ? true : false;
+        $nascimentoData = $this->input->post('dataNascimento') != '' ? implode('-', array_reverse(explode('/', $this->input->post('dataNascimento')))) : null;
+
+        if($this->form_validation->run('clientes') == false){
+            $this->session->set_flashdata('error', validation_errors());
+            $error = validation_errors();
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['error' => $error]));
+
+        } else {
+            $data = [
+                'nomeCliente' => $this->input->post('nomeCliente'),
+                'nomeFantasia' => $this->input->post('nomeFantasia'),
+                'sexo' => $this->input->post('sexo'),
+                'contato' => $this->input->post('contato'),
+                'pessoa_fisica' => $pessoaFisica,
+                'documento' => $this->input->post('documento'),
+                'rg_ie' => $this->input->post('rg_ie'),
+                'telefone' => $this->input->post('telefone'),
+                'celular' => $this->input->post('celular'),
+                'email' => $this->input->post('email'),
+                'senha' => password_hash($senhaCliente, PASSWORD_DEFAULT),
+                'rua' => $this->input->post('rua'),
+                'numero' => $this->input->post('numero'),
+                'complemento' => $this->input->post('complemento'),
+                'bairro' => $this->input->post('bairro'),
+                'cidade' => $this->input->post('cidade'),
+                'estado' => $this->input->post('estado'),
+                'cep' => $this->input->post('cep'),
+                'obsCliente' => $this->input->post('obsCliente'),
+                'dataCadastro' => date('Y-m-d'),
+                'fornecedor' => ($this->input->post('fornecedor') == true ? 1 : 0),
+                'situacao' => ($this->input->post('situacao') == true ? 1 : 0),
+                'dataNascimento' => $nascimentoData,
+            ];
+
+
+            if ($this->os_model->add('clientes', $data, false)) {
+                log_info('Adicionou um cliente. ID: ' . $this->db->insert_id());
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => 'Cliente adicionado com sucesso!']));
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['error' => 'Ocorreu um erro ao tentar adicionar o cliente!']));
+            }
+        }
     }
 
     public function validarCPF($cpf)

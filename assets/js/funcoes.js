@@ -12,12 +12,12 @@ $(function () {
             $(".cpfcnpjmine").prop('readonly', true);
         }
     }
-    if ($('.cpfUser').val() != null) {
+/*     if ($('.cpfUser').val() != null) {
         var cpfUser = $('.cpfUser').val().length;
         if (cpfUser == "14") {
             $(".cpfUser").prop('readonly', true);
         }
-    }
+    } */
 
 });
 
