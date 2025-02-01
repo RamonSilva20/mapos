@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer install --optimize-autoloader --prefer-lowest --prefer-stable
+          composer update --optimize-autoloader --prefer-lowest --prefer-stable
 
       - name: List Installed Dependencies
         run: composer show -D
