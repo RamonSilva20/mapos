@@ -120,7 +120,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 
 ### Requerimentos
 * PHP >= 8.3
-* MySQL = 5.7
+* MySQL >= 5.7 ou >= 8.0
 * Composer >= 2
 
 ### Doações
