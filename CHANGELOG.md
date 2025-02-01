@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.52.0] - 2025-02-01
+### Added
+- Action de release no GitHub. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.51.0] - 2025-02-01
 ### Fixed
 - Adequação para variáveis de conexão do banco de dados funcionarem com caracteres especiais. [@Pr3d4dor](https://github.com/Pr3d4dor)
