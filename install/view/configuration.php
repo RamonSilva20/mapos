@@ -76,18 +76,18 @@
     <hr />
     <div>
       <div class="form-group clearfix">
-        <label for="api_enabled" class=" col-md-3">Habilitar?</label>
+        <label for="enter_api_enabled" class=" col-md-3">Habilitar?</label>
         <div class="col-md-9">
-          <select name="api_enabled" id="" autocomplete="off">
+          <select name="enter_api_enabled" id="" autocomplete="off">
             <option value="true">Sim</option>
             <option value="false" selected>Não</option>
           </select>
         </div>
       </div>
       <div class="form-group clearfix">
-        <label for="token_expire_time" class=" col-md-3">Expiração Token JWT</label>
+        <label for="enter_token_expire_time" class=" col-md-3">Expiração Token JWT</label>
         <div class="col-md-9">
-          <select name="token_expire_time" id="" autocomplete="off">
+          <select name="enter_token_expire_time" id="" autocomplete="off">
             <option value="60">1 minuto</option>
             <option value="3600">1 hora</option>
             <option value="86400" selected>1 dia</option>
