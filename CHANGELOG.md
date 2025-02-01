@@ -4,8 +4,15 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.51.0] - 2025-02-01
+### Fixed
+- Adequação para variáveis de conexão do banco de dados funcionarem com caracteres especiais. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Changed
+- Atualizado dependências e versão mínima de PHP para 8.3. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.50.0] - 2025-01-25
-###
+### Added
 - Campo contato no cadastro na área do cliente. [@cabralwms](https://github.com/cabralwms)
 
 ## [4.49.1] - 2025-01-04
