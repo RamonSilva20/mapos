@@ -8,8 +8,7 @@ function dateInterval($startDate, $finalDate)
     $obj_data = DateTime::createFromFormat('d/m/Y', $data);
     
     if (!$obj_data) {
-        log_message('error', 'Erro ao converter a data: ' . $startDate);
-        return false;
+        throw new InvalidArgumentException('Erro ao converter a data: ' . $startDate);
     }
 
     $obj_data->setTime(0, 0, 0);
