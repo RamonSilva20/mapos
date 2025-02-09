@@ -82,9 +82,9 @@
                         }
 
                         $this->load->model('os_model'); foreach ($results as $r) {
-                                $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
+                                $dataInicial = $configuration['os_datetime'] ? date(('d/m/Y H:i'), strtotime($r->dataInicial)) : date(('d/m/Y'), strtotime($r->dataInicial));
                                 if ($r->dataFinal != null) {
-                                    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
+                                    $dataFinal = $configuration['os_datetime'] ? date(('d/m/Y H:i'), strtotime($r->dataFinal)) : date(('d/m/Y'), strtotime($r->dataFinal));
                                 } else {
                                     $dataFinal = "";
                                 }

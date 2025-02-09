@@ -66,6 +66,16 @@
                                 <span class="help-inline">Ativar ou desativar a visualização em tabelas dinâmicas</span>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label for="os_datetime" class="control-label">Utilizar Data/Hora na OS</label>
+                            <div class="controls">
+                                <select name="os_datetime" id="os_datetime">
+                                    <option value="1">Sim</option>
+                                    <option value="0" <?= $configuration['os_datetime'] == '0' ? 'selected' : ''; ?>>Não</option>
+                                </select>
+                                <span class="help-inline">Ativar ou desativar data e hora na OS</span>
+                            </div>
+                        </div>
                         <div class="form-actions">
                             <div class="span8">
                                 <div class="span9">
