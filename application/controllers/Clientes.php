@@ -86,7 +86,7 @@ class Clientes extends MY_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-                'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                'fornecedor' => $this->input->post('fornecedor') ? 1 : 0,
             ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
