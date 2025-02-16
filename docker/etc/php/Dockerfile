@@ -1,5 +1,8 @@
 FROM php:8.3-fpm
 
+# PHP extensions installer
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
 # Install extension
 RUN apt update && apt upgrade -y \
     && apt install -y \
@@ -28,8 +31,7 @@ RUN apt update && apt upgrade -y \
     wget \
     unzip \
     zlib1g-dev \
-    && docker-php-ext-install -j$(nproc) \
-    bcmath \
+    && install-php-extensions bcmath \
     bz2 \
     calendar \
     exif \
@@ -38,19 +40,15 @@ RUN apt update && apt upgrade -y \
     opcache \
     pdo_mysql \
     xsl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install -j$(nproc) imap \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-configure zip \
-    && docker-php-ext-install zip \
-    && CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install sockets \
-    && pecl install xmlrpc-1.0.0RC3 && docker-php-ext-enable xmlrpc \
-    && pecl install memcached && docker-php-ext-enable memcached \
-    && pecl install redis && docker-php-ext-enable redis \
-    && yes '' | pecl install imagick && docker-php-ext-enable imagick \
+    gd \
+    imap \
+    intl \
+    zip \
+    sockets \
+    xmlrpc \
+    memcached \
+    redis \
+    imagick \
     && docker-php-source delete \
     && apt remove -y g++ wget \
     && apt autoremove --purge -y && apt autoclean -y && apt clean -y \
