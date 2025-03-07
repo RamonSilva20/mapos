@@ -9,8 +9,8 @@ fi
 
 ##############################################################
 ## Script desenvolvido por Bruno Barreto e Leonardo Bernardi
-## Versao Instalador: v2.6.20240705
-## Publicado na versao 4.46.0 do MapOS
+## Versao Instalador: v2.7.20250303
+## Publicado na versao 4.52.0 do MapOS
 ##############################################################
 
 # <=== Controle de STEPs ===>
@@ -58,10 +58,12 @@ fi
 
 # <=== Inicio Boas Vindas ===>
     echo "Ola, seja bem vindo."
-    echo "Esse script foi desenvolvido com o intuito de auxiliar na instalacao padrao do Sistema MAP-OS e os componentes necessarios de forma automatizada."
-    echo "Reforcamos que nao recomendamos a instalacao em localhost para uso de PRODUCAO, apenas para TESTE ou DESENVOLVIMENTO devido a riscos de perdas de dados e seguranca."
+    echo "Esse script foi desenvolvido com o intuito de auxiliar na instalacao automatizada do Sistema MAP-OS e os componentes necessarios."
+    echo "Reforcamos que nao recomendamos a instalacao em localhost para uso em PRODUCAO, apenas para TESTE ou DESENVOLVIMENTO devido a riscos de perdas de dados e seguranca."
     echo
-    read -p "Continuar com a instalacao? (S/N): " resposta
+    echo "Video Tutorial: https://www.youtube.com/watch?v=3J9Q6J9Z9ZQ"
+    echo
+    read -p "Continuar a instalacao? (S/N): " resposta
     if [ "$resposta" = "N" ] || [ "$resposta" = "n" ]; then
         exit 0
     elif [ "$resposta" = "S" ] || [ "$resposta" = "s" ]; then
@@ -161,6 +163,7 @@ fi
         sudo chmod 777 $dirHtdocs/mapos/application/config/database.php
         sudo chmod 777 $dirHtdocs/mapos/application/config/.env
         sudo chmod 777 $dirHtdocs/mapos/application/config/.env.example
+        sudo rm -f $dirHtdocs/mapos/.htaccess
         echo
         echo "* Criando banco de dados."
         $dirMySQL -u root -e "CREATE DATABASE mapos;"
@@ -187,15 +190,14 @@ fi
     else
         echo "* Instalando complementos."
         cd $dirHtdocs/mapos
-        composer install --no-dev -n &> /dev/null
-        composer update -n &> /dev/null
+        composer install --no-dev -n --ignore-platform-reqs &> /dev/null
     fi
 # <=== Fim Instalação Composer ===>
 
 # <=== Inicio Configuração pelo Browser ===>
     clear
     echo "# CONFIGURANDO MAPOS..."
-    echo "Acesse o MapOS via navegador http://localhost/mapos"
+    echo "Acesse o Map-OS via navegador http://localhost/mapos/install"
     echo "Clique me PROXIMO e insira os dados abaixo:"
     echo
     echo "Host: localhost"
@@ -207,10 +209,10 @@ fi
     echo Email: "Informe seu E-mail para Login"
     echo Senha: "Insira sua senha para acesso"
     echo
-    echo "URL: http://localhost/mapos"
+    echo "URL: http://localhost/mapos/"
     echo
     echo "Obs: Caso a instalacao nao tenha sido bem sucedida, encerre o script e execute novamente."
-    read -p "Gostaria de seguir com a Autoconfiguracao Opcional? (S/N)" resposta
+    read -p "Gostaria de realizar a configuracao personalizada? (S/N)" resposta
     if [ "$resposta" = "N" ] || [ "$resposta" = "n" ]; then
         exit 0
     elif [ "$resposta" = "S" ] || [ "$resposta" = "s" ]; then
@@ -277,7 +279,8 @@ fi
 # Mensagem de status
 clear
 echo  "************************************************"
-echo  "****    MAPOS CONFIGURADO COM SUCESSO       ****"
+echo  "****    SCRIPT DE AUTOMACAO FINALIZADA      ****"
+echo  "****       AGRADECEMOS A PREFERENCIA        ****"
 echo  "************************************************"
 sleep 2
 rm -rf $dirDefault
