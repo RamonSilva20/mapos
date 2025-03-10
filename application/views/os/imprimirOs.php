@@ -125,12 +125,19 @@
 
                 <?php if ($result->laudoTecnico) : ?>
 					<div class="subtitle">PARECER TÉCNICO</div>
-							<div class="dados">
-									<div style="text-align: justify;">
-						<?= htmlspecialchars_decode($result->laudoTecnico) ?>
+                    <div class="dados">
+                        <div style="text-align: justify;">
+    						<?= htmlspecialchars_decode($result->laudoTecnico) ?>
 						</div>
-						</div>
-					<?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($result->garantias_id) : ?>
+                    <div class="subtitle">TERMO DE GARANTIA</div>
+                    <div class="dados">
+                        <div style="text-align: justify;"><?= htmlspecialchars_decode($result->textoGarantia) ?></div>
+                    </div>
+                <?php endif; ?>
 
                 <?php if ($produtos) : ?>
                     <div class="tabela">
@@ -376,6 +383,13 @@
                             <div>
                                 <?= htmlspecialchars_decode($result->laudoTecnico) ?>
                             </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($result->garantias_id) : ?>
+                        <div class="subtitle">TERMO DE GARANTIA</div>
+                        <div class="dados">
+                            <div style="text-align: justify;"><?= htmlspecialchars_decode($result->textoGarantia) ?></div>
                         </div>
                     <?php endif; ?>
 
