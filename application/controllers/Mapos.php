@@ -614,16 +614,6 @@ class Mapos extends MY_Controller {
             ->set_output(json_encode($events));
     }
 
-    // private function desconto(
-    //     float $valorTotal,
-    //     float $desconto,
-    //     string $tipoDesconto
-    // ) {
-    //     return $tipoDesconto === 'porcento'
-    //         ? $valorTotal * ($desconto / 100)
-    //         : $desconto;
-    // }
-
     private function editDontEnv(array $data)
     {
         $env_file_path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . '.env';
