@@ -1143,22 +1143,23 @@
         <div id="modalDescription" class="modal-Description"></div>
         <div id="modalDefeito" class="modal-Defeito"></div>
         <div id="modalObservacoes" class="modal-Observacoes"></div>
+        <div id="modalSubtotal" class="modal-Subtotal"></div>
+        <div id="modalDesconto" class="modal-Desconto"></div>
         <div id="modalTotal" class="modal-Total"></div>
-        <div id="modalDesconto" class="modal-Total"></div>
-        <div id="modalValorFaturado" class="modal-ValorFaturado"></div>
+        <div id="modalFaturado" class="modal-Faturado"></div>
     </div>
     <div class="modal-footer">
         <?php
-                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                            echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-                                        }
-                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                                            echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-                                        }
-                                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                                            echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
-                                        }
-?>
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+                echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+            }
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+                echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+            }
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+                echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+            }
+        ?>
     </div>
 </div>
 
@@ -1287,10 +1288,10 @@
                 $('#modalDescription').html(eventObj.description);
                 $('#modalDefeito').html(eventObj.defeito);
                 $('#modalObservacoes').html(eventObj.observacoes);
-                $('#modalTotal').html(eventObj.total);
+                $('#modalSubtotal').html(eventObj.subtotal);
                 $('#modalDesconto').html(eventObj.desconto);
-                $('#modalValorFaturado').html(eventObj.valorFaturado);
-
+                $('#modalTotal').html(eventObj.total);
+                $('#modalFaturado').html(eventObj.faturado);
                 $('#eventUrl').attr('href', event.url);
                 $('#calendarModal').modal();
             },
