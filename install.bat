@@ -149,7 +149,7 @@ GOTO etapa0
 :etapa4
 ECHO # BAIXANDO DEPENDENCIAS...
 ECHO.
-ECHO - Criando diretório de instalacao
+ECHO - Criando diretorio de instalacao
 IF not EXIST %dirDefault% mkdir %dirDefault% >NUL 2>&1
 ECHO - Verificando Wget
 IF not EXIST "%dirDefault%\wget.exe" PowerShell -command "& { iwr %urlWget% -OutFile %dirDefault%\wget.exe }" >NUL 2>&1
