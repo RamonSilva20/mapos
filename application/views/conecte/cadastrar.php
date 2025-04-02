@@ -254,7 +254,7 @@
                     <div class="span12">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
-                            <a href="<?= base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                            <a href="<?= base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-undo'></i></span><span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </div>
