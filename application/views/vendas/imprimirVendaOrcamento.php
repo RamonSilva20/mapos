@@ -52,8 +52,8 @@
                                 <tr class="table-secondary">
                                     <th class="text-center">STATUS</th>
                                     <th class="text-center">DATA DA VENDA</th>
-                                    <th class="text-center">GARANTIA</th>
-                                    <th class="text-center">VENC. DA GARANTIA</th>
+                                    <th class="text-center">VALIDADE</th>
+                                    <th class="text-center">VENC. DO ORÇAMENTO</th>
                                 </tr>
                             </thead>
                             <tbody>
