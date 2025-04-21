@@ -211,6 +211,12 @@ class Vendas extends MY_Controller
             true
         );
 
+        $clienteId = $this->data['result']->clientes_id;
+        $this->load->model('clientes_model');
+        $cliente = $this->clientes_model->getById($clienteId);
+
+        $zapnumber = preg_replace('/[^0-9]/', '', $cliente->telefone ?? '');
+        $this->data['zapnumber'] = $zapnumber;
         $this->data['view'] = 'vendas/visualizarVenda';
 
         return $this->layout();
