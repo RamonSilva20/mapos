@@ -63,22 +63,45 @@
                         echo '<tr>';
                         echo '<td>' . $r->idClientes . '</td>';
                         echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-                        echo '<td>' . $r->contato . '</td>';
+                        // Campo Contato com link para WhatsApp se for número
+                        if (!empty($r->contato)) {
+                            $contatoLimpo = preg_replace('/[^0-9]/', '', $r->contato);
+                            if (is_numeric($contatoLimpo) && strlen($contatoLimpo) >= 8) {
+                                echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $contatoLimpo . '" target="_blank" title="Chamar este número no WhatsApp">' . $r->contato . '</a></td>';
+                            } else {
+                                echo '<td>' . htmlspecialchars($r->contato) . '</td>';
+                            }
+                        } else {
+                            echo '<td>-</td>';
+                        }
+
+                        // Campo Documento (sem alterações)
                         echo '<td>' . $r->documento . '</td>';
-                        //Campo Telefone com link para WhatsApp
+
+                        // Campo Telefone com link para WhatsApp
                         if (!empty($r->telefone)) {
                             $telefoneLimpo = preg_replace('/[^0-9]/', '', $r->telefone);
-                            echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $telefoneLimpo . '" target="_blank">' . $r->telefone . '</a></td>';
+                            if (is_numeric($telefoneLimpo) && strlen($telefoneLimpo) >= 8) {
+                                echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $telefoneLimpo . '" target="_blank" title="Chamar este número no WhatsApp">' . $r->telefone . '</a></td>';
+                            } else {
+                                echo '<td>' . htmlspecialchars($r->telefone) . '</td>';
+                            }
                         } else {
                             echo '<td>-</td>';
-                        }                 
-                        //Campo Celular com link para WhatsApp
+                        }
+
+                        // Campo Celular com link para WhatsApp
                         if (!empty($r->celular)) {
                             $celularLimpo = preg_replace('/[^0-9]/', '', $r->celular);
-                            echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $celularLimpo . '" target="_blank">' . $r->celular . '</a></td>';
+                            if (is_numeric($celularLimpo) && strlen($celularLimpo) >= 8) {
+                                echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $celularLimpo . '" target="_blank" title="Chamar este número no WhatsApp">' . $r->celular . '</a></td>';
+                            } else {
+                                echo '<td>' . htmlspecialchars($r->celular) . '</td>';
+                            }
                         } else {
                             echo '<td>-</td>';
-                        } 
+                        }
+
                         echo '<td>' . $r->email . '</td>';
 
                         // Verifica se é Fornecedor ou Cliente
