@@ -63,18 +63,7 @@
                         echo '<tr>';
                         echo '<td>' . $r->idClientes . '</td>';
                         echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-                        // Campo Contato com link para WhatsApp se for número
-                        if (!empty($r->contato)) {
-                            $contatoLimpo = preg_replace('/[^0-9]/', '', $r->contato);
-                            if (is_numeric($contatoLimpo) && strlen($contatoLimpo) >= 8) {
-                                echo '<td><a href="https://api.whatsapp.com/send?phone=55' . $contatoLimpo . '" target="_blank" title="Chamar este número no WhatsApp">' . $r->contato . '</a></td>';
-                            } else {
-                                echo '<td>' . htmlspecialchars($r->contato) . '</td>';
-                            }
-                        } else {
-                            echo '<td>-</td>';
-                        }
-
+                        echo '<td>' . $r->contato . '</td>';
                         // Campo Documento (sem alterações)
                         echo '<td>' . $r->documento . '</td>';
 
