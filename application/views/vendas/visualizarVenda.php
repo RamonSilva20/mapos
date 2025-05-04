@@ -179,9 +179,9 @@
                                 <hr>
                                 <div style="text-align: right;">
                                 <?php if ($result->valor_desconto != 0 && $result->desconto != 0): ?>
-                                    <h4>SUBTOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
-                                    <h4>DESCONTO: R$ <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?></h4>
-                                    <h4>TOTAL: R$ <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></h4>
+                                    <h4>SUBTOTAL: <?php echo $valores['subtotal']; ?></h4>
+                                    <h4>DESCONTO: - <?php echo $valores['descontoReais'];; ?></h4>
+                                    <h4>TOTAL: R$ <?php echo $valores['valorTotal']; ?></h4>
                                     
                                 <?php else: ?>
                                     <h4 style="text-align: right">TOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>

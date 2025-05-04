@@ -13,6 +13,7 @@ class Vendas extends MY_Controller
         $this->load->helper('form');
         $this->load->model('vendas_model');
         $this->data['menuVendas'] = 'Vendas';
+        $this->load->library('OrdemUtils');
     }
 
     public function index()
@@ -121,6 +122,7 @@ class Vendas extends MY_Controller
 
     public function editar()
     {
+
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
@@ -173,6 +175,7 @@ class Vendas extends MY_Controller
         }
 
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        $this->data['valores'] = $this->ordemutils->calculaVenda($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['view'] = 'vendas/editarVenda';
 
@@ -216,6 +219,8 @@ class Vendas extends MY_Controller
         $cliente = $this->clientes_model->getById($clienteId);
 
         $zapnumber = preg_replace('/[^0-9]/', '', $cliente->telefone ?? '');
+        
+        $this->data['valores'] = $this->ordemutils->calculaVenda($this->uri->segment(3));
         $this->data['zapnumber'] = $zapnumber;
         $this->data['view'] = 'vendas/visualizarVenda';
 
