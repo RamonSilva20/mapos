@@ -1,5 +1,4 @@
-<?php $totalServico = 0;
-$totalProdutos = 0; ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -197,7 +196,6 @@ $totalProdutos = 0; ?>
                             <tbody>
                                 <?php
                                 foreach ($produtos as $p) {
-                                    $totalProdutos = $totalProdutos + $p->subTotal;
                                     echo '<tr>';
                                     echo '<td>' . $p->quantidade . '</td>';
                                     echo '<td>' . $p->descricao . '</td>';
@@ -208,7 +206,7 @@ $totalProdutos = 0; ?>
 
                                 <tr>
                                     <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                    <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                    <td><strong><?php echo $valores['totalProdutos']; ?></strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -227,7 +225,6 @@ $totalProdutos = 0; ?>
                                 <?php setlocale(LC_MONETARY, 'en_US'); foreach ($servicos as $s) {
                                     $preco = $s->preco ?: $s->precoVenda;
                                     $subtotal = $preco * ($s->quantidade ?: 1);
-                                    $totalServico = $totalServico + $subtotal;
                                     echo '<tr>';
                                     echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                     echo '<td>' . $s->nome . '</td>';
@@ -237,7 +234,7 @@ $totalProdutos = 0; ?>
                                 } ?>
                                 <tr>
                                     <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                    <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                    <td><strong><?php echo $valores['totalServicos']; ?></strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -245,15 +242,17 @@ $totalProdutos = 0; ?>
                     <table class="table table-bordered table-condensed">
                         <tbody>
                             <tr>
-                                <td colspan="5"> <?php
-                                    if ($totalProdutos != 0 || $totalServico != 0) {
-                                        if ($result->valor_desconto != 0) {
-                                            echo "<h4 style='text-align: right; font-size: 13px;'>Subtotal: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                            echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Total: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
-                                        } else { echo "<h4 style='text-align: right; font-size: 13px;'>Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
-                                    } ?>
-                                </td>
+                            <td colspan="5">
+                                <?php if ($valores['totalProdutos'] != 'R$ 0,00' || $valores['totalServicos'] != 'R$ 0,00') : ?>
+                                    <h4 style="text-align: right; font-size: 13px;">Subtotal: <?= $valores['subtotal']; ?></h4>
+
+                                    <?php if ($valores['descontoReais'] != 'R$ 0,00') : ?>
+                                        <h4 style="text-align: right; font-size: 13px;">Desconto: <?= $valores['descontoReais']; ?></h4>
+                                    <?php endif; ?>
+
+                                    <h4 style="text-align: right; font-size: 13px;">Total: <?= $valores['valorTotal']; ?></h4>
+                                <?php endif; ?>
+                            </td>
                             </tr>
                         </tbody>
                         <?php if ($result->status == 'Finalizado' || $result->status == 'Orçamento') { ?>
@@ -279,7 +278,7 @@ $totalProdutos = 0; ?>
                 </div>
                       
                 <!-- Via Da Empresa  -->
-                <?php $totalServico = 0; $totalProdutos = 0; ?>
+                
                     <div id="ViaEmpresa" <?php echo (!$configuration['control_2vias']) ? "style='display: none;'" : "style='display: block;'" ?>>
                         <div class="invoice-head" style="margin-bottom: 0">
                             <table class="table table-condensed">
@@ -412,7 +411,7 @@ $totalProdutos = 0; ?>
                                 <tbody>
                                     <?php
                                     foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
+                                        
                                         echo '<tr>';
                                         echo '<td>' . $p->quantidade . '</td>';
                                         echo '<td>' . $p->descricao . '</td>';
@@ -423,7 +422,7 @@ $totalProdutos = 0; ?>
 
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                        <td><strong><?php echo $valores['totalProdutos']; ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -443,7 +442,6 @@ $totalProdutos = 0; ?>
                                     <?php setlocale(LC_MONETARY, 'en_US'); foreach ($servicos as $s) {
                                         $preco = $s->preco ?: $s->precoVenda;
                                         $subtotal = $preco * ($s->quantidade ?: 1);
-                                        $totalServico = $totalServico + $subtotal;
                                         echo '<tr>';
                                         echo '<td>' . ($s->quantidade ?: 1) . '</td>';
                                         echo '<td>' . $s->nome . '</td>';
@@ -453,7 +451,7 @@ $totalProdutos = 0; ?>
                                     } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong></td>
+                                        <td><strong>R$ <?php echo $valores['totalServicos']; ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -462,14 +460,16 @@ $totalProdutos = 0; ?>
                         <table class="table table-bordered table-condensed">
                             <tbody>
                                 <tr>
-                                    <td colspan="5"> <?php
-                                        if ($totalProdutos != 0 || $totalServico != 0) {
-                                            if ($result->valor_desconto != 0) {
-                                                echo "<h4 style='text-align: right; font-size: 13px;'>Subtotal: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                                echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Desconto: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                                echo $result->valor_desconto != 0 ? "<h4 style='text-align: right; font-size: 13px;'> Total: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>" : "";
-                                            } else { echo "<h4 style='text-align: right; font-size: 13px;'>Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>"; }
-                                        } ?>
+                                    <td colspan="5">
+                                    <?php if ($valores['totalProdutos'] != 'R$ 0,00' || $valores['totalServicos'] != 'R$ 0,00') : ?>
+                                        <h4 style="text-align: right; font-size: 13px;">Subtotal: <?= $valores['subtotal']; ?></h4>
+
+                                        <?php if ($valores['descontoReais'] != 'R$ 0,00') : ?>
+                                            <h4 style="text-align: right; font-size: 13px;">Desconto: <?= $valores['descontoReais']; ?></h4>
+                                        <?php endif; ?>
+
+                                        <h4 style="text-align: right; font-size: 13px;">Total: <?= $valores['valorTotal']; ?></h4>
+                                    <?php endif; ?>
                                     </td>
                                 </tr>
                             </tbody>

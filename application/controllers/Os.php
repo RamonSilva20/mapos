@@ -12,6 +12,7 @@ class Os extends MY_Controller
         $this->load->helper('form');
         $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
+        $this->load->library('OrdemUtils');
     }
 
     public function index()
@@ -314,7 +315,7 @@ class Os extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
             redirect(base_url());
         }
-
+        
         $this->data['custom_error'] = '';
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
 
@@ -339,6 +340,7 @@ class Os extends MY_Controller
             ],
             true
         );
+        $this->data['valores'] = $this->ordemutils->calculaOrdem($this->uri->segment(3));
         $this->data['view'] = 'os/visualizarOs';
         $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
@@ -431,6 +433,7 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $this->data['valores'] = $this->ordemutils->calculaOrdem($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         if ($this->data['configuration']['pix_key']) {
             $this->data['qrCode'] = $this->os_model->getQrCode(
@@ -464,6 +467,7 @@ class Os extends MY_Controller
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['valores'] = $this->ordemutils->calculaOrdem($this->uri->segment(3));
         $this->data['qrCode'] = $this->os_model->getQrCode(
             $this->uri->segment(3),
             $this->data['configuration']['pix_key'],
