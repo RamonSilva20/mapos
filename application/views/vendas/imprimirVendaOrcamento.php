@@ -168,7 +168,7 @@
                                             </tr>
                                             <tr>
                                                 <td>DESCONTO</td>
-                                                <td>R$ <b><?= number_format($result->desconto, 2, ',', '.') ?></b></td>
+                                                <td>R$ <b><?= number_format($result->valor_desconto - $totalProdutos, 2, ',', '.') ?></b></td>
                                             </tr>
                                             <tr>
                                                 <td>TOTAL</td>
