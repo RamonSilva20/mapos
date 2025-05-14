@@ -95,4 +95,5 @@ class OrdemUtils {
         ];
     }
     // futuramente pode ser movido a função validaCpf e ValidaCnpj
+    
 }
