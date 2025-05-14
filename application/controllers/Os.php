@@ -315,7 +315,6 @@ class Os extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
             redirect(base_url());
         }
-        
         $this->data['custom_error'] = '';
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
 
