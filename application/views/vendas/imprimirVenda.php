@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <?php if ($result->observacoes) : ?>
+                <?php if ($result->observacoes_cliente) : ?>
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
                         <div>
