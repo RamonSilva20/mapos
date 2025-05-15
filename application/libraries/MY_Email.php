@@ -8,7 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  *
  * @category    Libraries
  *
- * @author      Thaynã Bruno Moretti
+ * @author      Thayn達 Bruno Moretti
  *
  * @link    http://www.meau.com.br/
  *
@@ -126,44 +126,52 @@ class MY_Email extends CI_Email
      *
      * @return void
      */
-    public function send_queue()
-    {
-        $this->set_status('pending');
-        $emails = $this->get();
+   public function send_queue()
+{
+    $this->set_status('pending');
+    $emails = $this->get();
 
-        $this->CI->db->where('status', 'pending');
-        $this->CI->db->set('status', 'sending');
+    $this->CI->db->where('status', 'pending');
+    $this->CI->db->set('status', 'sending');
+    $this->CI->db->set('date', date('Y-m-d H:i:s'));
+    $this->CI->db->update($this->table_email_queue);
+
+    foreach ($emails as $email) {
+        $recipients = explode(', ', $email->to);
+
+        $cc = ! empty($email->cc) ? explode(', ', $email->cc) : [];
+        $bcc = ! empty($email->bcc) ? explode(', ', $email->bcc) : [];
+
+        $this->_headers = unserialize($email->headers);
+
+        $this->to($recipients);
+        $this->cc($cc);
+        $this->bcc($bcc);
+
+        // 🔧 Configurações para prevenir erro de linha longa
+        $this->set_mailtype("html");
+        $this->set_newline("\r\n");
+        $this->set_crlf("\r\n");
+        $this->set_wordwrap(true);
+        $this->_headers['Content-Transfer-Encoding'] = 'quoted-printable';
+
+        // 🔧 Corrigir o corpo do e-mail com quebra de linha
+        $bodyQuebrado = chunk_split($email->message, 998, "\r\n");
+        $this->message($bodyQuebrado);
+
+        if ($this->send(true)) {
+            $status = 'sent';
+        } else {
+            log_message('error', $this->print_debugger());
+            $status = 'failed';
+        }
+
+        $this->CI->db->where('id', $email->id);
+        $this->CI->db->set('status', $status);
         $this->CI->db->set('date', date('Y-m-d H:i:s'));
         $this->CI->db->update($this->table_email_queue);
-
-        foreach ($emails as $email) {
-            $recipients = explode(', ', $email->to);
-
-            $cc = ! empty($email->cc) ? explode(', ', $email->cc) : [];
-            $bcc = ! empty($email->bcc) ? explode(', ', $email->bcc) : [];
-
-            $this->_headers = unserialize($email->headers);
-
-            $this->to($recipients);
-            $this->cc($cc);
-            $this->bcc($bcc);
-
-            $this->message($email->message);
-
-            if ($this->send(true)) {
-                $status = 'sent';
-            } else {
-                log_message('error', $this->print_debugger());
-                $status = 'failed';
-            }
-
-            $this->CI->db->where('id', $email->id);
-
-            $this->CI->db->set('status', $status);
-            $this->CI->db->set('date', date('Y-m-d H:i:s'));
-            $this->CI->db->update($this->table_email_queue);
-        }
     }
+}
 
     /**
      * Retry failed emails
