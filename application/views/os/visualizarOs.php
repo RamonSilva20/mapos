@@ -30,7 +30,21 @@
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                         $this->load->model('os_model');
                         $zapnumber = preg_replace("/[^0-9]/", "", $result->celular_cliente);
-                        $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente->nome : ''), ($emitente ? $emitente->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
+                        $troca = [
+                            $result->nomeCliente,
+                            $result->idOs,
+                            $result->status,
+                            $valores['valorTotal'],
+                            strip_tags($result->descricaoProduto),
+                            $emitente ? $emitente->nome : '',
+                            $emitente ? $emitente->telefone : '',
+                            strip_tags($result->observacoes),
+                            strip_tags($result->defeito),
+                            strip_tags($result->laudoTecnico),
+                            date('d/m/Y', strtotime($result->dataFinal)),
+                            date('d/m/Y', strtotime($result->dataInicial)),
+                            $result->garantia . ' dias'
+                        ];
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                         if (!empty($zapnumber)) {
                             echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://api.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
@@ -275,7 +289,7 @@
                                     <tr>
                                         <td></td>
                                         <td colspan="2" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?php echo $valores['totalProdutos']; ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -305,27 +319,25 @@
                                     } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?= $valores['totalServicos']; ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         <?php } ?>
                         <table class="table table-bordered table-condensed">
-                            <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                                if ($result->valor_desconto != 0) {
-                                    echo "<td>";
-                                    echo "<h4 style='text-align: right'>SUBTOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                    echo $result->valor_desconto != 0 ? "<h4 style='text-align: right'>DESCONTO: R$ " . number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') . "</h4>" : "";
-                                    echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($result->valor_desconto, 2, ',', '.') . "</h4>";
-                                    echo "</td>";
-                                } else {
-                                    echo "<td>";
-                                    echo "<h4 style='text-align: right'>TOTAL: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.') . "</h4>";
-                                    echo "</td>";
-                                }
-                            } ?>
-                        </table>
+                        <?php if ($valores['totalProdutos'] != "R$ 0,00" || $valores['totalServicos'] != "R$ 0,00"): ?>
+                            <td>
+                                <h4 style='text-align: right'>SUBTOTAL: <?= $valores['subtotal'] ?></h4>
+
+                                <?php if ($valores['descontoReais'] != 'R$ 0,00'): ?>
+                                    <h4 style='text-align: right'>DESCONTO: - <?= $valores['descontoReais'] ?></h4>
+                                <?php endif; ?>
+
+                                <h4 style='text-align: right'>TOTAL: <?= $valores['valorTotal'] ?></h4>
+                            </td>
+                        <?php endif; ?>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -369,13 +381,7 @@
                 <img src="<?php echo base_url(); ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
                 <img id="qrCodeImage" width="50%" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
                 <?php echo '<span>Chave PIX: ' . $chaveFormatada . '</span>'; ?></br>
-                <?php if ($totalProdutos != 0 || $totalServico != 0) {
-                    if ($result->valor_desconto != 0) {
-                        echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
-                    } else {
-                        echo "Valor Total: R$ " . number_format($totalProdutos + $totalServico, 2, ',', '.');
-                    }
-                } ?>
+                <?= $valores['valorTotal'] ?>
             </td>
         </div>
     </div>

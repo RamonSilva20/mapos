@@ -177,43 +177,45 @@
                                     <tbody>
                                         <?php
                                         $total = 0;
-foreach ($produtos as $p) {
-    $preco = $p->preco ?: $p->precoVenda;
-    $total = $total + $p->subTotal;
-    echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
-    echo '<td><div align="center">' . $p->quantidade . '</td>';
-    echo '<td><div align="center">R$: ' . $preco . '</td>';
-    echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
-    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, '.', '') . '</td>';
-    echo '</tr>';
-} ?>
+                                        foreach ($produtos as $p) {
+                                            $preco = $p->preco ?: $p->precoVenda;
+                                            $total = $total + $p->subTotal;
+                                            echo '<tr>';
+                                            echo '<td>' . $p->descricao . '</td>';
+                                            echo '<td><div align="center">' . $p->quantidade . '</td>';
+                                            echo '<td><div align="center">R$: ' . $preco . '</td>';
+                                            echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
+                                            echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, '.', '') . '</td>';
+                                            echo '</tr>';
+                                        } ?>
                                     </tbody>
+                                    <?php if($valores['valorTotal'] != "R$ 0,00") : ?>
                                     <tfoot>
+                                        
                                         <tr>
-                                            <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                            <td colspan="4" style="text-align: right"><strong>Subtotal:</strong></td>
                                             <td>
-                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, '.', ''); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2, '.', ''); ?>">
+                                                <div align="center"><strong>R$: <?= $valores['subtotal'] ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2, '.', ''); ?>">
                                             </td>
                                         </tr>
-                                        <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
-                                            ?>
+                                        <tr>
+                                            <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
+                                            <td>
+                                                <div align="center"><strong><?= $valores['descontoReais']?></strong></div>
+                                            </td>
+                                        </tr>
+                                        
                                             <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
+                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong><?php echo $result->tipo_desconto == "real" ? "R$ " : ""; ?> <?php echo number_format($result->desconto, 2, '.', ''); ?> <?php echo $result->tipo_desconto == "porcento" ? " %" : ""; ?></strong></div>
+                                                    <div align="center"><strong><?= $valores['valorTotal']; ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Total Com Desconto:</strong></td>
-                                                <td>
-                                                    <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, '.', ''); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
-                                                </td>
-                                            </tr>
-                                        <?php
-                                        } ?>
-                                    </tfoot>
-                                </table>
+                                            
+                                            
+                                        </tfoot>
+                                        <?php endif; ?>
+                                    </table>
                             </div>
                         </div>
                     </div>
@@ -249,11 +251,11 @@ foreach ($produtos as $p) {
                 <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo $valores['subtotal']; ?> " />
                 </div>
                 <div class="span5" style="margin-left: 2">
                     <label for="valor">Valor Com Desconto*</label>
-                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " />
+                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo $valores['valorTotal']; ?> " />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -325,7 +327,7 @@ foreach ($produtos as $p) {
 
         this.value = this.value.replace(/[^0-9.]/g, '');
         if ($("#total-venda").val() == null || $("#total-venda").val() == '') {
-            $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
+            // $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
             $('#resultado').val('');
             $("#total-venda").val(valorBackup);
