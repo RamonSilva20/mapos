@@ -121,6 +121,7 @@ section .dados {
     line-height: 20px;
     display: flex;
     justify-content: space-between;
+    page-break-inside: avoid;
 }
 
 section .dados p {
@@ -185,6 +186,8 @@ footer {
     width: 100%;
     padding: 10px;
     border: 1px solid #cdcdcd;
+    page-break-before: avoid;
+    page-break-inside: avoid;
 }
 
 footer .detalhes {
