@@ -97,7 +97,7 @@
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="display:flex">
+                                        <div class="span12" style="display:flex; justify-content: center;">
                                             <button class="button btn btn-success" id="btnContinuar">
                                               <span class="button__icon"><i class='bx bx-chevrons-right'></i></span><span class="button__text2">Continuar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning" style="max-width: 160px">
