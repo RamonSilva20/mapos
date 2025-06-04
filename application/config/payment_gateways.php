@@ -106,6 +106,7 @@ $config['payment_gateways'] = [
             'DUNNING_REQUESTED' => 'Em processo de recuperação',
             'DUNNING_RECEIVED' => 'Recuperada',
             'AWAITING_RISK_ANALYSIS' => 'Pagamento em análise',
+            'DELETED' => 'Cobrança excluída ou cancelada',
         ],
     ],
 ];
