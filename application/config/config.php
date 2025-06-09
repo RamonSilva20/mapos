@@ -1,5 +1,7 @@
 <?php
 
+use Whoops\Run;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
@@ -515,3 +517,10 @@ $config['proxy_ips'] = $_ENV['APP_PROXY_IPS'] ?? '';
 |
 */
 $config['global_xss_filtering'] = $_ENV['GLOBAL_XSS_FILTERING'] ? filter_var($_ENV['GLOBAL_XSS_FILTERING'], FILTER_VALIDATE_BOOLEAN) : true;
+
+/*
+|--------------------------------------------------------------------------
+| REST Handle Exceptions
+|--------------------------------------------------------------------------
+*/
+$config['rest_handle_exceptions'] = empty($_ENV['APP_ENVIRONMENT']) || $_ENV['APP_ENVIRONMENT'] !== 'development' || ! class_exists(Run::class);
