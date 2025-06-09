@@ -8,7 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  *
  * @category    Libraries
  *
- * @author      Thayn達 Bruno Moretti
+ * @author      Thaynã Bruno Moretti
  *
  * @link    http://www.meau.com.br/
  *
