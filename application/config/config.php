@@ -1,7 +1,5 @@
 <?php
 
-use Whoops\Run;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
@@ -523,4 +521,4 @@ $config['global_xss_filtering'] = $_ENV['GLOBAL_XSS_FILTERING'] ? filter_var($_E
 | REST Handle Exceptions
 |--------------------------------------------------------------------------
 */
-$config['rest_handle_exceptions'] = empty($_ENV['APP_ENVIRONMENT']) || $_ENV['APP_ENVIRONMENT'] !== 'development' || ! class_exists(Run::class);
+$config['rest_handle_exceptions'] = isset($_ENV['WHOOPS_ERROR_PAGE_ENABLED']) ? filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'], FILTER_VALIDATE_BOOLEAN) === false : true ;
