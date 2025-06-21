@@ -9,11 +9,11 @@ class WhoopsHook
 {
     public function bootWhoops()
     {
-        if (
-            empty($_ENV['APP_ENVIRONMENT'])
-            || $_ENV['APP_ENVIRONMENT'] !== 'development'
-            || ! class_exists(Run::class)
-        ) {
+        $whoopsEnabled = empty($_ENV['WHOOPS_ERROR_PAGE_ENABLED'])
+            ? true
+            : filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'], FILTER_VALIDATE_BOOLEAN);
+
+        if (! $whoopsEnabled) {
             return;
         }
 
@@ -28,8 +28,40 @@ class WhoopsHook
                 : new PrettyPageHandler();
         }
 
+        if ($handler instanceof PrettyPageHandler) {
+            $sensitiveVars = $this->extractEnvNames(APPPATH . '.env');
+
+            foreach ($sensitiveVars as $sensitiveVar) {
+                $handler->blacklist('_SERVER', $sensitiveVar);
+                $handler->blacklist('_ENV', $sensitiveVar);
+            }
+        }
+
         $whoops = new Run();
         $whoops->pushHandler($handler);
         $whoops->register();
+    }
+
+    private function extractEnvNames(string $filePath)
+    {
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (! $lines) {
+            return [];
+        }
+
+        $envNames = [];
+        foreach ($lines as $line) {
+            if (strpos(trim($line), '#') === 0 || trim($line) === '') {
+                continue;
+            }
+
+            $parts = explode('=', $line, 2);
+
+            if (isset($parts[0])) {
+                $envNames[] = trim($parts[0]);
+            }
+        }
+
+        return $envNames;
     }
 }
