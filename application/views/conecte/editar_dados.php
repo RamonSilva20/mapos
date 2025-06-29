@@ -22,6 +22,14 @@
                             <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo $result->nomeCliente; ?>" />
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label for="contato" class="control-label">Contato</label>
+                        <div class="controls">
+                            <input id="contato" type="text" name="contato" value="<?php echo $result->contato; ?>" />
+                        </div>
+                    </div>
+
                     <div class="control-group">
                         <?php if ($custom_error != '') {
                             echo '<div class="alert alert-danger">' . $custom_error . '</div>';

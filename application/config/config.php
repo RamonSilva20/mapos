@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * App current version
  */
-$config['app_version'] = '4.46.0';
+$config['app_version'] = '4.52.0';
 
 /**
  * Nome do sistema
@@ -515,3 +515,10 @@ $config['proxy_ips'] = $_ENV['APP_PROXY_IPS'] ?? '';
 |
 */
 $config['global_xss_filtering'] = $_ENV['GLOBAL_XSS_FILTERING'] ? filter_var($_ENV['GLOBAL_XSS_FILTERING'], FILTER_VALIDATE_BOOLEAN) : true;
+
+/*
+|--------------------------------------------------------------------------
+| REST Handle Exceptions
+|--------------------------------------------------------------------------
+*/
+$config['rest_handle_exceptions'] = isset($_ENV['WHOOPS_ERROR_PAGE_ENABLED']) ? filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'], FILTER_VALIDATE_BOOLEAN) === false : true ;

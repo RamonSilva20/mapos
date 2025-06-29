@@ -85,10 +85,10 @@ if (! empty($_POST)) {
     $env_file = file_get_contents($env_file_path);
 
     // set the database config file
-    $env_file = str_replace('enter_hostname', $host, $env_file);
+    $env_file = str_replace('enter_db_hostname', $host, $env_file);
     $env_file = str_replace('enter_db_username', $dbuser, $env_file);
     $env_file = str_replace('enter_db_password', $dbpassword, $env_file);
-    $env_file = str_replace('enter_database_name', $dbname, $env_file);
+    $env_file = str_replace('enter_db_name', $dbname, $env_file);
 
     // set random enter_encryption_key
     $encryption_key = substr(md5(rand()), 0, 15);
@@ -97,8 +97,8 @@ if (! empty($_POST)) {
 
     // set random enter_jwt_key
     $env_file = str_replace('enter_jwt_key', base64_encode(openssl_random_pseudo_bytes(32)), $env_file);
-    $env_file = str_replace('token_expire_time', $_POST['token_expire_time'], $env_file);
-    $env_file = str_replace('api_enabled', (string) $_POST['api_enabled'], $env_file);
+    $env_file = str_replace('enter_token_expire_time', $_POST['enter_token_expire_time'], $env_file);
+    $env_file = str_replace('enter_api_enabled', (string) $_POST['enter_api_enabled'], $env_file);
 
     // set the environment = production
     $env_file = str_replace('pre_installation', 'production', $env_file);

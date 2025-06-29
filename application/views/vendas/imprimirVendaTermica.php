@@ -44,7 +44,7 @@
                                     <tr>
                                         <td colspan="4" style="width: 100%;"><b>#Venda: </b><span>
                                                 <?php echo $result->idVendas ?></span>
-                                            <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y'); ?></span>
+                                            <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y H:i:s'); ?></span>
                                             <?php if ($result->faturado) : ?>
                                                 <br>
                                                 <b>Venc. Garantia: </b>

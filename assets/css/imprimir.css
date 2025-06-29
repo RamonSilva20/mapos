@@ -93,6 +93,10 @@ section .title .via {
     left: 5px;
 }
 
+.via{
+    display: none;
+}
+
 section .title .emissao {
     font-size: 13px;
     position: absolute;
@@ -117,6 +121,7 @@ section .dados {
     line-height: 20px;
     display: flex;
     justify-content: space-between;
+    page-break-inside: avoid;
 }
 
 section .dados p {
@@ -181,6 +186,8 @@ footer {
     width: 100%;
     padding: 10px;
     border: 1px solid #cdcdcd;
+    page-break-before: avoid;
+    page-break-inside: avoid;
 }
 
 footer .detalhes {
@@ -198,6 +205,12 @@ footer .assinaturas span {
     text-align: center;
     border-top: 1px solid #000;
     margin-top: 55px;
+}
+
+footer .vendedor {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
 }
 
 #anexos {
@@ -234,6 +247,11 @@ footer .assinaturas span {
         background: initial;
         page-break-after: always;
     }
+
+    .via{
+        display: block;
+    }
+    
     #anexos {
         display: block;
     }

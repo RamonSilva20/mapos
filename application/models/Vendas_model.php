@@ -32,6 +32,7 @@ class Vendas_model extends CI_Model
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->join('clientes', 'clientes.idClientes = ' . $table . '.clientes_id');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = ' . $table . '.usuarios_id');
         $this->db->order_by('idVendas', 'desc');
         
         // condicionais da pesquisa
@@ -124,7 +125,7 @@ class Vendas_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('vendas.*, clientes.*, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
+        $this->db->select('vendas.*, clientes.*, clientes.contato as contato_cliente, clientes.email as emailCliente, lancamentos.data_vencimento, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome as nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
@@ -298,6 +299,18 @@ class Vendas_model extends CI_Model
             ->setMerchantCity($emitente->cidade);
 
         return $pix->getQRCode();
+    }
+
+    public function getTotalVendas($idVendas)
+    {
+        $produtos = $this->getProdutos($idVendas);
+        $total = 0;
+
+        foreach ($produtos as $produto) {
+            $total += $produto->quantidade * $produto->preco;
+        }
+
+        return $total;
     }
 }
 

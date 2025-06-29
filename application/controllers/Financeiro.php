@@ -10,10 +10,6 @@ class Financeiro extends MY_Controller
     {
         parent::__construct();
         $this->load->model('financeiro_model');
-        $this->load->model("mapos_model");
-        $this->load->model("os_model");
-        $this->load->model("clientes_model");
-        $this->load->model("usuarios_model");
         $this->load->helper('codegen_helper');
         $this->data['menuLancamentos'] = 'financeiro';
     }
@@ -269,7 +265,7 @@ class Financeiro extends MY_Controller
                         'data_pagamento' => $recebimento ?: date_format($myDateTime, 'Y-m-d'),
                         'baixado' => 0,
                         'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'clientes_id ' => $this->input->post('idCliente_parc'),
+                        'clientes_id' => $this->input->post('idCliente_parc'),
                         'observacoes' => $this->input->post('observacoes_parc'),
                         'forma_pgto' => $this->input->post('formaPgto_parc'),
                         'tipo' => $this->input->post('tipo_parc'),
@@ -552,192 +548,46 @@ class Financeiro extends MY_Controller
         $id = $this->input->post('id');
 
         if ($id == null || ! is_numeric($id)) {
-            $json = ['result' => false];
+            $json = ['result' => false, 'message' => 'ID inválido'];
             echo json_encode($json);
-        } else {
-            $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
-            if ($result) {
-                log_info('Removeu um lançamento. ID: ' . $id);
-                $json = ['result' => true];
-                echo json_encode($json);
+            exit();
+        }
+
+        // Começa a transação
+        $this->db->trans_start();
+
+        // Atualiza a tabela vendas, removendo o ID do lançamento e alterando o faturado e status
+        $this->db->set('lancamentos_id', null);
+        $this->db->set('faturado', 0);
+        $this->db->set('status', 'Finalizado');
+        $this->db->where('lancamentos_id', $id);
+        $this->db->update('vendas');
+
+        // Exclui o lançamento
+        $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
+
+        if ($result) {
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
+                $json = ['result' => false, 'message' => 'Erro na transação'];
             } else {
-                $json = ['result' => false];
-                echo json_encode($json);
+                log_info('Excluiu um lançamento. ID: ' . $id);
+                $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
+                $json = ['result' => true];
             }
-        }
-    }
-    public function imprimirRecibo()
-    {
-        if (empty($this->uri->segment(3))) {
-            $this->session->set_flashdata(
-                "error",
-                "Ocorreu um erro ao tentar imprimir o recibo."
-            );
-            redirect(base_url());
         } else {
-            // Consulta dados do lançamento
-            $data["result"] = $this->financeiro_model->getLancamento(
-                $this->uri->segment(3)
-            );
-
-            //Verifica se o numero do lançameto existe
-            if (empty($data["result"])) {
-                $this->session->set_flashdata(
-                    "error",
-                    "Ocorreu um erro ao tentar imprimir o recibo. Lançamento não existe"
-                );
-                redirect(base_url());
-            }
-            
-            // Obtém os dados do lançamento atual
-            $lancamento = $this->financeiro_model->getLancamento($this->uri->segment(3));
-
-            // Verifica se há um valor de desconto e, se houver, usa-o no lugar do valor original
-            if ($lancamento["valor_desconto"] > 0.00) {
-                $lancamento["valor"] = $lancamento["valor_desconto"];
-            }
-            $data["cliente"] = $this->financeiro_model->getById(
-                $data["result"]["clientes_id"]
-            );
-            $emitente = $this->mapos_model->getEmitente();
-
-            // Cria o array de dados
-            $data = [
-                "id" => 3,
-                "qrCode" => $this->os_model->getQrCode(
-                    $this->uri->segment(3),
-                    $this->data["configuration"]["pix_key"],
-                    $emitente
-                ),
-                "emitente" => $emitente,
-                "chaveFormatada" => $this->formatarChave(
-                    $this->data["configuration"]["pix_key"]
-                ),
-                "lancamento" => $lancamento,
-                "cliente" => $this->financeiro_model->getById(
-                    $data["result"]["clientes_id"]
-                ),
-                "valorporescrito" => $this->numberToText(
-                    $lancamento["valor"]
-                ),
-            ];
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
+            $json = ['result' => false, 'message' => 'Erro ao excluir lançamento'];
         }
+
+        echo json_encode($json);
+        exit();
     }
-
-    public function formatarChave($chave)
-    {
-        if ($this->validarCPF($chave)) {
-            return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
-        } elseif ($this->validarCNPJ($chave)) {
-            return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
-        } elseif (strlen($chave) === 11) {
-            return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
-        }
-
-        return $chave;
-    }
-
-    function numberToText($value, $uppercase = 0) {
-        if (strpos($value, ",") > 0) {
-            $value = str_replace(".", "", $value);
-            $value = str_replace(",", ".", $value);
-        }
-     
-        $singular = ["centavo", "real", "mil", "milhão", "bilhão", "trilhão", "quatrilhão"];
-        $plural = ["centavos", "reais", "mil", "milhões", "bilhões", "trilhões", "quatrilhões"];
-     
-        $c = ["", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"];
-        $d = ["", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"];
-        $d10 = ["dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezesete", "dezoito", "dezenove"];
-        $u = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
-     
-        $z = 0;
-     
-        $value = number_format($value, 2, ".", ".");
-        $integer = explode(".", $value);
-        $cont = count($integer);
-     
-        for ($i = 0; $i < $cont; $i++)
-            for ($ii = strlen($integer[$i]); $ii < 3; $ii++)
-                $integer[$i] = "0" . $integer[$i];
-     
-        $fim = $cont - ($integer[$cont - 1] > 0 ? 1 : 2);
-        $rt = '';
-        for ($i = 0; $i < $cont; $i++) {
-            $value = $integer[$i];
-            $rc = (($value > 100) && ($value < 200)) ? "cento" : $c[$value[0]];
-            $rd = ($value[1] < 2) ? "" : $d[$value[1]];
-            $ru = ($value > 0) ? (($value[1] == 1) ? $d10[$value[2]] : $u[$value[2]]) : "";
-     
-            $r = $rc . (($rc && ($rd || $ru)) ? " e " : "") . $rd . (($rd &&
-                    $ru) ? " e " : "") . $ru;
-            $t = $cont - 1 - $i;
-            $r .= $r ? " " . ($value > 1 ? $plural[$t] : $singular[$t]) : "";
-            if ($value == "000"
-            )
-                $z++;
-            elseif ($z > 0)
-                $z--;
-            if (($t == 1) && ($z > 0) && ($integer[0] > 0))
-                $r .= ( ($z > 1) ? " de " : "") . $plural[$t];
-            if ($r)
-                $rt = $rt . ((($i > 0) && ($i <= $fim) &&
-                        ($integer[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r;
-        }
-     
-     return trim($rt ? $rt : "zero");
-    }
-
-    public function validarCPF($cpf)
-    {
-        $cpf = preg_replace("/[^0-9]/", "", $cpf);
-        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
-            return false;
-        }
-        $soma1 = 0;
-        for ($i = 0; $i < 9; $i++) {
-            $soma1 += $cpf[$i] * (10 - $i);
-        }
-        $resto1 = $soma1 % 11;
-        $dv1 = $resto1 < 2 ? 0 : 11 - $resto1;
-        if ($dv1 != $cpf[9]) {
-            return false;
-        }
-        $soma2 = 0;
-        for ($i = 0; $i < 10; $i++) {
-            $soma2 += $cpf[$i] * (11 - $i);
-        }
-        $resto2 = $soma2 % 11;
-        $dv2 = $resto2 < 2 ? 0 : 11 - $resto2;
-
-        return $dv2 == $cpf[10];
-    }
-
-    public function validarCNPJ($cnpj)
-    {
-        $cnpj = preg_replace("/[^0-9]/", "", $cnpj);
-        if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
-            return false;
-        }
-        $soma1 = 0;
-        for ($i = 0, $pos = 5; $i < 12; $i++, $pos--) {
-            $pos = $pos < 2 ? 9 : $pos;
-            $soma1 += $cnpj[$i] * $pos;
-        }
-        $dv1 = $soma1 % 11 < 2 ? 0 : 11 - ($soma1 % 11);
-        if ($dv1 != $cnpj[12]) {
-            return false;
-        }
-        $soma2 = 0;
-        for ($i = 0, $pos = 6; $i < 13; $i++, $pos--) {
-            $pos = $pos < 2 ? 9 : $pos;
-            $soma2 += $cnpj[$i] * $pos;
-        }
-        $dv2 = $soma2 % 11 < 2 ? 0 : 11 - ($soma2 % 11);
-
-        return $dv2 == $cnpj[13];
-    }
-
+    
     public function autoCompleteClienteFornecedor()
     {
         if (isset($_GET['term'])) {

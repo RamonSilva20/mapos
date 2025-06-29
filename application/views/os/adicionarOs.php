@@ -44,13 +44,15 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option value="Orçamento">Orçamento</option>
                                                 <option value="Aberto">Aberto</option>
+                                                <option value="Orçamento">Orçamento</option>
+                                                <option value="Negociação">Negociação</option>
+                                                <option value="Aprovado">Aprovado</option>
+                                                <option value="Aguardando Peças">Aguardando Peças</option>
                                                 <option value="Em Andamento">Em Andamento</option>
                                                 <option value="Finalizado">Finalizado</option>
+                                                <option value="Faturado">Faturado</option>
                                                 <option value="Cancelado">Cancelado</option>
-                                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                                <option value="Aprovado">Aprovado</option>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -95,7 +97,7 @@
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="display:flex">
+                                        <div class="span12" style="display:flex; justify-content: center;">
                                             <button class="button btn btn-success" id="btnContinuar">
                                               <span class="button__icon"><i class='bx bx-chevrons-right'></i></span><span class="button__text2">Continuar</span></button>
                                             <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning" style="max-width: 160px">

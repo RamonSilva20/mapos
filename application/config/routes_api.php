@@ -31,3 +31,20 @@ $route['api/v1/os/(:num)/anotacoes/(:num)'] = 'api/v1/OsController/anotacoes/$1/
 $route['api/v1/os/(:num)/anexos'] = 'api/v1/OsController/anexos/$1';
 $route['api/v1/os/(:num)/anexos/(:num)'] = 'api/v1/OsController/anexos/$1/$2';
 $route['api/v1/os/(:num)/desconto'] = 'api/v1/OsController/desconto/$1';
+
+/*
+Routes for clients API
+Rotas Para API area do cliente.
+*/
+
+$route['api/v1/client'] = 'api/v1/client/ClientOsController/index';
+$route['api/v1/client/auth'] = 'api/v1/client/ClientLoginController/login';
+
+$route['api/v1/client/os'] = 'api/v1/client/ClientOsController/os';
+$route['api/v1/client/os/(:num)'] = 'api/v1/client/ClientOsController/os/$1';
+
+$route['api/v1/client/compras'] = 'api/v1/client/ClientComprasController/index';
+$route['api/v1/client/compras/(:num)'] = 'api/v1/client/ClientComprasController/index/$1';
+
+$route['api/v1/client/cobrancas'] = 'api/v1/client/ClientCobrancasController/index';
+

@@ -49,6 +49,11 @@ class MercadoPago extends BasePaymentGateway
             throw new \Exception($payment->Error());
         }
 
+        // Se o status for 'cancelled', não podemos cancelar novamente
+        if ($payment->status === 'cancelled') {
+            return $this->atualizarDados($id);
+        }
+
         $payment->status = 'cancelled';
         $payment->update();
         if ($payment->Error()) {

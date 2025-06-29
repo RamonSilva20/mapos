@@ -135,7 +135,7 @@ $totalProdutos = 0; ?>
                                     <td style="text-align: center; width: 100%; font-size: 12px;">
                                         <b>N° OS: </b><span><?php echo $result->idOs ?></span>
                                         <span style="padding-left: 5%;"><b>Status: </b><?php echo $result->status ?></span></br>
-                                        <b>Emissão:</b> <?php echo date('d/m/Y') ?>
+                                        <b>Emissão:</b> <?php echo date('d/m/Y H:i:s') ?>
                                     </td>
                                 </tr>
                             </tbody>

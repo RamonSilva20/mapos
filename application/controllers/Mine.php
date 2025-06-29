@@ -239,15 +239,34 @@ class Mine extends CI_Controller
             if ($cliente) {
                 // Verificar credenciais do usuário
                 if (password_verify($password, $cliente->senha)) {
-                    $session_mine_data = ['nome' => $cliente->nomeCliente, 'cliente_id' => $cliente->idClientes, 'email' => $cliente->email, 'conectado' => true, 'isCliente' => true];
+                    $session_mine_data = [
+                        'nome' => $cliente->nomeCliente, 
+                        'cliente_id' => $cliente->idClientes, 
+                        'email' => $cliente->email, 
+                        'conectado' => true, 
+                        'isCliente' => true
+                    ];
                     $this->session->set_userdata($session_mine_data);
                     log_info($_SERVER['REMOTE_ADDR'] . ' Efetuou login no sistema');
+
+                    // Registrar login na auditoria
+                    $this->load->model('Audit_model');
+                    $log_data = [
+                        'usuario' => $cliente->nomeCliente,
+                        'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
+                        'data' => date('Y-m-d'),
+                        'hora' => date('H:i:s'),
+                        'ip' => $_SERVER['REMOTE_ADDR']
+                    ];
+
+                    $this->Audit_model->add($log_data);
+
                     echo json_encode(['result' => true]);
                 } else {
                     echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
                 }
             } else {
-                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
             }
         }
     }
@@ -309,6 +328,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             } else {
                 $data = [
@@ -324,6 +344,7 @@ class Mine extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'estado' => $this->input->post('estado'),
                     'cep' => $this->input->post('cep'),
+                    'contato' => $this->input->post('contato'),
                 ];
             }
 
@@ -616,7 +637,7 @@ class Mine extends CI_Controller
 
     public function imprimirOs($id = null)
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
+        if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
@@ -628,6 +649,13 @@ class Mine extends CI_Controller
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
+        $data['pix_key'] = $this->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $data['qrCode'] = $this->os_model->getQrCode(
+            $id,
+            $data['pix_key'],
+            $data['emitente']
+        );
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);      
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
@@ -647,24 +675,21 @@ class Mine extends CI_Controller
         $data['custom_error'] = '';
         $this->CI = &get_instance();
         $this->CI->load->database();
-        
-        
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $this->load->model('vendas_model');        
+
+        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
+        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $data['emitente'] = $this->mapos_model->getEmitente();
-        $data['qrCode'] = $this->os_model->getQrCode(
+        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $data['qrCode'] = $this->vendas_model->getQrCode(
             $id,
             $data['pix_key'],
             $data['emitente']
         );
         $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
         
-        $this->load->model('vendas_model');
-        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
-        $data['emitente'] = $this->mapos_model->getEmitente();
-
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
             redirect('mine/painel');
@@ -677,30 +702,29 @@ class Mine extends CI_Controller
 
     public function imprimirCompra($id = null)
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
+        if (!session_id() || !$this->session->userdata('conectado')) {
             redirect('mine');
         }
 
         $data['menuVendas'] = 'vendas';
         $data['custom_error'] = '';
-        $this->CI = &get_instance();
-        $this->CI->load->database();
+
         $this->load->model('mapos_model');
         $this->load->model('vendas_model');
         $this->load->model('os_model');
-        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
+
+        $data['result'] = $this->vendas_model->getById($id);
+        $data['produtos'] = $this->vendas_model->getProdutos($id);
         $data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->CI = &get_instance();
+        $this->CI->load->database();
         $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->os_model->getQrCode(
-            $id,
-            $data['pix_key'],
-            $data['emitente']
-        );
+        $data['qrCode'] = $this->vendas_model->getQrCode($id, $data['pix_key'], $data['emitente']);
         $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
 
         if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            $this->session->set_flashdata('error', 'Esta venda não pertence ao cliente logado.');
             redirect('mine/painel');
         }
 
@@ -740,7 +764,6 @@ class Mine extends CI_Controller
         }
     }
 
-    // Cadastro de OS pelo cliente
     public function adicionarOs()
     {
         if (! session_id() || ! $this->session->userdata('conectado')) {
@@ -774,8 +797,8 @@ class Mine extends CI_Controller
 
             $data = [
                 'dataInicial' => date('Y-m-d'),
-                'clientes_id' => $this->session->userdata('cliente_id'), //set_value('idCliente'),
-                'usuarios_id' => $id, //set_value('idUsuario'),
+                'clientes_id' => $this->session->userdata('cliente_id'),
+                'usuarios_id' => $id,
                 'dataFinal' => date('Y-m-d'),
                 'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
                 'defeito' => $this->security->xss_clean($this->input->post('defeito')),
@@ -834,7 +857,6 @@ class Mine extends CI_Controller
         }
     }
 
-    // método para clientes se cadastratem
     public function cadastrar()
     {
         $this->load->model('clientes_model', '', true);
@@ -862,6 +884,7 @@ class Mine extends CI_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
+                'contato' => $this->input->post('contato'),
             ];
 
             $id = $this->clientes_model->add('clientes', $data);
@@ -1094,6 +1117,7 @@ class Mine extends CI_Controller
 
         $this->session->set_userdata('captchaWord', $codigoCaptcha);
     }
+    
 }
 
 /* End of file conecte.php */
