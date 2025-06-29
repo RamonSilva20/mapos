@@ -590,8 +590,16 @@
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
         }
     });
-    $("#desconto").keyup(function () {
+         $("#desconto").keyup(function() {
+        // Primeiro: converte vírgula para ponto
+        var value = this.value;
+        value = value.replace(',', '.');
+        this.value = value;
+        
+        // Depois: aplica a validação existente
         this.value = this.value.replace(/[^0-9.]/g, '');
+        
+        // Lógica existente de validação
         if ($("#valorTotal").val() == null || $("#valorTotal").val() == '') {
             $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
@@ -607,6 +615,13 @@
             $('#desconto').val('');
             $('#resultado').val('');
         }
+    });
+
+    $("#desconto").blur(function() {
+        // Garante conversão final quando o campo perde o foco
+        var value = this.value;
+        value = value.replace(',', '.');
+        this.value = value;
     });
 
     $("#valorTotal").focusout(function () {
