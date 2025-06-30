@@ -577,21 +577,106 @@
     }
     var valorBackup = $("#valorTotal").val();
 
-    $("#quantidade").keyup(function () {
-        this.value = this.value.replace(/[^0-9.]/g, '');
+$("#quantidade").keyup(function() {
+        // Permite números, ponto e vírgula como separador decimal
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
     });
 
-    $("#quantidade_servico").keyup(function () {
-        this.value = this.value.replace(/[^0-9.]/g, '');
+    $("#quantidade").blur(function() {
+        // Garante conversão final quando o campo perde o foco
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
     });
+
+    $("#quantidade_servico").keyup(function() {
+        // Permite números, ponto e vírgula como separador decimal
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
+    });
+
+    $("#quantidade_servico").blur(function() {
+        // Garante conversão final quando o campo perde o foco
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
+    });
+    
     $('#tipoDesconto').on('change', function () {
         if (Number($("#desconto").val()) >= 0) {
             $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
             $('#resultado').val(validarDesconto(Number($('#resultado').val()), Number($("#valorTotal").val())));
         }
     });
-    $("#desconto").keyup(function () {
+         $("#desconto").keyup(function() {
+        // Primeiro: converte vírgula para ponto
+        var value = this.value;
+        value = value.replace(',', '.');
+        this.value = value;
+        
+        // Depois: aplica a validação existente
         this.value = this.value.replace(/[^0-9.]/g, '');
+        
+        // Lógica existente de validação
         if ($("#valorTotal").val() == null || $("#valorTotal").val() == '') {
             $('#errorAlert').text('Valor não pode ser apagado.').css("display", "inline").fadeOut(5000);
             $('#desconto').val('');
@@ -607,6 +692,13 @@
             $('#desconto').val('');
             $('#resultado').val('');
         }
+    });
+
+    $("#desconto").blur(function() {
+        // Garante conversão final quando o campo perde o foco
+        var value = this.value;
+        value = value.replace(',', '.');
+        this.value = value;
     });
 
     $("#valorTotal").focusout(function () {
