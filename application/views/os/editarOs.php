@@ -584,6 +584,51 @@
     $("#quantidade_servico").keyup(function () {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
+<<<<<<< Updated upstream
+=======
+
+    $("#quantidade_servico").keyup(function() {
+        // Permite números, ponto e vírgula como separador decimal
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
+    });
+
+    $("#quantidade_servico").blur(function() {
+        // Garante conversão final quando o campo perde o foco
+        var value = this.value;
+        
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        value = value.replace(/[^0-9.,]/g, '');
+        
+        // Se há vírgula, converte para ponto
+        if (value.indexOf(',') !== -1) {
+            value = value.replace(',', '.');
+        }
+        // Garante que há apenas um ponto decimal
+        var parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        this.value = value;
+    });
+
+>>>>>>> Stashed changes
     $('#tipoDesconto').on('change', function () {
         if (Number($("#desconto").val()) >= 0) {
             $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
