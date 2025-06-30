@@ -584,8 +584,6 @@
     $("#quantidade_servico").keyup(function () {
         this.value = this.value.replace(/[^0-9.]/g, '');
     });
-<<<<<<< Updated upstream
-=======
 
     $("#quantidade_servico").keyup(function() {
         // Permite números, ponto e vírgula como separador decimal
@@ -628,7 +626,6 @@
         this.value = value;
     });
 
->>>>>>> Stashed changes
     $('#tipoDesconto').on('change', function () {
         if (Number($("#desconto").val()) >= 0) {
             $('#resultado').val(calcDesconto(Number($("#valorTotal").val()), Number($("#desconto").val()), $("#tipoDesconto").val()));
