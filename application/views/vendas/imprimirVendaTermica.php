@@ -17,6 +17,14 @@
             width: 72mm;
             margin: 0 auto;
         }
+        hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 8px 0;
+        }
+        .invoice-head {
+          margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -41,19 +49,26 @@
                                             <span><?php echo 'Fone: ' . $emitente->telefone; ?></span>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="4" style="width: 100%;"><b>#Venda: </b><span>
-                                                <?php echo $result->idVendas ?></span>
-                                            <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y H:i:s'); ?></span>
-                                            <?php if ($result->faturado) : ?>
-                                                <br>
-                                                <b>Venc. Garantia: </b>
-                                                <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
                                 <?php
                                 } ?>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>Venda:</strong> <?= $result->idVendas ?> | <strong>Emissão:</strong> <?php echo date('d/m/Y - H:i'); ?><br>
+                                            <strong>Data de Venda:</strong> <?= date('d/m/Y - H:i', strtotime($result->dataVenda)) ?>
+                                        <?php if (isset($result->status)) : ?>
+                                            <br><strong>Status:</strong> <?= $result->status ?>
+                                        <?php endif; ?>
+                                        <?php if ($result->garantia) : ?>
+                                            <br><strong>Venc. Garantia:</strong> <?= dateInterval($result->dataVenda, $result->garantia) ?>
+                                        <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <table class="table">
@@ -85,10 +100,10 @@
                             <table class="table table-bordered table-condensed" id="tblProdutos">
                                 <thead>
                                     <tr>
-                                        <th style="font-size: 15px">Produto</th>
-                                        <th style="font-size: 15px">Quantidade</th>
-                                        <th style="font-size: 15px">Preço unit.</th>
-                                        <th style="font-size: 15px">Sub-total</th>
+                                        <th style="font-size: 12px">Produto</th>
+                                        <th style="font-size: 12px">Qtd</th>
+                                        <th style="font-size: 12px; text-align: right">V.Unit.</th>
+                                        <th style="font-size: 12px; text-align: right">S.Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -98,8 +113,8 @@
                                         echo '<tr>';
                                         echo '<td>' . $p->descricao . '</td>';
                                         echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                        echo '<td style="text-align: right">R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                        echo '<td style="text-align: right">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
                                     <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
