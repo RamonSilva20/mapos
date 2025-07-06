@@ -84,16 +84,21 @@ class Vendas extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? true : false);
         } else {
             $dataVenda = $this->input->post('dataVenda');
+            $dataVendaHora = date('Y-m-d H:i:s'); // Captura data e hora atuais
 
-            try {
-                $dataVenda = explode('/', $dataVenda);
-                $dataVenda = $dataVenda[2] . '-' . $dataVenda[1] . '-' . $dataVenda[0];
-            } catch (Exception $e) {
-                $dataVenda = date('Y-m-d');
+            if ($dataVenda) {
+                try {
+                    $dataVenda = explode('/', $dataVenda);
+                    $dataVenda = $dataVenda[2] . '-' . $dataVenda[1] . '-' . $dataVenda[0];
+                    // Mantém a hora atual se a data for enviada pelo formulário
+                    $dataVendaHora = $dataVenda . ' ' . date('H:i:s');
+                } catch (Exception $e) {
+                    // Mantém a data e hora atuais em caso de exceção
+                }
             }
 
             $data = [
-                'dataVenda' => $dataVenda,
+                'dataVenda' => $dataVendaHora, // Salva a data e hora
                 'observacoes' => $this->input->post('observacoes'),
                 'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'clientes_id' => $this->input->post('clientes_id'),
@@ -145,16 +150,23 @@ class Vendas extends MY_Controller
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
             $dataVenda = $this->input->post('dataVenda');
+            $dataVendaHora = date('Y-m-d H:i:s'); // Captura data e hora atuais
 
             try {
+                // Extrai a hora da data existente no banco, se houver
+                $vendaAtual = $this->vendas_model->getById($this->input->post('idVendas'));
+                $horaAtual = date('H:i:s', strtotime($vendaAtual->dataVenda));
+
                 $dataVenda = explode('/', $dataVenda);
                 $dataVenda = $dataVenda[2] . '-' . $dataVenda[1] . '-' . $dataVenda[0];
+                $dataVendaHora = $dataVenda . ' ' . $horaAtual; // Combina a nova data com a hora existente
             } catch (Exception $e) {
-                $dataVenda = date('Y/m/d');
+                // Mantém a data e hora atuais em caso de exceção
+                $dataVendaHora = date('Y-m-d H:i:s');
             }
 
             $data = [
-                'dataVenda' => $dataVenda,
+                'dataVenda' => $dataVendaHora, // Salva a data e hora
                 'observacoes' => $this->input->post('observacoes'),
                 'observacoes_cliente' => $this->input->post('observacoes_cliente'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
