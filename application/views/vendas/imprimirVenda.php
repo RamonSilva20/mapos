@@ -43,7 +43,7 @@
             <section>
                 <div class="title">
                     VENDA Nº#<?= str_pad($result->idVendas, 4, 0, STR_PAD_LEFT) ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
+                    <span class="emissao">Emissão: <?= date('d/m/Y - H:i:s') ?></span>
                 </div>
 
                 <?php if ($result->dataVenda != null): ?>
@@ -60,7 +60,7 @@
                             <tbody>
                                 <tr>
                                     <td class="text-center"><?= $result->status ?></td>
-                                    <td class="text-center"><?= date('d/m/Y H:i:s', strtotime($result->dataVenda)) ?></td>
+                                    <td class="text-center"><?= date('d/m/Y - H:i:s', strtotime($result->dataVenda)) ?></td>
                                     <td class="text-center">
                                         <?php if ($result->garantia > 0): ?>
                                             <?= $result->garantia . ' dia(s)' ?>
@@ -192,10 +192,8 @@
             </section>
             <footer>
                 <div class="detalhes">
-                    <span>Data da Venda: <b><?= date('d/m/Y', strtotime($result->dataVenda)) ?></b></span>
                     <span>VENDA <b>#<?= str_pad($result->idVendas, 4, 0, STR_PAD_LEFT) ?></b></span>
-                </div>
-                <div class="vendedor">
+                    <span>Data da Venda: <b><?= date('d/m/Y - H:i:s', strtotime($result->dataVenda)) ?></b></span>
                     <span>Vendedor : <b><?php echo $result->nome; ?> </b></span>
                 </div>
             </footer>
