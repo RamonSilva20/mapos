@@ -166,17 +166,6 @@ body {
 }
 
 .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
-    padding        : 3px;
-    padding        : 3px;
-    border-radius  : 35%;
-    width          : 40px;
-    height         : 40px;
-    display        : flex;
-    align-items    : center;
-    justify-content: center;
-}
-
-.lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06 {
     border    : none !important;
     background: #ffffff54 !important;
 }
@@ -313,10 +302,7 @@ body {
 }
 
 .cardBox .card .numbers {
-  position   : relative;
-  font-weight: 500;
-  font-size  : 1.3em;
-  color      : #0d0d10;
+  color      : #5f5f73;
 }
 
 .cardBox .card .iconBx {
@@ -324,6 +310,14 @@ body {
   color: #292929;
   text-decoration: none;
   text-shadow    : 0 1px 6px rgb(249 246 246 / 10%);
+}
+
+.new-bottons .card .cardName {
+  color: #9ca3af !important;
+}
+
+.cardBox .card .cardName {
+  color: #ffffff;
 }
 
 /* Responsive design */
