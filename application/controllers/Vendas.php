@@ -94,6 +94,7 @@ class Vendas extends MY_Controller
                     $dataVendaHora = $dataVenda . ' ' . date('H:i:s');
                 } catch (Exception $e) {
                     // Mantém a data e hora atuais em caso de exceção
+                    log_message('error', 'Erro ao processar a data de venda: ' . $e->getMessage());
                 }
             }
 
