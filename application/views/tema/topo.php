@@ -137,7 +137,7 @@
       </div>
       <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
 
-      <section style="display:block;position:absolute;right:10px">
+      <section class="sec_profile">
         <div class="profile">
           <div class="profile-img">
             <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
