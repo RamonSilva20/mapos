@@ -230,7 +230,6 @@ h3 {
   border       : none;
   outline      : none;
   border-radius: 5px;
-  min-width    : 140px;
   overflow     : hidden;
   font-size    : 1.05em;
   cursor       : pointer;
@@ -240,9 +239,10 @@ h3 {
 .button__icon {
   display    : inline-flex !important;
   align-items: center;
-  padding    : 0 7px;
+  padding    : 0 8px;
   color      : #fff;
   height     : 100%;
+  white-space: nowrap;
 }
 
 .button__text2 {
@@ -251,6 +251,7 @@ h3 {
     padding    : 0 7px;
     color      : #fff;
     height     : 100%;
+    white-space: nowrap;
 }
 
 .button__icon {
@@ -382,7 +383,6 @@ hr {
 /* Top user navigation */
 .navbar {
   margin     : 0;
-  margin-left: 5px;
 }
 
 .navbar .nav {
@@ -475,18 +475,31 @@ hr {
   display              : grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap             : 19px;
-  margin-bottom        : 15px;
-  margin-top           : 10px;
 }
 
-.cardBox .card {
+.cardBox .cardLink {
   position       : relative;
-  padding        : 20px 15px;
-  border-radius  : 12px;
+  padding        : 20px;
+  border-radius  : 16px;
   display        : flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items    : center;
-  opacity        : 0.9;
+}
+
+.card {
+  border-radius  : 16px;
+  position: relative; 
+  overflow: hidden;
+}
+
+.cardBox .card:hover {
+  opacity: 0.9;
+}
+
+.card a {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
 }
 
 .cardBox .card:nth-child(1) {
@@ -516,16 +529,17 @@ hr {
 .cardBox .card .numbers {
   position   : relative;
   font-weight: 500;
-  font-size  : 1.4em;
+  font-size  : 1.2em;
 }
 
 .cardBox .card .cardName {
-  font-size  : 1.1em;
+  font-size  : 1em;
+  margin-top: 16px;
   font-weight: 400;
 }
 
 .cardBox .card .iconBx01, .iconBx02, .iconBx03, .iconBx04, .iconBx05, .iconBx06, .iconBx07 {
-  font-size      : 2.8em;
+  font-size      : 2em;
   text-decoration: none;
 }
 
@@ -595,25 +609,24 @@ hr {
   right         : 15px;
 }
 
-}
 End hora certa */
 
 .cardBox .card .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
+    border-radius  : 12px;
     border    : none !important;
     background: #ffffff54 !important;
 }
 
 .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
-    padding        : 3px;
-    padding        : 3px;
     border-radius  : 35%;
-    width          : 40px;
-    height         : 40px;
+    width          : 35px;
+    height         : 35px;
     display        : flex;
     align-items    : center;
     justify-content: center;
     background     : #3336491f;
     border         : 1px solid #3336491f;
+    margin-top: -20px;
 }
 
 .icon-bord {
@@ -656,7 +669,7 @@ End hora certa */
   left           : 0;
   top            : 0;
   height         : 100vh;
-  width          : 240px;
+  width          : 270px;
   float          : left;
   background     : var(--funSider);
   justify-content: space-between;
@@ -664,7 +677,7 @@ End hora certa */
   transition     : var(--tran-01);
   border-right   : #4b4d60 solid 1px;
   /* overflow-x     : hidden; */
-  z-index        : 99999;
+  z-index        : 999;
 }
 
 #sidebar.open {
@@ -888,9 +901,10 @@ body.dark .switch::before {
   display         : flex;
   justify-content : space-between;
   align-items     : center;
-  margin-left     : 242px;
-  margin-top      : 5px;
+  margin-left     : 270px;
+  padding: 8px 24px;
   background-color: var(--bodycolor);
+  margin-bottom: 20px;
 }
 
 /* New User Perfil */
@@ -932,6 +946,12 @@ section .profile .profile-img {
   border-radius: 50%;
 }
 
+.sec_profile {
+  display :block;
+  position:absolute;
+  right   :30px;
+}
+
 .widget-contentMC {
   display       : flex;
   align-items   : center;
@@ -966,12 +986,19 @@ section .profile .profile-img {
 #content {
   background : none repeat scroll 0 0 var(--bodycolor);
   border-top : 0px solid #4b4d60;
-  margin-left: 240px;
+  margin-left: 270px;
   margin-top : -8px;
   min-height : 100%;
-  padding    : 0 1.7rem 0 1.7rem;
+  padding    : 0 2rem 0 2rem;
   transition : all 0.3s;
   transition : var(--tran-03);
+}
+
+.container-flu {
+  max-width: 1350px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 0;
 }
 
 .container-fluid {
@@ -980,7 +1007,7 @@ section .profile .profile-img {
 }
 
 #content-header {
-  margin         : 25px 10px 15px;
+  margin         : 10px 0;
   z-index        : 20;
   display        : flex;
   align-items    : center;
@@ -990,7 +1017,7 @@ section .profile .profile-img {
 
 /* New bem-vindos */
 #content-bemv {
-  margin         : 25px 10px 15px;
+  margin         : 32px 10px 15px;
   z-index        : 20;
   display        : flex;
   align-items    : center;
@@ -1445,7 +1472,6 @@ section .profile .profile-img {
   align-items    : center;
   border-radius  : 8px;
   padding        : 10px 5px;
-  border         : 1px solid rgba(229 229 229);
 }
 
 .new-bottons .card:nth-child(3) {
@@ -1790,7 +1816,7 @@ section .profile .profile-img {
   flex-direction: column;
   clear         : both;
   position      : relative;
-  border-radius : 12px;
+  border-radius : 16px;
 }
 
 .widget-box-statist {
@@ -1799,7 +1825,7 @@ section .profile .profile-img {
   flex-direction: column;
   clear         : both;
   position      : relative;
-  border-radius : 12px;
+  border-radius : 16px;
 }
 
 .widget-box0,
@@ -1921,7 +1947,7 @@ div.dataTables_wrapper .ui-widget-header {
 }
 
 .widget-content {
-  padding: 16px 15px;
+  padding: 18px 20px;
 }
 
 .widget-box.widget-plain .widget-content {
@@ -2869,10 +2895,6 @@ form {
     margin-top: 15px;
   }
 
-  .cardBox .card {
-    padding: 30px 20px;
-  }
-
   #sidebar {
     width: 280px;
   }
@@ -2978,10 +3000,6 @@ form {
     padding: 17px;
   }
 
-  .cardBox .card {
-    padding: 25px 18px;
-  }
-
   #newlog .icon2 {
     width: 37px;
   }
@@ -3072,10 +3090,6 @@ form {
   #newlog {
     padding    : 0 18px;
     margin-left: -4px;
-  }
-
-  .cardBox .card {
-    padding: 17px 10px !important;
   }
 
   #sidebar.open {
@@ -3193,10 +3207,6 @@ form {
   .cardBox {
     margin-bottom        : 0;
     grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  .cardBox .card {
-    padding: 15px 10px;
   }
 
   .cardBox .card-cl .clock-card .colun {
@@ -3661,11 +3671,23 @@ form {
   #content-bemv {
     right : 15px;
   }
+
+  .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 480px) {
   body {
     font-size: 0.75em;
+  }
+
+  .cardBox .cardLink {
+    padding: 5px;
+  }
+
+  .lord-icon01, .lord-icon02, .lord-icon03, .lord-icon04, .lord-icon05, .lord-icon06, .lord-icon07 {
+    margin-top: 0;
   }
   
   .new-bottons .card .cardName {
@@ -3777,6 +3799,7 @@ form {
     justify-content: flex-start;
     align-items    : center;
     grid-column-gap: 10px;
+    border: solid 1px #3030311a;
   }
 
   .widget-title .buttons>.btn {
@@ -3807,8 +3830,8 @@ form {
   }
 
   .new-bottons {
-    grid-template-columns: repeat(2, 2fr);
-    padding              : 15px 18px;
+    grid-template-columns: repeat(2, 1fr);
+    padding              : 15px 15px;
   }
 
   .new-bottons .card .iconBx,
@@ -3880,7 +3903,7 @@ form {
   }
 
   label {
-    top  : 36px;
+    display: none;
   }
 
   .form-horizontal .control-label {
@@ -3900,9 +3923,9 @@ form {
     margin: -8px 2px;
   }
 
-  .btn-xs {
-    bottom: 23px;
-    left  : 20px;
+  #source-calendar .btn-xs {
+    bottom: 21px;
+    left  : 21px;
   }
 
   .ionicon s-ion-icon {
@@ -4011,6 +4034,10 @@ form {
     border: 0 solid var(--laranja1);
   }
 
+  .sec_profile {
+    right: 19px;
+  }
+
   #user-nav>ul>li>a>i {
     margin-top: 3px;
     font-size : 1.1em;
@@ -4019,7 +4046,7 @@ form {
 
   #user-nav>ul {
     font-size  : 1.3em;
-    margin-left: -25px !important;
+    margin-left: -29px !important;
     top        : -5px;
   }
 
@@ -4039,11 +4066,11 @@ form {
   #content {
     margin-left           : 0 !important;
     border-top-left-radius: 0;
-    padding               : 0 1em 0 1em;
+    padding               : 0 1.3em 0 1.3em;
   }
 
   .widget-content {
-    padding: 12px 9px !important;
+    padding: 8px 15px !important;
   }
 
   #content-header h1,
@@ -4072,7 +4099,6 @@ form {
   }
 
   #content-bemv {
-    margin: 16px 5px 0px;
     right : 15px;
   }
 
@@ -4085,6 +4111,7 @@ form {
   .navebarn {
     align-items: flex-start;
     margin     : 8px 0 20px;
+    padding    : 8px 10px;
   }
 
   .bemv {
@@ -4093,7 +4120,7 @@ form {
 
   #sidebar.open {
     margin-left : 0;
-    width       : 240px;
+    width       : 270px;
     background  : #303244;
     transition  : var(--tran-02);
     box-shadow  : 15px 0 16px rgb(64 70 96 / 20%) !important;
@@ -4120,11 +4147,11 @@ form {
   }
 
   #sidebar .menu-bar {
-    margin-left: -240px;
+    margin-left: -270px;
   }
 
   #sidebar {
-    margin-left: -240px;
+    margin-left: -270px;
   }
 
   #sidebar #newlog {
