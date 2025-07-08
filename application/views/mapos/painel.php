@@ -23,17 +23,15 @@
     <div></div>
 </div>
 
-<!--Action boxes-->
+<!-- Action boxes -->
 <ul class="cardBox">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('clientes') ?>">
+            <a class="cardLink" href="<?= site_url('clientes') ?>">
+                <div class="grid-blak">
                     <div class="numbers">Clientes</div>
                     <div class="cardName">F1</div>
-                </a>
-            </div>
-            <a href="<?= site_url('clientes') ?>">
+                </div>
                 <div class="lord-icon02">
                     <i class='bx bx-user iconBx02'></i>
                 </div>
@@ -43,13 +41,11 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('produtos') ?>">
+            <a class="cardLink" href="<?= site_url('produtos') ?>">
+                <div class="grid-blak">
                     <div class="numbers">Produtos</div>
                     <div class="cardName">F2</div>
-                </a>
-            </div>
-            <a href="<?= site_url('produtos') ?>">
+                </div>
                 <div class="lord-icon02">
                     <i class='bx bx-basket iconBx02'></i>
                 </div>
@@ -59,13 +55,11 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('servicos') ?>">
+            <a class="cardLink" href="<?= site_url('servicos') ?>">
+                <div class="grid-blak">
                     <div class="numbers">Serviços</div>
                     <div class="cardName">F3</div>
-                </a>
-            </div>
-            <a href="<?= site_url('servicos') ?>">
+                </div>
                 <div class="lord-icon03">
                     <i class='bx bx-wrench iconBx03'></i>
                 </div>
@@ -75,13 +69,11 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('os') ?>">
+            <a class="cardLink" href="<?= site_url('os') ?>">
+                <div class="grid-blak">
                     <div class="numbers N-tittle">Ordens</div>
                     <div class="cardName">F4</div>
-                </a>
-            </div>
-            <a href="<?= site_url('os') ?>">
+                </div>
                 <div class="lord-icon04">
                     <i class='bx bx-file iconBx04'></i>
                 </div>
@@ -91,37 +83,33 @@
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('vendas/') ?>">
+            <a class="cardLink" href="<?= site_url('vendas/') ?>">
+                <div class="grid-blak">
                     <div class="numbers N-tittle">Vendas</div>
                     <div class="cardName">F6</div>
-                </a>
-            </div>
-            <a href="<?= site_url('vendas/') ?>">
-            <div class="lord-icon05">
-                <i class='bx bx-cart-alt iconBx05'></i></span>
-            </div>
+                </div>
+                <div class="lord-icon05">
+                    <i class='bx bx-cart-alt iconBx05'></i>
+                </div>
             </a>
         </li>
     <?php endif ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
         <li class="card">
-            <div class="grid-blak">
-                <a href="<?= site_url('financeiro/lancamentos') ?>">
+            <a class="cardLink" href="<?= site_url('financeiro/lancamentos') ?>">
+                <div class="grid-blak">
                     <div class="numbers N-tittle">Lançamentos</div>
                     <div class="cardName">F7</div>
-                </a>
-            </div>
-            <a href="<?= site_url('financeiro/lancamentos') ?>">
-            <div class="lord-icon06">
-                <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
-            </div>
+                </div>
+                <div class="lord-icon06">
+                    <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
+                </div>
             </a>
         </li>
     <?php endif ?>
 </ul>
-<!--End-Action boxes-->
+<!-- End-Action boxes -->
 
 <div class="row-fluid" style="margin-top: 0; display: flex">
     <div class="Sspan12">
