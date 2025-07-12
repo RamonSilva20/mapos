@@ -121,9 +121,9 @@ class Arquivos extends MY_Controller
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->arquivos_model->getById($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Arquivo não encontrado ou parâmetro inválido.');
+            redirect('arquivos');
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) {
