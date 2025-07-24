@@ -194,8 +194,8 @@ function validarCNPJ(cnpj) {
     //finaliza a validação do CNPJ
 
     $('#buscar_info_cnpj').on('click', function () {
-        //Nova variável "ndocumento" somente com dígitos.
-        var ndocumento = $('#documento').val().replace(/\D/g, '');
+        // Pega o valor original do campo, sem remover letras
+        var ndocumento = $('#documento').val().trim();
 
         if (validarCNPJ(ndocumento)) {
             // Se for CNPJ alfanumérico, exibe alerta e não faz requisição
