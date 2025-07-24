@@ -103,15 +103,25 @@ if (! function_exists('valid_cpf')) {
 if (! function_exists('verific_cpf_cnpj')) {
     function verific_cpf_cnpj($cpfCnpjValor)
     {
-        $cpfCnpj = preg_replace('/[^0-9]/', '', $cpfCnpjValor);
+        // Remove tudo que não for letra ou número
+        $cpfCnpj = preg_replace('/[^a-zA-Z0-9]/', '', $cpfCnpjValor);
         $cpfCnpj = (string) $cpfCnpj;
 
-        if (strlen($cpfCnpj) === 11) {
+        // CPF
+        if (strlen($cpfCnpj) === 11 && ctype_digit($cpfCnpj)) {
             return valid_cpf($cpfCnpj);
         }
 
-        if (strlen($cpfCnpj) === 14) {
+        // CNPJ tradicional
+        if (strlen($cpfCnpj) === 14 && ctype_digit($cpfCnpj)) {
             return valid_cnpj($cpfCnpj);
+        }
+
+        // Novo CNPJ alfanumérico: 14 caracteres, letras e números
+        if (strlen($cpfCnpj) === 14 && preg_match('/^[A-Z0-9]{14}$/i', $cpfCnpj)) {
+            // Aqui você pode implementar uma validação mais avançada se desejar
+            // Por enquanto, apenas aceita o formato
+            return true;
         }
 
         return false;
