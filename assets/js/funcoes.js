@@ -142,13 +142,13 @@ $(document).ready(function () {
 }
 
 function validarCNPJ(cnpj) {
-    console.log('Validando CNPJ:', cnpj);
+    
     cnpj = cnpj.replace(/[^\w]/g, '').toUpperCase();
 
     // CNPJ numérico tradicional
     if (/^\d{14}$/.test(cnpj)) {
         if (/^(\d)\1{13}$/.test(cnpj)) {
-            console.log('CNPJ tradicional inválido: padrão repetido.');
+            
             return false;
         }
 
@@ -165,7 +165,7 @@ function validarCNPJ(cnpj) {
 
         let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
         if (resultado != parseInt(digitos.charAt(0))) {
-            console.log('CNPJ tradicional inválido: 1º DV incorreto.');
+           
             return false;
         }
 
@@ -180,7 +180,6 @@ function validarCNPJ(cnpj) {
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
 
         const valido = resultado == parseInt(digitos.charAt(1));
-        console.log(`CNPJ tradicional ${valido ? 'válido' : 'inválido'}`);
         return valido;
     }
 
@@ -190,12 +189,7 @@ function validarCNPJ(cnpj) {
         let dv = cnpj.substring(12, 14);
         const calculado = calcularDVAlfanumerico(base);
         const valido = calculado === dv;
-        console.log(`CNPJ alfanumérico ${valido ? 'válido' : 'inválido'} (esperado: ${calculado}, recebido: ${dv})`);
-        return valido;
-    }
-
-    console.log('Formato de CNPJ inválido', cnpj);
-    return false;
+        return false;
 }
     //finaliza a validação do CNPJ
 
