@@ -156,4 +156,24 @@ class Clientes_model extends CI_Model
 
         return true;
     }
+
+    /**
+     * Verifica se o e-mail já existe na tabela de clientes
+     *
+     * @param  string  $email
+     * @param  int     $id (opcional, para excluir o próprio cliente na edição)
+     * @return bool
+     */
+    public function emailExists($email, $id = null)
+    {
+        $this->db->where('email', $email);
+        
+        if ($id !== null) {
+            $this->db->where('idClientes !=', $id);
+        }
+        
+        $query = $this->db->get('clientes');
+        
+        return $query->num_rows() > 0;
+    }
 }
