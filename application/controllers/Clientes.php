@@ -69,7 +69,12 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = [
+            // Validação adicional para e-mail duplicado
+            $email = set_value('email');
+            if ($this->clientes_model->emailExists($email)) {
+                $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
+            } else {
+                $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'contato' => set_value('contato'),
                 'pessoa_fisica' => $pessoa_fisica,
@@ -96,6 +101,7 @@ class Clientes extends MY_Controller
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
             }
+            }
         }
 
         $this->data['view'] = 'clientes/adicionarCliente';
@@ -121,7 +127,13 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $senha = $this->input->post('senha');
+            // Validação adicional para e-mail duplicado na edição
+            $email = $this->input->post('email');
+            $idCliente = $this->input->post('idClientes');
+            if ($this->clientes_model->emailExists($email, $idCliente)) {
+                $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
+            } else {
+                $senha = $this->input->post('senha');
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -167,6 +179,7 @@ class Clientes extends MY_Controller
                 redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            }
             }
         }
 

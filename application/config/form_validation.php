@@ -25,7 +25,7 @@ $config = [
         [
             'field' => 'email',
             'label' => 'Email',
-            'rules' => 'trim|valid_email',
+            'rules' => 'trim|valid_email|unique[clientes.email.' . get_instance()->uri->segment(3) . '.idClientes]',
         ],
         [
             'field' => 'rua',
