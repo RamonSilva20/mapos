@@ -39,31 +39,53 @@ $(function () {
 
 });
 
-$(function () {
-    // INICIO FUNÇÃO DE MASCARA CPF/CNPJ
-    var cpfMascara = function (val) {
-        return val.replace(/\D/g, '').length > 11 ? '00.000.000/0000-00' : '000.000.000-009';
-    },
-        cpfOptions = {
-            onKeyPress: function (val, e, field, options) {
-                field.mask(cpfMascara.apply({}, arguments), options);
-            },
-        };
-    $('.cpfcnpj').mask(cpfMascara, cpfOptions);
-    $('.cpfcnpj').on('paste', function (e) {
-        e.preventDefault();
-        var clipboardCurrentData = (e.originalEvent || e).clipboardData.getData('text/plain');
-        $('.cpfcnpj').val(clipboardCurrentData);
-    });
-    // FIM FUNÇÃO DE MASCARA CPF/CNPJ
-});
-
 $(document).ready(function () {
     if ($("[name='idClientes']").val()) {
         $("#nomeCliente").focus();
     } else {
         $("#documento").focus();
     }
+
+    // INICIO FUNÇÃO DE MASCARA CPF/CNPJ
+    if ($("[name='idClientes']").val()) {
+        $("#nomeCliente").focus();
+    } else {
+        $("#documento").focus();
+    }
+
+    // Máscara dinâmica para CPF, CNPJ tradicional e CNPJ alfanumérico
+    $('#documento').on('input', function () {
+        let v = $(this).val().replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        let result = '';
+        // CPF: 11 dígitos numéricos
+        if (/^\d{0,11}$/.test(v)) {
+            for (let i = 0; i < v.length && i < 11; i++) {
+                if (i === 3 || i === 6) result += '.';
+                if (i === 9) result += '-';
+                result += v[i];
+            }
+        }
+        // CNPJ tradicional: 14 dígitos numéricos
+        else if (/^\d{12,14}$/.test(v) && !/[A-Z]/.test(v)) {
+            for (let i = 0; i < v.length && i < 14; i++) {
+                if (i === 2 || i === 5) result += '.';
+                if (i === 8) result += '/';
+                if (i === 12) result += '-';
+                result += v[i];
+            }
+        }
+        // CNPJ alfanumérico: 14 caracteres (letras e números)
+        else {
+            for (let i = 0; i < v.length && i < 14; i++) {
+                if (i === 2 || i === 5) result += '.';
+                if (i === 8) result += '/';
+                if (i === 12) result += '-';
+                result += v[i];
+            }
+        }
+        $(this).val(result);
+         // FIM FUNÇÃO DE MASCARA CPF/CNPJ
+    });
 
     function limpa_formulario_cep() {
         // Limpa valores do formulário de cep.
@@ -92,65 +114,103 @@ $(document).ready(function () {
         return str.join(" ");
     }
 
-    function validarCNPJ(cnpj) {
-        cnpj = cnpj.replace(/[^\d]+/g, '');
+    // Valida CNPJ
+     // Função auxiliar para calcular o DV alfanumérico
+   function valorCharAlfanumerico(char) {
+    const ascii = char.charCodeAt(0);
+    return ascii - 48;
+    }
 
-        if (cnpj == '') return false;
+    // Função auxiliar para calcular o DV alfanumérico
+    function calcularDVAlfanumerico(cnpjBase) {
+    let valores = cnpjBase.split('').map(valorCharAlfanumerico);
 
-        if (cnpj.length != 14) return false;
+    // Cálculo do 1º DV
+    let pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    let soma1 = valores.reduce((acc, val, i) => acc + val * pesos1[i], 0);
+    let resto1 = soma1 % 11;
+    let dv1 = (resto1 === 0 || resto1 === 1) ? 0 : 11 - resto1;
 
-        // Elimina CNPJs invalidos conhecidos
-        if (cnpj == "00000000000000" ||
-            cnpj == "11111111111111" ||
-            cnpj == "22222222222222" ||
-            cnpj == "33333333333333" ||
-            cnpj == "44444444444444" ||
-            cnpj == "55555555555555" ||
-            cnpj == "66666666666666" ||
-            cnpj == "77777777777777" ||
-            cnpj == "88888888888888" ||
-            cnpj == "99999999999999")
+    // Cálculo do 2º DV
+    valores.push(dv1);
+    let pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    let soma2 = valores.reduce((acc, val, i) => acc + val * pesos2[i], 0);
+    let resto2 = soma2 % 11;
+    let dv2 = (resto2 === 0 || resto2 === 1) ? 0 : 11 - resto2;
+
+    return `${dv1}${dv2}`;
+}
+
+function validarCNPJ(cnpj) {
+    
+    cnpj = cnpj.replace(/[^\w]/g, '').toUpperCase();
+
+    // CNPJ numérico tradicional
+    if (/^\d{14}$/.test(cnpj)) {
+        if (/^(\d)\1{13}$/.test(cnpj)) {
+            
             return false;
-
-        // Valida DVs
-        tamanho = cnpj.length - 2
-        numeros = cnpj.substring(0, tamanho);
-        digitos = cnpj.substring(tamanho);
-        soma = 0;
-        pos = tamanho - 7;
-        for (i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
-                pos = 9;
         }
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(0))
+
+        let tamanho = cnpj.length - 2;
+        let numeros = cnpj.substring(0, tamanho);
+        let digitos = cnpj.substring(tamanho);
+
+        let soma = 0;
+        let pos = tamanho - 7;
+        for (let i = tamanho; i >= 1; i--) {
+            soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+            if (pos < 2) pos = 9;
+        }
+
+        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != parseInt(digitos.charAt(0))) {
+           
             return false;
+        }
 
         tamanho = tamanho + 1;
         numeros = cnpj.substring(0, tamanho);
         soma = 0;
         pos = tamanho - 7;
-
-        for (i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
-                pos = 9;
+        for (let i = tamanho; i >= 1; i--) {
+            soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+            if (pos < 2) pos = 9;
         }
-
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
 
-        if (resultado != digitos.charAt(1))
-            return false;
-
-        return true;
+        const valido = resultado == parseInt(digitos.charAt(1));
+        return valido;
     }
 
+    // CNPJ alfanumérico
+    if (/^[A-Z0-9]{12}\d{2}$/.test(cnpj)) {
+        let base = cnpj.substring(0, 12);
+        let dv = cnpj.substring(12, 14);
+        const calculado = calcularDVAlfanumerico(base);
+        const valido = calculado === dv;
+        return false;
+}
+    //finaliza a validação do CNPJ
+
     $('#buscar_info_cnpj').on('click', function () {
+        // Pega o valor original do campo, sem remover letras
+        var ndocumento = $('#documento').val().trim();
+
+        if (validarCNPJ(ndocumento)) {
+            // Se for CNPJ alfanumérico, exibe alerta e não faz requisição
+            if (/^[A-Z0-9]{14}$/.test(ndocumento.replace(/[^A-Z0-9]/g, '')) && /[A-Z]/.test(ndocumento)) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Atenção",
+                    text: "A consulta automática ainda não está disponível para o novo formato de CNPJ alfanumérico. Preencha os dados manualmente."
+                });
+                return;
+            }
+
         //Nova variável "ndocumento" somente com dígitos.
         var ndocumento = $('#documento').val().replace(/\D/g, '');
 
-        if (validarCNPJ(ndocumento)) {
             //Preenche os campos com "..." enquanto consulta webservice.
             $("#nomeCliente").val("...");
             $("#email").val("...");
@@ -311,4 +371,4 @@ $(document).ready(function () {
             limpa_formulario_cep();
         }
     });
-});
+}); 
