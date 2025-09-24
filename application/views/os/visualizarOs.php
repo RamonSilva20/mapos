@@ -149,7 +149,22 @@
                                                 <b>GARANTIA: </b><br><?php echo $result->garantia . ' dia(s)'; ?>
                                             <?php } ?>
                                         </td>
-
+                                        <?php if ($result->imei1 != null || $result->imei2 != null ||$result->sn != null) { ?>
+                                    <tr>
+                                        <td>
+                                            <b>IMEI 1: </b>
+                                            <?php echo htmlspecialchars_decode($result->imei1) ?>
+                                        </td>
+                                        <td>
+                                            <b>IMEI 2: </b>
+                                            <?php echo htmlspecialchars_decode($result->imei2) ?>
+                                        </td>
+                                        <td colspan="3">
+                                            <b>SN: </b>
+                                            <?php echo htmlspecialchars_decode($result->sn) ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                                         <?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto'])): ?>
                                             <td>
                                                 <b>VENC. DA GARANTIA:</b><br>
