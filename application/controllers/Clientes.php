@@ -69,9 +69,8 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            // Validação adicional para e-mail duplicado
             $email = set_value('email');
-            if ($this->clientes_model->emailExists($email)) {
+            if ($email && $this->clientes_model->emailExists($email)) {
                 $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
             } else {
                 $data = [
@@ -127,10 +126,10 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            // Validação adicional para e-mail duplicado na edição
+            
             $email = $this->input->post('email');
             $idCliente = $this->input->post('idClientes');
-            if ($this->clientes_model->emailExists($email, $idCliente)) {
+            if ($email && $this->clientes_model->emailExists($email, $idCliente)) {
                 $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
             } else {
                 $senha = $this->input->post('senha');
