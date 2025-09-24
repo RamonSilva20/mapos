@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm-bookworm
 
 # PHP extensions installer
 COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
