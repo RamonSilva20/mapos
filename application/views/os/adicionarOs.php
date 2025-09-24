@@ -54,14 +54,20 @@
                                                 <option value="Faturado">Faturado</option>
                                                 <option value="Cancelado">Cancelado</option>
                                             </select>
+                                        <label for="imei1">IMEI 1</label>
+                                        <input id="imei1" autocomplete="off" class="span12" type="text" name="imei1" value="" />
                                         </div>
                                         <div class="span3">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
+                                            <label for="imei2">IMEI 2</label>     
+                                            <input id="imei2" autocomplete="off" class="span12" type="text" name="imei2" value="" />
                                         </div>
                                         <div class="span3">
                                             <label for="dataFinal">Data Final<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="" />
+                                            <label for="sn">SN</label>
+                                            <input id="sn" autocomplete="off" class="span12" type="text" name="sn" value="" />
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia (dias)</label>
