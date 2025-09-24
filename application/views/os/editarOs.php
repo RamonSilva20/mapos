@@ -100,14 +100,20 @@
                                                 <option <?php if ($result->status == 'Faturado') { echo 'selected'; } ?> value="Faturado">Faturado</option>
                                                 <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>                                                          
                                             </select>
+                                            <label for="imei1">IMEI 1</label>
+                                            <input id="imei1" class="span12" type="text" name="imei1" value="<?php echo $result->imei1; ?>">
                                         </div>
                                         <div class="span3">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
+                                            <label for="imei2">IMEI 2</label>
+                                            <input id="imei2" class="span12" type="text" name="imei2" value="<?php echo $result->imei2; ?>">
                                         </div>
                                         <div class="span3">
                                             <label for="dataFinal">Data Final<span class="required">*</span></label>
                                             <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
+                                            <label for="sn">SN</label>
+                                            <input id="sn" class="span12" type="text" name="sn" value="<?php echo $result->sn; ?>">
                                         </div>
                                         <div class="span3">
                                             <label for="garantia">Garantia (dias)</label>
