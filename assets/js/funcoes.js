@@ -190,6 +190,7 @@ function validarCNPJ(cnpj) {
         const calculado = calcularDVAlfanumerico(base);
         const valido = calculado === dv;
         return false;
+    }
 }
     //finaliza a validação do CNPJ
 
