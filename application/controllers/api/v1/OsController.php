@@ -765,6 +765,7 @@ class OsController extends REST_Controller
 
     public function anexos_post($id)
     {
+        $this->logged_user();
         $this->load->library('upload');
         $this->load->library('image_lib');
 
