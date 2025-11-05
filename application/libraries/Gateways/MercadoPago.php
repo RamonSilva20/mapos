@@ -121,6 +121,58 @@ class MercadoPago extends BasePaymentGateway
         log_info('Atualizou cobrança Mercado Pago. ID: ' . $id);
     }
 
+    // public function confirmarPagamento($id)
+    // {
+    //     $cobranca = $this->ci->cobrancas_model->getById($id);
+    //     if (!$cobranca) {
+    //         throw new \Exception('Cobrança não existe!');
+    //     }
+
+    //     try {
+    //         $client = new PaymentClient();
+    //         $payment = $client->capture($cobranca->charge_id);
+    //     } catch (MPApiException $e) {
+    //         throw new \Exception($e->getApiResponse()->getContent());
+    //     } catch (MPException $e) {
+    //         throw new \Exception($e->getMessage());
+    //     }
+
+    //     return $this->atualizarDados($id);
+    // }
+
+    private function mpErrorMessage(\Exception $e): string
+    {
+        // MPApiException tem getApiResponse()->getContent() que pode ser array/stdClass
+        if ($e instanceof \MercadoPago\Exceptions\MPApiException) {
+            $content = $e->getApiResponse()->getContent();
+
+            // Converte objeto em array
+            if (is_object($content)) {
+                $content = json_decode(json_encode($content), true);
+            }
+
+            if (is_array($content)) {
+                // Tenta chaves padrão do MP
+                $msg = $content['message'] ?? $content['error'] ?? $content['cause'][0]['description'] ?? null;
+                if (!$msg) {
+                    // Fallback: joga o JSON inteiro
+                    $msg = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                }
+                return "Erro API Mercado Pago: " . $msg;
+            }
+
+            // Se for string já ok
+            if (is_string($content)) {
+                return "Erro API Mercado Pago: " . $content;
+            }
+
+            return "Erro API Mercado Pago: resposta inesperada.";
+        }
+
+        // Outras exceções
+        return $e->getMessage();
+    }
+
     public function confirmarPagamento($id)
     {
         $cobranca = $this->ci->cobrancas_model->getById($id);
@@ -130,15 +182,38 @@ class MercadoPago extends BasePaymentGateway
 
         try {
             $client = new PaymentClient();
-            $payment = $client->capture($cobranca->charge_id);
-        } catch (MPApiException $e) {
-            throw new \Exception($e->getApiResponse()->getContent());
-        } catch (MPException $e) {
-            throw new \Exception($e->getMessage());
-        }
+            $payment = $client->get($cobranca->charge_id);
 
-        return $this->atualizarDados($id);
+            // Se já estiver aprovado ou for boleto, apenas atualiza os dados
+            if ($payment->status === 'approved' || $payment->payment_method_id === 'bolbradesco') {
+                $this->atualizarDados($id);
+                return $payment;
+            }
+
+            // Se estiver autorizado (cartão), então capturar
+            if ($payment->status === 'authorized') {
+                $valor = isset($cobranca->total) ? (float)$cobranca->total : 0;
+                if ($valor > 1000) $valor /= 100;
+
+                $payment = $client->capture(
+                    (int)$cobranca->charge_id,
+                    (float)$valor
+                );
+            } else {
+                throw new \Exception('O pagamento não está em um estado que permite captura (' . $payment->status . ').');
+            }
+
+            $this->atualizarDados($id);
+            return $payment;
+        } catch (MPApiException $e) {
+            throw new \Exception($this->mpErrorMessage($e));
+        } catch (MPException $e) {
+            throw new \Exception('Erro Mercado Pago: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new \Exception('Erro ao confirmar pagamento: ' . $e->getMessage());
+        }
     }
+
 
     protected function gerarCobrancaBoleto($id, $tipo)
     {
