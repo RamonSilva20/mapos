@@ -173,7 +173,7 @@ class MercadoPago extends BasePaymentGateway
 
             // Se estiver autorizado (cartão), então capturar
             if ($payment->status === 'authorized') {
-                $valor = isset($cobranca->total) ? (float)$cobranca->total : 0;
+                $valor = isset($cobranca->total) ? (float) $cobranca->total : 0;
                 if ($valor > 1000) $valor /= 100;
 
                 $payment = $client->capture(
