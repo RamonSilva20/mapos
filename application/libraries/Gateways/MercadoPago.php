@@ -23,7 +23,6 @@ class MercadoPago extends BasePaymentGateway
 
         $this->mercadoPagoConfig = $this->ci->config->item('payment_gateways')['MercadoPago'];
 
-        // Define o token de acesso global
         MercadoPagoConfig::setAccessToken($this->mercadoPagoConfig['credentials']['access_token']);
     }
 
@@ -105,7 +104,6 @@ class MercadoPago extends BasePaymentGateway
             throw new \Exception($this->mpErrorMessage($e));
         }
 
-        // Atualiza status
         $this->ci->cobrancas_model->edit(
             'cobrancas',
             ['status' => $payment->status],
@@ -119,26 +117,21 @@ class MercadoPago extends BasePaymentGateway
 
     private function mpErrorMessage(\Exception $e): string
     {
-        // MPApiException tem getApiResponse()->getContent() que pode ser array/stdClass
         if ($e instanceof \MercadoPago\Exceptions\MPApiException) {
             $content = $e->getApiResponse()->getContent();
 
-            // Converte objeto em array
             if (is_object($content)) {
                 $content = json_decode(json_encode($content), true);
             }
 
             if (is_array($content)) {
-                // Tenta chaves padrão do MP
                 $msg = $content['message'] ?? $content['error'] ?? $content['cause'][0]['description'] ?? null;
                 if (!$msg) {
-                    // Fallback: joga o JSON inteiro
                     $msg = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 }
                 return "Erro API Mercado Pago: " . $msg;
             }
 
-            // Se for string já ok
             if (is_string($content)) {
                 return "Erro API Mercado Pago: " . $content;
             }
@@ -146,7 +139,6 @@ class MercadoPago extends BasePaymentGateway
             return "Erro API Mercado Pago: resposta inesperada.";
         }
 
-        // Outras exceções
         return $e->getMessage();
     }
 
@@ -161,13 +153,11 @@ class MercadoPago extends BasePaymentGateway
             $client = new PaymentClient();
             $payment = $client->get($cobranca->charge_id);
 
-            // Se já estiver aprovado ou for boleto, apenas atualiza os dados
             if ($payment->status === 'approved' || $payment->payment_method_id === 'bolbradesco') {
                 $this->atualizarDados($id);
                 return $payment;
             }
 
-            // Se estiver autorizado (cartão), então capturar
             if ($payment->status === 'authorized') {
                 $valor = isset($cobranca->total) ? (float) $cobranca->total : 0;
                 if ($valor > 1000) $valor /= 100;
