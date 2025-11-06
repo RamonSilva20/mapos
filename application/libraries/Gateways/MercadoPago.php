@@ -212,10 +212,10 @@ class MercadoPago extends BasePaymentGateway
             ? $this->ci->Os_model->getById($id)
             : $this->ci->vendas_model->getById($id)];
 
-        $totalProdutos = array_reduce($produtos, fn($t, $i) => $t + ($i->preco * $i->quantidade), 0);
-        $totalServicos = array_reduce($servicos, fn($t, $i) => $t + ($i->preco * $i->quantidade), 0);
-        $tipoDesconto = array_reduce($tipo_desconto, fn($t, $i) => $i->tipo_desconto, 0);
-        $totalDesconto = array_reduce($desconto, fn($t, $i) => $i->desconto, 0);
+        $totalProdutos = array_reduce($produtos, fn ($t, $i) => $t + ($i->preco * $i->quantidade), 0);
+        $totalServicos = array_reduce($servicos, fn ($t, $i) => $t + ($i->preco * $i->quantidade), 0);
+        $tipoDesconto = array_reduce($tipo_desconto, fn ($t, $i) => $i->tipo_desconto, 0);
+        $totalDesconto = array_reduce($desconto, fn ($t, $i) => $i->desconto, 0);
 
         if (empty($entity)) throw new \Exception('OS ou venda não existe!');
         if (($totalProdutos + $totalServicos) <= 0) throw new \Exception('Valor inválido!');
