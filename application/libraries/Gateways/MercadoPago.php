@@ -37,9 +37,7 @@ class MercadoPago extends BasePaymentGateway
         try {
             $client = new PaymentClient();
             $payment = $client->cancel($cobranca->charge_id);
-        } catch (MPApiException $e) {
-            throw new \Exception($e->getApiResponse()->getContent());
-        } catch (MPException $e) {
+        } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
 
@@ -103,10 +101,8 @@ class MercadoPago extends BasePaymentGateway
         try {
             $client = new PaymentClient();
             $payment = $client->get($cobranca->charge_id);
-        } catch (MPApiException $e) {
-            throw new \Exception($e->getApiResponse()->getContent());
-        } catch (MPException $e) {
-            throw new \Exception($e->getMessage());
+        } catch (MPApiException | MPException $e) {
+            throw new \Exception($this->mpErrorMessage($e));
         }
 
         // Atualiza status
