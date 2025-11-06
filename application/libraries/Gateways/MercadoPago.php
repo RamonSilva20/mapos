@@ -121,25 +121,6 @@ class MercadoPago extends BasePaymentGateway
         log_info('Atualizou cobrança Mercado Pago. ID: ' . $id);
     }
 
-    // public function confirmarPagamento($id)
-    // {
-    //     $cobranca = $this->ci->cobrancas_model->getById($id);
-    //     if (!$cobranca) {
-    //         throw new \Exception('Cobrança não existe!');
-    //     }
-
-    //     try {
-    //         $client = new PaymentClient();
-    //         $payment = $client->capture($cobranca->charge_id);
-    //     } catch (MPApiException $e) {
-    //         throw new \Exception($e->getApiResponse()->getContent());
-    //     } catch (MPException $e) {
-    //         throw new \Exception($e->getMessage());
-    //     }
-
-    //     return $this->atualizarDados($id);
-    // }
-
     private function mpErrorMessage(\Exception $e): string
     {
         // MPApiException tem getApiResponse()->getContent() que pode ser array/stdClass
