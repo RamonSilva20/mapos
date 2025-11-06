@@ -177,8 +177,8 @@ class MercadoPago extends BasePaymentGateway
                 if ($valor > 1000) $valor /= 100;
 
                 $payment = $client->capture(
-                    (int)$cobranca->charge_id,
-                    (float)$valor
+                    (int) $cobranca->charge_id,
+                    (float) $valor
                 );
             } else {
                 throw new \Exception('O pagamento não está em um estado que permite captura (' . $payment->status . ').');
