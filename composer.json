@@ -3,7 +3,7 @@
         "php": "^8.3",
         "ext-curl": "*",
         "ext-gd": "*",
-        "mercadopago/dx-php": "^2.6.2",
+        "mercadopago/dx-php": "^3.7",
         "efipay/sdk-php-apis-efi": "^1.13.0",
         "codeigniter/framework": "^3.1.13",
         "mpdf/mpdf": "^8.2.5",
