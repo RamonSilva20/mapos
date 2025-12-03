@@ -177,9 +177,9 @@ class Os extends MY_Controller
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->os_model->getById($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'OS não encontrada ou parâmetro inválido.');
+            redirect('os/gerenciar');
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {

@@ -134,6 +134,8 @@
         <div class="widget-box">
             <div class="widget-title">
                 <h5>Cadastre-se no Sistema</h5>
+                 <?php if (isset($custom_error) && $custom_error != '') {
+                            echo '<div class="alert alert-danger">' . $custom_error . '</div>'; } ?>
             </div>
             <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
@@ -145,13 +147,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <?php if (isset($custom_error) && $custom_error != '') {
-                            echo '<div class="alert alert-danger">' . $custom_error . '</div>';
-                        } ?>
                         <label for="documento" class="control-label"><span class="required"></span></label>
                         <div class="controls">
                             <input id="documento" class="cpfcnpj" type="text" placeholder="CPF/CNPJ*" name="documento" value="<?= set_value('documento') ?>" />
-                            <button style="top:70px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
+                            <button style="position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
 
@@ -254,7 +253,7 @@
                     <div class="span12">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
                             <button type="submit" class="button btn btn-success btn-large"><span class="button__icon"><i class='bx bx-user-plus'></i></span><span class="button__text2">Cadastrar</span></button>
-                            <a href="<?= base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-lock-alt'></i></span><span class="button__text2">Acessar</span></a>
+                            <a href="<?= base_url() ?>index.php/mine" id="" class="button btn btn-warning"><span class="button__icon"><i class='bx bx-undo'></i></span><span class="button__text2">Voltar</span></a>
                         </div>
                     </div>
                 </div>

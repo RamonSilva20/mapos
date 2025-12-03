@@ -599,9 +599,10 @@ class Mapos extends MY_Controller {
                     'description' => '<b>Descrição/Produto:</b> ' . strip_tags(html_entity_decode($os->descricaoProduto)),
                     'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
                     'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
-                    'total' => '<b>Valor Total:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto: </b>R$ ' . number_format($this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.'),
-                    'valorFaturado' => '<b>Valor Faturado:</b> ' . ($os->faturado ? 'R$ ' . number_format($os->valorTotal - $this->desconto(floatval($os->valorTotal), floatval($os->desconto), strval($os->tipo_desconto)), 2, ',', '.') : 'PENDENTE'),
+                    'subtotal' => '<br><b>Subtotal:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
+                    'desconto' => '<b>Desconto:</b> -R$ ' . ($os->desconto > 0 ? number_format(($os->totalProdutos + $os->totalServicos) - $os->valor_desconto, 2, ',', '.') : number_format($os->desconto, 2, ',', '.')),
+                    'total' => '<b>Total:</b> R$ ' . ($os->valor_desconto == 0 ? number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.') : number_format($os->valor_desconto, 2, ',', '.')),
+                    'faturado' => '<br><b>Faturado:</b> ' . ($os->faturado ? 'SIM' : 'PENDENTE'),
                     'editar' => $this->os_model->isEditable($os->idOs),
                 ],
             ];
@@ -611,16 +612,6 @@ class Mapos extends MY_Controller {
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($events));
-    }
-
-    private function desconto(
-        float $valorTotal,
-        float $desconto,
-        string $tipoDesconto
-    ) {
-        return $tipoDesconto === 'porcento'
-            ? $valorTotal * ($desconto / 100)
-            : $desconto;
     }
 
     private function editDontEnv(array $data)

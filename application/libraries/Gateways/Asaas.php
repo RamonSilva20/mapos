@@ -106,6 +106,12 @@ class Asaas extends BasePaymentGateway
             throw new Exception('Devido à limitação da Asaas, somente é possível atualizar cobranças com boletos!');
         }
 
+        // Verifica se a cobrança já foi deletada
+        if ($result->deleted) {
+            // Atribui o valor DELETED ao status para atualizar o status no banco de dados
+            $result->status = 'DELETED';
+        }
+        
         // Cobrança foi paga ou foi confirmada de forma manual, então damos baixa
         if ($result->status == 'RECEIVED' || $result->status == 'CONFIRMED' || $result->status == 'DUNNING_RECEIVED') {
             // TODO: dar baixa no lançamento caso exista

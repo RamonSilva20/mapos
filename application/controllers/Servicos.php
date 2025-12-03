@@ -84,6 +84,11 @@ class Servicos extends MY_Controller
 
     public function editar()
     {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->servicos_model->getById($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Serviço não encontrado ou parâmetro inválido.');
+            redirect('servicos/gerenciar');
+        }
+
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar serviços.');
             redirect(base_url());

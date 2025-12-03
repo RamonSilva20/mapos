@@ -71,13 +71,17 @@
 }
 
 .trumbowyg-box {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.trumbowyg-editor {
+    background-color: #fff;
+}
 
 textarea {
-        resize: vertical;
-    }
+    resize: vertical;
+}
 
 .ui-menu {
     z-index: 9999 !important;

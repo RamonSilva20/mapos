@@ -6,6 +6,11 @@ function dateInterval($startDate, $finalDate)
 
     // Criar o objeto representando a data
     $obj_data = DateTime::createFromFormat('d/m/Y', $data);
+    
+    if (!$obj_data) {
+        throw new InvalidArgumentException('Erro ao converter a data: ' . $startDate);
+    }
+
     $obj_data->setTime(0, 0, 0);
 
     // Realizar a soma de dias

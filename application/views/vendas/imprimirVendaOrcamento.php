@@ -52,8 +52,8 @@
                                 <tr class="table-secondary">
                                     <th class="text-center">STATUS</th>
                                     <th class="text-center">DATA DA VENDA</th>
-                                    <th class="text-center">GARANTIA</th>
-                                    <th class="text-center">VENC. DA GARANTIA</th>
+                                    <th class="text-center">VALIDADE</th>
+                                    <th class="text-center">VENC. DO ORÇAMENTO</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
 
-                <?php if ($result->observacoes) : ?>
+                <?php if ($result->observacoes_cliente) : ?>
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
                         <div>
@@ -168,7 +168,7 @@
                                             </tr>
                                             <tr>
                                                 <td>DESCONTO</td>
-                                                <td>R$ <b><?= number_format($result->desconto, 2, ',', '.') ?></b></td>
+                                                <td>R$ <b><?= number_format($result->valor_desconto - $totalProdutos, 2, ',', '.') ?></b></td>
                                             </tr>
                                             <tr>
                                                 <td>TOTAL</td>

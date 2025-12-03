@@ -69,7 +69,11 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $data = [
+            $email = set_value('email');
+            if ($email && $this->clientes_model->emailExists($email)) {
+                $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
+            } else {
+                $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'contato' => set_value('contato'),
                 'pessoa_fisica' => $pessoa_fisica,
@@ -86,7 +90,7 @@ class Clientes extends MY_Controller
                 'estado' => set_value('estado'),
                 'cep' => set_value('cep'),
                 'dataCadastro' => date('Y-m-d'),
-                'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                'fornecedor' => $this->input->post('fornecedor') ? 1 : 0,
             ];
 
             if ($this->clientes_model->add('clientes', $data) == true) {
@@ -95,6 +99,7 @@ class Clientes extends MY_Controller
                 redirect(site_url('clientes/'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+            }
             }
         }
 
@@ -105,9 +110,9 @@ class Clientes extends MY_Controller
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->clientes_model->getById($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Cliente não encontrado ou parâmetro inválido.');
+            redirect('clientes/gerenciar');
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
@@ -121,7 +126,13 @@ class Clientes extends MY_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $senha = $this->input->post('senha');
+            
+            $email = $this->input->post('email');
+            $idCliente = $this->input->post('idClientes');
+            if ($email && $this->clientes_model->emailExists($email, $idCliente)) {
+                $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
+            } else {
+                $senha = $this->input->post('senha');
             if ($senha != null) {
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -167,6 +178,7 @@ class Clientes extends MY_Controller
                 redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            }
             }
         }
 
