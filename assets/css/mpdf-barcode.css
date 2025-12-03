@@ -1,0 +1,38 @@
+.barcode {
+	padding: 1.5mm;
+	margin: 0;
+	vertical-align: top;
+	color: #000000;
+}
+
+.barcodecell {
+	text-align: center;
+	vertical-align: middle;
+	padding: 0;
+}
+
+.detalheProdutoEtiqueta {
+	width: 200px;
+	height: auto;
+	border: 1px dashed #777;
+	float: left;
+	padding: 5px;
+	page-break-inside:avoid; 
+}
+
+.detalheProdutoEtiquetaEan13 {
+	width: 145px;
+	height: auto;
+	border: 1px dashed #777;
+	float: left;
+	padding: 4px;
+}
+
+.descricaoProdutoEtiqueta {
+	text-align: center;
+	font-size: 70%;
+}
+
+.textoProdutoEtiqueta {
+	font-size: 70%;
+}

@@ -1,0 +1,141 @@
+/* Personalização da DIV com os campos de usuário e senha na área de login */
+
+.div-login {
+    background-color: rgba(242, 242, 242, 0.1);
+}
+
+.div-form {
+    background-color: rgba(242, 242, 242, 0.1);
+    border-radius: 15px;
+}
+
+.botao-enviar {
+    background-color: rgba(127, 127, 127, 0.5);
+    border-radius: 15px;
+    color: #cccccc;
+}
+
+.campo-digita {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    border: none;
+}
+
+.campo-digita:active {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.campo-digita:focus {
+    border: 1px solid;
+    border-color: #1E22F4;
+}
+
+.botao-enviar:hover {
+    background-color: #666666;
+    border: none;
+}
+
+.erro {
+    color: #FFFFFF !important;
+}
+
+/* FIM DA PERSONALIZAÇÃO DA DIV LOGIN */
+
+/* Personalização da calsse visualizar OS */
+
+#valores {
+    color: green;
+}
+
+/* FIM DA PERSONALZIAÇÃODA CLASSE VISUALIZAR OS */
+
+/* PERSONALIZAR DATA E HORA NO TOP DA PÁGINA */
+
+.date-time-top {
+    margin-left: 5px!important;
+    margin-top: 9px!important;
+}
+
+.date-time-top-text {
+    font-size: 11px!important;
+    color: #888!important;
+}
+
+.modal-body .control-group .help-inline {
+    margin-bottom: 8px!important;
+}
+
+/* Correção do Mini Caledário */
+.ui-datepicker {
+    z-index: 99999 !important;
+}
+
+.trumbowyg-box {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+textarea {
+        resize: vertical;
+    }
+
+.ui-menu {
+    z-index: 9999 !important;
+}
+
+.numero-col {
+    width: 3%;
+}
+
+.data-inicial-col {
+    width: 10%;
+}
+
+.data-final-col {
+    width: 10%;
+}
+
+.acoes-col {
+    width: 5%;
+}
+
+.tipo-col {
+    width: 10%;
+}
+
+.cliente-col {
+    width: 20%;
+}
+
+.status-col {
+    width: 12%;
+}
+
+.descricao-col {
+    width: 20%;
+}
+
+.vencimento-col {
+    width: 10%;
+}
+
+.valor-col {
+    width: 10%;
+}
+
+.text-truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lanc-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.lanc-table tbody > tr > td,
+.lanc-table tbody > tr > th {
+    padding: 7px;
+}

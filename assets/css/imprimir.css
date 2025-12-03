@@ -1,0 +1,259 @@
+body {
+    width: 230mm;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
+    font-size: 12px;
+    background: rgb(204,204,204);
+    font-family: "Roboto", sans-serif;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+.main-page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 1mm auto;
+    padding: 7mm;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+.sub-page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* height: 257mm; */
+    z-index: 1;
+}
+
+.novaPagina {
+    display: none;
+    page-break-before: always;
+}
+
+header {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cdcdcd;
+}
+
+header .alert {
+    width: 100%;
+}
+
+#imgLogo {
+    display: flex;
+    align-items: center;
+}
+
+header .emitente {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 3px;
+}
+
+header .contatoEmitente {
+    text-align: right;
+    max-width: 230px;
+    margin-top: 10px;
+}
+
+header .icon {
+    width: 20px;
+}
+
+section {
+    width: 100%;
+    padding: 10px 0;
+    /* border-bottom: 1px solid #ddd; */
+}
+
+section .title {
+    width: 100%;
+    border: 1px solid #cdcdcd;
+    padding: 3px;
+    font-weight: bold;
+    font-size: 1.25em;
+    text-align: center;
+    background-color: #e8e8e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+section .title .via {
+    font-size: 13px;
+    position: absolute;
+    left: 5px;
+}
+
+.via{
+    display: none;
+}
+
+section .title .emissao {
+    font-size: 13px;
+    position: absolute;
+    right: 5px;
+}
+
+section .subtitle {
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid #cdcdcd;
+    padding: 3px;
+    font-weight: bold;
+    text-align: left;
+    background-color: #e8e8e8;
+}
+
+section .dados {
+    width: 100%;
+    border: 1px solid #cdcdcd;
+    padding: 5px;
+    font-weight: bold;
+    line-height: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+section .dados p {
+    margin-bottom: -0.1em;
+}
+
+section .tabela {
+    padding-top: 10px;
+}
+section .tabela table {
+    margin-bottom: 0;
+}
+section .tabela table .table-secondary {
+    border-color: #cdcdcd;
+}
+section .tabela table tbody {
+    border-color: #cdcdcd !important;
+}
+
+.table>:not(caption)>*>* {
+    padding: .2rem .5rem;
+}
+
+section .pagamento {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+section .pagamento .qrcode {
+    display: flex;
+    justify-content: space-between;
+}
+
+section .pagamento .qrcode .chavePix {
+    width: 100%;
+    word-break: break-word;
+    margin-top:8px;
+    text-align:center;
+}
+
+section .pagamento .qrcode i {
+    font-size: 20px;
+    color: #989898;
+}
+
+section .pagamento .table {
+    width: 400px;
+    text-align: right;
+}
+
+section .pagamento .table th {
+    text-align: center;
+}
+
+section .pagamento .table tbody tr {
+    font-weight: bold;
+}
+
+footer {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cdcdcd;
+}
+
+footer .detalhes {
+    display: flex;
+    justify-content: space-between;
+}
+
+footer .assinaturas {
+    display: flex;
+    justify-content: space-around;
+}
+
+footer .assinaturas span {
+    width: 40%;
+    text-align: center;
+    border-top: 1px solid #000;
+    margin-top: 55px;
+}
+
+footer .vendedor {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+}
+
+#anexos {
+    display: none;
+    page-break-before: always;
+}
+
+#anexos section img {
+    flex: 1 0 30%;
+    max-width: 150px;
+    /* max-height: 200px; */
+    height: auto;
+    object-fit: cover;
+    margin: 5px;
+}
+
+@page {
+    size: auto;
+    margin: 0.5cm;
+}
+
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;       
+    }
+    .main-page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+
+    .via{
+        display: block;
+    }
+    
+    #anexos {
+        display: block;
+    }
+
+    .novaPagina {
+        display: block;
+    }
+}

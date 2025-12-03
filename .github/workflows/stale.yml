@@ -1,0 +1,16 @@
+name: "Close stale issues"
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v1.1.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'Esta issue está obsoleta porque está aberta há 30 dias sem atividade. Remova o rótulo ou esse comentário ou essa issue será fechada em 5 dias'
+        stale-pr-message: 'Esta PR está obsoleta porque está aberta há 30 dias sem atividade. Remova o rótulo ou esse comentário ou essa issue será fechada em 5 dias'
+        days-before-stale: 30
+        days-before-close: 5

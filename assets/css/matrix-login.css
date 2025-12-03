@@ -1,0 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin     : 0;
+  padding    : 0;
+  font-family: "Roboto", sans-serif;
+  font-size  : 0.77em;
+  width      : 100vw;
+  height     : 100vh;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+:root {
+  --funSider: #25233c;
+  --funCont : #e5eefd;
+  --blue    : #36449e;
+  --blue2   : #46435f;
+  --white   : #ffffff;
+  --white2  : #ebecf0;
+  --black   : #000000;
+  --black4  : #272b34;
+  --cinza   : #8a8d8f;
+  --cinza0  : #76818d;
+  --cinza1  : #aaa6b1;
+  --laranja : #fc9d0f;
+  --laranja1: #ffedd4;
+  --violeta : #6b22fc;
+  --violeta0: #333649;
+  --violeta1: #2f2b53;
+}
+
+#newlog {
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  margin-bottom  : 7px;
+  grid-column-gap: 5px;
+}
+
+#newlog .icon2 {
+  width: 42px;
+}
+
+#newlog .title01 {
+  padding-left: 6px;
+  width       : 135px;
+}
+
+#mcell {
+  font-size: 1em;
+  color     : var(--cinza1);
+  padding   : 0 0 25px 0;
+  text-align: center;
+}
+
+.container {
+  justify-content: center;
+  display: flex;
+}
+
+.container .card {
+  background   : var(--violeta0);
+  overflow     : hidden;
+  border-radius: 15px;
+  box-shadow   : 0 15px 26px rgb(0 0 0 / 37%);
+}
+
+.container .card .content {
+  padding   : 48px 30px;
+  transition: 0.5s;
+}
+
+.container .card .content h2 {
+  text-align    : center;
+  position      : absolute;
+  margin        : 20px;
+  color         : white;
+  font-size     : 25px;
+  pointer-events: none;
+}
+
+.control-group.success .help-inline {
+  display: flex;
+  color  : #f2bc9b;
+}
+
+.help-block,
+.help-inline {
+  display: flex;
+  color  : #f2bc9b;
+}
+
+form {
+    margin: 0;
+}
+
+input {
+  width        : 100%;
+  height       : 70px;
+  background   : transparent;
+  border       : none;
+  outline      : none;
+  border-bottom: 1px solid rgba(18, 129, 247, 0.405);
+}
+
+input[type="text"] {
+  height       : 33px;
+  border-radius: 5px;
+  padding      : 3px 9px 3px 25px;
+  color        : #b7b2be;
+  width        : 270px;
+}
+
+input[type="password"] {
+  height       : 33px;
+  border-radius: 5px;
+  padding      : 3px 9px 3px 25px;
+  color        : #b7b2be;
+  width        : 270px;
+}
+
+.input-field {
+  margin-bottom: 1px;
+  padding      : none;
+}
+
+label {
+  color        : #fa9c8e;
+  position     : absolute;
+  margin-bottom: -3px;
+  transition   : 0.3s ease-out;
+  padding      : 9px 7px;
+}
+
+input:focus {
+  box-shadow   : 0 1px 0 0 #1384c5;
+  border-bottom: #ff5f00 1px solid;
+}
+
+.center {
+  text-align : center;
+  padding-top: 10px;
+  width      : 100%;
+}
+
+.iconU {
+  position   : absolute;
+  font-size  : 1.5em;
+  color      : #fa9c8e;
+  padding    : 6px;
+  margin-left: -2px;
+}
+
+.container .card .content button {
+  background    : linear-gradient(13deg, #ff725e, #ffa85e);
+  padding       : 7px 15px;
+  border-radius : 5px;
+  font-family   : "Roboto", sans-serif !important;
+  font-size     : 1.05em;
+  color         : var(--violeta0);
+  text-transform: uppercase;
+  border        : none;
+  margin        : 12px 0;
+  width         : 100%;
+  cursor        : pointer;
+  transition    : ease-in-out 0.25s;
+  content       : "";
+}
+
+.container .card .content button:hover {
+  background : linear-gradient(13deg, #ffa85e, #ff725e);
+  box-shadow : 0 7px 30px -12px rgba(255, 132, 0, 0.75);
+  color      : var(--white);
+  font-weight: 500;
+}
+
+.btn-success {
+  background    : linear-gradient(13deg, #5effb4, #40f7d8);
+  padding       : 7px 15px;
+  border-radius : 5px;
+  font-family   : "Roboto", sans-serif !important;
+  font-size     : 1.05em;
+  color         : var(--violeta0);
+  text-transform: uppercase;
+  border        : none;
+  margin        : 12px 0;
+  width         : 100%;
+  cursor        : pointer;
+  transition    : ease-in-out 0.25s;
+  content       : "";
+}
+
+.btn-success:hover {
+  background : linear-gradient(13deg, #40f7d8, #5effb4);
+  box-shadow : 0 7px 30px -12px rgba(0, 255, 187, 0.75);
+  color      : var(--white);
+  font-weight: 500;
+}
+
+.container .card .content div a {
+  text-decoration: none;
+  font-size      : 0.9em;
+  color          : var(--cinza1);
+  transition     : 0.25s ease-in-out;
+}
+
+.container .card .content div a:hover {
+  color: var(--funCont);
+}
+
+.main-login {
+  width          : 100vw;
+  height         : 100vh;
+  background     : var(--funCont);
+  display        : flex;
+  justify-content: space-around;
+  align-items    : center;
+}
+
+.left-login {
+  width          : 50vw;
+  height         : 100vh;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  flex-direction : column;
+}
+
+.left-login-image {
+  width: 26vw;
+}
+
+.left-login-imagec {
+  width: 25vw;
+}
+
+.left-login > h1 {
+  font-size  : 2.4em;
+  font-weight: 600;
+  color      : var(--violeta0);
+}
+
+.left-login > h2 {
+  font-size    : 1.25em;
+  color        : var(--cinza);
+  font-weight  : 500;
+  margin-top   : -23px;
+  margin-bottom: -10px;
+}
+
+.right-login {
+  width          : 50vw;
+  height         : 100vh;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+}
+
+.links-uteis {
+  text-align: center;
+}
+
+@media (min-width: 375px) and (max-width: 800px) {
+  .main-login {
+    flex-direction: column;
+  }
+
+  .left-login {
+    display: none;
+  }
+  .right-login {
+    width : 100%;
+    height: auto;
+  }
+  .left-login-image {
+    width        : 80vw;
+    margin-bottom: 10px;
+  }
+  .left-login-imagec {
+    width        : 64vw;
+    margin-bottom: 6px;
+  }
+  .card .card-cad {
+    max-width: 95%;
+    height: 360px;
+  }
+  .main-login {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 374px) {
+  .main-login {
+    background: var(--violeta0);
+  }
+
+  .left-login {
+    display: none;
+  }
+
+  .container .card {
+    background: transparent;
+    border-radius: none;
+    box-shadow: none;
+  }
+}

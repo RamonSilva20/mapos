@@ -1,0 +1,38 @@
+name: "Generate release with vendor"
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, mbstring
+
+      - name: Install dependencies
+        run: |
+          composer update --optimize-autoloader --prefer-lowest --prefer-stable
+
+      - name: List Installed Dependencies
+        run: composer show -D
+
+      - name: Create zip file with application and vendor directory
+        run: |
+          zip -r ${{ github.ref_name }}-release.zip ./
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.ref_name }}-release.zip
+          generate_release_notes: true
+          make_latest: true
