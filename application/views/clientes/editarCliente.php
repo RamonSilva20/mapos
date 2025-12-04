@@ -126,7 +126,7 @@
                         <div class="control-group">
                             <label for="email" class="control-label">Email</label>
                             <div class="controls">
-                                <input id="email" type="text" name="email" value="<?php echo $result->email; ?>" />
+                                <input id="email" type="email" name="email" value="<?php echo ($result->email && strpos($result->email, '@exemplo.com') === false) ? $result->email : ''; ?>" autocomplete="off" placeholder="Digite o email do cliente" />
                             </div>
                         </div>
                         <div class="control-group">
@@ -235,6 +235,30 @@
             }
 
         });
+        
+        // Permitir limpar o campo de email facilmente
+        $("#email").on('focus', function() {
+            var emailValue = $(this).val();
+            // Se o email contém "@exemplo.com" ou está com "...", permitir limpar
+            if (emailValue && (emailValue.indexOf('@exemplo.com') !== -1 || emailValue === '...')) {
+                $(this).select();
+            }
+        });
+        
+        // Limpar email se for apenas "..." ou contiver "@exemplo.com" quando o campo perder o foco
+        $("#email").on('blur', function() {
+            var emailValue = $(this).val();
+            if (emailValue === '...' || (emailValue && emailValue.indexOf('@exemplo.com') !== -1)) {
+                $(this).val('');
+            }
+        });
+        
+        // Limpar email de exemplo ao carregar a página se existir
+        var emailValue = $("#email").val();
+        if (emailValue && (emailValue.indexOf('@exemplo.com') !== -1 || emailValue === '...')) {
+            $("#email").val('');
+        }
+        
         $('#formCliente').validate({
             rules: {
                 nomeCliente: {

@@ -263,13 +263,21 @@
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formServicos" action="<?php echo base_url() ?>index.php/os/adicionarServico"
                                     method="post">
-                                    <div class="span6">
+                                    <div class="span5">
                                         <input type="hidden" name="idServico" id="idServico" />
                                         <input type="hidden" name="idOsServico" id="idOsServico"
                                             value="<?php echo $result->idOs; ?>" />
                                         <label for="">Serviço</label>
                                         <input type="text" class="span12" name="servico" id="servico"
                                             placeholder="Digite o nome do serviço" />
+                                    </div>
+                                    <div class="span1">
+                                        <label for="">&nbsp;</label>
+                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) : ?>
+                                        <a href="#modal-novo-servico" role="button" data-toggle="modal" class="button btn btn-mini btn-info" style="width: 100%;" title="Criar Novo Serviço">
+                                            <span class="button__icon"><i class='bx bx-plus'></i></span>
+                                        </a>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="span2">
                                         <label for="">Preço</label>
@@ -470,6 +478,42 @@
     </form>
 </div>
 
+<!-- Modal Novo Serviço Rápido -->
+<div id="modal-novo-servico" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <form id="formNovoServico" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Criar Novo Serviço</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="nome_servico_rapido" class="control-label">Nome do Serviço<span class="required">*</span></label>
+                <div class="controls">
+                    <input type="text" id="nome_servico_rapido" name="nome" class="span12" placeholder="Ex: Instalação de Sistema" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="preco_servico_rapido" class="control-label">Preço<span class="required">*</span></label>
+                <div class="controls">
+                    <input type="text" id="preco_servico_rapido" name="preco" class="span12 money" 
+                        data-affixes-stay="true" data-thousands="" data-decimal="." placeholder="0.00" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="descricao_servico_rapido" class="control-label">Descrição</label>
+                <div class="controls">
+                    <input type="text" id="descricao_servico_rapido" name="descricao" class="span12" placeholder="Descrição opcional" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Criar Serviço</button>
+        </div>
+    </form>
+</div>
+
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
@@ -637,6 +681,11 @@
     $(document).ready(function () {
 
         $(".money").maskMoney();
+        
+        // Inicializar maskMoney no modal quando abrir
+        $('#modal-novo-servico').on('shown', function() {
+            $('#preco_servico_rapido').maskMoney();
+        });
 
         $('#recebido').click(function (event) {
             var flag = $(this).is(':checked');
@@ -838,6 +887,86 @@
                 $("#idServico").val(ui.item.id);
                 $("#preco_servico").val(ui.item.preco);
                 $("#quantidade_servico").focus();
+            }
+        });
+
+        // Formulário para criar novo serviço rapidamente
+        $("#formNovoServico").validate({
+            rules: {
+                nome_servico_rapido: {
+                    required: true
+                },
+                preco_servico_rapido: {
+                    required: true
+                }
+            },
+            messages: {
+                nome_servico_rapido: {
+                    required: 'Campo obrigatório.'
+                },
+                preco_servico_rapido: {
+                    required: 'Campo obrigatório.'
+                }
+            },
+            submitHandler: function(form) {
+                var dados = $(form).serialize();
+                
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/criarServicoRapido",
+                    data: dados,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.result == true) {
+                            // Fechar modal
+                            $('#modal-novo-servico').modal('hide');
+                            
+                            // Limpar formulário
+                            $('#formNovoServico')[0].reset();
+                            
+                            // Preencher campos com o serviço recém-criado
+                            $("#idServico").val(data.servico.id);
+                            $("#servico").val(data.servico.nome);
+                            $("#preco_servico").val(data.servico.preco);
+                            $("#quantidade_servico").focus();
+                            
+                            // Mostrar mensagem de sucesso
+                            Swal.fire({
+                                type: "success",
+                                title: "Sucesso!",
+                                text: data.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            
+                            // Forçar atualização do autocomplete (destruir e recriar)
+                            $("#servico").autocomplete("destroy");
+                            $("#servico").autocomplete({
+                                source: "<?php echo base_url(); ?>index.php/os/autoCompleteServico",
+                                minLength: 2,
+                                select: function (event, ui) {
+                                    $("#idServico").val(ui.item.id);
+                                    $("#preco_servico").val(ui.item.preco);
+                                    $("#quantidade_servico").focus();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                type: "error",
+                                title: "Erro",
+                                text: data.message || "Ocorreu um erro ao criar o serviço."
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            type: "error",
+                            title: "Erro",
+                            text: "Ocorreu um erro ao comunicar com o servidor."
+                        });
+                    }
+                });
+                return false;
             }
         });
 

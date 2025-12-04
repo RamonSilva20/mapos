@@ -12,11 +12,21 @@
     </div>
     <div class="span12" style="margin-left: 0">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) : ?>
-            <div class="span3 flexxn" style="display: flex;">
-                <a href="<?= base_url() ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+            <div class="span3">
+                <a href="<?= base_url() ?>index.php/produtos/adicionar" class="button btn btn-mini btn-success"
+                    style="max-width: 180px; white-space: nowrap;">
                     <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2"> Produtos</span>
                 </a>
-                <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning" style="max-width: 160px">
+            </div>
+            <div class="span3">
+                <a href="<?= base_url() ?>index.php/produtos/importar" class="button btn btn-mini btn-info"
+                    style="max-width: 180px; white-space: nowrap;">
+                    <span class="button__icon"><i class='bx bx-upload'></i></span><span class="button__text2">Importar em Massa</span>
+                </a>
+            </div>
+            <div class="span3">
+                <a href="#modal-etiquetas" role="button" data-toggle="modal" class="button btn btn-mini btn-warning"
+                    style="max-width: 180px; white-space: nowrap;">
                     <span class="button__icon"><i class='bx bx-barcode-reader' ></i></span><span class="button__text2">Gerar Etiquetas</span>
                 </a>
             </div>

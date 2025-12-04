@@ -213,8 +213,13 @@ function validarCNPJ(cnpj) {
         var ndocumento = $('#documento').val().replace(/\D/g, '');
 
             //Preenche os campos com "..." enquanto consulta webservice.
+            // Salvar valor atual do email antes de preencher com "..."
+            var emailAtual = $("#email").val();
             $("#nomeCliente").val("...");
-            $("#email").val("...");
+            // Só preencher email com "..." se estiver vazio
+            if (!emailAtual || emailAtual.trim() === '') {
+                $("#email").val("...");
+            }
             $("#cep").val("...");
             $("#rua").val("...");
             $("#numero").val("...");
@@ -239,7 +244,18 @@ function validarCNPJ(cnpj) {
                             $("#nomeEmitente").val(capital_letter(dados.nome));
                         }
                         $("#cep").val(dados.cep.replace(/\./g, ''));
-                        $("#email").val(dados.email.toLocaleLowerCase());
+                        // Só preencher email se estiver vazio ou com "..." e se a API retornar um email válido
+                        // NÃO preencher se o usuário já digitou algo ou se o email contém "@exemplo.com"
+                        var emailAtual = $("#email").val() || '';
+                        var emailValido = dados.email && dados.email.trim() !== '' && dados.email !== '...' && dados.email.indexOf('@exemplo.com') === -1;
+                        var podePreencher = (emailAtual === '' || emailAtual === '...' || !emailAtual) && emailAtual.indexOf('@exemplo.com') === -1;
+                        
+                        if (emailValido && podePreencher) {
+                            $("#email").val(dados.email.toLocaleLowerCase());
+                        } else if (emailAtual === '...') {
+                            // Se estava com "..." e não pode preencher, limpar
+                            $("#email").val('');
+                        }
                         $("#telefone").val(dados.telefone.split("/")[0].replace(/\ /g, ''));
                         $("#rua").val(capital_letter(dados.logradouro));
                         $("#numero").val(dados.numero);
@@ -270,7 +286,10 @@ function validarCNPJ(cnpj) {
                             $("#nomeEmitente").val("");
                         }
                         $("#cep").val("");
-                        $("#email").val("");
+                        // Só limpar email se estava vazio antes da busca
+                        if ($("#email").val() === '...') {
+                            $("#email").val("");
+                        }
                         $("#numero").val("");
                         $("#complemento").val("");
                         $("#telefone").val("");

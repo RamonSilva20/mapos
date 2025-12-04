@@ -20,6 +20,14 @@
                     </span>
                 </a>
             </div>
+            <div class="span3">
+                <a href="<?= base_url() ?>index.php/clientes/importar" class="button btn btn-mini btn-info"
+                    style="max-width: 165px">
+                    <span class="button__icon"><i class='bx bx-upload'></i></span><span class="button__text2">
+                        Importar em Massa
+                    </span>
+                </a>
+            </div>
         <?php } ?>
         <form class="span9" method="get" action="<?= base_url() ?>index.php/clientes"
             style="display: flex; justify-content: flex-end;">
@@ -48,7 +56,7 @@
                         <th>Telefone</th>
                         <th>Celular</th>
                         <th>Email</th>
-                        <th>Tipo</th> <!-- Nova coluna para Fornecedor/Cliente -->
+                        <th>Tipo</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -69,7 +77,6 @@
                         echo '<td>' . $r->celular . '</td>';
                         echo '<td>' . $r->email . '</td>';
 
-                        // Verifica se é Fornecedor ou Cliente
                         if ($r->fornecedor == 1) {
                             echo '<td><span class="label label-primary">Fornecedor</span></td>';
                         } else {

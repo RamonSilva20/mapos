@@ -831,6 +831,70 @@ class Os extends MY_Controller
         }
     }
 
+    /**
+     * Cria um novo serviço rapidamente via AJAX (usado na edição de OS)
+     */
+    public function criarServicoRapido()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aServico')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para adicionar serviços.']));
+        }
+
+        $this->load->library('form_validation');
+        $this->load->model('servicos_model');
+
+        // Regras de validação
+        $this->form_validation->set_rules('nome', 'Nome', 'required|trim');
+        $this->form_validation->set_rules('preco', 'Preço', 'required|trim');
+
+        if ($this->form_validation->run() === false) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => validation_errors()]));
+        }
+
+        $preco = $this->input->post('preco');
+        $preco = str_replace(',', '', $preco);
+
+        $data = [
+            'nome' => $this->input->post('nome'),
+            'descricao' => $this->input->post('descricao') ?: '',
+            'preco' => $preco,
+        ];
+
+        if ($this->servicos_model->add('servicos', $data) == true) {
+            // Buscar o serviço recém-criado
+            $this->db->where('nome', $data['nome']);
+            $this->db->order_by('idServicos', 'DESC');
+            $this->db->limit(1);
+            $servico = $this->db->get('servicos')->row();
+
+            log_info('Criou serviço rapidamente. ID: ' . $servico->idServicos);
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'result' => true,
+                    'message' => 'Serviço criado com sucesso!',
+                    'servico' => [
+                        'id' => $servico->idServicos,
+                        'nome' => $servico->nome,
+                        'preco' => $servico->preco
+                    ]
+                ]));
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode(['result' => false, 'message' => 'Erro ao criar serviço.']));
+        }
+    }
+
     public function anexar()
     {
         $this->load->library('upload');
