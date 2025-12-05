@@ -1,0 +1,3 @@
+"Código de Barras",Descrição,Unidade,"Preço de Compra","Preço de Venda",Estoque,"Estoque Mínimo","Entrada (Sim/Não)","Saída (Sim/Não)",NCM,CEST,CFOP,"Origem (0-Nacional, 1-Estrangeira)","Tributação ICMS"
+7891234567890,"Produto Exemplo 1",UN,10.50,25.90,100,10,Sim,Sim,12345678,1234567,5102,0,00
+7891234567891,"Produto Exemplo 2",KG,5.00,12.00,50,5,Sim,Sim,87654321,,5101,0,00

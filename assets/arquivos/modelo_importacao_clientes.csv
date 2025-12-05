@@ -1,0 +1,3 @@
+"Nome/Razão Social",CPF/CNPJ,Email,Telefone,Celular,Contato,Rua,Número,Complemento,Bairro,Cidade,Estado,CEP,"Fornecedor (Sim/Não)","Senha (opcional)"
+"João Silva",12345678901,joao@exemplo.com,"(11) 1234-5678","(11) 98765-4321","Maria Silva","Rua das Flores",123,"Apto 45",Centro,"São Paulo",SP,01234-567,Não,
+"Empresa XYZ Ltda",12345678000190,contato@empresa.com,"(11) 2345-6789","(11) 98765-4321","Carlos Santos","Av. Paulista",1000,"Sala 10","Bela Vista","São Paulo",SP,01310-100,Sim,

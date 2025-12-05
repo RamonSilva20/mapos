@@ -74,6 +74,11 @@ class Produtos extends MY_Controller
                 'estoqueMinimo' => set_value('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
+                'ncm' => set_value('ncm') ? set_value('ncm') : null,
+                'cest' => set_value('cest') ? set_value('cest') : null,
+                'cfop' => set_value('cfop') ? set_value('cfop') : null,
+                'origem' => set_value('origem') ? set_value('origem') : '0',
+                'tributacao' => set_value('tributacao') ? set_value('tributacao') : null,
             ];
 
             if ($this->produtos_model->add('produtos', $data) == true) {
@@ -120,6 +125,11 @@ class Produtos extends MY_Controller
                 'estoqueMinimo' => $this->input->post('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
+                'ncm' => $this->input->post('ncm') ? $this->input->post('ncm') : null,
+                'cest' => $this->input->post('cest') ? $this->input->post('cest') : null,
+                'cfop' => $this->input->post('cfop') ? $this->input->post('cfop') : null,
+                'origem' => $this->input->post('origem') ? $this->input->post('origem') : '0',
+                'tributacao' => $this->input->post('tributacao') ? $this->input->post('tributacao') : null,
             ];
 
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {

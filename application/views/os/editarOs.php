@@ -317,12 +317,15 @@
                                                 $preco = $s->preco ?: $s->precoVenda;
                                                 $subtotals = $preco * ($s->quantidade ?: 1);
                                                 $totals = $totals + $subtotals;
-                                                echo '<tr>';
+                                                echo '<tr id="servico-row-' . $s->idServicos_os . '">';
                                                 echo '<td>' . $s->nome . '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
-                                                echo '<td><div align="center">R$ ' . $preco . '</div></td>';
-                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
-                                                echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
+                                                echo '<td><div align="center"><span class="preco-servico-display" id="preco-display-' . $s->idServicos_os . '">R$ ' . number_format($preco, 2, ',', '.') . '</span></div></td>';
+                                                echo '<td><div align="center">';
+                                                echo '<span idAcao="' . $s->idServicos_os . '" precoAtual="' . number_format($preco, 2, '.', '') . '" quantidadeAtual="' . ($s->quantidade ?: 1) . '" title="Editar Preço" class="btn-nwe4 editar-servico" style="margin-right: 5px; color: #007bff; cursor: pointer;"><i class="bx bx-edit"></i></span>';
+                                                echo '<span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico" style="color: #dc3545; cursor: pointer;"><i class="bx bx-trash-alt"></i></span>';
+                                                echo '</div></td>';
+                                                echo '<td><div align="center"><span id="subtotal-' . $s->idServicos_os . '">R$: ' . number_format($subtotals, 2, ',', '.') . '</span></div></td>';
                                                 echo '</tr>';
                                             } ?>
                                         </tbody>
@@ -474,6 +477,44 @@
         <div class="modal-footer" style="display:flex;justify-content: center">
             <button class="btn" data-dismiss="modal" aria-hidden="true" id="btn-close-anotacao">Fechar</button>
             <button class="btn btn-primary">Adicionar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal Editar Preço Serviço -->
+<div id="modal-editar-preco-servico" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <form id="formEditarPrecoServico" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Editar Preço do Serviço</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label for="servico_nome_editar" class="control-label">Serviço</label>
+                <div class="controls">
+                    <input type="text" id="servico_nome_editar" class="span12" readonly />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="preco_servico_editar" class="control-label">Novo Preço<span class="required">*</span></label>
+                <div class="controls">
+                    <input type="text" id="preco_servico_editar" name="preco" class="span12 money" 
+                        data-affixes-stay="true" data-thousands="" data-decimal="." placeholder="0.00" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="quantidade_servico_editar" class="control-label">Quantidade</label>
+                <div class="controls">
+                    <input type="text" id="quantidade_servico_editar" name="quantidade" class="span12" readonly />
+                </div>
+            </div>
+            <input type="hidden" id="idServicos_os_editar" name="idServicos_os" />
+            <input type="hidden" id="idOs_editar" name="idOs" value="<?php echo $result->idOs; ?>" />
+        </div>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
 </div>
@@ -685,6 +726,11 @@
         // Inicializar maskMoney no modal quando abrir
         $('#modal-novo-servico').on('shown', function() {
             $('#preco_servico_rapido').maskMoney();
+        });
+        
+        // Inicializar maskMoney no modal de editar preço quando abrir
+        $('#modal-editar-preco-servico').on('shown', function() {
+            $('#preco_servico_editar').maskMoney();
         });
 
         $('#recebido').click(function (event) {
@@ -1262,6 +1308,85 @@
                 return false;
             }
 
+        });
+
+        // Editar preço do serviço
+        $(document).on('click', '.editar-servico', function (event) {
+            event.preventDefault();
+            var idServicosOs = $(this).attr('idAcao');
+            var precoAtual = $(this).attr('precoAtual');
+            var quantidadeAtual = $(this).attr('quantidadeAtual');
+            
+            // Buscar nome do serviço da linha
+            var nomeServico = $(this).closest('tr').find('td:first').text();
+            
+            // Preencher modal
+            $('#servico_nome_editar').val(nomeServico);
+            $('#preco_servico_editar').val(precoAtual);
+            $('#quantidade_servico_editar').val(quantidadeAtual);
+            $('#idServicos_os_editar').val(idServicosOs);
+            
+            // Abrir modal
+            $('#modal-editar-preco-servico').modal('show');
+        });
+        
+        // Formulário para editar preço do serviço
+        $("#formEditarPrecoServico").validate({
+            rules: {
+                preco: {
+                    required: true
+                }
+            },
+            messages: {
+                preco: {
+                    required: 'Campo obrigatório.'
+                }
+            },
+            submitHandler: function(form) {
+                var dados = $(form).serialize();
+                
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>index.php/os/editarPrecoServico",
+                    data: dados,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.result == true) {
+                            // Fechar modal
+                            $('#modal-editar-preco-servico').modal('hide');
+                            
+                            // Recarregar tabela de serviços e total
+                            $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#resultado").val('');
+                            $("#desconto").val('');
+                            
+                            // Mostrar mensagem de sucesso
+                            Swal.fire({
+                                type: "success",
+                                title: "Sucesso!",
+                                text: data.message || "Preço atualizado com sucesso!",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            Swal.fire({
+                                type: "error",
+                                title: "Erro",
+                                text: data.message || "Ocorreu um erro ao atualizar o preço."
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            type: "error",
+                            title: "Erro",
+                            text: "Ocorreu um erro ao comunicar com o servidor."
+                        });
+                    }
+                });
+                return false;
+            }
         });
 
         $(document).on('click', '.servico', function (event) {

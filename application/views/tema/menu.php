@@ -117,6 +117,17 @@
                     </li>
                 <?php } ?>
 
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vNotaEntrada')) { ?>
+                    <li class="<?php if (isset($menuNotasEntrada)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('notasentrada') ?>"><i class='bx bx-receipt iconX'></i>
+                            <span class="title">Notas de Entrada</span>
+                            <span class="title-tooltip">Notas de Entrada</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                     <li class="<?php if (isset($menuLancamentos)) {
                         echo 'active';

@@ -6,7 +6,7 @@
 <html lang="pt-br">
 
 <head>
-    <title><?= $this->config->item('app_name') ?> - <?= $result->idOs ?> - <?= $result->nomeCliente ?></title>
+    <title><?= $result->status ?> <?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?> - <?= $result->nomeCliente ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap5.3.2.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />

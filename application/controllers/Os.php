@@ -832,6 +832,87 @@ class Os extends MY_Controller
     }
 
     /**
+     * Edita o preço de um serviço na OS sem alterar o preço original do serviço
+     */
+    public function editarPrecoServico()
+    {
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('idServicos_os', 'ID do Serviço', 'required|integer');
+        $this->form_validation->set_rules('preco', 'Preço', 'required|numeric');
+        $this->form_validation->set_rules('idOs', 'ID da OS', 'required|integer');
+
+        if ($this->form_validation->run() === false) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => validation_errors()
+                ]));
+        }
+
+        $idServicosOs = $this->input->post('idServicos_os');
+        $idOs = $this->input->post('idOs');
+        $preco = $this->input->post('preco');
+        
+        // Remover formatação do preço (vírgulas, pontos, etc)
+        $preco = str_replace(',', '.', $preco);
+        $preco = preg_replace('/[^0-9.]/', '', $preco);
+        
+        // Buscar quantidade atual do serviço na OS
+        $this->db->where('idServicos_os', $idServicosOs);
+        $servicoOs = $this->db->get('servicos_os')->row();
+        
+        if (!$servicoOs) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(404)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Serviço não encontrado na OS.'
+                ]));
+        }
+
+        $quantidade = $servicoOs->quantidade ?: 1;
+        $subTotal = $preco * $quantidade;
+
+        // Atualizar apenas o preço e subtotal na tabela servicos_os
+        // O preço original do serviço (servicos.preco) permanece inalterado
+        $data = [
+            'preco' => $preco,
+            'subTotal' => $subTotal
+        ];
+
+        if ($this->os_model->edit('servicos_os', $data, 'idServicos_os', $idServicosOs)) {
+            log_info('Editou preço de serviço na OS. ID (OS): ' . $idOs . ', ID (Serviço OS): ' . $idServicosOs . ', Novo Preço: ' . $preco);
+
+            // Resetar desconto da OS quando o preço é alterado
+            $this->db->set('desconto', 0.00);
+            $this->db->set('valor_desconto', 0.00);
+            $this->db->set('tipo_desconto', null);
+            $this->db->where('idOs', $idOs);
+            $this->db->update('os');
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'result' => true,
+                    'message' => 'Preço do serviço atualizado com sucesso!'
+                ]));
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Erro ao atualizar o preço do serviço.'
+                ]));
+        }
+    }
+
+    /**
      * Cria um novo serviço rapidamente via AJAX (usado na edição de OS)
      */
     public function criarServicoRapido()

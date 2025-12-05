@@ -104,6 +104,74 @@
                             <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo set_value('estoqueMinimo'); ?>" />
                         </div>
                     </div>
+                    
+                    <!-- Campos Fiscais -->
+                    <div class="control-group">
+                        <label class="control-label" style="font-weight: bold; color: #0066cc;">Informações Fiscais</label>
+                        <div class="controls"></div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="ncm" class="control-label">NCM</label>
+                        <div class="controls">
+                            <input id="ncm" type="text" name="ncm" maxlength="8" value="<?php echo set_value('ncm'); ?>" placeholder="Ex: 12345678" />
+                            <small style="color: #666;">Código NCM (8 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cest" class="control-label">CEST</label>
+                        <div class="controls">
+                            <input id="cest" type="text" name="cest" maxlength="7" value="<?php echo set_value('cest'); ?>" placeholder="Ex: 1234567" />
+                            <small style="color: #666;">Código CEST (7 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cfop" class="control-label">CFOP</label>
+                        <div class="controls">
+                            <input id="cfop" type="text" name="cfop" maxlength="4" value="<?php echo set_value('cfop'); ?>" placeholder="Ex: 5102" />
+                            <small style="color: #666;">Código CFOP (4 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="origem" class="control-label">Origem</label>
+                        <div class="controls">
+                            <select id="origem" name="origem">
+                                <option value="0" <?php echo set_select('origem', '0', true); ?>>0 - Nacional</option>
+                                <option value="1" <?php echo set_select('origem', '1'); ?>>1 - Estrangeira - Importação direta</option>
+                                <option value="2" <?php echo set_select('origem', '2'); ?>>2 - Estrangeira - Adquirida no mercado interno</option>
+                                <option value="3" <?php echo set_select('origem', '3'); ?>>3 - Nacional - Mercadoria com mais de 40% de conteúdo estrangeiro</option>
+                                <option value="4" <?php echo set_select('origem', '4'); ?>>4 - Nacional - Produção em conformidade com processos produtivos básicos</option>
+                                <option value="5" <?php echo set_select('origem', '5'); ?>>5 - Nacional - Mercadoria com menos de 40% de conteúdo estrangeiro</option>
+                                <option value="6" <?php echo set_select('origem', '6'); ?>>6 - Estrangeira - Importação direta sem similar nacional</option>
+                                <option value="7" <?php echo set_select('origem', '7'); ?>>7 - Estrangeira - Adquirida no mercado interno sem similar nacional</option>
+                                <option value="8" <?php echo set_select('origem', '8'); ?>>8 - Nacional - Mercadoria com mais de 70% de conteúdo estrangeiro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="tributacao" class="control-label">Tributação ICMS</label>
+                        <div class="controls">
+                            <select id="tributacao" name="tributacao">
+                                <option value="">Selecione...</option>
+                                <option value="00" <?php echo set_select('tributacao', '00'); ?>>00 - Tributada integralmente</option>
+                                <option value="10" <?php echo set_select('tributacao', '10'); ?>>10 - Tributada com cobrança de ICMS por substituição tributária</option>
+                                <option value="20" <?php echo set_select('tributacao', '20'); ?>>20 - Com redução de base de cálculo</option>
+                                <option value="30" <?php echo set_select('tributacao', '30'); ?>>30 - Isenta ou não tributada com cobrança de ICMS por substituição tributária</option>
+                                <option value="40" <?php echo set_select('tributacao', '40'); ?>>40 - Isenta</option>
+                                <option value="41" <?php echo set_select('tributacao', '41'); ?>>41 - Não tributada</option>
+                                <option value="50" <?php echo set_select('tributacao', '50'); ?>>50 - Suspensa</option>
+                                <option value="51" <?php echo set_select('tributacao', '51'); ?>>51 - Diferimento</option>
+                                <option value="60" <?php echo set_select('tributacao', '60'); ?>>60 - ICMS cobrado anteriormente por substituição tributária</option>
+                                <option value="70" <?php echo set_select('tributacao', '70'); ?>>70 - Com redução de base de cálculo e cobrança de ICMS por substituição tributária</option>
+                                <option value="90" <?php echo set_select('tributacao', '90'); ?>>90 - Outras</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">

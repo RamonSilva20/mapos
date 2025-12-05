@@ -45,6 +45,10 @@ if (! defined('BASEPATH')) {
 $route['default_controller'] = 'mapos';
 $route['404_override'] = '';
 
+// Rota para Notas de Entrada
+$route['notasentrada'] = 'Notasentrada/index';
+$route['notasentrada/(:any)'] = 'Notasentrada/$1';
+
 // Rotas da API
 if (filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
     require APPPATH . 'config/routes_api.php';

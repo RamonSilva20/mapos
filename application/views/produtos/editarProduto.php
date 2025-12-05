@@ -111,6 +111,73 @@
                             <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo $result->estoqueMinimo; ?>" />
                         </div>
                     </div>
+                    
+                    <!-- Campos Fiscais -->
+                    <div class="control-group">
+                        <label class="control-label" style="font-weight: bold; color: #0066cc;">Informações Fiscais</label>
+                        <div class="controls"></div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="ncm" class="control-label">NCM</label>
+                        <div class="controls">
+                            <input id="ncm" type="text" name="ncm" maxlength="8" value="<?php echo isset($result->ncm) ? $result->ncm : ''; ?>" placeholder="Ex: 12345678" />
+                            <small style="color: #666;">Código NCM (8 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cest" class="control-label">CEST</label>
+                        <div class="controls">
+                            <input id="cest" type="text" name="cest" maxlength="7" value="<?php echo isset($result->cest) ? $result->cest : ''; ?>" placeholder="Ex: 1234567" />
+                            <small style="color: #666;">Código CEST (7 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cfop" class="control-label">CFOP</label>
+                        <div class="controls">
+                            <input id="cfop" type="text" name="cfop" maxlength="4" value="<?php echo isset($result->cfop) ? $result->cfop : ''; ?>" placeholder="Ex: 5102" />
+                            <small style="color: #666;">Código CFOP (4 dígitos)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="origem" class="control-label">Origem</label>
+                        <div class="controls">
+                            <select id="origem" name="origem">
+                                <option value="0" <?php echo (isset($result->origem) && $result->origem == '0') ? 'selected' : ''; ?>>0 - Nacional</option>
+                                <option value="1" <?php echo (isset($result->origem) && $result->origem == '1') ? 'selected' : ''; ?>>1 - Estrangeira - Importação direta</option>
+                                <option value="2" <?php echo (isset($result->origem) && $result->origem == '2') ? 'selected' : ''; ?>>2 - Estrangeira - Adquirida no mercado interno</option>
+                                <option value="3" <?php echo (isset($result->origem) && $result->origem == '3') ? 'selected' : ''; ?>>3 - Nacional - Mercadoria com mais de 40% de conteúdo estrangeiro</option>
+                                <option value="4" <?php echo (isset($result->origem) && $result->origem == '4') ? 'selected' : ''; ?>>4 - Nacional - Produção em conformidade com processos produtivos básicos</option>
+                                <option value="5" <?php echo (isset($result->origem) && $result->origem == '5') ? 'selected' : ''; ?>>5 - Nacional - Mercadoria com menos de 40% de conteúdo estrangeiro</option>
+                                <option value="6" <?php echo (isset($result->origem) && $result->origem == '6') ? 'selected' : ''; ?>>6 - Estrangeira - Importação direta sem similar nacional</option>
+                                <option value="7" <?php echo (isset($result->origem) && $result->origem == '7') ? 'selected' : ''; ?>>7 - Estrangeira - Adquirida no mercado interno sem similar nacional</option>
+                                <option value="8" <?php echo (isset($result->origem) && $result->origem == '8') ? 'selected' : ''; ?>>8 - Nacional - Mercadoria com mais de 70% de conteúdo estrangeiro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="tributacao" class="control-label">Tributação ICMS</label>
+                        <div class="controls">
+                            <select id="tributacao" name="tributacao">
+                                <option value="">Selecione...</option>
+                                <option value="00" <?php echo (isset($result->tributacao) && $result->tributacao == '00') ? 'selected' : ''; ?>>00 - Tributada integralmente</option>
+                                <option value="10" <?php echo (isset($result->tributacao) && $result->tributacao == '10') ? 'selected' : ''; ?>>10 - Tributada com cobrança de ICMS por substituição tributária</option>
+                                <option value="20" <?php echo (isset($result->tributacao) && $result->tributacao == '20') ? 'selected' : ''; ?>>20 - Com redução de base de cálculo</option>
+                                <option value="30" <?php echo (isset($result->tributacao) && $result->tributacao == '30') ? 'selected' : ''; ?>>30 - Isenta ou não tributada com cobrança de ICMS por substituição tributária</option>
+                                <option value="40" <?php echo (isset($result->tributacao) && $result->tributacao == '40') ? 'selected' : ''; ?>>40 - Isenta</option>
+                                <option value="41" <?php echo (isset($result->tributacao) && $result->tributacao == '41') ? 'selected' : ''; ?>>41 - Não tributada</option>
+                                <option value="50" <?php echo (isset($result->tributacao) && $result->tributacao == '50') ? 'selected' : ''; ?>>50 - Suspensa</option>
+                                <option value="51" <?php echo (isset($result->tributacao) && $result->tributacao == '51') ? 'selected' : ''; ?>>51 - Diferimento</option>
+                                <option value="60" <?php echo (isset($result->tributacao) && $result->tributacao == '60') ? 'selected' : ''; ?>>60 - ICMS cobrado anteriormente por substituição tributária</option>
+                                <option value="70" <?php echo (isset($result->tributacao) && $result->tributacao == '70') ? 'selected' : ''; ?>>70 - Com redução de base de cálculo e cobrança de ICMS por substituição tributária</option>
+                                <option value="90" <?php echo (isset($result->tributacao) && $result->tributacao == '90') ? 'selected' : ''; ?>>90 - Outras</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-actions">
                         <div class="span12">
