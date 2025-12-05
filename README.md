@@ -99,6 +99,39 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 2. Quando estiver nessa versão é possível atualizar o sistema clicando no botão "Atualizar Mapos" em Sistema >> Configurações;
 3. Serão baixados e atualizados todos os arquivos exceto: `config.php`, `database.php` e `email.php`;
 
+### Novas Funcionalidades
+
+#### Módulo de Notas de Entrada
+- **Upload de XML**: Importe notas fiscais (NFe e NFSe) através de upload de arquivo XML
+- **Busca SEFAZ**: Integração com SEFAZ para buscar notas fiscais pela chave de acesso
+- **Processamento Automático**: Extração automática de dados da nota e itens
+- **Adicionar ao Estoque**: Adicione itens da nota diretamente ao estoque com:
+  - Cálculo automático de preço de venda por markup (%)
+  - Edição individual de preço de venda por item
+  - Criação automática de produtos não cadastrados
+  - Atualização de estoque de produtos existentes
+- **Visualização Completa**: Visualize todos os dados da nota fiscal e seus itens
+
+#### Campos Fiscais em Produtos
+- **NCM** (Nomenclatura Comum do Mercosul): Código de 8 dígitos
+- **CEST** (Código Especificador da Substituição Tributária): Código de 7 dígitos
+- **CFOP** (Código Fiscal de Operações e Prestações): Código de 4 dígitos
+- **Origem**: Classificação da origem da mercadoria (0-8)
+- **Tributação ICMS**: Códigos de tributação do ICMS (00-90)
+- Disponível em: Cadastro, Edição e Visualização de Produtos
+
+#### Importação em Massa
+- **Clientes/Fornecedores**: Importe múltiplos clientes via arquivo CSV
+- **Produtos**: Importe múltiplos produtos via arquivo CSV com campos fiscais
+- **Modelos para Download**: Templates CSV disponíveis para download
+- **Validação Automática**: Validação de dados e tratamento de duplicatas
+- **Relatório de Importação**: Feedback detalhado sobre sucessos, erros e duplicatas
+
+#### Melhorias na Ordem de Serviço
+- **Criação Rápida de Serviços**: Crie novos serviços diretamente na tela de edição de OS
+- **Edição de Preço de Serviço**: Altere o preço de serviços dentro da OS sem afetar o preço original
+- **Personalização por Cliente**: Ajuste valores de serviços conforme necessário
+
 ### Comandos de terminal
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.
