@@ -653,6 +653,140 @@ class Os extends MY_Controller
         }
     }
 
+    public function cadastrarClienteRapido()
+    {
+        // Desabilitar CSRF para este método específico
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $this->config->set_item('csrf_protection', false);
+        
+        // Retornar teste imediato para verificar se o método é chamado
+        // TODO: Remover após teste
+        if (isset($_GET['test'])) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'success' => true,
+                    'message' => 'Método acessível!',
+                    'post' => $_POST,
+                    'session' => $this->session->userdata('logado') ? 'logado' : 'não logado'
+                ]));
+        }
+        
+        // Seguir o mesmo padrão do método adicionarProduto que funciona
+        $this->load->model('clientes_model');
+        
+        $nomeCliente = $this->input->post('nomeCliente');
+        
+        if (empty($nomeCliente) || trim($nomeCliente) == '') {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'O nome do cliente é obrigatório.'
+                ]));
+        }
+
+        // Preparar dados - apenas nome obrigatório, outros campos opcionais
+        $telefone = $this->input->post('telefone');
+        if (empty($telefone) || trim($telefone) == '') {
+            $telefone = '00000000000';
+        }
+        
+        $celular = $this->input->post('celular');
+        if (empty($celular) || trim($celular) == '') {
+            $celular = null;
+        }
+        
+        $email = trim($this->input->post('email'));
+        if (empty($email) || $email === '') {
+            // Gerar email temporário único se não fornecido
+            $email = 'cliente_' . time() . '_' . rand(1000, 9999) . '@temp.mapos.com';
+        }
+        
+        // Limpar emails de exemplo ou inválidos
+        if ($email && (strpos($email, '@exemplo.com') !== false || $email === '...')) {
+            $email = 'cliente_' . time() . '_' . rand(1000, 9999) . '@temp.mapos.com';
+        }
+        
+        // Verificar se email já existe (apenas para emails reais, não temporários)
+        if ($email && strpos($email, '@temp.mapos.com') === false && $this->clientes_model->emailExists($email)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Este e-mail já está sendo utilizado por outro cliente.'
+                ]));
+        }
+
+        // Gerar documento temporário único para evitar duplicatas
+        $documento = '00000000000'; // CPF temporário para pessoa física
+        
+        // Verificar se já existe cliente com este documento temporário
+        // Se existir, gerar um novo baseado em timestamp
+        $this->db->where('documento', $documento);
+        $existe = $this->db->get('clientes')->num_rows();
+        if ($existe > 0) {
+            // Gerar documento único baseado em timestamp
+            $documento = '000' . substr(time(), -8);
+        }
+        
+        // Gerar senha temporária
+        $senha = password_hash($documento, PASSWORD_DEFAULT);
+
+        $data = [
+            'nomeCliente' => trim($nomeCliente),
+            'contato' => null,
+            'pessoa_fisica' => 1, // Sempre pessoa física no cadastro rápido
+            'documento' => $documento,
+            'telefone' => $telefone,
+            'celular' => $celular,
+            'email' => $email,
+            'senha' => $senha,
+            'rua' => $this->input->post('rua') ?: null,
+            'numero' => $this->input->post('numero') ?: null,
+            'complemento' => null,
+            'bairro' => $this->input->post('bairro') ?: null,
+            'cidade' => $this->input->post('cidade') ?: null,
+            'estado' => $this->input->post('estado') ?: null,
+            'cep' => $this->input->post('cep') ?: null,
+            'dataCadastro' => date('Y-m-d'),
+            'fornecedor' => 0,
+        ];
+
+        $idCliente = $this->clientes_model->add('clientes', $data);
+        
+        if ($idCliente) {
+            $cliente = $this->clientes_model->getById($idCliente);
+            log_info('Cadastrou um cliente rápido da tela de OS. ID: ' . $idCliente);
+            
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'success' => true,
+                    'message' => 'Cliente cadastrado com sucesso!',
+                    'cliente' => [
+                        'idClientes' => $cliente->idClientes,
+                        'nomeCliente' => $cliente->nomeCliente
+                    ],
+                    'csrf_token' => $this->security->get_csrf_hash()
+                ]));
+        } else {
+            $error = $this->db->error();
+            
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Erro ao cadastrar cliente. Tente novamente.'
+                ]));
+        }
+    }
+
     public function autoCompleteUsuario()
     {
         if (isset($_GET['term'])) {

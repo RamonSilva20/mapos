@@ -28,10 +28,16 @@
                                 <?php
                                 } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
+                                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" id="csrf_token">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span6">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="" />
+                                            <div style="display: flex; gap: 5px; align-items: flex-start;">
+                                                <input id="cliente" class="span10" type="text" name="cliente" value="" style="margin-right: 5px;" />
+                                                <button type="button" class="btn btn-mini btn-success" id="btnCadastrarClienteRapido" title="Cadastrar Cliente Rápido" style="white-space: nowrap; margin-top: 0;">
+                                                    <i class="icon-plus"></i> Novo
+                                                </button>
+                                            </div>
                                             <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
                                         </div>
                                         <div class="span6">
@@ -185,5 +191,204 @@
             lang: 'pt_br',
             semantic: { 'strikethrough': 's', }
         });
+
+        // Modal para cadastro rápido de cliente
+        $('#btnCadastrarClienteRapido').on('click', function() {
+            $('#modalClienteRapido').modal('show');
+        });
+
+        // Salvar cliente rápido
+        $('#formClienteRapido').on('submit', function(e) {
+            e.preventDefault();
+            
+            var nomeCliente = $('#nomeClienteRapido').val().trim();
+            
+            if (!nomeCliente) {
+                if (typeof Swal !== 'undefined' && Swal.fire) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'O nome do cliente é obrigatório!'
+                    });
+                } else {
+                    alert('O nome do cliente é obrigatório!');
+                }
+                return false;
+            }
+
+            var dados = {
+                nomeCliente: nomeCliente,
+                telefone: $('#telefoneRapido').val().trim() || '',
+                celular: $('#celularRapido').val().trim() || '',
+                email: $('#emailRapido').val().trim() || '',
+                rua: $('#ruaRapido').val().trim() || '',
+                numero: $('#numeroRapido').val().trim() || '',
+                bairro: $('#bairroRapido').val().trim() || '',
+                cidade: $('#cidadeRapido').val().trim() || '',
+                estado: $('#estadoRapido').val().trim() || '',
+                cep: $('#cepRapido').val().trim() || ''
+            };
+
+            $.ajax({
+                url: '<?php echo base_url(); ?>index.php/os/cadastrarClienteRapido',
+                type: 'POST',
+                data: dados,
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#btnSalvarClienteRapido').prop('disabled', true).html('<i class="icon-spinner icon-spin"></i> Salvando...');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Atualizar campo de cliente
+                        $('#cliente').val(response.cliente.nomeCliente);
+                        $('#clientes_id').val(response.cliente.idClientes);
+                        
+                        // Atualizar token CSRF se fornecido na resposta
+                        if (response.csrf_token) {
+                            $('#csrf_token').val(response.csrf_token);
+                        }
+                        
+                        // Fechar modal e limpar formulário
+                        $('#modalClienteRapido').modal('hide');
+                        $('#formClienteRapido')[0].reset();
+                        
+                        if (typeof Swal !== 'undefined' && Swal.fire) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: 'Cliente cadastrado com sucesso!',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            alert('Cliente cadastrado com sucesso!');
+                        }
+                    } else {
+                        if (typeof Swal !== 'undefined' && Swal.fire) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro',
+                                text: response.message || 'Erro ao cadastrar cliente.'
+                            });
+                        } else {
+                            alert(response.message || 'Erro ao cadastrar cliente.');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMsg = 'Erro ao comunicar com o servidor.';
+                    console.log('Erro AJAX:', xhr, status, error);
+                    console.log('Response:', xhr.responseText);
+                    
+                    if (xhr.responseJSON) {
+                        if (xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        } else if (xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        }
+                    } else if (xhr.responseText) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.message) {
+                                errorMsg = response.message;
+                            }
+                        } catch (e) {
+                            // Se não for JSON, pode ser HTML de erro
+                            if (xhr.status === 403) {
+                                errorMsg = 'Você não tem permissão para realizar esta ação.';
+                            } else if (xhr.status === 500) {
+                                errorMsg = 'Erro interno do servidor. Verifique os logs.';
+                            } else if (xhr.status === 0) {
+                                errorMsg = 'Erro de conexão. Verifique sua internet.';
+                            }
+                        }
+                    }
+                    
+                    if (typeof Swal !== 'undefined' && Swal.fire) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert(errorMsg);
+                    }
+                },
+                complete: function() {
+                    $('#btnSalvarClienteRapido').prop('disabled', false).html('<i class="icon-save"></i> Salvar');
+                }
+            });
+        });
     });
 </script>
+
+<!-- Modal para Cadastro Rápido de Cliente -->
+<div id="modalClienteRapido" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Cadastrar Cliente Rápido</h3>
+    </div>
+    <form id="formClienteRapido">
+        <div class="modal-body">
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <div class="span12" style="margin-left: 0;">
+                    <label for="nomeClienteRapido">Nome do Cliente<span class="required">*</span></label>
+                    <input id="nomeClienteRapido" class="span12" type="text" name="nomeCliente" required />
+                </div>
+            </div>
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <div class="span6">
+                    <label for="telefoneRapido">Telefone</label>
+                    <input id="telefoneRapido" class="span12" type="text" name="telefone" />
+                </div>
+                <div class="span6">
+                    <label for="celularRapido">Celular</label>
+                    <input id="celularRapido" class="span12" type="text" name="celular" />
+                </div>
+            </div>
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <div class="span12" style="margin-left: 0;">
+                    <label for="emailRapido">E-mail</label>
+                    <input id="emailRapido" class="span12" type="email" name="email" />
+                </div>
+            </div>
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <div class="span8">
+                    <label for="ruaRapido">Rua</label>
+                    <input id="ruaRapido" class="span12" type="text" name="rua" />
+                </div>
+                <div class="span4">
+                    <label for="numeroRapido">Número</label>
+                    <input id="numeroRapido" class="span12" type="text" name="numero" />
+                </div>
+            </div>
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <div class="span4">
+                    <label for="bairroRapido">Bairro</label>
+                    <input id="bairroRapido" class="span12" type="text" name="bairro" />
+                </div>
+                <div class="span4">
+                    <label for="cidadeRapido">Cidade</label>
+                    <input id="cidadeRapido" class="span12" type="text" name="cidade" />
+                </div>
+                <div class="span2">
+                    <label for="estadoRapido">Estado</label>
+                    <input id="estadoRapido" class="span12" type="text" name="estado" maxlength="2" placeholder="UF" />
+                </div>
+                <div class="span2">
+                    <label for="cepRapido">CEP</label>
+                    <input id="cepRapido" class="span12" type="text" name="cep" />
+                </div>
+            </div>
+            <div class="span12" style="padding: 1%; margin-left: 0;">
+                <small style="color: #666;">* Campos marcados são obrigatórios. Os demais podem ser preenchidos posteriormente.</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button type="submit" class="btn btn-success" id="btnSalvarClienteRapido">
+                <i class="icon-save"></i> Salvar
+            </button>
+        </div>
+    </form>
+</div>
