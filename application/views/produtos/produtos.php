@@ -2,6 +2,26 @@
   select {
     width: 70px;
   }
+  /* Estilo para nome do produto clicável */
+  .nome-produto-link {
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 5px;
+    transition: all 0.2s;
+  }
+  .nome-produto-link:hover {
+    color: #0066cc;
+    text-decoration: underline;
+    background-color: #f0f0f0;
+  }
+  @media (max-width: 768px) {
+    .nome-produto-link {
+      font-size: 14px;
+      padding: 8px 5px;
+    }
+  }
 </style>
 <div class="new122">
     <div class="widget-title" style="margin: -20px 0 0">
@@ -68,7 +88,12 @@
                     echo '<tr>';
                     echo '<td>' . $r->idProdutos . '</td>';
                     echo '<td>' . $r->codDeBarra . '</td>';
-                    echo '<td>' . $r->descricao . '</td>';
+                    // Tornar o nome do produto clicável
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+                        echo '<td><a href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="nome-produto-link" title="Clique para visualizar">' . htmlspecialchars($r->descricao) . '</a></td>';
+                    } else {
+                        echo '<td>' . htmlspecialchars($r->descricao) . '</td>';
+                    }
                     echo '<td>' . $r->estoque . '</td>';
                     echo '<td>' . number_format($r->precoVenda, 2, ',', '.') . '</td>';
                     echo '<td>';
@@ -76,7 +101,10 @@
                         echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn-nwe" title="Visualizar Produto"><i class="bx bx-show bx-xs"></i></a>  ';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn-nwe3" title="Editar Produto"><i class="bx bx-edit bx-xs"></i></a>';
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn-nwe3" title="Editar Produto"><i class="bx bx-edit bx-xs"></i></a>  ';
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/clonar/' . $r->idProdutos . '" class="btn-nwe" title="Clonar Produto" onclick="return confirm(\'Deseja clonar este produto? O estoque será zerado na cópia.\');"><i class="bx bx-copy bx-xs"></i></a>  ';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
                         echo '<a style="margin-right: 1%" href="#modal-excluir" role="button" data-toggle="modal" produto="' . $r->idProdutos . '" class="btn-nwe4" title="Excluir Produto"><i class="bx bx-trash-alt bx-xs"></i></a>';

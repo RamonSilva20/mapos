@@ -140,3 +140,28 @@
         </div>
     </div>
 </div>
+
+<div class="row-fluid" style="margin-top: 20px;">
+    <div class="span12">
+        <div class="form-actions">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')): ?>
+                <a href="<?= base_url() ?>index.php/produtos/editar/<?= $result->idProdutos ?>" class="button btn btn-primary">
+                    <span class="button__icon"><i class='bx bx-edit'></i></span>
+                    <span class="button__text2">Editar Produto</span>
+                </a>
+            <?php endif; ?>
+            
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')): ?>
+                <a href="<?= base_url() ?>index.php/produtos/clonar/<?= $result->idProdutos ?>" class="button btn btn-info" onclick="return confirm('Deseja clonar este produto? O estoque será zerado na cópia.');">
+                    <span class="button__icon"><i class='bx bx-copy'></i></span>
+                    <span class="button__text2">Clonar Produto</span>
+                </a>
+            <?php endif; ?>
+            
+            <a href="<?= base_url() ?>index.php/produtos" class="button btn btn-warning">
+                <span class="button__icon"><i class='bx bx-arrow-back'></i></span>
+                <span class="button__text2">Voltar</span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -968,7 +968,6 @@ class Notasentrada extends MY_Controller
         }
 
         $chave_acesso = $this->input->post('chave_acesso');
-        $cnpj = preg_replace('/[^0-9]/', '', $chave_acesso);
         
         if (strlen($chave_acesso) != 44) {
             return $this->output
@@ -986,54 +985,608 @@ class Notasentrada extends MY_Controller
                 ->set_output(json_encode(['result' => false, 'message' => 'Esta nota fiscal já foi cadastrada anteriormente.']));
         }
 
-        // Buscar na SEFAZ usando API pública (exemplo: ReceitaWS ou similar)
-        // Nota: Para produção, você precisará de certificado digital e integração adequada
-        $url = "https://www.receitaws.com.br/v1/nfe/{$chave_acesso}";
+        // Extrair informações da chave de acesso
+        $uf = substr($chave_acesso, 0, 2);
+        $ano = '20' . substr($chave_acesso, 2, 2);
+        $mes = substr($chave_acesso, 4, 2);
+        $cnpj = substr($chave_acesso, 6, 14);
+        $modelo = substr($chave_acesso, 20, 2);
+        $serie = substr($chave_acesso, 22, 3);
+        $numero = substr($chave_acesso, 25, 9);
         
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // Determinar ambiente (homologação ou produção) baseado na UF
+        // Para produção, usar ambiente de produção. Para testes, usar homologação
+        $ambiente = 'producao'; // ou 'homologacao'
         
-        $response = curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($http_code != 200) {
+        // Buscar XML na SEFAZ usando certificado digital
+        $resultado = $this->consultarNFeSEFAZ($chave_acesso, $uf, $cnpj, $ambiente);
+        
+        if (!$resultado['success']) {
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400)
                 ->set_output(json_encode([
                     'result' => false,
-                    'message' => 'Não foi possível buscar a nota na SEFAZ. Verifique a chave de acesso ou tente fazer upload do XML.'
+                    'message' => $resultado['message']
                 ]));
         }
-
-        $data = json_decode($response, true);
         
-        if (!$data || isset($data['status']) && $data['status'] == 'ERROR') {
+        // Se obteve o XML, processar automaticamente
+        if (!empty($resultado['xml'])) {
+            // Salvar XML temporariamente
+            $temp_file = FCPATH . 'assets/arquivos/xml/temp_' . date('YmdHis') . '_' . uniqid() . '.xml';
+            file_put_contents($temp_file, $resultado['xml']);
+            
+            // Processar XML
+            $processamento = $this->processarXML($temp_file);
+            
+            // Remover arquivo temporário
+            @unlink($temp_file);
+            
+            if ($processamento['result']) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode([
+                        'result' => true,
+                        'message' => 'Nota fiscal baixada e processada com sucesso!',
+                        'nota_id' => $processamento['nota_id'] ?? null
+                    ]));
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode([
+                        'result' => false,
+                        'message' => 'Nota baixada mas erro ao processar: ' . ($processamento['message'] ?? 'Erro desconhecido')
+                    ]));
+            }
+        }
+        
+        // Se não obteve XML mas a consulta foi bem-sucedida, informar que precisa fazer download
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode([
+                'result' => true,
+                'message' => $resultado['message'] ?? 'Nota encontrada na SEFAZ. Para processar completamente, faça o upload do XML.',
+                'data' => $resultado['data'] ?? []
+            ]));
+    }
+    
+    /**
+     * Consulta a fila de distribuição de NFe na SEFAZ
+     */
+    public function consultarFila()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aNotaEntrada')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para adicionar notas de entrada.']));
+        }
+
+        $cnpj = preg_replace('/[^0-9]/', '', $this->input->post('cnpj'));
+        $ult_nsu = $this->input->post('ult_nsu') ?: '0';
+        
+        if (strlen($cnpj) != 14) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'CNPJ deve ter 14 caracteres.']));
+        }
+        
+        // Consultar fila de distribuição
+        $resultado = $this->consultarFilaDistribuicao($cnpj, $ult_nsu);
+        
+        if (!$resultado['success']) {
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400)
                 ->set_output(json_encode([
                     'result' => false,
-                    'message' => 'Nota não encontrada na SEFAZ ou chave de acesso inválida.'
+                    'message' => $resultado['message']
                 ]));
         }
-
-        // Processar resposta e salvar
-        // Nota: A API pública pode não retornar todos os dados. 
-        // Para produção, use integração oficial com certificado digital
         
         return $this->output
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode([
                 'result' => true,
-                'message' => 'Nota encontrada na SEFAZ. Por favor, faça o upload do XML para processar completamente.',
-                'data' => $data
+                'notas' => $resultado['notas'] ?? [],
+                'max_nsu' => $resultado['max_nsu'] ?? null,
+                'message' => 'Consulta realizada com sucesso.'
             ]));
+    }
+    
+    /**
+     * Consulta a fila de distribuição de DFe na SEFAZ
+     */
+    private function consultarFilaDistribuicao($cnpj, $ult_nsu = '0', $ambiente = 'producao')
+    {
+        // Carregar configurações do certificado
+        $this->load->model('mapos_model');
+        $cert_path = $this->mapos_model->getConfig('certificado_digital_path');
+        $cert_senha = $this->mapos_model->getConfig('certificado_digital_senha');
+        
+        if (empty($cert_path) || !file_exists($cert_path)) {
+            return [
+                'success' => false,
+                'message' => 'Certificado digital não configurado. Por favor, configure o certificado nas configurações do sistema.'
+            ];
+        }
+        
+        // URL do webservice de distribuição (é nacional, não depende da UF)
+        $ws_url = 'https://www.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx';
+        
+        // Preparar SOAP request
+        $soap_xml = $this->gerarSOAPDistribuicaoDFe($cnpj, $ult_nsu, $ambiente);
+        
+        // Fazer requisição SOAP com certificado
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $ws_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $soap_xml);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/soap+xml; charset=utf-8',
+            'Content-Length: ' . strlen($soap_xml),
+            'SOAPAction: "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse"'
+        ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+        // Configurar certificado digital
+        $cert_ext = strtolower(pathinfo($cert_path, PATHINFO_EXTENSION));
+        if (in_array($cert_ext, ['p12', 'pfx'])) {
+            curl_setopt($ch, CURLOPT_SSLCERT, $cert_path);
+            curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'P12');
+            if (!empty($cert_senha)) {
+                curl_setopt($ch, CURLOPT_SSLCERTPASSWD, $cert_senha);
+            }
+        } else {
+            curl_setopt($ch, CURLOPT_SSLCERT, $cert_path);
+            curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'PEM');
+        }
+        
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+        
+        if ($http_code != 200 || !empty($curl_error)) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao comunicar com SEFAZ: ' . ($curl_error ?: 'HTTP ' . $http_code)
+            ];
+        }
+        
+        // Processar resposta SOAP
+        return $this->processarRespostaDistribuicao($response);
+    }
+    
+    /**
+     * Gera XML SOAP para consulta de distribuição de DFe
+     */
+    private function gerarSOAPDistribuicaoDFe($cnpj, $ult_nsu = '0', $ambiente = 'producao')
+    {
+        $tpAmb = ($ambiente == 'producao') ? '1' : '2';
+        
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
+        $xml .= 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ';
+        $xml .= 'xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">';
+        $xml .= '<soap12:Body>';
+        $xml .= '<nfeDistDFeInteresse xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe">';
+        $xml .= '<nfeDadosMsg>';
+        $xml .= '<distDFeInt xmlns="http://www.portalfiscal.inf.br/nfe" versao="1.01">';
+        $xml .= '<tpAmb>' . $tpAmb . '</tpAmb>';
+        $xml .= '<cUFAutor>91</cUFAutor>'; // 91 = Ambiente Nacional
+        $xml .= '<CNPJ>' . htmlspecialchars($cnpj) . '</CNPJ>';
+        $xml .= '<distNSU>';
+        $xml .= '<ultNSU>' . htmlspecialchars($ult_nsu) . '</ultNSU>';
+        $xml .= '</distNSU>';
+        $xml .= '</distDFeInt>';
+        $xml .= '</nfeDadosMsg>';
+        $xml .= '</nfeDistDFeInteresse>';
+        $xml .= '</soap12:Body>';
+        $xml .= '</soap12:Envelope>';
+        
+        return $xml;
+    }
+    
+    /**
+     * Processa resposta SOAP da distribuição de DFe
+     */
+    private function processarRespostaDistribuicao($soap_response)
+    {
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($soap_response);
+        
+        if ($xml === false) {
+            return [
+                'success' => false,
+                'message' => 'Resposta inválida da SEFAZ.'
+            ];
+        }
+        
+        // Registrar namespaces
+        $xml->registerXPathNamespace('soap', 'http://www.w3.org/2003/05/soap-envelope');
+        $xml->registerXPathNamespace('nfe', 'http://www.portalfiscal.inf.br/nfe');
+        
+        // Buscar resposta da distribuição
+        $ret_dist = $xml->xpath('//nfe:retDistDFeInt');
+        
+        if (empty($ret_dist)) {
+            return [
+                'success' => false,
+                'message' => 'Resposta da SEFAZ não contém dados válidos.'
+            ];
+        }
+        
+        $ret = $ret_dist[0];
+        $cStat = (string)$ret->cStat;
+        $xMotivo = (string)$ret->xMotivo;
+        $max_nsu = (string)$ret->maxNSU ?? null;
+        
+        if ($cStat != '138') { // 138 = Documentos localizados
+            if ($cStat == '137') { // 137 = Nenhum documento localizado
+                return [
+                    'success' => true,
+                    'notas' => [],
+                    'max_nsu' => $max_nsu,
+                    'message' => 'Nenhuma nota encontrada na fila.'
+                ];
+            }
+            return [
+                'success' => false,
+                'message' => 'Erro na consulta. Status: ' . $cStat . ' - ' . $xMotivo
+            ];
+        }
+        
+        // Processar documentos encontrados
+        $notas = [];
+        $lote_dist = $ret->loteDistDFeInt;
+        
+        if ($lote_dist && isset($lote_dist->docZip)) {
+            foreach ($lote_dist->docZip as $doc) {
+                $schema = (string)$doc['schema'];
+                $nsu = (string)$doc['NSU'];
+                $xml_zip = base64_decode((string)$doc);
+                
+                // Descompactar XML (vem em gzip)
+                $xml_content = @gzdecode($xml_zip);
+                if ($xml_content === false) {
+                    $xml_content = $xml_zip; // Tentar sem descompactar
+                }
+                
+                // Processar XML para extrair informações
+                $nota_info = $this->extrairInfoNotaDistribuicao($xml_content, $schema);
+                if ($nota_info) {
+                    $nota_info['nsu'] = $nsu;
+                    $notas[] = $nota_info;
+                }
+            }
+        }
+        
+        return [
+            'success' => true,
+            'notas' => $notas,
+            'max_nsu' => $max_nsu,
+            'message' => count($notas) . ' nota(s) encontrada(s).'
+        ];
+    }
+    
+    /**
+     * Extrai informações da nota do XML de distribuição
+     */
+    private function extrairInfoNotaDistribuicao($xml_content, $schema)
+    {
+        libxml_use_internal_errors(true);
+        $xml = @simplexml_load_string($xml_content);
+        
+        if ($xml === false) {
+            return null;
+        }
+        
+        // Registrar namespaces
+        $namespaces = $xml->getNamespaces(true);
+        foreach ($namespaces as $prefix => $ns) {
+            $xml->registerXPathNamespace($prefix ?: 'nfe', $ns);
+        }
+        
+        // Buscar chave de acesso
+        $chave = null;
+        $chave_elem = $xml->xpath('//*[@Id]');
+        if (!empty($chave_elem)) {
+            $id = (string)$chave_elem[0]['Id'];
+            if (strpos($id, 'NFe') === 0) {
+                $chave = substr($id, 3); // Remove 'NFe' do início
+            }
+        }
+        
+        if (empty($chave) || strlen($chave) != 44) {
+            return null;
+        }
+        
+        // Buscar data de emissão
+        $data_emissao = null;
+        $data_elem = $xml->xpath('//*[local-name()="dhEmi"] | //*[local-name()="dEmi"]');
+        if (!empty($data_elem)) {
+            $data_emissao = (string)$data_elem[0];
+            if (strlen($data_emissao) > 10) {
+                $data_emissao = substr($data_emissao, 0, 10);
+            }
+        }
+        
+        // Buscar valor total
+        $valor = null;
+        $valor_elem = $xml->xpath('//*[local-name()="vNF"]');
+        if (!empty($valor_elem)) {
+            $valor = 'R$ ' . number_format((float)$valor_elem[0], 2, ',', '.');
+        }
+        
+        return [
+            'chave' => $chave,
+            'data_emissao' => $data_emissao,
+            'valor' => $valor,
+            'xml' => $xml_content
+        ];
+    }
+    
+    /**
+     * Consulta NFe na SEFAZ usando certificado digital
+     */
+    private function consultarNFeSEFAZ($chave_acesso, $uf, $cnpj, $ambiente = 'producao')
+    {
+        // Carregar configurações do certificado
+        $this->load->model('mapos_model');
+        $cert_path = $this->mapos_model->getConfig('certificado_digital_path');
+        $cert_senha = $this->mapos_model->getConfig('certificado_digital_senha');
+        
+        if (empty($cert_path) || !file_exists($cert_path)) {
+            return [
+                'success' => false,
+                'message' => 'Certificado digital não configurado. Por favor, configure o certificado nas configurações do sistema.'
+            ];
+        }
+        
+        // Determinar URL do webservice baseado na UF
+        $ws_url = $this->getWebServiceURL($uf, $ambiente);
+        
+        if (empty($ws_url)) {
+            return [
+                'success' => false,
+                'message' => 'Webservice da SEFAZ não disponível para esta UF.'
+            ];
+        }
+        
+        // Preparar SOAP request
+        $soap_xml = $this->gerarSOAPConsultaNFe($chave_acesso, $cnpj, $ambiente);
+        
+        // Fazer requisição SOAP com certificado
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $ws_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $soap_xml);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/soap+xml; charset=utf-8',
+            'Content-Length: ' . strlen($soap_xml),
+            'SOAPAction: "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/nfeConsultaNF"'
+        ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+        // Configurar certificado digital
+        curl_setopt($ch, CURLOPT_SSLCERT, $cert_path);
+        if (!empty($cert_senha)) {
+            curl_setopt($ch, CURLOPT_SSLCERTPASSWD, $cert_senha);
+        }
+        curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'P12'); // ou 'PEM' dependendo do formato
+        
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+        
+        if ($http_code != 200 || !empty($curl_error)) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao comunicar com SEFAZ: ' . ($curl_error ?: 'HTTP ' . $http_code)
+            ];
+        }
+        
+        // Processar resposta SOAP
+        return $this->processarRespostaSOAP($response);
+    }
+    
+    /**
+     * Gera XML SOAP para consulta de NFe
+     */
+    private function gerarSOAPConsultaNFe($chave_acesso, $cnpj, $ambiente = 'producao')
+    {
+        $tpAmb = ($ambiente == 'producao') ? '1' : '2';
+        
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
+        $xml .= 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ';
+        $xml .= 'xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">';
+        $xml .= '<soap12:Body>';
+        $xml .= '<nfeConsultaNF xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4">';
+        $xml .= '<nfeDadosMsg>';
+        $xml .= '<consSitNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">';
+        $xml .= '<tpAmb>' . $tpAmb . '</tpAmb>'; // 1=Produção, 2=Homologação
+        $xml .= '<xServ>CONSULTAR</xServ>';
+        $xml .= '<chNFe>' . htmlspecialchars($chave_acesso) . '</chNFe>';
+        $xml .= '</consSitNFe>';
+        $xml .= '</nfeDadosMsg>';
+        $xml .= '</nfeConsultaNF>';
+        $xml .= '</soap12:Body>';
+        $xml .= '</soap12:Envelope>';
+        
+        return $xml;
+    }
+    
+    /**
+     * Processa resposta SOAP da SEFAZ
+     */
+    private function processarRespostaSOAP($soap_response)
+    {
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($soap_response);
+        
+        if ($xml === false) {
+            return [
+                'success' => false,
+                'message' => 'Resposta inválida da SEFAZ.'
+            ];
+        }
+        
+        // Registrar namespaces
+        $xml->registerXPathNamespace('soap', 'http://www.w3.org/2003/05/soap-envelope');
+        $xml->registerXPathNamespace('nfe', 'http://www.portalfiscal.inf.br/nfe');
+        
+        // Buscar status da consulta
+        $ret_consulta = $xml->xpath('//nfe:retConsSitNFe');
+        
+        if (empty($ret_consulta)) {
+            return [
+                'success' => false,
+                'message' => 'Resposta da SEFAZ não contém dados válidos.'
+            ];
+        }
+        
+        $ret = $ret_consulta[0];
+        $cStat = (string)$ret->cStat;
+        $xMotivo = (string)$ret->xMotivo;
+        
+        if ($cStat != '100') { // 100 = Autorizado
+            return [
+                'success' => false,
+                'message' => 'Nota não autorizada ou não encontrada. Status: ' . $cStat . ' - ' . $xMotivo
+            ];
+        }
+        
+        // Se a nota está autorizada, tentar baixar o XML completo usando serviço de download
+        if ($cStat == '100') {
+            $chave_acesso = (string)$ret->chNFe;
+            
+            // Tentar fazer download do XML completo
+            $download_result = $this->downloadNFeSEFAZ($chave_acesso, substr($chave_acesso, 0, 2));
+            
+            if ($download_result['success'] && !empty($download_result['xml'])) {
+                return [
+                    'success' => true,
+                    'xml' => $download_result['xml'],
+                    'data' => [
+                        'status' => $cStat,
+                        'motivo' => $xMotivo,
+                        'chave_acesso' => $chave_acesso
+                    ]
+                ];
+            }
+            
+            // Se não conseguiu baixar, retornar sucesso mas informar que precisa fazer upload
+            return [
+                'success' => true,
+                'xml' => null,
+                'data' => [
+                    'status' => $cStat,
+                    'motivo' => $xMotivo,
+                    'chave_acesso' => $chave_acesso
+                ],
+                'message' => 'Nota encontrada e autorizada na SEFAZ. Não foi possível baixar o XML automaticamente. Por favor, faça o upload do XML.'
+            ];
+        }
+        
+        return [
+            'success' => false,
+            'message' => 'Nota não autorizada ou não encontrada. Status: ' . $cStat . ' - ' . $xMotivo
+        ];
+    }
+    
+    /**
+     * Retorna URL do webservice de download baseado na UF
+     */
+    private function getWebServiceDownloadURL($uf, $ambiente = 'producao')
+    {
+        // URLs dos webservices de download por UF
+        $webservices = [
+            '12' => 'https://nfe.sefaz.ac.gov.br/ws/NFeDownloadNF4',
+            '27' => 'https://nfe.sefaz.al.gov.br/ws/NFeDownloadNF4',
+            '16' => 'https://nfe.sefaz.ap.gov.br/ws/NFeDownloadNF4',
+            '13' => 'https://nfe.sefaz.am.gov.br/ws/NFeDownloadNF4',
+            '29' => 'https://nfe.sefaz.ba.gov.br/ws/NFeDownloadNF4',
+            '23' => 'https://nfe.sefaz.ce.gov.br/ws/NFeDownloadNF4',
+            '53' => 'https://nfe.sefaz.df.gov.br/ws/NFeDownloadNF4',
+            '32' => 'https://nfe.sefaz.es.gov.br/ws/NFeDownloadNF4',
+            '52' => 'https://nfe.sefaz.go.gov.br/ws/NFeDownloadNF4',
+            '21' => 'https://nfe.sefaz.ma.gov.br/ws/NFeDownloadNF4',
+            '51' => 'https://nfe.sefaz.mt.gov.br/ws/NFeDownloadNF4',
+            '50' => 'https://nfe.sefaz.ms.gov.br/ws/NFeDownloadNF4',
+            '31' => 'https://nfe.sefaz.mg.gov.br/ws/NFeDownloadNF4',
+            '15' => 'https://nfe.sefaz.pa.gov.br/ws/NFeDownloadNF4',
+            '25' => 'https://nfe.sefaz.pb.gov.br/ws/NFeDownloadNF4',
+            '41' => 'https://nfe.sefaz.pr.gov.br/ws/NFeDownloadNF4',
+            '26' => 'https://nfe.sefaz.pe.gov.br/ws/NFeDownloadNF4',
+            '22' => 'https://nfe.sefaz.pi.gov.br/ws/NFeDownloadNF4',
+            '33' => 'https://nfe.fazenda.rj.gov.br/ws/NFeDownloadNF4',
+            '24' => 'https://nfe.sefaz.rn.gov.br/ws/NFeDownloadNF4',
+            '43' => 'https://nfe.sefaz.rs.gov.br/ws/NFeDownloadNF4',
+            '11' => 'https://nfe.sefaz.ro.gov.br/ws/NFeDownloadNF4',
+            '14' => 'https://nfe.sefaz.rr.gov.br/ws/NFeDownloadNF4',
+            '42' => 'https://nfe.sefaz.sc.gov.br/ws/NFeDownloadNF4',
+            '35' => 'https://nfe.fazenda.sp.gov.br/ws/NFeDownloadNF4',
+            '28' => 'https://nfe.sefaz.se.gov.br/ws/NFeDownloadNF4',
+            '17' => 'https://nfe.sefaz.to.gov.br/ws/NFeDownloadNF4',
+        ];
+        
+        return $webservices[$uf] ?? null;
+    }
+    
+    /**
+     * Retorna URL do webservice baseado na UF
+     */
+    private function getWebServiceURL($uf, $ambiente = 'producao')
+    {
+        $amb = $ambiente == 'producao' ? 1 : 2;
+        
+        // URLs dos webservices por UF (ambiente de produção)
+        $webservices = [
+            '12' => 'https://nfe.sefaz.ac.gov.br/ws/NFeConsultaProtocolo4',
+            '27' => 'https://nfe.sefaz.al.gov.br/ws/NFeConsultaProtocolo4',
+            '16' => 'https://nfe.sefaz.ap.gov.br/ws/NFeConsultaProtocolo4',
+            '13' => 'https://nfe.sefaz.am.gov.br/ws/NFeConsultaProtocolo4',
+            '29' => 'https://nfe.sefaz.ba.gov.br/ws/NFeConsultaProtocolo4',
+            '23' => 'https://nfe.sefaz.ce.gov.br/ws/NFeConsultaProtocolo4',
+            '53' => 'https://nfe.sefaz.df.gov.br/ws/NFeConsultaProtocolo4',
+            '32' => 'https://nfe.sefaz.es.gov.br/ws/NFeConsultaProtocolo4',
+            '52' => 'https://nfe.sefaz.go.gov.br/ws/NFeConsultaProtocolo4',
+            '21' => 'https://nfe.sefaz.ma.gov.br/ws/NFeConsultaProtocolo4',
+            '51' => 'https://nfe.sefaz.mt.gov.br/ws/NFeConsultaProtocolo4',
+            '50' => 'https://nfe.sefaz.ms.gov.br/ws/NFeConsultaProtocolo4',
+            '31' => 'https://nfe.sefaz.mg.gov.br/ws/NFeConsultaProtocolo4',
+            '15' => 'https://nfe.sefaz.pa.gov.br/ws/NFeConsultaProtocolo4',
+            '25' => 'https://nfe.sefaz.pb.gov.br/ws/NFeConsultaProtocolo4',
+            '41' => 'https://nfe.sefaz.pr.gov.br/ws/NFeConsultaProtocolo4',
+            '26' => 'https://nfe.sefaz.pe.gov.br/ws/NFeConsultaProtocolo4',
+            '22' => 'https://nfe.sefaz.pi.gov.br/ws/NFeConsultaProtocolo4',
+            '33' => 'https://nfe.fazenda.rj.gov.br/ws/NFeConsultaProtocolo4',
+            '24' => 'https://nfe.sefaz.rn.gov.br/ws/NFeConsultaProtocolo4',
+            '43' => 'https://nfe.sefaz.rs.gov.br/ws/NFeConsultaProtocolo4',
+            '11' => 'https://nfe.sefaz.ro.gov.br/ws/NFeConsultaProtocolo4',
+            '14' => 'https://nfe.sefaz.rr.gov.br/ws/NFeConsultaProtocolo4',
+            '42' => 'https://nfe.sefaz.sc.gov.br/ws/NFeConsultaProtocolo4',
+            '35' => 'https://nfe.fazenda.sp.gov.br/ws/NFeConsultaProtocolo4',
+            '28' => 'https://nfe.sefaz.se.gov.br/ws/NFeConsultaProtocolo4',
+            '17' => 'https://nfe.sefaz.to.gov.br/ws/NFeConsultaProtocolo4',
+        ];
+        
+        return $webservices[$uf] ?? null;
     }
 
     public function reprocessar($id = null)

@@ -171,6 +171,54 @@ class Produtos extends MY_Controller
 
         return $this->layout();
     }
+    
+    public function clonar()
+    {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Produto não encontrado ou parâmetro inválido.');
+            redirect('produtos/gerenciar');
+        }
+
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar produtos.');
+            redirect(base_url());
+        }
+
+        $produto_original = $this->produtos_model->getById($this->uri->segment(3));
+        
+        if ($produto_original == null) {
+            $this->session->set_flashdata('error', 'Produto não encontrado.');
+            redirect('produtos/gerenciar');
+        }
+
+        // Clonar dados do produto
+        $data = [
+            'codDeBarra' => (!empty($produto_original->codDeBarra) ? $produto_original->codDeBarra . '_COPIA' : 'COPIA_' . time()),
+            'descricao' => $produto_original->descricao . ' (Cópia)',
+            'unidade' => $produto_original->unidade ?? 'UN',
+            'precoCompra' => $produto_original->precoCompra ?? 0,
+            'precoVenda' => $produto_original->precoVenda ?? 0,
+            'estoque' => 0, // Estoque zerado na cópia
+            'estoqueMinimo' => $produto_original->estoqueMinimo ?? 0,
+            'saida' => $produto_original->saida ?? 0,
+            'entrada' => $produto_original->entrada ?? 0,
+            'ncm' => !empty($produto_original->ncm) ? $produto_original->ncm : null,
+            'cest' => !empty($produto_original->cest) ? $produto_original->cest : null,
+            'cfop' => !empty($produto_original->cfop) ? $produto_original->cfop : null,
+            'origem' => !empty($produto_original->origem) ? $produto_original->origem : '0',
+            'tributacao' => !empty($produto_original->tributacao) ? $produto_original->tributacao : null,
+        ];
+
+        if ($this->produtos_model->add('produtos', $data) == true) {
+            $novo_id = $this->db->insert_id();
+            $this->session->set_flashdata('success', 'Produto clonado com sucesso!');
+            log_info('Clonou um produto. ID Original: ' . $produto_original->idProdutos . ', Novo ID: ' . $novo_id);
+            redirect(site_url('produtos/editar/') . $novo_id);
+        } else {
+            $this->session->set_flashdata('error', 'Erro ao clonar produto.');
+            redirect(site_url('produtos/visualizar/') . $produto_original->idProdutos);
+        }
+    }
 
     public function excluir()
     {

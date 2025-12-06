@@ -476,6 +476,8 @@ class Mapos extends MY_Controller {
                 'pix_key' => $this->input->post('pix_key'),
                 'os_status_list' => json_encode($this->input->post('os_status_list')),
                 'control_2vias' => $this->input->post('control_2vias'),
+                'certificado_digital_path' => $this->input->post('certificado_digital_path'),
+                'certificado_digital_senha' => $this->input->post('certificado_digital_senha'),
             ];
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
@@ -488,6 +490,159 @@ class Mapos extends MY_Controller {
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();
+    }
+    
+    public function uploadCertificado()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para configurar o sistema.']));
+        }
+        
+        // Configurar upload
+        $upload_path = FCPATH . 'assets/certificados/';
+        
+        // Criar diretório se não existir
+        if (!is_dir($upload_path)) {
+            if (!mkdir($upload_path, 0755, true)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(500)
+                    ->set_output(json_encode([
+                        'result' => false,
+                        'message' => 'Erro ao criar diretório de certificados. Verifique as permissões.'
+                    ]));
+            }
+        }
+        
+        // Ajustar permissões do diretório se necessário
+        if (!is_writable($upload_path)) {
+            // Tentar ajustar permissões
+            @chmod($upload_path, 0777);
+            
+            // Se ainda não for gravável, tentar criar arquivo de teste
+            $test_file = $upload_path . 'test_write_' . time() . '.tmp';
+            if (@file_put_contents($test_file, 'test') === false) {
+                // Tentar ajustar permissões do diretório pai também
+                $parent_dir = dirname($upload_path);
+                if (is_dir($parent_dir) && !is_writable($parent_dir)) {
+                    @chmod($parent_dir, 0755);
+                }
+                @chmod($upload_path, 0777);
+            } else {
+                @unlink($test_file);
+            }
+        }
+        
+        // Verificar se o diretório é gravável
+        if (!is_writable($upload_path)) {
+            // Tentar uma última vez com permissões mais amplas
+            @chmod($upload_path, 0777);
+            
+            if (!is_writable($upload_path)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(500)
+                    ->set_output(json_encode([
+                        'result' => false,
+                        'message' => 'Diretório de certificados não tem permissão de escrita. Execute no servidor: sudo chmod 777 ' . $upload_path . ' && sudo chown -R www-data:www-data ' . $upload_path
+                    ]));
+            }
+        }
+        
+        // Verificar extensão do arquivo antes do upload
+        $file_extension = strtolower(pathinfo($_FILES['certificado_file']['name'], PATHINFO_EXTENSION));
+        $allowed_extensions = ['p12', 'pfx', 'pem'];
+        
+        if (!in_array($file_extension, $allowed_extensions)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Tipo de arquivo não permitido. Use apenas arquivos .p12, .pfx ou .pem'
+                ]));
+        }
+        
+        $config['upload_path'] = $upload_path;
+        $config['allowed_types'] = '*'; // Permitir qualquer tipo, já validamos a extensão
+        $config['max_size'] = 5120; // 5MB (certificados podem ser maiores)
+        $config['file_name'] = 'certificado_' . date('YmdHis') . '_' . uniqid() . '.' . $file_extension;
+        $config['overwrite'] = false;
+        $config['file_ext_tolower'] = true;
+        $config['remove_spaces'] = true;
+        
+        $this->load->library('upload', $config);
+        
+        // Verificar se o arquivo foi enviado
+        if (empty($_FILES['certificado_file']['name'])) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Nenhum arquivo foi selecionado para upload.'
+                ]));
+        }
+        
+        // Verificar erros de upload do PHP
+        if (isset($_FILES['certificado_file']['error']) && $_FILES['certificado_file']['error'] != UPLOAD_ERR_OK) {
+            $upload_errors = [
+                UPLOAD_ERR_INI_SIZE => 'O arquivo excede o tamanho máximo permitido pelo PHP (upload_max_filesize).',
+                UPLOAD_ERR_FORM_SIZE => 'O arquivo excede o tamanho máximo permitido pelo formulário.',
+                UPLOAD_ERR_PARTIAL => 'O arquivo foi enviado parcialmente.',
+                UPLOAD_ERR_NO_FILE => 'Nenhum arquivo foi enviado.',
+                UPLOAD_ERR_NO_TMP_DIR => 'Falta a pasta temporária.',
+                UPLOAD_ERR_CANT_WRITE => 'Falha ao escrever o arquivo no disco.',
+                UPLOAD_ERR_EXTENSION => 'Uma extensão PHP parou o upload do arquivo.'
+            ];
+            $error_msg = isset($upload_errors[$_FILES['certificado_file']['error']]) 
+                ? $upload_errors[$_FILES['certificado_file']['error']] 
+                : 'Erro desconhecido no upload (código: ' . $_FILES['certificado_file']['error'] . ').';
+            
+            log_message('error', 'Erro no upload de certificado (PHP): ' . $error_msg);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => $error_msg
+                ]));
+        }
+        
+        if (!$this->upload->do_upload('certificado_file')) {
+            $error = $this->upload->display_errors('', '');
+            log_message('error', 'Erro no upload de certificado (CodeIgniter): ' . $error);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Erro no upload: ' . $error
+                ]));
+        }
+        
+        $upload_data = $this->upload->data();
+        $cert_path = $upload_data['full_path'];
+        
+        // Salvar caminho nas configurações
+        $this->load->model('mapos_model');
+        $this->mapos_model->saveConfiguracao([
+            'certificado_digital_path' => $cert_path
+        ]);
+        
+        log_info('Certificado digital enviado: ' . $cert_path);
+        
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode([
+                'result' => true,
+                'message' => 'Certificado digital enviado com sucesso!',
+                'cert_path' => $cert_path
+            ]));
     }
 
     public function atualizarBanco()

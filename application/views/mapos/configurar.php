@@ -16,6 +16,7 @@
                 <li><a data-toggle="tab" href="#menu5">OS</a></li>
                 <li><a data-toggle="tab" href="#menu6">API</a></li>
                 <li><a data-toggle="tab" href="#menu7">E-mail</a></li>
+                <li><a data-toggle="tab" href="#menu8">Certificado Digital</a></li>
             </ul>
             <form action="<?php echo current_url(); ?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
@@ -506,6 +507,65 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Menu Certificado Digital -->
+                    <div id="menu8" class="tab-pane fade">
+                        <div class="control-group">
+                            <label for="certificado_digital_path" class="control-label">Caminho do Certificado Digital</label>
+                            <div class="controls">
+                                <?php
+                                $this->load->model('mapos_model');
+                                $cert_path = $this->mapos_model->getConfig('certificado_digital_path');
+                                ?>
+                                <input type="text" name="certificado_digital_path" value="<?= htmlspecialchars($cert_path ?? '') ?>" id="certificado_digital_path" placeholder="/caminho/para/certificado.p12">
+                                <span class="help-inline">Caminho completo do arquivo do certificado digital (.p12, .pfx ou .pem). Ex: /opt/lampp/htdocs/mapos/assets/certificados/certificado.p12</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="certificado_digital_senha" class="control-label">Senha do Certificado</label>
+                            <div class="controls">
+                                <?php
+                                $cert_senha = $this->mapos_model->getConfig('certificado_digital_senha');
+                                ?>
+                                <input type="password" name="certificado_digital_senha" value="<?= htmlspecialchars($cert_senha ?? '') ?>" id="certificado_digital_senha" placeholder="Senha do certificado">
+                                <span class="help-inline">Senha do certificado digital (deixe em branco se não tiver senha)</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Upload de Certificado</label>
+                            <div class="controls">
+                                <div id="uploadCertificadoContainer" style="display: inline-block;">
+                                    <input type="file" name="certificado_file" id="certificado_file" accept=".p12,.pfx,.pem" />
+                                    <button type="button" id="btnUploadCertificado" class="button btn btn-info" style="margin-left: 10px;">
+                                        <span class="button__icon"><i class='bx bx-upload'></i></span>
+                                        <span class="button__text2">Upload Certificado</span>
+                                    </button>
+                                </div>
+                                <span class="help-inline">Faça upload do certificado digital (.p12, .pfx ou .pem). O arquivo será salvo em assets/certificados/</span>
+                            </div>
+                        </div>
+                        <?php if (!empty($cert_path)): ?>
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="alert alert-info">
+                                    <strong>Certificado configurado:</strong> <?= htmlspecialchars($cert_path) ?>
+                                    <?php if (file_exists($cert_path)): ?>
+                                        <span class="label label-success">Arquivo encontrado</span>
+                                    <?php else: ?>
+                                        <span class="label label-warning">Arquivo não encontrado no caminho especificado</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <div class="form-actions">
+                            <div class="span8">
+                                <div class="span9">
+                                  <button type="submit" class="button btn btn-primary">
+                                  <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Alterações</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -562,6 +622,102 @@
             if ($(this).val() != "0")
                 document.getElementById("notifica_whats").value += $(this).val();
             $(this).prop('selectedIndex', 0);
+        });
+        
+        // Upload de certificado digital
+        $('#btnUploadCertificado').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var fileInput = $('#certificado_file')[0];
+            
+            if (!fileInput.files || !fileInput.files[0]) {
+                if (typeof Swal !== 'undefined' && Swal.fire) {
+                    Swal.fire({
+                        type: 'warning',
+                        title: 'Atenção',
+                        text: 'Por favor, selecione um arquivo de certificado.'
+                    });
+                } else {
+                    alert('Por favor, selecione um arquivo de certificado.');
+                }
+                return false;
+            }
+            
+            var formData = new FormData();
+            formData.append('certificado_file', fileInput.files[0]);
+            
+            // Desabilitar botão durante upload
+            var btn = $(this);
+            btn.prop('disabled', true).html('<span class="button__icon"><i class="bx bx-loader bx-spin"></i></span><span class="button__text2">Enviando...</span>');
+            
+            $.ajax({
+                url: '<?= base_url() ?>index.php/mapos/uploadCertificado',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                success: function(response) {
+                    btn.prop('disabled', false).html('<span class="button__icon"><i class="bx bx-upload"></i></span><span class="button__text2">Upload Certificado</span>');
+                    
+                    if (response.result) {
+                        $('#certificado_digital_path').val(response.cert_path);
+                        // Limpar campo de arquivo
+                        $('#certificado_file').val('');
+                        
+                        if (typeof Swal !== 'undefined' && Swal.fire) {
+                            Swal.fire({
+                                type: 'success',
+                                title: 'Sucesso!',
+                                html: 'Certificado digital enviado e configurado com sucesso!<br><br>' +
+                                      '<strong>Caminho:</strong> ' + response.cert_path + '<br><br>' +
+                                      'O certificado está <strong>ATIVO</strong> e pronto para uso.',
+                                showConfirmButton: true,
+                                confirmButtonText: 'OK'
+                            }).then(function() {
+                                // Recarregar a página para atualizar a exibição do certificado
+                                location.reload();
+                            });
+                        } else {
+                            alert('Certificado digital enviado com sucesso!\nCaminho: ' + response.cert_path);
+                            location.reload();
+                        }
+                    } else {
+                        if (typeof Swal !== 'undefined' && Swal.fire) {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Erro',
+                                text: response.message || 'Erro ao fazer upload do certificado.'
+                            });
+                        } else {
+                            alert('Erro: ' + (response.message || 'Erro ao fazer upload do certificado.'));
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    btn.prop('disabled', false).html('<span class="button__icon"><i class="bx bx-upload"></i></span><span class="button__text2">Upload Certificado</span>');
+                    
+                    var errorMsg = 'Erro ao fazer upload do certificado.';
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        errorMsg = response.message || errorMsg;
+                    } catch(e) {}
+                    
+                    if (typeof Swal !== 'undefined' && Swal.fire) {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Erro',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert('Erro: ' + errorMsg);
+                    }
+                }
+            });
+            
+            return false;
         });
     });
 </script>

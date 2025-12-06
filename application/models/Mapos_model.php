@@ -463,4 +463,18 @@ class Mapos_model extends CI_Model
 
         return true;
     }
+    
+    /**
+     * Busca valor de uma configuração
+     */
+    public function getConfig($config)
+    {
+        $this->db->select('valor');
+        $this->db->from('configuracoes');
+        $this->db->where('config', $config);
+        $this->db->limit(1);
+        $result = $this->db->get()->row();
+        
+        return $result ? $result->valor : null;
+    }
 }
