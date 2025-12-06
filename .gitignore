@@ -29,3 +29,4 @@ ci_sessions/
 uploads
 application/.env
 assets/userImage
+assets/certificados/
