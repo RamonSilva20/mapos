@@ -96,7 +96,7 @@
                     </div>
                 </div>
 
-                <?php if ($result->descricaoProduto) : ?>
+                <?php if ($result->descricaoProduto && (isset($result->imprimir_descricao) && $result->imprimir_descricao == 1)) : ?>
                     <div class="subtitle">DESCRIÇÃO</div>
                     <div class="dados">
                         <div style="text-align: justify;">
@@ -188,7 +188,12 @@
                                         $subtotal = $preco * ($s->quantidade ?: 1);
                                         $totalServico = $totalServico + $subtotal;
                                         echo '<tr>';
-                                        echo '  <td>' . $s->nome . '</td>';
+                                        echo '  <td>';
+                                        echo '    <strong>' . $s->nome . '</strong>';
+                                        if (!empty($s->detalhes)) {
+                                            echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
+                                        }
+                                        echo '  </td>';
                                         echo '  <td class="text-center">' . ($s->quantidade ?: 1) . '</td>';
                                         echo '  <td class="text-center">' . number_format($preco, 2, ',', '.') . '</td>';
                                         echo '  <td class="text-end">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
@@ -350,7 +355,7 @@
                         </div>
                     </div>
 
-                    <?php if ($result->descricaoProduto) : ?>
+                    <?php if ($result->descricaoProduto && (isset($result->imprimir_descricao) && $result->imprimir_descricao == 1)) : ?>
                         <div class="subtitle">DESCRIÇÃO</div>
                         <div class="dados">
                             <div>
@@ -442,7 +447,12 @@
                                             $subtotal = $preco * ($s->quantidade ?: 1);
                                             $totalServico = $totalServico + $subtotal;
                                             echo '<tr>';
-                                            echo '  <td>' . $s->nome . '</td>';
+                                            echo '  <td>';
+                                            echo '    <strong>' . $s->nome . '</strong>';
+                                            if (!empty($s->descricao)) {
+                                                echo '<br><small style="color: #666;">' . htmlspecialchars($s->descricao) . '</small>';
+                                            }
+                                            echo '  </td>';
                                             echo '  <td class="text-center">' . ($s->quantidade ?: 1) . '</td>';
                                             echo '  <td class="text-center">' . number_format($preco, 2, ',', '.') . '</td>';
                                             echo '  <td class="text-end">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';

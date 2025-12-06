@@ -126,6 +126,10 @@
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
+                                        <label style="margin-top: 10px;">
+                                            <input type="checkbox" name="imprimir_descricao" id="imprimir_descricao" value="1" <?php echo (isset($result->imprimir_descricao) && $result->imprimir_descricao == 1) ? 'checked' : ''; ?> />
+                                            Exibir descrição na impressão
+                                        </label>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito"><h4>Defeito</h4></label>
@@ -301,6 +305,10 @@
                                             <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span
                                                 class="button__text2">Adicionar</span></button>
                                     </div>
+                                    <div class="span12" style="margin-top: 10px;">
+                                        <label for="">Detalhes</label>
+                                        <textarea placeholder="Detalhes do serviço (opcional)" id="detalhes_servico" name="detalhes" class="span12" rows="2"></textarea>
+                                    </div>
                                 </form>
                             </div>
                             <div class="widget-box" id="divServicos">
@@ -323,11 +331,16 @@
                                                 $subtotals = $preco * ($s->quantidade ?: 1);
                                                 $totals = $totals + $subtotals;
                                                 echo '<tr id="servico-row-' . $s->idServicos_os . '">';
-                                                echo '<td>' . $s->nome . '</td>';
+                                                echo '<td>';
+                                                echo '<strong>' . $s->nome . '</strong>';
+                                                if (!empty($s->detalhes)) {
+                                                    echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
+                                                }
+                                                echo '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
                                                 echo '<td><div align="center"><span class="preco-servico-display" id="preco-display-' . $s->idServicos_os . '">R$ ' . number_format($preco, 2, ',', '.') . '</span></div></td>';
                                                 echo '<td><div align="center">';
-                                                echo '<span idAcao="' . $s->idServicos_os . '" precoAtual="' . number_format($preco, 2, '.', '') . '" quantidadeAtual="' . ($s->quantidade ?: 1) . '" title="Editar Preço" class="btn-nwe4 editar-servico" style="margin-right: 5px; color: #007bff; cursor: pointer;"><i class="bx bx-edit"></i></span>';
+                                                echo '<span idAcao="' . $s->idServicos_os . '" precoAtual="' . number_format($preco, 2, '.', '') . '" quantidadeAtual="' . ($s->quantidade ?: 1) . '" detalhesAtual="' . htmlspecialchars($s->detalhes ?? '', ENT_QUOTES) . '" title="Editar Serviço" class="btn-nwe4 editar-servico" style="margin-right: 5px; color: #007bff; cursor: pointer;"><i class="bx bx-edit"></i></span>';
                                                 echo '<span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico" style="color: #dc3545; cursor: pointer;"><i class="bx bx-trash-alt"></i></span>';
                                                 echo '</div></td>';
                                                 echo '<td><div align="center"><span id="subtotal-' . $s->idServicos_os . '">R$: ' . number_format($subtotals, 2, ',', '.') . '</span></div></td>';
@@ -492,7 +505,7 @@
     <form id="formEditarPrecoServico" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Editar Preço do Serviço</h3>
+            <h3 id="myModalLabel">Editar Serviço</h3>
         </div>
         <div class="modal-body">
             <div class="control-group">
@@ -512,6 +525,12 @@
                 <label for="quantidade_servico_editar" class="control-label">Quantidade</label>
                 <div class="controls">
                     <input type="text" id="quantidade_servico_editar" name="quantidade" class="span12" readonly />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="detalhes_servico_editar" class="control-label">Detalhes</label>
+                <div class="controls">
+                    <textarea id="detalhes_servico_editar" name="detalhes" class="span12" rows="3" placeholder="Detalhes do serviço (opcional)"></textarea>
                 </div>
             </div>
             <input type="hidden" id="idServicos_os_editar" name="idServicos_os" />
@@ -1193,6 +1212,7 @@
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
+                            $("#detalhes_servico").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
                             $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
@@ -1321,14 +1341,16 @@
             var idServicosOs = $(this).attr('idAcao');
             var precoAtual = $(this).attr('precoAtual');
             var quantidadeAtual = $(this).attr('quantidadeAtual');
+            var detalhesAtual = $(this).attr('detalhesAtual') || '';
             
-            // Buscar nome do serviço da linha
-            var nomeServico = $(this).closest('tr').find('td:first').text();
+            // Buscar nome do serviço da linha (remover detalhes se existirem)
+            var nomeServico = $(this).closest('tr').find('td:first').find('strong').text() || $(this).closest('tr').find('td:first').text();
             
             // Preencher modal
-            $('#servico_nome_editar').val(nomeServico);
+            $('#servico_nome_editar').val(nomeServico.trim());
             $('#preco_servico_editar').val(precoAtual);
             $('#quantidade_servico_editar').val(quantidadeAtual);
+            $('#detalhes_servico_editar').val(detalhesAtual);
             $('#idServicos_os_editar').val(idServicosOs);
             
             // Abrir modal

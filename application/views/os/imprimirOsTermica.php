@@ -152,7 +152,7 @@ $totalProdutos = 0; ?>
                                     </tr>
                                 <?php } ?>
                                 
-                                <?php if ($result->descricaoProduto != null) { ?>
+                                <?php if ($result->descricaoProduto != null && (isset($result->imprimir_descricao) && $result->imprimir_descricao == 1)) { ?>
                                     <tr>
                                         <td colspan="5"><b>Descrição: </b><?php echo htmlspecialchars_decode($result->descricaoProduto) ?></td>
                                     </tr>
@@ -230,7 +230,12 @@ $totalProdutos = 0; ?>
                                     $totalServico = $totalServico + $subtotal;
                                     echo '<tr>';
                                     echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                    echo '<td>' . $s->nome . '</td>';
+                                    echo '<td>';
+                                    echo '<strong>' . $s->nome . '</strong>';
+                                    if (!empty($s->detalhes)) {
+                                        echo '<br><small>' . htmlspecialchars($s->detalhes) . '</small>';
+                                    }
+                                    echo '</td>';
                                     echo '<td>R$ ' . $preco . '</td>';
                                     echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
@@ -360,7 +365,7 @@ $totalProdutos = 0; ?>
                                                     <?php } ?>
                                                 </td>
                                         <?php } ?>
-                                        <?php if ($result->descricaoProduto != null) { ?>
+                                        <?php if ($result->descricaoProduto != null && (isset($result->imprimir_descricao) && $result->imprimir_descricao == 1)) { ?>
                                             <tr>
                                                 <td colspan="5">
                                                     <b>Descrição: </b><?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
@@ -446,7 +451,12 @@ $totalProdutos = 0; ?>
                                         $totalServico = $totalServico + $subtotal;
                                         echo '<tr>';
                                         echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                        echo '<td>' . $s->nome . '</td>';
+                                        echo '<td>';
+                                        echo '<strong>' . $s->nome . '</strong>';
+                                        if (!empty($s->descricao)) {
+                                            echo '<br><small>' . htmlspecialchars($s->descricao) . '</small>';
+                                        }
+                                        echo '</td>';
                                         echo '<td>R$ ' . $preco . '</td>';
                                         echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';

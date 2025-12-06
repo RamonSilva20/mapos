@@ -120,6 +120,7 @@ class Os extends MY_Controller
                 'garantia' => set_value('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
+                'imprimir_descricao' => $this->input->post('imprimir_descricao') ? 1 : 0,
                 'defeito' => $this->input->post('defeito'),
                 'status' => set_value('status'),
                 'observacoes' => $this->input->post('observacoes'),
@@ -221,6 +222,7 @@ class Os extends MY_Controller
                 'garantia' => $this->input->post('garantia'),
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
+                'imprimir_descricao' => $this->input->post('imprimir_descricao') ? 1 : 0,
                 'defeito' => $this->input->post('defeito'),
                 'status' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
@@ -925,6 +927,23 @@ class Os extends MY_Controller
             'os_id' => $this->input->post('idOsServico'),
             'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
         ];
+        
+        // Adicionar detalhes apenas se o campo existir no banco
+        $detalhes = $this->input->post('detalhes');
+        if ($detalhes !== null && $detalhes !== '') {
+            // Verificar se o campo existe antes de adicionar
+            $fields = $this->db->field_data('servicos_os');
+            $field_exists = false;
+            foreach ($fields as $field) {
+                if ($field->name === 'detalhes') {
+                    $field_exists = true;
+                    break;
+                }
+            }
+            if ($field_exists) {
+                $data['detalhes'] = $detalhes;
+            }
+        }
 
         if ($this->os_model->add('servicos_os', $data) == true) {
             log_info('Adicionou serviço a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
@@ -940,10 +959,19 @@ class Os extends MY_Controller
                 ->set_status_header(200)
                 ->set_output(json_encode(['result' => true]));
         } else {
+            $error = $this->db->error();
+            $error_message = 'Erro ao adicionar serviço.';
+            if (!empty($error['message'])) {
+                $error_message .= ' ' . $error['message'];
+            }
+            
             return $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500)
-                ->set_output(json_encode(['result' => false]));
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => $error_message
+                ]));
         }
     }
 
@@ -1011,15 +1039,32 @@ class Os extends MY_Controller
         $quantidade = $servicoOs->quantidade ?: 1;
         $subTotal = $preco * $quantidade;
 
-        // Atualizar apenas o preço e subtotal na tabela servicos_os
+        // Atualizar preço, subtotal e detalhes na tabela servicos_os
         // O preço original do serviço (servicos.preco) permanece inalterado
         $data = [
             'preco' => $preco,
             'subTotal' => $subTotal
         ];
+        
+        // Adicionar detalhes apenas se o campo existir no banco
+        $detalhes = $this->input->post('detalhes');
+        if ($detalhes !== null) {
+            // Verificar se o campo existe antes de adicionar
+            $fields = $this->db->field_data('servicos_os');
+            $field_exists = false;
+            foreach ($fields as $field) {
+                if ($field->name === 'detalhes') {
+                    $field_exists = true;
+                    break;
+                }
+            }
+            if ($field_exists) {
+                $data['detalhes'] = $detalhes ?: null;
+            }
+        }
 
         if ($this->os_model->edit('servicos_os', $data, 'idServicos_os', $idServicosOs)) {
-            log_info('Editou preço de serviço na OS. ID (OS): ' . $idOs . ', ID (Serviço OS): ' . $idServicosOs . ', Novo Preço: ' . $preco);
+            log_info('Editou serviço na OS. ID (OS): ' . $idOs . ', ID (Serviço OS): ' . $idServicosOs . ', Novo Preço: ' . $preco);
 
             // Resetar desconto da OS quando o preço é alterado
             $this->db->set('desconto', 0.00);
@@ -1033,7 +1078,7 @@ class Os extends MY_Controller
                 ->set_status_header(200)
                 ->set_output(json_encode([
                     'result' => true,
-                    'message' => 'Preço do serviço atualizado com sucesso!'
+                    'message' => 'Serviço atualizado com sucesso!'
                 ]));
         } else {
             return $this->output
@@ -1041,7 +1086,7 @@ class Os extends MY_Controller
                 ->set_status_header(500)
                 ->set_output(json_encode([
                     'result' => false,
-                    'message' => 'Erro ao atualizar o preço do serviço.'
+                    'message' => 'Erro ao atualizar serviço.'
                 ]));
         }
     }

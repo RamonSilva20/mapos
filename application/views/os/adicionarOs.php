@@ -83,6 +83,10 @@
                                             <h4>Descrição Produto/Serviço</h4>
                                         </label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
+                                        <label style="margin-top: 10px;">
+                                            <input type="checkbox" name="imprimir_descricao" id="imprimir_descricao" value="1" />
+                                            Exibir descrição na impressão
+                                        </label>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito">
