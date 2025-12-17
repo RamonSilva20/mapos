@@ -6,6 +6,68 @@
   select {
     width: 70px;
   }
+  /* Dar mais espaço para a coluna Cliente */
+  .table thead th:nth-child(2),
+  .table tbody td:nth-child(2) {
+    min-width: 250px;
+    max-width: 400px;
+    width: 30%;
+  }
+  .table tbody td.cli1 {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .table tbody td.cli1 a {
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  /* Coluna Ações - manter ícones em linha */
+  .table tbody td:last-child {
+    white-space: nowrap;
+  }
+  .table tbody td:last-child a {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  /* Linha clicável para acessar OS */
+  .table tbody tr.os-row-clickable:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
+  }
+  .table tbody tr.os-row-clickable td:last-child {
+    cursor: default;
+  }
+  .table tbody tr.os-row-clickable td:last-child a {
+    cursor: pointer;
+  }
+  /* Ordenação de colunas */
+  .table thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 25px;
+  }
+  .table thead th.sortable:hover {
+    background-color: #e8e8e8;
+  }
+  .table thead th.sortable .sort-icon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+  .table thead th.sortable.sort-asc .sort-icon::before {
+    content: "▲";
+    opacity: 1;
+  }
+  .table thead th.sortable.sort-desc .sort-icon::before {
+    content: "▼";
+    opacity: 1;
+  }
 </style>
 <div class="new122">
     <div class="widget-title" style="margin: -20px 0 0">
@@ -60,24 +122,19 @@
                 <table class="table table-bordered ">
                     <thead>
                         <tr>
-                            <th>N°</th>
-                            <th>Cliente</th>
-                            <th class="ph1">Responsável</th>
-                            <th>Data Inicial</th>
-                            <th class="ph2">Data Final</th>
+                            <th class="sortable" data-sort="id" data-type="number">N° <i class="sort-icon"></i></th>
+                            <th class="sortable" data-sort="nome" data-type="text">Cliente <i class="sort-icon"></i></th>
+                            <th class="sortable" data-sort="data" data-type="date">Data Inicial <i class="sort-icon"></i></th>
                             <th class="ph3">Venc. Garantia</th>
-                            <th>Valor Total</th>
-                            <th>Desconto</th>
-                            <th>Valor com Desconto</th>
-                            <th class="ph4">V.T (Faturado)</th>
-                            <th>Status</th>
+                            <th class="sortable" data-sort="valor" data-type="number">Valor Total <i class="sort-icon"></i></th>
+                            <th class="sortable" data-sort="status" data-type="text">Status <i class="sort-icon"></i></th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!$results) {
                             echo '<tr>
-                            <td colspan="10">Nenhuma OS Cadastrada</td>
+                            <td colspan="7">Nenhuma OS Cadastrada</td>
                             </tr>';
                         }
 
@@ -148,17 +205,12 @@
                                     $corGarantia = '';
                                 }
 
-                                echo '<tr>';
+                                echo '<tr class="os-row-clickable" data-os-id="' . $r->idOs . '" style="cursor: pointer;" data-sort-id="' . $r->idOs . '" data-sort-nome="' . htmlspecialchars(strtolower($r->nomeCliente)) . '" data-sort-data="' . strtotime($r->dataInicial) . '" data-sort-valor="' . ($r->totalProdutos + $r->totalServicos) . '" data-sort-status="' . htmlspecialchars(strtolower($r->status)) . '">';
                                 echo '<td>' . $r->idOs . '</td>';
-                                echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-                                echo '<td class="ph1">' . $r->nome . '</td>';
+                                echo '<td class="cli1">' . $r->nomeCliente . '</td>';
                                 echo '<td>' . $dataInicial . '</td>';
-                                echo '<td class="ph2">' . $dataFinal . '</td>';
                                 echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                                echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';                                
-                                echo '<td>R$ ' . number_format(floatval($r->desconto), 2, ',', '.') . '</td>';
-                                echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
-                                echo '<td class="ph4">R$ ' . number_format($r->faturado ? floatval($r->valor_desconto) : 0.00, 2, ',', '.') . '</td>';
+                                echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
                                 echo '<td>';
                                 echo '<select class="status-select" data-os-id="' . $r->idOs . '" data-status-atual="' . htmlspecialchars($r->status) . '" style="background-color: ' . $cor . '; border-color: ' . $cor . '; color: white; padding: 4px 8px; border-radius: 4px; border: 1px solid ' . $cor . '; font-size: 12px; font-weight: bold; cursor: pointer; min-width: 120px;">';
                                 echo '<option value="Aberto" ' . ($r->status == 'Aberto' ? 'selected' : '') . ' style="background: #00cd00;">Aberto</option>';
@@ -179,7 +231,7 @@
                                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                                     echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
                                     echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
+                                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirProposta/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Proposta Comercial"><i class="bx bx-file-blank bx-xs"></i></a>';
                                 }
                                 if ($editavel) {
                                     echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
@@ -222,6 +274,101 @@
     $(document).ready(function() {
         console.log('jQuery carregado, versão:', $.fn.jquery);
         console.log('Selects de status:', $('.status-select').length);
+        
+        // Funcionalidade de ordenação de colunas
+        var currentSort = {
+            column: null,
+            direction: 'asc'
+        };
+        
+        $(document).on('click', '.table thead th.sortable', function(e) {
+            e.stopPropagation(); // Evitar que dispare o evento da linha
+            e.preventDefault();
+            
+            var $th = $(this);
+            var sortType = $th.attr('data-type') || $th.data('type');
+            var sortAttr = $th.attr('data-sort') || $th.data('sort');
+            
+            // Remover classes de ordenação de todas as colunas
+            $('.table thead th.sortable').removeClass('sort-asc sort-desc');
+            
+            // Determinar direção da ordenação
+            if (currentSort.column === sortAttr && currentSort.direction === 'asc') {
+                currentSort.direction = 'desc';
+                $th.addClass('sort-desc');
+            } else {
+                currentSort.direction = 'asc';
+                $th.addClass('sort-asc');
+            }
+            currentSort.column = sortAttr;
+            
+            // Ordenar as linhas
+            var $tbody = $('.table tbody');
+            var $rows = $tbody.find('tr.os-row-clickable').get();
+            
+            $rows.sort(function(a, b) {
+                var $a = $(a);
+                var $b = $(b);
+                var valA, valB;
+                
+                // Obter valores usando attr() diretamente (mais confiável que data())
+                var dataAttrName = 'data-sort-' + sortAttr;
+                var rawA = $a.attr(dataAttrName);
+                var rawB = $b.attr(dataAttrName);
+                
+                switch(sortType) {
+                    case 'number':
+                        valA = parseFloat(rawA) || 0;
+                        valB = parseFloat(rawB) || 0;
+                        break;
+                    case 'date':
+                        valA = parseInt(rawA) || 0;
+                        valB = parseInt(rawB) || 0;
+                        break;
+                    case 'text':
+                    default:
+                        valA = (rawA || '').toString().toLowerCase();
+                        valB = (rawB || '').toString().toLowerCase();
+                        break;
+                }
+                
+                // Comparar valores
+                var result;
+                if (sortType === 'text') {
+                    if (currentSort.direction === 'asc') {
+                        result = valA.localeCompare(valB);
+                    } else {
+                        result = valB.localeCompare(valA);
+                    }
+                } else {
+                    if (currentSort.direction === 'asc') {
+                        result = valA - valB;
+                    } else {
+                        result = valB - valA;
+                    }
+                }
+                
+                return result;
+            });
+            
+            // Reordenar as linhas no DOM
+            $tbody.empty();
+            $.each($rows, function(index, row) {
+                $tbody.append(row);
+            });
+        });
+        
+        // Tornar linha clicável para acessar OS (exceto quando clicar em links, botões ou selects)
+        $(document).on('click', '.os-row-clickable', function(e) {
+            // Não redirecionar se clicar em links, botões ou selects
+            if ($(e.target).is('a, button, select, input') || $(e.target).closest('a, button, select, input').length > 0) {
+                return;
+            }
+            var osId = $(this).data('os-id');
+            if (osId) {
+                window.location.href = '<?php echo base_url(); ?>index.php/os/visualizar/' + osId;
+            }
+        });
         
         $(document).on('click', 'a', function(event) {
             var os = $(this).attr('os');
