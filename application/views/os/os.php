@@ -159,7 +159,19 @@
                                 echo '<td>R$ ' . number_format(floatval($r->desconto), 2, ',', '.') . '</td>';
                                 echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
                                 echo '<td class="ph4">R$ ' . number_format($r->faturado ? floatval($r->valor_desconto) : 0.00, 2, ',', '.') . '</td>';
-                                echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+                                echo '<td>';
+                                echo '<select class="status-select" data-os-id="' . $r->idOs . '" data-status-atual="' . htmlspecialchars($r->status) . '" style="background-color: ' . $cor . '; border-color: ' . $cor . '; color: white; padding: 4px 8px; border-radius: 4px; border: 1px solid ' . $cor . '; font-size: 12px; font-weight: bold; cursor: pointer; min-width: 120px;">';
+                                echo '<option value="Aberto" ' . ($r->status == 'Aberto' ? 'selected' : '') . ' style="background: #00cd00;">Aberto</option>';
+                                echo '<option value="Orçamento" ' . ($r->status == 'Orçamento' ? 'selected' : '') . ' style="background: #CDB380;">Orçamento</option>';
+                                echo '<option value="Negociação" ' . ($r->status == 'Negociação' ? 'selected' : '') . ' style="background: #AEB404;">Negociação</option>';
+                                echo '<option value="Aprovado" ' . ($r->status == 'Aprovado' ? 'selected' : '') . ' style="background: #808080;">Aprovado</option>';
+                                echo '<option value="Em Andamento" ' . ($r->status == 'Em Andamento' ? 'selected' : '') . ' style="background: #436eee;">Em Andamento</option>';
+                                echo '<option value="Aguardando Peças" ' . ($r->status == 'Aguardando Peças' ? 'selected' : '') . ' style="background: #FF7F00;">Aguardando Peças</option>';
+                                echo '<option value="Finalizado" ' . ($r->status == 'Finalizado' ? 'selected' : '') . ' style="background: #256;">Finalizado</option>';
+                                echo '<option value="Faturado" ' . ($r->status == 'Faturado' ? 'selected' : '') . ' style="background: #B266FF;">Faturado</option>';
+                                echo '<option value="Cancelado" ' . ($r->status == 'Cancelado' ? 'selected' : '') . ' style="background: #CD0000;">Cancelado</option>';
+                                echo '</select>';
+                                echo '</td>';
                                 echo '<td>';
 
                                 $editavel = $this->os_model->isEditable($r->idOs);
@@ -208,6 +220,9 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        console.log('jQuery carregado, versão:', $.fn.jquery);
+        console.log('Selects de status:', $('.status-select').length);
+        
         $(document).on('click', 'a', function(event) {
             var os = $(this).attr('os');
             $('#idOs').val(os);
@@ -236,6 +251,64 @@
                     }
                 });
         });
+        
+        // Atualizar status da OS via dropdown
+        $('body').on('change', '.status-select', function(e) {
+            e.stopPropagation();
+            
+            var $select = $(this);
+            var idOs = $select.data('os-id');
+            var statusAtual = $select.data('status-atual');
+            var novoStatus = $select.val();
+            
+            console.log('Evento change disparado!', {idOs: idOs, statusAtual: statusAtual, novoStatus: novoStatus});
+            
+            // Se não mudou, não fazer nada
+            if (novoStatus === statusAtual) {
+                console.log('Status não mudou');
+                return;
+            }
+            
+            // Confirmar mudança
+            if (confirm('Deseja alterar o status de "' + statusAtual + '" para "' + novoStatus + '"?')) {
+                console.log('Usuário confirmou mudança');
+                
+                // Desabilitar select
+                $select.prop('disabled', true);
+                
+                $.ajax({
+                    url: '<?php echo base_url(); ?>index.php/os/atualizarStatus',
+                    type: 'POST',
+                    data: {
+                        idOs: idOs,
+                        status: novoStatus,
+                        <?php echo $this->security->get_csrf_token_name(); ?>: '<?php echo $this->security->get_csrf_hash(); ?>'
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Resposta:', response);
+                        if (response.result) {
+                            alert('Status atualizado com sucesso!');
+                            location.reload();
+                        } else {
+                            alert('Erro: ' + (response.message || 'Erro ao atualizar status'));
+                            $select.val(statusAtual);
+                            $select.prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro AJAX:', error);
+                        alert('Erro ao comunicar com o servidor: ' + error);
+                        $select.val(statusAtual);
+                        $select.prop('disabled', false);
+                    }
+                });
+            } else {
+                console.log('Usuário cancelou mudança');
+                $select.val(statusAtual);
+            }
+        });
+        
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });

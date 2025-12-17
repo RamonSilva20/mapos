@@ -122,17 +122,29 @@ class Os extends MY_Controller
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'imprimir_descricao' => $this->input->post('imprimir_descricao') ? 1 : 0,
                 'defeito' => $this->input->post('defeito'),
+                'imprimir_defeito' => $this->input->post('imprimir_defeito') ? 1 : 0,
                 'status' => set_value('status'),
                 'observacoes' => $this->input->post('observacoes'),
+                'imprimir_observacoes' => $this->input->post('imprimir_observacoes') ? 1 : 0,
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
+                'imprimir_laudo' => $this->input->post('imprimir_laudo') ? 1 : 0,
                 'faturado' => 0,
             ];
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
+                $idOs = $id;
+                $status = set_value('status');
+                
+                // Se o status inicia garantia e tem garantia definida, definir data de início
+                if ($this->statusIniciaGarantia($status) && !empty($data['garantia']) && $data['garantia'] > 0) {
+                    $this->db->where('idOs', $idOs);
+                    $this->db->update('os', ['dataInicioGarantia' => date('Y-m-d')]);
+                    log_info("Garantia INICIADA no adicionar. OS: {$idOs}, Data início: " . date('Y-m-d') . ", Dias: {$data['garantia']}");
+                }
+
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
 
-                $idOs = $id;
                 $os = $this->os_model->getById($idOs);
                 $emitente = $this->mapos_model->getEmitente();
 
@@ -224,13 +236,18 @@ class Os extends MY_Controller
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'imprimir_descricao' => $this->input->post('imprimir_descricao') ? 1 : 0,
                 'defeito' => $this->input->post('defeito'),
+                'imprimir_defeito' => $this->input->post('imprimir_defeito') ? 1 : 0,
                 'status' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
+                'imprimir_observacoes' => $this->input->post('imprimir_observacoes') ? 1 : 0,
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
+                'imprimir_laudo' => $this->input->post('imprimir_laudo') ? 1 : 0,
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
             ];
             $os = $this->os_model->getById($this->input->post('idOs'));
+            $novoStatus = $this->input->post('status');
+            $statusAntigo = $os->status;
 
             //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
 
@@ -240,6 +257,23 @@ class Os extends MY_Controller
 
             if (strtolower($os->status) == 'cancelado' && strtolower($this->input->post('status')) != 'cancelado') {
                 $this->debitarEstoque($this->input->post('idOs'));
+            }
+
+            // Gerenciar data de início da garantia
+            $statusAntigoIniciaGarantia = $this->statusIniciaGarantia($statusAntigo);
+            $novoStatusIniciaGarantia = $this->statusIniciaGarantia($novoStatus);
+
+            // Se mudou para um status que inicia garantia E ainda não tem data de início
+            if ($novoStatusIniciaGarantia && !$statusAntigoIniciaGarantia) {
+                if (empty($os->dataInicioGarantia) && !empty($data['garantia']) && $data['garantia'] > 0) {
+                    $data['dataInicioGarantia'] = date('Y-m-d');
+                    log_info("Garantia INICIADA no editar. OS: {$this->input->post('idOs')}, Data início: " . date('Y-m-d') . ", Dias: {$data['garantia']}");
+                }
+            }
+            // Se mudou de um status que inicia garantia para um que não inicia (ex: Aprovado → Orçamento)
+            elseif ($statusAntigoIniciaGarantia && !$novoStatusIniciaGarantia) {
+                $data['dataInicioGarantia'] = null;
+                log_info("Garantia CANCELADA (status voltou para Orçamento/Negociação). OS: {$this->input->post('idOs')}");
             }
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
@@ -474,6 +508,36 @@ class Os extends MY_Controller
         $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
 
         $this->load->view('os/imprimirOsTermica', $this->data);
+    }
+
+    public function imprimirProposta()
+    {
+        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+            redirect('mapos');
+        }
+
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
+        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        if ($this->data['configuration']['pix_key']) {
+            $this->data['qrCode'] = $this->os_model->getQrCode(
+                $this->uri->segment(3),
+                $this->data['configuration']['pix_key'],
+                $this->data['emitente']
+            );
+            $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
+        }
+
+        $this->load->view('os/imprimirProposta', $this->data);
     }
 
     public function enviar_email()
@@ -723,16 +787,39 @@ class Os extends MY_Controller
                 ]));
         }
 
-        // Gerar documento temporário único para evitar duplicatas
-        $documento = '00000000000'; // CPF temporário para pessoa física
+        // Processar documento
+        $documento_post = trim($this->input->post('documento'));
+        $documento = null;
+        $pessoa_fisica = 1; // Padrão pessoa física
         
-        // Verificar se já existe cliente com este documento temporário
-        // Se existir, gerar um novo baseado em timestamp
-        $this->db->where('documento', $documento);
-        $existe = $this->db->get('clientes')->num_rows();
-        if ($existe > 0) {
-            // Gerar documento único baseado em timestamp
-            $documento = '000' . substr(time(), -8);
+        if (!empty($documento_post)) {
+            // Remover formatação
+            $documento_limpo = preg_replace('/[^0-9A-Za-z]/', '', $documento_post);
+            
+            // Determinar se é CPF ou CNPJ baseado no tamanho
+            if (strlen($documento_limpo) == 11) {
+                // CPF
+                $documento = $documento_limpo;
+                $pessoa_fisica = 1;
+            } elseif (strlen($documento_limpo) == 14) {
+                // CNPJ
+                $documento = $documento_limpo;
+                $pessoa_fisica = 0;
+            } else {
+                // Documento inválido, gerar temporário
+                $documento = '00000000000';
+            }
+        } else {
+            // Gerar documento temporário único para evitar duplicatas
+            $documento = '00000000000'; // CPF temporário para pessoa física
+            
+            // Verificar se já existe cliente com este documento temporário
+            $this->db->where('documento', $documento);
+            $existe = $this->db->get('clientes')->num_rows();
+            if ($existe > 0) {
+                // Gerar documento único baseado em timestamp
+                $documento = '000' . substr(time(), -8);
+            }
         }
         
         // Gerar senha temporária
@@ -741,7 +828,7 @@ class Os extends MY_Controller
         $data = [
             'nomeCliente' => trim($nomeCliente),
             'contato' => null,
-            'pessoa_fisica' => 1, // Sempre pessoa física no cadastro rápido
+            'pessoa_fisica' => $pessoa_fisica,
             'documento' => $documento,
             'telefone' => $telefone,
             'celular' => $celular,
@@ -749,7 +836,7 @@ class Os extends MY_Controller
             'senha' => $senha,
             'rua' => $this->input->post('rua') ?: null,
             'numero' => $this->input->post('numero') ?: null,
-            'complemento' => null,
+            'complemento' => $this->input->post('complemento') ?: null,
             'bairro' => $this->input->post('bairro') ?: null,
             'cidade' => $this->input->post('cidade') ?: null,
             'estado' => $this->input->post('estado') ?: null,
@@ -845,31 +932,91 @@ class Os extends MY_Controller
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
 
-        if ($this->os_model->add('produtos_os', $data) == true) {
-            $this->load->model('produtos_model');
+        // Verificar se o produto já existe nesta OS
+        $produtoExistente = $this->db->get_where('produtos_os', [
+            'os_id' => $id,
+            'produtos_id' => $produto
+        ])->row();
 
-            if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+        if ($produtoExistente) {
+            // Produto já existe, atualizar quantidade e subtotal
+            $novaQuantidade = $produtoExistente->quantidade + $quantidade;
+            $novoSubtotal = $preco * $novaQuantidade;
+
+            $this->db->where('idProdutos_os', $produtoExistente->idProdutos_os);
+            $this->db->update('produtos_os', [
+                'quantidade' => $novaQuantidade,
+                'subTotal' => $novoSubtotal,
+                'preco' => $preco
+            ]);
+
+            $lastId = $produtoExistente->idProdutos_os;
+            $produtoAdicionado = false;
+
+            // Só consome estoque se o status da OS exigir
+            if ($this->statusConsumeEstoque($os->status)) {
+                $this->load->model('produtos_model');
+
+                if ($this->data['configuration']['control_estoque']) {
+                    // Descontar apenas a quantidade ADICIONAL
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
+
+                // Garantir que está marcado como consumido
+                if ($produtoExistente->estoque_consumido == 0) {
+                    $this->db->where('idProdutos_os', $lastId);
+                    $this->db->update('produtos_os', ['estoque_consumido' => 1]);
+                }
+
+                log_info("Produto ATUALIZADO e estoque CONSUMIDO. OS: {$id}, Produto: {$produto}, Qtd adicional: {$quantidade}, Total: {$novaQuantidade}, Status: {$os->status}");
+            } else {
+                log_info("Produto ATUALIZADO SEM consumir estoque. OS: {$id}, Produto: {$produto}, Qtd adicional: {$quantidade}, Total: {$novaQuantidade}, Status: {$os->status}");
             }
-
-            $this->db->set('desconto', 0.00);
-            $this->db->set('valor_desconto', 0.00);
-            $this->db->set('tipo_desconto', null);
-            $this->db->where('idOs', $id);
-            $this->db->update('os');
-
-            log_info('Adicionou produto a uma OS. ID (OS): ' . $this->input->post('idOsProduto'));
-
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(200)
-                ->set_output(json_encode(['result' => true]));
         } else {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(500)
-                ->set_output(json_encode(['result' => false]));
+            // Produto não existe, adicionar novo
+            $produtoAdicionado = true;
+            
+            if ($this->os_model->add('produtos_os', $data) == true) {
+                $lastId = $this->db->insert_id();
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(500)
+                    ->set_output(json_encode(['result' => false, 'message' => 'Erro ao adicionar produto']));
+            }
         }
+
+        // Lógica de estoque para produtos novos
+        if ($produtoAdicionado) {
+            // Só consome estoque se o status da OS exigir
+            if ($this->statusConsumeEstoque($os->status)) {
+                $this->load->model('produtos_model');
+
+                if ($this->data['configuration']['control_estoque']) {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '-');
+                }
+
+                // Marcar que o estoque foi consumido
+                $this->db->where('idProdutos_os', $lastId);
+                $this->db->update('produtos_os', ['estoque_consumido' => 1]);
+
+                log_info("Produto adicionado e estoque CONSUMIDO. OS: {$id}, Produto: {$produto}, Qtd: {$quantidade}, Status: {$os->status}");
+            } else {
+                log_info("Produto adicionado SEM consumir estoque. OS: {$id}, Produto: {$produto}, Qtd: {$quantidade}, Status: {$os->status}");
+            }
+        }
+
+        // Resetar desconto
+        $this->db->set('desconto', 0.00);
+        $this->db->set('valor_desconto', 0.00);
+        $this->db->set('tipo_desconto', null);
+        $this->db->where('idOs', $id);
+        $this->db->update('os');
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode(['result' => true]));
     }
 
     public function excluirProduto()
@@ -883,14 +1030,24 @@ class Os extends MY_Controller
             redirect(base_url() . 'index.php/os/gerenciar/');
         }
 
+        // Buscar informações do produto ANTES de excluir
+        $produtoOs = $this->db->get_where('produtos_os', ['idProdutos_os' => $id])->row();
+
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $id) == true) {
             $quantidade = $this->input->post('quantidade');
             $produto = $this->input->post('produto');
 
-            $this->load->model('produtos_model');
+            // Só devolve estoque se o estoque havia sido consumido
+            if ($produtoOs && $produtoOs->estoque_consumido == 1) {
+                $this->load->model('produtos_model');
 
-            if ($this->data['configuration']['control_estoque']) {
-                $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                if ($this->data['configuration']['control_estoque']) {
+                    $this->produtos_model->updateEstoque($produto, $quantidade, '+');
+                }
+
+                log_info("Produto removido e estoque DEVOLVIDO. OS: {$idOs}, Produto: {$produto}, Qtd: {$quantidade}");
+            } else {
+                log_info("Produto removido SEM devolver estoque (não havia sido consumido). OS: {$idOs}, Produto: {$produto}");
             }
 
             $this->db->set('desconto', 0.00);
@@ -1502,5 +1659,185 @@ class Os extends MY_Controller
         } else {
             echo json_encode(['result' => false]);
         }
+    }
+
+    /**
+     * Verifica se o status da OS deve consumir estoque
+     * Status que NÃO consomem: Orçamento, Negociação
+     * Status que consomem: Todos os outros (Aberto, Aprovado, Em Andamento, etc.)
+     */
+    private function statusConsumeEstoque($status)
+    {
+        $statusQueNaoConsomem = ['Orçamento', 'Negociação'];
+        return !in_array($status, $statusQueNaoConsomem);
+    }
+
+    /**
+     * Verifica se o status da OS inicia a contagem da garantia
+     * Garantia só começa a contar quando o serviço é realmente iniciado/aprovado
+     * Status que iniciam: Aprovado, Em Andamento, Aguardando Peças, Finalizado, Faturado
+     * Status que NÃO iniciam: Orçamento, Negociação, Aberto, Cancelado
+     */
+    private function statusIniciaGarantia($status)
+    {
+        $statusQueIniciamGarantia = [
+            'Aprovado',
+            'Em Andamento',
+            'Aguardando Peças',
+            'Finalizado',
+            'Faturado'
+        ];
+        return in_array($status, $statusQueIniciamGarantia);
+    }
+
+    /**
+     * Atualiza o status de uma OS via AJAX
+     * Gerencia estoque e garantia baseado na mudança de status
+     */
+    public function atualizarStatus()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para editar OS']));
+            return;
+        }
+
+        $idOs = $this->input->post('idOs');
+        $novoStatus = $this->input->post('status');
+
+        if (!$idOs || !$novoStatus) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Dados inválidos']));
+            return;
+        }
+
+        // Buscar OS atual
+        $os = $this->os_model->getById($idOs);
+        if (!$os) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'OS não encontrada']));
+            return;
+        }
+
+        $statusAntigo = $os->status;
+
+        // Verificar mudanças de estoque necessárias
+        $statusAntigoConsome = $this->statusConsumeEstoque($statusAntigo);
+        $novoStatusConsome = $this->statusConsumeEstoque($novoStatus);
+
+        // Caso 1: Não consumia, agora consome (Orçamento → Aprovado)
+        if (!$statusAntigoConsome && $novoStatusConsome) {
+            $this->consumirEstoqueOS($idOs);
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque CONSUMIDO. OS: {$idOs}");
+        }
+        // Caso 2: Consumia, agora não consome (Aprovado → Cancelado)
+        elseif ($statusAntigoConsome && !$novoStatusConsome) {
+            $this->devolverEstoqueOS($idOs);
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque DEVOLVIDO. OS: {$idOs}");
+        }
+        // Caso 3: Sem mudança no comportamento de estoque
+        else {
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - SEM alteração de estoque. OS: {$idOs}");
+        }
+
+        // Verificar se deve iniciar a garantia
+        $statusAntigoIniciaGarantia = $this->statusIniciaGarantia($statusAntigo);
+        $novoStatusIniciaGarantia = $this->statusIniciaGarantia($novoStatus);
+
+        $data = array('status' => $novoStatus);
+
+        // Se mudou para um status que inicia garantia E ainda não tem data de início da garantia
+        if ($novoStatusIniciaGarantia && !$statusAntigoIniciaGarantia) {
+            // Verificar se já existe data de início (não sobrescrever se já foi definida)
+            if (empty($os->dataInicioGarantia) && !empty($os->garantia) && $os->garantia > 0) {
+                // Definir data de início da garantia como hoje
+                $data['dataInicioGarantia'] = date('Y-m-d');
+                log_info("Garantia INICIADA. OS: {$idOs}, Data início: " . date('Y-m-d') . ", Dias: {$os->garantia}");
+            }
+        }
+
+        if ($this->os_model->edit('os', $data, 'idOs', $idOs) == true) {
+            log_info('Atualizou status da OS. ID: ' . $idOs . ' | Novo status: ' . $novoStatus);
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => true, 'message' => 'Status atualizado com sucesso!']));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Erro ao atualizar status']));
+        }
+    }
+
+    /**
+     * Consome estoque de todos os produtos de uma OS
+     */
+    private function consumirEstoqueOS($idOs)
+    {
+        $query = "SELECT po.idProdutos_os, po.produtos_id, po.quantidade 
+                  FROM produtos_os po 
+                  WHERE po.os_id = ? AND po.estoque_consumido = 0";
+
+        $produtos = $this->db->query($query, [$idOs])->result();
+
+        if (!$produtos || count($produtos) == 0) {
+            log_info("Nenhum produto para consumir estoque. OS: {$idOs}");
+            return true;
+        }
+
+        $this->load->model('produtos_model');
+        $produtosProcessados = 0;
+
+        foreach ($produtos as $produto) {
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '-');
+            }
+
+            $this->db->where('idProdutos_os', $produto->idProdutos_os);
+            $this->db->update('produtos_os', ['estoque_consumido' => 1]);
+
+            log_info("Estoque consumido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, OS: {$idOs}");
+            $produtosProcessados++;
+        }
+
+        log_info("Total de produtos com estoque consumido: {$produtosProcessados}. OS: {$idOs}");
+        return true;
+    }
+
+    /**
+     * Devolve estoque de todos os produtos de uma OS
+     */
+    private function devolverEstoqueOS($idOs)
+    {
+        $query = "SELECT po.idProdutos_os, po.produtos_id, po.quantidade 
+                  FROM produtos_os po 
+                  WHERE po.os_id = ? AND po.estoque_consumido = 1";
+
+        $produtos = $this->db->query($query, [$idOs])->result();
+
+        if (!$produtos || count($produtos) == 0) {
+            log_info("Nenhum produto para devolver estoque. OS: {$idOs}");
+            return true;
+        }
+
+        $this->load->model('produtos_model');
+        $produtosProcessados = 0;
+
+        foreach ($produtos as $produto) {
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '+');
+            }
+
+            $this->db->where('idProdutos_os', $produto->idProdutos_os);
+            $this->db->update('produtos_os', ['estoque_consumido' => 0]);
+
+            log_info("Estoque devolvido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, OS: {$idOs}");
+            $produtosProcessados++;
+        }
+
+        log_info("Total de produtos com estoque devolvido: {$produtosProcessados}. OS: {$idOs}");
+        return true;
     }
 }

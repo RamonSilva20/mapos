@@ -134,14 +134,26 @@
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito"><h4>Defeito</h4></label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
+                                        <label style="margin-top: 10px;">
+                                            <input type="checkbox" name="imprimir_defeito" id="imprimir_defeito" value="1" <?php echo (isset($result->imprimir_defeito) && $result->imprimir_defeito == 1) ? 'checked' : ''; ?> />
+                                            Exibir defeito na impressão
+                                        </label>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes"><h4>Observações</h4></label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                        <label style="margin-top: 10px;">
+                                            <input type="checkbox" name="imprimir_observacoes" id="imprimir_observacoes" value="1" <?php echo (isset($result->imprimir_observacoes) && $result->imprimir_observacoes == 1) ? 'checked' : ''; ?> />
+                                            Exibir observações na impressão
+                                        </label>
                                     </div>
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
+                                        <label style="margin-top: 10px;">
+                                            <input type="checkbox" name="imprimir_laudo" id="imprimir_laudo" value="1" <?php echo (isset($result->imprimir_laudo) && $result->imprimir_laudo == 1) ? 'checked' : ''; ?> />
+                                            Exibir laudo técnico na impressão
+                                        </label>
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
                                         <div class="span12" style="display:flex; justify-content: center;">
