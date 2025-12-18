@@ -129,6 +129,14 @@
                 <?php } ?>
 
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+                    <li class="<?php if (isset($menuDashboard)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('financeiro/dashboard') ?>"><i class="bx bx-line-chart iconX"></i>
+                            <span class="title">Dashboard Financeiro</span>
+                            <span class="title-tooltip">Dashboard</span>
+                        </a>
+                    </li>
                     <li class="<?php if (isset($menuLancamentos)) {
                         echo 'active';
                     }; ?>">

@@ -158,4 +158,163 @@ class Financeiro_model extends CI_Model
             echo json_encode($row_set);
         }
     }
+
+    /**
+     * Busca dados para o dashboard financeiro
+     */
+    public function getDashboardData()
+    {
+        $hoje = date('Y-m-d');
+        $proximos7Dias = date('Y-m-d', strtotime('+7 days'));
+
+        // Total a Receber (pendente)
+        $this->db->select("SUM(IF(valor_desconto = 0, valor, valor_desconto)) as total");
+        $this->db->from('lancamentos');
+        $this->db->where('tipo', 'receita');
+        $this->db->where('baixado', 0);
+        $totalReceber = $this->db->get()->row()->total ?? 0;
+
+        // Total a Pagar (pendente)
+        $this->db->select("SUM(valor - desconto) as total");
+        $this->db->from('lancamentos');
+        $this->db->where('tipo', 'despesa');
+        $this->db->where('baixado', 0);
+        $totalPagar = $this->db->get()->row()->total ?? 0;
+
+        // Saldo Atual (receitas pagas - despesas pagas)
+        $this->db->select("
+            SUM(CASE WHEN tipo = 'receita' AND baixado = 1 THEN IF(valor_desconto = 0, valor, valor_desconto) END) as receitas_pagas,
+            SUM(CASE WHEN tipo = 'despesa' AND baixado = 1 THEN valor - desconto END) as despesas_pagas
+        ");
+        $this->db->from('lancamentos');
+        $saldo = $this->db->get()->row();
+        $saldoAtual = ($saldo->receitas_pagas ?? 0) - ($saldo->despesas_pagas ?? 0);
+
+        // Contas Vencidas
+        $this->db->select("COUNT(*) as total");
+        $this->db->from('lancamentos');
+        $this->db->where('baixado', 0);
+        $this->db->where('data_vencimento <', $hoje);
+        $contasVencidas = $this->db->get()->row()->total ?? 0;
+
+        // Contas a vencer (próximos 7 dias)
+        $this->db->select("COUNT(*) as total");
+        $this->db->from('lancamentos');
+        $this->db->where('baixado', 0);
+        $this->db->where('data_vencimento >=', $hoje);
+        $this->db->where('data_vencimento <=', $proximos7Dias);
+        $contasAVencer = $this->db->get()->row()->total ?? 0;
+
+        return [
+            'totalReceber' => floatval($totalReceber),
+            'totalPagar' => floatval($totalPagar),
+            'saldoAtual' => floatval($saldoAtual),
+            'contasVencidas' => intval($contasVencidas),
+            'contasAVencer' => intval($contasAVencer)
+        ];
+    }
+
+    /**
+     * Busca receitas e despesas do mês atual
+     */
+    public function getReceitasDespesasMes()
+    {
+        $mesAtual = date('Y-m');
+        
+        $this->db->select("
+            SUM(CASE WHEN tipo = 'receita' AND baixado = 1 THEN IF(valor_desconto = 0, valor, valor_desconto) END) as receitas,
+            SUM(CASE WHEN tipo = 'despesa' AND baixado = 1 THEN valor - desconto END) as despesas
+        ");
+        $this->db->from('lancamentos');
+        $this->db->where("DATE_FORMAT(COALESCE(data_pagamento, data_vencimento), '%Y-%m')", $mesAtual);
+        $this->db->where('baixado', 1);
+        
+        return $this->db->get()->row();
+    }
+
+    /**
+     * Busca fluxo de caixa dos últimos 6 meses
+     */
+    public function getFluxoCaixa6Meses()
+    {
+        $meses = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $data = date('Y-m', strtotime("-$i months"));
+            $meses[] = $data;
+        }
+
+        $resultado = [];
+        foreach ($meses as $mes) {
+            $this->db->select("
+                SUM(CASE WHEN tipo = 'receita' AND baixado = 1 THEN IF(valor_desconto = 0, valor, valor_desconto) END) as receitas,
+                SUM(CASE WHEN tipo = 'despesa' AND baixado = 1 THEN valor - desconto END) as despesas
+            ");
+            $this->db->from('lancamentos');
+            $this->db->where("DATE_FORMAT(COALESCE(data_pagamento, data_vencimento), '%Y-%m')", $mes);
+            $this->db->where('baixado', 1);
+            
+            $dados = $this->db->get()->row();
+            $resultado[] = [
+                'mes' => $mes,
+                'mes_nome' => $this->getNomeMes($mes),
+                'receitas' => floatval($dados->receitas ?? 0),
+                'despesas' => floatval($dados->despesas ?? 0)
+            ];
+        }
+
+        return $resultado;
+    }
+
+    /**
+     * Busca contas a vencer (próximos 7 dias)
+     */
+    public function getContasAVencer()
+    {
+        $hoje = date('Y-m-d');
+        $proximos7Dias = date('Y-m-d', strtotime('+7 days'));
+
+        $this->db->select('lancamentos.*, clientes.nomeCliente');
+        $this->db->from('lancamentos');
+        $this->db->join('clientes', 'clientes.idClientes = lancamentos.clientes_id', 'left');
+        $this->db->where('lancamentos.baixado', 0);
+        $this->db->where('lancamentos.data_vencimento >=', $hoje);
+        $this->db->where('lancamentos.data_vencimento <=', $proximos7Dias);
+        $this->db->order_by('lancamentos.data_vencimento', 'ASC');
+        $this->db->limit(10);
+
+        return $this->db->get()->result();
+    }
+
+    /**
+     * Busca contas vencidas
+     */
+    public function getContasVencidas()
+    {
+        $hoje = date('Y-m-d');
+
+        $this->db->select('lancamentos.*, clientes.nomeCliente');
+        $this->db->from('lancamentos');
+        $this->db->join('clientes', 'clientes.idClientes = lancamentos.clientes_id', 'left');
+        $this->db->where('lancamentos.baixado', 0);
+        $this->db->where('lancamentos.data_vencimento <', $hoje);
+        $this->db->order_by('lancamentos.data_vencimento', 'ASC');
+        $this->db->limit(10);
+
+        return $this->db->get()->result();
+    }
+
+    /**
+     * Retorna nome do mês em português
+     */
+    private function getNomeMes($mes)
+    {
+        $meses = [
+            '01' => 'Jan', '02' => 'Fev', '03' => 'Mar', '04' => 'Abr',
+            '05' => 'Mai', '06' => 'Jun', '07' => 'Jul', '08' => 'Ago',
+            '09' => 'Set', '10' => 'Out', '11' => 'Nov', '12' => 'Dez'
+        ];
+        
+        $partes = explode('-', $mes);
+        return $meses[$partes[1]] ?? $mes;
+    }
 }

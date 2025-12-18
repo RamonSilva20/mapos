@@ -19,6 +19,25 @@ class Financeiro extends MY_Controller
         $this->lancamentos();
     }
 
+    public function dashboard()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar o dashboard financeiro.');
+            redirect(base_url());
+        }
+
+        $this->data['dashboardData'] = $this->financeiro_model->getDashboardData();
+        $this->data['receitasDespesasMes'] = $this->financeiro_model->getReceitasDespesasMes();
+        $this->data['fluxoCaixa'] = $this->financeiro_model->getFluxoCaixa6Meses();
+        $this->data['contasAVencer'] = $this->financeiro_model->getContasAVencer();
+        $this->data['contasVencidas'] = $this->financeiro_model->getContasVencidas();
+        $this->data['menuLancamentos'] = 'financeiro';
+        $this->data['menuDashboard'] = 'financeiro';
+        $this->data['view'] = 'financeiro/dashboard';
+
+        return $this->layout();
+    }
+
     public function lancamentos()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
