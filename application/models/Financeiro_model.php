@@ -13,8 +13,21 @@ class Financeiro_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        // Incluir campos de pagamento parcial se existirem
-        $this->db->select($fields . ', usuarios.*, lancamentos.valor_pago, lancamentos.status_pagamento');
+        // Se for tabela lancamentos, incluir campos de pagamento parcial
+        if ($table == 'lancamentos') {
+            // Verificar se as colunas existem usando query direta
+            $checkColumns = $this->db->query("SHOW COLUMNS FROM lancamentos WHERE Field IN ('valor_pago', 'status_pagamento')");
+            $hasColumns = $checkColumns->num_rows() > 0;
+            
+            if ($hasColumns) {
+                $this->db->select($fields . ', usuarios.*, lancamentos.valor_pago, lancamentos.status_pagamento');
+            } else {
+                $this->db->select($fields . ', usuarios.*');
+            }
+        } else {
+            $this->db->select($fields . ', usuarios.*');
+        }
+        
         $this->db->from($table);
         $this->db->join('usuarios', 'usuarios.idUsuarios = usuarios_id', 'left');
         $this->db->order_by('data_vencimento', 'asc');
