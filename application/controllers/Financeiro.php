@@ -634,4 +634,40 @@ class Financeiro extends MY_Controller
 
         return [$inicia, $ate];
     }
+
+    public function imprimirRecibo($id = null)
+    {
+        if (!$id || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado.');
+            redirect('financeiro');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
+            redirect(base_url());
+        }
+
+        $this->load->model('mapos_model');
+        $lancamento = $this->financeiro_model->getLancamentoById($id);
+
+        if (!$lancamento) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado.');
+            redirect('financeiro');
+        }
+
+        // Verificar se o lançamento está pago
+        if ($lancamento->baixado != 1) {
+            $this->session->set_flashdata('error', 'Apenas lançamentos pagos podem gerar recibo.');
+            redirect('financeiro');
+        }
+
+        $this->data['lancamento'] = $lancamento;
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        // Calcular valor final (com desconto se houver)
+        $valorFinal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
+        $this->data['valorFinal'] = $valorFinal;
+
+        $this->load->view('financeiro/imprimirRecibo', $this->data);
+    }
 }
