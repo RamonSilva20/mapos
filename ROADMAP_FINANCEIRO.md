@@ -17,16 +17,17 @@
 
 ---
 
-### 🔴 **FASE 1: Recibos de Pagamento** (PRIORIDADE URGENTE)
+### ✅ **FASE 1: Recibos de Pagamento** (CONCLUÍDO)
 **Tempo estimado:** 1 dia  
-**Status:** 🟡 Aguardando início
+**Status:** ✅ Concluído
 
 #### Objetivos:
-- [ ] Criar view de impressão de recibo (`imprimirRecibo.php`)
-- [ ] Adicionar método no controller (`Financeiro::imprimirRecibo()`)
-- [ ] Adicionar método no model (`Financeiro_model::getById()`)
-- [ ] Adicionar botão "Imprimir Recibo" na lista de lançamentos
-- [ ] Testar impressão em diferentes cenários
+- [x] Criar view de impressão de recibo (`imprimirRecibo.php`)
+- [x] Adicionar método no controller (`Financeiro::imprimirRecibo()`)
+- [x] Adicionar método no model (`Financeiro_model::getLancamentoById()`)
+- [x] Adicionar função helper `valorPorExtenso()` para converter valores
+- [x] Adicionar botão "Imprimir Recibo" na lista de lançamentos
+- [x] Implementar validação (só imprime se estiver pago)
 
 #### Arquivos a criar/modificar:
 ```
@@ -319,14 +320,14 @@ application/
 ## 📊 PROGRESSO GERAL
 
 ### Status das Fases:
-- [ ] FASE 1: Recibos (0%)
+- [x] FASE 1: Recibos (100%) ✅
 - [ ] FASE 2: Dashboard (0%)
 - [ ] FASE 3: Simplificação (0%)
 - [ ] FASE 4: Categorias e Contas (0%)
 - [ ] FASE 5: Integração (0%)
 - [ ] FASE 6: Alertas (0%)
 
-### Progresso Total: 0%
+### Progresso Total: 16.7%
 
 ---
 
