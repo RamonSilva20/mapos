@@ -719,7 +719,7 @@ class Financeiro extends MY_Controller
             redirect('financeiro');
         }
 
-        $this->load->model('Pagamentosparciais_model');
+        $this->load->model('pagamentosparciais_model');
         
         // Calcular valores
         $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
@@ -771,7 +771,7 @@ class Financeiro extends MY_Controller
             $dataPagamento = date('Y-m-d');
         }
 
-        $this->load->model('Pagamentosparciais_model');
+        $this->load->model('pagamentosparciais_model');
 
         // Verificar saldo restante
         $saldoRestante = $this->pagamentosparciais_model->getSaldoRestante($lancamentoId);
@@ -816,7 +816,7 @@ class Financeiro extends MY_Controller
             return;
         }
 
-        $this->load->model('Pagamentosparciais_model');
+        $this->load->model('pagamentosparciais_model');
         $result = $this->pagamentosparciais_model->delete($id);
 
         if ($result) {
@@ -844,7 +844,7 @@ class Financeiro extends MY_Controller
             return;
         }
 
-        $this->load->model('Pagamentosparciais_model');
+        $this->load->model('pagamentosparciais_model');
         
         $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
         $totalPago = $this->pagamentosparciais_model->getTotalPago($id);
