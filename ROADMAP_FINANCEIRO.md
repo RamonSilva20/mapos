@@ -240,16 +240,16 @@ application/
 
 ---
 
-### 🟣 **FASE 5: Integração Automática** (PRIORIDADE MÉDIA)
+### ✅ **FASE 5: Integração Automática** (CONCLUÍDO PARCIALMENTE)
 **Tempo estimado:** 3-4 dias (inclui pagamento parcial)  
-**Status:** ⚪ Não iniciado
+**Status:** ⏳ Em andamento (5.1 e 5.2-OS concluídos)
 
 #### Objetivos:
-- [ ] **5.1: Pagamento Parcial (Sinal)** - Implementar suporte a pagamentos parciais
-- [ ] Integrar OS → Lançamento automático (com forma de pagamento e parcelas)
+- [x] **5.1: Pagamento Parcial (Sinal)** - Implementar suporte a pagamentos parciais
+- [x] Integrar OS → Lançamento automático (com forma de pagamento e parcelas)
 - [ ] Integrar Vendas → Lançamento automático (com forma de pagamento e parcelas)
-- [ ] Adicionar checkbox de controle
-- [ ] Evitar duplicação
+- [x] Adicionar checkbox de controle
+- [x] Evitar duplicação
 
 #### Arquivos a modificar:
 ```
@@ -262,18 +262,18 @@ application/
 ```
 
 #### Funcionalidades - Pagamento Parcial (5.1):
-- [ ] Adicionar campo `valor_pago` ou tabela `pagamentos_parciais`
-- [ ] Interface para registrar pagamentos parciais
-- [ ] Exibir progresso visual (barra de progresso)
-- [ ] Histórico de pagamentos parciais
+- [x] Adicionar campo `valor_pago` ou tabela `pagamentos_parciais`
+- [x] Interface para registrar pagamentos parciais
+- [x] Exibir progresso visual (barra de progresso)
+- [x] Histórico de pagamentos parciais
 - [ ] Atualizar dashboard para considerar pagamentos parciais
-- [ ] Status: Pendente / Parcial / Pago
+- [x] Status: Pendente / Parcial / Pago
 
 #### Funcionalidades - OS:
-- [ ] Adicionar campos: `forma_pgto`, `parcelas`, `entrada` em OS
-- [ ] Ao mudar para "Faturado" → perguntar se cria lançamento
-- [ ] Modal com opções: forma de pagamento, parcelas, entrada
-- [ ] Preencher dados automaticamente:
+- [x] Adicionar campos: `forma_pgto`, `parcelas`, `entrada` em OS
+- [x] Ao mudar para "Faturado" → perguntar se cria lançamento
+- [x] Modal com opções: forma de pagamento, parcelas, entrada
+- [x] Preencher dados automaticamente:
   - Cliente (da OS)
   - Valor (total da OS)
   - Descrição ("Pagamento de OS #123")
@@ -282,10 +282,10 @@ application/
   - **Forma de pagamento** (da OS)
   - **Parcelas** (se houver)
   - **Entrada** (se houver)
-- [ ] Criar múltiplos lançamentos se parcelado
-- [ ] Criar lançamento de entrada (pago) + parcelas (pendentes)
-- [ ] Vincular lançamento à OS (`os.lancamento`)
-- [ ] Evitar duplicação (verificar se já existe)
+- [x] Criar múltiplos lançamentos se parcelado
+- [x] Criar lançamento de entrada (pago) + parcelas (pendentes)
+- [x] Vincular lançamento à OS (`os.lancamento`)
+- [x] Evitar duplicação (verificar se já existe)
 
 #### Funcionalidades - Vendas:
 - [ ] Adicionar campos: `forma_pgto`, `parcelas`, `entrada` em Vendas
@@ -354,10 +354,10 @@ application/
 - [x] FASE 2: Dashboard (100%) ✅
 - [x] FASE 3: Simplificação (100%) ✅
 - [x] FASE 4: Categorias e Contas (100%) ✅
-- [ ] FASE 5: Integração (0%)
+- [~] FASE 5: Integração (75%) ⏳ (falta Vendas e Dashboard)
 - [ ] FASE 6: Alertas (0%)
 
-### Progresso Total: 66.7%
+### Progresso Total: 79.2%
 
 ---
 
