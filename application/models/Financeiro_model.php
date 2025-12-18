@@ -172,14 +172,16 @@ class Financeiro_model extends CI_Model
         $this->db->from('lancamentos');
         $this->db->where('tipo', 'receita');
         $this->db->where('baixado', 0);
-        $totalReceber = $this->db->get()->row()->total ?? 0;
+        $query = $this->db->get();
+        $totalReceber = ($query && $query->num_rows() > 0) ? ($query->row()->total ?? 0) : 0;
 
         // Total a Pagar (pendente)
         $this->db->select("SUM(valor - desconto) as total");
         $this->db->from('lancamentos');
         $this->db->where('tipo', 'despesa');
         $this->db->where('baixado', 0);
-        $totalPagar = $this->db->get()->row()->total ?? 0;
+        $query = $this->db->get();
+        $totalPagar = ($query && $query->num_rows() > 0) ? ($query->row()->total ?? 0) : 0;
 
         // Saldo Atual (receitas pagas - despesas pagas)
         $this->db->select("
@@ -187,15 +189,17 @@ class Financeiro_model extends CI_Model
             SUM(CASE WHEN tipo = 'despesa' AND baixado = 1 THEN valor - desconto END) as despesas_pagas
         ");
         $this->db->from('lancamentos');
-        $saldo = $this->db->get()->row();
-        $saldoAtual = ($saldo->receitas_pagas ?? 0) - ($saldo->despesas_pagas ?? 0);
+        $query = $this->db->get();
+        $saldo = ($query && $query->num_rows() > 0) ? $query->row() : null;
+        $saldoAtual = $saldo ? (($saldo->receitas_pagas ?? 0) - ($saldo->despesas_pagas ?? 0)) : 0;
 
         // Contas Vencidas
         $this->db->select("COUNT(*) as total");
         $this->db->from('lancamentos');
         $this->db->where('baixado', 0);
         $this->db->where('data_vencimento <', $hoje);
-        $contasVencidas = $this->db->get()->row()->total ?? 0;
+        $query = $this->db->get();
+        $contasVencidas = ($query && $query->num_rows() > 0) ? ($query->row()->total ?? 0) : 0;
 
         // Contas a vencer (próximos 7 dias)
         $this->db->select("COUNT(*) as total");
@@ -203,7 +207,8 @@ class Financeiro_model extends CI_Model
         $this->db->where('baixado', 0);
         $this->db->where('data_vencimento >=', $hoje);
         $this->db->where('data_vencimento <=', $proximos7Dias);
-        $contasAVencer = $this->db->get()->row()->total ?? 0;
+        $query = $this->db->get();
+        $contasAVencer = ($query && $query->num_rows() > 0) ? ($query->row()->total ?? 0) : 0;
 
         return [
             'totalReceber' => floatval($totalReceber),
@@ -229,7 +234,13 @@ class Financeiro_model extends CI_Model
         $this->db->where("DATE_FORMAT(COALESCE(data_pagamento, data_vencimento), '%Y-%m')", $mesAtual);
         $this->db->where('baixado', 1);
         
-        return $this->db->get()->row();
+        $query = $this->db->get();
+        if ($query && $query->num_rows() > 0) {
+            return $query->row();
+        }
+        
+        // Retorna objeto vazio se não houver dados
+        return (object) ['receitas' => 0, 'despesas' => 0];
     }
 
     /**
@@ -253,7 +264,8 @@ class Financeiro_model extends CI_Model
             $this->db->where("DATE_FORMAT(COALESCE(data_pagamento, data_vencimento), '%Y-%m')", $mes);
             $this->db->where('baixado', 1);
             
-            $dados = $this->db->get()->row();
+            $query = $this->db->get();
+            $dados = ($query && $query->num_rows() > 0) ? $query->row() : null;
             $resultado[] = [
                 'mes' => $mes,
                 'mes_nome' => $this->getNomeMes($mes),
@@ -282,7 +294,8 @@ class Financeiro_model extends CI_Model
         $this->db->order_by('lancamentos.data_vencimento', 'ASC');
         $this->db->limit(10);
 
-        return $this->db->get()->result();
+        $query = $this->db->get();
+        return ($query && $query->num_rows() > 0) ? $query->result() : [];
     }
 
     /**
@@ -300,7 +313,8 @@ class Financeiro_model extends CI_Model
         $this->db->order_by('lancamentos.data_vencimento', 'ASC');
         $this->db->limit(10);
 
-        return $this->db->get()->result();
+        $query = $this->db->get();
+        return ($query && $query->num_rows() > 0) ? $query->result() : [];
     }
 
     /**
