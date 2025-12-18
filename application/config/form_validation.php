@@ -453,4 +453,43 @@ $config = [
             'rules' => 'required|trim',
         ],
     ],
+    'categorias' => [
+        [
+            'field' => 'categoria',
+            'label' => 'Categoria',
+            'rules' => 'required|trim|max_length[80]',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'Tipo',
+            'rules' => 'required|in_list[receita,despesa]',
+        ],
+    ],
+    'contas' => [
+        [
+            'field' => 'conta',
+            'label' => 'Nome da Conta',
+            'rules' => 'required|trim|max_length[45]',
+        ],
+        [
+            'field' => 'banco',
+            'label' => 'Banco',
+            'rules' => 'trim|max_length[45]',
+        ],
+        [
+            'field' => 'numero',
+            'label' => 'Número da Conta',
+            'rules' => 'trim|max_length[45]',
+        ],
+        [
+            'field' => 'tipo',
+            'label' => 'Tipo',
+            'rules' => 'trim|max_length[80]',
+        ],
+        [
+            'field' => 'saldo',
+            'label' => 'Saldo Inicial',
+            'rules' => 'trim|numeric',
+        ],
+    ],
 ];

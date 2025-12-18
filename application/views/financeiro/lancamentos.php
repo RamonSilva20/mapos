@@ -396,6 +396,20 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                     <input class="span12" id="idCliente" type="hidden" name="idCliente" value="" />
                 </div>
 
+                <div class="span6" style="margin-left: 0">
+                    <label for="categoria">Categoria</label>
+                    <select name="categoria" id="categoria" class="span12">
+                        <option value="">Selecione uma categoria...</option>
+                    </select>
+                </div>
+
+                <div class="span6">
+                    <label for="conta">Conta</label>
+                    <select name="conta" id="conta" class="span12">
+                        <option value="">Selecione uma conta...</option>
+                    </select>
+                </div>
+
                 <div class="span12" style="margin-left: 0">
                     <label for="observacoes">Observações</label>
                     <textarea class="span12" id="observacoes" name="observacoes"></textarea>
@@ -1341,6 +1355,63 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 		
 		$('#add_receita').mouseover(function(event){
 			valorParcelas();
+		});
+		
+		// Carregar categorias e contas quando o modal for aberto
+		$('#modalReceita').on('shown', function() {
+			// Carregar categorias
+			$.ajax({
+				url: '<?php echo base_url(); ?>index.php/categorias/getAll',
+				type: 'GET',
+				dataType: 'json',
+				success: function(data) {
+					var tipo = $('#tipo').val();
+					$('#categoria').html('<option value="">Selecione uma categoria...</option>');
+					if (data && data.length > 0) {
+						$.each(data, function(i, cat) {
+							if (cat.status == 1 && (!tipo || cat.tipo == tipo)) {
+								$('#categoria').append('<option value="' + cat.idCategorias + '">' + cat.categoria + '</option>');
+							}
+						});
+					}
+				}
+			});
+			
+			// Carregar contas
+			$.ajax({
+				url: '<?php echo base_url(); ?>index.php/contas/getAll',
+				type: 'GET',
+				dataType: 'json',
+				success: function(data) {
+					$('#conta').html('<option value="">Selecione uma conta...</option>');
+					if (data && data.length > 0) {
+						$.each(data, function(i, conta) {
+							if (conta.status == 1) {
+								$('#conta').append('<option value="' + conta.idContas + '">' + conta.conta + '</option>');
+							}
+						});
+					}
+				}
+			});
+		});
+		
+		// Atualizar categorias quando tipo mudar
+		$('#tipo').on('change', function() {
+			var tipo = $(this).val();
+			$.ajax({
+				url: '<?php echo base_url(); ?>index.php/categorias/getByTipo',
+				type: 'GET',
+				data: { tipo: tipo },
+				dataType: 'json',
+				success: function(data) {
+					$('#categoria').html('<option value="">Selecione uma categoria...</option>');
+					if (data && data.length > 0) {
+						$.each(data, function(i, cat) {
+							$('#categoria').append('<option value="' + cat.idCategorias + '">' + cat.categoria + '</option>');
+						});
+					}
+				}
+			});
 		});
     });
 </script>

@@ -145,6 +145,22 @@
                             <span class="title-tooltip">Lançamentos</span>
                         </a>
                     </li>
+                    <li class="<?php if (isset($menuCategorias)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('categorias') ?>"><i class="bx bx-tag iconX"></i>
+                            <span class="title">Categorias</span>
+                            <span class="title-tooltip">Categorias</span>
+                        </a>
+                    </li>
+                    <li class="<?php if (isset($menuContas)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('contas') ?>"><i class="bx bx-wallet iconX"></i>
+                            <span class="title">Contas</span>
+                            <span class="title-tooltip">Contas</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) { ?>
                     <li class="<?php if (isset($menuCobrancas)) {

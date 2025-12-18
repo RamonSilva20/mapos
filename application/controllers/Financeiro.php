@@ -183,6 +183,13 @@ class Financeiro extends MY_Controller
             if (set_value('idCliente')) {
                 $data['clientes_id'] = set_value('idCliente');
             }
+            // Adicionar categoria e conta se selecionadas
+            if ($this->input->post('categoria')) {
+                $data['categorias_id'] = $this->input->post('categoria');
+            }
+            if ($this->input->post('conta')) {
+                $data['contas_id'] = $this->input->post('conta');
+            }
             // Inserção dos dados no banco
             if ($this->financeiro_model->add('lancamentos', $data) == true) {
                 $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
