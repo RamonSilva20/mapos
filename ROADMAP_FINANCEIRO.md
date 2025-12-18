@@ -114,16 +114,16 @@ application/
 
 ---
 
-### 🟢 **FASE 3: Simplificação da Interface** (PRIORIDADE MÉDIA)
+### ✅ **FASE 3: Simplificação da Interface** (CONCLUÍDO)
 **Tempo estimado:** 1 dia  
-**Status:** ⚪ Não iniciado
+**Status:** ✅ Concluído
 
 #### Objetivos:
-- [ ] Reduzir colunas da tabela de lançamentos
-- [ ] Melhorar visual com badges coloridos
-- [ ] Adicionar tooltips informativos
-- [ ] Implementar modal de detalhes
-- [ ] Melhorar filtros
+- [x] Reduzir colunas da tabela de lançamentos (12 → 8)
+- [x] Melhorar visual com badges coloridos
+- [x] Adicionar tooltips informativos
+- [x] Implementar modal de detalhes
+- [x] Melhorar CSS e visual geral
 
 #### Arquivos a modificar:
 ```
@@ -141,19 +141,20 @@ application/
 Observações | Forma Pgto | Valor(+) | Desconto(-) | Total(=) | Ações
 ```
 
-**Depois (7 colunas):**
+**Depois (8 colunas):**
 ```
 # | Tipo | Cliente/Fornecedor | Descrição | Vencimento | Valor | Status | Ações
 ```
 
 #### Melhorias Visuais:
-- [ ] Badge verde para "Receita"
-- [ ] Badge vermelho para "Despesa"
-- [ ] Badge azul para "Pago"
-- [ ] Badge laranja para "Pendente"
-- [ ] Badge vermelho escuro para "Vencido"
-- [ ] Tooltip com detalhes ao passar mouse
-- [ ] Modal com informações completas ao clicar
+- [x] Badge verde para "Receita"
+- [x] Badge vermelho para "Despesa"
+- [x] Badge azul para "Pago"
+- [x] Badge laranja para "Pendente"
+- [x] Badge vermelho escuro para "Vencido"
+- [x] Tooltip com detalhes ao passar mouse
+- [x] Modal com informações completas ao clicar
+- [x] Botão "Ver Detalhes" na coluna Ações
 
 #### Critérios de Aceitação:
 - [ ] Tabela mais limpa e legível
@@ -322,12 +323,12 @@ application/
 ### Status das Fases:
 - [x] FASE 1: Recibos (100%) ✅
 - [x] FASE 2: Dashboard (100%) ✅
-- [ ] FASE 3: Simplificação (0%)
+- [x] FASE 3: Simplificação (100%) ✅
 - [ ] FASE 4: Categorias e Contas (0%)
 - [ ] FASE 5: Integração (0%)
 - [ ] FASE 6: Alertas (0%)
 
-### Progresso Total: 33.3%
+### Progresso Total: 50%
 
 ---
 
