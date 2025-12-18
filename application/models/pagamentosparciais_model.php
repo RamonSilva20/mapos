@@ -7,7 +7,7 @@ if (! defined('BASEPATH')) {
 /**
  * Model para gerenciamento de pagamentos parciais
  */
-class PagamentosParciais_model extends CI_Model
+class Pagamentosparciais_model extends CI_Model
 {
     public function __construct()
     {
