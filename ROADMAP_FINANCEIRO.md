@@ -59,17 +59,17 @@ application/
 
 ---
 
-### 🟡 **FASE 2: Dashboard Financeiro** (PRIORIDADE ALTA)
+### ✅ **FASE 2: Dashboard Financeiro** (CONCLUÍDO)
 **Tempo estimado:** 2-3 dias  
-**Status:** ⚪ Não iniciado
+**Status:** ✅ Concluído
 
 #### Objetivos:
-- [ ] Criar view do dashboard (`dashboard.php`)
-- [ ] Criar método no controller (`Financeiro::dashboard()`)
-- [ ] Criar métodos no model para estatísticas
-- [ ] Implementar cards com totais
-- [ ] Implementar gráficos básicos
-- [ ] Implementar lista de alertas
+- [x] Criar view do dashboard (`dashboard.php`)
+- [x] Criar método no controller (`Financeiro::dashboard()`)
+- [x] Criar métodos no model para estatísticas
+- [x] Implementar cards com totais (4 cards)
+- [x] Implementar gráficos básicos (2 gráficos)
+- [x] Implementar lista de alertas (vencimentos)
 
 #### Arquivos a criar/modificar:
 ```
@@ -84,21 +84,21 @@ application/
 #### Componentes do Dashboard:
 
 **1. Cards Superiores:**
-- [ ] Total a Receber (pendente)
-- [ ] Total a Pagar (pendente)
-- [ ] Saldo Atual
-- [ ] Contas Vencidas (alerta vermelho)
+- [x] Total a Receber (pendente)
+- [x] Total a Pagar (pendente)
+- [x] Saldo Atual
+- [x] Contas Vencidas (alerta vermelho)
 
 **2. Gráficos:**
-- [ ] Receitas vs Despesas (mensal)
-- [ ] Fluxo de caixa (últimos 6 meses)
-- [ ] Despesas por categoria (se implementado)
+- [x] Receitas vs Despesas (mensal)
+- [x] Fluxo de caixa (últimos 6 meses)
+- [ ] Despesas por categoria (se implementado) - Futuro
 
 **3. Tabelas de Alertas:**
-- [ ] Contas a vencer (próximos 7 dias)
-- [ ] Contas vencidas
-- [ ] Maiores receitas do mês
-- [ ] Maiores despesas do mês
+- [x] Contas a vencer (próximos 7 dias)
+- [x] Contas vencidas
+- [ ] Maiores receitas do mês - Futuro
+- [ ] Maiores despesas do mês - Futuro
 
 #### Tecnologias:
 - Chart.js ou similar para gráficos
@@ -321,13 +321,13 @@ application/
 
 ### Status das Fases:
 - [x] FASE 1: Recibos (100%) ✅
-- [ ] FASE 2: Dashboard (0%)
+- [x] FASE 2: Dashboard (100%) ✅
 - [ ] FASE 3: Simplificação (0%)
 - [ ] FASE 4: Categorias e Contas (0%)
 - [ ] FASE 5: Integração (0%)
 - [ ] FASE 6: Alertas (0%)
 
-### Progresso Total: 16.7%
+### Progresso Total: 33.3%
 
 ---
 
