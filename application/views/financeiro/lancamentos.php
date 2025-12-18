@@ -23,6 +23,80 @@ $periodo = $this->input->get('periodo');
     textarea {
         resize: vertical;
     }
+    
+    /* Badges coloridos para tipo e status */
+    .badge-receita {
+        background-color: #28a745;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .badge-despesa {
+        background-color: #dc3545;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .badge-pago {
+        background-color: #007bff;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .badge-pendente {
+        background-color: #ffc107;
+        color: #333;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .badge-vencido {
+        background-color: #721c24;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    
+    /* Tooltip customizado */
+    .lancamento-tooltip {
+        cursor: help;
+        position: relative;
+    }
+    
+    /* Melhorar visual da tabela */
+    .table tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .table td {
+        vertical-align: middle;
+    }
+    
+    /* Modal de detalhes */
+    .modal-detalhes .detalhe-item {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    .modal-detalhes .detalhe-label {
+        font-weight: bold;
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+    .modal-detalhes .detalhe-valor {
+        color: #333;
+        font-size: 14px;
+    }
 </style>
 
 <div class="new122">
@@ -110,12 +184,8 @@ $periodo = $this->input->get('periodo');
                             <th>Cliente / Fornecedor</th>
                             <th>Descrição</th>
                             <th>Vencimento</th>
+                            <th>Valor</th>
                             <th>Status</th>
-                            <th>Observações</th>
-                            <th>Forma de Pagamento</th>
-                            <th>Valor (+)</th>
-                            <th>Desconto (-)</th>
-                            <th>Valor Total (=)</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -124,34 +194,59 @@ $periodo = $this->input->get('periodo');
 
                         if (!$results) {
                             echo '<tr>
-              <td colspan="9" >Nenhum lançamento encontrado</td>
+              <td colspan="8" >Nenhum lançamento encontrado</td>
             </tr>';
                         }
                         foreach ($results as $r) {
                             $vencimento = date(('d/m/Y'), strtotime($r->data_vencimento));
-                           
-                            if ($r->baixado == 0) {
-                                $status = 'Pendente';
-                            } else {
+                            $hoje = date('Y-m-d');
+                            $dataVencimento = date('Y-m-d', strtotime($r->data_vencimento));
+                            
+                            // Determinar status e badge
+                            if ($r->baixado == 1) {
                                 $status = 'Pago';
-                            };
-                            if ($r->tipo == 'receita') {
-                                $label = 'success';
+                                $badgeStatus = 'badge-pago';
                             } else {
-                                $label = 'important';
+                                if ($dataVencimento < $hoje) {
+                                    $status = 'Vencido';
+                                    $badgeStatus = 'badge-vencido';
+                                } else {
+                                    $status = 'Pendente';
+                                    $badgeStatus = 'badge-pendente';
+                                }
                             }
-                            echo '<tr>';
+                            
+                            // Badge tipo
+                            $badgeTipo = $r->tipo == 'receita' ? 'badge-receita' : 'badge-despesa';
+                            
+                            // Calcular valor final
+                            $valorFinal = $r->valor_desconto > 0 ? $r->valor_desconto : $r->valor;
+                            
+                            // Tooltip com detalhes
+                            $tooltipDetalhes = '';
+                            $tooltipDetalhes .= 'Valor Original: R$ ' . number_format($r->valor, 2, ',', '.');
+                            if ($r->valor_desconto > 0 && $r->valor_desconto < $r->valor) {
+                                $descontoValor = $r->valor - $r->valor_desconto;
+                                $tooltipDetalhes .= '\\nDesconto: R$ ' . number_format($descontoValor, 2, ',', '.');
+                            }
+                            if ($r->forma_pgto) {
+                                $tooltipDetalhes .= '\\nForma: ' . $r->forma_pgto;
+                            }
+                            if ($r->observacoes) {
+                                $tooltipDetalhes .= '\\nObs: ' . htmlspecialchars(substr($r->observacoes, 0, 50));
+                                if (strlen($r->observacoes) > 50) {
+                                    $tooltipDetalhes .= '...';
+                                }
+                            }
+                            
+                            echo '<tr class="lancamento-row" data-lancamento-id="' . $r->idLancamentos . '">';
                             echo '<td>' . $r->idLancamentos . '</td>';
-                            echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                            echo '<td>' . $r->cliente_fornecedor . '</td>';
-                            echo '<td>' . $r->descricao . '</td>';
+                            echo '<td><span class="' . $badgeTipo . '">' . ucfirst($r->tipo) . '</span></td>';
+                            echo '<td>' . htmlspecialchars($r->cliente_fornecedor) . '</td>';
+                            echo '<td class="lancamento-tooltip" title="' . htmlspecialchars($r->descricao) . '">' . htmlspecialchars($r->descricao) . '</td>';
                             echo '<td>' . $vencimento . '</td>';
-                            echo '<td>' . $status . '</td>';
-                            echo '<td>' . $r->observacoes . '</td>';
-                            echo '<td>' . $r->forma_pgto . '</td>';
-                            echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; //valor total sem o desconto
-                            echo  $r->tipo_desconto == "real" ? '<td>' . "R$ ".$r->desconto . '</td>' : ($r->tipo_desconto == "porcento" ? '<td>' . $r->desconto." %" . '</td>' : '<td>' . "0" . '</td>'); // valor do desconto
-                            echo $r->valor_desconto != 0 ? '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>' : '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; // valor total  com o desconto
+                            echo '<td class="lancamento-tooltip" title="' . $tooltipDetalhes . '"><strong>R$ ' . number_format($valorFinal, 2, ',', '.') . '</strong></td>';
+                            echo '<td><span class="' . $badgeStatus . '">' . $status . '</span></td>';
                            
                             echo '<td>';
                             if ($r->data_pagamento == "0000-00-00") {
@@ -160,13 +255,29 @@ $periodo = $this->input->get('periodo');
                                 $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
                             }
 
+                            // Botão Ver Detalhes
+                            echo '<a href="#modalDetalhes" style="margin-right: 1%" data-toggle="modal" role="button" class="btn-nwe lancamento-detalhes" 
+                                data-id="' . $r->idLancamentos . '"
+                                data-descricao="' . htmlspecialchars($r->descricao) . '"
+                                data-cliente="' . htmlspecialchars($r->cliente_fornecedor) . '"
+                                data-vencimento="' . $vencimento . '"
+                                data-valor="' . number_format($r->valor, 2, ',', '.') . '"
+                                data-valor-final="' . number_format($valorFinal, 2, ',', '.') . '"
+                                data-desconto="' . ($r->valor_desconto > 0 && $r->valor_desconto < $r->valor ? number_format($r->valor - $r->valor_desconto, 2, ',', '.') : '0,00') . '"
+                                data-forma-pgto="' . htmlspecialchars($r->forma_pgto ?: 'Não informado') . '"
+                                data-observacoes="' . htmlspecialchars($r->observacoes ?: 'Nenhuma') . '"
+                                data-status="' . $status . '"
+                                data-tipo="' . ucfirst($r->tipo) . '"
+                                data-pagamento="' . ($data_pagamento ?: 'Não pago') . '"
+                                title="Ver Detalhes"><i class="bx bx-info-circle"></i></a>';
+
                             // Botão Imprimir Recibo (apenas para lançamentos pagos)
                             if ($r->baixado == 1 && $this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
                                 echo '<a href="' . base_url() . 'index.php/financeiro/imprimirRecibo/' . $r->idLancamentos . '" target="_blank" style="margin-right: 1%" class="btn-nwe6" title="Imprimir Recibo"><i class="bx bx-printer bx-xs"></i></a>';
                             }
 
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar Lançamento"><i class="bx bx-edit"></i></a>';
+                                echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . htmlspecialchars($r->descricao) . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . htmlspecialchars($r->cliente_fornecedor) . '" formaPgto="' . htmlspecialchars($r->forma_pgto) . '" tipo="' . $r->tipo . '" observacoes="' . htmlspecialchars($r->observacoes) . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . htmlspecialchars($r->nome) . '" class="btn-nwe3 editar" title="Editar Lançamento"><i class="bx bx-edit"></i></a>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir Lançamento"><i class="bx bx-trash-alt"></i></a>';
@@ -178,70 +289,70 @@ $periodo = $this->input->get('periodo');
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
-                            <td colspan="6" style="text-align: left; color: green">
+                            <td colspan="5" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
+                            <td colspan="3" style="text-align: left; color: green">
                                 <strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
-                            <td colspan="6" style="text-align: left; color: red">
+                            <td colspan="5" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
+                            <td colspan="3" style="text-align: left; color: red">
                                 <strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" style="text-align: right"><strong>Saldo:</strong></td>
-                            <td colspan="6" style="text-align: left;">
+                            <td colspan="5" style="text-align: right"><strong>Saldo:</strong></td>
+                            <td colspan="3" style="text-align: left;">
                                 <strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                     
                         <tr>
-                            <td colspan="7" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
+                            <td colspan="8" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="7" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa;
+                      <td colspan="8" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa;
 echo number_format($sub_receita_despesa, 2, ',', '.') ?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa;
+                      <td colspan="8" style="text-align: left;">Total Receitas (+) Despesas: R$ <?php $soma_receita_despesa = $estatisticas_financeiro->total_receita + $estatisticas_financeiro->total_despesa;
 echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format($estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format($estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente;
+                      <td colspan="8" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente;
 echo number_format($sub_recpendente_despependente, 2, ',', '.')?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente;
+                      <td colspan="8" style="text-align: left;"><strong>Total de Receitas Pendentes (+) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente + $estatisticas_financeiro->total_despesa_pendente;
 echo number_format($sub_recpendente_despependente, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente;
+                      <td colspan="8" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente;
 echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="8" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -674,6 +785,69 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     </form>
 </div>
 
+<!-- Modal Detalhes do Lançamento -->
+<div id="modalDetalhes" class="modal hide fade modal-detalhes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Detalhes do Lançamento</h3>
+    </div>
+    <div class="modal-body">
+        <div class="detalhe-item">
+            <div class="detalhe-label">Número</div>
+            <div class="detalhe-valor" id="detalhe-id">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Tipo</div>
+            <div class="detalhe-valor" id="detalhe-tipo">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Cliente / Fornecedor</div>
+            <div class="detalhe-valor" id="detalhe-cliente">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Descrição</div>
+            <div class="detalhe-valor" id="detalhe-descricao">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Data de Vencimento</div>
+            <div class="detalhe-valor" id="detalhe-vencimento">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Status</div>
+            <div class="detalhe-valor" id="detalhe-status">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Valor Original</div>
+            <div class="detalhe-valor" id="detalhe-valor">-</div>
+        </div>
+        <div class="detalhe-item" id="detalhe-desconto-container" style="display: none;">
+            <div class="detalhe-label">Desconto</div>
+            <div class="detalhe-valor" id="detalhe-desconto">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Valor Final</div>
+            <div class="detalhe-valor" style="font-weight: bold; font-size: 16px; color: #007bff;" id="detalhe-valor-final">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Forma de Pagamento</div>
+            <div class="detalhe-valor" id="detalhe-forma-pgto">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Data de Pagamento</div>
+            <div class="detalhe-valor" id="detalhe-pagamento">-</div>
+        </div>
+        <div class="detalhe-item">
+            <div class="detalhe-label">Observações</div>
+            <div class="detalhe-valor" id="detalhe-observacoes" style="white-space: pre-wrap;">-</div>
+        </div>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:center;">
+        <button class="button btn btn-primary" data-dismiss="modal" aria-hidden="true">
+            <span class="button__icon"><i class="bx bx-check"></i></span><span class="button__text2">Fechar</span>
+        </button>
+    </div>
+</div>
+
 <!-- Modal Excluir lançamento-->
 <div id="modalExcluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
@@ -907,6 +1081,34 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             }
 
 
+        });
+
+        // Modal de detalhes
+        $(document).on('click', '.lancamento-detalhes', function(event) {
+            event.preventDefault();
+            
+            var $btn = $(this);
+            var desconto = $btn.attr('data-desconto');
+            
+            $('#detalhe-id').text('#' + $btn.attr('data-id'));
+            $('#detalhe-tipo').text($btn.attr('data-tipo'));
+            $('#detalhe-cliente').text($btn.attr('data-cliente'));
+            $('#detalhe-descricao').text($btn.attr('data-descricao'));
+            $('#detalhe-vencimento').text($btn.attr('data-vencimento'));
+            $('#detalhe-status').text($btn.attr('data-status'));
+            $('#detalhe-valor').text('R$ ' + $btn.attr('data-valor'));
+            $('#detalhe-valor-final').text('R$ ' + $btn.attr('data-valor-final'));
+            $('#detalhe-forma-pgto').text($btn.attr('data-forma-pgto'));
+            $('#detalhe-pagamento').text($btn.attr('data-pagamento'));
+            $('#detalhe-observacoes').text($btn.attr('data-observacoes'));
+            
+            // Mostrar/ocultar desconto
+            if (desconto && desconto !== '0,00') {
+                $('#detalhe-desconto').text('R$ ' + desconto);
+                $('#detalhe-desconto-container').show();
+            } else {
+                $('#detalhe-desconto-container').hide();
+            }
         });
 
         $(document).on('click', '#btnExcluir', function(event) {
