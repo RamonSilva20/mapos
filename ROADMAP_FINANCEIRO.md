@@ -241,12 +241,13 @@ application/
 ---
 
 ### 🟣 **FASE 5: Integração Automática** (PRIORIDADE MÉDIA)
-**Tempo estimado:** 1-2 dias  
+**Tempo estimado:** 3-4 dias (inclui pagamento parcial)  
 **Status:** ⚪ Não iniciado
 
 #### Objetivos:
-- [ ] Integrar OS → Lançamento automático
-- [ ] Integrar Vendas → Lançamento automático
+- [ ] **5.1: Pagamento Parcial (Sinal)** - Implementar suporte a pagamentos parciais
+- [ ] Integrar OS → Lançamento automático (com forma de pagamento e parcelas)
+- [ ] Integrar Vendas → Lançamento automático (com forma de pagamento e parcelas)
 - [ ] Adicionar checkbox de controle
 - [ ] Evitar duplicação
 
@@ -260,36 +261,64 @@ application/
     └── Financeiro_model.php (MODIFICAR)
 ```
 
+#### Funcionalidades - Pagamento Parcial (5.1):
+- [ ] Adicionar campo `valor_pago` ou tabela `pagamentos_parciais`
+- [ ] Interface para registrar pagamentos parciais
+- [ ] Exibir progresso visual (barra de progresso)
+- [ ] Histórico de pagamentos parciais
+- [ ] Atualizar dashboard para considerar pagamentos parciais
+- [ ] Status: Pendente / Parcial / Pago
+
 #### Funcionalidades - OS:
+- [ ] Adicionar campos: `forma_pgto`, `parcelas`, `entrada` em OS
 - [ ] Ao mudar para "Faturado" → perguntar se cria lançamento
-- [ ] Checkbox: "Gerar lançamento financeiro"
+- [ ] Modal com opções: forma de pagamento, parcelas, entrada
 - [ ] Preencher dados automaticamente:
   - Cliente (da OS)
   - Valor (total da OS)
   - Descrição ("Pagamento de OS #123")
   - Tipo: Receita
   - Data vencimento: data final da OS
+  - **Forma de pagamento** (da OS)
+  - **Parcelas** (se houver)
+  - **Entrada** (se houver)
+- [ ] Criar múltiplos lançamentos se parcelado
+- [ ] Criar lançamento de entrada (pago) + parcelas (pendentes)
 - [ ] Vincular lançamento à OS (`os.lancamento`)
 - [ ] Evitar duplicação (verificar se já existe)
 
 #### Funcionalidades - Vendas:
+- [ ] Adicionar campos: `forma_pgto`, `parcelas`, `entrada` em Vendas
 - [ ] Ao finalizar venda → perguntar se cria lançamento
-- [ ] Checkbox: "Gerar lançamento financeiro"
+- [ ] Modal com opções: forma de pagamento, parcelas, entrada
 - [ ] Preencher dados automaticamente:
   - Cliente (da venda)
   - Valor (total da venda)
   - Descrição ("Pagamento de Venda #456")
   - Tipo: Receita
   - Data vencimento: data da venda
+  - **Forma de pagamento** (da venda)
+  - **Parcelas** (se houver)
+  - **Entrada** (se houver)
+- [ ] Criar múltiplos lançamentos se parcelado
+- [ ] Criar lançamento de entrada (pago) + parcelas (pendentes)
 - [ ] Vincular lançamento à venda (`vendas.lancamentos_id`)
 - [ ] Evitar duplicação
 
 #### Critérios de Aceitação:
+- [ ] Pagamento parcial funcionando corretamente
 - [ ] Integração opcional (usuário decide)
-- [ ] Dados preenchidos corretamente
-- [ ] Vinculação funcionando
+- [ ] Dados preenchidos corretamente (incluindo forma de pagamento e parcelas)
+- [ ] Vinculação funcionando (OS/Venda → Financeiro)
 - [ ] Não cria duplicatas
 - [ ] Possível editar lançamento depois
+- [ ] Suporte a entrada + parcelas
+- [ ] Dashboard atualizado com pagamentos parciais
+
+#### 📝 Notas:
+- **Pagamento Parcial:** Necessário para suportar pagamento de sinal (ex: R$ 500 de R$ 1000)
+- **Integração Futura:** Forma de pagamento e parcelas serão integradas automaticamente de OS/Vendas
+- Ver documento `MELHORIAS_FUTURAS.md` para detalhes técnicos
 
 ---
 
