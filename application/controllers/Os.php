@@ -1840,4 +1840,231 @@ class Os extends MY_Controller
         log_info("Total de produtos com estoque devolvido: {$produtosProcessados}. OS: {$idOs}");
         return true;
     }
+
+    /**
+     * Gera lançamento financeiro a partir de uma OS
+     */
+    public function gerarLancamento()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            echo json_encode(['result' => false, 'message' => 'Você não tem permissão']);
+            return;
+        }
+
+        $idOs = $this->input->post('idOs');
+        $formaPgto = $this->input->post('forma_pgto');
+        $parcelas = intval($this->input->post('parcelas')) ?: 1;
+        $entrada = floatval(str_replace(',', '.', $this->input->post('entrada'))) ?: 0;
+        $dataVencimento = $this->input->post('data_vencimento');
+        $criarLancamento = $this->input->post('criar_lancamento');
+
+        if (!$idOs) {
+            echo json_encode(['result' => false, 'message' => 'ID da OS inválido']);
+            return;
+        }
+
+        // Buscar OS
+        $os = $this->os_model->getById($idOs);
+        if (!$os) {
+            echo json_encode(['result' => false, 'message' => 'OS não encontrada']);
+            return;
+        }
+
+        // Verificar se já tem lançamento vinculado
+        if (!empty($os->lancamento)) {
+            echo json_encode(['result' => false, 'message' => 'Esta OS já possui um lançamento financeiro vinculado']);
+            return;
+        }
+
+        // Calcular valor total
+        $produtos = $this->os_model->getProdutos($idOs);
+        $servicos = $this->os_model->getServicos($idOs);
+        
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        
+        foreach ($produtos as $p) {
+            $totalProdutos += $p->preco * $p->quantidade;
+        }
+        foreach ($servicos as $s) {
+            $totalServicos += $s->preco * $s->quantidade;
+        }
+        
+        $valorTotal = $totalProdutos + $totalServicos;
+        
+        if ($valorTotal <= 0) {
+            echo json_encode(['result' => false, 'message' => 'Valor total da OS é zero']);
+            return;
+        }
+
+        // Converter data de vencimento
+        if ($dataVencimento) {
+            $dataParts = explode('/', $dataVencimento);
+            if (count($dataParts) == 3) {
+                $dataVencimento = $dataParts[2] . '-' . $dataParts[1] . '-' . $dataParts[0];
+            } else {
+                $dataVencimento = date('Y-m-d');
+            }
+        } else {
+            $dataVencimento = date('Y-m-d');
+        }
+
+        // Atualizar OS com dados de pagamento
+        $dataOs = [
+            'forma_pgto' => $formaPgto,
+            'parcelas' => $parcelas,
+            'valor_entrada' => $entrada,
+            'faturado' => 1
+        ];
+        $this->os_model->edit('os', $dataOs, 'idOs', $idOs);
+
+        // Se não deve criar lançamento, apenas retornar sucesso
+        if (!$criarLancamento || $criarLancamento == '0') {
+            echo json_encode(['result' => true, 'message' => 'OS atualizada. Lançamento não criado.']);
+            return;
+        }
+
+        $this->load->model('financeiro_model');
+        $lancamentosIds = [];
+
+        // Se tem entrada, criar lançamento de entrada como pago
+        if ($entrada > 0) {
+            $dataEntrada = [
+                'descricao' => 'Entrada - OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
+                'valor' => $entrada,
+                'valor_desconto' => $entrada,
+                'valor_pago' => $entrada,
+                'status_pagamento' => 'pago',
+                'desconto' => 0,
+                'tipo_desconto' => 'real',
+                'data_vencimento' => date('Y-m-d'),
+                'data_pagamento' => date('Y-m-d'),
+                'baixado' => 1,
+                'cliente_fornecedor' => $os->nomeCliente,
+                'clientes_id' => $os->clientes_id,
+                'forma_pgto' => $formaPgto,
+                'tipo' => 'receita',
+                'observacoes' => 'Entrada referente à OS #' . $idOs,
+                'usuarios_id' => $this->session->userdata('id_admin')
+            ];
+            
+            $this->financeiro_model->add('lancamentos', $dataEntrada);
+            $lancamentosIds[] = $this->db->insert_id();
+        }
+
+        // Calcular valor restante após entrada
+        $valorRestante = $valorTotal - $entrada;
+
+        if ($valorRestante > 0) {
+            if ($parcelas > 1) {
+                // Criar parcelas
+                $valorParcela = $valorRestante / $parcelas;
+                
+                for ($i = 1; $i <= $parcelas; $i++) {
+                    $dataVencimentoParcela = date('Y-m-d', strtotime($dataVencimento . ' + ' . ($i - 1) . ' months'));
+                    
+                    $dataParcela = [
+                        'descricao' => 'OS #' . $idOs . ' - Parcela ' . $i . '/' . $parcelas . ' - ' . htmlspecialchars($os->nomeCliente),
+                        'valor' => round($valorParcela, 2),
+                        'valor_desconto' => round($valorParcela, 2),
+                        'valor_pago' => 0,
+                        'status_pagamento' => 'pendente',
+                        'desconto' => 0,
+                        'tipo_desconto' => 'real',
+                        'data_vencimento' => $dataVencimentoParcela,
+                        'data_pagamento' => null,
+                        'baixado' => 0,
+                        'cliente_fornecedor' => $os->nomeCliente,
+                        'clientes_id' => $os->clientes_id,
+                        'forma_pgto' => $formaPgto,
+                        'tipo' => 'receita',
+                        'observacoes' => 'Parcela ' . $i . '/' . $parcelas . ' referente à OS #' . $idOs,
+                        'usuarios_id' => $this->session->userdata('id_admin')
+                    ];
+                    
+                    $this->financeiro_model->add('lancamentos', $dataParcela);
+                    $lancamentosIds[] = $this->db->insert_id();
+                }
+            } else {
+                // Lançamento único
+                $dataLancamento = [
+                    'descricao' => 'OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
+                    'valor' => $valorRestante,
+                    'valor_desconto' => $valorRestante,
+                    'valor_pago' => 0,
+                    'status_pagamento' => 'pendente',
+                    'desconto' => 0,
+                    'tipo_desconto' => 'real',
+                    'data_vencimento' => $dataVencimento,
+                    'data_pagamento' => null,
+                    'baixado' => 0,
+                    'cliente_fornecedor' => $os->nomeCliente,
+                    'clientes_id' => $os->clientes_id,
+                    'forma_pgto' => $formaPgto,
+                    'tipo' => 'receita',
+                    'observacoes' => 'Referente à OS #' . $idOs,
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->financeiro_model->add('lancamentos', $dataLancamento);
+                $lancamentosIds[] = $this->db->insert_id();
+            }
+        }
+
+        // Vincular primeiro lançamento à OS
+        if (!empty($lancamentosIds)) {
+            $this->os_model->edit('os', ['lancamento' => $lancamentosIds[0]], 'idOs', $idOs);
+        }
+
+        log_info('Gerou lançamento financeiro para OS #' . $idOs . '. Lançamentos: ' . implode(', ', $lancamentosIds));
+
+        $mensagem = 'Lançamento(s) criado(s) com sucesso!';
+        if ($entrada > 0) {
+            $mensagem .= ' Entrada: R$ ' . number_format($entrada, 2, ',', '.');
+        }
+        if ($parcelas > 1) {
+            $mensagem .= ' ' . $parcelas . ' parcelas de R$ ' . number_format($valorRestante / $parcelas, 2, ',', '.');
+        }
+
+        echo json_encode(['result' => true, 'message' => $mensagem, 'lancamentos' => $lancamentosIds]);
+    }
+
+    /**
+     * Retorna dados da OS para o modal de faturamento
+     */
+    public function getDadosOsJson($idOs)
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            echo json_encode(['result' => false, 'message' => 'Sem permissão']);
+            return;
+        }
+
+        $os = $this->os_model->getById($idOs);
+        if (!$os) {
+            echo json_encode(['result' => false, 'message' => 'OS não encontrada']);
+            return;
+        }
+
+        $produtos = $this->os_model->getProdutos($idOs);
+        $servicos = $this->os_model->getServicos($idOs);
+        
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        
+        foreach ($produtos as $p) {
+            $totalProdutos += $p->preco * $p->quantidade;
+        }
+        foreach ($servicos as $s) {
+            $totalServicos += $s->preco * $s->quantidade;
+        }
+        
+        $valorTotal = $totalProdutos + $totalServicos;
+
+        echo json_encode([
+            'result' => true,
+            'os' => $os,
+            'valorTotal' => $valorTotal,
+            'temLancamento' => !empty($os->lancamento)
+        ]);
+    }
 }

@@ -268,6 +268,82 @@
             </div>
         </form>
     </div>
+
+    <!-- Modal Faturamento -->
+    <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalFaturarLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="modalFaturarLabel"><i class="bx bx-dollar-circle"></i> Faturar OS #<span id="faturar-os-id"></span></h5>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="faturar-idOs" value="" />
+            
+            <div class="span12" style="margin-left: 0; background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <strong>Valor Total da OS:</strong> 
+                <span id="faturar-valor-total" style="font-size: 18px; color: #28a745; font-weight: bold;">R$ 0,00</span>
+            </div>
+            
+            <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
+                <label><input type="checkbox" id="criar-lancamento" checked /> Gerar lançamento no financeiro</label>
+            </div>
+            
+            <div id="opcoes-faturamento">
+                <div class="span6" style="margin-left: 0;">
+                    <label for="faturar-forma-pgto">Forma de Pagamento</label>
+                    <select id="faturar-forma-pgto" class="span12">
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Cartão de Débito">Cartão de Débito</option>
+                        <option value="Boleto">Boleto</option>
+                        <option value="Transferência">Transferência</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                </div>
+                
+                <div class="span6">
+                    <label for="faturar-parcelas">Parcelas</label>
+                    <select id="faturar-parcelas" class="span12">
+                        <option value="1">À Vista</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                        <option value="4">4x</option>
+                        <option value="5">5x</option>
+                        <option value="6">6x</option>
+                        <option value="7">7x</option>
+                        <option value="8">8x</option>
+                        <option value="9">9x</option>
+                        <option value="10">10x</option>
+                        <option value="11">11x</option>
+                        <option value="12">12x</option>
+                    </select>
+                </div>
+                
+                <div class="span6" style="margin-left: 0;">
+                    <label for="faturar-entrada">Entrada (Sinal)</label>
+                    <input type="text" id="faturar-entrada" class="span12" placeholder="0,00" value="0" />
+                </div>
+                
+                <div class="span6">
+                    <label for="faturar-vencimento">Vencimento 1ª Parcela</label>
+                    <input type="text" id="faturar-vencimento" class="span12 datepicker" value="<?php echo date('d/m/Y'); ?>" />
+                </div>
+                
+                <div class="span12" style="margin-left: 0; margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 5px;">
+                    <strong>Resumo:</strong>
+                    <div id="resumo-faturamento" style="margin-top: 5px; color: #666;">
+                        1x de R$ 0,00
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="display:flex;justify-content: center">
+            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" id="btn-cancelar-faturar">
+                <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
+            <button class="button btn btn-success" id="btn-confirmar-faturar">
+                <span class="button__icon"><i class='bx bx-check'></i></span><span class="button__text2">Confirmar Faturamento</span></button>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -416,7 +492,53 @@
                 return;
             }
             
-            // Confirmar mudança
+            // Se mudar para Faturado, abrir modal de faturamento
+            if (novoStatus === 'Faturado') {
+                $select.prop('disabled', true);
+                
+                // Buscar dados da OS
+                $.ajax({
+                    url: '<?php echo base_url(); ?>index.php/os/getDadosOsJson/' + idOs,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.result) {
+                            // Verificar se já tem lançamento
+                            if (data.temLancamento) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Atenção',
+                                    text: 'Esta OS já possui um lançamento financeiro vinculado.',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Continuar mesmo assim',
+                                    cancelButtonText: 'Cancelar'
+                                }).then(function(result) {
+                                    if (result.isConfirmed) {
+                                        abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
+                                    } else {
+                                        $select.val(statusAtual);
+                                        $select.prop('disabled', false);
+                                    }
+                                });
+                            } else {
+                                abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
+                            }
+                        } else {
+                            Swal.fire('Erro', data.message, 'error');
+                            $select.val(statusAtual);
+                            $select.prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Erro', 'Erro ao buscar dados da OS', 'error');
+                        $select.val(statusAtual);
+                        $select.prop('disabled', false);
+                    }
+                });
+                return;
+            }
+            
+            // Para outros status, confirmar e atualizar normalmente
             if (confirm('Deseja alterar o status de "' + statusAtual + '" para "' + novoStatus + '"?')) {
                 console.log('Usuário confirmou mudança');
                 
@@ -435,17 +557,23 @@
                     success: function(response) {
                         console.log('Resposta:', response);
                         if (response.result) {
-                            alert('Status atualizado com sucesso!');
-                            location.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: 'Status atualizado com sucesso!',
+                                timer: 1500
+                            }).then(function() {
+                                location.reload();
+                            });
                         } else {
-                            alert('Erro: ' + (response.message || 'Erro ao atualizar status'));
+                            Swal.fire('Erro', response.message || 'Erro ao atualizar status', 'error');
                             $select.val(statusAtual);
                             $select.prop('disabled', false);
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Erro AJAX:', error);
-                        alert('Erro ao comunicar com o servidor: ' + error);
+                        Swal.fire('Erro', 'Erro ao comunicar com o servidor: ' + error, 'error');
                         $select.val(statusAtual);
                         $select.prop('disabled', false);
                     }
@@ -456,8 +584,158 @@
             }
         });
         
+        // Função para abrir modal de faturamento
+        function abrirModalFaturar(idOs, valorTotal, $select, statusAnterior) {
+            // Salvar referência para reverter se cancelar
+            faturamentoPendente = {
+                $select: $select,
+                statusAnterior: statusAnterior
+            };
+            
+            // Preencher modal
+            $('#faturar-idOs').val(idOs);
+            $('#faturar-os-id').text(idOs);
+            $('#faturar-valor-total').text('R$ ' + valorTotal.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#faturar-entrada').val('0');
+            $('#faturar-parcelas').val('1');
+            $('#faturar-vencimento').val('<?php echo date('d/m/Y'); ?>');
+            $('#criar-lancamento').prop('checked', true);
+            $('#opcoes-faturamento').show();
+            
+            atualizarResumoFaturamento();
+            
+            // Abrir modal
+            $('#modal-faturar').modal('show');
+        }
+        
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
+        });
+        
+        // Variável para armazenar dados do faturamento pendente
+        var faturamentoPendente = null;
+        
+        // Mostrar/ocultar opções de faturamento
+        $('#criar-lancamento').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#opcoes-faturamento').slideDown();
+            } else {
+                $('#opcoes-faturamento').slideUp();
+            }
+        });
+        
+        // Atualizar resumo do faturamento
+        function atualizarResumoFaturamento() {
+            var valorTotal = parseFloat($('#faturar-valor-total').text().replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
+            var entrada = parseFloat($('#faturar-entrada').val().replace('.', '').replace(',', '.')) || 0;
+            var parcelas = parseInt($('#faturar-parcelas').val()) || 1;
+            var valorRestante = valorTotal - entrada;
+            var valorParcela = parcelas > 0 ? valorRestante / parcelas : valorRestante;
+            
+            var resumo = '';
+            if (entrada > 0) {
+                resumo += 'Entrada: R$ ' + entrada.toFixed(2).replace('.', ',') + '<br>';
+            }
+            if (parcelas > 1) {
+                resumo += parcelas + 'x de R$ ' + valorParcela.toFixed(2).replace('.', ',');
+            } else {
+                resumo += '1x de R$ ' + valorParcela.toFixed(2).replace('.', ',');
+            }
+            
+            $('#resumo-faturamento').html(resumo);
+        }
+        
+        $('#faturar-parcelas, #faturar-entrada').on('change keyup', function() {
+            atualizarResumoFaturamento();
+        });
+        
+        // Confirmar faturamento
+        $('#btn-confirmar-faturar').on('click', function() {
+            var idOs = $('#faturar-idOs').val();
+            var criarLancamento = $('#criar-lancamento').is(':checked') ? 1 : 0;
+            var formaPgto = $('#faturar-forma-pgto').val();
+            var parcelas = $('#faturar-parcelas').val();
+            var entrada = $('#faturar-entrada').val();
+            var vencimento = $('#faturar-vencimento').val();
+            
+            $(this).prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Processando...');
+            
+            // Primeiro, atualiza o status para Faturado
+            $.ajax({
+                url: '<?php echo base_url(); ?>index.php/os/atualizarStatus',
+                type: 'POST',
+                data: {
+                    idOs: idOs,
+                    status: 'Faturado',
+                    <?php echo $this->security->get_csrf_token_name(); ?>: '<?php echo $this->security->get_csrf_hash(); ?>'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.result) {
+                        // Se o status foi atualizado, gerar lançamento
+                        $.ajax({
+                            url: '<?php echo base_url(); ?>index.php/os/gerarLancamento',
+                            type: 'POST',
+                            data: {
+                                idOs: idOs,
+                                forma_pgto: formaPgto,
+                                parcelas: parcelas,
+                                entrada: entrada,
+                                data_vencimento: vencimento,
+                                criar_lancamento: criarLancamento,
+                                <?php echo $this->security->get_csrf_token_name(); ?>: '<?php echo $this->security->get_csrf_hash(); ?>'
+                            },
+                            dataType: 'json',
+                            success: function(resp) {
+                                $('#modal-faturar').modal('hide');
+                                if (resp.result) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sucesso!',
+                                        text: resp.message,
+                                        timer: 2000
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire('Aviso', resp.message, 'warning').then(function() {
+                                        location.reload();
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire('Erro', 'Erro ao gerar lançamento', 'error');
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire('Erro', response.message || 'Erro ao atualizar status', 'error');
+                        $('#btn-confirmar-faturar').prop('disabled', false).html('<span class="button__icon"><i class="bx bx-check"></i></span><span class="button__text2">Confirmar Faturamento</span>');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Erro', 'Erro ao comunicar com o servidor', 'error');
+                    $('#btn-confirmar-faturar').prop('disabled', false).html('<span class="button__icon"><i class="bx bx-check"></i></span><span class="button__text2">Confirmar Faturamento</span>');
+                }
+            });
+        });
+        
+        // Cancelar faturamento - reverter select
+        $('#btn-cancelar-faturar').on('click', function() {
+            if (faturamentoPendente) {
+                faturamentoPendente.$select.val(faturamentoPendente.statusAnterior);
+                faturamentoPendente.$select.prop('disabled', false);
+                faturamentoPendente = null;
+            }
+        });
+        
+        // Também reverter ao fechar modal
+        $('#modal-faturar').on('hidden', function() {
+            if (faturamentoPendente) {
+                faturamentoPendente.$select.val(faturamentoPendente.statusAnterior);
+                faturamentoPendente.$select.prop('disabled', false);
+                faturamentoPendente = null;
+            }
         });
     });
 </script>

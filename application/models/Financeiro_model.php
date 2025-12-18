@@ -13,7 +13,8 @@ class Financeiro_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields . ', usuarios.*');
+        // Incluir campos de pagamento parcial se existirem
+        $this->db->select($fields . ', usuarios.*, lancamentos.valor_pago, lancamentos.status_pagamento');
         $this->db->from($table);
         $this->db->join('usuarios', 'usuarios.idUsuarios = usuarios_id', 'left');
         $this->db->order_by('data_vencimento', 'asc');

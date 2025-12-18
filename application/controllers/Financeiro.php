@@ -696,4 +696,170 @@ class Financeiro extends MY_Controller
 
         $this->load->view('financeiro/imprimirRecibo', $this->data);
     }
+
+    /**
+     * Exibe detalhes do lançamento com histórico de pagamentos parciais
+     */
+    public function detalhes($id = null)
+    {
+        if (!$id || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado.');
+            redirect('financeiro');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
+            redirect(base_url());
+        }
+
+        $lancamento = $this->financeiro_model->getLancamentoById($id);
+
+        if (!$lancamento) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado.');
+            redirect('financeiro');
+        }
+
+        $this->load->model('pagamentosparciais_model');
+        
+        // Calcular valores
+        $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
+        $totalPago = $this->pagamentosparciais_model->getTotalPago($id);
+        $saldoRestante = max(0, $valorTotal - $totalPago);
+        $percentualPago = $valorTotal > 0 ? min(100, round(($totalPago / $valorTotal) * 100, 2)) : 100;
+
+        $this->data['lancamento'] = $lancamento;
+        $this->data['pagamentos'] = $this->pagamentosparciais_model->getByLancamento($id);
+        $this->data['valorTotal'] = $valorTotal;
+        $this->data['totalPago'] = $totalPago;
+        $this->data['saldoRestante'] = $saldoRestante;
+        $this->data['percentualPago'] = $percentualPago;
+        $this->data['view'] = 'financeiro/detalhes';
+
+        return $this->layout();
+    }
+
+    /**
+     * Adiciona um pagamento parcial via AJAX
+     */
+    public function adicionarPagamentoParcial()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+            echo json_encode(['result' => false, 'message' => 'Sem permissão']);
+            return;
+        }
+
+        $lancamentoId = $this->input->post('lancamento_id');
+        $valor = floatval(str_replace(',', '.', $this->input->post('valor')));
+        $dataPagamento = $this->input->post('data_pagamento');
+        $formaPgto = $this->input->post('forma_pgto');
+        $observacao = $this->input->post('observacao');
+
+        if (!$lancamentoId || $valor <= 0) {
+            echo json_encode(['result' => false, 'message' => 'Dados inválidos']);
+            return;
+        }
+
+        // Converter data
+        if ($dataPagamento) {
+            $dataParts = explode('/', $dataPagamento);
+            if (count($dataParts) == 3) {
+                $dataPagamento = $dataParts[2] . '-' . $dataParts[1] . '-' . $dataParts[0];
+            } else {
+                $dataPagamento = date('Y-m-d');
+            }
+        } else {
+            $dataPagamento = date('Y-m-d');
+        }
+
+        $this->load->model('pagamentosparciais_model');
+
+        // Verificar saldo restante
+        $saldoRestante = $this->pagamentosparciais_model->getSaldoRestante($lancamentoId);
+        if ($valor > $saldoRestante + 0.01) { // Margem para arredondamento
+            echo json_encode(['result' => false, 'message' => 'Valor maior que o saldo restante (R$ ' . number_format($saldoRestante, 2, ',', '.') . ')']);
+            return;
+        }
+
+        $data = [
+            'lancamentos_id' => $lancamentoId,
+            'valor' => $valor,
+            'data_pagamento' => $dataPagamento,
+            'forma_pgto' => $formaPgto,
+            'observacao' => $observacao,
+            'usuarios_id' => $this->session->userdata('id_admin')
+        ];
+
+        $result = $this->pagamentosparciais_model->add($data);
+
+        if ($result) {
+            log_info('Adicionou pagamento parcial de R$ ' . number_format($valor, 2, ',', '.') . ' ao lançamento #' . $lancamentoId);
+            echo json_encode(['result' => true, 'message' => 'Pagamento registrado com sucesso!', 'id' => $result]);
+        } else {
+            echo json_encode(['result' => false, 'message' => 'Erro ao registrar pagamento']);
+        }
+    }
+
+    /**
+     * Exclui um pagamento parcial via AJAX
+     */
+    public function excluirPagamentoParcial()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+            echo json_encode(['result' => false, 'message' => 'Sem permissão']);
+            return;
+        }
+
+        $id = $this->input->post('id');
+
+        if (!$id || !is_numeric($id)) {
+            echo json_encode(['result' => false, 'message' => 'ID inválido']);
+            return;
+        }
+
+        $this->load->model('pagamentosparciais_model');
+        $result = $this->pagamentosparciais_model->delete($id);
+
+        if ($result) {
+            log_info('Excluiu pagamento parcial #' . $id);
+            echo json_encode(['result' => true, 'message' => 'Pagamento excluído com sucesso!']);
+        } else {
+            echo json_encode(['result' => false, 'message' => 'Erro ao excluir pagamento']);
+        }
+    }
+
+    /**
+     * Retorna dados do lançamento para AJAX
+     */
+    public function getLancamentoJson($id)
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
+            echo json_encode(['result' => false, 'message' => 'Sem permissão']);
+            return;
+        }
+
+        $lancamento = $this->financeiro_model->getLancamentoById($id);
+
+        if (!$lancamento) {
+            echo json_encode(['result' => false, 'message' => 'Lançamento não encontrado']);
+            return;
+        }
+
+        $this->load->model('pagamentosparciais_model');
+        
+        $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
+        $totalPago = $this->pagamentosparciais_model->getTotalPago($id);
+        $saldoRestante = max(0, $valorTotal - $totalPago);
+        $percentualPago = $valorTotal > 0 ? min(100, round(($totalPago / $valorTotal) * 100, 2)) : 100;
+        $pagamentos = $this->pagamentosparciais_model->getByLancamento($id);
+
+        echo json_encode([
+            'result' => true,
+            'lancamento' => $lancamento,
+            'valorTotal' => $valorTotal,
+            'totalPago' => $totalPago,
+            'saldoRestante' => $saldoRestante,
+            'percentualPago' => $percentualPago,
+            'pagamentos' => $pagamentos
+        ]);
+    }
 }

@@ -57,6 +57,14 @@ $periodo = $this->input->get('periodo');
         font-size: 11px;
         font-weight: bold;
     }
+    .badge-parcial {
+        background-color: #17a2b8;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
     .badge-vencido {
         background-color: #721c24;
         color: white;
@@ -65,6 +73,25 @@ $periodo = $this->input->get('periodo');
         font-size: 11px;
         font-weight: bold;
     }
+    
+    /* Mini barra de progresso */
+    .mini-progress {
+        display: inline-block;
+        width: 50px;
+        height: 6px;
+        background: #e9ecef;
+        border-radius: 3px;
+        overflow: hidden;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+    .mini-progress-bar {
+        height: 100%;
+        border-radius: 3px;
+    }
+    .mini-progress-bar.verde { background: #28a745; }
+    .mini-progress-bar.amarelo { background: #ffc107; }
+    .mini-progress-bar.vermelho { background: #dc3545; }
     
     /* Tooltip customizado */
     .lancamento-tooltip {
@@ -202,10 +229,20 @@ $periodo = $this->input->get('periodo');
                             $hoje = date('Y-m-d');
                             $dataVencimento = date('Y-m-d', strtotime($r->data_vencimento));
                             
+                            // Calcular percentual pago (se tiver valor_pago)
+                            $valorTotal = $r->valor_desconto > 0 ? $r->valor_desconto : $r->valor;
+                            $valorPago = isset($r->valor_pago) ? floatval($r->valor_pago) : 0;
+                            $percentualPago = $valorTotal > 0 ? min(100, round(($valorPago / $valorTotal) * 100)) : 0;
+                            $statusPagamento = isset($r->status_pagamento) ? $r->status_pagamento : '';
+                            
                             // Determinar status e badge
-                            if ($r->baixado == 1) {
+                            if ($r->baixado == 1 || $statusPagamento == 'pago') {
                                 $status = 'Pago';
                                 $badgeStatus = 'badge-pago';
+                                $percentualPago = 100;
+                            } elseif ($statusPagamento == 'parcial' || ($valorPago > 0 && $valorPago < $valorTotal)) {
+                                $status = 'Parcial';
+                                $badgeStatus = 'badge-parcial';
                             } else {
                                 if ($dataVencimento < $hoje) {
                                     $status = 'Vencido';
@@ -246,7 +283,16 @@ $periodo = $this->input->get('periodo');
                             echo '<td class="lancamento-tooltip" title="' . htmlspecialchars($r->descricao) . '">' . htmlspecialchars($r->descricao) . '</td>';
                             echo '<td>' . $vencimento . '</td>';
                             echo '<td class="lancamento-tooltip" title="' . $tooltipDetalhes . '"><strong>R$ ' . number_format($valorFinal, 2, ',', '.') . '</strong></td>';
-                            echo '<td><span class="' . $badgeStatus . '">' . $status . '</span></td>';
+                            // Mostrar status com mini barra de progresso para parciais
+                            echo '<td>';
+                            echo '<span class="' . $badgeStatus . '">' . $status . '</span>';
+                            if ($status == 'Parcial' || ($valorPago > 0 && $valorPago < $valorTotal)) {
+                                $corBarra = 'vermelho';
+                                if ($percentualPago >= 75) $corBarra = 'verde';
+                                elseif ($percentualPago >= 40) $corBarra = 'amarelo';
+                                echo '<div class="mini-progress" title="' . $percentualPago . '% pago"><div class="mini-progress-bar ' . $corBarra . '" style="width: ' . $percentualPago . '%;"></div></div>';
+                            }
+                            echo '</td>';
                            
                             echo '<td>';
                             if ($r->data_pagamento == "0000-00-00") {
@@ -255,7 +301,10 @@ $periodo = $this->input->get('periodo');
                                 $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
                             }
 
-                            // Botão Ver Detalhes
+                            // Botão Ver Detalhes (página completa com pagamentos parciais)
+                            echo '<a href="' . site_url('financeiro/detalhes/' . $r->idLancamentos) . '" style="margin-right: 1%" class="btn-nwe" title="Ver Detalhes e Pagamentos"><i class="bx bx-detail"></i></a>';
+                            
+                            // Botão Modal Detalhes Rápido
                             echo '<a href="#modalDetalhes" style="margin-right: 1%" data-toggle="modal" role="button" class="btn-nwe lancamento-detalhes" 
                                 data-id="' . $r->idLancamentos . '"
                                 data-descricao="' . htmlspecialchars($r->descricao) . '"
