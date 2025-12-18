@@ -34,7 +34,7 @@
         // Irá retornar conforme o horário:
         ?>
       </h1>
-      <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
+      <h2 class="h-two"> Ao Sistema de Ordens de Serviço</h2>
       <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
     </div>
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
@@ -73,7 +73,7 @@
                   <button id="btn-acessar">Acessar</button>
                 </div>
                 <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                    <p><?= date('Y'); ?> &copy; Ramon Silva</p>
+                    <p><?= date('Y'); ?> &copy; Técnico Litoral</p>
                   </a>
                 </div>
                 <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
