@@ -723,12 +723,12 @@ class Financeiro extends MY_Controller
         
         // Calcular valores
         $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
-        $totalPago = $this->pagamentosparciais_model->getTotalPago($id);
+        $totalPago = $this->pagamentos_parciais_model->getTotalPago($id);
         $saldoRestante = max(0, $valorTotal - $totalPago);
         $percentualPago = $valorTotal > 0 ? min(100, round(($totalPago / $valorTotal) * 100, 2)) : 100;
 
         $this->data['lancamento'] = $lancamento;
-        $this->data['pagamentos'] = $this->pagamentosparciais_model->getByLancamento($id);
+        $this->data['pagamentos'] = $this->pagamentos_parciais_model->getByLancamento($id);
         $this->data['valorTotal'] = $valorTotal;
         $this->data['totalPago'] = $totalPago;
         $this->data['saldoRestante'] = $saldoRestante;
@@ -774,7 +774,7 @@ class Financeiro extends MY_Controller
         $this->load->model('pagamentos_parciais_model');
 
         // Verificar saldo restante
-        $saldoRestante = $this->pagamentosparciais_model->getSaldoRestante($lancamentoId);
+        $saldoRestante = $this->pagamentos_parciais_model->getSaldoRestante($lancamentoId);
         if ($valor > $saldoRestante + 0.01) { // Margem para arredondamento
             echo json_encode(['result' => false, 'message' => 'Valor maior que o saldo restante (R$ ' . number_format($saldoRestante, 2, ',', '.') . ')']);
             return;
@@ -789,7 +789,7 @@ class Financeiro extends MY_Controller
             'usuarios_id' => $this->session->userdata('id_admin')
         ];
 
-        $result = $this->pagamentosparciais_model->add($data);
+        $result = $this->pagamentos_parciais_model->add($data);
 
         if ($result) {
             log_info('Adicionou pagamento parcial de R$ ' . number_format($valor, 2, ',', '.') . ' ao lançamento #' . $lancamentoId);
@@ -817,7 +817,7 @@ class Financeiro extends MY_Controller
         }
 
         $this->load->model('pagamentos_parciais_model');
-        $result = $this->pagamentosparciais_model->delete($id);
+        $result = $this->pagamentos_parciais_model->delete($id);
 
         if ($result) {
             log_info('Excluiu pagamento parcial #' . $id);
@@ -847,7 +847,7 @@ class Financeiro extends MY_Controller
         $this->load->model('pagamentos_parciais_model');
         
         $valorTotal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
-        $totalPago = $this->pagamentosparciais_model->getTotalPago($id);
+        $totalPago = $this->pagamentos_parciais_model->getTotalPago($id);
         $saldoRestante = max(0, $valorTotal - $totalPago);
         $percentualPago = $valorTotal > 0 ? min(100, round(($totalPago / $valorTotal) * 100, 2)) : 100;
         $pagamentos = $this->pagamentosparciais_model->getByLancamento($id);
