@@ -302,7 +302,7 @@ $periodo = $this->input->get('periodo');
                             }
 
                             // Botão Ver Detalhes (página completa com pagamentos parciais)
-                            echo '<a href="' . site_url('financeiro/detalhes/' . $r->idLancamentos) . '" style="margin-right: 1%" class="btn-nwe" title="Ver Detalhes e Pagamentos"><i class="bx bx-detail"></i></a>';
+                            echo '<a href="' . site_url('financeiro/detalhes/' . $r->idLancamentos) . '" style="margin-right: 1%" class="btn-nwe" title="Ver Detalhes e Pagamentos"><i class="bx bx-show"></i></a>';
                             
                             // Botão Modal Detalhes Rápido
                             echo '<a href="#modalDetalhes" style="margin-right: 1%" data-toggle="modal" role="button" class="btn-nwe lancamento-detalhes" 
