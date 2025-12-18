@@ -861,6 +861,15 @@ End hora certa */
   justify-content: flex-start;
   overflow-y     : auto;
   overflow-x     : hidden;
+  flex           : 1;
+  min-height     : 0;
+}
+
+#sidebar .menu-bar .menu {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .menu-bar .mode .toggle-switch {
