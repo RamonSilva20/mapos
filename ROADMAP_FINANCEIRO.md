@@ -164,17 +164,17 @@ Observações | Forma Pgto | Valor(+) | Desconto(-) | Total(=) | Ações
 
 ---
 
-### 🔵 **FASE 4: Categorias e Contas** (PRIORIDADE MÉDIA)
+### ✅ **FASE 4: Categorias e Contas** (CONCLUÍDO)
 **Tempo estimado:** 2-3 dias  
-**Status:** ⚪ Não iniciado
+**Status:** ✅ Concluído
 
 #### Objetivos:
-- [ ] Ativar uso de categorias na interface
-- [ ] Ativar uso de contas bancárias
-- [ ] Criar CRUD de categorias
-- [ ] Criar CRUD de contas
-- [ ] Implementar relatórios por categoria
-- [ ] Implementar controle de saldo por conta
+- [x] Ativar uso de categorias na interface
+- [x] Ativar uso de contas bancárias
+- [x] Criar CRUD de categorias
+- [x] Criar CRUD de contas
+- [x] Implementar controle de saldo por conta
+- [x] Implementar transferência entre contas
 
 #### Arquivos a criar/modificar:
 ```
@@ -196,23 +196,23 @@ application/
 ```
 
 #### Funcionalidades - Categorias:
-- [ ] Listar categorias
-- [ ] Adicionar categoria
-- [ ] Editar categoria
-- [ ] Excluir categoria (se não tiver lançamentos)
-- [ ] Filtrar por tipo (receita/despesa)
-- [ ] Dropdown de categorias no formulário de lançamento
-- [ ] Relatório de lançamentos por categoria
+- [x] Listar categorias
+- [x] Adicionar categoria
+- [x] Editar categoria
+- [x] Excluir categoria (se não tiver lançamentos)
+- [x] Filtrar por tipo (receita/despesa)
+- [x] Dropdown de categorias no formulário de lançamento
+- [ ] Relatório de lançamentos por categoria (futuro)
 
 #### Funcionalidades - Contas:
-- [ ] Listar contas
-- [ ] Adicionar conta (banco, número, saldo inicial)
-- [ ] Editar conta
-- [ ] Excluir conta (se não tiver lançamentos)
-- [ ] Visualizar extrato por conta
-- [ ] Atualização automática de saldo
-- [ ] Transferência entre contas
-- [ ] Dropdown de contas no formulário de lançamento
+- [x] Listar contas
+- [x] Adicionar conta (banco, número, saldo inicial)
+- [x] Editar conta
+- [x] Excluir conta (se não tiver lançamentos)
+- [x] Visualizar extrato por conta
+- [x] Atualização automática de saldo
+- [x] Transferência entre contas
+- [x] Dropdown de contas no formulário de lançamento
 
 #### Categorias Padrão (Sugestão):
 **Receitas:**
@@ -232,11 +232,11 @@ application/
 - Outras Despesas
 
 #### Critérios de Aceitação:
-- [ ] Categorias funcionando corretamente
-- [ ] Contas com saldo atualizado automaticamente
-- [ ] Relatórios por categoria precisos
-- [ ] Extrato por conta funcional
-- [ ] Transferência entre contas registrada
+- [x] Categorias funcionando corretamente
+- [x] Contas com saldo atualizado automaticamente
+- [x] Extrato por conta funcional
+- [x] Transferência entre contas registrada
+- [ ] Relatórios por categoria precisos (futuro)
 
 ---
 
@@ -353,11 +353,11 @@ application/
 - [x] FASE 1: Recibos (100%) ✅
 - [x] FASE 2: Dashboard (100%) ✅
 - [x] FASE 3: Simplificação (100%) ✅
-- [ ] FASE 4: Categorias e Contas (0%)
+- [x] FASE 4: Categorias e Contas (100%) ✅
 - [ ] FASE 5: Integração (0%)
 - [ ] FASE 6: Alertas (0%)
 
-### Progresso Total: 50%
+### Progresso Total: 66.7%
 
 ---
 
