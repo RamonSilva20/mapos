@@ -647,11 +647,12 @@ End hora certa */
 #newlog {
   position       : relative;
   display        : flex;
-  top            : 15px;
-  padding        : 0 30px;
+  top            : 10px;
+  padding        : 0 20px;
   align-items    : center;
   justify-content: space-evenly;
   z-index        : 99;
+  flex-shrink    : 0;
 }
 
 #newlog .icon2 {
@@ -696,13 +697,13 @@ End hora certa */
 
 #sidebar ul {
   margin : 0;
-  padding: 10px 20px 0;
+  padding: 5px 15px 0;
 }
 
 #sidebar li {
-  height     : 40px;
+  height     : 36px;
   list-style : none;
-  margin-top : 4px;
+  margin-top : 2px;
   list-style : none;
   display    : flex;
   align-items: center;
@@ -799,11 +800,13 @@ End hora certa */
 #sidebar .search-box {
   background   : #484c64;
   border-radius: 6px;
-  margin       : 35px 20px 8px 20px;
+  margin       : 15px 15px 5px 15px;
+  flex-shrink  : 0;
 }
 
 #sidebar .botton-content {
-  margin: 20px 20px 0;
+  margin: 10px 15px 0;
+  flex-shrink: 0;
 }
 
 .search-box input {
@@ -856,6 +859,8 @@ End hora certa */
   display        : flex;
   flex-direction : column;
   justify-content: flex-start;
+  overflow-y     : auto;
+  overflow-x     : hidden;
 }
 
 .menu-bar .mode .toggle-switch {
