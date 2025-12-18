@@ -850,7 +850,7 @@ class Financeiro extends MY_Controller
         $totalPago = $this->pagamentos_parciais_model->getTotalPago($id);
         $saldoRestante = max(0, $valorTotal - $totalPago);
         $percentualPago = $valorTotal > 0 ? min(100, round(($totalPago / $valorTotal) * 100, 2)) : 100;
-        $pagamentos = $this->pagamentosparciais_model->getByLancamento($id);
+        $pagamentos = $this->pagamentos_parciais_model->getByLancamento($id);
 
         echo json_encode([
             'result' => true,
