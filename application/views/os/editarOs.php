@@ -1253,7 +1253,10 @@
         $("#formServicos").validate({
             rules: {
                 servico: {
-                    required: true
+                    required: function() {
+                        // Não é obrigatório se o campo de texto livre estiver preenchido
+                        return $("#outros_produtos_servicos").val().trim() === '';
+                    }
                 },
                 preco: {
                     required: true
@@ -1264,7 +1267,7 @@
             },
             messages: {
                 servico: {
-                    required: 'Insira um serviço'
+                    required: 'Insira um serviço ou preencha o campo "Outros Produtos/Serviços"'
                 },
                 preco: {
                     required: 'Insira o preço'
