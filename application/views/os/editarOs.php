@@ -1918,7 +1918,13 @@
                 return false;
             }
             
-            if (!preco || parseFloat(preco.replace(/\./g, '').replace(',', '.')) <= 0) {
+            // Converter preço de formato brasileiro para numérico
+            var precoNum = 0;
+            if (preco) {
+                precoNum = parseFloat(preco.replace(/\./g, '').replace(',', '.'));
+            }
+            
+            if (!preco || isNaN(precoNum) || precoNum <= 0) {
                 Swal.fire({
                     icon: "error",
                     title: "Atenção",
