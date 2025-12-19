@@ -295,10 +295,10 @@ $periodo = $this->input->get('periodo');
                             echo '</td>';
                            
                             echo '<td>';
-                            if ($r->data_pagamento == "0000-00-00") {
-                                $data_pagamento = "";
-                            } else {
+                            if ($r->data_pagamento && $r->data_pagamento != "0000-00-00") {
                                 $data_pagamento = date('d/m/Y', strtotime($r->data_pagamento));
+                            } else {
+                                $data_pagamento = "";
                             }
 
                             // Botão Ver Detalhes (página completa com pagamentos parciais)
