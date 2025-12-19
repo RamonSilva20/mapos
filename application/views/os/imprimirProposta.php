@@ -1,6 +1,7 @@
 <?php
     $totalServico  = 0;
     $totalProdutos = 0;
+    $totalOutros = 0;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
