@@ -582,39 +582,65 @@ class Financeiro extends MY_Controller
             exit();
         }
 
-        // Começa a transação
-        $this->db->trans_start();
+        try {
+            // Começa a transação
+            $this->db->trans_begin();
 
-        // Atualiza a tabela vendas, removendo o ID do lançamento e alterando o faturado e status
-        $this->db->set('lancamentos_id', null);
-        $this->db->set('faturado', 0);
-        $this->db->set('status', 'Finalizado');
-        $this->db->where('lancamentos_id', $id);
-        $this->db->update('vendas');
+            // Atualiza a tabela vendas, removendo o ID do lançamento e alterando o faturado e status
+            $this->db->set('lancamentos_id', null);
+            $this->db->set('faturado', 0);
+            $this->db->set('status', 'Finalizado');
+            $this->db->where('lancamentos_id', $id);
+            $this->db->update('vendas');
+            
+            if ($this->db->error()['code']) {
+                throw new Exception('Erro ao atualizar vendas: ' . $this->db->error()['message']);
+            }
 
-        // Atualiza a tabela os, removendo o ID do lançamento
-        $this->db->set('lancamento', null);
-        $this->db->where('lancamento', $id);
-        $this->db->update('os');
+            // Atualiza a tabela os, removendo o ID do lançamento
+            $this->db->set('lancamento', null);
+            $this->db->where('lancamento', $id);
+            $this->db->update('os');
+            
+            if ($this->db->error()['code']) {
+                throw new Exception('Erro ao atualizar OS: ' . $this->db->error()['message']);
+            }
 
-        // Excluir pagamentos parciais relacionados
-        $this->load->model('pagamentos_parciais_model');
-        $this->db->where('lancamento_id', $id);
-        $this->db->delete('pagamentos_parciais');
+            // Excluir pagamentos parciais relacionados
+            $this->db->where('lancamento_id', $id);
+            $this->db->delete('pagamentos_parciais');
+            
+            if ($this->db->error()['code']) {
+                throw new Exception('Erro ao excluir pagamentos parciais: ' . $this->db->error()['message']);
+            }
 
-        // Exclui o lançamento
-        $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
+            // Exclui o lançamento
+            $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
+            
+            if ($this->db->error()['code']) {
+                throw new Exception('Erro ao excluir lançamento: ' . $this->db->error()['message']);
+            }
 
-        // Completa a transação
-        $this->db->trans_complete();
+            if (!$result) {
+                throw new Exception('Método delete retornou false');
+            }
 
-        if ($this->db->trans_status() === FALSE || !$result) {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
-            $json = ['result' => false, 'message' => 'Ocorreu um erro ao tentar excluir lançamento.'];
-        } else {
+            // Confirma a transação
+            $this->db->trans_commit();
+            
             log_info('Excluiu um lançamento. ID: ' . $id);
             $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
             $json = ['result' => true, 'message' => 'Lançamento excluído com sucesso!'];
+            
+        } catch (Exception $e) {
+            // Reverte a transação em caso de erro
+            $this->db->trans_rollback();
+            
+            $errorMsg = 'Erro ao excluir lançamento: ' . $e->getMessage();
+            log_error($errorMsg);
+            
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
+            $json = ['result' => false, 'message' => $errorMsg];
         }
 
         echo json_encode($json);
