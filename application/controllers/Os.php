@@ -347,6 +347,10 @@ class Os extends MY_Controller
         // Carregar parcelas da OS
         $this->load->model('parcelas_os_model');
         $this->data['parcelas'] = $this->parcelas_os_model->getByOs($this->uri->segment(3));
+        
+        // Carregar outros produtos/serviços
+        $this->load->model('outros_produtos_servicos_os_model');
+        $this->data['outros'] = $this->outros_produtos_servicos_os_model->getByOs($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 

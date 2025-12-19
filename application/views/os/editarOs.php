@@ -510,8 +510,10 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $this->load->model('outros_produtos_servicos_os_model');
-                                            $outros = $this->outros_produtos_servicos_os_model->getByOs($result->idOs);
+                                            if (!isset($outros)) {
+                                                $this->load->model('outros_produtos_servicos_os_model');
+                                                $outros = $this->outros_produtos_servicos_os_model->getByOs($result->idOs);
+                                            }
                                             $totalOutros = 0;
                                             foreach ($outros as $o) {
                                                 $totalOutros += $o->preco;
