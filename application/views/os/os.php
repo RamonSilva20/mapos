@@ -647,16 +647,29 @@
                         var $modal = $('#modal-faturar');
                         console.log('Modal encontrado?', $modal.length > 0);
                         if ($modal.length > 0) {
+                            // Remover classe 'hide' se existir
+                            $modal.removeClass('hide');
+                            // Abrir modal
                             $modal.modal('show');
                             console.log('Modal.show() chamado');
-                            // Forçar exibição se necessário
+                            
+                            // Verificar se modal abriu após um tempo
                             setTimeout(function() {
                                 if (!$modal.is(':visible')) {
                                     console.log('Modal não visível, tentando forçar...');
-                                    $modal.removeClass('hide').addClass('show');
-                                    $modal.css('display', 'block');
+                                    $modal.removeClass('hide fade').addClass('in');
+                                    $modal.css({
+                                        'display': 'block',
+                                        'z-index': 1050
+                                    });
+                                    // Adicionar backdrop
+                                    if ($('.modal-backdrop').length === 0) {
+                                        $('body').append('<div class="modal-backdrop fade in"></div>');
+                                    }
+                                } else {
+                                    console.log('Modal visível com sucesso!');
                                 }
-                            }, 100);
+                            }, 200);
                         } else {
                             console.error('Modal não encontrado!');
                             Swal.fire('Erro', 'Modal de faturamento não encontrado', 'error');
