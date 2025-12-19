@@ -1998,6 +1998,35 @@
             });
         });
         
+        // Cancelar edição
+        $('#btnCancelarEdicao').on('click', function() {
+            $('#descricao_outros').trumbowyg('empty');
+            $('#preco_outros').val('').maskMoney('mask');
+            $('#idOutrosEditar').val('');
+            $('#btnSalvarOutros').html('<span class="button__icon"><i class="bx bx-plus-circle"></i></span><span class="button__text2">Adicionar</span>');
+            $('#divCancelarEdicao').hide();
+            $('#formOutros').data('editando', false);
+        });
+        
+        // Converter formato americano para brasileiro ao digitar
+        $('#preco_outros').on('blur', function() {
+            var valor = $(this).val();
+            // Se contém ponto e não contém vírgula, pode ser formato americano
+            if (valor && valor.indexOf('.') !== -1 && valor.indexOf(',') === -1) {
+                // Verificar se é formato americano (ex: 400.00)
+                var partes = valor.split('.');
+                if (partes.length === 2 && partes[1].length <= 2) {
+                    // É formato decimal americano, converter
+                    var valorNum = parseFloat(valor);
+                    var valorFormatado = valorNum.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $(this).val(valorFormatado).maskMoney('mask');
+                }
+            }
+        });
+        
         // Excluir outros produtos/serviços
         $(document).on('click', '.excluir-outros', function() {
             var id = $(this).attr('idAcao');
