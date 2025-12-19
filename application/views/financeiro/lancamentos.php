@@ -1185,15 +1185,20 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 success: function(data) {
                     if (data.result == true) {
                         $("#btnCancelExcluir").trigger('click');
-                        $("#divLancamentos").html('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
-                        $("#divLancamentos").load($(location).attr('href') + " #divLancamentos");
-
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sucesso!",
+                            text: data.message || "Lançamento excluído com sucesso!",
+                            timer: 2000
+                        }).then(function() {
+                            location.reload();
+                        });
                     } else {
                         $("#btnCancelExcluir").trigger('click');
                         Swal.fire({
-                            type: "error",
+                            icon: "error",
                             title: "Atenção",
-                            text: "Ocorreu um erro ao tentar excluir lançamento."
+                            text: data.message || "Ocorreu um erro ao tentar excluir lançamento."
                         });
                     }
                 }
