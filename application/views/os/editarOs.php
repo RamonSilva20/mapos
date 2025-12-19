@@ -486,11 +486,18 @@
                                             <label for="preco_outros">Preço *</label>
                                             <input type="text" placeholder="0,00" id="preco_outros" name="preco" class="span12 money" required />
                                         </div>
-                                        <div class="span8">
+                                        <div class="span6">
                                             <label for="">&nbsp;</label>
-                                            <button type="submit" class="button btn btn-success span12">
+                                            <button type="submit" class="button btn btn-success span12" id="btnSalvarOutros">
                                                 <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
                                                 <span class="button__text2">Adicionar</span>
+                                            </button>
+                                        </div>
+                                        <div class="span2" id="divCancelarEdicao" style="display: none;">
+                                            <label for="">&nbsp;</label>
+                                            <button type="button" class="button btn btn-warning span12" id="btnCancelarEdicao">
+                                                <span class="button__icon"><i class='bx bx-x'></i></span>
+                                                <span class="button__text2">Cancelar</span>
                                             </button>
                                         </div>
                                     </div>
@@ -1948,9 +1955,10 @@
                     if (data.result == true) {
                         $("#divOutros").load("<?php echo current_url(); ?> #divOutros");
                         $("#descricao_outros").trumbowyg('empty');
-                        $("#preco_outros").val('');
+                        $("#preco_outros").val('').maskMoney('mask');
                         $("#idOutrosEditar").val('');
-                        $('#formOutros button[type="submit"]').html('<span class="button__icon"><i class="bx bx-plus-circle"></i></span><span class="button__text2">Adicionar</span>');
+                        $('#btnSalvarOutros').html('<span class="button__icon"><i class="bx bx-plus-circle"></i></span><span class="button__text2">Adicionar</span>');
+                        $('#divCancelarEdicao').hide();
                         $('#formOutros').data('editando', false);
                         $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
                             // Atualizar valores das parcelas após adicionar
