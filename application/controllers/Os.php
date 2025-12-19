@@ -1880,7 +1880,124 @@ class Os extends MY_Controller
     }
 
     /**
-     * Gera lançamento financeiro a partir de uma OS
+     * Gera lançamento financeiro usando parcelas configuradas
+     */
+    public function gerarLancamentoParcelas()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            echo json_encode(['result' => false, 'message' => 'Você não tem permissão']);
+            return;
+        }
+
+        $idOs = $this->input->post('idOs');
+        $parcelasJson = $this->input->post('parcelas');
+        $criarLancamento = $this->input->post('criar_lancamento');
+
+        if (!$idOs) {
+            echo json_encode(['result' => false, 'message' => 'ID da OS inválido']);
+            return;
+        }
+
+        // Buscar OS
+        $os = $this->os_model->getById($idOs);
+        if (!$os) {
+            echo json_encode(['result' => false, 'message' => 'OS não encontrada']);
+            return;
+        }
+
+        // Verificar se já tem lançamento vinculado
+        if (!empty($os->lancamento)) {
+            echo json_encode(['result' => false, 'message' => 'Esta OS já possui um lançamento financeiro vinculado']);
+            return;
+        }
+
+        // Decodificar parcelas
+        $parcelas = json_decode($parcelasJson, true);
+        if (!is_array($parcelas) || count($parcelas) === 0) {
+            echo json_encode(['result' => false, 'message' => 'Nenhuma parcela configurada']);
+            return;
+        }
+
+        // Se não deve criar lançamento, apenas atualizar parcelas e retornar
+        if (!$criarLancamento || $criarLancamento == '0') {
+            $this->load->model('parcelas_os_model');
+            $this->parcelas_os_model->saveParcelas($idOs, $parcelas);
+            echo json_encode(['result' => true, 'message' => 'OS atualizada. Lançamento não criado.']);
+            return;
+        }
+
+        $this->load->model('financeiro_model');
+        $lancamentosIds = [];
+
+        foreach ($parcelas as $parcela) {
+            // Converter data de vencimento
+            $dataVencimento = date('Y-m-d');
+            if (!empty($parcela['data_vencimento'])) {
+                if (strpos($parcela['data_vencimento'], '/') !== false) {
+                    $dataParts = explode('/', $parcela['data_vencimento']);
+                    if (count($dataParts) == 3) {
+                        $dataVencimento = $dataParts[2] . '-' . $dataParts[1] . '-' . $dataParts[0];
+                    }
+                } else {
+                    $dataVencimento = $parcela['data_vencimento'];
+                }
+            } elseif (!empty($parcela['dias']) && $parcela['dias'] > 0) {
+                $dataVencimento = date('Y-m-d', strtotime('+' . intval($parcela['dias']) . ' days'));
+            }
+
+            $valor = floatval($parcela['valor']) ?: 0;
+            if ($valor <= 0) {
+                continue; // Pular parcelas sem valor
+            }
+
+            // Determinar status (se já está pago ou pendente)
+            $statusPagamento = (isset($parcela['status']) && $parcela['status'] === 'pago') ? 'pago' : 'pendente';
+            $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
+            $baixado = ($statusPagamento === 'pago') ? 1 : 0;
+            $dataPagamento = ($statusPagamento === 'pago') ? date('Y-m-d') : null;
+
+            $dataLancamento = [
+                'descricao' => 'OS #' . $idOs . ' - Parcela ' . $parcela['numero'] . ' - ' . htmlspecialchars($os->nomeCliente),
+                'valor' => $valor,
+                'valor_desconto' => $valor,
+                'valor_pago' => $valorPago,
+                'status_pagamento' => $statusPagamento,
+                'desconto' => 0,
+                'tipo_desconto' => 'real',
+                'data_vencimento' => $dataVencimento,
+                'data_pagamento' => $dataPagamento,
+                'baixado' => $baixado,
+                'cliente_fornecedor' => $os->nomeCliente,
+                'clientes_id' => $os->clientes_id,
+                'forma_pgto' => $parcela['forma_pgto'] ?? '',
+                'tipo' => 'receita',
+                'observacoes' => (!empty($parcela['observacao']) ? $parcela['observacao'] . ' - ' : '') . 
+                                (!empty($parcela['detalhes']) ? 'Detalhes: ' . $parcela['detalhes'] . ' - ' : '') . 
+                                'Referente à OS #' . $idOs,
+                'usuarios_id' => $this->session->userdata('id_admin')
+            ];
+            
+            $this->financeiro_model->add('lancamentos', $dataLancamento);
+            $lancamentosIds[] = $this->db->insert_id();
+        }
+
+        // Atualizar parcelas na tabela parcelas_os com dados finais
+        $this->load->model('parcelas_os_model');
+        $this->parcelas_os_model->saveParcelas($idOs, $parcelas);
+
+        // Vincular primeiro lançamento à OS
+        if (!empty($lancamentosIds)) {
+            $this->os_model->edit('os', ['lancamento' => $lancamentosIds[0]], 'idOs', $idOs);
+        }
+
+        log_info('Gerou lançamento financeiro para OS #' . $idOs . ' usando parcelas. Lançamentos: ' . implode(', ', $lancamentosIds));
+
+        $mensagem = count($lancamentosIds) . ' lançamento(s) criado(s) com sucesso!';
+        echo json_encode(['result' => true, 'message' => $mensagem, 'lancamentos' => $lancamentosIds]);
+    }
+
+    /**
+     * Gera lançamento financeiro a partir de uma OS (método antigo - mantido para compatibilidade)
      */
     public function gerarLancamento()
     {
@@ -2086,9 +2203,12 @@ class Os extends MY_Controller
             return false;
         }
 
-        // Verificar se tem forma de pagamento configurada
-        if (empty($os->forma_pgto)) {
-            log_info("OS #{$idOs} não possui forma de pagamento configurada. Pulando geração automática.");
+        // Verificar se tem parcelas configuradas ou forma de pagamento (compatibilidade)
+        $this->load->model('parcelas_os_model');
+        $parcelasConfiguradas = $this->parcelas_os_model->getByOs($idOs);
+        
+        if (empty($parcelasConfiguradas) && empty($os->forma_pgto)) {
+            log_info("OS #{$idOs} não possui parcelas ou forma de pagamento configurada. Pulando geração automática.");
             return false;
         }
 
@@ -2113,97 +2233,82 @@ class Os extends MY_Controller
             return false;
         }
 
-        // Usar dados da OS
-        $formaPgto = $os->forma_pgto;
-        $parcelas = intval($os->parcelas) ?: 1;
-        $entrada = floatval($os->valor_entrada) ?: 0;
-        $dataVencimento = date('Y-m-d'); // Usar data atual como primeira parcela
-
+        // Buscar parcelas configuradas
+        $this->load->model('parcelas_os_model');
+        $parcelasConfiguradas = $this->parcelas_os_model->getByOs($idOs);
+        
         $this->load->model('financeiro_model');
         $lancamentosIds = [];
-
-        // Se tem entrada, criar lançamento de entrada como pago
-        if ($entrada > 0) {
-            $dataEntrada = [
-                'descricao' => 'Entrada - OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
-                'valor' => $entrada,
-                'valor_desconto' => $entrada,
-                'valor_pago' => $entrada,
-                'status_pagamento' => 'pago',
-                'desconto' => 0,
-                'tipo_desconto' => 'real',
-                'data_vencimento' => date('Y-m-d'),
-                'data_pagamento' => date('Y-m-d'),
-                'baixado' => 1,
-                'cliente_fornecedor' => $os->nomeCliente,
-                'clientes_id' => $os->clientes_id,
-                'forma_pgto' => $formaPgto,
-                'tipo' => 'receita',
-                'observacoes' => 'Entrada referente à OS #' . $idOs,
-                'usuarios_id' => $this->session->userdata('id_admin')
-            ];
-            
-            $this->financeiro_model->add('lancamentos', $dataEntrada);
-            $lancamentosIds[] = $this->db->insert_id();
-        }
-
-        // Calcular valor restante após entrada
-        $valorRestante = $valorTotal - $entrada;
-
-        if ($valorRestante > 0) {
-            if ($parcelas > 1) {
-                // Criar parcelas
-                $valorParcela = $valorRestante / $parcelas;
-                
-                for ($i = 1; $i <= $parcelas; $i++) {
-                    $dataVencimentoParcela = date('Y-m-d', strtotime($dataVencimento . ' + ' . ($i - 1) . ' months'));
-                    
-                    $dataParcela = [
-                        'descricao' => 'OS #' . $idOs . ' - Parcela ' . $i . '/' . $parcelas . ' - ' . htmlspecialchars($os->nomeCliente),
-                        'valor' => round($valorParcela, 2),
-                        'valor_desconto' => round($valorParcela, 2),
-                        'valor_pago' => 0,
-                        'status_pagamento' => 'pendente',
-                        'desconto' => 0,
-                        'tipo_desconto' => 'real',
-                        'data_vencimento' => $dataVencimentoParcela,
-                        'data_pagamento' => null,
-                        'baixado' => 0,
-                        'cliente_fornecedor' => $os->nomeCliente,
-                        'clientes_id' => $os->clientes_id,
-                        'forma_pgto' => $formaPgto,
-                        'tipo' => 'receita',
-                        'observacoes' => 'Parcela ' . $i . '/' . $parcelas . ' referente à OS #' . $idOs,
-                        'usuarios_id' => $this->session->userdata('id_admin')
-                    ];
-                    
-                    $this->financeiro_model->add('lancamentos', $dataParcela);
-                    $lancamentosIds[] = $this->db->insert_id();
+        
+        // Se tem parcelas configuradas, usar elas
+        if (!empty($parcelasConfiguradas) && count($parcelasConfiguradas) > 0) {
+            foreach ($parcelasConfiguradas as $parcela) {
+                $valor = floatval($parcela->valor) ?: 0;
+                if ($valor <= 0) {
+                    continue; // Pular parcelas sem valor
                 }
-            } else {
-                // Lançamento único
+                
+                // Usar data de vencimento da parcela ou calcular baseado em dias
+                $dataVencimento = date('Y-m-d');
+                if (!empty($parcela->data_vencimento)) {
+                    $dataVencimento = $parcela->data_vencimento;
+                } elseif (!empty($parcela->dias) && $parcela->dias > 0) {
+                    $dataVencimento = date('Y-m-d', strtotime('+' . intval($parcela->dias) . ' days'));
+                }
+                
+                // Determinar status
+                $statusPagamento = ($parcela->status === 'pago') ? 'pago' : 'pendente';
+                $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
+                $baixado = ($statusPagamento === 'pago') ? 1 : 0;
+                $dataPagamento = ($statusPagamento === 'pago') ? date('Y-m-d') : null;
+                
                 $dataLancamento = [
-                    'descricao' => 'OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
-                    'valor' => $valorRestante,
-                    'valor_desconto' => $valorRestante,
-                    'valor_pago' => 0,
-                    'status_pagamento' => 'pendente',
+                    'descricao' => 'OS #' . $idOs . ' - Parcela ' . $parcela->numero . ' - ' . htmlspecialchars($os->nomeCliente),
+                    'valor' => $valor,
+                    'valor_desconto' => $valor,
+                    'valor_pago' => $valorPago,
+                    'status_pagamento' => $statusPagamento,
                     'desconto' => 0,
                     'tipo_desconto' => 'real',
                     'data_vencimento' => $dataVencimento,
-                    'data_pagamento' => null,
-                    'baixado' => 0,
+                    'data_pagamento' => $dataPagamento,
+                    'baixado' => $baixado,
                     'cliente_fornecedor' => $os->nomeCliente,
                     'clientes_id' => $os->clientes_id,
-                    'forma_pgto' => $formaPgto,
+                    'forma_pgto' => $parcela->forma_pgto ?? '',
                     'tipo' => 'receita',
-                    'observacoes' => 'Referente à OS #' . $idOs,
+                    'observacoes' => (!empty($parcela->observacao) ? $parcela->observacao . ' - ' : '') . 
+                                    (!empty($parcela->detalhes) ? 'Detalhes: ' . $parcela->detalhes . ' - ' : '') . 
+                                    'Referente à OS #' . $idOs,
                     'usuarios_id' => $this->session->userdata('id_admin')
                 ];
                 
                 $this->financeiro_model->add('lancamentos', $dataLancamento);
                 $lancamentosIds[] = $this->db->insert_id();
             }
+        } else {
+            // Se não tem parcelas configuradas, criar lançamento único (compatibilidade)
+            $dataLancamento = [
+                'descricao' => 'OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
+                'valor' => $valorTotal,
+                'valor_desconto' => $valorTotal,
+                'valor_pago' => 0,
+                'status_pagamento' => 'pendente',
+                'desconto' => 0,
+                'tipo_desconto' => 'real',
+                'data_vencimento' => date('Y-m-d'),
+                'data_pagamento' => null,
+                'baixado' => 0,
+                'cliente_fornecedor' => $os->nomeCliente,
+                'clientes_id' => $os->clientes_id,
+                'forma_pgto' => $os->forma_pgto ?? '',
+                'tipo' => 'receita',
+                'observacoes' => 'Referente à OS #' . $idOs,
+                'usuarios_id' => $this->session->userdata('id_admin')
+            ];
+            
+            $this->financeiro_model->add('lancamentos', $dataLancamento);
+            $lancamentosIds[] = $this->db->insert_id();
         }
 
         // Vincular primeiro lançamento à OS
@@ -2217,6 +2322,10 @@ class Os extends MY_Controller
 
     /**
      * Retorna dados da OS para o modal de faturamento
+     */
+    /**
+     * Retorna dados da OS para o modal de faturamento
+     * Inclui parcelas se existirem
      */
     public function getDadosOsJson($idOs)
     {
@@ -2246,11 +2355,32 @@ class Os extends MY_Controller
         
         $valorTotal = $totalProdutos + $totalServicos;
 
+        // Buscar parcelas da OS
+        $this->load->model('parcelas_os_model');
+        $parcelas = $this->parcelas_os_model->getByOs($idOs);
+        
+        // Preparar parcelas para JSON
+        $parcelasArray = [];
+        foreach ($parcelas as $p) {
+            $parcelasArray[] = [
+                'id' => $p->idParcela,
+                'numero' => intval($p->numero),
+                'dias' => intval($p->dias),
+                'valor' => floatval($p->valor),
+                'observacao' => $p->observacao ?? '',
+                'data_vencimento' => $p->data_vencimento,
+                'forma_pgto' => $p->forma_pgto ?? '',
+                'detalhes' => $p->detalhes ?? '',
+                'status' => $p->status ?? 'pendente'
+            ];
+        }
+
         echo json_encode([
             'result' => true,
             'os' => $os,
             'valorTotal' => $valorTotal,
-            'temLancamento' => !empty($os->lancamento)
+            'temLancamento' => !empty($os->lancamento),
+            'parcelas' => $parcelasArray
         ]);
     }
 }

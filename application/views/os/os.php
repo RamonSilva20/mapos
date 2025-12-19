@@ -270,12 +270,12 @@
     </div>
 
     <!-- Modal Faturamento -->
-    <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalFaturarLabel" aria-hidden="true">
+    <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalFaturarLabel" aria-hidden="true" style="width: 90%; max-width: 1200px; margin-left: -45%;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="modalFaturarLabel"><i class="bx bx-dollar-circle"></i> Faturar OS #<span id="faturar-os-id"></span></h5>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
             <input type="hidden" id="faturar-idOs" value="" />
             
             <div class="span12" style="margin-left: 0; background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
@@ -288,51 +288,34 @@
             </div>
             
             <div id="opcoes-faturamento">
-                <div class="span6" style="margin-left: 0;">
-                    <label for="faturar-forma-pgto">Forma de Pagamento</label>
-                    <select id="faturar-forma-pgto" class="span12">
-                        <option value="Dinheiro">Dinheiro</option>
-                        <option value="Pix">Pix</option>
-                        <option value="Cartão de Crédito">Cartão de Crédito</option>
-                        <option value="Cartão de Débito">Cartão de Débito</option>
-                        <option value="Boleto">Boleto</option>
-                        <option value="Transferência">Transferência</option>
-                        <option value="Cheque">Cheque</option>
-                    </select>
+                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                    <h5>Parcelas de Pagamento</h5>
+                    <p style="color: #666; font-size: 12px;">Edite as informações de cada parcela antes de confirmar o faturamento.</p>
                 </div>
                 
-                <div class="span6">
-                    <label for="faturar-parcelas">Parcelas</label>
-                    <select id="faturar-parcelas" class="span12">
-                        <option value="1">À Vista</option>
-                        <option value="2">2x</option>
-                        <option value="3">3x</option>
-                        <option value="4">4x</option>
-                        <option value="5">5x</option>
-                        <option value="6">6x</option>
-                        <option value="7">7x</option>
-                        <option value="8">8x</option>
-                        <option value="9">9x</option>
-                        <option value="10">10x</option>
-                        <option value="11">11x</option>
-                        <option value="12">12x</option>
-                    </select>
+                <div class="span12" style="margin-left: 0; overflow-x: auto;">
+                    <table class="table table-bordered" id="tabela-faturamento">
+                        <thead>
+                            <tr>
+                                <th width="5%">Nº</th>
+                                <th width="10%">Dias</th>
+                                <th width="12%">Data Vencimento</th>
+                                <th width="15%">Valor</th>
+                                <th width="18%">Forma de Pagamento</th>
+                                <th width="30%">Detalhes</th>
+                                <th width="10%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-faturamento">
+                            <!-- Parcelas serão inseridas aqui via JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
                 
-                <div class="span6" style="margin-left: 0;">
-                    <label for="faturar-entrada">Entrada (Sinal)</label>
-                    <input type="text" id="faturar-entrada" class="span12" placeholder="0,00" value="0" />
-                </div>
-                
-                <div class="span6">
-                    <label for="faturar-vencimento">Vencimento 1ª Parcela</label>
-                    <input type="text" id="faturar-vencimento" class="span12 datepicker" value="<?php echo date('d/m/Y'); ?>" />
-                </div>
-                
-                <div class="span12" style="margin-left: 0; margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 5px;">
+                <div class="span12" style="margin-left: 0; margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px;">
                     <strong>Resumo:</strong>
                     <div id="resumo-faturamento" style="margin-top: 5px; color: #666;">
-                        1x de R$ 0,00
+                        <span id="total-parcelas">0</span> parcela(s) | Total: R$ <span id="total-valor">0,00</span>
                     </div>
                 </div>
             </div>
@@ -584,6 +567,10 @@
             }
         });
         
+        // Variável para armazenar parcelas do faturamento
+        var parcelasFaturamento = [];
+        var dataBaseVencimento = '<?php echo date('d/m/Y'); ?>';
+        
         // Função para abrir modal de faturamento
         function abrirModalFaturar(idOs, valorTotal, $select, statusAnterior) {
             // Salvar referência para reverter se cancelar
@@ -592,20 +579,166 @@
                 statusAnterior: statusAnterior
             };
             
-            // Preencher modal
+            // Preencher modal básico
             $('#faturar-idOs').val(idOs);
             $('#faturar-os-id').text(idOs);
             $('#faturar-valor-total').text('R$ ' + valorTotal.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-            $('#faturar-entrada').val('0');
-            $('#faturar-parcelas').val('1');
-            $('#faturar-vencimento').val('<?php echo date('d/m/Y'); ?>');
             $('#criar-lancamento').prop('checked', true);
-            $('#opcoes-faturamento').show();
+            
+            // Buscar parcelas da OS
+            $.ajax({
+                url: '<?php echo base_url(); ?>index.php/os/getDadosOsJson/' + idOs,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.result && data.parcelas && data.parcelas.length > 0) {
+                        // Carregar parcelas existentes
+                        parcelasFaturamento = data.parcelas.map(function(p) {
+                            return {
+                                id: p.id,
+                                numero: p.numero,
+                                dias: p.dias,
+                                valor: p.valor,
+                                observacao: p.observacao || '',
+                                data_vencimento: p.data_vencimento || '',
+                                forma_pgto: p.forma_pgto || '',
+                                detalhes: p.detalhes || '',
+                                status: p.status || 'pendente'
+                            };
+                        });
+                    } else {
+                        // Se não tem parcelas, criar uma parcela única
+                        parcelasFaturamento = [{
+                            id: null,
+                            numero: 1,
+                            dias: 0,
+                            valor: valorTotal,
+                            observacao: '',
+                            data_vencimento: '',
+                            forma_pgto: '',
+                            detalhes: '',
+                            status: 'pendente'
+                        }];
+                    }
+                    
+                    atualizarTabelaFaturamento();
+                    $('#opcoes-faturamento').show();
+                    
+                    // Abrir modal
+                    $('#modal-faturar').modal('show');
+                },
+                error: function() {
+                    Swal.fire('Erro', 'Erro ao carregar dados da OS', 'error');
+                    if ($select) {
+                        $select.val(statusAnterior);
+                        $select.prop('disabled', false);
+                    }
+                }
+            });
+        }
+        
+        // Função para atualizar tabela de faturamento
+        function atualizarTabelaFaturamento() {
+            var tbody = $('#tbody-faturamento');
+            tbody.empty();
+            
+            if (parcelasFaturamento.length === 0) {
+                tbody.append('<tr><td colspan="7" style="text-align: center; color: #999;">Nenhuma parcela configurada</td></tr>');
+                atualizarResumoFaturamento();
+                return;
+            }
+            
+            parcelasFaturamento.forEach(function(parcela, index) {
+                // Calcular data de vencimento
+                var dataVencimento = '';
+                if (parcela.data_vencimento) {
+                    var dataParts = parcela.data_vencimento.split('-');
+                    if (dataParts.length === 3) {
+                        dataVencimento = dataParts[2] + '/' + dataParts[1] + '/' + dataParts[0];
+                    }
+                } else if (parcela.dias > 0) {
+                    var dataBase = new Date(dataBaseVencimento.split('/').reverse().join('-'));
+                    dataBase.setDate(dataBase.getDate() + parcela.dias);
+                    dataVencimento = ('0' + dataBase.getDate()).slice(-2) + '/' + 
+                                   ('0' + (dataBase.getMonth() + 1)).slice(-2) + '/' + 
+                                   dataBase.getFullYear();
+                } else {
+                    dataVencimento = dataBaseVencimento;
+                }
+                
+                var row = $('<tr>');
+                row.append('<td style="text-align: center;">' + parcela.numero + '</td>');
+                row.append('<td><input type="number" class="span12 dias-faturar" data-index="' + index + '" value="' + parcela.dias + '" min="0" style="width: 100%;" /></td>');
+                row.append('<td><input type="text" class="span12 datepicker data-faturar" data-index="' + index + '" value="' + dataVencimento + '" style="width: 100%;" /></td>');
+                row.append('<td><input type="text" class="span12 money valor-faturar" data-index="' + index + '" value="' + (parcela.valor > 0 ? parcela.valor.toFixed(2).replace('.', ',') : '0,00') + '" style="width: 100%;" /></td>');
+                row.append('<td><select class="span12 forma-faturar" data-index="' + index + '" style="width: 100%;"><option value="">Selecione...</option><option value="Dinheiro"' + (parcela.forma_pgto === 'Dinheiro' ? ' selected' : '') + '>Dinheiro</option><option value="Pix"' + (parcela.forma_pgto === 'Pix' ? ' selected' : '') + '>Pix</option><option value="Cartão de Crédito"' + (parcela.forma_pgto === 'Cartão de Crédito' ? ' selected' : '') + '>Cartão de Crédito</option><option value="Cartão de Débito"' + (parcela.forma_pgto === 'Cartão de Débito' ? ' selected' : '') + '>Cartão de Débito</option><option value="Boleto"' + (parcela.forma_pgto === 'Boleto' ? ' selected' : '') + '>Boleto</option><option value="Transferência"' + (parcela.forma_pgto === 'Transferência' ? ' selected' : '') + '>Transferência</option><option value="Cheque"' + (parcela.forma_pgto === 'Cheque' ? ' selected' : '') + '>Cheque</option></select></td>');
+                row.append('<td><input type="text" class="span12 detalhes-faturar" data-index="' + index + '" value="' + (parcela.detalhes || '') + '" placeholder="Banco, gateway, conta..." style="width: 100%;" /></td>');
+                row.append('<td style="text-align: center;"><span class="badge badge-' + (parcela.status === 'pago' ? 'success' : 'warning') + '">' + (parcela.status === 'pago' ? 'Pago' : 'Pendente') + '</span></td>');
+                tbody.append(row);
+            });
+            
+            // Aplicar máscaras e datepickers
+            $('.money').mask('#.##0,00', {reverse: true});
+            $('.datepicker').datepicker({
+                dateFormat: 'dd/mm/yy'
+            });
+            
+            // Eventos de edição
+            $(document).off('change', '.dias-faturar').on('change', '.dias-faturar', function() {
+                var index = $(this).data('index');
+                parcelasFaturamento[index].dias = parseInt($(this).val()) || 0;
+                // Recalcular data
+                var dataBase = new Date(dataBaseVencimento.split('/').reverse().join('-'));
+                dataBase.setDate(dataBase.getDate() + parcelasFaturamento[index].dias);
+                var novaData = ('0' + dataBase.getDate()).slice(-2) + '/' + 
+                             ('0' + (dataBase.getMonth() + 1)).slice(-2) + '/' + 
+                             dataBase.getFullYear();
+                $(this).closest('tr').find('.data-faturar').val(novaData);
+                atualizarResumoFaturamento();
+            });
+            
+            $(document).off('blur', '.valor-faturar').on('blur', '.valor-faturar', function() {
+                var index = $(this).data('index');
+                var valor = $(this).val().replace('.', '').replace(',', '.');
+                parcelasFaturamento[index].valor = parseFloat(valor) || 0;
+                atualizarResumoFaturamento();
+            });
+            
+            $(document).off('change', '.data-faturar').on('change', '.data-faturar', function() {
+                var index = $(this).data('index');
+                var dataStr = $(this).val();
+                if (dataStr) {
+                    var dataParts = dataStr.split('/');
+                    if (dataParts.length === 3) {
+                        parcelasFaturamento[index].data_vencimento = dataParts[2] + '-' + dataParts[1] + '-' + dataParts[0];
+                    }
+                }
+            });
+            
+            $(document).off('change', '.forma-faturar').on('change', '.forma-faturar', function() {
+                var index = $(this).data('index');
+                parcelasFaturamento[index].forma_pgto = $(this).val();
+            });
+            
+            $(document).off('blur', '.detalhes-faturar').on('blur', '.detalhes-faturar', function() {
+                var index = $(this).data('index');
+                parcelasFaturamento[index].detalhes = $(this).val();
+            });
             
             atualizarResumoFaturamento();
+        }
+        
+        // Função para atualizar resumo do faturamento
+        function atualizarResumoFaturamento() {
+            var totalParcelas = parcelasFaturamento.length;
+            var totalValor = 0;
             
-            // Abrir modal
-            $('#modal-faturar').modal('show');
+            parcelasFaturamento.forEach(function(p) {
+                totalValor += p.valor || 0;
+            });
+            
+            $('#total-parcelas').text(totalParcelas);
+            $('#total-valor').text(totalValor.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
         }
         
         $(".datepicker").datepicker({
@@ -624,39 +757,34 @@
             }
         });
         
-        // Atualizar resumo do faturamento
-        function atualizarResumoFaturamento() {
-            var valorTotal = parseFloat($('#faturar-valor-total').text().replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
-            var entrada = parseFloat($('#faturar-entrada').val().replace('.', '').replace(',', '.')) || 0;
-            var parcelas = parseInt($('#faturar-parcelas').val()) || 1;
-            var valorRestante = valorTotal - entrada;
-            var valorParcela = parcelas > 0 ? valorRestante / parcelas : valorRestante;
-            
-            var resumo = '';
-            if (entrada > 0) {
-                resumo += 'Entrada: R$ ' + entrada.toFixed(2).replace('.', ',') + '<br>';
-            }
-            if (parcelas > 1) {
-                resumo += parcelas + 'x de R$ ' + valorParcela.toFixed(2).replace('.', ',');
-            } else {
-                resumo += '1x de R$ ' + valorParcela.toFixed(2).replace('.', ',');
-            }
-            
-            $('#resumo-faturamento').html(resumo);
-        }
-        
-        $('#faturar-parcelas, #faturar-entrada').on('change keyup', function() {
-            atualizarResumoFaturamento();
-        });
-        
         // Confirmar faturamento
         $('#btn-confirmar-faturar').on('click', function() {
             var idOs = $('#faturar-idOs').val();
             var criarLancamento = $('#criar-lancamento').is(':checked') ? 1 : 0;
-            var formaPgto = $('#faturar-forma-pgto').val();
-            var parcelas = $('#faturar-parcelas').val();
-            var entrada = $('#faturar-entrada').val();
-            var vencimento = $('#faturar-vencimento').val();
+            
+            // Validar parcelas
+            if (parcelasFaturamento.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção',
+                    text: 'Configure pelo menos uma parcela antes de faturar!'
+                });
+                return;
+            }
+            
+            // Validar se todas as parcelas têm forma de pagamento
+            var parcelasInvalidas = parcelasFaturamento.filter(function(p) {
+                return !p.forma_pgto || p.forma_pgto === '';
+            });
+            
+            if (parcelasInvalidas.length > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção',
+                    text: 'Todas as parcelas devem ter uma forma de pagamento selecionada!'
+                });
+                return;
+            }
             
             $(this).prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Processando...');
             
@@ -672,16 +800,13 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.result) {
-                        // Se o status foi atualizado, gerar lançamento
+                        // Se o status foi atualizado, gerar lançamento usando parcelas
                         $.ajax({
-                            url: '<?php echo base_url(); ?>index.php/os/gerarLancamento',
+                            url: '<?php echo base_url(); ?>index.php/os/gerarLancamentoParcelas',
                             type: 'POST',
                             data: {
                                 idOs: idOs,
-                                forma_pgto: formaPgto,
-                                parcelas: parcelas,
-                                entrada: entrada,
-                                data_vencimento: vencimento,
+                                parcelas: JSON.stringify(parcelasFaturamento),
                                 criar_lancamento: criarLancamento,
                                 <?php echo $this->security->get_csrf_token_name(); ?>: '<?php echo $this->security->get_csrf_hash(); ?>'
                             },

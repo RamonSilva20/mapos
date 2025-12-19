@@ -216,6 +216,55 @@
                         </div>
                     </div>
                 <?php endif; ?>
+                
+                <?php if (isset($parcelas) && !empty($parcelas)) : ?>
+                    <div class="subtitle">CONDIÇÕES DE PAGAMENTO</div>
+                    <div class="tabela">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th width="8%">Nº</th>
+                                    <th width="12%">Dias</th>
+                                    <th width="20%">Valor</th>
+                                    <th width="60%">Observação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $totalParcelas = 0;
+                                foreach ($parcelas as $p) :
+                                    $totalParcelas += floatval($p->valor);
+                                    // Calcular data de vencimento
+                                    $dataVencimento = '';
+                                    if ($p->data_vencimento) {
+                                        $dataVencimento = date('d/m/Y', strtotime($p->data_vencimento));
+                                    } elseif ($p->dias > 0 && $result->dataFinal) {
+                                        $dataBase = new DateTime($result->dataFinal);
+                                        $dataBase->modify('+' . intval($p->dias) . ' days');
+                                        $dataVencimento = $dataBase->format('d/m/Y');
+                                    }
+                                ?>
+                                <tr>
+                                    <td style="text-align: center;"><?= $p->numero ?></td>
+                                    <td style="text-align: center;">
+                                        <?= $p->dias ?> dias
+                                        <?php if ($dataVencimento): ?>
+                                            <br><small style="color: #666;">(<?= $dataVencimento ?>)</small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td style="text-align: right;">R$ <?= number_format(floatval($p->valor), 2, ',', '.') ?></td>
+                                    <td><?= htmlspecialchars($p->observacao ?: '-') ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <tr style="background: #f8f9fa; font-weight: bold;">
+                                    <td colspan="2" style="text-align: right;">TOTAL:</td>
+                                    <td style="text-align: right;">R$ <?= number_format($totalParcelas, 2, ',', '.') ?></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </section>
             <footer>
                 <div class="detalhes">
