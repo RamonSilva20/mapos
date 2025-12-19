@@ -592,25 +592,29 @@ class Financeiro extends MY_Controller
         $this->db->where('lancamentos_id', $id);
         $this->db->update('vendas');
 
+        // Atualiza a tabela os, removendo o ID do lançamento
+        $this->db->set('lancamento', null);
+        $this->db->where('lancamento', $id);
+        $this->db->update('os');
+
+        // Excluir pagamentos parciais relacionados
+        $this->load->model('pagamentos_parciais_model');
+        $this->db->where('lancamento_id', $id);
+        $this->db->delete('pagamentos_parciais');
+
         // Exclui o lançamento
         $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
 
-        if ($result) {
-            $this->db->trans_complete();
+        // Completa a transação
+        $this->db->trans_complete();
 
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
-                $json = ['result' => false, 'message' => 'Erro na transação'];
-            } else {
-                log_info('Excluiu um lançamento. ID: ' . $id);
-                $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
-                $json = ['result' => true];
-            }
-        } else {
-            $this->db->trans_rollback();
+        if ($this->db->trans_status() === FALSE || !$result) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
-            $json = ['result' => false, 'message' => 'Erro ao excluir lançamento'];
+            $json = ['result' => false, 'message' => 'Ocorreu um erro ao tentar excluir lançamento.'];
+        } else {
+            log_info('Excluiu um lançamento. ID: ' . $id);
+            $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
+            $json = ['result' => true, 'message' => 'Lançamento excluído com sucesso!'];
         }
 
         echo json_encode($json);
