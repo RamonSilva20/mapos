@@ -560,6 +560,10 @@ class Os extends MY_Controller
             );
             $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
         }
+        
+        // Carregar parcelas da OS
+        $this->load->model('parcelas_os_model');
+        $this->data['parcelas'] = $this->parcelas_os_model->getByOs($this->uri->segment(3));
 
         $this->load->view('os/imprimirProposta', $this->data);
     }
