@@ -607,7 +607,7 @@ class Financeiro extends MY_Controller
             }
 
             // Excluir pagamentos parciais relacionados
-            $this->db->where('lancamento_id', $id);
+            $this->db->where('lancamentos_id', $id);
             $this->db->delete('pagamentos_parciais');
             
             if ($this->db->error()['code']) {
