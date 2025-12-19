@@ -473,7 +473,18 @@
             var statusAtual = $select.data('status-atual');
             var novoStatus = $select.val();
             
-            console.log('Evento change disparado!', {idOs: idOs, statusAtual: statusAtual, novoStatus: novoStatus});
+            // Limpar espaços e normalizar
+            novoStatus = novoStatus ? novoStatus.trim() : '';
+            statusAtual = statusAtual ? statusAtual.trim() : '';
+            
+            console.log('Evento change disparado!', {
+                idOs: idOs, 
+                statusAtual: statusAtual, 
+                novoStatus: novoStatus,
+                'novoStatus === "Faturado"': novoStatus === 'Faturado',
+                'novoStatus.length': novoStatus.length,
+                'statusAtual.length': statusAtual.length
+            });
             
             // Se não mudou, não fazer nada
             if (novoStatus === statusAtual) {
@@ -483,20 +494,41 @@
             }
             
             // Se mudar para Faturado, abrir modal de faturamento
-            if (novoStatus === 'Faturado') {
-                console.log('Status mudou para Faturado, abrindo modal...');
+            console.log('Verificando se status é Faturado...', novoStatus, typeof novoStatus);
+            
+            // Teste alternativo: verificar se contém "Faturado"
+            var isFaturado = novoStatus === 'Faturado' || 
+                            novoStatus.trim() === 'Faturado' || 
+                            novoStatus.indexOf('Faturado') !== -1;
+            
+            console.log('isFaturado:', isFaturado);
+            
+            if (isFaturado) {
+                console.log('✓ Status é Faturado! Abrindo modal...');
                 $select.prop('disabled', true);
                 
+                // Verificar se função existe
+                if (typeof abrirModalFaturar === 'undefined') {
+                    console.error('ERRO: Função abrirModalFaturar não existe!');
+                    Swal.fire('Erro', 'Função de abrir modal não encontrada. Recarregue a página.', 'error');
+                    $select.val(statusAtual);
+                    $select.prop('disabled', false);
+                    return false;
+                }
+                
                 // Buscar dados da OS
+                console.log('Fazendo requisição AJAX para:', '<?php echo base_url(); ?>index.php/os/getDadosOsJson/' + idOs);
                 $.ajax({
                     url: '<?php echo base_url(); ?>index.php/os/getDadosOsJson/' + idOs,
                     type: 'GET',
                     dataType: 'json',
+                    timeout: 10000,
                     success: function(data) {
-                        console.log('Dados da OS recebidos:', data);
-                        if (data.result) {
+                        console.log('✓ Dados da OS recebidos:', data);
+                        if (data && data.result) {
                             // Verificar se já tem lançamento
                             if (data.temLancamento) {
+                                console.log('OS já tem lançamento, mostrando aviso...');
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'Atenção',
@@ -506,33 +538,41 @@
                                     cancelButtonText: 'Cancelar'
                                 }).then(function(result) {
                                     if (result.isConfirmed) {
-                                        console.log('Abrindo modal de faturamento (com lançamento existente)');
+                                        console.log('✓ Abrindo modal de faturamento (com lançamento existente)');
                                         abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
                                     } else {
+                                        console.log('Usuário cancelou');
                                         $select.val(statusAtual);
                                         $select.prop('disabled', false);
                                     }
                                 });
                             } else {
-                                console.log('Abrindo modal de faturamento');
+                                console.log('✓ Abrindo modal de faturamento (sem lançamento)');
                                 abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
                             }
                         } else {
-                            console.error('Erro na resposta:', data);
-                            Swal.fire('Erro', data.message || 'Erro ao buscar dados da OS', 'error');
+                            console.error('✗ Erro na resposta:', data);
+                            Swal.fire('Erro', data && data.message ? data.message : 'Erro ao buscar dados da OS', 'error');
                             $select.val(statusAtual);
                             $select.prop('disabled', false);
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Erro AJAX ao buscar dados da OS:', xhr, status, error);
+                        console.error('✗ Erro AJAX ao buscar dados da OS:', {
+                            xhr: xhr,
+                            status: status,
+                            error: error,
+                            responseText: xhr.responseText
+                        });
                         Swal.fire('Erro', 'Erro ao buscar dados da OS: ' + error, 'error');
                         $select.val(statusAtual);
                         $select.prop('disabled', false);
                     }
                 });
-                return;
+                return false; // Impedir que continue para outros status
             }
+            
+            console.log('Status não é Faturado, continuando com fluxo normal...');
             
             // Para outros status, confirmar e atualizar normalmente
             if (confirm('Deseja alterar o status de "' + statusAtual + '" para "' + novoStatus + '"?')) {
