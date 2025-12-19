@@ -68,9 +68,16 @@ class Contas extends MY_Controller
         if ($this->form_validation->run('contas') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
         } else {
-            $saldoInicial = str_replace(',', '.', $this->input->post('saldo'));
-            if (!is_numeric($saldoInicial)) {
-                $saldoInicial = 0;
+            // Converter formato de moeda brasileiro (0,00) para formato numérico (0.00)
+            $saldoPost = $this->input->post('saldo');
+            $saldoInicial = 0;
+            if (!empty($saldoPost) && $saldoPost !== '0,00') {
+                // Remove pontos de milhar e substitui vírgula por ponto
+                $saldoLimpo = str_replace('.', '', $saldoPost);
+                $saldoLimpo = str_replace(',', '.', $saldoLimpo);
+                if (is_numeric($saldoLimpo)) {
+                    $saldoInicial = floatval($saldoLimpo);
+                }
             }
 
             $data = [

@@ -489,7 +489,7 @@ $config = [
         [
             'field' => 'saldo',
             'label' => 'Saldo Inicial',
-            'rules' => 'trim|numeric',
+            'rules' => 'trim',
         ],
     ],
 ];
