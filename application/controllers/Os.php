@@ -1226,6 +1226,73 @@ class Os extends MY_Controller
         }
     }
     
+    public function editarOutros()
+    {
+        $id = $this->input->post('idOutros');
+        $os_id = $this->input->post('idOsOutros');
+        $descricao = $this->input->post('descricao');
+        $preco = $this->input->post('preco');
+        
+        if (empty($id) || !is_numeric($id)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'ID inválido']));
+        }
+        
+        if (empty($os_id) || !is_numeric($os_id)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'ID da OS inválido']));
+        }
+        
+        if (empty(trim($descricao))) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'Descrição é obrigatória']));
+        }
+        
+        // Converter preço de formato brasileiro (0,00) para numérico
+        if (!empty($preco)) {
+            $preco = str_replace('.', '', $preco);
+            $preco = str_replace(',', '.', $preco);
+        }
+        
+        if (empty($preco) || !is_numeric($preco) || floatval($preco) <= 0) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'Preço é obrigatório e deve ser maior que zero']));
+        }
+        
+        $this->load->model('outros_produtos_servicos_os_model');
+        
+        $data = [
+            'descricao' => $descricao,
+            'preco' => floatval($preco)
+        ];
+        
+        if ($this->outros_produtos_servicos_os_model->edit($id, $data)) {
+            log_info('Editou outros produtos/serviços da OS. ID (OS): ' . $os_id . ', ID (Item): ' . $id);
+            
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true, 'message' => 'Item atualizado com sucesso!']));
+        } else {
+            $error = $this->db->error();
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Erro ao atualizar item: ' . ($error['message'] ?? 'Erro desconhecido')
+                ]));
+        }
+    }
+    
     public function excluirOutros()
     {
         $id = $this->input->post('id');

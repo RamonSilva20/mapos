@@ -476,6 +476,7 @@
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formOutros">
                                     <input type="hidden" name="idOsOutros" id="idOsOutros" value="<?php echo $result->idOs; ?>" />
+                                    <input type="hidden" name="idOutros" id="idOutrosEditar" value="" />
                                     <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                                         <label for="descricao_outros"><strong>Descrição</strong> <small style="color: #666;">(Use o editor para formatar o texto)</small></label>
                                         <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="descricao_outros" name="descricao" class="span12 editor" rows="6"></textarea>
@@ -483,7 +484,7 @@
                                     <div class="span12" style="margin-left: 0; display: flex; gap: 10px; align-items: flex-end;">
                                         <div class="span4" style="margin-left: 0;">
                                             <label for="preco_outros">Preço *</label>
-                                            <input type="text" placeholder="0,00" id="preco_outros" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." required />
+                                            <input type="text" placeholder="0,00" id="preco_outros" name="preco" class="span12 money" required />
                                         </div>
                                         <div class="span8">
                                             <label for="">&nbsp;</label>
@@ -521,6 +522,7 @@
                                                 echo '<td>' . $o->descricao . '</td>';
                                                 echo '<td><div align="center"><strong>R$ ' . number_format($o->preco, 2, ',', '.') . '</strong></div></td>';
                                                 echo '<td><div align="center">';
+                                                echo '<span idAcao="' . $o->idOutros . '" descricao="' . htmlspecialchars($o->descricao, ENT_QUOTES) . '" preco="' . number_format($o->preco, 2, '.', '') . '" title="Editar" class="btn-nwe4 editar-outros" style="color: #007bff; cursor: pointer; margin-right: 5px;"><i class="bx bx-edit"></i></span>';
                                                 echo '<span idAcao="' . $o->idOutros . '" title="Excluir" class="btn-nwe4 excluir-outros" style="color: #dc3545; cursor: pointer;"><i class="bx bx-trash-alt"></i></span>';
                                                 echo '</div></td>';
                                                 echo '</tr>';
@@ -876,7 +878,11 @@
     });
     $(document).ready(function () {
 
-        $(".money").maskMoney();
+        $(".money").maskMoney({
+            decimal: ",",
+            thousands: ".",
+            allowZero: true
+        });
         
         // Inicializar maskMoney no modal quando abrir
         $('#modal-novo-servico').on('shown', function() {
@@ -1922,12 +1928,14 @@
             }
             
             var dados = $(this).serialize();
+            var isEditando = $(this).data('editando');
+            var url = isEditando ? "<?php echo base_url(); ?>index.php/os/editarOutros" : "<?php echo base_url(); ?>index.php/os/adicionarOutros";
             
             $("#divOutros").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
             
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>index.php/os/adicionarOutros",
+                url: url,
                 data: dados,
                 dataType: 'json',
                 success: function (data) {
@@ -1935,6 +1943,9 @@
                         $("#divOutros").load("<?php echo current_url(); ?> #divOutros");
                         $("#descricao_outros").trumbowyg('empty');
                         $("#preco_outros").val('');
+                        $("#idOutrosEditar").val('');
+                        $('#formOutros button[type="submit"]').html('<span class="button__icon"><i class="bx bx-plus-circle"></i></span><span class="button__text2">Adicionar</span>');
+                        $('#formOutros').data('editando', false);
                         $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
                             // Atualizar valores das parcelas após adicionar
                             if (typeof atualizarValoresParcelas === 'function') {
@@ -1944,7 +1955,7 @@
                         Swal.fire({
                             icon: "success",
                             title: "Sucesso!",
-                            text: data.message || "Item adicionado com sucesso!",
+                            text: data.message || (isEditando ? "Item atualizado com sucesso!" : "Item adicionado com sucesso!"),
                             timer: 1500,
                             showConfirmButton: false
                         });
@@ -1952,7 +1963,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Atenção",
-                            text: data.message || "Ocorreu um erro ao tentar adicionar item."
+                            text: data.message || "Ocorreu um erro ao tentar " + (isEditando ? "atualizar" : "adicionar") + " item."
                         });
                     }
                 },
