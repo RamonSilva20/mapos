@@ -499,12 +499,18 @@
             // Teste alternativo: verificar se contém "Faturado"
             var isFaturado = novoStatus === 'Faturado' || 
                             novoStatus.trim() === 'Faturado' || 
-                            novoStatus.indexOf('Faturado') !== -1;
+                            (novoStatus && novoStatus.indexOf('Faturado') !== -1);
             
-            console.log('isFaturado:', isFaturado);
+            console.log('isFaturado:', isFaturado, 'novoStatus:', JSON.stringify(novoStatus));
             
             if (isFaturado) {
                 console.log('✓ Status é Faturado! Abrindo modal...');
+                // Teste temporário para garantir que está entrando aqui
+                try {
+                    throw new Error('TESTE: Entrou na condição Faturado');
+                } catch(e) {
+                    console.error('TESTE:', e.message);
+                }
                 $select.prop('disabled', true);
                 
                 // Verificar se função existe
