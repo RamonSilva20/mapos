@@ -51,3 +51,4 @@ UPDATE `lancamentos` SET `status_pagamento` = 'pendente' WHERE `baixado` = 0;
 -- Atualizar valor_pago para lançamentos já pagos
 UPDATE `lancamentos` SET `valor_pago` = COALESCE(`valor_desconto`, `valor`) WHERE `baixado` = 1;
 
+

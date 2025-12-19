@@ -189,3 +189,4 @@ ADD COLUMN `lancamento_gerado` TINYINT(1) DEFAULT 0 AFTER `entrada`;
 **Última atualização:** 17/12/2025  
 **Status:** 📝 Documentado - Aguardando implementação
 
+

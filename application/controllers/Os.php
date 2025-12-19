@@ -112,17 +112,6 @@ class Os extends MY_Controller
                 $dataFinal = date('Y/m/d');
             }
 
-            // Converter valor de entrada
-            $valorEntrada = 0;
-            $entradaPost = $this->input->post('valorEntrada');
-            if (!empty($entradaPost) && $entradaPost !== '0,00') {
-                $entradaLimpo = str_replace('.', '', $entradaPost);
-                $entradaLimpo = str_replace(',', '.', $entradaLimpo);
-                if (is_numeric($entradaLimpo)) {
-                    $valorEntrada = floatval($entradaLimpo);
-                }
-            }
-            
             $data = [
                 'dataInicial' => $dataInicial,
                 'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
@@ -140,13 +129,20 @@ class Os extends MY_Controller
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'imprimir_laudo' => $this->input->post('imprimir_laudo') ? 1 : 0,
                 'faturado' => 0,
-                'forma_pgto' => $this->input->post('formaPgto') ?: null,
-                'parcelas' => intval($this->input->post('parcelas')) ?: 1,
-                'valor_entrada' => $valorEntrada,
             ];
 
             if (is_numeric($id = $this->os_model->add('os', $data, true))) {
                 $idOs = $id;
+                
+                // Salvar parcelas se houver
+                $parcelasJson = $this->input->post('parcelas_json');
+                if (!empty($parcelasJson)) {
+                    $parcelas = json_decode($parcelasJson, true);
+                    if (is_array($parcelas) && count($parcelas) > 0) {
+                        $this->load->model('parcelas_os_model');
+                        $this->parcelas_os_model->saveParcelas($idOs, $parcelas);
+                    }
+                }
                 $status = set_value('status');
                 
                 // Se o status inicia garantia e tem garantia definida, definir data de início
@@ -242,17 +238,6 @@ class Os extends MY_Controller
                 $dataInicial = date('Y/m/d');
             }
 
-            // Converter valor de entrada
-            $valorEntrada = 0;
-            $entradaPost = $this->input->post('valorEntrada');
-            if (!empty($entradaPost) && $entradaPost !== '0,00') {
-                $entradaLimpo = str_replace('.', '', $entradaPost);
-                $entradaLimpo = str_replace(',', '.', $entradaLimpo);
-                if (is_numeric($entradaLimpo)) {
-                    $valorEntrada = floatval($entradaLimpo);
-                }
-            }
-            
             $data = [
                 'dataInicial' => $dataInicial,
                 'dataFinal' => $dataFinal,
@@ -269,9 +254,6 @@ class Os extends MY_Controller
                 'imprimir_laudo' => $this->input->post('imprimir_laudo') ? 1 : 0,
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'clientes_id' => $this->input->post('clientes_id'),
-                'forma_pgto' => $this->input->post('formaPgto') ?: null,
-                'parcelas' => intval($this->input->post('parcelas')) ?: 1,
-                'valor_entrada' => $valorEntrada,
             ];
             $os = $this->os_model->getById($this->input->post('idOs'));
             $novoStatus = $this->input->post('status');
@@ -305,6 +287,16 @@ class Os extends MY_Controller
             }
 
             if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
+                // Salvar parcelas se houver
+                $parcelasJson = $this->input->post('parcelas_json');
+                if (!empty($parcelasJson)) {
+                    $parcelas = json_decode($parcelasJson, true);
+                    if (is_array($parcelas) && count($parcelas) > 0) {
+                        $this->load->model('parcelas_os_model');
+                        $this->parcelas_os_model->saveParcelas($this->input->post('idOs'), $parcelas);
+                    }
+                }
+                
                 $this->load->model('mapos_model');
                 $this->load->model('usuarios_model');
 
@@ -351,6 +343,10 @@ class Os extends MY_Controller
 
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
+        
+        // Carregar parcelas da OS
+        $this->load->model('parcelas_os_model');
+        $this->data['parcelas'] = $this->parcelas_os_model->getByOs($this->uri->segment(3));
         $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
         $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
 

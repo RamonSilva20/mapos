@@ -157,41 +157,47 @@
                                         </label>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0; border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px;">
-                                        <h4 style="margin-bottom: 10px;">Forma de Pagamento</h4>
-                                        <div class="span4" style="margin-left: 0;">
-                                            <label for="formaPgto">Forma de Pagamento</label>
-                                            <select class="span12" name="formaPgto" id="formaPgto">
-                                                <option value="">Selecione...</option>
-                                                <option value="Dinheiro" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Dinheiro') ? 'selected' : ''; ?>>Dinheiro</option>
-                                                <option value="Pix" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Pix') ? 'selected' : ''; ?>>Pix</option>
-                                                <option value="Cartão de Crédito" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cartão de Crédito') ? 'selected' : ''; ?>>Cartão de Crédito</option>
-                                                <option value="Cartão de Débito" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cartão de Débito') ? 'selected' : ''; ?>>Cartão de Débito</option>
-                                                <option value="Boleto" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Boleto') ? 'selected' : ''; ?>>Boleto</option>
-                                                <option value="Transferência" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Transferência') ? 'selected' : ''; ?>>Transferência</option>
-                                                <option value="Cheque" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cheque') ? 'selected' : ''; ?>>Cheque</option>
-                                            </select>
+                                        <h4 style="margin-bottom: 10px;">Parcelas de Pagamento</h4>
+                                        <div class="span12" style="margin-left: 0; margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-radius: 5px;">
+                                            <div class="span8" style="margin-left: 0;">
+                                                <label for="geradorParcelas">Gerar Parcelas</label>
+                                                <input type="text" class="span12" id="geradorParcelas" placeholder="Ex: 30 (30 dias) | 30 60 90 (vencimentos em 30, 60 e 90 dias) | 6x (6 parcelas a cada 30 dias)" />
+                                                <small style="color: #666; display: block; margin-top: 5px;">
+                                                    <strong>Exemplos:</strong><br>
+                                                    • <code>30</code> = 1 parcela em 30 dias<br>
+                                                    • <code>30 60 90</code> = 3 parcelas em 30, 60 e 90 dias<br>
+                                                    • <code>6x</code> = 6 parcelas iguais a cada 30 dias
+                                                </small>
+                                            </div>
+                                            <div class="span4" style="display: flex; align-items: flex-end; padding-bottom: 0;">
+                                                <button type="button" class="button btn btn-success span12" id="btnGerarParcelas" style="max-width: 100%;">
+                                                    <span class="button__icon"><i class='bx bx-calculator'></i></span>
+                                                    <span class="button__text2">Gerar</span>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="span4">
-                                            <label for="parcelas">Parcelas</label>
-                                            <select class="span12" name="parcelas" id="parcelas">
-                                                <option value="1" <?php echo (isset($result->parcelas) && $result->parcelas == 1) ? 'selected' : ''; ?>>À Vista</option>
-                                                <option value="2" <?php echo (isset($result->parcelas) && $result->parcelas == 2) ? 'selected' : ''; ?>>2x</option>
-                                                <option value="3" <?php echo (isset($result->parcelas) && $result->parcelas == 3) ? 'selected' : ''; ?>>3x</option>
-                                                <option value="4" <?php echo (isset($result->parcelas) && $result->parcelas == 4) ? 'selected' : ''; ?>>4x</option>
-                                                <option value="5" <?php echo (isset($result->parcelas) && $result->parcelas == 5) ? 'selected' : ''; ?>>5x</option>
-                                                <option value="6" <?php echo (isset($result->parcelas) && $result->parcelas == 6) ? 'selected' : ''; ?>>6x</option>
-                                                <option value="7" <?php echo (isset($result->parcelas) && $result->parcelas == 7) ? 'selected' : ''; ?>>7x</option>
-                                                <option value="8" <?php echo (isset($result->parcelas) && $result->parcelas == 8) ? 'selected' : ''; ?>>8x</option>
-                                                <option value="9" <?php echo (isset($result->parcelas) && $result->parcelas == 9) ? 'selected' : ''; ?>>9x</option>
-                                                <option value="10" <?php echo (isset($result->parcelas) && $result->parcelas == 10) ? 'selected' : ''; ?>>10x</option>
-                                                <option value="11" <?php echo (isset($result->parcelas) && $result->parcelas == 11) ? 'selected' : ''; ?>>11x</option>
-                                                <option value="12" <?php echo (isset($result->parcelas) && $result->parcelas == 12) ? 'selected' : ''; ?>>12x</option>
-                                            </select>
-                                        </div>
-                                        <div class="span4">
-                                            <label for="valorEntrada">Entrada (Sinal)</label>
-                                            <input type="text" class="span12 money" name="valorEntrada" id="valorEntrada" value="<?php echo isset($result->valor_entrada) && $result->valor_entrada > 0 ? number_format($result->valor_entrada, 2, ',', '.') : '0,00'; ?>" placeholder="0,00" />
-                                            <small style="color: #999; display: block; margin-top: 5px;">Valor da entrada/sinal (opcional)</small>
+                                        
+                                        <div id="tabelaParcelasContainer" style="display: none;">
+                                            <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
+                                                <h5>Parcelas Configuradas</h5>
+                                            </div>
+                                            <div class="span12" style="margin-left: 0; overflow-x: auto;">
+                                                <table class="table table-bordered" id="tabelaParcelas">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5%">Nº</th>
+                                                            <th width="15%">Dias</th>
+                                                            <th width="20%">Valor</th>
+                                                            <th width="45%">Observação</th>
+                                                            <th width="15%">Ações</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyParcelas">
+                                                        <!-- Parcelas serão inseridas aqui via JavaScript -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <input type="hidden" name="parcelas_json" id="parcelas_json" value="<?php echo isset($parcelas) && !empty($parcelas) ? htmlspecialchars(json_encode(array_map(function($p) { return ['numero' => $p->numero, 'dias' => $p->dias, 'valor' => floatval($p->valor), 'observacao' => $p->observacao]; }, $parcelas))) : ''; ?>" />
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
@@ -1210,7 +1216,12 @@
                                 $("#preco").val('');
                                 $("#resultado").val('');
                                 $("#desconto").val('');
-                                $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                                $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                    // Atualizar valores das parcelas após adicionar produto
+                                    if (typeof atualizarValoresParcelas === 'function') {
+                                        setTimeout(atualizarValoresParcelas, 300);
+                                    }
+                                });
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
@@ -1266,7 +1277,12 @@
                             $("#detalhes_servico").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
-                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                // Atualizar valores das parcelas após adicionar serviço
+                                if (typeof atualizarValoresParcelas === 'function') {
+                                    setTimeout(atualizarValoresParcelas, 300);
+                                }
+                            });
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
@@ -1368,7 +1384,11 @@
                     success: function (data) {
                         if (data.result == true) {
                             $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
-                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                if (typeof atualizarValoresParcelas === 'function') {
+                                    setTimeout(atualizarValoresParcelas, 300);
+                                }
+                            });
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1435,7 +1455,11 @@
                             
                             // Recarregar tabela de serviços e total
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
-                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                if (typeof atualizarValoresParcelas === 'function') {
+                                    setTimeout(atualizarValoresParcelas, 300);
+                                }
+                            });
                             $("#resultado").val('');
                             $("#desconto").val('');
                             
@@ -1480,7 +1504,11 @@
                     success: function (data) {
                         if (data.result == true) {
                             $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
-                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal");
+                            $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                if (typeof atualizarValoresParcelas === 'function') {
+                                    setTimeout(atualizarValoresParcelas, 300);
+                                }
+                            });
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1568,6 +1596,214 @@
         
         // Máscara para campo de entrada
         $('.money').mask('#.##0,00', {reverse: true});
+
+        // Variável para armazenar parcelas
+        var parcelas = [];
+        var contadorParcela = 0;
+        
+        // Carregar parcelas existentes se houver
+        <?php if (isset($parcelas) && !empty($parcelas)): ?>
+        parcelas = <?php echo json_encode(array_map(function($p) { 
+            return [
+                'numero' => intval($p->numero),
+                'dias' => intval($p->dias),
+                'valor' => floatval($p->valor),
+                'observacao' => $p->observacao ?? ''
+            ];
+        }, $parcelas)); ?>;
+        if (parcelas.length > 0) {
+            setTimeout(function() { atualizarTabelaParcelas(); }, 500);
+        }
+        <?php endif; ?>
+        
+        // Função para gerar parcelas
+        $('#btnGerarParcelas').on('click', function() {
+            var input = $('#geradorParcelas').val().trim();
+            if (!input) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção',
+                    text: 'Digite a configuração de parcelas!'
+                });
+                return;
+            }
+            
+            parcelas = [];
+            contadorParcela = 0;
+            
+            // Verificar se é formato "Nx" (ex: 6x)
+            if (/^\d+x$/i.test(input)) {
+                var numParcelas = parseInt(input.replace(/x/i, ''));
+                if (numParcelas > 0 && numParcelas <= 24) {
+                    for (var i = 1; i <= numParcelas; i++) {
+                        parcelas.push({
+                            numero: i,
+                            dias: i * 30,
+                            valor: 0,
+                            observacao: ''
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Número de parcelas inválido! Use entre 1 e 24.'
+                    });
+                    return;
+                }
+            } else {
+                // Verificar se são números separados por espaço (ex: 30 60 90)
+                var diasArray = input.split(/\s+/).map(function(d) {
+                    return parseInt(d);
+                }).filter(function(d) {
+                    return !isNaN(d) && d > 0;
+                });
+                
+                if (diasArray.length === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Formato inválido! Use: 30, 30 60 90 ou 6x'
+                    });
+                    return;
+                }
+                
+                diasArray.forEach(function(dias, index) {
+                    parcelas.push({
+                        numero: index + 1,
+                        dias: dias,
+                        valor: 0,
+                        observacao: ''
+                    });
+                });
+            }
+            
+            atualizarTabelaParcelas();
+            $(document).trigger('parcelasGeradas');
+        });
+        
+        // Função para atualizar tabela de parcelas
+        function atualizarTabelaParcelas() {
+            var tbody = $('#tbodyParcelas');
+            tbody.empty();
+            
+            if (parcelas.length === 0) {
+                $('#tabelaParcelasContainer').hide();
+                $('#parcelas_json').val('');
+                return;
+            }
+            
+            parcelas.forEach(function(parcela, index) {
+                var row = $('<tr>');
+                row.append('<td>' + parcela.numero + '</td>');
+                row.append('<td><input type="number" class="span12 dias-parcela" data-index="' + index + '" value="' + parcela.dias + '" min="1" /></td>');
+                row.append('<td><input type="text" class="span12 money valor-parcela" data-index="' + index + '" value="' + (parcela.valor > 0 ? parcela.valor.toFixed(2).replace('.', ',') : '0,00') + '" /></td>');
+                row.append('<td><input type="text" class="span12 obs-parcela" data-index="' + index + '" value="' + (parcela.observacao || '') + '" placeholder="Observação..." /></td>');
+                row.append('<td><button type="button" class="btn btn-mini btn-danger btn-remover-parcela" data-index="' + index + '"><i class="bx bx-trash"></i></button></td>');
+                tbody.append(row);
+            });
+            
+            // Aplicar máscaras
+            $('.money').mask('#.##0,00', {reverse: true});
+            
+            // Eventos de edição (usando delegação para elementos dinâmicos)
+            $(document).off('change', '.dias-parcela').on('change', '.dias-parcela', function() {
+                var index = $(this).data('index');
+                parcelas[index].dias = parseInt($(this).val()) || 0;
+                salvarParcelasJSON();
+            });
+            
+            $(document).off('blur', '.valor-parcela').on('blur', '.valor-parcela', function() {
+                var index = $(this).data('index');
+                var valor = $(this).val().replace('.', '').replace(',', '.');
+                parcelas[index].valor = parseFloat(valor) || 0;
+                salvarParcelasJSON();
+            });
+            
+            $(document).off('blur', '.obs-parcela').on('blur', '.obs-parcela', function() {
+                var index = $(this).data('index');
+                parcelas[index].observacao = $(this).val();
+                salvarParcelasJSON();
+            });
+            
+            $(document).off('click', '.btn-remover-parcela').on('click', '.btn-remover-parcela', function() {
+                var index = $(this).data('index');
+                parcelas.splice(index, 1);
+                // Renumerar parcelas
+                parcelas.forEach(function(p, i) {
+                    p.numero = i + 1;
+                });
+                atualizarTabelaParcelas();
+                atualizarValoresParcelas();
+            });
+            
+            $('#tabelaParcelasContainer').show();
+            salvarParcelasJSON();
+            adicionarBotaoAtualizar();
+        }
+        
+        // Função para salvar parcelas em JSON
+        function salvarParcelasJSON() {
+            $('#parcelas_json').val(JSON.stringify(parcelas));
+        }
+        
+        // Função para atualizar valores das parcelas automaticamente
+        function atualizarValoresParcelas() {
+            if (parcelas.length === 0) {
+                return;
+            }
+            
+            // Buscar valor total da OS
+            var valorTotal = 0;
+            
+            if ($('#valorTotal').length && $('#valorTotal').val()) {
+                var valorStr = $('#valorTotal').val().toString().replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.');
+                valorTotal = parseFloat(valorStr) || 0;
+            }
+            
+            // Se não tem valor total ainda, não atualiza (mas não mostra erro)
+            if (valorTotal <= 0) {
+                return;
+            }
+            
+            // Calcular valor por parcela (distribuição igual)
+            var valorPorParcela = valorTotal / parcelas.length;
+            
+            // Atualizar valores das parcelas
+            parcelas.forEach(function(parcela) {
+                parcela.valor = parseFloat(valorPorParcela.toFixed(2));
+            });
+            
+            // Atualizar tabela
+            atualizarTabelaParcelas();
+        }
+        
+        // Adicionar botão para atualizar valores manualmente
+        function adicionarBotaoAtualizar() {
+            if ($('#btnAtualizarValoresParcelas').length === 0 && parcelas.length > 0) {
+                var btn = $('<button type="button" class="button btn btn-info btn-mini" id="btnAtualizarValoresParcelas" style="margin-top: 10px;">' +
+                    '<span class="button__icon"><i class="bx bx-refresh"></i></span>' +
+                    '<span class="button__text2">Atualizar Valores</span></button>');
+                $('#tabelaParcelasContainer').append(btn);
+                btn.on('click', function() {
+                    atualizarValoresParcelas();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Valores Atualizados!',
+                        text: 'Os valores das parcelas foram atualizados com base no valor total da OS.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                });
+            }
+        }
+        
+        // Observar mudanças no valor total
+        $(document).on('parcelasGeradas', function() {
+            setTimeout(function() {
+                atualizarValoresParcelas();
+            }, 500);
+        });
 
         $('.editor').trumbowyg({
             lang: 'pt_br',
