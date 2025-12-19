@@ -637,7 +637,7 @@ class Financeiro extends MY_Controller
             $this->db->trans_rollback();
             
             $errorMsg = 'Erro ao excluir lançamento: ' . $e->getMessage();
-            log_error($errorMsg);
+            log_message('error', $errorMsg);
             
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
             $json = ['result' => false, 'message' => $errorMsg];
