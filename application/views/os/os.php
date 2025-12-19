@@ -333,6 +333,12 @@
     $(document).ready(function() {
         console.log('jQuery carregado, versão:', $.fn.jquery);
         console.log('Selects de status:', $('.status-select').length);
+        console.log('Modal faturar existe?', $('#modal-faturar').length > 0);
+        
+        // Teste: verificar se o evento está sendo capturado
+        $('.status-select').each(function() {
+            console.log('Select encontrado:', $(this).data('os-id'), $(this).data('status-atual'));
+        });
         
         // Funcionalidade de ordenação de colunas
         var currentSort = {
@@ -459,7 +465,7 @@
         });
         
         // Atualizar status da OS via dropdown
-        $('body').on('change', '.status-select', function(e) {
+        $(document).on('change', '.status-select', function(e) {
             e.stopPropagation();
             
             var $select = $(this);
@@ -472,11 +478,13 @@
             // Se não mudou, não fazer nada
             if (novoStatus === statusAtual) {
                 console.log('Status não mudou');
-                return;
+                $select.val(statusAtual); // Forçar valor original
+                return false;
             }
             
             // Se mudar para Faturado, abrir modal de faturamento
             if (novoStatus === 'Faturado') {
+                console.log('Status mudou para Faturado, abrindo modal...');
                 $select.prop('disabled', true);
                 
                 // Buscar dados da OS
@@ -485,6 +493,7 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        console.log('Dados da OS recebidos:', data);
                         if (data.result) {
                             // Verificar se já tem lançamento
                             if (data.temLancamento) {
@@ -497,6 +506,7 @@
                                     cancelButtonText: 'Cancelar'
                                 }).then(function(result) {
                                     if (result.isConfirmed) {
+                                        console.log('Abrindo modal de faturamento (com lançamento existente)');
                                         abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
                                     } else {
                                         $select.val(statusAtual);
@@ -504,16 +514,19 @@
                                     }
                                 });
                             } else {
+                                console.log('Abrindo modal de faturamento');
                                 abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
                             }
                         } else {
-                            Swal.fire('Erro', data.message, 'error');
+                            console.error('Erro na resposta:', data);
+                            Swal.fire('Erro', data.message || 'Erro ao buscar dados da OS', 'error');
                             $select.val(statusAtual);
                             $select.prop('disabled', false);
                         }
                     },
-                    error: function() {
-                        Swal.fire('Erro', 'Erro ao buscar dados da OS', 'error');
+                    error: function(xhr, status, error) {
+                        console.error('Erro AJAX ao buscar dados da OS:', xhr, status, error);
+                        Swal.fire('Erro', 'Erro ao buscar dados da OS: ' + error, 'error');
                         $select.val(statusAtual);
                         $select.prop('disabled', false);
                     }
@@ -573,6 +586,8 @@
         
         // Função para abrir modal de faturamento
         function abrirModalFaturar(idOs, valorTotal, $select, statusAnterior) {
+            console.log('abrirModalFaturar chamado', {idOs: idOs, valorTotal: valorTotal});
+            
             // Salvar referência para reverter se cancelar
             faturamentoPendente = {
                 $select: $select,
@@ -591,44 +606,73 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    if (data.result && data.parcelas && data.parcelas.length > 0) {
-                        // Carregar parcelas existentes
-                        parcelasFaturamento = data.parcelas.map(function(p) {
-                            return {
-                                id: p.id,
-                                numero: p.numero,
-                                dias: p.dias,
-                                valor: p.valor,
-                                observacao: p.observacao || '',
-                                data_vencimento: p.data_vencimento || '',
-                                forma_pgto: p.forma_pgto || '',
-                                detalhes: p.detalhes || '',
-                                status: p.status || 'pendente'
-                            };
-                        });
+                    console.log('Parcelas recebidas:', data);
+                    if (data.result) {
+                        if (data.parcelas && data.parcelas.length > 0) {
+                            // Carregar parcelas existentes
+                            parcelasFaturamento = data.parcelas.map(function(p) {
+                                return {
+                                    id: p.id,
+                                    numero: p.numero,
+                                    dias: p.dias,
+                                    valor: p.valor,
+                                    observacao: p.observacao || '',
+                                    data_vencimento: p.data_vencimento || '',
+                                    forma_pgto: p.forma_pgto || '',
+                                    detalhes: p.detalhes || '',
+                                    status: p.status || 'pendente'
+                                };
+                            });
+                        } else {
+                            // Se não tem parcelas, criar uma parcela única
+                            parcelasFaturamento = [{
+                                id: null,
+                                numero: 1,
+                                dias: 0,
+                                valor: valorTotal,
+                                observacao: '',
+                                data_vencimento: '',
+                                forma_pgto: '',
+                                detalhes: '',
+                                status: 'pendente'
+                            }];
+                        }
+                        
+                        console.log('Parcelas processadas:', parcelasFaturamento);
+                        atualizarTabelaFaturamento();
+                        $('#opcoes-faturamento').show();
+                        
+                        // Abrir modal
+                        console.log('Abrindo modal...');
+                        var $modal = $('#modal-faturar');
+                        console.log('Modal encontrado?', $modal.length > 0);
+                        if ($modal.length > 0) {
+                            $modal.modal('show');
+                            console.log('Modal.show() chamado');
+                            // Forçar exibição se necessário
+                            setTimeout(function() {
+                                if (!$modal.is(':visible')) {
+                                    console.log('Modal não visível, tentando forçar...');
+                                    $modal.removeClass('hide').addClass('show');
+                                    $modal.css('display', 'block');
+                                }
+                            }, 100);
+                        } else {
+                            console.error('Modal não encontrado!');
+                            Swal.fire('Erro', 'Modal de faturamento não encontrado', 'error');
+                        }
                     } else {
-                        // Se não tem parcelas, criar uma parcela única
-                        parcelasFaturamento = [{
-                            id: null,
-                            numero: 1,
-                            dias: 0,
-                            valor: valorTotal,
-                            observacao: '',
-                            data_vencimento: '',
-                            forma_pgto: '',
-                            detalhes: '',
-                            status: 'pendente'
-                        }];
+                        console.error('Erro na resposta:', data);
+                        Swal.fire('Erro', data.message || 'Erro ao carregar dados da OS', 'error');
+                        if ($select) {
+                            $select.val(statusAnterior);
+                            $select.prop('disabled', false);
+                        }
                     }
-                    
-                    atualizarTabelaFaturamento();
-                    $('#opcoes-faturamento').show();
-                    
-                    // Abrir modal
-                    $('#modal-faturar').modal('show');
                 },
-                error: function() {
-                    Swal.fire('Erro', 'Erro ao carregar dados da OS', 'error');
+                error: function(xhr, status, error) {
+                    console.error('Erro AJAX ao buscar parcelas:', xhr, status, error);
+                    Swal.fire('Erro', 'Erro ao carregar dados da OS: ' + error, 'error');
                     if ($select) {
                         $select.val(statusAnterior);
                         $select.prop('disabled', false);
