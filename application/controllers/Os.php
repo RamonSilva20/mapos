@@ -1958,7 +1958,8 @@ class Os extends MY_Controller
             $statusPagamento = (isset($parcela['status']) && $parcela['status'] === 'pago') ? 'pago' : 'pendente';
             $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
             $baixado = ($statusPagamento === 'pago') ? 1 : 0;
-            $dataPagamento = ($statusPagamento === 'pago') ? date('Y-m-d') : null;
+            // Se está pago, a data de pagamento é a data de vencimento
+            $dataPagamento = ($statusPagamento === 'pago') ? $dataVencimento : null;
 
             $dataLancamento = [
                 'descricao' => 'OS #' . $idOs . ' - Parcela ' . $parcela['numero'] . ' - ' . htmlspecialchars($os->nomeCliente),
@@ -1976,10 +1977,14 @@ class Os extends MY_Controller
                 'forma_pgto' => $parcela['forma_pgto'] ?? '',
                 'tipo' => 'receita',
                 'observacoes' => (!empty($parcela['observacao']) ? $parcela['observacao'] . ' - ' : '') . 
-                                (!empty($parcela['detalhes']) ? 'Detalhes: ' . $parcela['detalhes'] . ' - ' : '') . 
                                 'Referente à OS #' . $idOs,
                 'usuarios_id' => $this->session->userdata('id_admin')
             ];
+            
+            // Adicionar conta bancária se fornecida
+            if (isset($parcela['conta_id']) && !empty($parcela['conta_id'])) {
+                $dataLancamento['contas_id'] = $parcela['conta_id'];
+            }
             
             $this->financeiro_model->add('lancamentos', $dataLancamento);
             $lancamentosIds[] = $this->db->insert_id();
@@ -2286,6 +2291,11 @@ class Os extends MY_Controller
                                     'Referente à OS #' . $idOs,
                     'usuarios_id' => $this->session->userdata('id_admin')
                 ];
+                
+                // Adicionar conta bancária se fornecida
+                if (isset($parcela->conta_id) && !empty($parcela->conta_id)) {
+                    $dataLancamento['contas_id'] = $parcela->conta_id;
+                }
                 
                 $this->financeiro_model->add('lancamentos', $dataLancamento);
                 $lancamentosIds[] = $this->db->insert_id();

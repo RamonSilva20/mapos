@@ -46,8 +46,11 @@ class Financeiro extends MY_Controller
         }
 
         $where = '';
-        $vencimento_de = $this->input->get('vencimento_de') ?: date('d/m/Y');
-        $vencimento_ate = $this->input->get('vencimento_ate') ?: date('d/m/Y');
+        // Definir período padrão como o mês atual se não houver filtros
+        $primeiroDiaMes = date('01/m/Y');
+        $ultimoDiaMes = date('t/m/Y');
+        $vencimento_de = $this->input->get('vencimento_de') ?: $primeiroDiaMes;
+        $vencimento_ate = $this->input->get('vencimento_ate') ?: $ultimoDiaMes;
         $cliente = $this->input->get('cliente');
         $tipo = $this->input->get('tipo');
         $status = $this->input->get('status');

@@ -303,7 +303,7 @@
                                 <th width="12%">Data Vencimento</th>
                                 <th width="15%">Valor</th>
                                 <th width="18%">Forma de Pagamento</th>
-                                <th width="30%">Detalhes</th>
+                                <th width="30%">Conta Bancária</th>
                                 <th width="10%">Status</th>
                             </tr>
                         </thead>
@@ -335,6 +335,20 @@
         console.log('jQuery carregado, versão:', $.fn.jquery);
         console.log('Selects de status:', $('.status-select').length);
         console.log('Modal faturar existe?', $('#modal-faturar').length > 0);
+        
+        // Carregar contas bancárias
+        $.ajax({
+            url: '<?php echo base_url(); ?>index.php/contas/getAll',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                contasBancarias = data || [];
+                console.log('Contas bancárias carregadas:', contasBancarias.length);
+            },
+            error: function() {
+                console.error('Erro ao carregar contas bancárias');
+            }
+        });
         
         // Teste: verificar se o evento está sendo capturado
         $('.status-select').each(function() {
@@ -494,18 +508,22 @@
                 return false;
             }
             
-            // Se mudar para Faturado, abrir modal de faturamento
-            console.log('Verificando se status é Faturado...', novoStatus, typeof novoStatus);
+            // Se mudar para Faturado ou Finalizado, abrir modal de faturamento
+            console.log('Verificando se status é Faturado ou Finalizado...', novoStatus, typeof novoStatus);
             
-            // Teste alternativo: verificar se contém "Faturado"
+            // Verificar se é Faturado ou Finalizado
             var isFaturado = novoStatus === 'Faturado' || 
                             novoStatus.trim() === 'Faturado' || 
                             (novoStatus && novoStatus.indexOf('Faturado') !== -1);
             
-            console.log('isFaturado:', isFaturado, 'novoStatus:', JSON.stringify(novoStatus));
+            var isFinalizado = novoStatus === 'Finalizado' || 
+                            novoStatus.trim() === 'Finalizado' || 
+                            (novoStatus && novoStatus.indexOf('Finalizado') !== -1);
             
-            if (isFaturado) {
-                console.log('✓ Status é Faturado! Abrindo modal...');
+            console.log('isFaturado:', isFaturado, 'isFinalizado:', isFinalizado, 'novoStatus:', JSON.stringify(novoStatus));
+            
+            if (isFaturado || isFinalizado) {
+                console.log('✓ Status é Faturado ou Finalizado! Abrindo modal...');
                 $select.prop('disabled', true);
                 
                 // Verificar se função existe
@@ -540,7 +558,7 @@
                                 }).then(function(result) {
                                     if (result.isConfirmed) {
                                         console.log('✓ Abrindo modal de faturamento (com lançamento existente)');
-                                        abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
+                                        abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual, novoStatus);
                                     } else {
                                         console.log('Usuário cancelou');
                                         $select.val(statusAtual);
@@ -549,7 +567,7 @@
                                 });
                             } else {
                                 console.log('✓ Abrindo modal de faturamento (sem lançamento)');
-                                abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual);
+                                abrirModalFaturar(idOs, data.valorTotal, $select, statusAtual, novoStatus);
                             }
                         } else {
                             console.error('✗ Erro na resposta:', data);
@@ -624,15 +642,17 @@
         // Variável para armazenar parcelas do faturamento
         var parcelasFaturamento = [];
         var dataBaseVencimento = '<?php echo date('d/m/Y'); ?>';
+        var contasBancarias = [];
         
         // Função para abrir modal de faturamento
-        function abrirModalFaturar(idOs, valorTotal, $select, statusAnterior) {
-            console.log('abrirModalFaturar chamado', {idOs: idOs, valorTotal: valorTotal});
+        function abrirModalFaturar(idOs, valorTotal, $select, statusAnterior, novoStatus) {
+            console.log('abrirModalFaturar chamado', {idOs: idOs, valorTotal: valorTotal, novoStatus: novoStatus});
             
             // Salvar referência para reverter se cancelar
             faturamentoPendente = {
                 $select: $select,
-                statusAnterior: statusAnterior
+                statusAnterior: statusAnterior,
+                novoStatus: novoStatus
             };
             
             // Preencher modal básico
@@ -674,7 +694,7 @@
                                 observacao: '',
                                 data_vencimento: '',
                                 forma_pgto: '',
-                                detalhes: '',
+                                conta_id: '',
                                 status: 'pendente'
                             }];
                         }
@@ -764,13 +784,21 @@
                     dataVencimento = dataBaseVencimento;
                 }
                 
+                // Construir select de contas bancárias
+                var selectContas = '<select class="span12 conta-faturar" data-index="' + index + '" style="width: 100%;"><option value="">Selecione a conta...</option>';
+                contasBancarias.forEach(function(conta) {
+                    var selected = (parcela.conta_id && parcela.conta_id == conta.idContas) ? ' selected' : '';
+                    selectContas += '<option value="' + conta.idContas + '"' + selected + '>' + conta.conta + ' (' + conta.banco + ')' + '</option>';
+                });
+                selectContas += '</select>';
+                
                 var row = $('<tr>');
                 row.append('<td style="text-align: center;">' + parcela.numero + '</td>');
                 row.append('<td><input type="number" class="span12 dias-faturar" data-index="' + index + '" value="' + parcela.dias + '" min="0" style="width: 100%;" /></td>');
                 row.append('<td><input type="text" class="span12 datepicker data-faturar" data-index="' + index + '" value="' + dataVencimento + '" style="width: 100%;" /></td>');
                 row.append('<td><input type="text" class="span12 money valor-faturar" data-index="' + index + '" value="' + (parcela.valor > 0 ? parcela.valor.toFixed(2).replace('.', ',') : '0,00') + '" style="width: 100%;" /></td>');
                 row.append('<td><select class="span12 forma-faturar" data-index="' + index + '" style="width: 100%;"><option value="">Selecione...</option><option value="Dinheiro"' + (parcela.forma_pgto === 'Dinheiro' ? ' selected' : '') + '>Dinheiro</option><option value="Pix"' + (parcela.forma_pgto === 'Pix' ? ' selected' : '') + '>Pix</option><option value="Cartão de Crédito"' + (parcela.forma_pgto === 'Cartão de Crédito' ? ' selected' : '') + '>Cartão de Crédito</option><option value="Cartão de Débito"' + (parcela.forma_pgto === 'Cartão de Débito' ? ' selected' : '') + '>Cartão de Débito</option><option value="Boleto"' + (parcela.forma_pgto === 'Boleto' ? ' selected' : '') + '>Boleto</option><option value="Transferência"' + (parcela.forma_pgto === 'Transferência' ? ' selected' : '') + '>Transferência</option><option value="Cheque"' + (parcela.forma_pgto === 'Cheque' ? ' selected' : '') + '>Cheque</option></select></td>');
-                row.append('<td><input type="text" class="span12 detalhes-faturar" data-index="' + index + '" value="' + (parcela.detalhes || '') + '" placeholder="Banco, gateway, conta..." style="width: 100%;" /></td>');
+                row.append('<td>' + selectContas + '</td>');
                 row.append('<td style="text-align: center;"><span class="badge badge-' + (parcela.status === 'pago' ? 'success' : 'warning') + '">' + (parcela.status === 'pago' ? 'Pago' : 'Pendente') + '</span></td>');
                 tbody.append(row);
             });
@@ -818,9 +846,9 @@
                 parcelasFaturamento[index].forma_pgto = $(this).val();
             });
             
-            $(document).off('blur', '.detalhes-faturar').on('blur', '.detalhes-faturar', function() {
+            $(document).off('change', '.conta-faturar').on('change', '.conta-faturar', function() {
                 var index = $(this).data('index');
-                parcelasFaturamento[index].detalhes = $(this).val();
+                parcelasFaturamento[index].conta_id = $(this).val();
             });
             
             atualizarResumoFaturamento();
@@ -886,13 +914,16 @@
             
             $(this).prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Processando...');
             
-            // Primeiro, atualiza o status para Faturado
+            // Obter o status do faturamento pendente
+            var statusParaAtualizar = faturamentoPendente && faturamentoPendente.novoStatus ? faturamentoPendente.novoStatus : 'Faturado';
+            
+            // Primeiro, atualiza o status
             $.ajax({
                 url: '<?php echo base_url(); ?>index.php/os/atualizarStatus',
                 type: 'POST',
                 data: {
                     idOs: idOs,
-                    status: 'Faturado',
+                    status: statusParaAtualizar,
                     <?php echo $this->security->get_csrf_token_name(); ?>: '<?php echo $this->security->get_csrf_hash(); ?>'
                 },
                 dataType: 'json',
