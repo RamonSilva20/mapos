@@ -1102,8 +1102,15 @@ class Os extends MY_Controller
         
         // Se for customizado, validar apenas os campos necessários
         if ($isCustomizado) {
-            $preco = $this->input->post('preco');
-            $quantidade = $this->input->post('quantidade');
+            // Usar preço e quantidade específicos do campo "outros"
+            $preco = $this->input->post('preco_outros');
+            $quantidade = $this->input->post('quantidade_outros');
+            
+            // Converter preço de formato brasileiro (0,00) para numérico
+            if (!empty($preco)) {
+                $preco = str_replace('.', '', $preco);
+                $preco = str_replace(',', '.', $preco);
+            }
             
             if (empty($preco) || !is_numeric($preco) || floatval($preco) <= 0) {
                 return $this->output

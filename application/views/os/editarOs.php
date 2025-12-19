@@ -368,9 +368,28 @@
                                     </div>
                                     <div class="span12" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
                                         <label for="outros_produtos_servicos"><strong>Outros Produtos/Serviços</strong> <small style="color: #666;">(Texto livre - não precisa cadastrar)</small></label>
-                                        <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="outros_produtos_servicos" name="outros_produtos_servicos" class="span12" rows="3"></textarea>
+                                        <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
+                                            <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="outros_produtos_servicos" name="outros_produtos_servicos" class="span12 editor" rows="4"></textarea>
+                                        </div>
+                                        <div class="span12" style="margin-left: 0; display: flex; gap: 10px; align-items: flex-end;">
+                                            <div class="span3" style="margin-left: 0;">
+                                                <label for="preco_outros">Preço *</label>
+                                                <input type="text" placeholder="Preço" id="preco_outros" name="preco_outros" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
+                                            </div>
+                                            <div class="span3">
+                                                <label for="quantidade_outros">Quantidade *</label>
+                                                <input type="text" placeholder="Quantidade" id="quantidade_outros" name="quantidade_outros" class="span12" value="1" />
+                                            </div>
+                                            <div class="span6">
+                                                <label for="">&nbsp;</label>
+                                                <button type="button" class="button btn btn-success span12" id="btnAdicionarOutros">
+                                                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
+                                                    <span class="button__text2">Adicionar Outros</span>
+                                                </button>
+                                            </div>
+                                        </div>
                                         <small style="color: #666; display: block; margin-top: 5px;">
-                                            <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Será incluído no total da OS.
+                                            <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Use o editor de texto para formatar. Será incluído no total da OS.
                                         </small>
                                     </div>
                                 </form>
@@ -1277,6 +1296,11 @@
                 },
             },
             submitHandler: function (form) {
+                // Não processar se for o botão "Adicionar Outros" (tem handler próprio)
+                if ($(form).data('skip-submit')) {
+                    return false;
+                }
+                
                 var dados = $(form).serialize();
                 
                 // Verificar se está usando campo de texto livre
@@ -1865,6 +1889,98 @@
         $('.editor').trumbowyg({
             lang: 'pt_br',
             semantic: { 'strikethrough': 's', }
+        });
+        
+        // Handler para botão "Adicionar Outros"
+        $('#btnAdicionarOutros').on('click', function(e) {
+            e.preventDefault();
+            
+            var outrosProdutosServicos = $('#outros_produtos_servicos').val().trim();
+            var precoOutros = $('#preco_outros').val();
+            var quantidadeOutros = $('#quantidade_outros').val() || '1';
+            
+            // Validações
+            if (!outrosProdutosServicos) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Atenção",
+                    text: "Preencha o campo 'Outros Produtos/Serviços'."
+                });
+                return false;
+            }
+            
+            if (!precoOutros || parseFloat(precoOutros.replace(/\./g, '').replace(',', '.')) <= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Atenção",
+                    text: "Preço é obrigatório e deve ser maior que zero."
+                });
+                return false;
+            }
+            
+            if (!quantidadeOutros || parseFloat(quantidadeOutros) <= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Atenção",
+                    text: "Quantidade é obrigatória e deve ser maior que zero."
+                });
+                return false;
+            }
+            
+            // Preparar dados
+            var dados = {
+                idOsServico: $('#idOsServico').val(),
+                outros_produtos_servicos: outrosProdutosServicos,
+                preco_outros: precoOutros,
+                quantidade_outros: quantidadeOutros
+            };
+            
+            $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+            
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>index.php/os/adicionarServico",
+                data: dados,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result == true) {
+                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
+                        $("#outros_produtos_servicos").trumbowyg('empty');
+                        $("#preco_outros").val('');
+                        $("#quantidade_outros").val('1');
+                        $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                            // Atualizar valores das parcelas após adicionar serviço
+                            if (typeof atualizarValoresParcelas === 'function') {
+                                setTimeout(atualizarValoresParcelas, 300);
+                            }
+                        });
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sucesso!",
+                            text: "Produto/Serviço adicionado com sucesso!",
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Atenção",
+                            text: data.message || "Ocorreu um erro ao tentar adicionar produto/serviço."
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMsg = "Ocorreu um erro ao tentar adicionar produto/serviço.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    Swal.fire({
+                        icon: "error",
+                        title: "Atenção",
+                        text: errorMsg
+                    });
+                }
+            });
         });
 
         // Modal para cadastro rápido de cliente
