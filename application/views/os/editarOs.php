@@ -886,9 +886,12 @@
     $(document).ready(function () {
 
         $(".money").maskMoney({
+            prefix: '',
+            suffix: '',
             decimal: ",",
             thousands: ".",
-            allowZero: true
+            allowZero: true,
+            allowNegative: false
         });
         
         // Inicializar maskMoney no modal quando abrir
