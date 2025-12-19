@@ -255,7 +255,7 @@
                                 <?php foreach ($pagamentos as $pgto): ?>
                                 <tr id="pgto-<?php echo $pgto->idPagamento; ?>">
                                     <td><?php echo $pgto->idPagamento; ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($pgto->data_pagamento)); ?></td>
+                                    <td><?php echo $pgto->data_pagamento && $pgto->data_pagamento != '0000-00-00' ? date('d/m/Y', strtotime($pgto->data_pagamento)) : '-'; ?></td>
                                     <td><strong style="color: #28a745;">R$ <?php echo number_format($pgto->valor, 2, ',', '.'); ?></strong></td>
                                     <td><?php echo htmlspecialchars($pgto->forma_pgto ?: '-'); ?></td>
                                     <td><?php echo htmlspecialchars($pgto->observacao ?: '-'); ?></td>
