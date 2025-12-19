@@ -141,6 +141,44 @@
                                             Exibir laudo técnico na impressão
                                         </label>
                                     </div>
+                                    <div class="span12" style="padding: 1%; margin-left: 0; border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px;">
+                                        <h4 style="margin-bottom: 10px;">Forma de Pagamento</h4>
+                                        <div class="span4" style="margin-left: 0;">
+                                            <label for="formaPgto">Forma de Pagamento</label>
+                                            <select class="span12" name="formaPgto" id="formaPgto">
+                                                <option value="">Selecione...</option>
+                                                <option value="Dinheiro">Dinheiro</option>
+                                                <option value="Pix">Pix</option>
+                                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                                <option value="Cartão de Débito">Cartão de Débito</option>
+                                                <option value="Boleto">Boleto</option>
+                                                <option value="Transferência">Transferência</option>
+                                                <option value="Cheque">Cheque</option>
+                                            </select>
+                                        </div>
+                                        <div class="span4">
+                                            <label for="parcelas">Parcelas</label>
+                                            <select class="span12" name="parcelas" id="parcelas">
+                                                <option value="1">À Vista</option>
+                                                <option value="2">2x</option>
+                                                <option value="3">3x</option>
+                                                <option value="4">4x</option>
+                                                <option value="5">5x</option>
+                                                <option value="6">6x</option>
+                                                <option value="7">7x</option>
+                                                <option value="8">8x</option>
+                                                <option value="9">9x</option>
+                                                <option value="10">10x</option>
+                                                <option value="11">11x</option>
+                                                <option value="12">12x</option>
+                                            </select>
+                                        </div>
+                                        <div class="span4">
+                                            <label for="valorEntrada">Entrada (Sinal)</label>
+                                            <input type="text" class="span12 money" name="valorEntrada" id="valorEntrada" value="0,00" placeholder="0,00" />
+                                            <small style="color: #999; display: block; margin-top: 5px;">Valor da entrada/sinal (opcional)</small>
+                                        </div>
+                                    </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span12" style="display:flex; justify-content: center;">
                                             <button class="button btn btn-success" id="btnContinuar">
@@ -284,6 +322,10 @@
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });
+        
+        // Máscara para campo de entrada
+        $('.money').mask('#.##0,00', {reverse: true});
+        
         $('.editor').trumbowyg({
             lang: 'pt_br',
             semantic: { 'strikethrough': 's', }

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
 <script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
@@ -154,6 +155,44 @@
                                             <input type="checkbox" name="imprimir_laudo" id="imprimir_laudo" value="1" <?php echo (isset($result->imprimir_laudo) && $result->imprimir_laudo == 1) ? 'checked' : ''; ?> />
                                             Exibir laudo técnico na impressão
                                         </label>
+                                    </div>
+                                    <div class="span12" style="padding: 1%; margin-left: 0; border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px;">
+                                        <h4 style="margin-bottom: 10px;">Forma de Pagamento</h4>
+                                        <div class="span4" style="margin-left: 0;">
+                                            <label for="formaPgto">Forma de Pagamento</label>
+                                            <select class="span12" name="formaPgto" id="formaPgto">
+                                                <option value="">Selecione...</option>
+                                                <option value="Dinheiro" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Dinheiro') ? 'selected' : ''; ?>>Dinheiro</option>
+                                                <option value="Pix" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Pix') ? 'selected' : ''; ?>>Pix</option>
+                                                <option value="Cartão de Crédito" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cartão de Crédito') ? 'selected' : ''; ?>>Cartão de Crédito</option>
+                                                <option value="Cartão de Débito" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cartão de Débito') ? 'selected' : ''; ?>>Cartão de Débito</option>
+                                                <option value="Boleto" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Boleto') ? 'selected' : ''; ?>>Boleto</option>
+                                                <option value="Transferência" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Transferência') ? 'selected' : ''; ?>>Transferência</option>
+                                                <option value="Cheque" <?php echo (isset($result->forma_pgto) && $result->forma_pgto == 'Cheque') ? 'selected' : ''; ?>>Cheque</option>
+                                            </select>
+                                        </div>
+                                        <div class="span4">
+                                            <label for="parcelas">Parcelas</label>
+                                            <select class="span12" name="parcelas" id="parcelas">
+                                                <option value="1" <?php echo (isset($result->parcelas) && $result->parcelas == 1) ? 'selected' : ''; ?>>À Vista</option>
+                                                <option value="2" <?php echo (isset($result->parcelas) && $result->parcelas == 2) ? 'selected' : ''; ?>>2x</option>
+                                                <option value="3" <?php echo (isset($result->parcelas) && $result->parcelas == 3) ? 'selected' : ''; ?>>3x</option>
+                                                <option value="4" <?php echo (isset($result->parcelas) && $result->parcelas == 4) ? 'selected' : ''; ?>>4x</option>
+                                                <option value="5" <?php echo (isset($result->parcelas) && $result->parcelas == 5) ? 'selected' : ''; ?>>5x</option>
+                                                <option value="6" <?php echo (isset($result->parcelas) && $result->parcelas == 6) ? 'selected' : ''; ?>>6x</option>
+                                                <option value="7" <?php echo (isset($result->parcelas) && $result->parcelas == 7) ? 'selected' : ''; ?>>7x</option>
+                                                <option value="8" <?php echo (isset($result->parcelas) && $result->parcelas == 8) ? 'selected' : ''; ?>>8x</option>
+                                                <option value="9" <?php echo (isset($result->parcelas) && $result->parcelas == 9) ? 'selected' : ''; ?>>9x</option>
+                                                <option value="10" <?php echo (isset($result->parcelas) && $result->parcelas == 10) ? 'selected' : ''; ?>>10x</option>
+                                                <option value="11" <?php echo (isset($result->parcelas) && $result->parcelas == 11) ? 'selected' : ''; ?>>11x</option>
+                                                <option value="12" <?php echo (isset($result->parcelas) && $result->parcelas == 12) ? 'selected' : ''; ?>>12x</option>
+                                            </select>
+                                        </div>
+                                        <div class="span4">
+                                            <label for="valorEntrada">Entrada (Sinal)</label>
+                                            <input type="text" class="span12 money" name="valorEntrada" id="valorEntrada" value="<?php echo isset($result->valor_entrada) && $result->valor_entrada > 0 ? number_format($result->valor_entrada, 2, ',', '.') : '0,00'; ?>" placeholder="0,00" />
+                                            <small style="color: #999; display: block; margin-top: 5px;">Valor da entrada/sinal (opcional)</small>
+                                        </div>
                                     </div>
                                     <div class="span12" style="padding: 0; margin-left: 0">
                                         <div class="span12" style="display:flex; justify-content: center;">
@@ -1526,6 +1565,9 @@
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });
+        
+        // Máscara para campo de entrada
+        $('.money').mask('#.##0,00', {reverse: true});
 
         $('.editor').trumbowyg({
             lang: 'pt_br',
