@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
 <style>
   select {
     width: 70px;
@@ -505,12 +506,6 @@
             
             if (isFaturado) {
                 console.log('✓ Status é Faturado! Abrindo modal...');
-                // Teste temporário para garantir que está entrando aqui
-                try {
-                    throw new Error('TESTE: Entrou na condição Faturado');
-                } catch(e) {
-                    console.error('TESTE:', e.message);
-                }
                 $select.prop('disabled', true);
                 
                 // Verificar se função existe
