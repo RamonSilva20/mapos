@@ -170,7 +170,6 @@
                 <?php endif; ?>
                 
                 <?php 
-                $totalOutros = 0;
                 if (isset($outros) && $outros) : ?>
                     <div class="tabela">
                         <table class="table table-bordered">
