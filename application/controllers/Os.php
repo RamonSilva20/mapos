@@ -1137,16 +1137,26 @@ class Os extends MY_Controller
             }
         }
 
-        $preco = floatval($this->input->post('preco'));
-        $quantidade = floatval($this->input->post('quantidade'));
+        if ($isCustomizado) {
+            $preco = floatval($preco);
+            $quantidade = floatval($quantidade);
+        } else {
+            $preco = floatval($this->input->post('preco'));
+            $quantidade = floatval($this->input->post('quantidade'));
+        }
         
         $data = [
-            'servicos_id' => $isCustomizado ? null : $this->input->post('idServico'),
             'quantidade' => $quantidade,
             'preco' => $preco,
             'os_id' => $this->input->post('idOsServico'),
             'subTotal' => $preco * $quantidade,
         ];
+        
+        // Para serviços customizados, não incluir servicos_id (será NULL)
+        // Para serviços cadastrados, incluir servicos_id
+        if (!$isCustomizado) {
+            $data['servicos_id'] = $this->input->post('idServico');
+        }
         
         // Para serviços customizados, usar o campo detalhes para armazenar a descrição
         if ($isCustomizado) {
@@ -1206,6 +1216,86 @@ class Os extends MY_Controller
                     'result' => false,
                     'message' => $error_message
                 ]));
+        }
+    }
+
+    public function adicionarOutros()
+    {
+        $os_id = $this->input->post('idOsOutros');
+        $descricao = $this->input->post('descricao');
+        $preco = $this->input->post('preco');
+        
+        if (empty($os_id) || !is_numeric($os_id)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'ID da OS inválido']));
+        }
+        
+        if (empty(trim($descricao))) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'Descrição é obrigatória']));
+        }
+        
+        // Converter preço de formato brasileiro (0,00) para numérico
+        if (!empty($preco)) {
+            $preco = str_replace('.', '', $preco);
+            $preco = str_replace(',', '.', $preco);
+        }
+        
+        if (empty($preco) || !is_numeric($preco) || floatval($preco) <= 0) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['result' => false, 'message' => 'Preço é obrigatório e deve ser maior que zero']));
+        }
+        
+        $this->load->model('outros_produtos_servicos_os_model');
+        
+        $data = [
+            'os_id' => $os_id,
+            'descricao' => $descricao,
+            'preco' => floatval($preco)
+        ];
+        
+        if ($this->outros_produtos_servicos_os_model->add($data)) {
+            log_info('Adicionou outros produtos/serviços à OS. ID (OS): ' . $os_id);
+            
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true, 'message' => 'Item adicionado com sucesso!']));
+        } else {
+            $error = $this->db->error();
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'Erro ao adicionar item: ' . ($error['message'] ?? 'Erro desconhecido')
+                ]));
+        }
+    }
+    
+    public function excluirOutros()
+    {
+        $id = $this->input->post('id');
+        $idOs = $this->input->post('idOs');
+        
+        if (empty($id) || !is_numeric($id)) {
+            echo json_encode(['result' => false, 'message' => 'ID inválido']);
+            return;
+        }
+        
+        $this->load->model('outros_produtos_servicos_os_model');
+        
+        if ($this->outros_produtos_servicos_os_model->delete($id)) {
+            log_info('Removeu outros produtos/serviços da OS. ID (OS): ' . $idOs);
+            echo json_encode(['result' => true, 'message' => 'Item excluído com sucesso!']);
+        } else {
+            echo json_encode(['result' => false, 'message' => 'Erro ao excluir item']);
         }
     }
 

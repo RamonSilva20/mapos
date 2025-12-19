@@ -167,8 +167,36 @@
                         </table>
                     </div>
                 <?php endif; ?>
+                
+                <?php 
+                $totalOutros = 0;
+                if (isset($outros) && $outros) : ?>
+                    <div class="tabela">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th>OUTROS PRODUTOS/SERVIÇOS</th>
+                                    <th class="text-end" width="15%">VALOR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($outros as $o) :
+                                    $totalOutros += $o->preco;
+                                    echo '<tr>';
+                                    echo '  <td>' . htmlspecialchars_decode($o->descricao) . '</td>';
+                                    echo '  <td class="text-end">R$ ' . number_format($o->preco, 2, ',', '.') . '</td>';
+                                    echo '</tr>';
+                                endforeach; ?>
+                                <tr>
+                                    <td class="text-end"><b>TOTAL OUTROS:</b></td>
+                                    <td class="text-end"><b>R$ <?= number_format($totalOutros, 2, ',', '.') ?></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
 
-                <?php if ($totalProdutos != 0 || $totalServico != 0) : ?>
+                <?php if ($totalProdutos != 0 || $totalServico != 0 || $totalOutros > 0) : ?>
                     <div class="pagamento">
                         <div class="qrcode">
                             <?php if ($this->data['configuration']['pix_key']) : ?>
@@ -191,14 +219,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if ($result->valor_desconto != 0) : ?>
+                                        <?php 
+                                        $subtotalGeral = $totalProdutos + $totalServico + $totalOutros;
+                                        if ($result->valor_desconto != 0) : ?>
                                             <tr>
                                                 <td width="65%">SUBTOTAL</td>
-                                                <td>R$ <b><?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></b></td>
+                                                <td>R$ <b><?= number_format($subtotalGeral, 2, ',', '.') ?></b></td>
                                             </tr>
                                             <tr>
                                                 <td>DESCONTO</td>
-                                                <td>R$ <b><?= number_format($result->valor_desconto != 0 ? $result->valor_desconto - ($totalProdutos + $totalServico) : 0.00, 2, ',', '.') ?></b></td>
+                                                <td>R$ <b><?= number_format($result->valor_desconto != 0 ? $result->valor_desconto - $subtotalGeral : 0.00, 2, ',', '.') ?></b></td>
                                             </tr>
                                             <tr>
                                                 <td>TOTAL</td>
@@ -207,7 +237,7 @@
                                         <?php else : ?>
                                             <tr>
                                                 <td style="width:290px">TOTAL</td>
-                                                <td>R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></td>
+                                                <td>R$ <?= number_format($subtotalGeral, 2, ',', '.') ?></td>
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>

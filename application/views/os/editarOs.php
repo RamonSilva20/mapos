@@ -65,6 +65,7 @@
                         <li id="tabDesconto"><a href="#tab2" data-toggle="tab">Desconto</a></li>
                         <li id="tabProdutos"><a href="#tab3" data-toggle="tab">Produtos</a></li>
                         <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
+                        <li id="tabOutros"><a href="#tab7" data-toggle="tab">Outros Produtos/Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
                     </ul>
@@ -366,32 +367,6 @@
                                         <label for="">Detalhes</label>
                                         <textarea placeholder="Detalhes do serviço (opcional)" id="detalhes_servico" name="detalhes" class="span12" rows="2"></textarea>
                                     </div>
-                                    <div class="span12" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
-                                        <label for="outros_produtos_servicos"><strong>Outros Produtos/Serviços</strong> <small style="color: #666;">(Texto livre - não precisa cadastrar)</small></label>
-                                        <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
-                                            <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="outros_produtos_servicos" name="outros_produtos_servicos" class="span12 editor" rows="4"></textarea>
-                                        </div>
-                                        <div class="span12" style="margin-left: 0; display: flex; gap: 10px; align-items: flex-end;">
-                                            <div class="span3" style="margin-left: 0;">
-                                                <label for="preco_outros">Preço *</label>
-                                                <input type="text" placeholder="Preço" id="preco_outros" name="preco_outros" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
-                                            </div>
-                                            <div class="span3">
-                                                <label for="quantidade_outros">Quantidade *</label>
-                                                <input type="text" placeholder="Quantidade" id="quantidade_outros" name="quantidade_outros" class="span12" value="1" />
-                                            </div>
-                                            <div class="span6">
-                                                <label for="">&nbsp;</label>
-                                                <button type="button" class="button btn btn-success span12" id="btnAdicionarOutros">
-                                                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
-                                                    <span class="button__text2">Adicionar Outros</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <small style="color: #666; display: block; margin-top: 5px;">
-                                            <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Use o editor de texto para formatar. Será incluído no total da OS.
-                                        </small>
-                                    </div>
                                 </form>
                             </div>
                             <div class="widget-box" id="divServicos">
@@ -492,6 +467,71 @@
                                                 </div>';
                                     }
                                     ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Outros Produtos/Serviços-->
+                        <div class="tab-pane" id="tab7">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+                                <form id="formOutros">
+                                    <input type="hidden" name="idOsOutros" id="idOsOutros" value="<?php echo $result->idOs; ?>" />
+                                    <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                                        <label for="descricao_outros"><strong>Descrição</strong> <small style="color: #666;">(Use o editor para formatar o texto)</small></label>
+                                        <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="descricao_outros" name="descricao" class="span12 editor" rows="6"></textarea>
+                                    </div>
+                                    <div class="span12" style="margin-left: 0; display: flex; gap: 10px; align-items: flex-end;">
+                                        <div class="span4" style="margin-left: 0;">
+                                            <label for="preco_outros">Preço *</label>
+                                            <input type="text" placeholder="0,00" id="preco_outros" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." required />
+                                        </div>
+                                        <div class="span8">
+                                            <label for="">&nbsp;</label>
+                                            <button type="submit" class="button btn btn-success span12">
+                                                <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
+                                                <span class="button__text2">Adicionar</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small style="color: #666; display: block; margin-top: 5px;">
+                                        <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Será impresso na proposta com o preço informado.
+                                    </small>
+                                </form>
+                            </div>
+                            <div class="widget-box" id="divOutros">
+                                <div class="widget_content nopadding">
+                                    <table width="100%" class="table table-bordered" id="tblOutros">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th width="15%">Preço</th>
+                                                <th width="10%">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $this->load->model('outros_produtos_servicos_os_model');
+                                            $outros = $this->outros_produtos_servicos_os_model->getByOs($result->idOs);
+                                            $totalOutros = 0;
+                                            foreach ($outros as $o) {
+                                                $totalOutros += $o->preco;
+                                                echo '<tr id="outros-row-' . $o->idOutros . '">';
+                                                echo '<td>' . $o->descricao . '</td>';
+                                                echo '<td><div align="center"><strong>R$ ' . number_format($o->preco, 2, ',', '.') . '</strong></div></td>';
+                                                echo '<td><div align="center">';
+                                                echo '<span idAcao="' . $o->idOutros . '" title="Excluir" class="btn-nwe4 excluir-outros" style="color: #dc3545; cursor: pointer;"><i class="bx bx-trash-alt"></i></span>';
+                                                echo '</div></td>';
+                                                echo '</tr>';
+                                            } ?>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="text-align: right"><strong>Total:</strong></td>
+                                                <td><div align="center"><strong>R$ <?php echo number_format($totalOutros, 2, ',', '.'); ?></strong></div></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -1272,10 +1312,7 @@
         $("#formServicos").validate({
             rules: {
                 servico: {
-                    required: function() {
-                        // Não é obrigatório se o campo de texto livre estiver preenchido
-                        return $("#outros_produtos_servicos").val().trim() === '';
-                    }
+                    required: true
                 },
                 preco: {
                     required: true
@@ -1286,7 +1323,7 @@
             },
             messages: {
                 servico: {
-                    required: 'Insira um serviço ou preencha o campo "Outros Produtos/Serviços"'
+                    required: 'Insira um serviço'
                 },
                 preco: {
                     required: 'Insira o preço'
@@ -1296,41 +1333,7 @@
                 },
             },
             submitHandler: function (form) {
-                // Não processar se for o botão "Adicionar Outros" (tem handler próprio)
-                if ($(form).data('skip-submit')) {
-                    return false;
-                }
-                
                 var dados = $(form).serialize();
-                
-                // Verificar se está usando campo de texto livre
-                var outrosProdutosServicos = $("#outros_produtos_servicos").val().trim();
-                var servico = $("#servico").val().trim();
-                
-                // Se campo de texto livre estiver preenchido, não precisa validar serviço
-                if (outrosProdutosServicos && !servico) {
-                    // Validar apenas preço e quantidade
-                    var preco = $("#preco_servico").val();
-                    var quantidade = $("#quantidade_servico").val();
-                    
-                    if (!preco || parseFloat(preco) <= 0) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Atenção",
-                            text: "Preço é obrigatório e deve ser maior que zero."
-                        });
-                        return false;
-                    }
-                    
-                    if (!quantidade || parseFloat(quantidade) <= 0) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Atenção",
-                            text: "Quantidade é obrigatória e deve ser maior que zero."
-                        });
-                        return false;
-                    }
-                }
 
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1344,7 +1347,6 @@
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
                             $("#detalhes_servico").val('');
-                            $("#outros_produtos_servicos").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
                             $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
@@ -1891,25 +1893,24 @@
             semantic: { 'strikethrough': 's', }
         });
         
-        // Handler para botão "Adicionar Outros"
-        $('#btnAdicionarOutros').on('click', function(e) {
+        // Formulário de Outros Produtos/Serviços
+        $('#formOutros').on('submit', function(e) {
             e.preventDefault();
             
-            var outrosProdutosServicos = $('#outros_produtos_servicos').val().trim();
-            var precoOutros = $('#preco_outros').val();
-            var quantidadeOutros = $('#quantidade_outros').val() || '1';
+            var descricao = $('#descricao_outros').val().trim();
+            var preco = $('#preco_outros').val();
             
             // Validações
-            if (!outrosProdutosServicos) {
+            if (!descricao) {
                 Swal.fire({
                     icon: "error",
                     title: "Atenção",
-                    text: "Preencha o campo 'Outros Produtos/Serviços'."
+                    text: "Preencha a descrição."
                 });
                 return false;
             }
             
-            if (!precoOutros || parseFloat(precoOutros.replace(/\./g, '').replace(',', '.')) <= 0) {
+            if (!preco || parseFloat(preco.replace(/\./g, '').replace(',', '.')) <= 0) {
                 Swal.fire({
                     icon: "error",
                     title: "Atenção",
@@ -1918,38 +1919,22 @@
                 return false;
             }
             
-            if (!quantidadeOutros || parseFloat(quantidadeOutros) <= 0) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Atenção",
-                    text: "Quantidade é obrigatória e deve ser maior que zero."
-                });
-                return false;
-            }
+            var dados = $(this).serialize();
             
-            // Preparar dados
-            var dados = {
-                idOsServico: $('#idOsServico').val(),
-                outros_produtos_servicos: outrosProdutosServicos,
-                preco_outros: precoOutros,
-                quantidade_outros: quantidadeOutros
-            };
-            
-            $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+            $("#divOutros").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
             
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>index.php/os/adicionarServico",
+                url: "<?php echo base_url(); ?>index.php/os/adicionarOutros",
                 data: dados,
                 dataType: 'json',
                 success: function (data) {
                     if (data.result == true) {
-                        $("#divServicos").load("<?php echo current_url(); ?> #divServicos");
-                        $("#outros_produtos_servicos").trumbowyg('empty');
+                        $("#divOutros").load("<?php echo current_url(); ?> #divOutros");
+                        $("#descricao_outros").trumbowyg('empty');
                         $("#preco_outros").val('');
-                        $("#quantidade_outros").val('1');
                         $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
-                            // Atualizar valores das parcelas após adicionar serviço
+                            // Atualizar valores das parcelas após adicionar
                             if (typeof atualizarValoresParcelas === 'function') {
                                 setTimeout(atualizarValoresParcelas, 300);
                             }
@@ -1957,7 +1942,7 @@
                         Swal.fire({
                             icon: "success",
                             title: "Sucesso!",
-                            text: "Produto/Serviço adicionado com sucesso!",
+                            text: data.message || "Item adicionado com sucesso!",
                             timer: 1500,
                             showConfirmButton: false
                         });
@@ -1965,12 +1950,12 @@
                         Swal.fire({
                             icon: "error",
                             title: "Atenção",
-                            text: data.message || "Ocorreu um erro ao tentar adicionar produto/serviço."
+                            text: data.message || "Ocorreu um erro ao tentar adicionar item."
                         });
                     }
                 },
                 error: function(xhr, status, error) {
-                    var errorMsg = "Ocorreu um erro ao tentar adicionar produto/serviço.";
+                    var errorMsg = "Ocorreu um erro ao tentar adicionar item.";
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMsg = xhr.responseJSON.message;
                     }
@@ -1978,6 +1963,55 @@
                         icon: "error",
                         title: "Atenção",
                         text: errorMsg
+                    });
+                }
+            });
+        });
+        
+        // Excluir outros produtos/serviços
+        $(document).on('click', '.excluir-outros', function() {
+            var id = $(this).attr('idAcao');
+            var idOs = $('#idOsOutros').val();
+            
+            Swal.fire({
+                title: 'Confirmar exclusão?',
+                text: 'Deseja realmente excluir este item?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>index.php/os/excluirOutros",
+                        data: { id: id, idOs: idOs },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.result == true) {
+                                $("#divOutros").load("<?php echo current_url(); ?> #divOutros");
+                                $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
+                                    if (typeof atualizarValoresParcelas === 'function') {
+                                        setTimeout(atualizarValoresParcelas, 300);
+                                    }
+                                });
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Sucesso!",
+                                    text: data.message || "Item excluído com sucesso!",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Atenção",
+                                    text: data.message || "Ocorreu um erro ao tentar excluir item."
+                                });
+                            }
+                        }
                     });
                 }
             });
