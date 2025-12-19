@@ -366,6 +366,13 @@
                                         <label for="">Detalhes</label>
                                         <textarea placeholder="Detalhes do serviço (opcional)" id="detalhes_servico" name="detalhes" class="span12" rows="2"></textarea>
                                     </div>
+                                    <div class="span12" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
+                                        <label for="outros_produtos_servicos"><strong>Outros Produtos/Serviços</strong> <small style="color: #666;">(Texto livre - não precisa cadastrar)</small></label>
+                                        <textarea placeholder="Digite aqui produtos ou serviços que não estão cadastrados no sistema. Ex: 'Instalação de ar condicionado', 'Troca de peças diversas', etc." id="outros_produtos_servicos" name="outros_produtos_servicos" class="span12" rows="3"></textarea>
+                                        <small style="color: #666; display: block; margin-top: 5px;">
+                                            <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Será incluído no total da OS.
+                                        </small>
+                                    </div>
                                 </form>
                             </div>
                             <div class="widget-box" id="divServicos">
@@ -389,9 +396,15 @@
                                                 $totals = $totals + $subtotals;
                                                 echo '<tr id="servico-row-' . $s->idServicos_os . '">';
                                                 echo '<td>';
-                                                echo '<strong>' . $s->nome . '</strong>';
-                                                if (!empty($s->detalhes)) {
-                                                    echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
+                                                // Se não tem nome (serviço customizado), usar detalhes como nome
+                                                if (empty($s->nome) && !empty($s->detalhes)) {
+                                                    echo '<strong style="color: #007bff;">📝 ' . htmlspecialchars($s->detalhes) . '</strong>';
+                                                    echo '<br><small style="color: #666;">(Produto/Serviço customizado)</small>';
+                                                } else {
+                                                    echo '<strong>' . htmlspecialchars($s->nome ?: 'Serviço') . '</strong>';
+                                                    if (!empty($s->detalhes)) {
+                                                        echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
+                                                    }
                                                 }
                                                 echo '</td>';
                                                 echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
@@ -1262,6 +1275,35 @@
             },
             submitHandler: function (form) {
                 var dados = $(form).serialize();
+                
+                // Verificar se está usando campo de texto livre
+                var outrosProdutosServicos = $("#outros_produtos_servicos").val().trim();
+                var servico = $("#servico").val().trim();
+                
+                // Se campo de texto livre estiver preenchido, não precisa validar serviço
+                if (outrosProdutosServicos && !servico) {
+                    // Validar apenas preço e quantidade
+                    var preco = $("#preco_servico").val();
+                    var quantidade = $("#quantidade_servico").val();
+                    
+                    if (!preco || parseFloat(preco) <= 0) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Atenção",
+                            text: "Preço é obrigatório e deve ser maior que zero."
+                        });
+                        return false;
+                    }
+                    
+                    if (!quantidade || parseFloat(quantidade) <= 0) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Atenção",
+                            text: "Quantidade é obrigatória e deve ser maior que zero."
+                        });
+                        return false;
+                    }
+                }
 
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1275,6 +1317,7 @@
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
                             $("#detalhes_servico").val('');
+                            $("#outros_produtos_servicos").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
                             $("#divValorTotal").load("<?php echo current_url(); ?> #divValorTotal", function() {
@@ -1286,11 +1329,22 @@
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
-                                type: "error",
+                                icon: "error",
                                 title: "Atenção",
-                                text: "Ocorreu um erro ao tentar adicionar serviço."
+                                text: data.message || "Ocorreu um erro ao tentar adicionar serviço."
                             });
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMsg = "Ocorreu um erro ao tentar adicionar serviço.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Atenção",
+                            text: errorMsg
+                        });
                     }
                 });
                 return false;

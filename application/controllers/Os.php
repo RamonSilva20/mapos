@@ -1095,28 +1095,54 @@ class Os extends MY_Controller
     public function adicionarServico()
     {
         $this->load->library('form_validation');
+        
+        // Verificar se é um serviço customizado (texto livre)
+        $outrosProdutosServicos = $this->input->post('outros_produtos_servicos');
+        $isCustomizado = !empty(trim($outrosProdutosServicos));
+        
+        // Se for customizado, validar apenas os campos necessários
+        if ($isCustomizado) {
+            $preco = $this->input->post('preco');
+            $quantidade = $this->input->post('quantidade');
+            
+            if (empty($preco) || !is_numeric($preco) || floatval($preco) <= 0) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'message' => 'Preço é obrigatório e deve ser maior que zero.']));
+            }
+            
+            if (empty($quantidade) || !is_numeric($quantidade) || floatval($quantidade) <= 0) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['result' => false, 'message' => 'Quantidade é obrigatória e deve ser maior que zero.']));
+            }
+        } else {
+            // Validação normal para serviços cadastrados
+            if ($this->form_validation->run('adicionar_servico_os') === false) {
+                $errors = validation_errors();
 
-        if ($this->form_validation->run('adicionar_servico_os') === false) {
-            $errors = validation_errors();
-
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(400)
-                ->set_output(json_encode($errors));
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode($errors));
+            }
         }
 
+        $preco = floatval($this->input->post('preco'));
+        $quantidade = floatval($this->input->post('quantidade'));
+        
         $data = [
-            'servicos_id' => $this->input->post('idServico'),
-            'quantidade' => $this->input->post('quantidade'),
-            'preco' => $this->input->post('preco'),
+            'servicos_id' => $isCustomizado ? null : $this->input->post('idServico'),
+            'quantidade' => $quantidade,
+            'preco' => $preco,
             'os_id' => $this->input->post('idOsServico'),
-            'subTotal' => $this->input->post('preco') * $this->input->post('quantidade'),
+            'subTotal' => $preco * $quantidade,
         ];
         
-        // Adicionar detalhes apenas se o campo existir no banco
-        $detalhes = $this->input->post('detalhes');
-        if ($detalhes !== null && $detalhes !== '') {
-            // Verificar se o campo existe antes de adicionar
+        // Para serviços customizados, usar o campo detalhes para armazenar a descrição
+        if ($isCustomizado) {
             $fields = $this->db->field_data('servicos_os');
             $field_exists = false;
             foreach ($fields as $field) {
@@ -1126,7 +1152,23 @@ class Os extends MY_Controller
                 }
             }
             if ($field_exists) {
-                $data['detalhes'] = $detalhes;
+                $data['detalhes'] = trim($outrosProdutosServicos);
+            }
+        } else {
+            // Adicionar detalhes apenas se o campo existir no banco
+            $detalhes = $this->input->post('detalhes');
+            if ($detalhes !== null && $detalhes !== '') {
+                $fields = $this->db->field_data('servicos_os');
+                $field_exists = false;
+                foreach ($fields as $field) {
+                    if ($field->name === 'detalhes') {
+                        $field_exists = true;
+                        break;
+                    }
+                }
+                if ($field_exists) {
+                    $data['detalhes'] = $detalhes;
+                }
             }
         }
 
