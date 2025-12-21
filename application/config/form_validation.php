@@ -494,9 +494,9 @@ $config = [
     ],
     'propostas' => [
         [
-            'field' => 'clientes_id',
+            'field' => 'cliente',
             'label' => 'Cliente',
-            'rules' => 'required|integer',
+            'rules' => 'required|trim',
         ],
         [
             'field' => 'usuarios_id',
