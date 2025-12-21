@@ -30,3 +30,4 @@ CREATE TABLE IF NOT EXISTS `parcelas_os` (
 CREATE INDEX `idx_parcelas_os_status` ON `parcelas_os` (`os_id`, `status`);
 
 
+

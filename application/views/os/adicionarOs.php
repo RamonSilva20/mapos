@@ -2,6 +2,7 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
 
@@ -22,6 +23,7 @@
 
                     <ul class="nav nav-tabs">
                         <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
+                        <li id="tabOutros"><a href="#tab7" data-toggle="tab">Outros Produtos/Serviços</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -194,6 +196,23 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab7">
+                            <div class="span12 well" style="padding: 1%; margin-left: 0">
+                                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                                    <label for="descricao_outros"><strong>Descrição</strong> <small style="color: #666;">(Use o editor para formatar o texto)</small></label>
+                                    <textarea id="descricao_outros" name="descricao_outros" class="span12 editor" rows="6"></textarea>
+                                </div>
+                                <div class="span12" style="margin-left: 0;">
+                                    <div class="span4" style="margin-left: 0;">
+                                        <label for="preco_outros">Preço</label>
+                                        <input type="text" value="0,00" id="preco_outros" name="preco_outros" class="span12 money" />
+                                    </div>
+                                </div>
+                                <small style="color: #666; display: block; margin-top: 5px;">
+                                    <i class="bx bx-info-circle"></i> Este campo permite adicionar descrições de produtos/serviços que não estão cadastrados. Será impresso na proposta com o preço informado.
+                                </small>
                             </div>
                         </div>
                     </div>

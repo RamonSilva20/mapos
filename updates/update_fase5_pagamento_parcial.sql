@@ -53,3 +53,4 @@ UPDATE `lancamentos` SET `valor_pago` = COALESCE(`valor_desconto`, `valor`) WHER
 
 
 
+

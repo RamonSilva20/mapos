@@ -17,3 +17,4 @@ REFERENCES `servicos` (`idServicos`)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
+

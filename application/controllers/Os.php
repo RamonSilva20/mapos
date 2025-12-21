@@ -143,6 +143,26 @@ class Os extends MY_Controller
                         $this->parcelas_os_model->saveParcelas($idOs, $parcelas);
                     }
                 }
+                
+                // Salvar outros produtos/serviços
+                $descricaoOutros = $this->input->post('descricao_outros');
+                $precoOutros = $this->input->post('preco_outros');
+                if (!empty($descricaoOutros) || !empty($precoOutros)) {
+                    $this->load->model('outros_produtos_servicos_os_model');
+                    // Converter preço de formato brasileiro (0,00) para numérico
+                    $preco = 0;
+                    if (!empty($precoOutros)) {
+                        $preco = str_replace('.', '', $precoOutros);
+                        $preco = str_replace(',', '.', $preco);
+                        $preco = floatval($preco);
+                    }
+                    
+                    $this->outros_produtos_servicos_os_model->add([
+                        'os_id' => $idOs,
+                        'descricao' => $descricaoOutros ?: '',
+                        'preco' => $preco
+                    ]);
+                }
                 $status = set_value('status');
                 
                 // Se o status inicia garantia e tem garantia definida, definir data de início
@@ -294,6 +314,37 @@ class Os extends MY_Controller
                     if (is_array($parcelas) && count($parcelas) > 0) {
                         $this->load->model('parcelas_os_model');
                         $this->parcelas_os_model->saveParcelas($this->input->post('idOs'), $parcelas);
+                    }
+                }
+                
+                // Salvar outros produtos/serviços
+                $descricaoOutros = $this->input->post('descricao_outros');
+                $precoOutros = $this->input->post('preco_outros');
+                if (!empty($descricaoOutros) || !empty($precoOutros)) {
+                    $this->load->model('outros_produtos_servicos_os_model');
+                    // Converter preço de formato brasileiro (0,00) para numérico
+                    $preco = 0;
+                    if (!empty($precoOutros)) {
+                        $preco = str_replace('.', '', $precoOutros);
+                        $preco = str_replace(',', '.', $preco);
+                        $preco = floatval($preco);
+                    }
+                    
+                    // Verificar se já existe registro para esta OS
+                    $outrosExistentes = $this->outros_produtos_servicos_os_model->getByOs($this->input->post('idOs'));
+                    if (!empty($outrosExistentes) && count($outrosExistentes) > 0) {
+                        // Atualizar registro existente
+                        $this->outros_produtos_servicos_os_model->edit($outrosExistentes[0]->idOutros, [
+                            'descricao' => $descricaoOutros ?: '',
+                            'preco' => $preco
+                        ]);
+                    } else {
+                        // Criar novo registro
+                        $this->outros_produtos_servicos_os_model->add([
+                            'os_id' => $this->input->post('idOs'),
+                            'descricao' => $descricaoOutros ?: '',
+                            'preco' => $preco
+                        ]);
                     }
                 }
                 
