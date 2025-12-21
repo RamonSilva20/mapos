@@ -200,6 +200,18 @@ class Propostas extends MY_Controller
                 $dataProposta = date('Y-m-d');
             }
 
+            // Cliente pode ser ID cadastrado ou apenas nome
+            $clienteId = $this->input->post('clientes_id');
+            $clienteNome = $this->input->post('cliente');
+            
+            // Se não tem ID, usar apenas o nome
+            if (empty($clienteId) || !is_numeric($clienteId)) {
+                $clienteId = null;
+            } else {
+                // Se tem ID, não precisa do nome
+                $clienteNome = null;
+            }
+
             $data = [
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,

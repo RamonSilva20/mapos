@@ -537,7 +537,7 @@ $(document).ready(function() {
     // Validação do formulário
     $("#formProposta").validate({
         rules: {
-            clientes_id: { required: true },
+            cliente: { required: true },
             usuarios_id: { required: true },
             data_proposta: { required: true }
         },
