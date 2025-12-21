@@ -37,10 +37,15 @@
         </a>
         <?php 
         $clienteNome = $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? '');
-        $numeroProposta = $result->numero_proposta ?: '#' . $result->idProposta;
+        $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
         $valorTotal = number_format($result->valor_total, 2, ',', '.');
         $textoWhatsApp = urlencode("Olá! Segue a proposta comercial:\n\n*Proposta:* $numeroProposta\n*Cliente:* $clienteNome\n*Valor Total:* R$ $valorTotal\n\n" . base_url() . "index.php/propostas/visualizar/" . $result->idProposta);
-        $telefoneCliente = $result->celular_cliente ? preg_replace('/[^0-9]/', '', $result->celular_cliente) : ($result->telefone ? preg_replace('/[^0-9]/', '', $result->telefone) : '');
+        $telefoneCliente = '';
+        if ($result->celular_cliente) {
+            $telefoneCliente = preg_replace('/[^0-9]/', '', $result->celular_cliente);
+        } elseif ($result->telefone) {
+            $telefoneCliente = preg_replace('/[^0-9]/', '', $result->telefone);
+        }
         ?>
         <?php if ($telefoneCliente) { ?>
             <a href="https://api.whatsapp.com/send?phone=55<?php echo $telefoneCliente; ?>&text=<?php echo $textoWhatsApp; ?>" class="btn btn-success" target="_blank">
