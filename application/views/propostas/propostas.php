@@ -191,10 +191,21 @@
                 return;
             }
             
+            // Obter token CSRF
+            var csrfTokenName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+            var csrfTokenValue = '<?php echo $this->security->get_csrf_hash(); ?>';
+            
+            var postData = {
+                id: id,
+                [csrfTokenName]: csrfTokenValue
+            };
+            
+            console.log('Dados POST:', postData);
+            
             $.ajax({
                 url: form.attr('action'),
                 type: 'POST',
-                data: { id: id },
+                data: postData,
                 dataType: 'json',
                 beforeSend: function() {
                     console.log('Enviando requisição AJAX com ID:', id);
