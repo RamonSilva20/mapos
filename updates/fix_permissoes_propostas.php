@@ -2,8 +2,12 @@
 // Script PHP para atualizar permissões
 // Execute: php fix_permissoes_propostas.php
 
+// Permitir acesso direto
+define('BASEPATH', true);
+define('ENVIRONMENT', 'production');
+
 $config_file = '../application/config/database.php';
-require_once($config_file);
+include($config_file);
 
 $db_config = $db['default'];
 $host = $db_config['hostname'];
