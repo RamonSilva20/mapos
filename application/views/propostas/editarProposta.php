@@ -26,8 +26,9 @@
                         <div class="span12" style="margin-left: 0;">
                             <div class="span6">
                                 <label for="cliente">Cliente<span class="required">*</span></label>
-                                <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente; ?>" />
-                                <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id; ?>" />
+                                <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? ''); ?>" />
+                                <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?? ''; ?>" />
+                                <small class="help-block">Digite apenas o nome. O cliente pode ser cadastrado depois.</small>
                             </div>
                             <div class="span6">
                                 <label for="vendedor">Vendedor/Responsável<span class="required">*</span></label>
@@ -286,12 +287,22 @@ $(document).ready(function() {
         allowNegative: false
     });
 
-    // Autocomplete
+    // Autocomplete de cliente (opcional - pode digitar livremente)
     $("#cliente").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
         minLength: 1,
         select: function(event, ui) {
             $("#clientes_id").val(ui.item.id);
+        }
+    });
+    
+    // Permitir digitação livre - limpar clientes_id se não selecionar do autocomplete
+    $("#cliente").on('blur', function() {
+        // Se não foi selecionado do autocomplete, garante que pode ser texto livre
+        var clienteNome = $(this).val();
+        if (clienteNome && !$("#clientes_id").val()) {
+            // Cliente será salvo apenas pelo nome
+            $("#clientes_id").val('');
         }
     });
 
@@ -531,7 +542,7 @@ $(document).ready(function() {
             data_proposta: { required: true }
         },
         messages: {
-            clientes_id: { required: 'Selecione um cliente' },
+            cliente: { required: 'Digite o nome do cliente' },
             usuarios_id: { required: 'Selecione um vendedor' },
             data_proposta: { required: 'Data da proposta é obrigatória' }
         }

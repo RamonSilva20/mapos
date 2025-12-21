@@ -285,12 +285,22 @@ $(document).ready(function() {
         allowNegative: false
     });
 
-    // Autocomplete
+    // Autocomplete de cliente (opcional - pode digitar livremente)
     $("#cliente").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
         minLength: 1,
         select: function(event, ui) {
             $("#clientes_id").val(ui.item.id);
+        }
+    });
+    
+    // Permitir digitação livre - limpar clientes_id se não selecionar do autocomplete
+    $("#cliente").on('blur', function() {
+        // Se não foi selecionado do autocomplete, garante que pode ser texto livre
+        var clienteNome = $(this).val();
+        if (clienteNome && !$("#clientes_id").val()) {
+            // Cliente será salvo apenas pelo nome
+            $("#clientes_id").val('');
         }
     });
 
@@ -498,12 +508,12 @@ $(document).ready(function() {
     // Validação do formulário
     $("#formProposta").validate({
         rules: {
-            clientes_id: { required: true },
+            cliente: { required: true },
             usuarios_id: { required: true },
             data_proposta: { required: true }
         },
         messages: {
-            clientes_id: { required: 'Selecione um cliente' },
+            cliente: { required: 'Digite o nome do cliente' },
             usuarios_id: { required: 'Selecione um vendedor' },
             data_proposta: { required: 'Data da proposta é obrigatória' }
         }

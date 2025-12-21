@@ -104,12 +104,25 @@ class Propostas extends MY_Controller
 
             $numeroProposta = $this->propostas_model->gerarNumeroProposta();
 
+            // Cliente pode ser ID cadastrado ou apenas nome
+            $clienteId = $this->input->post('clientes_id');
+            $clienteNome = $this->input->post('cliente');
+            
+            // Se não tem ID, usar apenas o nome
+            if (empty($clienteId) || !is_numeric($clienteId)) {
+                $clienteId = null;
+            } else {
+                // Se tem ID, não precisa do nome
+                $clienteNome = null;
+            }
+            
             $data = [
                 'numero_proposta' => $numeroProposta,
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,
                 'status' => $this->input->post('status') ?: 'Rascunho',
-                'clientes_id' => $this->input->post('clientes_id'),
+                'clientes_id' => $clienteId,
+                'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id') ?: $this->session->userdata('id_admin'),
                 'observacoes' => $this->input->post('observacoes'),
                 'desconto' => $this->input->post('desconto') ?: 0,
@@ -191,7 +204,8 @@ class Propostas extends MY_Controller
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,
                 'status' => $this->input->post('status'),
-                'clientes_id' => $this->input->post('clientes_id'),
+                'clientes_id' => $clienteId,
+                'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'observacoes' => $this->input->post('observacoes'),
                 'desconto' => $this->input->post('desconto') ?: 0,

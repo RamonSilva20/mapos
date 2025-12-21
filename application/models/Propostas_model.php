@@ -13,9 +13,9 @@ class Propostas_model extends CI_Model
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente');
+        $this->db->select($fields . ',COALESCE(clientes.nomeCliente, propostas.cliente_nome) as nomeCliente, clientes.celular as celular_cliente');
         $this->db->from($table);
-        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id');
+        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id', 'left');
         $this->db->limit($perpage, $start);
         $this->db->order_by('idProposta', 'desc');
         if ($where) {
@@ -42,9 +42,9 @@ class Propostas_model extends CI_Model
             }
         }
 
-        $this->db->select('propostas.*, clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome');
+        $this->db->select('propostas.*, clientes.idClientes, COALESCE(clientes.nomeCliente, propostas.cliente_nome) as nomeCliente, clientes.celular as celular_cliente, usuarios.nome');
         $this->db->from('propostas');
-        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id');
+        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id', 'left');
         $this->db->join('usuarios', 'usuarios.idUsuarios = propostas.usuarios_id', 'left');
 
         // Condicional de status
@@ -52,10 +52,16 @@ class Propostas_model extends CI_Model
             $this->db->where_in('propostas.status', $where_array['status']);
         }
 
-        // Condicional de clientes
+        // Condicional de clientes - buscar também em cliente_nome
         if (array_key_exists('pesquisa', $where_array)) {
-            if ($lista_clientes != null) {
+            $pesquisa = $where_array['pesquisa'];
+            if ($lista_clientes != null && !empty($lista_clientes)) {
+                $this->db->group_start();
                 $this->db->where_in('propostas.clientes_id', $lista_clientes);
+                $this->db->or_like('propostas.cliente_nome', $pesquisa);
+                $this->db->group_end();
+            } else {
+                $this->db->like('propostas.cliente_nome', $pesquisa);
             }
         }
 
@@ -77,9 +83,9 @@ class Propostas_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('propostas.*, clientes.*, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, usuarios.nome, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario');
+        $this->db->select('propostas.*, clientes.*, COALESCE(clientes.nomeCliente, propostas.cliente_nome) as nomeCliente_exibicao, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, usuarios.nome, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario');
         $this->db->from('propostas');
-        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id');
+        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id', 'left');
         $this->db->join('usuarios', 'usuarios.idUsuarios = propostas.usuarios_id', 'left');
         $this->db->where('propostas.idProposta', $id);
         $this->db->limit(1);

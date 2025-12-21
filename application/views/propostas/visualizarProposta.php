@@ -102,7 +102,7 @@
     <div class="info-box">
         <div class="left">
             <h3>DADOS DO CLIENTE</h3>
-            <p><strong>Nome:</strong> <?php echo $result->nomeCliente; ?></p>
+            <p><strong>Nome:</strong> <?php echo $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? 'N/A'); ?></p>
             <?php if ($result->documento) { ?>
                 <p><strong>CPF/CNPJ:</strong> <?php echo $result->documento; ?></p>
             <?php } ?>
