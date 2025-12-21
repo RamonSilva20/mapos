@@ -116,7 +116,7 @@
                 <p><strong>E-mail:</strong> <?php echo $result->email; ?></p>
             <?php } ?>
             <?php if ($result->rua || $result->cidade) { ?>
-                <p><strong>Endereço:</strong> <?php echo trim(($result->rua ? $result->rua . ', ' : '') . ($result->numero ? $result->numero : '') . ($result->bairro ? ' - ' . $result->bairro : '') . ($result->cidade ? ' - ' . $result->cidade : '') . ($result->estado ? '/' . $result->estado : '')); ?></p>
+                <p><strong>Endereço:</strong> <?php echo trim(($result->rua ? $result->rua . ', ' : '') . ($result->numero ? $result->numero : '') . ($result->bairro ? ' - ' . $result->bairro : '') . ($result->cidade ? ' - ' . $result->cidade : '') . (isset($result->estado) && $result->estado ? '/' . $result->estado : '')); ?></p>
             <?php } ?>
         </div>
         <div class="right">
@@ -298,9 +298,9 @@
                 <strong><?php echo $emitente->nome; ?></strong><br>
                 <?php if ($emitente->telefone) { echo $emitente->telefone . '<br>'; } ?>
                 <?php if ($emitente->email) { echo $emitente->email . '<br>'; } ?>
-                <?php if ($emitente->rua || $emitente->cidade) { 
-                    echo trim(($emitente->rua ? $emitente->rua . ', ' : '') . ($emitente->numero ? $emitente->numero : '') . ($emitente->bairro ? ' - ' . $emitente->bairro : '') . ($emitente->cidade ? ' - ' . $emitente->cidade : '') . ($emitente->estado ? '/' . $emitente->estado : '') . ($emitente->cep ? ' - CEP: ' . $emitente->cep : '')); 
-                } ?>
+                    <?php if ($emitente->rua || $emitente->cidade) { 
+                        echo trim(($emitente->rua ? $emitente->rua . ', ' : '') . ($emitente->numero ? $emitente->numero : '') . ($emitente->bairro ? ' - ' . $emitente->bairro : '') . ($emitente->cidade ? ' - ' . $emitente->cidade : '') . (isset($emitente->estado) && $emitente->estado ? '/' . $emitente->estado : '') . (isset($emitente->cep) && $emitente->cep ? ' - CEP: ' . $emitente->cep : '')); 
+                    } ?>
             <?php } ?>
         </p>
     </div>

@@ -338,9 +338,47 @@ $(document).ready(function() {
     });
 
     // Variáveis globais
-    var produtos = <?php echo json_encode(array_map(function($p) { return ['produtos_id' => $p->produtos_id, 'descricao' => $p->descricao, 'quantidade' => floatval($p->quantidade), 'preco' => floatval($p->preco), 'subtotal' => floatval($p->subtotal)]; }, $produtos ?: [])); ?>;
-    var servicos = <?php echo json_encode(array_map(function($s) { return ['servicos_id' => $s->servicos_id, 'descricao' => $s->descricao, 'quantidade' => floatval($s->quantidade), 'preco' => floatval($s->preco), 'subtotal' => floatval($s->subtotal)]; }, $servicos ?: [])); ?>;
-    var parcelas = <?php echo json_encode(array_map(function($p) { return ['numero' => intval($p->numero), 'dias' => intval($p->dias), 'valor' => floatval($p->valor), 'observacao' => $p->observacao]; }, $parcelas ?: [])); ?>;
+    var produtos = [];
+    var servicos = [];
+    var parcelas = [];
+    
+    // Carregar produtos existentes (convertendo valores corretamente)
+    <?php if (!empty($produtos)) { ?>
+        <?php foreach ($produtos as $p) { ?>
+            produtos.push({
+                produtos_id: <?php echo $p->produtos_id ? $p->produtos_id : 'null'; ?>,
+                descricao: "<?php echo addslashes($p->descricao); ?>",
+                quantidade: <?php echo floatval($p->quantidade); ?>,
+                preco: <?php echo floatval($p->preco); ?>,
+                subtotal: <?php echo floatval($p->subtotal); ?>
+            });
+        <?php } ?>
+    <?php } ?>
+    
+    // Carregar serviços existentes (convertendo valores corretamente)
+    <?php if (!empty($servicos)) { ?>
+        <?php foreach ($servicos as $s) { ?>
+            servicos.push({
+                servicos_id: <?php echo $s->servicos_id ? $s->servicos_id : 'null'; ?>,
+                descricao: "<?php echo addslashes($s->descricao); ?>",
+                quantidade: <?php echo floatval($s->quantidade); ?>,
+                preco: <?php echo floatval($s->preco); ?>,
+                subtotal: <?php echo floatval($s->subtotal); ?>
+            });
+        <?php } ?>
+    <?php } ?>
+    
+    // Carregar parcelas existentes
+    <?php if (!empty($parcelas)) { ?>
+        <?php foreach ($parcelas as $p) { ?>
+            parcelas.push({
+                numero: <?php echo intval($p->numero); ?>,
+                dias: <?php echo intval($p->dias); ?>,
+                valor: <?php echo floatval($p->valor); ?>,
+                observacao: "<?php echo addslashes($p->observacao); ?>"
+            });
+        <?php } ?>
+    <?php } ?>
 
     // Carregar dados existentes
     if (produtos.length > 0) {

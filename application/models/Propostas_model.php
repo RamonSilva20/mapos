@@ -83,7 +83,7 @@ class Propostas_model extends CI_Model
 
     public function getById($id)
     {
-        $this->db->select('propostas.*, clientes.*, COALESCE(clientes.nomeCliente, propostas.cliente_nome) as nomeCliente_exibicao, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, usuarios.nome, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario');
+        $this->db->select('propostas.*, clientes.nomeCliente as nomeCliente_original, clientes.documento, clientes.telefone, clientes.celular as celular_cliente, clientes.email, clientes.rua, clientes.numero, clientes.bairro, clientes.cidade, clientes.estado, clientes.cep, COALESCE(clientes.nomeCliente, propostas.cliente_nome) as nomeCliente, usuarios.nome, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario');
         $this->db->from('propostas');
         $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id', 'left');
         $this->db->join('usuarios', 'usuarios.idUsuarios = propostas.usuarios_id', 'left');
