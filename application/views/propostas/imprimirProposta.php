@@ -12,55 +12,8 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap5.3.2.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/imprimir.css">
-    <style>
-        .no-print {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f5f5f5;
-            border-radius: 5px;
-        }
-        .no-print button, .no-print a {
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
-    <div class="no-print">
-        <button onclick="window.print()" class="btn btn-primary">
-            <i class="bx bx-printer"></i> Imprimir
-        </button>
-        <a href="<?php echo base_url(); ?>index.php/propostas/gerarPdf/<?php echo $result->idProposta; ?>" class="btn btn-danger" target="_blank">
-            <i class="bx bx-file"></i> Salvar PDF
-        </a>
-        <?php 
-        $clienteNome = $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? '');
-        $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
-        $valorTotal = number_format($result->valor_total, 2, ',', '.');
-        $textoWhatsApp = urlencode("Olá! Segue a proposta comercial:\n\n*Proposta:* $numeroProposta\n*Cliente:* $clienteNome\n*Valor Total:* R$ $valorTotal\n\n" . base_url() . "index.php/propostas/visualizar/" . $result->idProposta);
-        $telefoneCliente = '';
-        if ($result->celular_cliente) {
-            $telefoneCliente = preg_replace('/[^0-9]/', '', $result->celular_cliente);
-        } elseif ($result->telefone) {
-            $telefoneCliente = preg_replace('/[^0-9]/', '', $result->telefone);
-        }
-        ?>
-        <?php if ($telefoneCliente) { ?>
-            <a href="https://api.whatsapp.com/send?phone=55<?php echo $telefoneCliente; ?>&text=<?php echo $textoWhatsApp; ?>" class="btn btn-success" target="_blank">
-                <i class="bx bxl-whatsapp"></i> Compartilhar WhatsApp
-            </a>
-        <?php } else { ?>
-            <a href="https://api.whatsapp.com/send?text=<?php echo $textoWhatsApp; ?>" class="btn btn-success" target="_blank">
-                <i class="bx bxl-whatsapp"></i> Compartilhar WhatsApp
-            </a>
-        <?php } ?>
-        <a href="<?php echo base_url(); ?>index.php/propostas" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Voltar
-        </a>
-    </div>
-
     <div class="main-page">
         <div class="sub-page">
             <header>
