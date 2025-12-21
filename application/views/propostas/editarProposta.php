@@ -478,7 +478,12 @@ $(document).ready(function() {
         var total = 0;
         produtos.forEach(function(p, index) {
             total += p.subtotal;
-            html += '<tr><td>' + p.descricao + '</td><td>' + p.quantidade + '</td><td>R$ ' + p.preco.toFixed(2).replace('.', ',') + '</td><td>R$ ' + p.subtotal.toFixed(2).replace('.', ',') + '</td><td><a href="#" class="btn-remover-produto" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+            // Garantir que preco e subtotal são números
+            var preco = typeof p.preco === 'number' ? p.preco : parseFloat(p.preco);
+            var subtotal = typeof p.subtotal === 'number' ? p.subtotal : parseFloat(p.subtotal);
+            var precoFormatado = preco.toFixed(2).replace('.', ',');
+            var subtotalFormatado = subtotal.toFixed(2).replace('.', ',');
+            html += '<tr><td>' + p.descricao + '</td><td>' + p.quantidade + '</td><td>R$ ' + precoFormatado + '</td><td>R$ ' + subtotalFormatado + '</td><td><a href="#" class="btn-remover-produto" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
         });
         $("#tbodyProdutos").html(html);
         $("#totalProdutos").text('R$ ' + total.toFixed(2).replace('.', ','));
@@ -491,7 +496,12 @@ $(document).ready(function() {
         var total = 0;
         servicos.forEach(function(s, index) {
             total += s.subtotal;
-            html += '<tr><td>' + s.descricao + '</td><td>' + s.quantidade + '</td><td>R$ ' + s.preco.toFixed(2).replace('.', ',') + '</td><td>R$ ' + s.subtotal.toFixed(2).replace('.', ',') + '</td><td><a href="#" class="btn-remover-servico" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+            // Garantir que preco e subtotal são números
+            var preco = typeof s.preco === 'number' ? s.preco : parseFloat(s.preco);
+            var subtotal = typeof s.subtotal === 'number' ? s.subtotal : parseFloat(s.subtotal);
+            var precoFormatado = preco.toFixed(2).replace('.', ',');
+            var subtotalFormatado = subtotal.toFixed(2).replace('.', ',');
+            html += '<tr><td>' + s.descricao + '</td><td>' + s.quantidade + '</td><td>R$ ' + precoFormatado + '</td><td>R$ ' + subtotalFormatado + '</td><td><a href="#" class="btn-remover-servico" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
         });
         $("#tbodyServicos").html(html);
         $("#totalServicos").text('R$ ' + total.toFixed(2).replace('.', ','));

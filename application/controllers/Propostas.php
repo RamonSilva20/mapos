@@ -273,16 +273,17 @@ class Propostas extends MY_Controller
             foreach ($produtos as $produto) {
                 if (empty($produto['descricao'])) continue;
 
-                $preco = str_replace(['.', ','], ['', '.'], $produto['preco'] ?? '0');
+                // Converter preço corretamente - já vem como número do JavaScript
+                $preco = isset($produto['preco']) ? floatval($produto['preco']) : 0;
                 $quantidade = floatval($produto['quantidade'] ?? 1);
-                $subtotal = floatval($preco) * $quantidade;
+                $subtotal = $preco * $quantidade;
 
                 $this->db->insert('produtos_proposta', [
                     'proposta_id' => $idProposta,
                     'produtos_id' => !empty($produto['produtos_id']) ? $produto['produtos_id'] : null,
                     'descricao' => $produto['descricao'],
                     'quantidade' => $quantidade,
-                    'preco' => floatval($preco),
+                    'preco' => $preco,
                     'subtotal' => $subtotal,
                 ]);
             }
@@ -296,16 +297,17 @@ class Propostas extends MY_Controller
             foreach ($servicos as $servico) {
                 if (empty($servico['descricao'])) continue;
 
-                $preco = str_replace(['.', ','], ['', '.'], $servico['preco'] ?? '0');
+                // Converter preço corretamente - já vem como número do JavaScript
+                $preco = isset($servico['preco']) ? floatval($servico['preco']) : 0;
                 $quantidade = floatval($servico['quantidade'] ?? 1);
-                $subtotal = floatval($preco) * $quantidade;
+                $subtotal = $preco * $quantidade;
 
                 $this->db->insert('servicos_proposta', [
                     'proposta_id' => $idProposta,
                     'servicos_id' => !empty($servico['servicos_id']) ? $servico['servicos_id'] : null,
                     'descricao' => $servico['descricao'],
                     'quantidade' => $quantidade,
-                    'preco' => floatval($preco),
+                    'preco' => $preco,
                     'subtotal' => $subtotal,
                 ]);
             }
