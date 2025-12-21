@@ -351,6 +351,46 @@
         // Máscara para campo de entrada
         $('.money').mask('#.##0,00', {reverse: true});
         
+        // Inicializar maskMoney para campo de preço outros
+        if ($('#preco_outros').length > 0 && typeof $.fn.maskMoney !== 'undefined') {
+            $('#preco_outros').maskMoney({
+                prefix: '',
+                suffix: '',
+                decimal: ",",
+                thousands: ".",
+                allowZero: true,
+                allowNegative: false
+            });
+            if ($('#preco_outros').val() === '' || $('#preco_outros').val() === null) {
+                $('#preco_outros').val('0,00').maskMoney('mask');
+            }
+            
+            // Corrigir máscara de preço para outros produtos/serviços
+            $('#preco_outros').on('blur', function() {
+                var valor = $(this).val();
+                if (!valor || valor.trim() === '') {
+                    $(this).val('0,00').maskMoney('mask');
+                    return;
+                }
+                // Se contém ponto e não contém vírgula, pode ser formato americano
+                if (valor && valor.indexOf('.') !== -1 && valor.indexOf(',') === -1) {
+                    // Verificar se é formato americano (ex: 400.00 ou 350.00)
+                    var partes = valor.split('.');
+                    if (partes.length === 2 && partes[1].length <= 2) {
+                        // É formato decimal americano, converter
+                        var valorNum = parseFloat(valor);
+                        if (!isNaN(valorNum)) {
+                            var valorFormatado = valorNum.toLocaleString('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
+                            $(this).val(valorFormatado).maskMoney('mask');
+                        }
+                    }
+                }
+            });
+        }
+        
         $('.editor').trumbowyg({
             lang: 'pt_br',
             semantic: { 'strikethrough': 's', }
