@@ -4,6 +4,9 @@
  * Acesse via browser: http://seusite.com/updates/install_propostas.php
  */
 
+// Permite acesso direto ao script
+define('BASEPATH', true);
+
 // Caminho para o arquivo de configuração do CodeIgniter
 $config_path = dirname(__FILE__) . '/../application/config/database.php';
 
@@ -11,7 +14,10 @@ if (!file_exists($config_path)) {
     die('Arquivo de configuração não encontrado: ' . $config_path);
 }
 
-require_once($config_path);
+// Incluir apenas o necessário para conexão
+if (file_exists($config_path)) {
+    include($config_path);
+}
 
 // Buscar configuração do banco
 $db_config = $db['default'];
