@@ -82,7 +82,7 @@
                                     case 'Convertida': $statusClass = 'primary'; break;
                                 }
                                 ?>
-                                <tr>
+                                <tr style="cursor: pointer;" onclick="window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
                                     <td><?php echo $r->numero_proposta ?: '#' . $r->idProposta; ?></td>
                                     <td><?php echo $r->nomeCliente; ?></td>
                                     <td><?php echo $dataProposta; ?></td>
@@ -90,7 +90,7 @@
                                     <td><strong>R$ <?php echo $valorTotal; ?></strong></td>
                                     <td><span class="badge badge-<?php echo $statusClass; ?>"><?php echo $r->status; ?></span></td>
                                     <td><?php echo $r->nome; ?></td>
-                                    <td>
+                                    <td onclick="event.stopPropagation();">
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
                                             <a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Imprimir">
                                                 <i class="bx bx-printer"></i>

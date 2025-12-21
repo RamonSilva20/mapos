@@ -17,6 +17,10 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
         @mkdir($tempDir . '/mpdf', 0777, true);
     }
     
+    // Garantir permissões de escrita
+    @chmod($tempDir, 0777);
+    @chmod($tempDir . '/mpdf', 0777);
+    
     // Normalizar o caminho (remover barras duplas)
     $tempDir = rtrim($tempDir, '/') . '/';
     
