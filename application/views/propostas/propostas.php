@@ -143,38 +143,46 @@
             dateFormat: 'dd/mm/yy'
         });
 
-        // Evento para abrir modal (compatível com Bootstrap 2 e 3)
+        var propostaIdParaExcluir = null;
+
+        // Evento para abrir modal (compatível com Bootstrap 2)
         $('#modalExcluir').on('show', function(event) {
             var button = $(event.relatedTarget || $(document.activeElement));
             var id = button.data('id') || button.attr('data-id');
             var nome = button.data('nome') || button.attr('data-nome');
             var modal = $(this);
+            
+            propostaIdParaExcluir = id;
             modal.find('#id').val(id);
             modal.find('#nome').text(nome);
-            console.log('Modal aberto - ID:', id, 'Nome:', nome);
+            console.log('Modal aberto - ID:', id, 'Nome:', nome, 'Variável global:', propostaIdParaExcluir);
         });
         
-        // Também para Bootstrap 3+
-        $('#modalExcluir').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var nome = button.data('nome');
-            var modal = $(this);
-            modal.find('#id').val(id);
-            modal.find('#nome').text(nome);
-            console.log('Modal aberto (BS3) - ID:', id, 'Nome:', nome);
+        // Também para Bootstrap 3+ (mas usar o evento show que funciona)
+        $('#modalExcluir').on('shown', function(event) {
+            // Garantir que o ID está definido
+            var id = $('#modalExcluir #id').val();
+            if (id && !propostaIdParaExcluir) {
+                propostaIdParaExcluir = id;
+                console.log('ID recuperado no shown:', propostaIdParaExcluir);
+            }
         });
         
         // Submeter formulário de exclusão
         $('#modalExcluir form').on('submit', function(e) {
             e.preventDefault();
             var form = $(this);
-            var id = form.find('#id').val();
             
-            console.log('Tentando excluir - ID do campo:', id);
+            // Tentar pegar o ID de várias formas
+            var id = propostaIdParaExcluir || form.find('#id').val() || $('#modalExcluir #id').val();
+            
+            console.log('Tentando excluir - ID variável global:', propostaIdParaExcluir);
+            console.log('Tentando excluir - ID do campo form:', form.find('#id').val());
+            console.log('Tentando excluir - ID do campo modal:', $('#modalExcluir #id').val());
+            console.log('Tentando excluir - ID final:', id);
             console.log('Form action:', form.attr('action'));
             
-            if (!id || id === '' || id === 'undefined') {
+            if (!id || id === '' || id === 'undefined' || id === null) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro!',
@@ -193,6 +201,7 @@
                 },
                 success: function(response) {
                     console.log('Resposta recebida:', response);
+                    propostaIdParaExcluir = null; // Limpar
                     $('#modalExcluir').modal('hide');
                     if (response.success) {
                         Swal.fire({
@@ -215,6 +224,7 @@
                 error: function(xhr, status, error) {
                     console.error('Erro na requisição:', status, error);
                     console.error('Response:', xhr.responseText);
+                    propostaIdParaExcluir = null; // Limpar
                     $('#modalExcluir').modal('hide');
                     var message = 'Erro ao excluir proposta.';
                     try {
