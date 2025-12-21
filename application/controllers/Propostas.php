@@ -148,7 +148,7 @@ class Propostas extends MY_Controller
 
                 log_info('Adicionou uma Proposta. ID: ' . $id);
                 $this->session->set_flashdata('success', 'Proposta adicionada com sucesso!');
-                redirect(site_url('propostas/editar/') . $id);
+                redirect(site_url('propostas/gerenciar/'));
             } else {
                 $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
             }
@@ -256,7 +256,7 @@ class Propostas extends MY_Controller
 
                 log_info('Editou uma Proposta. ID: ' . $idProposta);
                 $this->session->set_flashdata('success', 'Proposta editada com sucesso!');
-                redirect(site_url('propostas/editar/') . $idProposta);
+                redirect(site_url('propostas/gerenciar/'));
             } else {
                 $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
             }
