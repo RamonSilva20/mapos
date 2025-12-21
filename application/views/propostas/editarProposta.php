@@ -411,21 +411,34 @@ $(document).ready(function() {
     $("#btnAdicionarProduto").on('click', function() {
         var produto = $("#produto").val();
         var idProduto = $("#idProduto").val();
-        var preco = $("#preco_produto").val().replace(/\./g, '').replace(',', '.');
+        var precoStr = $("#preco_produto").val().replace(/\./g, '').replace(',', '.');
+        var preco = parseFloat(precoStr);
         var quantidade = parseFloat($("#quantidade_produto").val()) || 1;
 
-        if (!produto || !preco || parseFloat(preco) <= 0) {
+        if (!produto || !precoStr || preco <= 0) {
             Swal.fire({ icon: "error", title: "Atenção", text: "Preencha produto e preço válidos." });
             return;
         }
 
-        produtos.push({
-            produtos_id: idProduto || null,
-            descricao: produto,
-            quantidade: quantidade,
-            preco: parseFloat(preco),
-            subtotal: quantidade * parseFloat(preco)
+        // Verificar se produto já existe e atualizar quantidade
+        var produtoExistente = produtos.find(function(p) {
+            return p.produtos_id == idProduto && idProduto != null && idProduto != '';
         });
+
+        if (produtoExistente) {
+            // Atualizar quantidade do produto existente
+            produtoExistente.quantidade += quantidade;
+            produtoExistente.subtotal = produtoExistente.quantidade * produtoExistente.preco;
+        } else {
+            // Adicionar novo produto
+            produtos.push({
+                produtos_id: idProduto || null,
+                descricao: produto,
+                quantidade: quantidade,
+                preco: preco,
+                subtotal: quantidade * preco
+            });
+        }
 
         atualizarTabelaProdutos();
         limparFormProduto();
