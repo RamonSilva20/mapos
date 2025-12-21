@@ -143,6 +143,18 @@
             dateFormat: 'dd/mm/yy'
         });
 
+        // Evento para abrir modal (compatível com Bootstrap 2 e 3)
+        $('#modalExcluir').on('show', function(event) {
+            var button = $(event.relatedTarget || $(document.activeElement));
+            var id = button.data('id') || button.attr('data-id');
+            var nome = button.data('nome') || button.attr('data-nome');
+            var modal = $(this);
+            modal.find('#id').val(id);
+            modal.find('#nome').text(nome);
+            console.log('Modal aberto - ID:', id, 'Nome:', nome);
+        });
+        
+        // Também para Bootstrap 3+
         $('#modalExcluir').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
@@ -150,7 +162,7 @@
             var modal = $(this);
             modal.find('#id').val(id);
             modal.find('#nome').text(nome);
-            console.log('Modal aberto - ID:', id, 'Nome:', nome);
+            console.log('Modal aberto (BS3) - ID:', id, 'Nome:', nome);
         });
         
         // Submeter formulário de exclusão
@@ -159,11 +171,14 @@
             var form = $(this);
             var id = form.find('#id').val();
             
-            if (!id || id === '') {
+            console.log('Tentando excluir - ID do campo:', id);
+            console.log('Form action:', form.attr('action'));
+            
+            if (!id || id === '' || id === 'undefined') {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro!',
-                    text: 'ID da proposta não encontrado.'
+                    text: 'ID da proposta não encontrado. Verifique o console para mais detalhes.'
                 });
                 return;
             }
@@ -173,7 +188,11 @@
                 type: 'POST',
                 data: { id: id },
                 dataType: 'json',
+                beforeSend: function() {
+                    console.log('Enviando requisição AJAX com ID:', id);
+                },
                 success: function(response) {
+                    console.log('Resposta recebida:', response);
                     $('#modalExcluir').modal('hide');
                     if (response.success) {
                         Swal.fire({
@@ -193,7 +212,9 @@
                         });
                     }
                 },
-                error: function(xhr) {
+                error: function(xhr, status, error) {
+                    console.error('Erro na requisição:', status, error);
+                    console.error('Response:', xhr.responseText);
                     $('#modalExcluir').modal('hide');
                     var message = 'Erro ao excluir proposta.';
                     try {
@@ -203,7 +224,7 @@
                         }
                     } catch(e) {
                         if (xhr.responseText) {
-                            message = xhr.responseText;
+                            message = xhr.responseText.substring(0, 200);
                         }
                     }
                     Swal.fire({
