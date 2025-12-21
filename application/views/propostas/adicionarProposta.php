@@ -320,7 +320,9 @@ $(document).ready(function() {
         minLength: 2,
         select: function(event, ui) {
             $("#idProduto").val(ui.item.id);
-            $("#preco_produto").val(parseFloat(ui.item.preco).toFixed(2).replace('.', ',')).maskMoney('mask');
+            // Converter preço corretamente (já vem como número do banco)
+            var preco = parseFloat(ui.item.preco);
+            $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
             $("#quantidade_produto").focus();
         }
     });
@@ -330,7 +332,9 @@ $(document).ready(function() {
         minLength: 2,
         select: function(event, ui) {
             $("#idServico").val(ui.item.id);
-            $("#preco_servico").val(parseFloat(ui.item.preco).toFixed(2).replace('.', ',')).maskMoney('mask');
+            // Converter preço corretamente (já vem como número do banco)
+            var preco = parseFloat(ui.item.preco);
+            $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
             $("#quantidade_servico").focus();
         }
     });

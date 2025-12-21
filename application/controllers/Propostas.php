@@ -372,11 +372,32 @@ class Propostas extends MY_Controller
             redirect(site_url('propostas/gerenciar/'));
         }
 
-        if ($this->propostas_model->delete('propostas', 'idProposta', $id) == true) {
+        $this->db->trans_start();
+
+        // Excluir itens relacionados
+        $this->db->where('proposta_id', $id);
+        $this->db->delete('produtos_proposta');
+
+        $this->db->where('proposta_id', $id);
+        $this->db->delete('servicos_proposta');
+
+        $this->db->where('proposta_id', $id);
+        $this->db->delete('parcelas_proposta');
+
+        $this->db->where('proposta_id', $id);
+        $this->db->delete('outros_proposta');
+
+        // Excluir a proposta
+        $this->db->where('idProposta', $id);
+        $this->db->delete('propostas');
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->session->set_flashdata('error', 'Erro ao excluir proposta.');
+        } else {
             log_info('Removeu uma proposta. ID: ' . $id);
             $this->session->set_flashdata('success', 'Proposta excluída com sucesso!');
-        } else {
-            $this->session->set_flashdata('error', 'Não foi possível excluir a proposta. Ela pode estar sendo utilizada.');
         }
 
         redirect(site_url('propostas/gerenciar/'));
