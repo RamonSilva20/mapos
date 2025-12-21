@@ -492,4 +492,26 @@ $config = [
             'rules' => 'trim',
         ],
     ],
+    'propostas' => [
+        [
+            'field' => 'clientes_id',
+            'label' => 'Cliente',
+            'rules' => 'required|integer',
+        ],
+        [
+            'field' => 'usuarios_id',
+            'label' => 'Vendedor/Responsável',
+            'rules' => 'required|integer',
+        ],
+        [
+            'field' => 'data_proposta',
+            'label' => 'Data da Proposta',
+            'rules' => 'required',
+        ],
+        [
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim',
+        ],
+    ],
 ];
