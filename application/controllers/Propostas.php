@@ -362,14 +362,30 @@ class Propostas extends MY_Controller
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para excluir propostas.');
-            redirect(base_url());
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Você não tem permissão para excluir propostas.'
+            ]));
+            return;
         }
 
         $id = $this->input->post('id');
-        if ($id == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir proposta.');
-            redirect(site_url('propostas/gerenciar/'));
+        if ($id == null || !is_numeric($id)) {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'ID da proposta inválido.'
+            ]));
+            return;
+        }
+
+        // Verificar se proposta existe
+        $proposta = $this->propostas_model->getById($id);
+        if (!$proposta) {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Proposta não encontrada.'
+            ]));
+            return;
         }
 
         $this->db->trans_start();
@@ -394,13 +410,19 @@ class Propostas extends MY_Controller
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE) {
-            $this->session->set_flashdata('error', 'Erro ao excluir proposta.');
+            $error = $this->db->error();
+            log_message('error', 'Erro ao excluir proposta ID ' . $id . ': ' . json_encode($error));
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Erro ao excluir proposta: ' . ($error['message'] ?? 'Erro desconhecido')
+            ]));
         } else {
             log_info('Removeu uma proposta. ID: ' . $id);
-            $this->session->set_flashdata('success', 'Proposta excluída com sucesso!');
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => true,
+                'message' => 'Proposta excluída com sucesso!'
+            ]));
         }
-
-        redirect(site_url('propostas/gerenciar/'));
     }
 
     public function visualizar()

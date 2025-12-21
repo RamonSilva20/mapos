@@ -143,13 +143,59 @@
             dateFormat: 'dd/mm/yy'
         });
 
-        $('#modalExcluir').on('show', function(event) {
+        $('#modalExcluir').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var nome = button.data('nome');
             var modal = $(this);
             modal.find('#id').val(id);
             modal.find('#nome').text(nome);
+        });
+        
+        // Submeter formulário de exclusão
+        $('#modalExcluir form').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var id = form.find('#id').val();
+            
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: { id: id },
+                dataType: 'json',
+                success: function(response) {
+                    $('#modalExcluir').modal('hide');
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sucesso!',
+                            text: response.message || 'Proposta excluída com sucesso!',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            text: response.message || 'Erro ao excluir proposta.'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    $('#modalExcluir').modal('hide');
+                    var message = 'Erro ao excluir proposta.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: message
+                    });
+                }
+            });
         });
     });
 </script>
