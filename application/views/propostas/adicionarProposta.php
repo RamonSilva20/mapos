@@ -291,17 +291,20 @@ $(document).ready(function() {
         minLength: 1,
         select: function(event, ui) {
             $("#clientes_id").val(ui.item.id);
+            return true;
+        },
+        change: function(event, ui) {
+            // Se não foi selecionado do autocomplete, limpar o ID
+            if (!ui.item) {
+                $("#clientes_id").val('');
+            }
         }
     });
     
-    // Permitir digitação livre - limpar clientes_id se não selecionar do autocomplete
-    $("#cliente").on('blur', function() {
-        // Se não foi selecionado do autocomplete, garante que pode ser texto livre
-        var clienteNome = $(this).val();
-        if (clienteNome && !$("#clientes_id").val()) {
-            // Cliente será salvo apenas pelo nome
-            $("#clientes_id").val('');
-        }
+    // Permitir digitação livre
+    $("#cliente").on('keyup', function() {
+        // Se o usuário está digitando livremente, permitir
+        console.log('Cliente digitando: ' + $(this).val());
     });
 
     $("#vendedor").autocomplete({
