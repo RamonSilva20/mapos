@@ -75,7 +75,38 @@ try {
     echo "========================================\n";
     
     echo "</pre>";
+    
+    // Adicionar permissões
+    echo "<h3>Adicionando Permissões...</h3>";
+    echo "<pre>";
+    $permissoes_file = dirname(__FILE__) . '/add_permissões_propostas.sql';
+    if (file_exists($permissoes_file)) {
+        $permissoes_sql = file_get_contents($permissoes_file);
+        $permissoes_statements = array_filter(
+            array_map('trim', explode(';', $permissoes_sql)),
+            function($stmt) {
+                return !empty($stmt) && !preg_match('/^--/', $stmt) && !preg_match('/^\/\*/', $stmt);
+            }
+        );
+        
+        foreach ($permissoes_statements as $statement) {
+            if (empty(trim($statement))) continue;
+            try {
+                $pdo->exec($statement);
+                echo "✓ Permissões adicionadas\n";
+            } catch (PDOException $e) {
+                if (strpos($e->getMessage(), 'Duplicate') !== false) {
+                    echo "⚠ Permissões já existem\n";
+                } else {
+                    echo "✗ Erro: " . $e->getMessage() . "\n";
+                }
+            }
+        }
+    }
+    echo "</pre>";
+    
     echo "<p><strong>Instalação concluída!</strong></p>";
+    echo "<p><strong>Importante:</strong> Configure as permissões no sistema para que os usuários possam acessar o módulo de Propostas.</p>";
     echo "<p><a href='../index.php'>Voltar para o sistema</a></p>";
     
 } catch (PDOException $e) {

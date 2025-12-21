@@ -402,5 +402,40 @@ class Propostas extends MY_Controller
             $this->propostas_model->autoCompleteUsuario($q);
         }
     }
+
+    public function autoCompleteProduto()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->db->select('*');
+            $this->db->limit(25);
+            $this->db->like('codDeBarra', $q);
+            $this->db->or_like('descricao', $q);
+            $query = $this->db->get('produtos');
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $row) {
+                    $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
+                }
+                echo json_encode($row_set);
+            }
+        }
+    }
+
+    public function autoCompleteServico()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->db->select('*');
+            $this->db->limit(25);
+            $this->db->like('nome', $q);
+            $query = $this->db->get('servicos');
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $row) {
+                    $row_set[] = ['label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'], 'id' => $row['idServicos'], 'preco' => $row['preco']];
+                }
+                echo json_encode($row_set);
+            }
+        }
+    }
 }
 

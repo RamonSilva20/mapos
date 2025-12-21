@@ -1,0 +1,513 @@
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+
+<div class="row-fluid" style="margin-top:0">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Nova Proposta Comercial</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <?php if ($custom_error == true) { ?>
+                    <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos obrigatórios.</div>
+                <?php } ?>
+                <form action="<?php echo current_url(); ?>" method="post" id="formProposta">
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" id="csrf_token">
+                    
+                    <!-- Dados Básicos -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 2px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Dados da Proposta</h4>
+                        <div class="span12" style="margin-left: 0;">
+                            <div class="span6">
+                                <label for="cliente">Cliente<span class="required">*</span></label>
+                                <input id="cliente" class="span12" type="text" name="cliente" value="" />
+                                <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="" />
+                            </div>
+                            <div class="span6">
+                                <label for="vendedor">Vendedor/Responsável<span class="required">*</span></label>
+                                <input id="vendedor" class="span12" type="text" name="vendedor" value="<?= $this->session->userdata('nome_admin'); ?>" />
+                                <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
+                            </div>
+                        </div>
+                        <div class="span12" style="margin-left: 0; margin-top: 10px;">
+                            <div class="span3">
+                                <label for="data_proposta">Data da Proposta<span class="required">*</span></label>
+                                <input id="data_proposta" autocomplete="off" class="span12 datepicker" type="text" name="data_proposta" value="<?php echo date('d/m/Y'); ?>" />
+                            </div>
+                            <div class="span3">
+                                <label for="data_validade">Validade</label>
+                                <input id="data_validade" autocomplete="off" class="span12 datepicker" type="text" name="data_validade" value="" placeholder="Opcional" />
+                            </div>
+                            <div class="span3">
+                                <label for="status">Status</label>
+                                <select class="span12" name="status" id="status">
+                                    <option value="Rascunho" selected>Rascunho</option>
+                                    <option value="Enviada">Enviada</option>
+                                    <option value="Aprovada">Aprovada</option>
+                                    <option value="Recusada">Recusada</option>
+                                    <option value="Convertida">Convertida</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produtos -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Produtos</h4>
+                        <div class="span12 well" style="margin-left: 0; padding: 15px;">
+                            <div class="span12" style="margin-left: 0;">
+                                <div class="span5">
+                                    <label>Produto</label>
+                                    <input type="text" class="span12" id="produto" placeholder="Digite o nome do produto" />
+                                    <input type="hidden" id="idProduto" />
+                                </div>
+                                <div class="span2">
+                                    <label>Preço</label>
+                                    <input type="text" id="preco_produto" name="preco" class="span12 money" placeholder="0,00" />
+                                </div>
+                                <div class="span2">
+                                    <label>Quantidade</label>
+                                    <input type="text" id="quantidade_produto" name="quantidade" class="span12" placeholder="1" value="1" />
+                                </div>
+                                <div class="span3" style="display: flex; align-items: flex-end;">
+                                    <button type="button" class="button btn btn-success span12" id="btnAdicionarProduto">
+                                        <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
+                                        <span class="button__text2">Adicionar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span12" style="margin-left: 0;">
+                            <table class="table table-bordered" id="tabelaProdutos">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th width="15%">Quantidade</th>
+                                        <th width="15%">Preço Unit.</th>
+                                        <th width="15%">Subtotal</th>
+                                        <th width="10%">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyProdutos">
+                                    <!-- Produtos serão adicionados aqui -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right;"><strong>Total Produtos:</strong></td>
+                                        <td><strong id="totalProdutos">R$ 0,00</strong></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <input type="hidden" name="produtos_json" id="produtos_json" value="[]" />
+                        </div>
+                    </div>
+
+                    <!-- Serviços -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Serviços</h4>
+                        <div class="span12 well" style="margin-left: 0; padding: 15px;">
+                            <div class="span12" style="margin-left: 0;">
+                                <div class="span5">
+                                    <label>Serviço</label>
+                                    <input type="text" class="span12" id="servico" placeholder="Digite o nome do serviço" />
+                                    <input type="hidden" id="idServico" />
+                                </div>
+                                <div class="span2">
+                                    <label>Preço</label>
+                                    <input type="text" id="preco_servico" class="span12 money" placeholder="0,00" />
+                                </div>
+                                <div class="span2">
+                                    <label>Quantidade</label>
+                                    <input type="text" id="quantidade_servico" class="span12" placeholder="1" value="1" />
+                                </div>
+                                <div class="span3" style="display: flex; align-items: flex-end;">
+                                    <button type="button" class="button btn btn-success span12" id="btnAdicionarServico">
+                                        <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
+                                        <span class="button__text2">Adicionar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span12" style="margin-left: 0;">
+                            <table class="table table-bordered" id="tabelaServicos">
+                                <thead>
+                                    <tr>
+                                        <th>Serviço</th>
+                                        <th width="15%">Quantidade</th>
+                                        <th width="15%">Preço Unit.</th>
+                                        <th width="15%">Subtotal</th>
+                                        <th width="10%">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyServicos">
+                                    <!-- Serviços serão adicionados aqui -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right;"><strong>Total Serviços:</strong></td>
+                                        <td><strong id="totalServicos">R$ 0,00</strong></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <input type="hidden" name="servicos_json" id="servicos_json" value="[]" />
+                        </div>
+                    </div>
+
+                    <!-- Outros Produtos/Serviços -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Outros Produtos/Serviços</h4>
+                        <div class="span12 well" style="margin-left: 0; padding: 15px;">
+                            <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
+                                <label for="descricao_outros">Descrição</label>
+                                <textarea id="descricao_outros" name="descricao_outros" class="span12" rows="3" placeholder="Digite produtos ou serviços que não estão cadastrados..."></textarea>
+                            </div>
+                            <div class="span12" style="margin-left: 0;">
+                                <div class="span4">
+                                    <label for="preco_outros">Preço</label>
+                                    <input type="text" value="0,00" id="preco_outros" name="preco_outros" class="span12 money" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Parcelas -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Condições de Pagamento</h4>
+                        <div class="span12 well" style="margin-left: 0; padding: 15px;">
+                            <div class="span8">
+                                <label for="geradorParcelas">Gerar Parcelas</label>
+                                <input type="text" class="span12" id="geradorParcelas" placeholder="Ex: 30 (30 dias) | 30 60 90 (vencimentos em 30, 60 e 90 dias) | 6x (6 parcelas a cada 30 dias)" />
+                                <small style="color: #666; display: block; margin-top: 5px;">
+                                    <strong>Exemplos:</strong> • <code>30</code> = 1 parcela em 30 dias • <code>30 60 90</code> = 3 parcelas • <code>6x</code> = 6 parcelas iguais a cada 30 dias
+                                </small>
+                            </div>
+                            <div class="span4" style="display: flex; align-items: flex-end;">
+                                <button type="button" class="button btn btn-success span12" id="btnGerarParcelas">
+                                    <span class="button__icon"><i class='bx bx-calculator'></i></span>
+                                    <span class="button__text2">Gerar</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="tabelaParcelasContainer" style="display: none;">
+                            <div class="span12" style="margin-left: 0;">
+                                <table class="table table-bordered" id="tabelaParcelas">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%">Nº</th>
+                                            <th width="15%">Dias</th>
+                                            <th width="20%">Valor</th>
+                                            <th width="50%">Observação</th>
+                                            <th width="10%">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyParcelas"></tbody>
+                                </table>
+                                <input type="hidden" name="parcelas_json" id="parcelas_json" value="[]" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Observações</h4>
+                        <div class="span12" style="margin-left: 0;">
+                            <textarea name="observacoes" id="observacoes" class="span12" rows="4" placeholder="Observações adicionais sobre a proposta..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Resumo -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; background: #f8f9fa; border-radius: 5px;">
+                        <div class="span6" style="margin-left: 0;">
+                            <h4>Resumo</h4>
+                            <table class="table">
+                                <tr>
+                                    <td><strong>Total Produtos:</strong></td>
+                                    <td><span id="resumoProdutos">R$ 0,00</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Serviços:</strong></td>
+                                    <td><span id="resumoServicos">R$ 0,00</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Subtotal:</strong></td>
+                                    <td><span id="resumoSubtotal">R$ 0,00</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Desconto:</strong></td>
+                                    <td><span id="resumoDesconto">R$ 0,00</span></td>
+                                </tr>
+                                <tr style="background: #fff; font-size: 18px;">
+                                    <td><strong>TOTAL:</strong></td>
+                                    <td><strong><span id="resumoTotal">R$ 0,00</span></strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <input type="hidden" name="valor_total" id="valor_total" value="0" />
+                    <input type="hidden" name="desconto" id="desconto" value="0" />
+                    <input type="hidden" name="valor_desconto" id="valor_desconto" value="0" />
+                    <input type="hidden" name="tipo_desconto" id="tipo_desconto" value="" />
+
+                    <!-- Botões -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; margin-top: 20px;">
+                        <div class="span12" style="display:flex; justify-content: center; gap: 10px;">
+                            <button type="submit" class="button btn btn-success">
+                                <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar Proposta</span>
+                            </button>
+                            <a href="<?php echo base_url() ?>index.php/propostas" class="button btn btn-mini btn-warning">
+                                <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Máscaras e datepicker
+    $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy' });
+    $(".money").maskMoney({
+        prefix: '',
+        suffix: '',
+        decimal: ",",
+        thousands: ".",
+        allowZero: true,
+        allowNegative: false
+    });
+
+    // Autocomplete
+    $("#cliente").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
+        minLength: 1,
+        select: function(event, ui) {
+            $("#clientes_id").val(ui.item.id);
+        }
+    });
+
+    $("#vendedor").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
+        minLength: 1,
+        select: function(event, ui) {
+            $("#usuarios_id").val(ui.item.id);
+        }
+    });
+
+    $("#produto").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
+        minLength: 2,
+        select: function(event, ui) {
+            $("#idProduto").val(ui.item.id);
+            $("#preco_produto").val(parseFloat(ui.item.preco).toFixed(2).replace('.', ',')).maskMoney('mask');
+            $("#quantidade_produto").focus();
+        }
+    });
+
+    $("#servico").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
+        minLength: 2,
+        select: function(event, ui) {
+            $("#idServico").val(ui.item.id);
+            $("#preco_servico").val(parseFloat(ui.item.preco).toFixed(2).replace('.', ',')).maskMoney('mask');
+            $("#quantidade_servico").focus();
+        }
+    });
+
+    // Variáveis globais
+    var produtos = [];
+    var servicos = [];
+    var parcelas = [];
+
+    // Adicionar produto
+    $("#btnAdicionarProduto").on('click', function() {
+        var produto = $("#produto").val();
+        var idProduto = $("#idProduto").val();
+        var preco = $("#preco_produto").val().replace(/\./g, '').replace(',', '.');
+        var quantidade = parseFloat($("#quantidade_produto").val()) || 1;
+
+        if (!produto || !preco || parseFloat(preco) <= 0) {
+            Swal.fire({ icon: "error", title: "Atenção", text: "Preencha produto e preço válidos." });
+            return;
+        }
+
+        produtos.push({
+            produtos_id: idProduto || null,
+            descricao: produto,
+            quantidade: quantidade,
+            preco: parseFloat(preco),
+            subtotal: quantidade * parseFloat(preco)
+        });
+
+        atualizarTabelaProdutos();
+        limparFormProduto();
+    });
+
+    // Adicionar serviço
+    $("#btnAdicionarServico").on('click', function() {
+        var servico = $("#servico").val();
+        var idServico = $("#idServico").val();
+        var preco = $("#preco_servico").val().replace(/\./g, '').replace(',', '.');
+        var quantidade = parseFloat($("#quantidade_servico").val()) || 1;
+
+        if (!servico || !preco || parseFloat(preco) <= 0) {
+            Swal.fire({ icon: "error", title: "Atenção", text: "Preencha serviço e preço válidos." });
+            return;
+        }
+
+        servicos.push({
+            servicos_id: idServico || null,
+            descricao: servico,
+            quantidade: quantidade,
+            preco: parseFloat(preco),
+            subtotal: quantidade * parseFloat(preco)
+        });
+
+        atualizarTabelaServicos();
+        limparFormServico();
+    });
+
+    // Atualizar tabelas e resumo
+    function atualizarTabelaProdutos() {
+        var html = '';
+        var total = 0;
+        produtos.forEach(function(p, index) {
+            total += p.subtotal;
+            html += '<tr><td>' + p.descricao + '</td><td>' + p.quantidade + '</td><td>R$ ' + p.preco.toFixed(2).replace('.', ',') + '</td><td>R$ ' + p.subtotal.toFixed(2).replace('.', ',') + '</td><td><a href="#" class="btn-remover-produto" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+        });
+        $("#tbodyProdutos").html(html);
+        $("#totalProdutos").text('R$ ' + total.toFixed(2).replace('.', ','));
+        $("#produtos_json").val(JSON.stringify(produtos));
+        atualizarResumo();
+    }
+
+    function atualizarTabelaServicos() {
+        var html = '';
+        var total = 0;
+        servicos.forEach(function(s, index) {
+            total += s.subtotal;
+            html += '<tr><td>' + s.descricao + '</td><td>' + s.quantidade + '</td><td>R$ ' + s.preco.toFixed(2).replace('.', ',') + '</td><td>R$ ' + s.subtotal.toFixed(2).replace('.', ',') + '</td><td><a href="#" class="btn-remover-servico" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+        });
+        $("#tbodyServicos").html(html);
+        $("#totalServicos").text('R$ ' + total.toFixed(2).replace('.', ','));
+        $("#servicos_json").val(JSON.stringify(servicos));
+        atualizarResumo();
+    }
+
+    function atualizarResumo() {
+        var totalProdutos = produtos.reduce((sum, p) => sum + p.subtotal, 0);
+        var totalServicos = servicos.reduce((sum, s) => sum + s.subtotal, 0);
+        var subtotal = totalProdutos + totalServicos;
+        var desconto = parseFloat($("#valor_desconto").val()) || 0;
+        var total = subtotal - desconto;
+
+        $("#resumoProdutos").text('R$ ' + totalProdutos.toFixed(2).replace('.', ','));
+        $("#resumoServicos").text('R$ ' + totalServicos.toFixed(2).replace('.', ','));
+        $("#resumoSubtotal").text('R$ ' + subtotal.toFixed(2).replace('.', ','));
+        $("#resumoDesconto").text('R$ ' + desconto.toFixed(2).replace('.', ','));
+        $("#resumoTotal").text('R$ ' + total.toFixed(2).replace('.', ','));
+        $("#valor_total").val(total.toFixed(2));
+    }
+
+    // Remover itens
+    $(document).on('click', '.btn-remover-produto', function(e) {
+        e.preventDefault();
+        var index = $(this).data('index');
+        produtos.splice(index, 1);
+        atualizarTabelaProdutos();
+    });
+
+    $(document).on('click', '.btn-remover-servico', function(e) {
+        e.preventDefault();
+        var index = $(this).data('index');
+        servicos.splice(index, 1);
+        atualizarTabelaServicos();
+    });
+
+    function limparFormProduto() {
+        $("#produto").val('');
+        $("#idProduto").val('');
+        $("#preco_produto").val('0,00').maskMoney('mask');
+        $("#quantidade_produto").val('1');
+    }
+
+    function limparFormServico() {
+        $("#servico").val('');
+        $("#idServico").val('');
+        $("#preco_servico").val('0,00').maskMoney('mask');
+        $("#quantidade_servico").val('1');
+    }
+
+    // Gerar parcelas (lógica simplificada)
+    $("#btnGerarParcelas").on('click', function() {
+        var input = $("#geradorParcelas").val().trim();
+        if (!input) {
+            Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Digite a configuração de parcelas!' });
+            return;
+        }
+
+        parcelas = [];
+        var total = parseFloat($("#valor_total").val()) || 0;
+        
+        // Lógica simplificada para gerar parcelas (similar à OS)
+        if (input.includes('x')) {
+            var numParcelas = parseInt(input.replace('x', ''));
+            var valorParcela = total / numParcelas;
+            for (var i = 1; i <= numParcelas; i++) {
+                parcelas.push({
+                    numero: i,
+                    dias: i * 30,
+                    valor: valorParcela.toFixed(2),
+                    observacao: ''
+                });
+            }
+        } else {
+            var dias = input.split(' ').map(d => parseInt(d));
+            var valorParcela = total / dias.length;
+            dias.forEach(function(d, index) {
+                parcelas.push({
+                    numero: index + 1,
+                    dias: d,
+                    valor: valorParcela.toFixed(2),
+                    observacao: ''
+                });
+            });
+        }
+
+        atualizarTabelaParcelas();
+    });
+
+    function atualizarTabelaParcelas() {
+        var html = '';
+        parcelas.forEach(function(p, index) {
+            html += '<tr><td>' + p.numero + '</td><td>' + p.dias + '</td><td>R$ ' + parseFloat(p.valor).toFixed(2).replace('.', ',') + '</td><td><input type="text" class="span12 obs-parcela" data-index="' + index + '" value="' + (p.observacao || '') + '" /></td><td><a href="#" class="btn-remover-parcela" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+        });
+        $("#tbodyParcelas").html(html);
+        $("#tabelaParcelasContainer").show();
+        $("#parcelas_json").val(JSON.stringify(parcelas));
+    }
+
+    // Validação do formulário
+    $("#formProposta").validate({
+        rules: {
+            clientes_id: { required: true },
+            usuarios_id: { required: true },
+            data_proposta: { required: true }
+        },
+        messages: {
+            clientes_id: { required: 'Selecione um cliente' },
+            usuarios_id: { required: 'Selecione um vendedor' },
+            data_proposta: { required: 'Data da proposta é obrigatória' }
+        }
+    });
+});
+</script>
+
