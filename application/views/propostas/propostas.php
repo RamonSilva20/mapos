@@ -150,6 +150,7 @@
             var modal = $(this);
             modal.find('#id').val(id);
             modal.find('#nome').text(nome);
+            console.log('Modal aberto - ID:', id, 'Nome:', nome);
         });
         
         // Submeter formulário de exclusão
@@ -157,6 +158,15 @@
             e.preventDefault();
             var form = $(this);
             var id = form.find('#id').val();
+            
+            if (!id || id === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'ID da proposta não encontrado.'
+                });
+                return;
+            }
             
             $.ajax({
                 url: form.attr('action'),
@@ -186,8 +196,15 @@
                 error: function(xhr) {
                     $('#modalExcluir').modal('hide');
                     var message = 'Erro ao excluir proposta.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        message = xhr.responseJSON.message;
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.message) {
+                            message = response.message;
+                        }
+                    } catch(e) {
+                        if (xhr.responseText) {
+                            message = xhr.responseText;
+                        }
                     }
                     Swal.fire({
                         icon: 'error',

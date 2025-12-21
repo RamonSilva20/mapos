@@ -370,10 +370,15 @@ class Propostas extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        if ($id == null || !is_numeric($id)) {
+        
+        // Debug
+        log_message('debug', 'Tentando excluir proposta. ID recebido: ' . var_export($id, true));
+        log_message('debug', 'POST completo: ' . var_export($this->input->post(), true));
+        
+        if (empty($id) || !is_numeric($id)) {
             $this->output->set_content_type('application/json')->set_output(json_encode([
                 'success' => false,
-                'message' => 'ID da proposta inválido.'
+                'message' => 'ID da proposta inválido. ID recebido: ' . var_export($id, true)
             ]));
             return;
         }
