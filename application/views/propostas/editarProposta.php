@@ -502,17 +502,42 @@ $(document).ready(function() {
     function atualizarResumo() {
         var totalProdutos = produtos.reduce((sum, p) => sum + p.subtotal, 0);
         var totalServicos = servicos.reduce((sum, s) => sum + s.subtotal, 0);
-        var subtotal = totalProdutos + totalServicos;
+        
+        // Incluir outros produtos/serviços
+        var outrosPreco = 0;
+        var outrosValor = $("#preco_outros").val();
+        if (outrosValor) {
+            outrosPreco = parseFloat(outrosValor.replace(/\./g, '').replace(',', '.')) || 0;
+        }
+        
+        var subtotal = totalProdutos + totalServicos + outrosPreco;
         var desconto = parseFloat($("#valor_desconto").val()) || 0;
         var total = subtotal - desconto;
 
         $("#resumoProdutos").text('R$ ' + totalProdutos.toFixed(2).replace('.', ','));
         $("#resumoServicos").text('R$ ' + totalServicos.toFixed(2).replace('.', ','));
+        $("#resumoOutros").text('R$ ' + outrosPreco.toFixed(2).replace('.', ','));
         $("#resumoSubtotal").text('R$ ' + subtotal.toFixed(2).replace('.', ','));
         $("#resumoDesconto").text('R$ ' + desconto.toFixed(2).replace('.', ','));
         $("#resumoTotal").text('R$ ' + total.toFixed(2).replace('.', ','));
         $("#valor_total").val(total.toFixed(2));
+        
+        // Atualizar valores das parcelas proporcionalmente
+        if (parcelas.length > 0) {
+            var totalParcelas = parcelas.reduce((sum, p) => sum + parseFloat(p.valor || 0), 0);
+            if (totalParcelas > 0) {
+                parcelas.forEach(function(p) {
+                    p.valor = (parseFloat(p.valor) / totalParcelas) * total;
+                });
+                atualizarTabelaParcelas();
+            }
+        }
     }
+    
+    // Atualizar resumo quando mudar outros produtos/serviços
+    $("#preco_outros").on('blur', function() {
+        atualizarResumo();
+    });
 
     // Remover itens
     $(document).on('click', '.btn-remover-produto', function(e) {
