@@ -417,7 +417,29 @@ class Propostas extends MY_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->propostas_model->autoCompleteCliente($q);
+            $this->db->select('idClientes, nomeCliente, documento, telefone, celular');
+            $this->db->limit(25);
+            $this->db->like('nomeCliente', $q);
+            $this->db->or_like('documento', $q);
+            $this->db->or_like('telefone', $q);
+            $this->db->or_like('celular', $q);
+            $query = $this->db->get('clientes');
+            
+            if ($query->num_rows() > 0) {
+                $row_set = [];
+                foreach ($query->result_array() as $row) {
+                    $documento = $row['documento'] ? ' | ' . $row['documento'] : '';
+                    $telefone = $row['telefone'] ? ' | ' . $row['telefone'] : ($row['celular'] ? ' | ' . $row['celular'] : '');
+                    $row_set[] = [
+                        'label' => $row['nomeCliente'] . $documento . $telefone,
+                        'id' => $row['idClientes'],
+                        'value' => $row['nomeCliente']
+                    ];
+                }
+                echo json_encode($row_set);
+            } else {
+                echo json_encode([]);
+            }
         }
     }
 
