@@ -92,7 +92,10 @@
                                     <td><?php echo $r->nome; ?></td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
-                                            <a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Visualizar/Imprimir">
+                                            <a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Imprimir">
+                                                <i class="bx bx-printer"></i>
+                                            </a>
+                                            <a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Visualizar">
                                                 <i class="bx bx-show"></i>
                                             </a>
                                         <?php } ?>

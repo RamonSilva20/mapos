@@ -86,6 +86,20 @@
 <body>
     <div class="actions no-print">
         <button onclick="window.print()">Imprimir</button>
+        <a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $result->idProposta; ?>" target="_blank">Visualizar para Impressão</a>
+        <a href="<?php echo base_url(); ?>index.php/propostas/gerarPdf/<?php echo $result->idProposta; ?>" target="_blank">Salvar PDF</a>
+        <?php 
+        $clienteNome = $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? '');
+        $numeroProposta = $result->numero_proposta ?: '#' . $result->idProposta;
+        $valorTotal = number_format($result->valor_total, 2, ',', '.');
+        $textoWhatsApp = urlencode("Olá! Segue a proposta comercial:\n\n*Proposta:* $numeroProposta\n*Cliente:* $clienteNome\n*Valor Total:* R$ $valorTotal\n\n" . base_url() . "index.php/propostas/visualizar/" . $result->idProposta);
+        $telefoneCliente = $result->celular_cliente ? preg_replace('/[^0-9]/', '', $result->celular_cliente) : ($result->telefone ? preg_replace('/[^0-9]/', '', $result->telefone) : '');
+        ?>
+        <?php if ($telefoneCliente) { ?>
+            <a href="https://api.whatsapp.com/send?phone=55<?php echo $telefoneCliente; ?>&text=<?php echo $textoWhatsApp; ?>" target="_blank">Compartilhar WhatsApp</a>
+        <?php } else { ?>
+            <a href="https://api.whatsapp.com/send?text=<?php echo $textoWhatsApp; ?>" target="_blank">Compartilhar WhatsApp</a>
+        <?php } ?>
         <a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $result->idProposta; ?>">Editar</a>
         <a href="<?php echo base_url(); ?>index.php/propostas">Voltar</a>
     </div>

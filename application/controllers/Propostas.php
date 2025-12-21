@@ -462,6 +462,71 @@ class Propostas extends MY_Controller
         return $this->layout();
     }
 
+    public function imprimir()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar propostas.');
+            redirect(base_url());
+        }
+
+        $result = $this->propostas_model->getById($this->uri->segment(3));
+        if (!$result) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        $this->data['result'] = $result;
+        $this->data['produtos'] = $this->propostas_model->getProdutos($result->idProposta);
+        $this->data['servicos'] = $this->propostas_model->getServicos($result->idProposta);
+        $this->data['parcelas'] = $this->propostas_model->getParcelas($result->idProposta);
+        $this->data['outros'] = $this->propostas_model->getOutros($result->idProposta);
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->view('propostas/imprimirProposta', $this->data);
+    }
+
+    public function gerarPdf()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar propostas.');
+            redirect(base_url());
+        }
+
+        $result = $this->propostas_model->getById($this->uri->segment(3));
+        if (!$result) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        $this->data['result'] = $result;
+        $this->data['produtos'] = $this->propostas_model->getProdutos($result->idProposta);
+        $this->data['servicos'] = $this->propostas_model->getServicos($result->idProposta);
+        $this->data['parcelas'] = $this->propostas_model->getParcelas($result->idProposta);
+        $this->data['outros'] = $this->propostas_model->getOutros($result->idProposta);
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->helper('mpdf');
+        
+        $html = $this->load->view('propostas/imprimirProposta', $this->data, true);
+        
+        $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
+        $filename = 'Proposta_' . $numeroProposta;
+        
+        pdf_create($html, $filename, true, false);
+    }
+
     // AJAX methods
     public function autoCompleteCliente()
     {
