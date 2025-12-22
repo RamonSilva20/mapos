@@ -180,7 +180,8 @@
                     </div>
                 <?php endif; ?>
 
-                <?php if ($parcelas && count($parcelas) > 0) : ?>
+                <?php if ($result->tipo_cond_comerc == 'P' && $parcelas && count($parcelas) > 0) : ?>
+                    <div class="subtitle">CONDIÇÕES DE PAGAMENTO</div>
                     <div class="tabela">
                         <table class="table table-bordered">
                             <thead>
