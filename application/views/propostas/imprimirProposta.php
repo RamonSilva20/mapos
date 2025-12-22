@@ -159,7 +159,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="table-secondary">
-                                    <th>OUTROS PRODUTOS/SERVIÇOS</th>
+                                    <th>OUTROS ITENS OU SERVIÇOS</th>
                                     <th class="text-end" width="15%">VALOR</th>
                                 </tr>
                             </thead>
@@ -172,7 +172,7 @@
                                     echo '</tr>';
                                 endforeach; ?>
                                 <tr>
-                                    <td class="text-end"><b>TOTAL:</b></td>
+                                    <td class="text-end"><b>TOTAL OUTROS:</b></td>
                                     <td class="text-end"><b>R$ <?= number_format($totalOutros, 2, ',', '.') ?></b></td>
                                 </tr>
                             </tbody>

@@ -160,9 +160,9 @@
                         </div>
                     </div>
 
-                    <!-- Outros Produtos/Serviços -->
+                    <!-- Outros itens ou serviços -->
                     <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
-                        <h4 style="margin-bottom: 15px;">Outros Produtos/Serviços</h4>
+                        <h4 style="margin-bottom: 15px;">Outros itens ou serviços</h4>
                         <div class="span12 well" style="margin-left: 0; padding: 15px;">
                             <div class="span12" style="margin-left: 0; margin-bottom: 10px;">
                                 <label for="descricao_outros">Descrição</label>
@@ -170,7 +170,7 @@
                             </div>
                             <div class="span12" style="margin-left: 0;">
                                 <div class="span4">
-                                    <label for="preco_outros">Preço</label>
+                                    <label for="preco_outros">Total outros</label>
                                     <input type="text" value="0,00" id="preco_outros" name="preco_outros" class="span12 money" />
                                 </div>
                             </div>

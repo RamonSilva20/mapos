@@ -555,7 +555,8 @@ class Propostas extends MY_Controller
         $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
         $filename = 'Proposta_' . $numeroProposta;
         
-        pdf_create($html, $filename, true, false);
+        // true = stream, false = landscape, true = download (força download ao invés de abrir)
+        pdf_create($html, $filename, true, false, true);
     }
 
     // AJAX methods
