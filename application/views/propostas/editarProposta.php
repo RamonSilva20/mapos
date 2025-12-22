@@ -649,16 +649,7 @@ $(document).ready(function() {
         $("#resumoTotal").text('R$ ' + total.toFixed(2).replace('.', ','));
         $("#valor_total").val(total.toFixed(2));
         
-        // Atualizar valores das parcelas proporcionalmente
-        if (parcelas.length > 0) {
-            var totalParcelas = parcelas.reduce((sum, p) => sum + parseFloat(p.valor || 0), 0);
-            if (totalParcelas > 0) {
-                parcelas.forEach(function(p) {
-                    p.valor = (parseFloat(p.valor) / totalParcelas) * total;
-                });
-                atualizarTabelaParcelas();
-            }
-        }
+        // Não atualizar parcelas automaticamente - o usuário deve regenerar se necessário
     }
     
     // Atualizar resumo quando mudar outros produtos/serviços
@@ -703,29 +694,62 @@ $(document).ready(function() {
             return;
         }
 
+        // Calcular o total atual antes de gerar parcelas
+        var totalProdutos = produtos.reduce((sum, p) => sum + p.subtotal, 0);
+        var totalServicos = servicos.reduce((sum, s) => sum + s.subtotal, 0);
+        var outrosPreco = 0;
+        var outrosValor = $("#preco_outros").val();
+        if (outrosValor) {
+            outrosPreco = parseFloat(outrosValor.replace(/\./g, '').replace(',', '.')) || 0;
+        }
+        var subtotal = totalProdutos + totalServicos + outrosPreco;
+        var desconto = parseFloat($("#valor_desconto").val()) || 0;
+        if (desconto > subtotal) desconto = subtotal;
+        var total = subtotal - desconto;
+        
+        if (total <= 0) {
+            Swal.fire({ icon: 'error', title: 'Atenção', text: 'O total da proposta deve ser maior que zero para gerar parcelas!' });
+            return;
+        }
+
         parcelas = [];
-        var total = parseFloat($("#valor_total").val()) || 0;
         
         // Lógica simplificada para gerar parcelas (similar à OS)
         if (input.includes('x')) {
             var numParcelas = parseInt(input.replace('x', ''));
+            if (isNaN(numParcelas) || numParcelas <= 0) {
+                Swal.fire({ icon: 'error', title: 'Atenção', text: 'Número de parcelas inválido!' });
+                return;
+            }
             var valorParcela = total / numParcelas;
+            // Ajustar última parcela para compensar arredondamentos
+            var somaParcelas = 0;
             for (var i = 1; i <= numParcelas; i++) {
+                var valor = (i == numParcelas) ? (total - somaParcelas) : valorParcela;
+                somaParcelas += valor;
                 parcelas.push({
                     numero: i,
                     dias: i * 30,
-                    valor: valorParcela.toFixed(2),
+                    valor: parseFloat(valor.toFixed(2)),
                     observacao: ''
                 });
             }
         } else {
-            var dias = input.split(' ').map(d => parseInt(d));
+            var dias = input.split(' ').map(d => parseInt(d)).filter(d => !isNaN(d) && d > 0);
+            if (dias.length == 0) {
+                Swal.fire({ icon: 'error', title: 'Atenção', text: 'Digite dias válidos! Ex: 30 ou 30 60 90' });
+                return;
+            }
             var valorParcela = total / dias.length;
+            // Ajustar última parcela para compensar arredondamentos
+            var somaParcelas = 0;
             dias.forEach(function(d, index) {
+                var valor = (index == dias.length - 1) ? (total - somaParcelas) : valorParcela;
+                somaParcelas += valor;
                 parcelas.push({
                     numero: index + 1,
                     dias: d,
-                    valor: valorParcela.toFixed(2),
+                    valor: parseFloat(valor.toFixed(2)),
                     observacao: ''
                 });
             });
@@ -737,12 +761,34 @@ $(document).ready(function() {
     function atualizarTabelaParcelas() {
         var html = '';
         parcelas.forEach(function(p, index) {
-            html += '<tr><td>' + p.numero + '</td><td>' + p.dias + '</td><td>R$ ' + parseFloat(p.valor).toFixed(2).replace('.', ',') + '</td><td><input type="text" class="span12 obs-parcela" data-index="' + index + '" value="' + (p.observacao || '') + '" /></td><td><a href="#" class="btn-remover-parcela" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
+            var valor = typeof p.valor === 'number' ? p.valor : parseFloat(p.valor);
+            html += '<tr><td>' + p.numero + '</td><td>' + p.dias + '</td><td>R$ ' + valor.toFixed(2).replace('.', ',') + '</td><td><input type="text" class="span12 obs-parcela" data-index="' + index + '" value="' + (p.observacao || '') + '" /></td><td><a href="#" class="btn-remover-parcela" data-index="' + index + '"><i class="bx bx-trash" style="color: #dc3545;"></i></a></td></tr>';
         });
         $("#tbodyParcelas").html(html);
         $("#tabelaParcelasContainer").show();
         $("#parcelas_json").val(JSON.stringify(parcelas));
     }
+    
+    // Atualizar observação da parcela quando mudar
+    $(document).on('blur', '.obs-parcela', function() {
+        var index = $(this).data('index');
+        if (parcelas[index]) {
+            parcelas[index].observacao = $(this).val();
+            $("#parcelas_json").val(JSON.stringify(parcelas));
+        }
+    });
+    
+    // Remover parcela
+    $(document).on('click', '.btn-remover-parcela', function(e) {
+        e.preventDefault();
+        var index = $(this).data('index');
+        parcelas.splice(index, 1);
+        // Renumerar parcelas
+        parcelas.forEach(function(p, i) {
+            p.numero = i + 1;
+        });
+        atualizarTabelaParcelas();
+    });
 
     // Validação do formulário
     $("#formProposta").validate({
