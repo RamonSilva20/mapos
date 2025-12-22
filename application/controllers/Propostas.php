@@ -550,7 +550,8 @@ class Propostas extends MY_Controller
 
         $this->load->helper('mpdf');
         
-        $html = $this->load->view('propostas/imprimirProposta', $this->data, true);
+        // Usar view específica para PDF (layout simples)
+        $html = $this->load->view('propostas/pdfProposta', $this->data, true);
         
         $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
         $filename = 'Proposta_' . $numeroProposta;
@@ -596,7 +597,8 @@ class Propostas extends MY_Controller
 
         $this->load->helper('mpdf');
         
-        $html = $this->load->view('propostas/imprimirProposta', $this->data, true);
+        // Usar view específica para PDF (layout simples)
+        $html = $this->load->view('propostas/pdfProposta', $this->data, true);
         
         $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
         $filename = 'Proposta_' . $numeroProposta . '_' . date('YmdHis');
