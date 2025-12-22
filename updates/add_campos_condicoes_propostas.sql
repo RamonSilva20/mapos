@@ -13,3 +13,4 @@ ALTER TABLE `propostas`
 ADD COLUMN `validade_dias` INT(11) NULL COMMENT 'Validade da proposta em dias' AFTER `cond_comerc_texto`,
 ADD COLUMN `prazo_entrega` VARCHAR(255) NULL COMMENT 'Prazo de entrega (texto livre)' AFTER `validade_dias`;
 
+

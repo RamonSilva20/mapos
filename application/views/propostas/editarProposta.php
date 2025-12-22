@@ -485,47 +485,74 @@ $(document).ready(function() {
         <?php } ?>
     <?php } ?>
 
-    // Carregar dados existentes
-    if (produtos.length > 0) {
-        atualizarTabelaProdutos();
-    }
-    if (servicos.length > 0) {
-        atualizarTabelaServicos();
-    }
-    if (parcelas.length > 0) {
-        atualizarTabelaParcelas();
-    }
-    
-    // Carregar outros produtos/serviços
-    <?php if (!empty($outros) && count($outros) > 0) { ?>
-        $("#descricao_outros").val("<?php echo addslashes($outros[0]->descricao); ?>");
-        $("#preco_outros").val("<?php echo number_format($outros[0]->preco, 2, ',', '.'); ?>").maskMoney('mask');
-    <?php } ?>
-    
-    // Carregar observações
-    $("#observacoes").val("<?php echo addslashes($result->observacoes ?: ''); ?>");
-    
-    // Carregar valores totais
-    $("#valor_total").val("<?php echo $result->valor_total; ?>");
-    $("#desconto").val("<?php echo number_format($result->desconto ?: 0, 2, ',', '.'); ?>").maskMoney('mask');
-    $("#valor_desconto").val("<?php echo $result->valor_desconto ?: 0; ?>");
-    $("#tipo_desconto").val("<?php echo $result->tipo_desconto ?: ''; ?>");
-    
-    // Carregar condições comerciais
-    $("#tipo_cond_comerc").val("<?php echo $result->tipo_cond_comerc ?: 'N'; ?>");
-    $("#cond_comerc_texto").val("<?php echo addslashes($result->cond_comerc_texto ?: ''); ?>");
-    $("#tipo_cond_comerc").trigger('change');
-    
-    // Se tipo for Parcelas e já existirem parcelas, mostrar tabela
-    if ($("#tipo_cond_comerc").val() == 'P' && parcelas.length > 0) {
-        $("#tabelaParcelasContainer").show();
-    }
-    
-    // Carregar condições gerais
-    $("#validade_dias").val("<?php echo $result->validade_dias ?: ''; ?>");
-    $("#prazo_entrega").val("<?php echo addslashes($result->prazo_entrega ?: ''); ?>");
-    
-    atualizarResumo();
+    // Aguardar um pouco para garantir que todos os elementos estejam prontos
+    setTimeout(function() {
+        // Carregar dados existentes
+        if (produtos.length > 0) {
+            atualizarTabelaProdutos();
+        }
+        if (servicos.length > 0) {
+            atualizarTabelaServicos();
+        }
+        if (parcelas.length > 0) {
+            atualizarTabelaParcelas();
+        }
+        
+        // Carregar outros produtos/serviços
+        <?php if (!empty($outros) && count($outros) > 0) { ?>
+            if ($("#descricao_outros").length) {
+                $("#descricao_outros").val("<?php echo addslashes($outros[0]->descricao); ?>");
+            }
+            if ($("#preco_outros").length) {
+                $("#preco_outros").val("<?php echo number_format($outros[0]->preco, 2, ',', '.'); ?>").maskMoney('mask');
+            }
+        <?php } ?>
+        
+        // Carregar observações
+        if ($("#observacoes").length) {
+            $("#observacoes").val("<?php echo addslashes($result->observacoes ?: ''); ?>");
+        }
+        
+        // Carregar valores totais
+        if ($("#valor_total").length) {
+            $("#valor_total").val("<?php echo $result->valor_total; ?>");
+        }
+        if ($("#desconto").length) {
+            $("#desconto").val("<?php echo number_format($result->desconto ?: 0, 2, ',', '.'); ?>").maskMoney('mask');
+        }
+        if ($("#valor_desconto").length) {
+            $("#valor_desconto").val("<?php echo $result->valor_desconto ?: 0; ?>");
+        }
+        if ($("#tipo_desconto").length) {
+            $("#tipo_desconto").val("<?php echo $result->tipo_desconto ?: ''; ?>");
+        }
+        
+        // Carregar condições comerciais
+        if ($("#tipo_cond_comerc").length) {
+            $("#tipo_cond_comerc").val("<?php echo $result->tipo_cond_comerc ?: 'N'; ?>");
+            $("#tipo_cond_comerc").trigger('change');
+        }
+        if ($("#cond_comerc_texto").length) {
+            $("#cond_comerc_texto").val("<?php echo addslashes($result->cond_comerc_texto ?: ''); ?>");
+        }
+        
+        // Se tipo for Parcelas e já existirem parcelas, mostrar tabela
+        if ($("#tipo_cond_comerc").length && $("#tipo_cond_comerc").val() == 'P' && parcelas.length > 0) {
+            if ($("#tabelaParcelasContainer").length) {
+                $("#tabelaParcelasContainer").show();
+            }
+        }
+        
+        // Carregar condições gerais
+        if ($("#validade_dias").length) {
+            $("#validade_dias").val("<?php echo $result->validade_dias ?: ''; ?>");
+        }
+        if ($("#prazo_entrega").length) {
+            $("#prazo_entrega").val("<?php echo addslashes($result->prazo_entrega ?: ''); ?>");
+        }
+        
+        atualizarResumo();
+    }, 100);
 
     // Adicionar produto
     $("#btnAdicionarProduto").on('click', function() {
