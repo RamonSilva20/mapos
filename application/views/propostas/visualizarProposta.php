@@ -269,7 +269,7 @@
         </tr>
     </table>
 
-    <?php if (!empty($parcelas) && count($parcelas) > 0) { ?>
+    <?php if ($result->tipo_cond_comerc == 'P' && !empty($parcelas) && count($parcelas) > 0) { ?>
         <h3>CONDIÇÕES DE PAGAMENTO</h3>
         <table>
             <thead>
@@ -295,6 +295,31 @@
                 <?php } ?>
             </tbody>
         </table>
+    <?php } elseif ($result->tipo_cond_comerc == 'T' && $result->cond_comerc_texto) { ?>
+        <h3>CONDIÇÕES DE PAGAMENTO</h3>
+        <div style="padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;">
+            <?php echo nl2br(htmlspecialchars($result->cond_comerc_texto)); ?>
+        </div>
+    <?php } ?>
+
+    <?php if ($result->validade_dias || $result->prazo_entrega) { ?>
+        <div style="margin-top: 30px;">
+            <h3>CONDIÇÕES GERAIS</h3>
+            <table style="width: 100%;">
+                <?php if ($result->validade_dias) { ?>
+                    <tr>
+                        <td style="width: 200px;"><strong>Validade da Proposta:</strong></td>
+                        <td><?php echo $result->validade_dias; ?> dias</td>
+                    </tr>
+                <?php } ?>
+                <?php if ($result->prazo_entrega) { ?>
+                    <tr>
+                        <td><strong>Prazo de Entrega:</strong></td>
+                        <td><?php echo htmlspecialchars($result->prazo_entrega); ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
     <?php } ?>
 
     <?php if ($result->observacoes) { ?>

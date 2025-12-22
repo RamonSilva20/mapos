@@ -234,6 +234,27 @@
                     </table>
                 </div>
 
+                <?php if ($result->tipo_cond_comerc == 'T' && $result->cond_comerc_texto) : ?>
+                    <div class="subtitle">CONDIÇÕES DE PAGAMENTO</div>
+                    <div class="dados">
+                        <div style="text-align: justify;">
+                            <?= nl2br(htmlspecialchars($result->cond_comerc_texto)) ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($result->validade_dias || $result->prazo_entrega) : ?>
+                    <div class="subtitle">CONDIÇÕES GERAIS</div>
+                    <div class="dados">
+                        <?php if ($result->validade_dias) : ?>
+                            <p><strong>Validade da Proposta:</strong> <?= $result->validade_dias ?> dias</p>
+                        <?php endif; ?>
+                        <?php if ($result->prazo_entrega) : ?>
+                            <p><strong>Prazo de Entrega:</strong> <?= htmlspecialchars($result->prazo_entrega) ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
                 <?php if ($result->observacoes) : ?>
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
