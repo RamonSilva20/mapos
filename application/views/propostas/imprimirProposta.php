@@ -186,24 +186,44 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="table-secondary">
-                                    <th width="5%">Nº</th>
-                                    <th width="15%">DIAS</th>
-                                    <th width="20%">VENCIMENTO</th>
-                                    <th width="20%" class="text-end">VALOR</th>
-                                    <th>OBSERVAÇÃO</th>
+                                    <th width="8%">Nº</th>
+                                    <th width="12%">Dias</th>
+                                    <th width="20%">Valor</th>
+                                    <th width="60%">Observação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($parcelas as $p) :
-                                    $dataVencimento = $p->data_vencimento ? date('d/m/Y', strtotime($p->data_vencimento)) : '-';
-                                    echo '<tr>';
-                                    echo '  <td>' . $p->numero . '</td>';
-                                    echo '  <td>' . $p->dias . ' dias</td>';
-                                    echo '  <td>' . $dataVencimento . '</td>';
-                                    echo '  <td class="text-end">R$ ' . number_format($p->valor, 2, ',', '.') . '</td>';
-                                    echo '  <td>' . ($p->observacao ?? '') . '</td>';
-                                    echo '</tr>';
-                                endforeach; ?>
+                                <?php 
+                                $totalParcelas = 0;
+                                foreach ($parcelas as $p) :
+                                    $totalParcelas += floatval($p->valor);
+                                    // Calcular data de vencimento
+                                    $dataVencimento = '';
+                                    if ($p->data_vencimento) {
+                                        $dataVencimento = date('d/m/Y', strtotime($p->data_vencimento));
+                                    } elseif ($p->dias > 0 && $result->data_proposta) {
+                                        $dataBase = new DateTime($result->data_proposta);
+                                        $dataBase->modify('+' . intval($p->dias) . ' days');
+                                        $dataVencimento = $dataBase->format('d/m/Y');
+                                    }
+                                ?>
+                                <tr>
+                                    <td style="text-align: center;"><?= $p->numero ?></td>
+                                    <td style="text-align: center;">
+                                        <?= $p->dias ?> dias
+                                        <?php if ($dataVencimento): ?>
+                                            <br><small style="color: #666;">(<?= $dataVencimento ?>)</small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td style="text-align: right;">R$ <?= number_format(floatval($p->valor), 2, ',', '.') ?></td>
+                                    <td><?= htmlspecialchars($p->observacao ?: '-') ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <tr style="background: #f8f9fa; font-weight: bold;">
+                                    <td colspan="2" style="text-align: right;">TOTAL:</td>
+                                    <td style="text-align: right;">R$ <?= number_format($totalParcelas, 2, ',', '.') ?></td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -214,26 +234,46 @@
                 $desconto = floatval($result->valor_desconto ?? 0);
                 $total = $subtotal - $desconto;
                 ?>
-                <div class="tabela">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <td colspan="3" class="text-end"><b>SUBTOTAL:</b></td>
-                                <td class="text-end"><b>R$ <?= number_format($subtotal, 2, ',', '.') ?></b></td>
-                            </tr>
-                            <?php if ($desconto > 0) : ?>
-                                <tr>
-                                    <td colspan="3" class="text-end"><b>DESCONTO:</b></td>
-                                    <td class="text-end"><b>- R$ <?= number_format($desconto, 2, ',', '.') ?></b></td>
-                                </tr>
-                            <?php endif; ?>
-                            <tr style="background-color: #f0f0f0; font-size: 16px;">
-                                <td colspan="3" class="text-end"><b>TOTAL:</b></td>
-                                <td class="text-end"><b>R$ <?= number_format($total, 2, ',', '.') ?></b></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <?php if ($totalProdutos != 0 || $totalServico != 0 || $totalOutros > 0) : ?>
+                    <div class="pagamento">
+                        <div class="qrcode">
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div>
+                            <div class="tabela">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-secondary">
+                                            <th colspan="2">RESUMO DOS VALORES</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($desconto > 0) : ?>
+                                            <tr>
+                                                <td width="65%">SUBTOTAL</td>
+                                                <td>R$ <b><?= number_format($subtotal, 2, ',', '.') ?></b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>DESCONTO</td>
+                                                <td>R$ <b>- <?= number_format($desconto, 2, ',', '.') ?></b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TOTAL</td>
+                                                <td>R$ <b><?= number_format($total, 2, ',', '.') ?></b></td>
+                                            </tr>
+                                        <?php else : ?>
+                                            <tr>
+                                                <td style="width:290px">TOTAL</td>
+                                                <td>R$ <b><?= number_format($subtotal, 2, ',', '.') ?></b></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
                 <?php if ($result->tipo_cond_comerc == 'T' && $result->cond_comerc_texto) : ?>
                     <div class="subtitle">CONDIÇÕES DE PAGAMENTO</div>
@@ -264,12 +304,19 @@
                         </div>
                     </div>
                 <?php endif; ?>
-
-                <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #666;">
-                    <p>Esta proposta é válida até <?= $result->data_validade ? date('d/m/Y', strtotime($result->data_validade)) : 'a definir'; ?></p>
-                    <p>Status: <strong><?= $result->status ?></strong></p>
-                </div>
             </section>
+            <footer>
+                <div class="detalhes">
+                    <span>Validade: <b><?= $result->data_validade ? date('d/m/Y', strtotime($result->data_validade)) : ($result->validade_dias ? date('d/m/Y', strtotime($result->data_proposta . " +{$result->validade_dias} days")) : 'A combinar') ?></b></span>
+                    <span>PROPOSTA COMERCIAL</span>
+                    <span>Emissão: <b><?= date('d/m/Y', strtotime($result->data_proposta)) ?></b></span>
+                </div>
+            </footer>
+            <br>
+            <div class="detalhes">
+                <span>Atenciosamente<br>
+                <?= $result->nome ? $result->nome : 'Departamento de Vendas' ?></span>
+            </div>
         </div>
     </div>
 </body>
