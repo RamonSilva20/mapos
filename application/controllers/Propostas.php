@@ -341,7 +341,16 @@ class Propostas extends MY_Controller
         $parcelas = json_decode($this->input->post('parcelas_json'), true);
         if (is_array($parcelas) && count($parcelas) > 0) {
             foreach ($parcelas as $parcela) {
-                $valor = str_replace(['.', ','], ['', '.'], $parcela['valor'] ?? '0');
+                // O valor já vem como número do JavaScript (ex: 293.49)
+                // Se for string, pode estar formatada (ex: "293,49" ou "293.49")
+                $valor = $parcela['valor'] ?? 0;
+                if (is_string($valor)) {
+                    // Se for string, remover formatação brasileira
+                    $valor = str_replace('.', '', $valor); // Remove separador de milhar
+                    $valor = str_replace(',', '.', $valor); // Converte vírgula para ponto
+                }
+                $valor = floatval($valor);
+                
                 $dias = intval($parcela['dias'] ?? 0);
 
                 // Calcular data de vencimento
@@ -355,7 +364,7 @@ class Propostas extends MY_Controller
                     'proposta_id' => $idProposta,
                     'numero' => intval($parcela['numero'] ?? 1),
                     'dias' => $dias,
-                    'valor' => floatval($valor),
+                    'valor' => $valor,
                     'observacao' => $parcela['observacao'] ?? null,
                     'data_vencimento' => $dataVencimento,
                 ]);

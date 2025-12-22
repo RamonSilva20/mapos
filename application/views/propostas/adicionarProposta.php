@@ -648,10 +648,12 @@ $(document).ready(function() {
             for (var i = 1; i <= numParcelas; i++) {
                 var valor = (i == numParcelas) ? (total - somaParcelas) : valorParcela;
                 somaParcelas += valor;
+                // Garantir que valor seja sempre um número, não string
+                var valorNumerico = parseFloat(valor.toFixed(2));
                 parcelas.push({
                     numero: i,
                     dias: i * 30,
-                    valor: parseFloat(valor.toFixed(2)),
+                    valor: valorNumerico, // Número puro, não string
                     observacao: ''
                 });
             }
@@ -667,10 +669,12 @@ $(document).ready(function() {
             dias.forEach(function(d, index) {
                 var valor = (index == dias.length - 1) ? (total - somaParcelas) : valorParcela;
                 somaParcelas += valor;
+                // Garantir que valor seja sempre um número, não string
+                var valorNumerico = parseFloat(valor.toFixed(2));
                 parcelas.push({
                     numero: index + 1,
                     dias: d,
-                    valor: parseFloat(valor.toFixed(2)),
+                    valor: valorNumerico, // Número puro, não string
                     observacao: ''
                 });
             });
