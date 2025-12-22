@@ -177,39 +177,97 @@
                         </div>
                     </div>
 
-                    <!-- Parcelas -->
+                    <!-- Desconto -->
                     <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
-                        <h4 style="margin-bottom: 15px;">Condições de Pagamento</h4>
-                        <div class="span12 well" style="margin-left: 0; padding: 15px;">
-                            <div class="span8">
-                                <label for="geradorParcelas">Gerar Parcelas</label>
-                                <input type="text" class="span12" id="geradorParcelas" placeholder="Ex: 30 (30 dias) | 30 60 90 (vencimentos em 30, 60 e 90 dias) | 6x (6 parcelas a cada 30 dias)" />
-                                <small style="color: #666; display: block; margin-top: 5px;">
-                                    <strong>Exemplos:</strong> • <code>30</code> = 1 parcela em 30 dias • <code>30 60 90</code> = 3 parcelas • <code>6x</code> = 6 parcelas iguais a cada 30 dias
-                                </small>
+                        <h4 style="margin-bottom: 15px;">Desconto</h4>
+                        <div class="span12" style="margin-left: 0;">
+                            <div class="span3">
+                                <label for="tipo_desconto">Tipo</label>
+                                <select class="span12" name="tipo_desconto" id="tipo_desconto">
+                                    <option value="">Nenhum</option>
+                                    <option value="percentual">Percentual (%)</option>
+                                    <option value="fixo">Valor Fixo (R$)</option>
+                                </select>
                             </div>
-                            <div class="span4" style="display: flex; align-items: flex-end;">
-                                <button type="button" class="button btn btn-success span12" id="btnGerarParcelas">
-                                    <span class="button__icon"><i class='bx bx-calculator'></i></span>
-                                    <span class="button__text2">Gerar</span>
-                                </button>
+                            <div class="span3">
+                                <label for="desconto">Valor</label>
+                                <input type="text" class="span12 money" name="desconto" id="desconto" value="0,00" placeholder="0,00" />
                             </div>
                         </div>
-                        <div id="tabelaParcelasContainer" style="display: none;">
+                    </div>
+
+                    <!-- Condições Comerciais -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Condições Comerciais</h4>
+                        <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                            <div class="span3">
+                                <label for="tipo_cond_comerc">Tipo</label>
+                                <select class="span12" name="tipo_cond_comerc" id="tipo_cond_comerc">
+                                    <option value="N">Nenhuma</option>
+                                    <option value="P">Parcelas</option>
+                                    <option value="T">Texto livre</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Parcelas -->
+                        <div id="slot_cond_comerc_parc" class="hide">
+                            <div class="span12 well" style="margin-left: 0; padding: 15px;">
+                                <div class="span8">
+                                    <label for="geradorParcelas">Gerar Parcelas</label>
+                                    <input type="text" class="span12" id="geradorParcelas" placeholder="Ex: 30 (30 dias) | 30 60 90 (vencimentos em 30, 60 e 90 dias) | 6x (6 parcelas a cada 30 dias)" />
+                                    <small style="color: #666; display: block; margin-top: 5px;">
+                                        <strong>Exemplos:</strong> • <code>30</code> = 1 parcela em 30 dias • <code>30 60 90</code> = 3 parcelas • <code>6x</code> = 6 parcelas iguais a cada 30 dias
+                                    </small>
+                                </div>
+                                <div class="span4" style="display: flex; align-items: flex-end;">
+                                    <button type="button" class="button btn btn-success span12" id="btnGerarParcelas">
+                                        <span class="button__icon"><i class='bx bx-calculator'></i></span>
+                                        <span class="button__text2">Gerar</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="tabelaParcelasContainer" style="display: none;">
+                                <div class="span12" style="margin-left: 0;">
+                                    <table class="table table-bordered" id="tabelaParcelas">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Nº</th>
+                                                <th width="15%">Dias</th>
+                                                <th width="20%">Valor</th>
+                                                <th width="50%">Observação</th>
+                                                <th width="10%">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyParcelas"></tbody>
+                                    </table>
+                                    <input type="hidden" name="parcelas_json" id="parcelas_json" value="[]" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Texto Livre -->
+                        <div id="slot_cond_comerc_texto" class="hide">
                             <div class="span12" style="margin-left: 0;">
-                                <table class="table table-bordered" id="tabelaParcelas">
-                                    <thead>
-                                        <tr>
-                                            <th width="5%">Nº</th>
-                                            <th width="15%">Dias</th>
-                                            <th width="20%">Valor</th>
-                                            <th width="50%">Observação</th>
-                                            <th width="10%">Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyParcelas"></tbody>
-                                </table>
-                                <input type="hidden" name="parcelas_json" id="parcelas_json" value="[]" />
+                                <label for="cond_comerc_texto">Condições de Pagamento (Texto Livre)</label>
+                                <textarea name="cond_comerc_texto" id="cond_comerc_texto" class="span12" rows="5" placeholder="Digite as condições de pagamento..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Condições Gerais -->
+                    <div class="span12" style="padding: 1%; margin-left: 0; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Condições Gerais</h4>
+                        <div class="span12" style="margin-left: 0;">
+                            <div class="span3">
+                                <label for="validade_dias">Validade da Proposta</label>
+                                <input type="number" class="span12" name="validade_dias" id="validade_dias" placeholder="Ex: 30" />
+                                <small style="color: #666; display: block; margin-top: 5px;">Em dias</small>
+                            </div>
+                            <div class="span3">
+                                <label for="prazo_entrega">Prazo de Entrega</label>
+                                <input type="text" class="span12" name="prazo_entrega" id="prazo_entrega" placeholder="Ex: 15 dias úteis" />
+                                <small style="color: #666; display: block; margin-top: 5px;">Texto livre</small>
                             </div>
                         </div>
                     </div>
@@ -284,6 +342,49 @@ $(document).ready(function() {
         allowZero: true,
         allowNegative: false
     });
+
+    // Controlar tipo de condições comerciais
+    $("#tipo_cond_comerc").on('change', function() {
+        var tipo = $(this).val();
+        $("#slot_cond_comerc_parc").addClass('hide');
+        $("#slot_cond_comerc_texto").addClass('hide');
+        
+        if (tipo == 'P') {
+            $("#slot_cond_comerc_parc").removeClass('hide');
+        } else if (tipo == 'T') {
+            $("#slot_cond_comerc_texto").removeClass('hide');
+        }
+    });
+
+    // Calcular desconto
+    $("#desconto, #tipo_desconto").on('change blur', function() {
+        calcularDesconto();
+    });
+
+    function calcularDesconto() {
+        var tipo = $("#tipo_desconto").val();
+        var valorDesconto = $("#desconto").val().replace(/\./g, '').replace(',', '.');
+        valorDesconto = parseFloat(valorDesconto) || 0;
+        
+        var totalProdutos = produtos.reduce((sum, p) => sum + p.subtotal, 0);
+        var totalServicos = servicos.reduce((sum, s) => sum + s.subtotal, 0);
+        var outrosPreco = 0;
+        var outrosValor = $("#preco_outros").val();
+        if (outrosValor) {
+            outrosPreco = parseFloat(outrosValor.replace(/\./g, '').replace(',', '.')) || 0;
+        }
+        var subtotal = totalProdutos + totalServicos + outrosPreco;
+        
+        var valorDescontoCalculado = 0;
+        if (tipo == 'percentual' && valorDesconto > 0) {
+            valorDescontoCalculado = (subtotal * valorDesconto) / 100;
+        } else if (tipo == 'fixo' && valorDesconto > 0) {
+            valorDescontoCalculado = valorDesconto;
+        }
+        
+        $("#valor_desconto").val(valorDescontoCalculado.toFixed(2));
+        atualizarResumo();
+    }
 
     // Autocomplete de cliente (opcional - pode digitar livremente)
     $("#cliente").autocomplete({
@@ -458,6 +559,7 @@ $(document).ready(function() {
         
         var subtotal = totalProdutos + totalServicos + outrosPreco;
         var desconto = parseFloat($("#valor_desconto").val()) || 0;
+        if (desconto > subtotal) desconto = subtotal; // Não permitir desconto maior que subtotal
         var total = subtotal - desconto;
 
         $("#resumoProdutos").text('R$ ' + totalProdutos.toFixed(2).replace('.', ','));

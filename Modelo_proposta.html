@@ -1,0 +1,3534 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta http-equiv="x-ua-compatible" content="IE=Edge"/><title>ERP da Olist - Propostas</title><meta name="description" content="Sistema de gestão online para pequenas empresas" /><meta name="author" content="Olist" /><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="manifest" href="https://erp.olist.com/favicons/manifest.json?v=4.0" />
+<link rel="icon" href="https://erp.olist.com/favicon.ico?v=4.0" type="image/x-icon" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://erp.olist.com/favicons/favicon-32x32.png?v=4.0" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://erp.olist.com/favicons/favicon-16x16.png?v=4.0" />
+<link rel="mask-icon" href="https://erp.olist.com/favicons/safari-pinned-tab.svg?v=4.0" color="#0050DC" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://erp.olist.com/favicons/apple-touch-icon.png?v=4.0" />
+<meta name="theme-color" content="#0050DC" />
+
+<script>
+(function(document, navigator, standalone) {
+	// prevents links from apps from oppening in mobile safari
+	if ((standalone in navigator) && navigator[standalone]) {
+		var curnode;
+		var location = document.location;
+		var stop = /^(a|html)$/i;
+
+		document.addEventListener('click', function(e) {
+			curnode = e.target || e.srcElement;
+
+			if (!curnode) {
+				return;
+			}
+
+			while (!(stop).test(curnode.nodeName)) {
+				curnode = curnode.parentNode;
+
+				if (!curnode){
+					return;
+				}
+			}
+
+			if ('href' in curnode && e.defaultPrevented !== true && curnode.target !== '_blank' && !(/\.(png|jpeg|pdf)$/).test(curnode.href)) {
+				e.preventDefault();
+				location.href = curnode.href;
+			}
+		}, false);
+	}
+}(document, window.navigator, 'standalone'));
+</script>
+<script>
+	// Check that service workers are supported
+	if ("serviceWorker" in navigator) {
+		// Use the window load event to keep the page load performant
+		window.addEventListener("load", function registrarServiceWorker() {
+			navigator.serviceWorker.register("https://erp.olist.com/service-worker.js");
+		});
+	}
+</script>
+<link rel="stylesheet" href="https://erp.olist.com/build/assets/styles.BbUaUeu9.css" media='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)' temaCss='light' refBuildCss='styles' mediaCssTemaAuto='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)' /><link rel="stylesheet" href="https://erp.olist.com/build/assets/styles-dark.pxgayXQ3.css" media='(prefers-color-scheme: dark)' temaCss='dark' refBuildCss='styles-dark' mediaCssTemaAuto='(prefers-color-scheme: dark)' /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/plugins/tipsy/tipsy.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/libs/plugins/foo-table/css/footable.core.min.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/animations.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/libs/plugins/toastr/toastr.min.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/libs/jquery-ui/1.12.1/jquery-ui.min.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/libs/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/styles.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/print.css?v=3.83.08' media='print' /><script type='text/javascript' src='https://erp.olist.com/libs/jquery/jquery-1.11.1.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/jquery/jquery-migrate-1.2.1.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/jquery-ui/1.12.1/jquery-ui.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/history/jquery.history.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/context-menu/jquery.contextmenu.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/number-formatter/jquery.numberformatter-1.1.2.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/tipsy/jquery.tipsy.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/toastr/toastr.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/jquery-animation/jquery-animation.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/metis-menu/jquery.metisMenu.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/foo-table/dist/footable.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/foo-table/dist/footable.sort.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/tabdrop/bootstrap-tabdrop.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/masonry/masonry.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/moment/moment.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/moment/moment.locale.pt-br.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/libgif-js/libgif.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/clipboard/clipboard.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/mousetrap/mousetrap.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/atalhos-teclado.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/config-plugins.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/graficos-config.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/ui.popup.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/ui.page.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/paginacao.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/ui-2.07.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/utils.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/date.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/temaSistema.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/functions-es5.js?v=3.83.08'></script><script>setStorageItem('tiny_theme', 'auto');</script><link rel="stylesheet" href="https://use.typekit.net/qcw0nsv.css"><script type='text/javascript' src='https://erp.olist.com/templates/form.orcamento.itens.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.orcamentos.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.orcamento.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.orcamento.parcelas.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.contato.rapido.div.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.consultar.boa.vista.popup.js?v=3.83.08'></script><script src='https://erp.olist.com/libs/php/xajax/novo/xajax_js/xajax_core.js?v=3.83.08'></script>
+<script src='https://erp.olist.com/libs/tiny/xajax_exceptions.js?v=3.83.08'></script>
+<script> var TagManagerConfig = { data: "1KDZTTymy7RDQVTkKkX71oh3UuZl4eYvd4h8adwGwQs=" }; </script><script type='text/javascript' src='https://erp.olist.com/templates/google.tag.manager.head.js?v=3.83.08'></script><!-- Hotjar Tracking Code for https://erp.tiny.com.br -->
+<script>
+(function(h,o,t,j,a,r){
+	h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+	h._hjSettings={hjid:3221995,hjsv:6};
+	a=o.getElementsByTagName('head')[0];
+	r=o.createElement('script');r.async=1;
+	r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+	a.appendChild(r);
+})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+
+window.hj('identify', 707471142, {"email":"contato@tecnicolitoral.com","plano":" Crescer","cnpj":"31.490.630\/0001-15"});</script>
+</head>
+<body data-editar-automaticamente="N" data-voltar-para-listagem="S" data-abrir-menu-hover="S" class="loading-page menu-closed modulo-vendas menu-fixed">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T2S5NS5" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="bs-modal"></div>
+<script>
+	function requestAuthServices(params, callback) {
+		$.get("https://erp.olist.com/services/auth.services.php", params, callback);
+	}
+
+	function requestMutiEmpresa(params, callback) {
+		$.post("https://erp.olist.com/services/multi.empresa.auth.services.php", params, callback);
+	}
+
+	function requestServicesNotificacoes(params, callback) {
+		$.get("https://erp.olist.com/services/notificacoes.services.php", params, callback);
+	}
+
+	function redirecionarLinkRaiz(linkRelativo) {
+		window.location.href = "https://erp.olist.com/" + linkRelativo;
+	}
+
+	function getUrlAbrirChamadoSuporte() {
+		return "https://erp.olist.com/tickets#add";
+	}
+
+	function getVersaoFrontEnd() {
+		return "3.83.08";
+	}
+
+	function abrirModalRebrandOlist(){
+		return eventBus.trigger("abrir.modal.rebrand.olist");
+	}
+</script>
+
+<script type='text/javascript' src='https://erp.olist.com/templates/menu.js?v=3.83.08'></script>
+<div id="main-menu-backdrop"></div>
+
+<div id="main-menu" class="no-print">
+	<div class="sidebar-menu-mobile-bar">
+		<div class="sidebar-menu-mobile-toggle-area">
+							<div class="btn-sidebar-menu-mobile">
+					<i class="icon-menu-bars"></i>
+				</div>
+					</div>
+
+		<div class="sidebar-menu-mobile-actions-area">
+									        						<div class="sidebar-menu-notificacoes">
+					<a href="javascript:void(0)" onclick="mainMenu.abrirSubmenuNotificacoes(true, true);" aria-label="Menu Notificações">
+						<div class="icone-circulo icone-notificacoes"><i class="far fa-bell"></i></div>
+						<span class="badge badge-menu info-numero-notificacoes hide"></span>
+					</a>
+				</div>
+    					<div class="sidebar-menu-usuario">
+				<a href="javascript:void(0)" onclick="mainMenu.abrirSubmenuUsuario(true, true);" aria-label="Menu do usuário">
+					<div class="btn-sidebar-usuario">
+						<div class="sidebar-menu-logo-usuario">
+							<div class='sidebar-menu-iniciais-usuario' style='background-color: #e58070;'>TB</div>						</div>
+													<div class="sidebar-menu-logo-empresa">
+								<img src="https://erp.olist.com/exibe.logo.empresa?idEmpresa=707471142&logoMenor=S" alt="31.490.630 TIAGO MARQUES BOMFIM" />
+							</div>
+											</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="sidebar-menu-container">
+		<div class="sidebar-menu">
+			<div class="sidebar-menu-nav">
+				 					<div class="btn-sidebar-menu">
+						<i class="icon-menu-bars"></i>
+					</div>
+
+					<nav class="menu-grupos">
+						<ul>
+															<li data-key-modulo="0" data-ref-modulo="home">
+									<a href="index" onclick="mainMenu.abrirSubmenuModulos('0', true, true, true, true); return false;" aria-label="Início">
+										<span class="menu-description">Início</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="0" data-ref-modulo="home">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/index"
+														hrefRelativo="index"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Índice"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-map-o'></i>
+
+														<span class='side-menu-description'>Índice</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/dashboard"
+														hrefRelativo="dashboard"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo="Dashboard"
+														aria-label="Dashboard"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-tachometer'></i>
+
+														<span class='side-menu-description'>Dashboard</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/home_agenda"
+														hrefRelativo="home_agenda"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Agenda"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-calendar'></i>
+
+														<span class='side-menu-description'>Agenda<span class='badge badge-menu side-menu-description'>2</span></span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/dados_conta"
+														hrefRelativo="dados_conta"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Minha conta"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-user-circle'></i>
+
+														<span class='side-menu-description'>Minha conta</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/integracoes"
+														hrefRelativo="integracoes"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Integrações"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-exchange'></i>
+
+														<span class='side-menu-description'>Integrações</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/contratacao_servico"
+														hrefRelativo="contratacao_servico"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Upgrade de plano"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-rocket'></i>
+
+														<span class='side-menu-description'>Upgrade de plano</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/detalhes_versao"
+														hrefRelativo="detalhes_versao"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Sobre a versão"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-info-circle'></i>
+
+														<span class='side-menu-description'>Sobre a versão</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/ajuda/"
+														hrefRelativo="ajuda/"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Ajuda do ERP"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-life-ring'></i>
+
+														<span class='side-menu-description'>Ajuda do ERP</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/ferramentas_geral"
+														hrefRelativo="ferramentas_geral"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Ferramentas"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+
+														<span class='side-menu-description'>Ferramentas</span>
+													</a>
+												</li>
+																							
+																									<li class="divider"></li>
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/loja_aplicativos"
+														hrefRelativo="loja_aplicativos"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Loja de extensões"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-shopping-bag'></i>
+
+														<span class='side-menu-description'>Loja de extensões</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://olist.com/parceiros"
+														hrefRelativo="https://olist.com/parceiros"
+														class="menu-lateral close-menu-on-click"
+														target="_blank"
+														data-key-module="home"
+														data-nome-modulo=""
+														aria-label="Shopping de Serviços"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-store-alt'></i>
+
+														<span class='side-menu-description'>Shopping de Serviços</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+															<li data-key-modulo="1" data-ref-modulo="cadastros">
+									<a href="contatos" onclick="mainMenu.abrirSubmenuModulos('1', true, true, true, true); return false;" aria-label="Cadastros">
+										<span class="menu-description">Cadastros</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="1" data-ref-modulo="cadastros">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/contatos"
+														hrefRelativo="contatos"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Contatos"
+														aria-label="Clientes e Fornecedores"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-user'></i>
+
+														<span class='side-menu-description'>Clientes e Fornecedores</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/produtos#list"
+														hrefRelativo="produtos#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Produtos"
+														aria-label="Produtos"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-tags'></i>
+
+														<span class='side-menu-description'>Produtos</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/anuncios"
+														hrefRelativo="anuncios"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo=""
+														aria-label="Anúncios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-bullhorn'></i>
+
+														<span class='side-menu-description'>Anúncios</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/servicos#list"
+														hrefRelativo="servicos#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Servicos"
+														aria-label="Serviços"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+
+														<span class='side-menu-description'>Serviços</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/produto_categorias"
+														hrefRelativo="produto_categorias"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="ProdutoCategorias"
+														aria-label="Categorias dos Produtos"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-sitemap'></i>
+
+														<span class='side-menu-description'>Categorias dos Produtos</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/vendedores#list"
+														hrefRelativo="vendedores#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Vendedores"
+														aria-label="Vendedores"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-briefcase'></i>
+
+														<span class='side-menu-description'>Vendedores</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/embalagens"
+														hrefRelativo="embalagens"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Embalagens"
+														aria-label="Embalagens"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-gift'></i>
+
+														<span class='side-menu-description'>Embalagens</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/relatorios_sistema?id=1"
+														hrefRelativo="relatorios_sistema?id=1"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="cadastros"
+														data-nome-modulo="Relatórios"
+														aria-label="Relatórios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+
+														<span class='side-menu-description'>Relatórios</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+															<li data-key-modulo="2" data-ref-modulo="suprimentos">
+									<a href="estoques" onclick="mainMenu.abrirSubmenuModulos('2', true, true, true, true); return false;" aria-label="Suprimentos">
+										<span class="menu-description">Suprimentos</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="2" data-ref-modulo="suprimentos">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/estoques"
+														hrefRelativo="estoques"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="Estoque"
+														aria-label="Controle de Estoques"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-th-large'></i>
+
+														<span class='side-menu-description'>Controle de Estoques</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/pedidos_compra#list"
+														hrefRelativo="pedidos_compra#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="PedidosCompra"
+														aria-label="Ordens de Compra"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+
+														<span class='side-menu-description'>Ordens de Compra</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/notas_entrada#list"
+														hrefRelativo="notas_entrada#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="NotaEntrada"
+														aria-label="Notas de Entrada"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file'></i>
+
+														<span class='side-menu-description'>Notas de Entrada</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/giro_estoque"
+														hrefRelativo="giro_estoque"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="GiroEstoque"
+														aria-label="Giro de Estoque"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-redo'></i>
+
+														<span class='side-menu-description'>Giro de Estoque</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/fci"
+														hrefRelativo="fci"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="FCI"
+														aria-label="FCI"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+
+														<span class='side-menu-description'>FCI</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/relatorios_sistema?id=2"
+														hrefRelativo="relatorios_sistema?id=2"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="suprimentos"
+														data-nome-modulo="Relatórios"
+														aria-label="Relatórios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+
+														<span class='side-menu-description'>Relatórios</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+															<li data-key-modulo="3" data-ref-modulo="vendas">
+									<a href="crm" onclick="mainMenu.abrirSubmenuModulos('3', true, true, true, true); return false;" aria-label="Vendas">
+										<span class="menu-description">Vendas</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="3" data-ref-modulo="vendas">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/crm"
+														hrefRelativo="crm"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="CRM"
+														aria-label="CRM"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-eye'></i>
+
+														<span class='side-menu-description'>CRM</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/automacoes"
+														hrefRelativo="automacoes"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="PainelDeAutomacoes"
+														aria-label="Painel de Automações"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-magic'></i>
+
+														<span class='side-menu-description'>Painel de Automações</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/pdv"
+														hrefRelativo="pdv"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="VendasBalcao"
+														aria-label="PDV"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-scanner-keyboard'></i>
+
+														<span class='side-menu-description'>PDV</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/orcamentos#list"
+														hrefRelativo="orcamentos#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Orcamentos"
+														aria-label="Propostas Comerciais"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-briefcase'></i>
+
+														<span class='side-menu-description'>Propostas Comerciais</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/vendas#list"
+														hrefRelativo="vendas#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Vendas"
+														aria-label="Pedidos de Venda"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+
+														<span class='side-menu-description'>Pedidos de Venda</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/notas_fiscais#list"
+														hrefRelativo="notas_fiscais#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="NotasFiscais"
+														aria-label="Notas Fiscais"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file'></i>
+
+														<span class='side-menu-description'>Notas Fiscais</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/comissoes#list"
+														hrefRelativo="comissoes#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Comissoes"
+														aria-label="Comissões"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-star'></i>
+
+														<span class='side-menu-description'>Comissões</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/notas_fiscais_consumidor#list"
+														hrefRelativo="notas_fiscais_consumidor#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="NFCe"
+														aria-label="Notas Fiscais Consumidor"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-qrcode'></i>
+
+														<span class='side-menu-description'>Notas Fiscais Consumidor</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/custos_ecommerce"
+														hrefRelativo="custos_ecommerce"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="CustosEcommerce"
+														aria-label="Custos do e-commerce"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-usd'></i>
+
+														<span class='side-menu-description'>Custos do e-commerce</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/google_shopping"
+														hrefRelativo="google_shopping"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="GoogleShopping"
+														aria-label="Google Shopping"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-google'></i>
+
+														<span class='side-menu-description'>Google Shopping</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/separacao"
+														hrefRelativo="separacao"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Separacao"
+														aria-label="Separação"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-cubes'></i>
+
+														<span class='side-menu-description'>Separação</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/expedicao"
+														hrefRelativo="expedicao"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Expedicao"
+														aria-label="Expedição"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-truck'></i>
+
+														<span class='side-menu-description'>Expedição</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/devolucoes_vendas"
+														hrefRelativo="devolucoes_vendas"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="DevolucaoVenda"
+														aria-label="Devoluções de venda"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-undo'></i>
+
+														<span class='side-menu-description'>Devoluções de venda</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/lista_pedidos_ecommerce"
+														hrefRelativo="lista_pedidos_ecommerce"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="PedidosEcommerce"
+														aria-label="Pedidos no e-commerce"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-shopping-cart'></i>
+
+														<span class='side-menu-description'>Pedidos no e-commerce</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/perguntas_ecommerce"
+														hrefRelativo="perguntas_ecommerce"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="EcommercePreVendas"
+														aria-label="Perguntas do e-commerce"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-comment-alt-lines'></i>
+
+														<span class='side-menu-description'>Perguntas do e-commerce</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/ecommerce_pos_venda"
+														hrefRelativo="ecommerce_pos_venda"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="EcommercePosVenda"
+														aria-label="Pós-venda Mercado Livre"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-comment-alt-lines'></i>
+
+														<span class='side-menu-description'>Pós-venda Mercado Livre</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/relatorios_sistema?id=3"
+														hrefRelativo="relatorios_sistema?id=3"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="vendas"
+														data-nome-modulo="Relatórios"
+														aria-label="Relatórios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+
+														<span class='side-menu-description'>Relatórios</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+															<li data-key-modulo="5" data-ref-modulo="financas">
+									<a href="caixa" onclick="mainMenu.abrirSubmenuModulos('5', true, true, true, true); return false;" aria-label="Finanças">
+										<span class="menu-description">Finanças</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="5" data-ref-modulo="financas">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/caixa"
+														hrefRelativo="caixa"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="Caixa"
+														aria-label="Caixa"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-usd'></i>
+
+														<span class='side-menu-description'>Caixa</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/conta_digital?utm=modulo"
+														hrefRelativo="conta_digital?utm=modulo"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="ContaDigital"
+														aria-label="Conta Digital"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-wallet'></i>
+
+														<span class='side-menu-description'>Conta Digital<span class='icon-badge badge-addon badge-addon-novo '>pix grátis</span></span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/demonstrativo_de_vendas"
+														hrefRelativo="demonstrativo_de_vendas"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="DemonstrativoVendas"
+														aria-label="Demonstrativo de vendas"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-credit-card'></i>
+
+														<span class='side-menu-description'>Demonstrativo de vendas</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/contas_pagar"
+														hrefRelativo="contas_pagar"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="ContasPagar"
+														aria-label="Contas a Pagar"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-minus-square'></i>
+
+														<span class='side-menu-description'>Contas a Pagar</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/contas_receber"
+														hrefRelativo="contas_receber"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="ContasReceber"
+														aria-label="Contas a Receber"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-plus-square'></i>
+
+														<span class='side-menu-description'>Contas a Receber</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/recebimento_cliente"
+														hrefRelativo="recebimento_cliente"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="RecebimentoPorCliente"
+														aria-label="Recebimento por Cliente"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-user'></i>
+
+														<span class='side-menu-description'>Recebimento por Cliente</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/cobrancas_registradas"
+														hrefRelativo="cobrancas_registradas"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="CobrancaRegistrada"
+														aria-label="Cobranças Bancárias"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-bank'></i>
+
+														<span class='side-menu-description'>Cobranças Bancárias</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/extratos_bancarios"
+														hrefRelativo="extratos_bancarios"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="ExtratoBancario"
+														aria-label="Extratos Bancários"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-list-alt'></i>
+
+														<span class='side-menu-description'>Extratos Bancários</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/relatorios_sistema?id=5"
+														hrefRelativo="relatorios_sistema?id=5"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="financas"
+														data-nome-modulo="Relatórios"
+														aria-label="Relatórios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+
+														<span class='side-menu-description'>Relatórios</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+															<li data-key-modulo="6" data-ref-modulo="servicos">
+									<a href="contratos#list" onclick="mainMenu.abrirSubmenuModulos('6', true, true, true, true); return false;" aria-label="Serviços">
+										<span class="menu-description">Serviços</span>
+									</a>
+
+									<nav class="menu-modulos" data-key-modulo="6" data-ref-modulo="servicos">
+										<ul>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/contratos#list"
+														hrefRelativo="contratos#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="servicos"
+														data-nome-modulo="Contratos"
+														aria-label="Contratos"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-list'></i>
+
+														<span class='side-menu-description'>Contratos</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/ordem_servicos"
+														hrefRelativo="ordem_servicos"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="servicos"
+														data-nome-modulo="OrdemServico"
+														aria-label="Ordens de Serviço"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+
+														<span class='side-menu-description'>Ordens de Serviço</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/notas_servico#list"
+														hrefRelativo="notas_servico#list"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="servicos"
+														data-nome-modulo="Notas Servico"
+														aria-label="Notas de Serviço"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file'></i>
+
+														<span class='side-menu-description'>Notas de Serviço</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/cobrancas"
+														hrefRelativo="cobrancas"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="servicos"
+														data-nome-modulo="Cobrancas"
+														aria-label="Cobranças"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-share-alt'></i>
+
+														<span class='side-menu-description'>Cobranças</span>
+													</a>
+												</li>
+																							
+												
+												<li>
+																										<a
+														href="https://erp.olist.com/relatorios_sistema?id=6"
+														hrefRelativo="relatorios_sistema?id=6"
+														class="menu-lateral close-menu-on-click"
+														target="_self"
+														data-key-module="servicos"
+														data-nome-modulo="Relatórios"
+														aria-label="Relatórios"
+													>
+
+														<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+
+														<span class='side-menu-description'>Relatórios</span>
+													</a>
+												</li>
+																					</ul>
+									</nav>
+								</li>
+													</ul>
+					</nav>
+				
+				<div class="sidebar-menu-acoes-principais dropup-aparencia-tiny">
+					<ul>
+																																			<li class="dropup dropdown-in">
+									<!-- file deepcode ignore XSS: apenas 3 opcoes disponiveis. validamos se input valido antes de aplicar -->
+									<a href="javascript:void(0)" class="dropdown-toggle btn-toggle-tema-sistema has-tipsy-menu" original-title="Aparência do ERP da Olist" data-toggle="dropdown" temaAtual="auto" aria-label="Aparência do ERP da Olist">
+										<div class="icone-circulo">
+											<i class="fas fa-adjust fa-rotate-180"></i>
+										</div>
+									</a>
+									<ul class="dropdown-menu">
+										<li class="dropdown-header">Aparência do <span class="normal-case">ERP da Olist</span></li>
+										<li>
+											<a href="javascript:void(0)" onclick="temaSistema.alterarTema('auto');" aria-label="Aparência do ERP da Olist automática">
+												<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistema" value="auto">
+												<span class="comp-placeholder"></span>
+												Automática
+											</a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<a href="javascript:void(0)" onclick="temaSistema.alterarTema('light');" aria-label="Aparência do ERP da Olist modo claro">
+												<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistema" value="light">
+												<span class="comp-placeholder"></span>
+												Modo claro
+											</a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<a href="javascript:void(0)" onclick="temaSistema.alterarTema('dark');" aria-label="Aparência do ERP da Olist modo escuro">
+												<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistema" value="dark">
+												<span class="comp-placeholder"></span>
+												Modo escuro
+											</a>
+										</li>
+									</ul>
+								</li>
+																						<li class="sidebar-menu-ajuda">
+									<a href="https://erp.olist.com/ajuda/orcamentos" class="btn-acessar-pagina-ajuda close-menu-on-click has-tipsy-menu" original-title="Menu Ajuda" onclick="return !togglePopupHelp();" aria-label="Menu Ajuda">
+										<div class="icone-circulo icone-ajuda">?</div>
+									</a>
+								</li>
+														<!-- <li class="sidebar-menu-suporte">
+								<a href="https://erp.olist.com/tickets#list" class="has-tipsy-menu" original-title="Suporte">
+									<div class="icone-circulo"><i class="fal fa-comment-dots"></i></div>
+								</a>
+							</li> -->
+							<li class="sidebar-menu-notificacoes">
+								<a href="javascript:void(0)" onclick="mainMenu.abrirSubmenuNotificacoes(true);" class="has-tipsy-menu" original-title="Menu Notificações" aria-label="Menu Notificações">
+									<div class="icone-circulo icone-notificacoes"><i class="far fa-bell"></i></div>
+									<span class="badge badge-menu info-numero-notificacoes hide"></span>
+								</a>
+							</li>
+						
+						<li class="sidebar-menu-usuario">
+							<a href="javascript:void(0)" onclick="mainMenu.abrirSubmenuUsuario(true);" class="has-tipsy-menu" original-title="Tiago Marques Bomfim" aria-label="Menu Usuário">
+								<div class="btn-sidebar-usuario">
+									<div class="sidebar-menu-logo-usuario">
+										<div class='sidebar-menu-iniciais-usuario' style='background-color: #e58070;'>TB</div>									</div>
+																			<div class="sidebar-menu-logo-empresa">
+											<img src="https://erp.olist.com/exibe.logo.empresa?idEmpresa=707471142&logoMenor=S" alt="31.490.630 TIAGO MARQUES BOMFIM" />
+										</div>
+																	</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+							<div class="sidebar-menu-acoes">
+					<ul>
+						<li class="sidebar-menu-expandir">
+							<a href="javascript:void(0)" aria-label="Expandir Menu">
+								<div class="checkbox checkbox-custom">
+									<label>
+										<input type="checkbox" id="mainMenuToggleFixed" />
+										<span class="comp-placeholder"></span>
+										Expandir menu
+									</label>
+								</div>
+							</a>
+						</li>
+						<li class="sidebar-menu-acoes-secundarias dropup-aparencia-tiny">
+							<ul>
+																	<li class="hidden-sm hidden-md hidden-lg dropup dropdown-in">
+										<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-label="Menu Aparência do ERP da Olist">
+											<i class="far fa-fw fa-adjust fa-rotate-180"></i>
+											Aparência do <span class="normal-case">ERP da Olist</span>
+										</a>
+										<ul class="dropdown-menu">
+											<li class="dropdown-header">Aparência do <span class="normal-case">ERP da Olist</span></li>
+											<li>
+												<a href="javascript:void(0)" class="close-menu-on-click" onclick="temaSistema.alterarTema('auto');" aria-label="Aparência do ERP da Olist automática"></a>>
+													<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistemaMobile" value="auto">
+													<span class="comp-placeholder"></span>
+													Automática
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<a href="javascript:void(0)" class="close-menu-on-click" onclick="temaSistema.alterarTema('light');" aria-label="Aparência do ERP da Olist modo claro"></a>>
+													<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistemaMobile" value="light">
+													<span class="comp-placeholder"></span>
+													Modo claro
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<a href="javascript:void(0)" class="close-menu-on-click" onclick="temaSistema.alterarTema('dark');" aria-label="Aparência do ERP da Olist modo escuro"></a>>
+													<input type="radio" class="radio-opc-tema-sistema" name="opcTemaSistemaMobile" value="dark">
+													<span class="comp-placeholder"></span>
+													Modo escuro
+												</a>
+											</li>
+										</ul>
+									</li>
+																<li>
+									<a href="https://erp.olist.com/preferencias_vendas" class="close-menu-on-click" id="mainMenuLinkConfig" aria-label="Menu Configurações">
+										<i class="fal fa-fw fa-cog"></i>
+										<span class="desc">Configurações</span>
+									</a>
+								</li>
+																	<li class="sidebar-menu-opcao-ideias">
+										<a href="https://erp.olist.com/ideias" class="close-menu-on-click" aria-label="Canal de ideias">
+											<i class="fal fa-fw fa-lightbulb"></i>
+											<span class="desc">Canal de ideias</span>
+										</a>
+									</li>
+																<li>
+									<a href="https://erp.olist.com/suporte_tickets" class="close-menu-on-click" aria-label="Suporte">
+										<i class="fal fa-fw fa-comments-alt"></i>
+										<span class="desc">Suporte</span>
+									</a>
+								</li>
+																	<li>
+										<a href="https://erp.olist.com/conta_digital?utm=menu_acesso_rapido" class="close-menu-on-click" aria-label="Olist Conta Digital">
+											<i class="fal fa-fw fa-wallet"></i>
+											<span class="desc">Conta digital</span>
+																					</a>
+									</li>
+								                                 									<li>
+										<a href="https://erp.olist.com/olist_envios" class="close-menu-on-click" aria-label="Envios Olist">
+											<i class="fal fa-fw fa-truck"></i>
+											<span class="desc">Envios Olist</span>
+																					</a>
+									</li>
+																																<li>
+									<a href="https://agents.olist.com/chats/new/" class="close-menu-on-click" aria-label="Agentes de IA">
+										<i class="fa-fw tiny-ai-icon"></i>
+										<span class="desc">Agentes de <span class="normal-case">IA</span></span>
+										<span class='icon-badge badge-addon badge-addon-novo'>novo</span>
+									</a>
+								</li>
+								<li class="hidden-sm hidden-md hidden-lg">
+									<a href="https://erp.olist.com/ajuda/orcamentos" class="btn-acessar-pagina-ajuda close-menu-on-click" onclick="return !togglePopupHelp();" aria-label="Menu Ajuda">
+										<i class="fal fa-fw fa-question-circle"></i>
+										<span class="desc">Ajuda</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+					</div>
+
+					<div class="sidebar-menu-modulos">
+									<nav class="menu-modulos " data-key-modulo="0" data-ref-modulo="home">
+						<h3 class="menu-modulos-header">Início</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/index"
+											hrefRelativo="index"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Índice"
+											aria-label="Índice"
+										>
+											<i class='menu-item-icon fa fa-fw fa-map-o'></i>
+											<span class='side-menu-description'>Índice</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/dashboard"
+											hrefRelativo="dashboard"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo="Dashboard"
+											original-title="Dashboard"
+											aria-label="Dashboard"
+										>
+											<i class='menu-item-icon fa fa-fw fa-tachometer'></i>
+											<span class='side-menu-description'>Dashboard</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/home_agenda"
+											hrefRelativo="home_agenda"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Agenda"
+											aria-label="Agenda"
+										>
+											<i class='menu-item-icon fa fa-fw fa-calendar'></i>
+											<span class='side-menu-description'>Agenda<span class='badge badge-menu side-menu-description'>2</span></span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/dados_conta"
+											hrefRelativo="dados_conta"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Minha conta"
+											aria-label="Minha conta"
+										>
+											<i class='menu-item-icon fa fa-fw fa-user-circle'></i>
+											<span class='side-menu-description'>Minha conta</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/integracoes"
+											hrefRelativo="integracoes"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Integrações"
+											aria-label="Integrações"
+										>
+											<i class='menu-item-icon fa fa-fw fa-exchange'></i>
+											<span class='side-menu-description'>Integrações</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/contratacao_servico"
+											hrefRelativo="contratacao_servico"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Upgrade de plano"
+											aria-label="Upgrade de plano"
+										>
+											<i class='menu-item-icon fa fa-fw fa-rocket'></i>
+											<span class='side-menu-description'>Upgrade de plano</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/detalhes_versao"
+											hrefRelativo="detalhes_versao"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Sobre a versão"
+											aria-label="Sobre a versão"
+										>
+											<i class='menu-item-icon fa fa-fw fa-info-circle'></i>
+											<span class='side-menu-description'>Sobre a versão</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/ajuda/"
+											hrefRelativo="ajuda/"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Ajuda do ERP"
+											aria-label="Ajuda do ERP"
+										>
+											<i class='menu-item-icon fa fa-fw fa-life-ring'></i>
+											<span class='side-menu-description'>Ajuda do ERP</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/ferramentas_geral"
+											hrefRelativo="ferramentas_geral"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Ferramentas"
+											aria-label="Ferramentas"
+										>
+											<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+											<span class='side-menu-description'>Ferramentas</span>
+										</a>
+																	</li>
+															
+																	<li class="divider"></li>
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/loja_aplicativos"
+											hrefRelativo="loja_aplicativos"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Loja de extensões"
+											aria-label="Loja de extensões"
+										>
+											<i class='menu-item-icon fa fa-fw fa-shopping-bag'></i>
+											<span class='side-menu-description'>Loja de extensões</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://olist.com/parceiros"
+											hrefRelativo="https://olist.com/parceiros"
+											target="_blank"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="home"
+											data-nome-modulo=""
+											original-title="Shopping de Serviços"
+											aria-label="Shopping de Serviços"
+										>
+											<i class='menu-item-icon fa fa-fw fa-store-alt'></i>
+											<span class='side-menu-description'>Shopping de Serviços</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+									<nav class="menu-modulos " data-key-modulo="1" data-ref-modulo="cadastros">
+						<h3 class="menu-modulos-header">Cadastros</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/contatos"
+											hrefRelativo="contatos"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Contatos"
+											original-title="Clientes e Fornecedores"
+											aria-label="Clientes e Fornecedores"
+										>
+											<i class='menu-item-icon fa fa-fw fa-user'></i>
+											<span class='side-menu-description'>Clientes e Fornecedores</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/produtos#list"
+											hrefRelativo="produtos#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Produtos"
+											original-title="Produtos"
+											aria-label="Produtos"
+										>
+											<i class='menu-item-icon fa fa-fw fa-tags'></i>
+											<span class='side-menu-description'>Produtos</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/anuncios"
+											hrefRelativo="anuncios"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo=""
+											original-title="Anúncios"
+											aria-label="Anúncios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-bullhorn'></i>
+											<span class='side-menu-description'>Anúncios</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/servicos#list"
+											hrefRelativo="servicos#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Servicos"
+											original-title="Serviços"
+											aria-label="Serviços"
+										>
+											<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+											<span class='side-menu-description'>Serviços</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/produto_categorias"
+											hrefRelativo="produto_categorias"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="ProdutoCategorias"
+											original-title="Categorias dos Produtos"
+											aria-label="Categorias dos Produtos"
+										>
+											<i class='menu-item-icon fa fa-fw fa-sitemap'></i>
+											<span class='side-menu-description'>Categorias dos Produtos</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/vendedores#list"
+											hrefRelativo="vendedores#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Vendedores"
+											original-title="Vendedores"
+											aria-label="Vendedores"
+										>
+											<i class='menu-item-icon fa fa-fw fa-briefcase'></i>
+											<span class='side-menu-description'>Vendedores</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/embalagens"
+											hrefRelativo="embalagens"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Embalagens"
+											original-title="Embalagens"
+											aria-label="Embalagens"
+										>
+											<i class='menu-item-icon fa fa-fw fa-gift'></i>
+											<span class='side-menu-description'>Embalagens</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/relatorios_sistema?id=1"
+											hrefRelativo="relatorios_sistema?id=1"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="cadastros"
+											data-nome-modulo="Relatórios"
+											original-title="Relatórios"
+											aria-label="Relatórios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+											<span class='side-menu-description'>Relatórios</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+									<nav class="menu-modulos " data-key-modulo="2" data-ref-modulo="suprimentos">
+						<h3 class="menu-modulos-header">Suprimentos</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/estoques"
+											hrefRelativo="estoques"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="Estoque"
+											original-title="Controle de Estoques"
+											aria-label="Controle de Estoques"
+										>
+											<i class='menu-item-icon fa fa-fw fa-th-large'></i>
+											<span class='side-menu-description'>Controle de Estoques</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/pedidos_compra#list"
+											hrefRelativo="pedidos_compra#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="PedidosCompra"
+											original-title="Ordens de Compra"
+											aria-label="Ordens de Compra"
+										>
+											<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+											<span class='side-menu-description'>Ordens de Compra</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/notas_entrada#list"
+											hrefRelativo="notas_entrada#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="NotaEntrada"
+											original-title="Notas de Entrada"
+											aria-label="Notas de Entrada"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file'></i>
+											<span class='side-menu-description'>Notas de Entrada</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/giro_estoque"
+											hrefRelativo="giro_estoque"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="GiroEstoque"
+											original-title="Giro de Estoque"
+											aria-label="Giro de Estoque"
+										>
+											<i class='menu-item-icon fa fa-fw fa-redo'></i>
+											<span class='side-menu-description'>Giro de Estoque</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/fci"
+											hrefRelativo="fci"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="FCI"
+											original-title="FCI"
+											aria-label="FCI"
+										>
+											<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+											<span class='side-menu-description'>FCI</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/relatorios_sistema?id=2"
+											hrefRelativo="relatorios_sistema?id=2"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="suprimentos"
+											data-nome-modulo="Relatórios"
+											original-title="Relatórios"
+											aria-label="Relatórios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+											<span class='side-menu-description'>Relatórios</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+									<nav class="menu-modulos active" data-key-modulo="3" data-ref-modulo="vendas">
+						<h3 class="menu-modulos-header">Vendas</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/crm"
+											hrefRelativo="crm"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="CRM"
+											original-title="CRM"
+											aria-label="CRM"
+										>
+											<i class='menu-item-icon fa fa-fw fa-eye'></i>
+											<span class='side-menu-description'>CRM</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/automacoes"
+											hrefRelativo="automacoes"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="PainelDeAutomacoes"
+											original-title="Painel de Automações"
+											aria-label="Painel de Automações"
+										>
+											<i class='menu-item-icon fa fa-fw fa-magic'></i>
+											<span class='side-menu-description'>Painel de Automações</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/pdv"
+											hrefRelativo="pdv"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="VendasBalcao"
+											original-title="PDV"
+											aria-label="PDV"
+										>
+											<i class='menu-item-icon fa fa-fw fa-scanner-keyboard'></i>
+											<span class='side-menu-description'>PDV</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/orcamentos#list"
+											hrefRelativo="orcamentos#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Orcamentos"
+											original-title="Propostas Comerciais"
+											aria-label="Propostas Comerciais"
+										>
+											<i class='menu-item-icon fa fa-fw fa-briefcase'></i>
+											<span class='side-menu-description'>Propostas Comerciais</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/vendas#list"
+											hrefRelativo="vendas#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Vendas"
+											original-title="Pedidos de Venda"
+											aria-label="Pedidos de Venda"
+										>
+											<i class='menu-item-icon fa fa-fw fa-inbox'></i>
+											<span class='side-menu-description'>Pedidos de Venda</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/notas_fiscais#list"
+											hrefRelativo="notas_fiscais#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="NotasFiscais"
+											original-title="Notas Fiscais"
+											aria-label="Notas Fiscais"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file'></i>
+											<span class='side-menu-description'>Notas Fiscais</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/comissoes#list"
+											hrefRelativo="comissoes#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Comissoes"
+											original-title="Comissões"
+											aria-label="Comissões"
+										>
+											<i class='menu-item-icon fa fa-fw fa-star'></i>
+											<span class='side-menu-description'>Comissões</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/notas_fiscais_consumidor#list"
+											hrefRelativo="notas_fiscais_consumidor#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="NFCe"
+											original-title="Notas Fiscais Consumidor"
+											aria-label="Notas Fiscais Consumidor"
+										>
+											<i class='menu-item-icon fa fa-fw fa-qrcode'></i>
+											<span class='side-menu-description'>Notas Fiscais Consumidor</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/custos_ecommerce"
+											hrefRelativo="custos_ecommerce"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="CustosEcommerce"
+											original-title="Custos do e-commerce"
+											aria-label="Custos do e-commerce"
+										>
+											<i class='menu-item-icon fa fa-fw fa-usd'></i>
+											<span class='side-menu-description'>Custos do e-commerce</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/google_shopping"
+											hrefRelativo="google_shopping"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="GoogleShopping"
+											original-title="Google Shopping"
+											aria-label="Google Shopping"
+										>
+											<i class='menu-item-icon fa fa-fw fa-google'></i>
+											<span class='side-menu-description'>Google Shopping</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/separacao"
+											hrefRelativo="separacao"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Separacao"
+											original-title="Separação"
+											aria-label="Separação"
+										>
+											<i class='menu-item-icon fa fa-fw fa-cubes'></i>
+											<span class='side-menu-description'>Separação</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/expedicao"
+											hrefRelativo="expedicao"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Expedicao"
+											original-title="Expedição"
+											aria-label="Expedição"
+										>
+											<i class='menu-item-icon fa fa-fw fa-truck'></i>
+											<span class='side-menu-description'>Expedição</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/devolucoes_vendas"
+											hrefRelativo="devolucoes_vendas"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="DevolucaoVenda"
+											original-title="Devoluções de venda"
+											aria-label="Devoluções de venda"
+										>
+											<i class='menu-item-icon fa fa-fw fa-undo'></i>
+											<span class='side-menu-description'>Devoluções de venda</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/lista_pedidos_ecommerce"
+											hrefRelativo="lista_pedidos_ecommerce"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="PedidosEcommerce"
+											original-title="Pedidos no e-commerce"
+											aria-label="Pedidos no e-commerce"
+										>
+											<i class='menu-item-icon fa fa-fw fa-shopping-cart'></i>
+											<span class='side-menu-description'>Pedidos no e-commerce</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/perguntas_ecommerce"
+											hrefRelativo="perguntas_ecommerce"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="EcommercePreVendas"
+											original-title="Perguntas do e-commerce"
+											aria-label="Perguntas do e-commerce"
+										>
+											<i class='menu-item-icon fa fa-fw fa-comment-alt-lines'></i>
+											<span class='side-menu-description'>Perguntas do e-commerce</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/ecommerce_pos_venda"
+											hrefRelativo="ecommerce_pos_venda"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="EcommercePosVenda"
+											original-title="Pós-venda Mercado Livre"
+											aria-label="Pós-venda Mercado Livre"
+										>
+											<i class='menu-item-icon fa fa-fw fa-comment-alt-lines'></i>
+											<span class='side-menu-description'>Pós-venda Mercado Livre</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/relatorios_sistema?id=3"
+											hrefRelativo="relatorios_sistema?id=3"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="vendas"
+											data-nome-modulo="Relatórios"
+											original-title="Relatórios"
+											aria-label="Relatórios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+											<span class='side-menu-description'>Relatórios</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+									<nav class="menu-modulos " data-key-modulo="5" data-ref-modulo="financas">
+						<h3 class="menu-modulos-header">Finanças</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/caixa"
+											hrefRelativo="caixa"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="Caixa"
+											original-title="Caixa"
+											aria-label="Caixa"
+										>
+											<i class='menu-item-icon fa fa-fw fa-usd'></i>
+											<span class='side-menu-description'>Caixa</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/conta_digital?utm=modulo"
+											hrefRelativo="conta_digital?utm=modulo"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="ContaDigital"
+											original-title="Conta Digital"
+											aria-label="Conta Digital"
+										>
+											<i class='menu-item-icon fa fa-fw fa-wallet'></i>
+											<span class='side-menu-description'>Conta Digital<span class='icon-badge badge-addon badge-addon-novo '>pix grátis</span></span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/demonstrativo_de_vendas"
+											hrefRelativo="demonstrativo_de_vendas"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="DemonstrativoVendas"
+											original-title="Demonstrativo de vendas"
+											aria-label="Demonstrativo de vendas"
+										>
+											<i class='menu-item-icon fa fa-fw fa-credit-card'></i>
+											<span class='side-menu-description'>Demonstrativo de vendas</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/contas_pagar"
+											hrefRelativo="contas_pagar"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="ContasPagar"
+											original-title="Contas a Pagar"
+											aria-label="Contas a Pagar"
+										>
+											<i class='menu-item-icon fa fa-fw fa-minus-square'></i>
+											<span class='side-menu-description'>Contas a Pagar</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/contas_receber"
+											hrefRelativo="contas_receber"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="ContasReceber"
+											original-title="Contas a Receber"
+											aria-label="Contas a Receber"
+										>
+											<i class='menu-item-icon fa fa-fw fa-plus-square'></i>
+											<span class='side-menu-description'>Contas a Receber</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/recebimento_cliente"
+											hrefRelativo="recebimento_cliente"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="RecebimentoPorCliente"
+											original-title="Recebimento por Cliente"
+											aria-label="Recebimento por Cliente"
+										>
+											<i class='menu-item-icon fa fa-fw fa-user'></i>
+											<span class='side-menu-description'>Recebimento por Cliente</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/cobrancas_registradas"
+											hrefRelativo="cobrancas_registradas"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="CobrancaRegistrada"
+											original-title="Cobranças Bancárias"
+											aria-label="Cobranças Bancárias"
+										>
+											<i class='menu-item-icon fa fa-fw fa-bank'></i>
+											<span class='side-menu-description'>Cobranças Bancárias</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/extratos_bancarios"
+											hrefRelativo="extratos_bancarios"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="ExtratoBancario"
+											original-title="Extratos Bancários"
+											aria-label="Extratos Bancários"
+										>
+											<i class='menu-item-icon fa fa-fw fa-list-alt'></i>
+											<span class='side-menu-description'>Extratos Bancários</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/relatorios_sistema?id=5"
+											hrefRelativo="relatorios_sistema?id=5"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="financas"
+											data-nome-modulo="Relatórios"
+											original-title="Relatórios"
+											aria-label="Relatórios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+											<span class='side-menu-description'>Relatórios</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+									<nav class="menu-modulos " data-key-modulo="6" data-ref-modulo="servicos">
+						<h3 class="menu-modulos-header">Serviços</h3>
+
+						<ul>
+																						
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/contratos#list"
+											hrefRelativo="contratos#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="servicos"
+											data-nome-modulo="Contratos"
+											original-title="Contratos"
+											aria-label="Contratos"
+										>
+											<i class='menu-item-icon fa fa-fw fa-list'></i>
+											<span class='side-menu-description'>Contratos</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/ordem_servicos"
+											hrefRelativo="ordem_servicos"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="servicos"
+											data-nome-modulo="OrdemServico"
+											original-title="Ordens de Serviço"
+											aria-label="Ordens de Serviço"
+										>
+											<i class='menu-item-icon fa fa-fw fa-wrench'></i>
+											<span class='side-menu-description'>Ordens de Serviço</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/notas_servico#list"
+											hrefRelativo="notas_servico#list"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="servicos"
+											data-nome-modulo="Notas Servico"
+											original-title="Notas de Serviço"
+											aria-label="Notas de Serviço"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file'></i>
+											<span class='side-menu-description'>Notas de Serviço</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/cobrancas"
+											hrefRelativo="cobrancas"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="servicos"
+											data-nome-modulo="Cobrancas"
+											original-title="Cobranças"
+											aria-label="Cobranças"
+										>
+											<i class='menu-item-icon fa fa-fw fa-share-alt'></i>
+											<span class='side-menu-description'>Cobranças</span>
+										</a>
+																	</li>
+															
+								
+								<li>
+																												<a
+											href="https://erp.olist.com/relatorios_sistema?id=6"
+											hrefRelativo="relatorios_sistema?id=6"
+											target="_self"
+											class="menu-lateral tipsy-menu-lateral close-menu-on-click"
+											data-key-module="servicos"
+											data-nome-modulo="Relatórios"
+											original-title="Relatórios"
+											aria-label="Relatórios"
+										>
+											<i class='menu-item-icon fa fa-fw fa-file-chart-line'></i>
+											<span class='side-menu-description'>Relatórios</span>
+										</a>
+																	</li>
+													</ul>
+					</nav>
+				
+				<nav class="menu-modulos menu-usuario" data-key-modulo="usuario" data-ref-modulo="usuario">
+					
+					<div class="menu-usuario-nav">
+						<ul>
+															<li>
+									<a href="https://erp.olist.com/empresa" class="close-menu-on-click" aria-label="Dados da empresa">
+										<i class="menu-item-icon fa fa-fw fa-briefcase"></i>
+										<span class="side-menu-description">Dados da empresa</span>
+									</a>
+								</li>
+							
+							<li>
+								<a href="https://erp.olist.com/dados_usuario" class="close-menu-on-click" aria-label="Dados do usuário">
+									<i class="menu-item-icon fa fa-fw fa-user"></i>
+									<span class="side-menu-description">Dados do usuário</span>
+								</a>
+							</li>
+
+							<li id="opc-visualizar-usuario-suporte" class="close-menu-on-click">
+								<a href="javascript:void(0)" onclick="abrirPopupUsuarioSuporte();" aria-label="Usuário de suporte">
+									<i class="menu-item-icon fa fa-fw fa-user-md"></i>
+									<span class="desc">Usuário de suporte</span>
+								</a>
+							</li>
+
+							
+																							<li>
+									<a href="https://erp.olist.com/loja_aplicativos" class="close-menu-on-click" aria-label="Menu Extensões">
+										<i class="menu-item-icon fa fa-fw fa-puzzle-piece"></i>
+										<span class="side-menu-description">Extensões</span>
+									</a>
+								</li>
+																<li>
+									<a target="_blank" href="https://blog.tiny.com.br" class="close-menu-on-click" aria-label="Menu Blog">
+										<i class="menu-item-icon fa fa-fw fa-rss"></i>
+										<span class="side-menu-description">Blog</span>
+									</a>
+								</li>
+								<li>
+									<a id="indique-ganhe" target="_blank" href="https://cloud.comunicacao.olist.com/indique-e-ganhe" class="close-menu-on-click" aria-label="Indique e ganhe">
+										<i class="menu-item-icon fa fa-thin fa-gift"></i>
+										<span class="side-menu-description">
+											Indique e ganhe
+										</span>
+									</a>
+								</li>
+													</ul>
+					</div>
+
+					<div class="menu-usuario-logout">
+						<a href="https://erp.olist.com/logout" class="btn btn-default btn-ghost close-menu-on-click" onclick="mainMenu.handleClickLogout()" aria-label="Sair">Sair</a>
+					</div>
+				</nav>
+
+				<nav class="menu-modulos menu-notificacoes" data-key-modulo="notificacoes" data-ref-modulo="notificacoes">
+					<div class="menu-usuario-notificacoes">
+						<h3 class="menu-modulos-header">Minhas notificações</h3>
+						<div class="conteudo-notificacoes"></div>
+					</div>
+				</nav>
+			</div>
+			</div>
+
+	<div class="sidebar-menu-logo-tiny">
+		<a href="https://erp.olist.com/" class="close-menu-on-click" aria-label="Menu Início"><span class="sr-only">Início</span></a>
+	</div>
+</div>
+
+	<div id="help-topico">
+		<div class="help-container">
+			<div class="help-body" data-url="orcamentos" data-custom="" data-loaded="false"></div>
+		</div>
+	</div>
+
+	<div id="help-topico-backdrop"></div>
+
+	<script>
+	 $(function() {
+	 	if (window.mainMenu) {
+			window.mainMenu.setLinksConfigGrupos({"principal":"https:\/\/erp.olist.com\/preferencias_vendas","map":{"0":"https:\/\/erp.olist.com\/preferencias_geral","1":"https:\/\/erp.olist.com\/preferencias_cadastros","2":"https:\/\/erp.olist.com\/preferencias_suprimentos","3":"https:\/\/erp.olist.com\/preferencias_vendas","5":"https:\/\/erp.olist.com\/preferencias_financeiro","6":"https:\/\/erp.olist.com\/preferencias_servicos"}});
+	 	}
+	});
+	</script>
+
+<div id="lis"></div>
+<div id="wrapper">
+	<div id="page-wrapper">
+		<div class="head-alerts">
+			
+			
+			
+			
+			<div class='alert alert-warning no-print' id='error-messages'></div>
+
+					</div><script type='text/javascript' src='https://erp.olist.com/libs/tiny/popup.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/tag-it.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/popupPeriod.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/searchContatos.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/searchProdutos.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/jquery-file-upload/jquery.iframe-transport.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/plugins/jquery-file-upload/jquery.fileupload.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/libs/tiny/iframe-page.js?v=3.83.08'></script><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/plugins/tag-it/jquery.tagit.css?v=3.83.08'  /><link rel='stylesheet' type='text/css' href='https://erp.olist.com/styles/plugins/tag-it/tagit.ui-zendesk.css?v=3.83.08'  /><script type='text/javascript' src='https://erp.olist.com/libs/plugins/tinymce/tinymce.min.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.marcacoes.objeto.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.codigo.rastreamento.aux.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/frame.forma.envio.utils.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.cotacao.popup.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.envio.documento.popup.js?v=3.83.08'></script><script type='text/javascript' src='https://erp.olist.com/templates/form.autocomplete.contatos.js?v=3.83.08'></script>
+<div id="popup" class="hide"></div>
+
+<div class="panel panel-list hide">
+	<div class="panel-head page-head">
+		<div class="top-bar">
+			<ol class='breadcrumb'><li><a href='https://erp.olist.com/'>Início</a></li><li class='dropdown dropdown-in dropdown-acesso-rapido-grupos'><a href='javascript:void(0)' class='dropdown-toggle' onclick='return false;' data-toggle='dropdown' title='Acesso rápido'><i class='fal fa-bars' style='font-size: 0.65em;'></i> Vendas</a><ul class='dropdown-menu'><li class='' data-key-modulo='0'><a href='https://erp.olist.com/index' class='no-icon'>Início</a></li><li class='' data-key-modulo='1'><a href='https://erp.olist.com/contatos' class='no-icon'>Cadastros</a></li><li class='' data-key-modulo='2'><a href='https://erp.olist.com/estoques' class='no-icon'>Suprimentos</a></li><li class='active' data-key-modulo='3'><a href='https://erp.olist.com/crm' class='no-icon'>Vendas</a></li><li class='' data-key-modulo='5'><a href='https://erp.olist.com/caixa' class='no-icon'>Finanças</a></li><li class='' data-key-modulo='6'><a href='https://erp.olist.com/contratos#list' class='no-icon'>Serviços</a></li></ul></li><li class='active'>Propostas Comerciais</li></ol>
+			<div class="external-actions featured-actions-scope">
+				<div class="featured-actions-container"></div>
+
+								<div class="dropdown dropdown-in">
+					<button onclick="abrirMenuInclusaoProposta(); return false;" class="btn btn-primary btn-fab dropdown-toggle" data-toggle="dropdown" type="button">Incluir proposta</button>
+					<ul class="dropdown-menu" id="opc_orcamentos_modelo"></ul>
+				</div>
+				
+				<div class="dropdown dropdown-in featured-actions-menu">
+					<button type="button" class="btn btn-menu-acoes dropdown-toggle" data-toggle="dropdown">Ações <i class="icon-more"></i></button>
+
+					<ul class="dropdown-menu">
+						<li class="featured-action-item" data-featured-desc="Imprimir"><a href="#" class="act-relatorio"><i class="fa fa-fw fa-print"></i> Imprimir relatório</a></li>
+													<li><a href="#" class="act-exportar"><i class="fa fa-fw fa-upload"></i> Exportar propostas para planilha</a></li>
+							<li><a href="#" class="act-importar"><i class="fa fa-fw fa-download"></i> Importar propostas de uma planilha</a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="head-title">Propostas Comerciais</div>
+
+		<div class="bar-tabs-filtros">
+			<div id="container-filtros">
+				<input type="hidden" id="idContatoPesquisa" />
+				<div class="input-group">
+					<input type="text" id="pesquisa-mini" class="form-control" placeholder="Pesquise por cliente ou número" onkeypress="if (event.keyCode == 13) {executarListar();}" />
+					<span class="disabled-placeholder"></span>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" onclick="executarListar();"><i class="fa fa-search"></i></button>
+					</span>
+				</div>
+			</div>
+
+			<ul class="nav-page-filters" data-filter-action="executarListar" data-filter-clear="removerTodosFiltros(); executarListar();">
+				<li>
+					<a href="#" class="filter-label filter-toggle has-tipsy-top" original-title="Período" data-label="periodo"><i class="fal fa-fw fa-calendar-alt"></i> por período</a>
+
+					<div class="filter-popover hide-controls" style="width: 350px;">
+						<div class="form-group" id="periodoDatas">
+							<label>Período</label>
+							<div class="btn-group filter-persist">
+								<div class="btn-group"><button type="button" data-filter="0" class="btn btn-default item-per filter-apply active" id="opc-per-todas" onclick="ativarTabPeriodo('', this); return false;">Sem filtro</button></div>
+								<div class="btn-group"><button type="button" data-filter="1" class="btn btn-default item-per" id="opc-per-data" onclick="ativarTabPeriodo('#div-data', this); return false;">Do dia</button></div>
+								<div class="btn-group"><button type="button" data-filter="2" class="btn btn-default item-per" id="opc-per-mes" onclick="ativarTabPeriodo('#div-mes', this); return false;">Do mês</button></div>
+								<div class="btn-group"><button type="button" data-filter="3" class="btn btn-default item-per" id="opc-per-periodo" onclick="ativarTabPeriodo('#div-periodo', this); return false;">Do intervalo</button></div>
+								<div class="btn-group"><button type="button" data-filter="4" class="btn btn-default item-per" id="opc-per-proximoContato" onclick="ativarTabPeriodo('proximoContato', this); return false;">Próximo contatos</button></div>
+							</div>
+						</div>
+
+						<div class="search-container">
+							<div id="div-mes" class="input-group form-group tab-search-periodo hide">
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="incrementaMeses(-1);"><i class="fa fa-fw fa-chevron-left"></i></button>
+								</span>
+								<input class="form-control" type="text" id="mes" name="mes" onchange="incrementaMeses(0);"/>
+								<span class="disabled-placeholder"></span>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="incrementaMeses(+1);"><i class="fa fa-fw fa-chevron-right"></i></button>
+								</span>
+							</div>
+
+							<div id="div-data" class="input-group form-group tab-search-periodo hide">
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="incrementaDias(-1);"><i class="fa fa-fw fa-chevron-left"></i></button>
+								</span>
+								<input class="date-pick-day form-control" type="text" id="p-data" name="p-data" onchange="formatDateField(this); incrementaDias(0);" />
+								<span class="disabled-placeholder"></span>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="incrementaDias(+1);"><i class="fa fa-fw fa-chevron-right"></i></button>
+								</span>
+							</div>
+
+							<div id="div-periodo" class="tab-search-periodo hide">
+								<div class="input-group form-group">
+									<div class="input-group-addon">De</div>
+									<input class="date-pick form-control" type="text" id="data-ini" name="data-ini" onchange="formatDateField(this)" />
+									<span class="disabled-placeholder"></span>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" onclick="toggleDatepicker('#data-ini');"><i class="fal fa-calendar-alt"></i></button>
+									</span>
+								</div>
+								<div class="input-group form-group">
+									<div class="input-group-addon">Até</div>
+									<input class="date-pick form-control" type="text" id="data-fim" name="data-fim" onchange="formatDateField(this)" />
+									<span class="disabled-placeholder"></span>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" onclick="toggleDatepicker('#data-fim');"><i class="fal fa-calendar-alt"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="filter-controls">
+							<button type="button" class="btn btn-primary filter-apply">Aplicar</button>
+							<button type="button" class="btn btn-default filter-toggle">Cancelar</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a href="#" class="filter-label filter-toggle" data-label="avancado"><i class="fal fa-filter"></i> filtros</a>
+
+					<div class="filter-popover" style="width: 300px;">
+						<div id="divMarcacoes">
+							<fieldset class='form-group'><label for='idMarcacaoPsq'>Marcador</label><select id='idMarcacaoPsq' name='idMarcacaoPsq' class='form-control'><option value='0'>Sem filtro por marcador</option><option value='190559'>Basculante</option><option value='191555'>Central de portaria</option><option value='190394'>CFTV</option><option value='190395'>Controle de Acesso</option><option value='190388'>Controle de Acesso Senha</option><option value='190422'>Deslizante</option><option value='189917'>Enviado</option><option value='190396'>Facial</option><option value='191621'>Intelbras</option><option value='190400'>IP</option><option value='190426'>Motor</option><option value='191556'>PABX</option><option value='190399'>Pivo</option><option value='190398'>Portão</option><option value='190389'>Portão Pivo</option><option value='190425'>PPA</option><option value='190424'>Roldana</option><option value='190397'>Senha</option><option value='190966'>Servidor</option><option value='190423'>Trilho</option><option value='1'>Sem marcadores</option></select></fieldset>						</div>
+
+						<div class="form-group">
+							<label for="psqVendedor">Vendedor</label>
+							<input type="hidden" id="idPsqVendedor" value="0" />
+							<input type="text" id="psqVendedor" placeholder="Nome do vendedor" class="form-control tipsyOff" onkeydown="clearHiddenResult(event,'#idPsqVendedor');" />
+						</div>
+
+						<div class="filter-controls">
+							<button type="button" class="btn btn-primary filter-apply">Aplicar</button>
+							<button type="button" class="btn btn-default filter-toggle">Cancelar</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a href="#"class="filter-label filter-clear"><i class="fal fa-minus-circle"></i> limpar filtros</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container-nav-tabs-config">
+			<div class="container-config-colunas">
+				<button type="button" class="btn btn-config-colunas has-tipsy-left" original-title="Configurar informações visíveis" data-target="orcamentos"><i class="far fa-sliders-v"></i></button>
+			</div>
+			<div class="nav-tabs-scroll">
+				<ul class="nav nav-tabs nav-page-view nav-filtros filter-persist" data-filter-action="executarListar">
+					<li><a href="#" data-filter="" class="item-sit filter-apply" id="sit-">Todas <span class="totalizador-aba" data-total-id="geral"></span></a></li>
+					<li class="active"><a href="#" data-filter="EmAberto" class="item-sit filter-apply" id="sit-EmAberto">Em aberto <span class="totalizador-aba" data-total-id="EmAberto"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Rascunho" class="item-sit filter-apply" id="sit-Rascunho"><div class="icon-led icon-led-grey has-tipsy" original-title="Rascunho"></div> Rascunhos <span class="totalizador-aba" data-total-id="Rascunho"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Pendente" class="item-sit filter-apply" id="sit-Pendente"><div class="icon-led icon-led-yellow has-tipsy" original-title="Pendente"></div> Pendentes <span class="totalizador-aba" data-total-id="Pendente"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Aguardando" class="item-sit filter-apply" id="sit-Aguardando"><div class="icon-led icon-led-orange has-tipsy" original-title="Aguardando"></div> Aguardando <span class="totalizador-aba" data-total-id="Aguardando"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Aprovado" class="item-sit filter-apply" id="sit-Aprovado"><div class="icon-led icon-led-green has-tipsy" original-title="Aprovado"></div> Aprovadas <span class="totalizador-aba" data-total-id="Aprovado"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Não aprovado" class="item-sit filter-apply" id="sit-Não aprovado"><div class="icon-led icon-led-red has-tipsy" original-title="Não aprovado"></div> Não aprovadas <span class="totalizador-aba" data-total-id="Não aprovado"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Concluído" class="item-sit filter-apply" id="sit-Concluído"><div class="icon-led icon-led-dgreen has-tipsy" original-title="Concluído"></div> Concluídas <span class="totalizador-aba" data-total-id="Concluído"></span></a></li>
+					<li class="has-icon"><a href="#" data-filter="Modelo" class="item-sit filter-apply" id="sit-Modelo"><div class="icon-led icon-led-purple has-tipsy" original-title="Modelo"></div> Modelos <span class="totalizador-aba" data-total-id="Modelo"></span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-body">
+		<div class="page-list-empty-state"></div>
+
+		<div class="hidden-empty-state">
+			<div class="datatable-area">
+				<div id="datatable" class="table-responsive"></div>
+
+				<div id="popUpMenu" class="popUpMenu">
+					<ul id='listaMenu' class='listaMenu dropdown-menu' style="display: block;">
+													<li id="im_18" data-exibir-fluxo="true"><i class="fa fa-fw fa-user"></i> Ver assuntos no <span class="normal-case">CRM</span></li>
+															<li id="im_19" data-exibir-fluxo="true"><i class="fa fa-fw fa-user-plus"></i> Incluir assunto no <span class="normal-case">CRM</span></li>
+														<li class="divider"></li>
+																			<li id="im_12"><i class="fa fa-fw fa-copy"></i> Clonar proposta</li>
+							<li id="im_13"><i class="fa fa-fw fa-clipboard"></i> Criar modelo</li>
+																			<li id="im_17"><i class="fa fa-fw fa-trash-o"></i> Excluir proposta</li>
+																			<li id="im_1"><i class="fa fa-fw fa-share"></i> Novo a partir deste</li>
+																			<li id="im_11" class="divider"></li>
+																			<li id="im_20"><i class="fa fa-fw fa-calculator"></i> Cotar fretes</li>
+																			<li id="im_8"><i class="fa fa-fw fa-briefcase"></i> Gerar venda</li>
+												<li id="im_9"><i class="fas fa-fw fa-share-alt"></i> Compartilhar</li>
+						<li id="im_10"><i class="fa fa-fw fa-print"></i> Imprimir</li>
+						<li id="im_21"><i class="fa fa-fw fa-file-pdf"></i> Salvar em <span class="normal-case">PDF</span></li>
+						<li class="divider"></li>
+						<li id="im_15"><i class="fa fa-fw fa-eye"></i> Ocorrências</li>
+													<li class="dropdown-header"><i class="fa fa-fw fa-random"></i> Alterar situação</li>
+							<li class="dropdown-item-situacoes">
+								<div id="im_2" class="icon-led icon-led-grey icon-menu has-tipsy situacaoAlteracao" original-title="Rascunho"></div>
+								<div id="im_3" class="icon-led icon-led-yellow icon-menu has-tipsy situacaoAlteracao" original-title="Pendente"></div>
+								<div id="im_14" class="icon-led icon-led-orange icon-menu has-tipsy situacaoAlteracao" original-title="Aguardando"></div>
+								<div id="im_4" class="icon-led icon-led-green icon-menu has-tipsy situacaoAlteracao" original-title="Aprovado"></div>
+								<div id="im_5" class="icon-led icon-led-red icon-menu has-tipsy situacaoAlteracao" original-title="Não aprovado"></div>
+								<div id="im_6" class="icon-led icon-led-dgreen icon-menu has-tipsy situacaoAlteracao" original-title="Concluído"></div>
+							</li>
+							<li class="divider"></li>
+							<li id="im_16"><i class="fa fa-fw fa-tags"></i> Marcadores</li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="divPaginacaoBottomMobile"></div>
+
+	<div class="bottom-bar">
+		<div class="totalizadores">
+			<div class="content-totais">
+									<div class="total total-selecao hide">
+						<h4>Selecionadas <span class="normal-case">(R$)</span></h4>
+						<div id="total-vlr-sel"></div>
+					</div>
+					<div class="total">
+						<h4>Quantidade</h4>
+						<div id="total-qtd"></div>
+					</div>
+					<div class="total">
+						<h4>Valor Total <span class="normal-case">(R$)</span></h4>
+						<div id="total-vlr"></div>
+					</div>
+								<div class="control">
+					<button type="button" onclick="voltarAoTopo();" class="btn-nav-top has-tipsy-top" original-title="Voltar ao topo"><i class="fal fa-long-arrow-up"></i></button>
+				</div>
+			</div>
+
+			<div id="divPaginacaoBottom"></div>
+
+			<div class="container-actions-selecao featured-actions-scope">
+				<span class="arrow-acoes"></span>
+				<span class="total-selecao" id="total-qtd-sel"></span>
+
+				<div class="featured-actions-container"></div>
+
+				<div class="dropdown dropup dropdown-in featured-actions-menu">
+					<button type="button" class="btn btn-menu-acoes dropdown-toggle" data-toggle="dropdown">Ações <i class="icon-more"></i></button>
+
+					<div class="dropdown-menu dropdown-menu-wrapper">
+						<ul class="dropdown-menu">
+															<li class="featured-action-item"><a href="#" class="prevent-dbclick" onclick="cotarSelecionados(); return false;"><i class="fa fa-fw fa-calculator"></i> Cotar fretes</a></li>
+																						<li class="featured-action-item"><a href="#" class="act-excluir" onclick="return false;"><i class="fa fa-fw fa-trash-o"></i> Excluir propostas</a></li>
+																						<li class="featured-action-item"><a href="#" onclick="incluirMarcadoresLoteOrcamentos(); return false;"><i class="fa fa-fw fa-tags"></i> Alterar marcadores</a></li>
+													</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> <!-- /.panel -->
+
+
+<div class="panel panel-item">
+	<div class="top-bar">
+		<ol class='breadcrumb'><li class='back'><a href='javascript:void(0)' class='btn btn-breadcrumb-voltar' onclick='cancelarOrcamento();'><i class='icon-back'></i> Voltar</a></li><li><a href='https://erp.olist.com/'>Início</a></li><li class='dropdown dropdown-in dropdown-acesso-rapido-grupos'><a href='javascript:void(0)' class='dropdown-toggle' onclick='return false;' data-toggle='dropdown' title='Acesso rápido'><i class='fal fa-bars' style='font-size: 0.65em;'></i> Vendas</a><ul class='dropdown-menu'><li class='' data-key-modulo='0'><a href='https://erp.olist.com/index' class='no-icon'>Início</a></li><li class='' data-key-modulo='1'><a href='https://erp.olist.com/contatos' class='no-icon'>Cadastros</a></li><li class='' data-key-modulo='2'><a href='https://erp.olist.com/estoques' class='no-icon'>Suprimentos</a></li><li class='active' data-key-modulo='3'><a href='https://erp.olist.com/crm' class='no-icon'>Vendas</a></li><li class='' data-key-modulo='5'><a href='https://erp.olist.com/caixa' class='no-icon'>Finanças</a></li><li class='' data-key-modulo='6'><a href='https://erp.olist.com/contratos#list' class='no-icon'>Serviços</a></li></ul></li><li class='active'>Propostas Comerciais</li></ol>
+		<div class="external-actions hide-from-edit featured-actions-scope">
+			<div class="featured-actions-container"></div>
+
+			<button type="button" class="btn btn-primary btn-edicao-item" onclick="habilitarEdicao();"> <i class="fa fa-edit"></i> Editar</button>
+
+			<div class="dropdown dropdown-in featured-actions-menu">
+				<button type="button" class="btn btn-menu-acoes dropdown-toggle" data-toggle="dropdown">Ações <i class="icon-more"></i></button>
+				<ul class="dropdown-menu dropdown-menu-right menu-acoes-item"></ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-item-card">
+		<div class="panel-head">
+			<h2 class="main-title">
+				Proposta Comercial
+				<div id="view-info-orcamento" class="item-view-info"></div>
+			</h2>
+
+			<div class="mensagens-header-edicao">
+				<div class="bs-callout bs-callout-warning bs-callout-compact hide-from-edit hide" id="mensagemEdicaoDesabilitada"></div>
+				<div class="nomessage" id="mensagem"></div>
+			</div>
+		</div>
+
+		<div class="panel-body">
+			<div id="pleasewait" class="pleasewait"></div>
+			<form id="orcamentoForm" name="orcamentoForm" action="#" onsubmit='return false'>
+				<input type="hidden" id="modelo" name="modelo" value="O" />
+				<input type="hidden" name="tipo_orcamento" id="tipo_orcamento" value="T" />
+				<input type="hidden" name="exibe_cond_gerais" id="exibe_cond_gerais" value="N" />
+				<input type="hidden" name="peso_calculado" id="peso_calculado" value="N" />				
+				<input type="hidden" id="tokenLiberacaoDesconto" name="tokenLiberacaoDesconto" value="" />
+
+				<div class="form-group-section">
+					<div id="tabModelo" class="hide row">
+						<div class="col-md-4 form-group">
+							<label for="nome_modelo">Nome do modelo <span class="obrigatorio"></span></label>
+							<input type="text" name="nome_modelo" id="nome_modelo" class="form-control" />
+						</div>
+					</div>
+
+					<div id="slot_para">
+						<div class="row">
+							<div class="col-md-4 form-group hide">
+								<label for="natureza">Natureza da operação</label>
+								<input type="text" onkeydown="clearHiddenResult(event,'#idNaturezaOperacao');" id="natureza" name="natureza" class="form-control tipsyOff ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+								<input type="hidden" id="idNaturezaOperacao" name="idNaturezaOperacao" value="">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-7 form-group">
+								<label id="lblContato" for="contato">Cliente <span class="obrigatorio"></span></label>
+								<input type="hidden" id="idContato" name="idContato" />
+								<div class="input-group">
+									<input type="text" class="form-control tipsyOff" id="contato" name="nomeContato" onkeypress="completerContact(event, 'contato', 'setIdContato', [1, 0]);" onkeydown="clearHiddenResult(event,'#idContato', limparCodigoContato);" onblur="setTimeout('verificarContato()', 100);" placeholder="Pesquise pelas iniciais do nome do cliente, pelo cpf/cnpj ou pelo e-mail"/>
+									<span class="disabled-placeholder"></span>
+									<div class="input-group-btn">
+										<button type="button" class="btn btn-default" title="Pesquisar" onclick="displayWait('pleasewait');autoCompletarContato('contato','setIdContato', [1, 0]);"><i class="fa fa-fw fa-search"></i></button>
+									</div>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-link btn-xs show-on-view" onclick="visualizarDadosContato();">Dados do cliente</button>
+									<button type="button" class="btn btn-link btn-xs show-on-view" onclick="visualizarAsInformacoesHistoricoCliente();">Ver últimas vendas</button>
+									<button type="button" class="btn btn-link btn-xs show-on-view" onclick="visualizarPessoasContato();">Pessoas de contato</button>
+								</div>
+							</div>
+
+							<div class="col-md-2 form-group">
+								<label for="contato_ac">Aos cuidados de</label>
+								<input type="text" class="form-control" name="contato_ac" id="contato_ac" />
+							</div>
+
+							<div class="col-md-3 form-group ">
+								<label for="idListaPreco">Lista de preço</label>
+								<div class="input-group">
+									<select name='idListaPreco' id='idListaPreco' class='form-control'><option value='0'>Padrão</option></select>									<span class="input-group-btn">
+										<button type="button" onclick="recalcularItens(); return false;" title="Recalcular preços conforme lista de preços" class="btn btn-default"><i class="fal fa-sync"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						
+						<div id="mensagemContato" class="bs-callout bs-callout-warning hide"></div>
+						<div id="mensagemContasAtrasadas" class="bs-callout bs-callout-warning bs-callout-compact hide"></div>
+
+						<div id="novoContato"> 
+
+	<div class="row">
+		<div class="col-md-3 form-group">
+			<label id="lbl_tipoPessoa" for="tipo">Tipo de Pessoa</label>
+			<select id="tipo" class="form-control dados-contato" name="contato[tipo]" onchange="ajustarFormContatoRapido($(this).val());">
+				<option value="J" selected="true">Jurídica</option>
+				<option value="F">Física</option>
+				<option value="E">Estrangeiro</option>
+				<option value="X">Estrangeiro no Brasil</option>
+			</select>
+		</div>
+
+		<div class="col-md-3 form-group" id="td_cnpj">
+			<label for="cnpj"><span id="label_cnpj">CNPJ</span></label>
+
+			<div class="input-group">
+				<input type="text" class="form-control dados-contato" id="cnpj" name="contato[cnpj]"
+					onblur="verificaSeJaExisteCNPJ();"
+					onkeypress="if(document.getElementById('tipo').value == 'J'){
+						return txtBoxFormat(this.form, this.name, '99.999.999/9999-99', event);
+					}else if(document.getElementById('tipo').value == 'F'){	
+						return txtBoxFormat(this.form, this.name, '999.999.999-99', event);}"
+					onkeyup="if(document.getElementById('tipo').value == 'J'){
+						return autoTab(this, 18, event);
+					}else if(document.getElementById('tipo').value == 'F'){
+						return autoTab(this, 14, event);}" />
+
+				<span class="input-group-btn dropdown group-controls-nacional">
+					<button tabindex='-1' type='button' data-toggle='dropdown' class='btn dropdown-toggle btn-default'><i class="far fa-fw fa-id-card"></i></button>
+					<ul class='dropdown-menu-right listaMenu dropdown-menu'>
+													<li class="controls-cnpj"><a href='javascript:void(0)' onclick="abrirPopupConsultarCadastroSefaz($(this));">Consultar na receita federal</a></li>
+						
+													<li><a href='javascript:void(0)' onclick="consultarClienteSCPC();">Consultar na <span class="normal-case">Boa Vista</span></a></li>
+											</ul>
+				</span>
+			</div>
+
+			<div id="cnpj-message"></div>
+			<div id="erro_cnpj"></div>
+		</div>
+
+		<div class="col-md-3 form-group" id="td_indIEDest">
+			<label for="indIEDest">Contribuinte</label>
+			<select class="form-control dados-contato" id="indIEDest" name="contato[indIEDest]" onchange="verificarIEContatoRapido()">
+				<option value="0">Não informado</option>
+				<option value="1">Contribuinte ICMS</option>
+				<option value="2">Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS</option>
+				<option value="9">Não Contribuinte, que pode ou não possuir Inscrição Estadual no Cadastro de Contribuintes do ICMS</option>
+			</select>
+		</div>
+
+		<div class="col-md-3 form-group" id="td_ie">
+			<label id="label_ie" for="ie">Inscrição Estadual</label>
+			<input type="text" class="form-control dados-contato" id="ie" name="contato[ie]" />
+			<div id="ie-message"></div>
+		</div>
+
+		<div class="col-md-3 form-group" id="td_rg" style="display: none;">
+			<label id="lbl_RG" for="rg">RG</label>
+			<input type="text" class="form-control dados-contato" id="rg" name="contato[rg]" />
+		</div>
+
+        <div class="col-md-3 form-group hide" id="td_dataNascimento" style="display: none;">
+			<label id="lbl_dataNascimento" for="dataNascimento">Data Nascimento</label>
+			<div class="input-group">
+                <input type="text" class="form-control dados-contato" id="dataNascimento" name="contato[dataNascimento]" onchange="formatDateField(this);"/>
+                <span class="disabled-placeholder"></span>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="toggleDatepicker('#dataNascimento');"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+		</div>
+
+		<div class="col-md-3 form-group" id="td_pais" style="display: none;">
+			<label id="lbl_pais" for="nomePais">País<span class="obrigatorio">&nbsp;</span></label>
+			<input type="hidden" name="contato[idPais]" id="idPais" value="" />
+			<input type="text" class="form-control dados-contato"  name="contato[nomePais]" id="nomePais" />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-3 form-group" id="td_cep">
+			<label id="lbl_cep" for="cep">CEP</label>
+			<div class="input-group">
+				<input type="text" class="form-control dados-contato" id="cep" name="contato[cep]" maxlength="10" onkeypress="if(event.keyCode==13){obterDadosCEP($('#cep').val());}" />
+				<span class="disabled-placeholder"></span>
+				<span class="input-group-btn">
+					<button class="btn btn-default dados-contato" onclick="obterDadosCEP($('#cep').val());" title="Buscar dados do CEP" type="button">
+						<i class="fa fa-fw fa-search"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-6 form-group" id="td_municipio">
+			<label id="lbl_cidade" for="cidade_contato_rapido">Cidade</label>
+			<input type="hidden" id="idCidade" name="contato[idMunicipio]" />
+			<input type="text" class="form-control dados-contato tipsyOff" id="cidade_contato_rapido" validation-fields="cidade,contato.cidade" onkeydown="clearHiddenResult(event, '#idCidade');" name="contato[cidade]" />
+		</div>
+		<div class="col-md-3 form-group" id="td_uf">
+			<label id="lbl_uf" for="uf_contato_rapido">UF</label>
+			<select name='contato[uf]' id='uf_contato_rapido' class='form-control form-control dados-contato'  ><option value=" " > Selecione </option>
+<option value="AC" >AC</option>
+<option value="AL" >AL</option>
+<option value="AM" >AM</option>
+<option value="AP" >AP</option>
+<option value="BA" >BA</option>
+<option value="CE" >CE</option>
+<option value="DF" >DF</option>
+<option value="ES" >ES</option>
+<option value="EX" >EX</option>
+<option value="GO" >GO</option>
+<option value="MA" >MA</option>
+<option value="MG" >MG</option>
+<option value="MS" >MS</option>
+<option value="MT" >MT</option>
+<option value="PA" >PA</option>
+<option value="PB" >PB</option>
+<option value="PE" >PE</option>
+<option value="PI" >PI</option>
+<option value="PR" >PR</option>
+<option value="RJ" >RJ</option>
+<option value="RN" >RN</option>
+<option value="RO" >RO</option>
+<option value="RR" >RR</option>
+<option value="RS" >RS</option>
+<option value="SC" >SC</option>
+<option value="SE" >SE</option>
+<option value="SP" >SP</option>
+<option value="TO" >TO</option>
+</select>		</div>
+	</div>
+	
+	<div class="form-group">
+		<label id="lbl_endereco" for="endereco">Endereço</label>
+		<input type="text" class="form-control dados-contato" id="endereco" name="contato[endereco]"  maxlength="60" />
+	</div>
+	
+	<div class="row">
+		<div class="col-md-4 form-group">
+			<label id="lbl_bairro" for="bairro">Bairro</label>
+			<input type="text" class="form-control dados-contato" id="bairro" name="contato[bairro]"  maxlength="60" />
+		</div>
+
+		<div class="col-md-2 form-group">
+			<label id="lbl_numero" for="enderecoNro">Número</label>
+			<input type="text" class="form-control dados-contato" id="enderecoNro" name="contato[enderecoNro]" />
+		</div>
+
+		<div class="col-md-6 form-group">
+			<label id="lbl_complemento" for="complemento">Complemento</label>
+			<input type="text" class="form-control dados-contato" id="complemento" name="contato[complemento]"  maxlength="60" />
+		</div>
+	</div>
+			
+	<div class="row">
+		<div class="col-md-3 form-group">
+			<label id="lbl_fone" for="fone">Telefone</label>
+			<input type="text" class="form-control dados-contato format_fone" id="fone" name="contato[fone]" />
+		</div>
+
+		<div class="col-md-3 form-group">
+			<label id="lbl_celular" for="celular">Celular</label>
+			<input type="text" class="form-control dados-contato format_fone" id="celular" name="contato[celular]" />
+		</div>
+
+		<div class="col-md-6 form-group">
+			<label id="lbl_email" for="email">Email</label>
+			<input type="text" class="form-control dados-contato" id="email" name="contato[email]" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#cidade_contato_rapido").tipsy({gravity: $.fn.tipsy.autoWE});
+		$(".format_fone").bind("blur", function() {
+			$(this).val(formatarTelefone($(this).val()));
+		});
+	});
+</script>
+
+						<div id="pessoasContato" class="hide"></div>
+
+						<div class="row hide-from-view">
+							<div class="col-md-12 checkbox">
+								<label>
+									<input type="checkbox" name="selEnderecoEntrega" id="selEnderecoEntrega" />
+									<span class="comp-placeholder"></span>
+									<p>O endereço de entrega do cliente é diferente do endereço de cobrança</p>
+								</label>
+							</div>
+						</div>
+
+						<div id="form_endereco_alternativo" class="hide">
+						<input type="hidden" id="id_endereco_alternativo" name="enderecoAlternativo[id]" value="0" />
+							<div class="form-group-section">
+								<h3 class="page-header">Endereço de entrega</h3>
+								<div class="row">
+									<div class="col-sm-3 form-group">
+										<label for="cep_alternativo">CEP</label>
+										<div class="input-group">
+											<input type="text" maxlength="10" name="enderecoAlternativo[cep]" id="cep_alternativo" class="form-control" onkeypress="if(event.keyCode==13){obterDadosCEPAlt($('#cep_alternativo').val());}" />
+											<span class="disabled-placeholder"></span>
+											<span class="input-group-btn">
+												<button type="button" title="Buscar dados do CEP" class="btn btn-default" onclick="obterDadosCEPAlt($('#cep_alternativo').val());">
+													<i class="fa fa-fw fa-search"></i>
+												</button>
+											</span>
+										</div>
+									</div>
+									<div class="col-md-6 form-group">
+										<label for="cidade_contato_rapido_alternativo">Cidade</label>
+										<input type="hidden" name="enderecoAlternativo[idMunicipio]" id="idCidade_alternativo" />
+										<input type="text" name="enderecoAlternativo[municipio]" onkeydown="clearHiddenResult(event, '#idCidade_alternativo');" id="cidade_contato_rapido_alternativo" class="form-control tipsyOff ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" />
+									</div>
+									<div class="col-md-3 form-group">
+										<label for="uf_contato_rapido_alternativo">UF</label>
+										<select name='enderecoAlternativo[uf]' id='uf_contato_rapido_alternativo' class='form-control form-control'  ><option value=" " > Selecione </option>
+<option value="AC" >AC</option>
+<option value="AL" >AL</option>
+<option value="AM" >AM</option>
+<option value="AP" >AP</option>
+<option value="BA" >BA</option>
+<option value="CE" >CE</option>
+<option value="DF" >DF</option>
+<option value="ES" >ES</option>
+<option value="EX" >EX</option>
+<option value="GO" >GO</option>
+<option value="MA" >MA</option>
+<option value="MG" >MG</option>
+<option value="MS" >MS</option>
+<option value="MT" >MT</option>
+<option value="PA" >PA</option>
+<option value="PB" >PB</option>
+<option value="PE" >PE</option>
+<option value="PI" >PI</option>
+<option value="PR" >PR</option>
+<option value="RJ" >RJ</option>
+<option value="RN" >RN</option>
+<option value="RO" >RO</option>
+<option value="RR" >RR</option>
+<option value="RS" >RS</option>
+<option value="SC" >SC</option>
+<option value="SE" >SE</option>
+<option value="SP" >SP</option>
+<option value="TO" >TO</option>
+</select>									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="endereco_alternativo">Endereço</label>
+									<input type="text" maxlength="60" name="enderecoAlternativo[endereco]" id="endereco_alternativo" class="form-control" />
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 form-group">
+										<label for="bairro_alternativo">Bairro</label>
+										<input type="text" maxlength="60" name="enderecoAlternativo[bairro]" id="bairro_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-2 form-group">
+										<label for="enderecoNro_alternativo">Número</label>
+										<input type="text" name="enderecoAlternativo[enderecoNro]" id="enderecoNro_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-3 form-group">
+										<label for="complemento_alternativo">Complemento</label>
+										<input type="text" maxlength="60" name="enderecoAlternativo[complemento]" id="complemento_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-3 form-group">
+										<label for="ie_alternativo">Insc. estadual</label>
+										<input type="text" name="enderecoAlternativo[ie]" id="ie_alternativo" class="form-control" />
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 form-group">
+										<label for="nomeDestinatario_alternativo">Destinatário</label>
+										<input type="text" name="enderecoAlternativo[nomeDestinatario]" id="nomeDestinatario_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-2 form-group">
+										<label for="tipoPessoa_alternativo">Tipo de Pessoa</label>
+										<select name="enderecoAlternativo[tipoPessoa]" id="tipoPessoa_alternativo" class="form-control">
+											<option value="F"selected="selected">Física</option><option value="J">Jurídica</option>										</select>
+									</div>
+
+									<div class="col-md-3 form-group" id="contCPF_alternativo">
+										<label for="cpf_alternativo">CPF</label>
+										<input type="text" name="enderecoAlternativo[cpf]" id="cpf_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-3 form-group hide" id="contCNPJ_alternativo">
+										<label for="cnpj_alternativo">CNPJ</label>
+										<input type="text" name="enderecoAlternativo[cnpj]" id="cnpj_alternativo" class="form-control" />
+									</div>
+
+									<div class="col-md-3 form-group">
+										<label for="fone_alternativo">Fone</label>
+										<input type="text" name="enderecoAlternativo[fone]" id="fone_alternativo" class="form-control format_fone" />
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group-section">
+							<label for="introducao">Introdução</label>
+							<textarea class="form-control" name="introducao" id="introducao" rows="2"></textarea>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3 form-group">
+								<label for="numeroProposta">Nº Proposta</label>
+								<input type="text" class="form-control" name="numeroProposta" id="numeroProposta" value="" readonly="readonly" />
+							</div>
+															<div class="col-md-3 form-group">
+									<label for="nomeVendedor">Vendedor</label>
+									<input type="text"  class="form-control" class="tipsyOff" name="nomeVendedor" id="nomeVendedor" onkeydown="clearHiddenResult(event,'#idVendedor');"/>
+									<input type="hidden" name="idVendedor" id="idVendedor" value="0"/>
+								</div>
+														<div class="col-md-3 form-group">
+								<label for="data">Data</label>
+								<div class="input-group">
+									<input type="text" class="date-pick form-control" name="data" id="data" value="21/12/2025" onchange="formatDateField(this)" />
+									<span class="disabled-placeholder"></span>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" onclick="toggleDatepicker('#data');"><i class="fa fa-calendar"></i></button>
+									</span>
+								</div>
+								<p class="help-block">(dd/mm/aaaa)</p>
+							</div>
+
+							<div class="col-md-3 form-group">
+								<label for="dataProximoContato">Data do Próximo Contato</label>
+								<div class="input-group">
+									<input type="text" class="date-pick form-control" name="dataProximoContato" id="dataProximoContato" value="21/12/2025" onchange="formatDateField(this)" />
+									<span class="disabled-placeholder"></span>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" onclick="toggleDatepicker('#dataProximoContato');"><i class="fa fa-calendar"></i></button>
+									</span>
+								</div>
+								<p class="help-block">(dd/mm/aaaa)</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-section">
+					<div id="tab-area">
+						<ul class="nav nav-tabs nav-tabs-header">
+							<li id="activeItens" class="active"><a href="#" onclick="alterarAba('item', $(this).parent()); return false;">Itens<span class="hidden-xs"> de produto ou serviço</span></a></li>
+							<li><a href="#" onclick="alterarAba('complementar', $(this).parent()); return false;">Descrições complementares</a></li>
+													</ul>
+					</div>
+
+					<div id="slot_itens">
+						<input type="hidden" id="itemNumber" value="-1" name="itemNumber" />
+						<input type="hidden" id="nextItemNumber" value="-1" name="nextItemNumber" />
+						<input type="hidden" id="parcelaNumber" name="parcelaNumber" />
+						<input type="hidden" id="id" name="id" />
+
+						<div class="table-itens">
+							<div class="table-responsive">
+								<table id="gritens" class="table table-bordered table-hover table-condensed table-editable">
+									<thead>
+										<tr id="itens-header">
+											<th class="text-center small-width">Nº</th>
+											<th class="col-sm-4">Item</th>
+											<th>Código (SKU)</th>
+											<th class="text-right item">Qtde</th>
+											<th class="item">UN</th>
+											<th class="text-right item exibeDesconto">Preço lista</th>
+											<th class="text-right item exibeDesconto">% Desc</th>
+											<th class="text-right item">Preço un</th>
+											<th class="text-right item">Preço total</th>
+											<th class="complementar hide">NCM</th>
+											<th class="col-sm-4 complementar hide">Descrição complementar</th>
+																						<th class="small-width hide-from-view">Ação</th>
+											<th class="small-width"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id="itens" class="editing hide-from-view">
+											<td class="nowrap nro-itens">1</td>
+											<td>
+												<input type="hidden" id="produtoId" name="produtoId" />
+												<input type="hidden" id="pesoLiqItem" name="pesoLiqItem" />
+												<input type="hidden" id="pesoBrutoItem" name="pesoBrutoItem" />
+												<input type="hidden" id="tipoProduto" name="tipoProduto" />
+												<input class="form-control tipsyOff" id="produto" name="produto" type="text" maxlength="120" onkeypress="completerProduct(event,'produto','setIdProduto', '', '', '', '', 'S');" onkeydown="clearHiddenResult(event,'#produtoId');" placeholder="Pesquise por descrição, código (SKU) ou gtin" />
+											</td>
+											<td><input class="form-control" type="text" id="codigo" name="codigo" readonly="readonly" /></td>
+											<td class="item"><input class="form-control edt-qtde" type="text" id="quantidade" name="quantidade" onblur="totalItem('quantidade','precounitario', 'precototal', 'descontoItem', 'N');" /></td>
+											<td class="item"><input class="form-control" type="text" id="unidade" name="unidade" disabled="disabled" /></td>
+											<td class="item exibeDesconto"><input class="form-control" type="text" id="precoLista" name="precoLista" readonly="readonly" /></td>
+											<td class="item exibeDesconto"><input class="form-control edt-valor" type="text" id="descontoItem" name="descontoItem" onchange ="formatNumeroBra($(this));diferencaPrecos('precounitario', 'precoLista', 'descontoItem', 'percentual');totalItem('quantidade','precounitario','precototal','descontoItem','N');" /></td>
+
+											<td class="item"><input class="form-control edt-valor" type="text" id="precounitario" name="precounitario" onchange ="formatNumeroBra($(this));diferencaPrecos('precounitario', 'precoLista', 'descontoItem', 'valor');totalItem('quantidade','precounitario','precototal','descontoItem','N');" /></td>
+											<td class="item"><input class="form-control" type="text" id="precototal" name="precototal" readonly="readonly" /></td>
+											<td class="complementar hide"><input class="form-control" id="ncmItem" name="ncmItem" type="text" readonly="readonly" /></td>
+											<td class="complementar hide"><textarea class="form-control" id="descrComplementarOrc" name="descrComplementarOrc" type="text" style="height: 34px;" /></textarea></td>
+																						<td class='nowrap tab-itens btn-action line-actions actions-column hide-from-view'>
+									    		<button type='button' onclick="addDetailItem();" class='btn btn-link btn-salvar-completerLinhaInclusaoProduto'>Salvar</button>
+									    		<button type='button' onclick="removeDetailItem('-1');" class='btn btn-default'><i class='fa fa-fw fa-ban'></i></button>
+											</td>
+											<td class="actions-column">
+												<span onclick="abrirPopupInformacoesVendasEComprasDoProduto($('#produtoId').val());" title="Informações"><i class="far fa-fw fa-info-circle icon-situacao-estoque"></i></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<button type="button" class="btn btn-link" id="aNovaLinhaItem" onclick="adicionarLinhaItem();"><i class='fa fa-fw fa-plus-circle'></i> Adicionar item</button>
+							<button type="button" class="btn btn-link" id="buscaAvancadaItem" onclick="buscaAvancadaItensOrcamento();"><i class='fa fa-fw fa-search'></i> busca avançada de itens</button>
+							<div class="warn-itens-repetidos bs-callout bs-callout-info bs-callout-compact hide"></div>
+							<div class="warn-preco-abaixo bs-callout bs-callout-info bs-callout-compact hide"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-section">
+					<h3 class="page-header">Outros itens ou serviços</h3>
+
+					<div id="slot_texto" class="form-group">
+						<textarea class="form-control has-tinymce" name="texto" id="texto" rows="12"></textarea>
+					</div>
+
+					<div id="totais">
+						<div class="row">
+							<div class="col-md-3 form-group">
+								<label for="totalTexto">Total outros</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input class="form-control edt-valor" type="text" name="totalTexto" id="totalTexto" value="" onchange="totalGeral();" />
+									<span class="disabled-placeholder"></span>
+								</div>
+								<p class="help-block">Não considerado no pedido</p>
+							</div>
+
+							<div class="col-md-3 form-group" id="td_desc">
+								<label for="desconto">Desconto</label>
+								<input type="text" name="desconto" id="desconto" value="0" class="form-control" onchange="formatNumeroBra($(this));totalGeral();calcularImpostosOrcamento();"/>
+							</div>
+
+							<div class="col-md-3 form-group" id="td_frete">
+								<label for="frete">Frete</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input type="text" name="frete" id="frete" value="0,00" class="form-control edt-valor" onchange="formatNumeroBra($(this));totalGeral();calcularImpostosOrcamento();"/>
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3 form-group" id="td_pesoBruto">
+								<label for="pesoBruto">Peso Bruto</label>
+								<div class="input-group">
+									<input type="text" name="pesoBruto" id="pesoBruto" value="0,000" class="form-control" onchange=""/>
+								<span class="input-group-addon after">kg</span>
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+							<div class="col-md-3 form-group" id="td_pesoLiq">
+								<label for="pesoLiq">Peso Líquido</label>
+								<div class="input-group">
+									<input type="text" name="pesoLiq" id="pesoLiq" value="0,000" class="form-control" onchange=""/>
+								<span class="input-group-addon after">kg</span>
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+							<div class="col-md-3 form-group" id="td_tot_prod">
+								<label for="subtotal">Total dos itens</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input type="text" name="subtotal" id="subtotal" class="form-control" value="" readonly="readonly" />
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+
+							<div class="col-md-3 form-group hide">
+								<label for="valorIPI">Valor IPI</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input type="text" class="form-control" readonly="readonly" id="valorIPI" name="valorIPI" value="0,00" />
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+
+							<div class="col-md-3 form-group hide">
+								<label for="valorICMSSubst">Valor ICMS ST + FCP ST</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input type="text" class="form-control" readonly="readonly" id="valorICMSSubst" name="valorICMSSubst" value="0,00" />
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+
+							<div class="col-md-3 form-group" id="td_tot_orc">
+								<label for="totalOrcamento">Total proposta</label>
+								<div class="input-group">
+									<span class="input-group-addon">R$</span>
+									<input class="form-control total" type="text" name="totalOrcamento" id="totalOrcamento" value="" />
+									<span class="disabled-placeholder"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-section">
+					<h3 class="page-header">Transportador</h3>
+
+					<div class="row">
+						<div class="col-md-3 form-group">
+							<label for="idFormaEnvio">Forma de envio</label>
+							<select name="idFormaEnvio" id="idFormaEnvio" class="form-control" onchange="exibirOcultarCamposLogistica('V');"></select>
+						</div>
+						<div class="wrapper-forma-frete forma-envio forma-envio-gateway forma-envio-correios forma-envio-transportadora forma-envio-mercado_envios forma-envio-jadlog forma-envio-total_express forma-envio-loggi forma-envio-correios_ff forma-envio-b2w_entrega forma-envio-olist forma-envio-custom forma-envio-viavarejo_envvias forma-envio-shopee-envios forma-envio-mandae forma-envio-olist_envios col-md-3 form-group">
+							<label for="idFormaFrete">Forma de frete</label>
+							<select id="idFormaFrete" name="idFormaFrete"  onchange="verificarMontagemCodigoRastreamento();" class="form-control"></select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label for="transportador">Nome</label>
+							<input type="hidden" name="idTransportador" id="idTransportador" />
+							<input type="text" name="transportador" id="transportador" class="form-control tipsyOff" onkeydown="clearHiddenResult(event, '#idTransportador');" />
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-section">
+					<h3 class="page-header">Condições comerciais</h3>
+
+			  		<div class="row">
+			  			<div class="col-md-3 form-group">
+			  				<!-- <label for="tipo_cond_comerc">Tipo</label> -->
+			  				<select name="tipo_cond_comerc" id="tipo_cond_comerc" class="form-control" onchange="selecionarTipoCondComercPorParametro(this.value);">
+			  					<option value="N">Nenhuma</option>
+			  					<option value="P">Parcelas</option>
+			  					<option value="T">Texto livre</option>
+			  				</select>
+			  			</div>
+			  		</div>
+
+					<div id="slot_cond_comerc_parc" class="hide">
+						<div class="row">
+							<div class="col-md-8 form-group">
+								<label for="condicao">Condição de pagamento</label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="condicao" name="condicao"  onkeypress="if(event.keyCode==13){gerarParcelas();}" />
+									<span class="disabled-placeholder"></span>
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button" id="pag_botaoCalcular" onclick="gerarParcelas();return false;"><i class="fa fa-fw fa-retweet"></i> Gerar parcelas</button>
+									</span>
+								</div>
+								<p class="help-block">Exemplos: 30 (30 dias direto); 30 60 90 (vencimentos em 30,60 e 90 dias); 6x (6 parcelas iguais a cada 30 dias)</p>
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table id="gridparcelas" class="table table-condensed table-bordered table-editable hide">
+								<thead>
+									<tr id="header-parc">
+										<th class="col-sm-2">Dias</th>
+										<th class="col-sm-3">Valor</th>
+										<th>Observação</th>
+										<th class="small-width"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="trh" class="hide"></tr>
+								</tbody>
+							</table>
+						</div>
+						<button class="btn btn-link btn-add hide" id="aNovaLinhaParcela" onclick="adicionarLinhaParcela();" type="button"><i class="fa fa-plus"></i> Adicionar parcela</button>
+					</div>
+
+					<div id="slot_cond_comerc_texto" class="hide form-group">
+						<textarea class="form-control has-tinymce" name="txt_cond_comerc" id="txt_cond_comerc" rows="5"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group-section empty-section-visible">
+					<h3 class="page-header">Condições gerais			   			<span id="cond_gerais" class="btn btn-link btn-sm" onclick="exibirOcultarCondGerais()">exibir</span>
+					</h3>
+
+					<div id="slot_cond_comerc_gerais" class="hide show-on-view">
+						<div class="row">
+							<div class="col-md-3 form-group">
+								<label for="validade">Validade da proposta</label>
+								<input type="text" name="validade" id="validade" class="form-control" />
+								<p class="help-block">Em dias</p>
+							</div>
+							<div class="col-md-3 form-group">
+								<label for="prazo_entrega">Prazo de entrega</label>
+								<input type="text" class="form-control" name="prazo_entrega" id="prazo_entrega"  />
+								<p class="help-block">Texto livre</p>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="observacao">Observações</label>
+							<textarea class="form-control" name="observacao" id="observacao" rows="3"></textarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-section">
+					<h3 class="page-header">Assinatura</h3>
+
+					<div id="assinatura">
+					    <div class="row">
+					    	<div class="col-md-6 form-group">
+						    	<input type="text" tabindex="0" class="form-control inline transparent-input" id="assinatura_saudacao" name="assinatura_saudacao" />
+				    		</div>
+				    	</div>
+				    	<div class="row">
+					    	<div class="col-md-6 form-group">
+								<input type="text" tabindex="0" class="form-control inline transparent-input" id="assinatura_responsavel" name="assinatura_responsavel" />
+				    		</div>
+				    	</div>
+			  		</div>
+			  	</div>
+
+			  	<div class="form-group-section empty-section-visible">
+			  						  		<div>
+				  					  		<h3 class="page-header">Anexo</h3>
+
+						<div id="div-anexo">
+							<input type="hidden" id="idAnexo" name="idAnexo" value="" />
+							<input type="hidden" id="nomeArquivoAnexo" name="nomeArquivoAnexo" value="" />
+
+							<div id="td_incluiAnexo">
+								<div id="div-add-anexo" class="form-group draggable-area">
+									<span class='btn btn-secondary fileinput-button'>
+										<i class="far fa-arrow-from-bottom"></i>
+										Procurar arquivo
+										<input type="file" id="fileupload" name="Filedata" />
+									</span>
+									<p class='help-block'>O tamanho do arquivo não deve ultrapassar 2Mb</p>
+								</div>
+
+								<div id='progressbarAnexo' class='hide'></div>
+							</div>
+
+							<div id="td_foiIncluido">
+								<div id="recebeUpload" class='recebeFoto'></div>
+								<div id='fileQueue'></div>
+							</div>
+				  		</div>
+
+				  		<div id='msg-anexos'></div>
+				  	</div>
+				</div>
+
+				<div class="form-group-section">
+				  	<div class="form-group">
+					  	<label class="hide-from-view">Marcadores</label>
+						<input type="hidden" id="campoMarcacoesObjeto" name="campoMarcacoesObjeto"/>
+						<ul id="listaMarcacoesObjeto"></ul>
+				  		<p class="help-block">Separados por vírgula ou tab</p>
+				  	</div>
+				</div>
+
+				<div class="bottom-bar hide-from-view">
+					<div class="totalizadores">
+						<div class="container-actions-edicao">
+							<button type="button" id="btnSalvar" class="btn btn-primary" onclick="salvarOrcamento();">Salvar</button>
+							<button type="button" class="btn btn-default" onclick="cancelarOrcamento(true);">Cancelar</button>
+						</div>
+					</div>
+				</div>
+
+				<button type="button" onclick="voltarAoTopo();" class="btn-nav-top-view show-on-view hide-from-edit" title="Voltar ao topo"><i class="fal fa-long-arrow-up"></i></button>
+
+				<div id="attrEventosItem"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<input type="hidden" name="espacoAnexosExcedido" id="espacoAnexosExcedido" value=""/>
+<input type="hidden" name="msgEspacoAnexos" id="msgEspacoAnexos" value=""/>
+
+<iframe id="frameDownload" width="0" height="0" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" tabindex="-1"></iframe>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+					setIdCampoValor("", "");
+		
+		setIdConsumidorFinal("713406304");
+
+	});
+</script>
+
+<div id="wait" class="pleasewait"></div>
+
+<input type="hidden" id="dec_qtde" value="2" />
+<input type="hidden" id="dec_valor" value="2" />
+<input type="hidden" id="tipoNumeracao" value="S" />
+<input type="hidden" id="tipoPessoaPadrao" value="J" />
+<input type="hidden" id="exibeCampoDescontoNosItens" value="N" />
+
+<script type="text/javascript">
+	var podeIncluir = true;
+	var podeEditar = true;
+	var temPermissaoEstoqueReserva = false;
+	var opcCadastrarCliente = true;
+
+	$(document).ready(function() {
+		formaEnvioUtils.defineFormaEnvio({"tiposLogistica":{"0":{"nome":"TIPO_SEM_FRETE","alias":"sem_frete","tipoLogisticaCompatibilidade":"S","descricao":"N\u00e3o definida","podeExpedir":true,"aliasAPI":["sem frete","semfrete","s"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"1":{"nome":"TIPO_CORREIOS","alias":"correios","tipoLogisticaCompatibilidade":"C","descricao":"Correios","podeExpedir":true,"aliasAPI":["correios","correio","c"],"emProducao":true,"icone":"images\/icones-logistica\/correios.png","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"2":{"nome":"TIPO_TRANSPORTADORA","alias":"transportadora","tipoLogisticaCompatibilidade":"T","descricao":"Transportadora","podeExpedir":true,"aliasAPI":["transportadora","t"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"3":{"nome":"TIPO_MERCADO_ENVIOS","alias":"mercado_envios","tipoLogisticaCompatibilidade":"M","descricao":"Mercado Envios","podeExpedir":true,"aliasAPI":["mercado envios","mercadoenvios","mercadoenvio","m","f"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"limiteExpedicoesAgrupamento":50,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[23,8,92,197],"temPermissao":true},"5":{"nome":"TIPO_CORREIOS_FF","alias":"correios_ff","tipoLogisticaCompatibilidade":"E","descricao":"Correios Log","podeExpedir":false,"aliasAPI":["e"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"4":{"nome":"TIPO_B2W_ENTREGA","alias":"b2w_entrega","tipoLogisticaCompatibilidade":"B","descricao":"Americanas Entrega","podeExpedir":true,"aliasAPI":[],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"limiteExpedicoesAgrupamento":25,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[30,37],"temPermissao":false},"7":{"nome":"TIPO_JADLOG","alias":"jadlog","tipoLogisticaCompatibilidade":"J","descricao":"Jadlog","podeExpedir":true,"aliasAPI":["jadlog"],"emProducao":true,"icone":"images\/icones-logistica\/jadlog.png","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"8":{"nome":"TIPO_TOTALEXPRESS","alias":"total_express","tipoLogisticaCompatibilidade":"TOTALEXPRESS","descricao":"Total Express","podeExpedir":true,"aliasAPI":["total express, totalexpress"],"emProducao":true,"icone":"images\/icones-logistica\/totalexpress.png","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"9":{"nome":"TIPO_OLIST","alias":"olist","tipoLogisticaCompatibilidade":"OLIST","descricao":"Olist","podeExpedir":true,"aliasAPI":["olist"],"emProducao":true,"icone":"images\/icones-logistica\/olist.png","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":50,"temPermissao":false},"10":{"nome":"TIPO_GATEWAY","alias":"gateway","tipoLogisticaCompatibilidade":"GATEWAY","descricao":"Gateway log\u00edstico","podeExpedir":true,"aliasAPI":["gateway"],"emProducao":true,"icone":"","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"6":{"nome":"TIPO_CUSTOMIZADO","alias":"custom","tipoLogisticaCompatibilidade":"X","descricao":"Customizado","podeExpedir":true,"aliasAPI":["custom","customizado"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"11":{"nome":"TIPO_MAGALU_ENTREGAS","alias":"magalu-entregas","tipoLogisticaCompatibilidade":"MAGALU_ENTREGAS","descricao":"Magalu Entregas","podeExpedir":true,"aliasAPI":["magalu","magalu_entregas","magalu entregas"],"emProducao":true,"icone":"images\/icones-logistica\/magalu.png","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"limiteExpedicoesAgrupamento":20,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[38],"temPermissao":false},"20":{"nome":"TIPO_MAGALU_FULFILLMENT","alias":"magalu-fulfillment","tipoLogisticaCompatibilidade":"MAGALU_FULFILLMENT","descricao":"Magalu Fulfillment","podeExpedir":false,"aliasAPI":["magalu","magalu_fulfillment","magalu fulfillment"],"emProducao":true,"icone":"images\/icones-logistica\/magalu.png","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"temPermissao":false},"12":{"nome":"TIPO_SHOPEE_ENVIOS","alias":"shopee-envios","tipoLogisticaCompatibilidade":"SHOPEE_ENVIOS","descricao":"Shopee Envios","podeExpedir":true,"aliasAPI":["shopee envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"limiteExpedicoesAgrupamento":150,"possuiValidacaoPlataformasMapeamento":false,"temPermissao":false},"13":{"nome":"TIPO_NS_ENTREGAS","alias":"netshoes_entregas","tipoLogisticaCompatibilidade":"NS_ENTREGAS","descricao":"Netshoes Entregas","podeExpedir":true,"aliasAPI":["nsentregas","ns entregas","ns_entregas","ns-entregas","netshoes entregas","netshoes_entregas","netshoes-entregas"],"emProducao":true,"icone":"images\/icones-logistica\/netshoes.png","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"14":{"nome":"TIPO_VIAVAREJO_ENVVIAS","alias":"viavarejo_envvias","tipoLogisticaCompatibilidade":"VIAVAREJO_ENVVIAS","descricao":"CB Entrega","podeExpedir":true,"aliasAPI":["viavarejo_envvias"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"16":{"nome":"TIPO_ALI_ENVIOS","alias":"aliexpress-envios","tipoLogisticaCompatibilidade":"ALI_ENVIOS","descricao":"AliExpress Envios","podeExpedir":true,"aliasAPI":["aliexpress-envios","cainiao"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"15":{"nome":"TIPO_MADEIRA_ENVIOS","alias":"madeira_envios","tipoLogisticaCompatibilidade":"MADEIRA_ENVIOS","descricao":"Madeira Envios","podeExpedir":true,"aliasAPI":["madeira_envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"18":{"nome":"TIPO_CONECTA_LA_ETIQUETAS","alias":"conecta_la_etiquetas","tipoLogisticaCompatibilidade":"D","descricao":"Conecta L\u00e1 Etiquetas","podeExpedir":true,"aliasAPI":["conecta_la_etiquetas"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"17":{"nome":"TIPO_LOGGI","alias":"loggi","tipoLogisticaCompatibilidade":"LOGGI","descricao":"Loggi","podeExpedir":true,"aliasAPI":["loggi"],"emProducao":true,"icone":"images\/icones-logistica\/loggi.svg","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"limiteExpedicoesAgrupamento":150,"possuiValidacaoPlataformasMapeamento":false,"imprimirEtiquetasGateway":true,"temPermissao":true},"19":{"nome":"TIPO_AMAZON_DBA","alias":"amazon-dba","tipoLogisticaCompatibilidade":"AMAZON_DBA","descricao":"Amazon DBA","podeExpedir":true,"aliasAPI":["amazon-dba","amazonDBA","amazondba","amazon_dba"],"emProducao":true,"icone":"images\/icones-logistica\/amazon-dba.svg","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":25,"temPermissao":false},"21":{"nome":"TIPO_NS_MAGALU_ENTREGAS","alias":"netshoes_magalu-entregas","tipoLogisticaCompatibilidade":"NS_MAGALU_ENTREGAS","descricao":"Magalu Entregas por Netshoes","podeExpedir":true,"aliasAPI":["ns_magalu_entregas","netshoes_magalu_entregas","netshoes magalu entregas"],"emProducao":true,"icone":"images\/icones-logistica\/magalu.png","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"22":{"nome":"TIPO_SHEIN_ENVIOS","alias":"shein_envios","tipoLogisticaCompatibilidade":"SHEIN_ENVIOS","descricao":"Shein Envios","podeExpedir":true,"aliasAPI":["shein_envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":false},"23":{"nome":"TIPO_MANDAE","alias":"mandae","tipoLogisticaCompatibilidade":"MANDAE","descricao":"Manda\u00ea","podeExpedir":true,"aliasAPI":["mandae"],"emProducao":false,"icone":"images\/icones-logistica\/mandae.svg","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"temPermissao":true},"25":{"nome":"TIPO_KWAI_ENVIOS","alias":"kwai_envios","tipoLogisticaCompatibilidade":"KWAI_ENVIOS","descricao":"Kwai Envios","podeExpedir":true,"aliasAPI":["kwai_envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[187],"limiteExpedicoesAgrupamento":150,"temPermissao":false},"24":{"nome":"TIPO_OLIST_ENVIOS","alias":"olist_envios","tipoLogisticaCompatibilidade":"OLIST_ENVIOS","descricao":"Envios da Olist","podeExpedir":true,"aliasAPI":["olist_envios"],"emProducao":true,"icone":"images\/icones-logistica\/olist-envios.svg","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"limiteExpedicoesAgrupamento":150,"possuiLoginOAuth":true,"temPermissao":false},"26":{"nome":"TIPO_BELEZA_ENVIOS","alias":"beleza_envios","tipoLogisticaCompatibilidade":"BELEZA_ENVIOS","descricao":"Beleza Envios","podeExpedir":true,"aliasAPI":["beleza_envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[152],"limiteExpedicoesAgrupamento":150,"temPermissao":false},"29":{"nome":"TIPO_FORMA_TESTE","alias":"forma_teste","tipoLogisticaCompatibilidade":"FORMA_TESTE","descricao":"Forma Teste","podeExpedir":true,"aliasAPI":["forma_Teste"],"emProducao":false,"icone":"images\/icones-logistica\/olist-envios.svg","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"temPermissao":false},"27":{"nome":"TIPO_TIKTOK_ENVIOS","alias":"tiktok_envios","tipoLogisticaCompatibilidade":"TIKTOK_ENVIOS","descricao":"TikTok Shipping","podeExpedir":true,"aliasAPI":["tiktok_envios"],"emProducao":true,"icone":"","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[193],"limiteExpedicoesAgrupamento":150,"temPermissao":false},"28":{"nome":"TIPO_HUB_ENVIOS","alias":"hub_envios","tipoLogisticaCompatibilidade":"HUB_ENVIOS","descricao":"Envios do HUB","podeExpedir":true,"aliasAPI":["hub_envios"],"emProducao":true,"icone":"images\/icones-logistica\/olist-envios.svg","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[197],"limiteExpedicoesAgrupamento":150,"temPermissao":false},"30":{"nome":"TIPO_POSTA_JA","alias":"posta_ja","tipoLogisticaCompatibilidade":"POSTA_JA","descricao":"Posta Ja","podeExpedir":true,"aliasAPI":["posta_ja"],"emProducao":true,"icone":"images\/icones-logistica\/posta-ja.svg","possuiCotacao":true,"possuiCotacaoEcommerce":true,"possuiAtualizacaoStatusEnvio":true,"possuiVinculoEcommerce":false,"possuiValidacaoPlataformasMapeamento":false,"temPermissao":true},"31":{"nome":"TIPO_TEMU_ENVIOS","alias":"temu_envios","tipoLogisticaCompatibilidade":"M","descricao":"Temu Envios","podeExpedir":true,"aliasAPI":["temu envios"],"emProducao":true,"icone":"images\/icones-ecommerce\/icone-temu.svg","possuiCotacao":false,"possuiCotacaoEcommerce":false,"possuiAtualizacaoStatusEnvio":false,"possuiVinculoEcommerce":true,"limiteExpedicoesAgrupamento":50,"possuiValidacaoPlataformasMapeamento":true,"plataformasPermitidasMapeamento":[197],"temPermissao":false}},"recursos":{"1":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":false,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"7":{"enviarPedidos":true,"cancelarPedidos":true,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"17":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":true,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"23":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":true},"8":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":false,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":true,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"9":{"enviarPedidos":false,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":false,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"11":{"enviarPedidos":false,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":false,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"3":{"enviarPedidos":false,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":false,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"19":{"enviarPedidos":false,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":false,"marcarExpedicaoComoConcluida":false,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":true,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":true,"medidasNaoNecessarias":false},"24":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":true,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"29":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":true,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"30":{"enviarPedidos":true,"cancelarPedidos":false,"rastrearCodigoVenda":true,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":true,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false},"10":{"enviarPedidos":false,"cancelarPedidos":false,"rastrearCodigoVenda":false,"cotarPrecosPrazos":true,"marcarExpedicaoComoConcluida":true,"imprimirEtiquetas":false,"ignorarRecursoEnviarCodigoRastreioEcommerce":false,"possuiAtualizacaoStatusEnvioAutomatico":false,"utilizaColetaAgendada":false,"medidasNaoNecessarias":false}},"valoresConfigPadrao":{"2":{"idConfigEtiqueta":"0","codigoBarrasEtiqueta":"C"},"7":{"idConfigEtiqueta":"0","codigoBarrasEtiqueta":"R"},"8":{"idConfigEtiqueta":"0","codigoBarrasEtiqueta":"O"}},"situacoes":{"1":{"nome":"SITUACAO_HABILITADA"},"2":{"nome":"SITUACAO_DESABILITADA"}}});
+		formaEnvioUtils.setConfigOptions({"formasEnvioDisponiveis":[{"id":"713335941","nome":"Correios","situacao":1,"tipoLogistica":1,"urlRastreamentoPadrao":"","tipoGatewayLogistico":null,"imprimirAoFinalizar":"","imprimirAoFinalizarExpedicao":"","tipoIntegracaoGatewayLogistico":null,"idConfigEtiqueta":null,"configuracoes":{"possuiContrato":"S"}},{"id":"713335943","nome":"Transportadora","situacao":1,"tipoLogistica":2,"urlRastreamentoPadrao":"","tipoGatewayLogistico":null,"imprimirAoFinalizar":"","imprimirAoFinalizarExpedicao":"","tipoIntegracaoGatewayLogistico":null,"idConfigEtiqueta":null,"configuracoes":null},{"id":"713335944","nome":"Retirar pessoalmente","situacao":1,"tipoLogistica":6,"urlRastreamentoPadrao":"","tipoGatewayLogistico":null,"imprimirAoFinalizar":"","imprimirAoFinalizarExpedicao":"","tipoIntegracaoGatewayLogistico":null,"idConfigEtiqueta":null,"configuracoes":null},{"id":"737283610","nome":"Mercado Envios","situacao":1,"tipoLogistica":3,"urlRastreamentoPadrao":"","tipoGatewayLogistico":null,"imprimirAoFinalizar":"","imprimirAoFinalizarExpedicao":"","tipoIntegracaoGatewayLogistico":null,"idConfigEtiqueta":null,"configuracoes":null},{"id":"865410586","nome":"Transporte pr\u00f3prio","situacao":1,"tipoLogistica":6,"urlRastreamentoPadrao":"","tipoGatewayLogistico":null,"imprimirAoFinalizar":"","imprimirAoFinalizarExpedicao":"","tipoIntegracaoGatewayLogistico":null,"idConfigEtiqueta":"0","configuracoes":null}],"formasFreteDisponiveis":{"713335941":[],"713335943":[],"713335944":[],"737283610":[],"865410586":[]},"formasFreteLogisticaReversaDisponiveis":{"713335941":[],"713335943":[],"713335944":[],"737283610":[],"865410586":[]}});
+		destacarItemDeMenuPrincipal("3");
+		initForm('21/12/2025', '707471142');
+	});
+</script>
+	</div> <!-- page-wrapper -->
+</div> <!-- wrapper -->
+
+<div id="bs-modal-email"></div>
+
+<input type='hidden' id='jsParams_vendas' value='{&quot;possuiModuloAprovarDescontoGerente&quot;:&quot;S&quot;,&quot;percentualDescontoMaximo&quot;:&quot;100.00&quot;}' /><input type='hidden' id='jsParams___sessionParameters' value='{&quot;httpDir&quot;:&quot;https:\/\/erp.olist.com\/&quot;,&quot;ambiente&quot;:&quot;online&quot;,&quot;environment&quot;:&quot;online&quot;,&quot;versaoSistema&quot;:&quot;3.83.08&quot;,&quot;sentry&quot;:{&quot;enabled&quot;:true},&quot;bannersExternos&quot;:{&quot;enabled&quot;:false},&quot;decimais&quot;:{&quot;quantidade&quot;:2,&quot;preco&quot;:2},&quot;interface&quot;:{&quot;viewMode&quot;:&quot;view&quot;,&quot;voltarParaListagem&quot;:true},&quot;filtros&quot;:{&quot;registrosPagina&quot;:50},&quot;mixpanel&quot;:{&quot;token&quot;:&quot;ca8b1f21d3d5ce98015701a92d739bca&quot;,&quot;debugRequest&quot;:false,&quot;printEvents&quot;:false,&quot;enabled&quot;:true,&quot;superProperties&quot;:{&quot;idUsuario&quot;:707471146,&quot;Nome do usuario&quot;:&quot;Tiago Marques Bomfim&quot;,&quot;Email do usuario&quot;:&quot;marques823@gmail.com&quot;,&quot;Role&quot;:&quot;Admin&quot;}},&quot;empresa&quot;:{&quot;id&quot;:707471142,&quot;cnpj&quot;:&quot;31.490.630\/0001-15&quot;,&quot;nome&quot;:&quot;31.490.630 TIAGO MARQUES BOMFIM&quot;,&quot;emDemonstracao&quot;:false,&quot;diasRestantesDemo&quot;:null},&quot;contaDigital&quot;:{&quot;possuiContaConfigurada&quot;:true},&quot;isAdmin&quot;:true}' /><input type='hidden' id='jsParams_xajax' value='{&quot;Xjx-Page-Ver&quot;:&quot;3.83.08&quot;,&quot;cacheVersion&quot;:&quot;3.83.08&quot;,&quot;shouldUseV2&quot;:false}' /><script type="module" src="https://erp.olist.com/build/front-core.9BlpSd3X.js"></script><script type="module" src="https://erp.olist.com/build/orcamentos.DmnfzibQ.js"></script><script type="module" src="https://erp.olist.com/build/cotacao-popup.CYO-wd0c.js"></script>
+
+
+<script id="single-crm-script" type="text/javascript" defer src="https://d1gk24cz4i54hi.cloudfront.net/single-crm.js"
+	onload="(function () {
+	window.SingleCrm.boot({
+		productSlug: 'erp',
+		env: 'production',
+		targetElementSelector: '#single-crm-root',
+		shouldCreateRoot: false,
+		accessToken: &quot;eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3NjYzNjg4OTQsImlhdCI6MTc2NjM2NzA5NCwiYXV0aF90aW1lIjoxNzY2MzY3MDkxLCJqdGkiOiJjNzc1MzI1NS04MzcyLTRmYzctYWIwNS05OTg1ZGM3ZjYwYzMiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjpbImNvbW11bmljYXRvci1hcGkiLCJzZWxsZXJzLWFwaS12MiIsInplbmRlc2stYmZmIiwiZXJwLW9saXN0LWFwaSIsImFjY291bnQiXSwic3ViIjoiZDE3YzE5YTktZmVhOC00YzNlLWJmYWQtNzNmZTM2NzE2YTBmIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidGlueS13ZWJhcHAiLCJzZXNzaW9uX3N0YXRlIjoiNmM0Yjg1OGItZGNhYy00MGEwLTk5M2MtYzllZWQ0NjAyMTY3IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLXRpbnkiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgYXBwbGljYXRpb24tc2VsZWN0b3ItdGlueSBwcm9maWxlIiwic2lkIjoiNmM0Yjg1OGItZGNhYy00MGEwLTk5M2MtYzllZWQ0NjAyMTY3IiwidXNlcl9tZXRhZGF0YSI6eyJhcHAiOnsiaWRlbnRpZmllciI6InRpbnk6aWRfZW1wcmVzYSIsIm5hbWUiOiJ0aW55In0sInRpbnk6aWRfdXN1YXJpbyI6IjcwNzQ3MTE0NiIsInRpbnk6aXNfYWRtaW4iOiJTIiwidGlueTppZF9lbXByZXNhIjoiNzA3NDcxMTQyIn0sImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlRpYWdvIE1hcnF1ZXMgQm9tZmltIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVjbmljb2xpdG9yYWwiLCJnaXZlbl9uYW1lIjoiVGlhZ28iLCJmYW1pbHlfbmFtZSI6Ik1hcnF1ZXMgQm9tZmltIiwiZW1haWwiOiJtYXJxdWVzODIzQGdtYWlsLmNvbSJ9.ZBFBob9-Mvi9BTzld5JTV7JtY831STpNeMt0BP6t35frxnCn8gVoj8Jo14WkrgTld0tdnHczLleYI1RV9AXpqLOk2qPe6nZ9AEcPw_VTH8zMxOadaCrkBPcohvTA3Dd406hYNbH5Ued1oaRViZ8fcl6sY0U6ixwN-u4u_mfIfSf4tvqqIsEThYq8omyuB8FrFrV-Vk187qFMufirSJWchfxBydH5IDdvLXx18xxyDytcwfA--qWfa6mGE2C76rs3gfAS5oAVoaKiddyqbziL6-wHfxk66VNILOHcCwU4ghjd85lDcTwvcx3_Fgh0edSktRaDPEoCfkn7V9gpmCmyIQ&quot;,
+		enableJourneyWidget: true,
+		journeyWidgetUser: {&quot;customerId&quot;:&quot;0fb5d4cf-93f6-4bb5-a274-0441100a901d&quot;,&quot;name&quot;:&quot;31.490.630 TIAGO MARQUES BOMFIM&quot;,&quot;cnpj&quot;:&quot;31.490.630\/0001-15&quot;,&quot;email&quot;:&quot;contato@tecnicolitoral.com&quot;,&quot;productAttributes&quot;:{&quot;referenceId&quot;:707471142,&quot;plano&quot;:&quot;Crescer&quot;,&quot;regimeTributario&quot;:&quot;Simples nacional&quot;,&quot;enquadramentoRegimeTributario&quot;:&quot;&quot;,&quot;segmentoCanalDeVendas&quot;:&quot;&quot;,&quot;checkoutPosTrial&quot;:true,&quot;cupomUtilizado&quot;:&quot;&quot;,&quot;cupomCondicaoComercial&quot;:&quot;&quot;,&quot;dataSup&quot;:&quot;2023-04-22&quot;,&quot;temPermissaoOlistHUB&quot;:false,&quot;temOlistHubInstalado&quot;:false,&quot;dataWon&quot;:&quot;22\/05\/2023&quot;,&quot;deuWon&quot;:true,&quot;emPeriodoTrial&quot;:false},&quot;checkoutPosTrial&quot;:true},
+	})
+})()"></script>
+
+</body>
+</html>

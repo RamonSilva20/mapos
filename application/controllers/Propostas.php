@@ -116,6 +116,13 @@ class Propostas extends MY_Controller
                 $clienteNome = null;
             }
             
+            // Processar desconto
+            $desconto = $this->input->post('desconto');
+            if ($desconto) {
+                $desconto = str_replace(['.', ','], ['', '.'], $desconto);
+            }
+            $desconto = floatval($desconto) ?: 0;
+
             $data = [
                 'numero_proposta' => $numeroProposta,
                 'data_proposta' => $dataProposta,
@@ -125,10 +132,14 @@ class Propostas extends MY_Controller
                 'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id') ?: $this->session->userdata('id_admin'),
                 'observacoes' => $this->input->post('observacoes'),
-                'desconto' => $this->input->post('desconto') ?: 0,
+                'desconto' => $desconto,
                 'valor_desconto' => $this->input->post('valor_desconto') ?: 0,
                 'tipo_desconto' => $this->input->post('tipo_desconto'),
                 'valor_total' => $this->input->post('valor_total') ?: 0,
+                'tipo_cond_comerc' => $this->input->post('tipo_cond_comerc') ?: 'N',
+                'cond_comerc_texto' => $this->input->post('cond_comerc_texto'),
+                'validade_dias' => $this->input->post('validade_dias') ?: null,
+                'prazo_entrega' => $this->input->post('prazo_entrega'),
             ];
 
             if (is_numeric($id = $this->propostas_model->add('propostas', $data, true))) {
@@ -212,6 +223,13 @@ class Propostas extends MY_Controller
                 $clienteNome = null;
             }
 
+            // Processar desconto
+            $desconto = $this->input->post('desconto');
+            if ($desconto) {
+                $desconto = str_replace(['.', ','], ['', '.'], $desconto);
+            }
+            $desconto = floatval($desconto) ?: 0;
+
             $data = [
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,
@@ -220,10 +238,14 @@ class Propostas extends MY_Controller
                 'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'observacoes' => $this->input->post('observacoes'),
-                'desconto' => $this->input->post('desconto') ?: 0,
+                'desconto' => $desconto,
                 'valor_desconto' => $this->input->post('valor_desconto') ?: 0,
                 'tipo_desconto' => $this->input->post('tipo_desconto'),
                 'valor_total' => $this->input->post('valor_total') ?: 0,
+                'tipo_cond_comerc' => $this->input->post('tipo_cond_comerc') ?: 'N',
+                'cond_comerc_texto' => $this->input->post('cond_comerc_texto'),
+                'validade_dias' => $this->input->post('validade_dias') ?: null,
+                'prazo_entrega' => $this->input->post('prazo_entrega'),
             ];
 
             if ($this->propostas_model->edit('propostas', $data, 'idProposta', $this->input->post('idProposta')) == true) {
