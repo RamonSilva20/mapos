@@ -559,6 +559,66 @@ class Propostas extends MY_Controller
         pdf_create($html, $filename, true, false, true);
     }
 
+    public function gerarPdfLink()
+    {
+        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Proposta não encontrada.'
+            ]));
+            return;
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Você não tem permissão para visualizar propostas.'
+            ]));
+            return;
+        }
+
+        $result = $this->propostas_model->getById($this->uri->segment(3));
+        if (!$result) {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Proposta não encontrada.'
+            ]));
+            return;
+        }
+
+        $this->data['result'] = $result;
+        $this->data['produtos'] = $this->propostas_model->getProdutos($result->idProposta);
+        $this->data['servicos'] = $this->propostas_model->getServicos($result->idProposta);
+        $this->data['parcelas'] = $this->propostas_model->getParcelas($result->idProposta);
+        $this->data['outros'] = $this->propostas_model->getOutros($result->idProposta);
+        $this->load->model('mapos_model');
+        $this->data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->helper('mpdf');
+        
+        $html = $this->load->view('propostas/imprimirProposta', $this->data, true);
+        
+        $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
+        $filename = 'Proposta_' . $numeroProposta . '_' . date('YmdHis');
+        
+        // Gerar PDF e salvar em local acessível
+        $pdfPath = pdf_create($html, $filename, false, false, false);
+        
+        if ($pdfPath) {
+            // Retornar link público do PDF
+            $pdfUrl = base_url() . 'assets/uploads/temp/' . basename($pdfPath);
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => true,
+                'url' => $pdfUrl
+            ]));
+        } else {
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'success' => false,
+                'message' => 'Erro ao gerar PDF.'
+            ]));
+        }
+    }
+
     // AJAX methods
     public function autoCompleteCliente()
     {

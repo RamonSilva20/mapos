@@ -92,14 +92,38 @@
         $clienteNome = $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? '');
         $numeroProposta = $result->numero_proposta ?: '#' . $result->idProposta;
         $valorTotal = number_format($result->valor_total, 2, ',', '.');
-        $textoWhatsApp = urlencode("Olá! Segue a proposta comercial:\n\n*Proposta:* $numeroProposta\n*Cliente:* $clienteNome\n*Valor Total:* R$ $valorTotal\n\n" . base_url() . "index.php/propostas/visualizar/" . $result->idProposta);
         $telefoneCliente = $result->celular_cliente ? preg_replace('/[^0-9]/', '', $result->celular_cliente) : ($result->telefone ? preg_replace('/[^0-9]/', '', $result->telefone) : '');
         ?>
-        <?php if ($telefoneCliente) { ?>
-            <a href="https://api.whatsapp.com/send?phone=55<?php echo $telefoneCliente; ?>&text=<?php echo $textoWhatsApp; ?>" target="_blank">Compartilhar WhatsApp</a>
-        <?php } else { ?>
-            <a href="https://api.whatsapp.com/send?text=<?php echo $textoWhatsApp; ?>" target="_blank">Compartilhar WhatsApp</a>
-        <?php } ?>
+        <a href="#" id="btnWhatsApp" onclick="compartilharWhatsApp(); return false;">Compartilhar WhatsApp</a>
+        <script>
+        function compartilharWhatsApp() {
+            // Gerar PDF e obter link
+            $.ajax({
+                url: '<?php echo base_url(); ?>index.php/propostas/gerarPdfLink/<?php echo $result->idProposta; ?>',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        var clienteNome = '<?php echo addslashes($clienteNome); ?>';
+                        var numeroProposta = '<?php echo $numeroProposta; ?>';
+                        var valorTotal = '<?php echo $valorTotal; ?>';
+                        var pdfUrl = response.url;
+                        var textoWhatsApp = encodeURIComponent("Olá! Segue a proposta comercial:\n\n*Proposta:* " + numeroProposta + "\n*Cliente:* " + clienteNome + "\n*Valor Total:* R$ " + valorTotal + "\n\n*PDF da Proposta:*\n" + pdfUrl);
+                        var telefoneCliente = '<?php echo $telefoneCliente; ?>';
+                        var whatsappUrl = telefoneCliente 
+                            ? 'https://api.whatsapp.com/send?phone=55' + telefoneCliente + '&text=' + textoWhatsApp
+                            : 'https://api.whatsapp.com/send?text=' + textoWhatsApp;
+                        window.open(whatsappUrl, '_blank');
+                    } else {
+                        alert('Erro ao gerar PDF: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Erro ao gerar PDF para compartilhamento.');
+                }
+            });
+        }
+        </script>
         <a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $result->idProposta; ?>">Editar</a>
         <a href="<?php echo base_url(); ?>index.php/propostas">Voltar</a>
     </div>
