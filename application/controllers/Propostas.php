@@ -604,7 +604,7 @@ class Propostas extends MY_Controller
         // Gerar PDF e salvar em local acessível
         $pdfPath = pdf_create($html, $filename, false, false, false);
         
-        if ($pdfPath) {
+        if ($pdfPath && file_exists($pdfPath)) {
             // Retornar link público do PDF
             $pdfUrl = base_url() . 'assets/uploads/temp/' . basename($pdfPath);
             $this->output->set_content_type('application/json')->set_output(json_encode([
@@ -614,7 +614,7 @@ class Propostas extends MY_Controller
         } else {
             $this->output->set_content_type('application/json')->set_output(json_encode([
                 'success' => false,
-                'message' => 'Erro ao gerar PDF.'
+                'message' => 'Erro ao gerar PDF. Caminho: ' . ($pdfPath ?? 'null')
             ]));
         }
     }
