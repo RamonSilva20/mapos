@@ -45,7 +45,7 @@
             <section>
                 <div class="title">
                     PROPOSTA COMERCIAL <?= $result->numero_proposta ? 'N° ' . $result->numero_proposta : '# ' . str_pad($result->idProposta, 4, 0, STR_PAD_LEFT) ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y', strtotime($result->data_proposta)) ?></span>
+                    <span class="emissao">Emissão: <?= date('d/m/Y H:i:s', strtotime($result->data_proposta)) ?></span>
                 </div>
 
                 <?php if ($result->data_validade) : ?>
