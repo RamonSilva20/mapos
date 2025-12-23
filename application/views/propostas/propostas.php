@@ -3,6 +3,36 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+<style>
+    /* Estilos para abas de status */
+    #statusTabs {
+        margin-bottom: 0;
+        border-bottom: 2px solid #ddd;
+    }
+    #statusTabs li {
+        margin-bottom: -2px;
+    }
+    #statusTabs li a {
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        transition: all 0.3s ease;
+    }
+    #statusTabs li.active a {
+        background-color: #fff;
+        border-color: #ddd;
+        border-bottom-color: #fff;
+        font-weight: bold;
+    }
+    #statusTabs li:not(.active) a:hover {
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+    #statusTabs .badge {
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+</style>
 
 <div class="new122">
     <div class="widget-title" style="margin: -20px 0 0">
@@ -46,6 +76,120 @@
                     <span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
             </div>
         </form>
+    </div>
+
+    <!-- Abas de Status para Filtragem Rápida -->
+    <div class="span12" style="margin-left: 0; margin-top: 15px; margin-bottom: 10px;">
+        <ul class="nav nav-tabs" id="statusTabs" style="border-bottom: 2px solid #ddd;">
+            <li class="<?= !$this->input->get('status') ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    unset($params['status']);
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; font-weight: bold;">
+                    <i class="bx bx-list-ul"></i> Todas
+                    <?php if (isset($contadores_status['total'])): ?>
+                        <span class="badge badge-info" style="margin-left: 5px;"><?php echo $contadores_status['total']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Em aberto' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Em aberto';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #17a2b8; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #17a2b8;"></i> Em aberto
+                    <?php if (isset($contadores_status['Em aberto']) && $contadores_status['Em aberto'] > 0): ?>
+                        <span class="badge" style="background-color: #17a2b8; margin-left: 5px;"><?php echo $contadores_status['Em aberto']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Rascunho' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Rascunho';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #6c757d; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #6c757d;"></i> Rascunho
+                    <?php if (isset($contadores_status['Rascunho']) && $contadores_status['Rascunho'] > 0): ?>
+                        <span class="badge" style="background-color: #6c757d; margin-left: 5px;"><?php echo $contadores_status['Rascunho']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Pendente' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Pendente';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #ffc107; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #ffc107;"></i> Pendente
+                    <?php if (isset($contadores_status['Pendente']) && $contadores_status['Pendente'] > 0): ?>
+                        <span class="badge" style="background-color: #ffc107; margin-left: 5px;"><?php echo $contadores_status['Pendente']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Aguardando' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Aguardando';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #fd7e14; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #fd7e14;"></i> Aguardando
+                    <?php if (isset($contadores_status['Aguardando']) && $contadores_status['Aguardando'] > 0): ?>
+                        <span class="badge" style="background-color: #fd7e14; margin-left: 5px;"><?php echo $contadores_status['Aguardando']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Aprovada' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Aprovada';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #28a745; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #28a745;"></i> Aprovada
+                    <?php if (isset($contadores_status['Aprovada']) && $contadores_status['Aprovada'] > 0): ?>
+                        <span class="badge" style="background-color: #28a745; margin-left: 5px;"><?php echo $contadores_status['Aprovada']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Não aprovada' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Não aprovada';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #dc3545; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #dc3545;"></i> Não aprovada
+                    <?php if (isset($contadores_status['Não aprovada']) && $contadores_status['Não aprovada'] > 0): ?>
+                        <span class="badge" style="background-color: #dc3545; margin-left: 5px;"><?php echo $contadores_status['Não aprovada']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Concluído' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Concluído';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #28a745; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #28a745;"></i> Concluído
+                    <?php if (isset($contadores_status['Concluído']) && $contadores_status['Concluído'] > 0): ?>
+                        <span class="badge" style="background-color: #28a745; margin-left: 5px;"><?php echo $contadores_status['Concluído']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+            <li class="<?= $this->input->get('status') == 'Modelo' ? 'active' : '' ?>">
+                <a href="<?php echo base_url(); ?>index.php/propostas/gerenciar?<?php 
+                    $params = $_GET;
+                    $params['status'] = 'Modelo';
+                    echo http_build_query($params);
+                ?>" style="padding: 10px 15px; color: #6f42c1; font-weight: bold;">
+                    <i class="bx bx-circle" style="color: #6f42c1;"></i> Modelo
+                    <?php if (isset($contadores_status['Modelo']) && $contadores_status['Modelo'] > 0): ?>
+                        <span class="badge" style="background-color: #6f42c1; margin-left: 5px;"><?php echo $contadores_status['Modelo']; ?></span>
+                    <?php endif; ?>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <div class="widget-box" style="margin-top: 8px">

@@ -176,5 +176,55 @@ class Propostas_model extends CI_Model
         return 'PROP-' . str_pad($nextId, 6, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Conta propostas com filtros
+     */
+    public function countPropostas($where_array = [])
+    {
+        $lista_clientes = [];
+        if (array_key_exists('pesquisa', $where_array)) {
+            $this->db->select('idClientes');
+            $this->db->like('nomeCliente', $where_array['pesquisa']);
+            $this->db->or_like('documento', $where_array['pesquisa']);
+            $this->db->limit(25);
+            $clientes = $this->db->get('clientes')->result();
+
+            foreach ($clientes as $c) {
+                array_push($lista_clientes, $c->idClientes);
+            }
+        }
+
+        $this->db->from('propostas');
+        $this->db->join('clientes', 'clientes.idClientes = propostas.clientes_id', 'left');
+
+        // Condicional de status
+        if (array_key_exists('status', $where_array) && !empty($where_array['status'])) {
+            if (is_array($where_array['status'])) {
+                $this->db->where_in('propostas.status', $where_array['status']);
+            } else {
+                $this->db->where('propostas.status', $where_array['status']);
+            }
+        }
+
+        // Condicional de pesquisa
+        if (array_key_exists('pesquisa', $where_array) && !empty($where_array['pesquisa'])) {
+            if (count($lista_clientes) > 0) {
+                $this->db->where_in('propostas.clientes_id', $lista_clientes);
+            } else {
+                $this->db->like('propostas.cliente_nome', $where_array['pesquisa']);
+            }
+        }
+
+        // Condicional de data
+        if (array_key_exists('de', $where_array)) {
+            $this->db->where('propostas.data_proposta >=', $where_array['de']);
+        }
+        if (array_key_exists('ate', $where_array)) {
+            $this->db->where('propostas.data_proposta <=', $where_array['ate']);
+        }
+
+        return $this->db->count_all_results();
+    }
+
 }
 

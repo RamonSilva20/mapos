@@ -68,6 +68,9 @@ class Propostas extends MY_Controller
             $this->uri->segment(3)
         );
 
+        // Contar propostas por status para as abas
+        $this->data['contadores_status'] = $this->getContadoresStatus($where_array);
+
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'propostas/propostas';
 
