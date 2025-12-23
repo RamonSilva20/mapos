@@ -479,6 +479,14 @@ class Propostas extends MY_Controller
             return;
         }
 
+        // Devolver estoque antes de excluir (se houver estoque consumido)
+        // Verificar se status consome estoque - se sim, precisa devolver
+        $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Em aberto');
+        if ($statusConsomeEstoque) {
+            $this->devolverEstoqueProposta($id);
+            log_info("Estoque devolvido ao excluir proposta. ID: {$id}, Status: {$proposta->status}");
+        }
+
         $this->db->trans_start();
 
         // Excluir itens relacionados
