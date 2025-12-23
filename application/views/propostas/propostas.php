@@ -59,45 +59,35 @@
     .table tbody tr td:first-child {
         cursor: default;
     }
-    .table tbody tr td:first-child .dropdown {
-        cursor: pointer;
-    }
-    /* Estilos para dropdown funcionar */
-    .dropdown.open .dropdown-menu {
-        display: block !important;
-    }
-    .dropdown-menu.show {
-        display: block !important;
-    }
-    .dropdown-menu {
-        display: none !important;
-        position: fixed !important;
-        z-index: 9999 !important;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 5px 0;
-        margin-top: 2px;
-        min-width: 180px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-    .dropdown-menu.show {
-        display: block !important;
-    }
-    .dropdown {
+    /* Estilos para menu de ações */
+    .dropdown-menu-proposta {
         position: relative;
     }
-    /* Garantir que o dropdown não seja cortado */
+    .menu-acoes-lista {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .menu-acoes-lista li a {
+        display: block;
+        padding: 8px 15px;
+        color: #333;
+        text-decoration: none;
+    }
+    .menu-acoes-lista li a:hover {
+        background-color: #f5f5f5;
+    }
+    .menu-acoes-lista li a i {
+        margin-right: 8px;
+        width: 18px;
+    }
+    /* Garantir que o menu não seja cortado */
     .table-responsive {
         overflow: visible !important;
     }
     .widget-content {
         overflow: visible !important;
     }
-    .table {
-        margin-bottom: 0;
-    }
-    /* Garantir que a célula não corte o dropdown */
     .table tbody tr td:first-child {
         overflow: visible !important;
     }
