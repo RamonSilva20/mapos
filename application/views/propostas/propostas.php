@@ -271,9 +271,9 @@
                                 }
                                 ?>
                                 <tr style="cursor: pointer;" onclick="window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
-                                    <td onclick="event.stopPropagation();" style="width: 50px; text-align: center;">
-                                        <div class="dropdown" style="position: relative;">
-                                            <button class="btn btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666;" onclick="event.stopPropagation();">
+                                    <td onclick="event.stopPropagation();" style="width: 50px; text-align: center; position: relative;">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666;">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-right" style="min-width: 180px;">
