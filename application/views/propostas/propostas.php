@@ -396,7 +396,7 @@
             e.stopPropagation();
             e.preventDefault();
             
-            var id = $(this).data('id');
+            var id = $(this).attr('data-id');
             var $menu = $('#menu-' + id);
             var $allMenus = $('.menu-acoes-lista');
             
@@ -404,7 +404,11 @@
             $allMenus.not($menu).hide();
             
             // Toggle do menu atual
-            $menu.toggle();
+            if ($menu.is(':visible')) {
+                $menu.hide();
+            } else {
+                $menu.show();
+            }
         });
         
         // Fechar menu ao clicar fora
@@ -414,7 +418,7 @@
             }
         });
         
-        // Fechar menu ao clicar em um link
+        // Fechar menu ao clicar em um link (exceto excluir)
         $(document).on('click', '.menu-acoes-lista a', function(e) {
             if (!$(this).hasClass('link-excluir-proposta')) {
                 $('.menu-acoes-lista').hide();
