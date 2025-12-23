@@ -142,7 +142,7 @@
                                         $totalServico = $totalServico + $subtotal;
                                         echo '<tr>';
                                         echo '  <td>';
-                                        echo '    <strong>' . $s->descricao . '</strong>';
+                                        echo '    <strong>' . ($s->nome_servico ?? $s->descricao ?? '') . '</strong>';
                                         if (!empty($s->detalhes)) {
                                             echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
                                         }
