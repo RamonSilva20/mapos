@@ -93,32 +93,115 @@
     }
     /* Estilos responsivos para mobile */
     @media (max-width: 768px) {
-        .menu-acoes-lista {
-            min-width: 200px !important;
-            max-width: calc(100vw - 20px);
-            z-index: 10000 !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        .menu-desktop {
+            display: none !important;
         }
         .btn-menu-acoes {
             padding: 8px 12px !important;
             font-size: 20px !important;
         }
-        .menu-acoes-lista li a {
-            padding: 12px 15px !important;
-            font-size: 14px !important;
-        }
         .table tbody tr td:first-child {
             width: 60px !important;
         }
     }
-    @media (max-width: 480px) {
-        .menu-acoes-lista {
-            min-width: 180px !important;
+    @media (min-width: 769px) {
+        .modal-menu-mobile {
+            display: none !important;
         }
-        .menu-acoes-lista li a {
-            padding: 10px 12px !important;
-            font-size: 13px !important;
+    }
+    /* Modal Menu Mobile */
+    .modal-menu-mobile {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10001;
+    }
+    .modal-menu-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .modal-menu-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-radius: 20px 20px 0 0;
+        max-height: 70vh;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
         }
+        to {
+            transform: translateY(0);
+        }
+    }
+    .modal-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .modal-menu-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .btn-fechar-menu {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #666;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 10px 0;
+    }
+    .modal-menu-list li {
+        border-bottom: 1px solid #f5f5f5;
+    }
+    .modal-menu-list li:last-child {
+        border-bottom: none;
+    }
+    .modal-menu-list li a {
+        display: flex;
+        align-items: center;
+        padding: 18px 20px;
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    .modal-menu-list li a:active {
+        background-color: #f5f5f5;
+    }
+    .modal-menu-list li a i {
+        margin-right: 15px;
+        font-size: 20px;
+        width: 24px;
+    }
+    .modal-menu-list li.divider {
+        height: 1px;
+        background-color: #e5e5e5;
+        margin: 10px 0;
+        border-bottom: none;
     }
 </style>
 
@@ -334,7 +417,8 @@
                                             <button type="button" class="btn-menu-acoes" data-id="<?php echo $r->idProposta; ?>" onclick="event.stopPropagation(); toggleMenuAcoes(<?php echo $r->idProposta; ?>); return false;" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666; cursor: pointer;">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
-                                            <ul class="menu-acoes-lista" id="menu-<?php echo $r->idProposta; ?>" style="display: none; position: absolute; right: 0; top: 100%; z-index: 10000; background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 5px 0; margin-top: 2px; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); list-style: none; max-width: calc(100vw - 20px);">
+                                            <!-- Menu Desktop -->
+                                            <ul class="menu-acoes-lista menu-desktop" id="menu-<?php echo $r->idProposta; ?>" style="display: none; position: absolute; right: 0; top: 100%; z-index: 10000; background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 5px 0; margin-top: 2px; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); list-style: none;">
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
                                                     <li><a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-show"></i> Visualizar</a></li>
                                                     <li><a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-printer"></i> Imprimir</a></li>
@@ -422,89 +506,61 @@
         
         // Função para toggle do menu
         window.toggleMenuAcoes = function(id) {
-            var $menu = $('#menu-' + id);
-            var $allMenus = $('.menu-acoes-lista');
-            var $button = $('.btn-menu-acoes[data-id="' + id + '"]');
-            
-            // Fechar todos os menus
-            $allMenus.not($menu).hide();
-            
-            // Toggle do menu atual
-            if ($menu.is(':visible')) {
-                $menu.hide();
+            // Verificar se é mobile
+            if ($(window).width() <= 768) {
+                // Mobile: usar modal
+                abrirMenuMobile(id);
             } else {
-                // Calcular posição para mobile
-                if ($(window).width() <= 768) {
-                    var buttonOffset = $button.offset();
-                    var buttonHeight = $button.outerHeight();
-                    var buttonWidth = $button.outerWidth();
-                    var scrollTop = $(window).scrollTop();
-                    var windowHeight = $(window).height();
-                    var windowWidth = $(window).width();
-                    
-                    // Calcular posição do menu alinhado ao botão
-                    var estimatedMenuHeight = 250;
-                    var menuWidth = 200; // largura estimada do menu
-                    
-                    // Top: logo abaixo do botão (usar offset.top diretamente, não precisa subtrair scroll)
-                    var menuTop = buttonOffset.top + buttonHeight + 5;
-                    
-                    // Left: alinhar menu com a borda direita do botão
-                    // O menu deve começar onde o botão termina (buttonOffset.left + buttonWidth)
-                    // Mas como o menu tem largura, precisamos ajustar para não sair da tela
-                    var menuLeft = buttonOffset.left + buttonWidth - menuWidth; // Alinhar borda direita do menu com borda direita do botão
-                    
-                    // Se o menu sair da tela à esquerda, alinhar à esquerda do botão
-                    if (menuLeft < 10) {
-                        menuLeft = buttonOffset.left;
-                        // Se ainda sair, ajustar para não sair da tela
-                        if (menuLeft + menuWidth > windowWidth) {
-                            menuLeft = windowWidth - menuWidth - 10;
-                        }
-                    }
-                    // Se o menu sair da tela à direita, ajustar
-                    if (menuLeft + menuWidth > windowWidth - 10) {
-                        menuLeft = windowWidth - menuWidth - 10;
-                    }
-                    
-                    // Verificar se há espaço abaixo do botão
-                    var spaceBelow = (scrollTop + windowHeight) - (buttonOffset.top + buttonHeight);
-                    var spaceAbove = buttonOffset.top - scrollTop;
-                    
-                    // Se não houver espaço suficiente abaixo, posicionar acima
-                    if (spaceBelow < estimatedMenuHeight && spaceAbove > estimatedMenuHeight) {
-                        menuTop = buttonOffset.top - estimatedMenuHeight - 5;
-                    }
-                    
-                    // Garantir que o menu não saia da tela no topo (mínimo 10px do topo visível)
-                    if (menuTop < scrollTop + 10) {
-                        menuTop = scrollTop + 10;
-                    }
-                    // Garantir que o menu não saia da tela embaixo
-                    if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
-                        menuTop = scrollTop + windowHeight - estimatedMenuHeight - 10;
-                    }
-                    
-                    $menu.css({
-                        'position': 'fixed',
-                        'top': menuTop + 'px',
-                        'left': menuLeft + 'px',
-                        'right': 'auto',
-                        'bottom': 'auto'
-                    });
+                // Desktop: usar dropdown
+                var $menu = $('#menu-' + id);
+                var $allMenus = $('.menu-acoes-lista');
+                
+                // Fechar todos os menus
+                $allMenus.not($menu).hide();
+                
+                // Toggle do menu atual
+                if ($menu.is(':visible')) {
+                    $menu.hide();
                 } else {
-                    // Desktop: usar posição absoluta padrão
                     $menu.css({
                         'position': 'absolute',
                         'top': '100%',
                         'right': '0',
                         'left': 'auto',
                         'bottom': 'auto'
-                    });
+                    }).show();
                 }
-                
-                $menu.show();
             }
+        };
+        
+        // Função para abrir menu mobile
+        window.abrirMenuMobile = function(id) {
+            var $button = $('.btn-menu-acoes[data-id="' + id + '"]');
+            var $menu = $('#menu-' + id);
+            var $modal = $('#modalMenuMobile');
+            var $modalList = $('#modalMenuList');
+            
+            // Limpar lista anterior
+            $modalList.empty();
+            
+            // Copiar itens do menu para o modal
+            $menu.find('li').each(function() {
+                var $item = $(this).clone();
+                $item.find('a').on('click', function() {
+                    fecharMenuMobile();
+                });
+                $modalList.append($item);
+            });
+            
+            // Mostrar modal
+            $modal.show();
+            $('body').css('overflow', 'hidden');
+        };
+        
+        // Função para fechar menu mobile
+        window.fecharMenuMobile = function() {
+            $('#modalMenuMobile').hide();
+            $('body').css('overflow', '');
         };
         
         // Menu de ações simplificado (backup)
