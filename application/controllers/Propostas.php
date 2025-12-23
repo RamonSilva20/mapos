@@ -825,6 +825,35 @@ class Propostas extends MY_Controller
     }
     
     /**
+     * Método temporário para executar SQL de atualização
+     * Remover após execução
+     */
+    public function executarSqlAtualizacao()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPropostas')) {
+            die('Sem permissão');
+        }
+        
+        $sql = file_get_contents(FCPATH . 'updates/add_estoque_consumido_propostas.sql');
+        $commands = explode(';', $sql);
+        
+        foreach ($commands as $command) {
+            $command = trim($command);
+            if (empty($command) || strpos($command, '--') === 0) {
+                continue;
+            }
+            
+            if (strpos($command, 'PREPARE') !== false || strpos($command, 'EXECUTE') !== false || strpos($command, 'DEALLOCATE') !== false) {
+                $this->db->query($command);
+            } else {
+                $this->db->query($command);
+            }
+        }
+        
+        echo "SQL executado com sucesso!";
+    }
+    
+    /**
      * Atualiza o status de uma proposta via AJAX
      * Gerencia estoque baseado na mudança de status
      */
