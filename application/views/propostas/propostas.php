@@ -70,7 +70,7 @@
         display: block !important;
     }
     .dropdown-menu {
-        display: none;
+        display: none !important;
         position: fixed !important;
         z-index: 9999 !important;
         background-color: #fff;
@@ -80,6 +80,9 @@
         margin-top: 2px;
         min-width: 180px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .dropdown-menu.show {
+        display: block !important;
     }
     .dropdown {
         position: relative;
@@ -399,10 +402,12 @@
         });
         
         // Inicializar dropdowns manualmente
-        $('.dropdown-toggle').on('click', function(e) {
+        $(document).on('click', '.dropdown-toggle', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            var $dropdown = $(this).parent('.dropdown');
+            
+            var $toggle = $(this);
+            var $dropdown = $toggle.parent('.dropdown');
             var $menu = $dropdown.find('.dropdown-menu');
             
             // Fechar outros dropdowns
@@ -413,11 +418,6 @@
                 'right': '',
                 'left': ''
             });
-            
-            // Calcular posição do dropdown
-            var offset = $toggle.offset();
-            var toggleHeight = $toggle.outerHeight();
-            var toggleWidth = $toggle.outerWidth();
             
             // Toggle do dropdown atual
             if ($dropdown.hasClass('open')) {
@@ -430,7 +430,11 @@
                     'left': ''
                 });
             } else {
-                // Abrir
+                // Abrir - calcular posição
+                var offset = $toggle.offset();
+                var toggleHeight = $toggle.outerHeight();
+                var toggleWidth = $toggle.outerWidth();
+                
                 $dropdown.addClass('open');
                 $menu.addClass('show').css({
                     'position': 'fixed',
