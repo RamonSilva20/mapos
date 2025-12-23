@@ -446,7 +446,7 @@
                     var estimatedMenuHeight = 250;
                     var menuWidth = 200; // largura estimada do menu
                     
-                    // Top: logo abaixo do botão
+                    // Top: logo abaixo do botão (usar offset.top diretamente, não precisa subtrair scroll)
                     var menuTop = buttonOffset.top + buttonHeight + 5;
                     
                     // Left: alinhar menu com a borda direita do botão
@@ -467,21 +467,22 @@
                         menuLeft = windowWidth - menuWidth - 10;
                     }
                     
-                    // Se não houver espaço abaixo, posicionar acima
-                    if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
+                    // Verificar se há espaço abaixo do botão
+                    var spaceBelow = (scrollTop + windowHeight) - (buttonOffset.top + buttonHeight);
+                    var spaceAbove = buttonOffset.top - scrollTop;
+                    
+                    // Se não houver espaço suficiente abaixo, posicionar acima
+                    if (spaceBelow < estimatedMenuHeight && spaceAbove > estimatedMenuHeight) {
                         menuTop = buttonOffset.top - estimatedMenuHeight - 5;
-                        if (menuTop < scrollTop + 10) {
-                            menuTop = scrollTop + 10;
-                        }
                     }
                     
-                    // Garantir que o menu não saia da tela no topo
+                    // Garantir que o menu não saia da tela no topo (mínimo 10px do topo visível)
                     if (menuTop < scrollTop + 10) {
                         menuTop = scrollTop + 10;
                     }
                     // Garantir que o menu não saia da tela embaixo
                     if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
-                        menuTop = Math.max(scrollTop + 10, scrollTop + windowHeight - estimatedMenuHeight - 10);
+                        menuTop = scrollTop + windowHeight - estimatedMenuHeight - 10;
                     }
                     
                     $menu.css({
