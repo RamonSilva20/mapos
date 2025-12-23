@@ -443,36 +443,43 @@
                     var windowWidth = $(window).width();
                     
                     // Calcular posição do menu alinhado ao botão
-                    // Top: logo abaixo do botão (considerando scroll)
-                    var menuTop = buttonOffset.top + buttonHeight + 5;
-                    // Right: alinhado à direita do botão
-                    var menuRight = windowWidth - (buttonOffset.left + buttonWidth);
                     var estimatedMenuHeight = 250;
                     var menuWidth = 200; // largura estimada do menu
+                    
+                    // Top: logo abaixo do botão
+                    var menuTop = buttonOffset.top + buttonHeight + 5;
+                    
+                    // Right: alinhar menu com a borda direita do botão
+                    // buttonOffset.left + buttonWidth = posição da borda direita do botão
+                    // Para alinhar menu com botão: right = windowWidth - (buttonOffset.left + buttonWidth)
+                    var buttonRightEdge = buttonOffset.left + buttonWidth;
+                    var menuRight = windowWidth - buttonRightEdge;
                     
                     // Se não houver espaço abaixo, posicionar acima
                     if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
                         menuTop = buttonOffset.top - estimatedMenuHeight - 5;
-                    }
-                    
-                    // Garantir que o menu não saia da tela à direita
-                    if (menuRight < 0) {
-                        menuRight = 10;
-                    }
-                    // Se o menu sair da tela à direita, alinhar à esquerda do botão
-                    if (menuRight + menuWidth > windowWidth) {
-                        menuRight = windowWidth - buttonOffset.left - buttonWidth;
-                        if (menuRight + menuWidth > windowWidth) {
-                            menuRight = windowWidth - menuWidth - 10;
+                        if (menuTop < scrollTop + 10) {
+                            menuTop = scrollTop + 10;
                         }
                     }
+                    
+                    // Ajustar se menu sair da tela à direita
+                    if (menuRight < 0 || menuRight + menuWidth > windowWidth) {
+                        // Tentar alinhar à esquerda do botão
+                        menuRight = windowWidth - buttonOffset.left;
+                        // Se ainda sair, centralizar ou ajustar
+                        if (menuRight + menuWidth > windowWidth) {
+                            menuRight = Math.max(10, windowWidth - menuWidth - 10);
+                        }
+                    }
+                    
                     // Garantir que o menu não saia da tela no topo
                     if (menuTop < scrollTop + 10) {
                         menuTop = scrollTop + 10;
                     }
                     // Garantir que o menu não saia da tela embaixo
                     if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
-                        menuTop = scrollTop + windowHeight - estimatedMenuHeight - 10;
+                        menuTop = Math.max(scrollTop + 10, scrollTop + windowHeight - estimatedMenuHeight - 10);
                     }
                     
                     $menu.css({
