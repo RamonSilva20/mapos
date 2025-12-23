@@ -91,6 +91,41 @@
     .table tbody tr td:first-child {
         overflow: visible !important;
     }
+    /* Estilos responsivos para mobile */
+    @media (max-width: 768px) {
+        .menu-acoes-lista {
+            position: fixed !important;
+            right: 10px !important;
+            left: auto !important;
+            top: auto !important;
+            bottom: auto !important;
+            min-width: 200px !important;
+            max-width: calc(100vw - 20px);
+            z-index: 10000 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        }
+        .btn-menu-acoes {
+            padding: 8px 12px !important;
+            font-size: 20px !important;
+        }
+        .menu-acoes-lista li a {
+            padding: 12px 15px !important;
+            font-size: 14px !important;
+        }
+        .table tbody tr td:first-child {
+            width: 60px !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .menu-acoes-lista {
+            min-width: 180px !important;
+            right: 5px !important;
+        }
+        .menu-acoes-lista li a {
+            padding: 10px 12px !important;
+            font-size: 13px !important;
+        }
+    }
 </style>
 
 <div class="new122">
