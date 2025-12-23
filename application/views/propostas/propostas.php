@@ -75,17 +75,17 @@
                                 $dataValidade = $r->data_validade ? date('d/m/Y', strtotime($r->data_validade)) : '-';
                                 $valorTotal = number_format($r->valor_total, 2, ',', '.');
                                 
-                                // Status badge
-                                $statusClass = 'default';
+                                // Cores dos status
+                                $corStatus = '#6c757d'; // default
                                 switch($r->status) {
-                                    case 'Em aberto': $statusClass = 'info'; break;
-                                    case 'Rascunho': $statusClass = 'secondary'; break;
-                                    case 'Pendente': $statusClass = 'warning'; break;
-                                    case 'Aguardando': $statusClass = 'warning'; break;
-                                    case 'Aprovada': $statusClass = 'success'; break;
-                                    case 'Não aprovada': $statusClass = 'danger'; break;
-                                    case 'Concluído': $statusClass = 'success'; break;
-                                    case 'Modelo': $statusClass = 'primary'; break;
+                                    case 'Em aberto': $corStatus = '#17a2b8'; break;
+                                    case 'Rascunho': $corStatus = '#6c757d'; break;
+                                    case 'Pendente': $corStatus = '#ffc107'; break;
+                                    case 'Aguardando': $corStatus = '#fd7e14'; break;
+                                    case 'Aprovada': $corStatus = '#28a745'; break;
+                                    case 'Não aprovada': $corStatus = '#dc3545'; break;
+                                    case 'Concluído': $corStatus = '#28a745'; break;
+                                    case 'Modelo': $corStatus = '#6f42c1'; break;
                                 }
                                 ?>
                                 <tr style="cursor: pointer;" onclick="window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
@@ -94,7 +94,35 @@
                                     <td><?php echo $dataProposta; ?></td>
                                     <td><?php echo $dataValidade; ?></td>
                                     <td><strong>R$ <?php echo $valorTotal; ?></strong></td>
-                                    <td><span class="badge badge-<?php echo $statusClass; ?>"><?php echo $r->status; ?></span></td>
+                                    <td onclick="event.stopPropagation();">
+                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) { ?>
+                                            <select class="status-select-proposta" data-proposta-id="<?php echo $r->idProposta; ?>" data-status-atual="<?php echo htmlspecialchars($r->status); ?>" style="background-color: <?php echo $corStatus; ?>; border-color: <?php echo $corStatus; ?>; color: white; padding: 4px 8px; border-radius: 4px; border: 1px solid <?php echo $corStatus; ?>; font-size: 12px; font-weight: bold; cursor: pointer; min-width: 140px;">
+                                                <option value="Em aberto" <?= $r->status == 'Em aberto' ? 'selected' : '' ?> style="background: #17a2b8;">Em aberto</option>
+                                                <option value="Rascunho" <?= $r->status == 'Rascunho' ? 'selected' : '' ?> style="background: #6c757d;">Rascunho</option>
+                                                <option value="Pendente" <?= $r->status == 'Pendente' ? 'selected' : '' ?> style="background: #ffc107;">Pendente</option>
+                                                <option value="Aguardando" <?= $r->status == 'Aguardando' ? 'selected' : '' ?> style="background: #fd7e14;">Aguardando</option>
+                                                <option value="Aprovada" <?= $r->status == 'Aprovada' ? 'selected' : '' ?> style="background: #28a745;">Aprovada</option>
+                                                <option value="Não aprovada" <?= $r->status == 'Não aprovada' ? 'selected' : '' ?> style="background: #dc3545;">Não aprovada</option>
+                                                <option value="Concluído" <?= $r->status == 'Concluído' ? 'selected' : '' ?> style="background: #28a745;">Concluído</option>
+                                                <option value="Modelo" <?= $r->status == 'Modelo' ? 'selected' : '' ?> style="background: #6f42c1;">Modelo</option>
+                                            </select>
+                                        <?php } else { ?>
+                                            <span class="badge badge-<?php 
+                                                $statusClass = 'default';
+                                                switch($r->status) {
+                                                    case 'Em aberto': $statusClass = 'info'; break;
+                                                    case 'Rascunho': $statusClass = 'secondary'; break;
+                                                    case 'Pendente': $statusClass = 'warning'; break;
+                                                    case 'Aguardando': $statusClass = 'warning'; break;
+                                                    case 'Aprovada': $statusClass = 'success'; break;
+                                                    case 'Não aprovada': $statusClass = 'danger'; break;
+                                                    case 'Concluído': $statusClass = 'success'; break;
+                                                    case 'Modelo': $statusClass = 'primary'; break;
+                                                }
+                                                echo $statusClass;
+                                            ?>"><?php echo $r->status; ?></span>
+                                        <?php } ?>
+                                    </td>
                                     <td><?php echo $r->nome; ?></td>
                                     <td onclick="event.stopPropagation();">
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
@@ -238,6 +266,104 @@
             });
             
             return false;
+        });
+        
+        // Atualizar status da proposta via dropdown
+        $(document).on('change', '.status-select-proposta', function(e) {
+            e.stopPropagation();
+            
+            var $select = $(this);
+            var idProposta = $select.data('proposta-id');
+            var statusAtual = $select.data('status-atual');
+            var novoStatus = $select.val();
+            
+            // Limpar espaços e normalizar
+            novoStatus = novoStatus ? novoStatus.trim() : '';
+            statusAtual = statusAtual ? statusAtual.trim() : '';
+            
+            // Se não mudou, não fazer nada
+            if (novoStatus === statusAtual) {
+                $select.val(statusAtual);
+                return false;
+            }
+            
+            // Confirmar mudança
+            Swal.fire({
+                title: 'Alterar Status?',
+                text: 'Deseja alterar o status de "' + statusAtual + '" para "' + novoStatus + '"?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, alterar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545'
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    // Desabilitar select
+                    $select.prop('disabled', true);
+                    
+                    // Obter token CSRF
+                    var csrfTokenName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+                    var csrfTokenValue = '<?php echo $this->security->get_csrf_hash(); ?>';
+                    
+                    var postData = {};
+                    postData.idProposta = idProposta;
+                    postData.status = novoStatus;
+                    postData[csrfTokenName] = csrfTokenValue;
+                    
+                    $.ajax({
+                        url: '<?php echo base_url(); ?>index.php/propostas/atualizarStatus',
+                        type: 'POST',
+                        data: postData,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.result) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Sucesso!',
+                                    text: response.message || 'Status atualizado com sucesso!',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro!',
+                                    text: response.message || 'Erro ao atualizar status'
+                                });
+                                $select.val(statusAtual);
+                                $select.prop('disabled', false);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro AJAX:', error);
+                            var message = 'Erro ao comunicar com o servidor: ' + error;
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.message) {
+                                    message = response.message;
+                                }
+                            } catch(e) {
+                                if (xhr.responseText) {
+                                    message = xhr.responseText.substring(0, 200);
+                                }
+                            }
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro!',
+                                text: message
+                            });
+                            $select.val(statusAtual);
+                            $select.prop('disabled', false);
+                        }
+                    });
+                } else {
+                    // Usuário cancelou, restaurar valor
+                    $select.val(statusAtual);
+                }
+            });
         });
     });
 </script>
