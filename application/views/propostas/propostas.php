@@ -64,25 +64,41 @@
     }
     /* Estilos para dropdown funcionar */
     .dropdown.open .dropdown-menu {
-        display: block;
+        display: block !important;
     }
     .dropdown-menu.show {
-        display: block;
+        display: block !important;
     }
     .dropdown-menu {
         display: none;
         position: absolute;
         top: 100%;
         right: 0;
-        z-index: 1000;
+        z-index: 9999 !important;
         background-color: #fff;
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 5px 0;
         margin-top: 2px;
+        min-width: 180px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
     .dropdown {
         position: relative;
+    }
+    /* Garantir que o dropdown não seja cortado */
+    .table-responsive {
+        overflow: visible !important;
+    }
+    .widget-content {
+        overflow: visible !important;
+    }
+    .table {
+        margin-bottom: 0;
+    }
+    /* Garantir que a célula não corte o dropdown */
+    .table tbody tr td:first-child {
+        overflow: visible !important;
     }
 </style>
 
