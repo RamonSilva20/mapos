@@ -442,22 +442,34 @@
                     var windowHeight = $(window).height();
                     var windowWidth = $(window).width();
                     
-                    // Calcular posição do menu
+                    // Calcular posição do menu alinhado ao botão
+                    // Top: logo abaixo do botão
                     var menuTop = buttonOffset.top + buttonHeight + 5;
+                    // Right: alinhado à direita do botão
                     var menuRight = windowWidth - buttonOffset.left - buttonWidth;
                     var estimatedMenuHeight = 250;
+                    var menuWidth = 200; // largura estimada do menu
                     
                     // Se não houver espaço abaixo, posicionar acima
-                    if (menuTop + estimatedMenuHeight - scrollTop > windowHeight + scrollTop) {
+                    if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
                         menuTop = buttonOffset.top - estimatedMenuHeight - 5;
                     }
                     
-                    // Garantir que o menu não saia da tela
+                    // Garantir que o menu não saia da tela à direita
+                    if (menuRight + menuWidth > windowWidth) {
+                        menuRight = windowWidth - menuWidth - 10;
+                    }
+                    // Garantir que o menu não saia da tela à esquerda
                     if (menuRight < 10) {
                         menuRight = 10;
                     }
+                    // Garantir que o menu não saia da tela no topo
                     if (menuTop < scrollTop + 10) {
                         menuTop = scrollTop + 10;
+                    }
+                    // Garantir que o menu não saia da tela embaixo
+                    if (menuTop + estimatedMenuHeight > scrollTop + windowHeight) {
+                        menuTop = scrollTop + windowHeight - estimatedMenuHeight - 10;
                     }
                     
                     $menu.css({
