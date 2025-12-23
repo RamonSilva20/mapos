@@ -770,9 +770,19 @@ class Propostas extends MY_Controller
      */
     private function consumirEstoqueProposta($idProposta)
     {
-        $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
-                  FROM produtos_proposta pp 
-                  WHERE pp.proposta_id = ? AND pp.estoque_consumido = 0 AND pp.produtos_id IS NOT NULL";
+        // Verificar se campo estoque_consumido existe
+        $campos = $this->db->list_fields('produtos_proposta');
+        $temEstoqueConsumido = in_array('estoque_consumido', $campos);
+        
+        if ($temEstoqueConsumido) {
+            $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
+                      FROM produtos_proposta pp 
+                      WHERE pp.proposta_id = ? AND pp.estoque_consumido = 0 AND pp.produtos_id IS NOT NULL";
+        } else {
+            $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
+                      FROM produtos_proposta pp 
+                      WHERE pp.proposta_id = ? AND pp.produtos_id IS NOT NULL";
+        }
 
         $produtos = $this->db->query($query, [$idProposta])->result();
 
