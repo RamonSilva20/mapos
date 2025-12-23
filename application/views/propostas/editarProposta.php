@@ -48,11 +48,14 @@
                             <div class="span3">
                                 <label for="status">Status</label>
                                 <select class="span12" name="status" id="status">
+                                    <option value="Em aberto" <?= $result->status == 'Em aberto' ? 'selected' : '' ?>>Em aberto</option>
                                     <option value="Rascunho" <?= $result->status == 'Rascunho' ? 'selected' : '' ?>>Rascunho</option>
-                                    <option value="Enviada" <?= $result->status == 'Enviada' ? 'selected' : '' ?>>Enviada</option>
+                                    <option value="Pendente" <?= $result->status == 'Pendente' ? 'selected' : '' ?>>Pendente</option>
+                                    <option value="Aguardando" <?= $result->status == 'Aguardando' ? 'selected' : '' ?>>Aguardando</option>
                                     <option value="Aprovada" <?= $result->status == 'Aprovada' ? 'selected' : '' ?>>Aprovada</option>
-                                    <option value="Recusada" <?= $result->status == 'Recusada' ? 'selected' : '' ?>>Recusada</option>
-                                    <option value="Convertida" <?= $result->status == 'Convertida' ? 'selected' : '' ?>>Convertida</option>
+                                    <option value="Não aprovada" <?= $result->status == 'Não aprovada' ? 'selected' : '' ?>>Não aprovada</option>
+                                    <option value="Concluído" <?= $result->status == 'Concluído' ? 'selected' : '' ?>>Concluído</option>
+                                    <option value="Modelo" <?= $result->status == 'Modelo' ? 'selected' : '' ?>>Modelo</option>
                                 </select>
                             </div>
                         </div>

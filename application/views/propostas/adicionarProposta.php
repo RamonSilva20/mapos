@@ -46,11 +46,14 @@
                             <div class="span3">
                                 <label for="status">Status</label>
                                 <select class="span12" name="status" id="status">
-                                    <option value="Rascunho" selected>Rascunho</option>
-                                    <option value="Enviada">Enviada</option>
+                                    <option value="Em aberto" selected>Em aberto</option>
+                                    <option value="Rascunho">Rascunho</option>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Aguardando">Aguardando</option>
                                     <option value="Aprovada">Aprovada</option>
-                                    <option value="Recusada">Recusada</option>
-                                    <option value="Convertida">Convertida</option>
+                                    <option value="Não aprovada">Não aprovada</option>
+                                    <option value="Concluído">Concluído</option>
+                                    <option value="Modelo">Modelo</option>
                                 </select>
                             </div>
                         </div>

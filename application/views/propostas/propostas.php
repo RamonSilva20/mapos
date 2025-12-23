@@ -26,11 +26,14 @@
             <div class="span2">
                 <select name="status" id="" class="span12">
                     <option value="">Todos os status</option>
+                    <option value="Em aberto" <?=$this->input->get('status') == 'Em aberto' ? 'selected' : ''?>>Em aberto</option>
                     <option value="Rascunho" <?=$this->input->get('status') == 'Rascunho' ? 'selected' : ''?>>Rascunho</option>
-                    <option value="Enviada" <?=$this->input->get('status') == 'Enviada' ? 'selected' : ''?>>Enviada</option>
+                    <option value="Pendente" <?=$this->input->get('status') == 'Pendente' ? 'selected' : ''?>>Pendente</option>
+                    <option value="Aguardando" <?=$this->input->get('status') == 'Aguardando' ? 'selected' : ''?>>Aguardando</option>
                     <option value="Aprovada" <?=$this->input->get('status') == 'Aprovada' ? 'selected' : ''?>>Aprovada</option>
-                    <option value="Recusada" <?=$this->input->get('status') == 'Recusada' ? 'selected' : ''?>>Recusada</option>
-                    <option value="Convertida" <?=$this->input->get('status') == 'Convertida' ? 'selected' : ''?>>Convertida</option>
+                    <option value="Não aprovada" <?=$this->input->get('status') == 'Não aprovada' ? 'selected' : ''?>>Não aprovada</option>
+                    <option value="Concluído" <?=$this->input->get('status') == 'Concluído' ? 'selected' : ''?>>Concluído</option>
+                    <option value="Modelo" <?=$this->input->get('status') == 'Modelo' ? 'selected' : ''?>>Modelo</option>
                 </select>
             </div>
 
@@ -75,11 +78,14 @@
                                 // Status badge
                                 $statusClass = 'default';
                                 switch($r->status) {
+                                    case 'Em aberto': $statusClass = 'info'; break;
                                     case 'Rascunho': $statusClass = 'secondary'; break;
-                                    case 'Enviada': $statusClass = 'info'; break;
+                                    case 'Pendente': $statusClass = 'warning'; break;
+                                    case 'Aguardando': $statusClass = 'warning'; break;
                                     case 'Aprovada': $statusClass = 'success'; break;
-                                    case 'Recusada': $statusClass = 'danger'; break;
-                                    case 'Convertida': $statusClass = 'primary'; break;
+                                    case 'Não aprovada': $statusClass = 'danger'; break;
+                                    case 'Concluído': $statusClass = 'success'; break;
+                                    case 'Modelo': $statusClass = 'primary'; break;
                                 }
                                 ?>
                                 <tr style="cursor: pointer;" onclick="window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">

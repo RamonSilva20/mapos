@@ -127,7 +127,7 @@ class Propostas extends MY_Controller
                 'numero_proposta' => $numeroProposta,
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,
-                'status' => $this->input->post('status') ?: 'Rascunho',
+                'status' => $this->input->post('status') ?: 'Em aberto',
                 'clientes_id' => $clienteId,
                 'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id') ?: $this->session->userdata('id_admin'),
@@ -248,9 +248,16 @@ class Propostas extends MY_Controller
                 'prazo_entrega' => $this->input->post('prazo_entrega'),
             ];
 
-            if ($this->propostas_model->edit('propostas', $data, 'idProposta', $this->input->post('idProposta')) == true) {
-                $idProposta = $this->input->post('idProposta');
-
+            $idProposta = $this->input->post('idProposta');
+            $propostaAntiga = $this->propostas_model->getById($idProposta);
+            $statusAntigo = $propostaAntiga->status ?? 'Em aberto';
+            $novoStatus = $this->input->post('status');
+            
+            // Verificar mudanças de estoque necessárias
+            $statusAntigoConsome = $this->statusConsumeEstoque($statusAntigo);
+            $novoStatusConsome = $this->statusConsumeEstoque($novoStatus);
+            
+            if ($this->propostas_model->edit('propostas', $data, 'idProposta', $idProposta) == true) {
                 // Deletar e recriar produtos, serviços, parcelas e outros
                 $this->db->where('proposta_id', $idProposta);
                 $this->db->delete('produtos_proposta');
@@ -275,6 +282,18 @@ class Propostas extends MY_Controller
 
                 // Salvar outros produtos/serviços
                 $this->salvarOutros($idProposta);
+                
+                // Gerenciar estoque baseado na mudança de status
+                // Caso 1: Não consumia, agora consome (Rascunho → Aprovada)
+                if (!$statusAntigoConsome && $novoStatusConsome) {
+                    $this->consumirEstoqueProposta($idProposta);
+                    log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque CONSUMIDO. Proposta: {$idProposta}");
+                }
+                // Caso 2: Consumia, agora não consome (Aprovada → Rascunho)
+                elseif ($statusAntigoConsome && !$novoStatusConsome) {
+                    $this->devolverEstoqueProposta($idProposta);
+                    log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque DEVOLVIDO. Proposta: {$idProposta}");
+                }
 
                 log_info('Editou uma Proposta. ID: ' . $idProposta);
                 $this->session->set_flashdata('success', 'Proposta editada com sucesso!');
@@ -292,6 +311,10 @@ class Propostas extends MY_Controller
     {
         $produtos = json_decode($this->input->post('produtos_json'), true);
         if (is_array($produtos) && count($produtos) > 0) {
+            // Buscar proposta para verificar status
+            $proposta = $this->propostas_model->getById($idProposta);
+            $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Em aberto');
+            
             foreach ($produtos as $produto) {
                 if (empty($produto['descricao'])) continue;
 
@@ -299,15 +322,31 @@ class Propostas extends MY_Controller
                 $preco = isset($produto['preco']) ? floatval($produto['preco']) : 0;
                 $quantidade = floatval($produto['quantidade'] ?? 1);
                 $subtotal = $preco * $quantidade;
+                $produtosId = !empty($produto['produtos_id']) ? $produto['produtos_id'] : null;
 
                 $this->db->insert('produtos_proposta', [
                     'proposta_id' => $idProposta,
-                    'produtos_id' => !empty($produto['produtos_id']) ? $produto['produtos_id'] : null,
+                    'produtos_id' => $produtosId,
                     'descricao' => $produto['descricao'],
                     'quantidade' => $quantidade,
                     'preco' => $preco,
                     'subtotal' => $subtotal,
+                    'estoque_consumido' => 0,
                 ]);
+                
+                $lastId = $this->db->insert_id();
+                
+                // Consumir estoque se status permitir e produto tiver ID cadastrado
+                if ($statusConsomeEstoque && $produtosId && $this->data['configuration']['control_estoque']) {
+                    $this->load->model('produtos_model');
+                    $this->produtos_model->updateEstoque($produtosId, $quantidade, '-');
+                    
+                    // Marcar como consumido
+                    $this->db->where('idProdutoProposta', $lastId);
+                    $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+                    
+                    log_info("Estoque consumido ao adicionar produto. Proposta: {$idProposta}, Produto: {$produtosId}, Qtd: {$quantidade}, Status: {$proposta->status}");
+                }
             }
         }
     }
@@ -701,6 +740,155 @@ class Propostas extends MY_Controller
                 }
                 echo json_encode($row_set);
             }
+        }
+    }
+    
+    /**
+     * Verifica se o status da proposta deve consumir estoque
+     * Status que NÃO consomem: Rascunho, Modelo
+     * Status que consomem: Todos os outros (Em aberto, Pendente, Aguardando, Aprovada, Não aprovada, Concluído)
+     */
+    private function statusConsumeEstoque($status)
+    {
+        $statusQueNaoConsomem = ['Rascunho', 'Modelo'];
+        return !in_array($status, $statusQueNaoConsomem);
+    }
+    
+    /**
+     * Consome estoque de todos os produtos de uma proposta
+     */
+    private function consumirEstoqueProposta($idProposta)
+    {
+        $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
+                  FROM produtos_proposta pp 
+                  WHERE pp.proposta_id = ? AND pp.estoque_consumido = 0 AND pp.produtos_id IS NOT NULL";
+
+        $produtos = $this->db->query($query, [$idProposta])->result();
+
+        if (!$produtos || count($produtos) == 0) {
+            log_info("Nenhum produto para consumir estoque. Proposta: {$idProposta}");
+            return true;
+        }
+
+        $this->load->model('produtos_model');
+        $produtosProcessados = 0;
+
+        foreach ($produtos as $produto) {
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '-');
+            }
+
+            $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
+            $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+
+            log_info("Estoque consumido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, Proposta: {$idProposta}");
+            $produtosProcessados++;
+        }
+
+        log_info("Total de produtos com estoque consumido: {$produtosProcessados}. Proposta: {$idProposta}");
+        return true;
+    }
+    
+    /**
+     * Devolve estoque de todos os produtos de uma proposta
+     */
+    private function devolverEstoqueProposta($idProposta)
+    {
+        $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
+                  FROM produtos_proposta pp 
+                  WHERE pp.proposta_id = ? AND pp.estoque_consumido = 1 AND pp.produtos_id IS NOT NULL";
+
+        $produtos = $this->db->query($query, [$idProposta])->result();
+
+        if (!$produtos || count($produtos) == 0) {
+            log_info("Nenhum produto para devolver estoque. Proposta: {$idProposta}");
+            return true;
+        }
+
+        $this->load->model('produtos_model');
+        $produtosProcessados = 0;
+
+        foreach ($produtos as $produto) {
+            if ($this->data['configuration']['control_estoque']) {
+                $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '+');
+            }
+
+            $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
+            $this->db->update('produtos_proposta', ['estoque_consumido' => 0]);
+
+            log_info("Estoque devolvido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, Proposta: {$idProposta}");
+            $produtosProcessados++;
+        }
+
+        log_info("Total de produtos com estoque devolvido: {$produtosProcessados}. Proposta: {$idProposta}");
+        return true;
+    }
+    
+    /**
+     * Atualiza o status de uma proposta via AJAX
+     * Gerencia estoque baseado na mudança de status
+     */
+    public function atualizarStatus()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para editar propostas']));
+            return;
+        }
+
+        $idProposta = $this->input->post('idProposta');
+        $novoStatus = $this->input->post('status');
+
+        if (!$idProposta || !$novoStatus) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Dados inválidos']));
+            return;
+        }
+
+        // Buscar proposta atual
+        $proposta = $this->propostas_model->getById($idProposta);
+        if (!$proposta) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Proposta não encontrada']));
+            return;
+        }
+
+        $statusAntigo = $proposta->status ?? 'Em aberto';
+
+        // Verificar mudanças de estoque necessárias
+        $statusAntigoConsome = $this->statusConsumeEstoque($statusAntigo);
+        $novoStatusConsome = $this->statusConsumeEstoque($novoStatus);
+
+        // Caso 1: Não consumia, agora consome (Rascunho → Aprovada)
+        if (!$statusAntigoConsome && $novoStatusConsome) {
+            $this->consumirEstoqueProposta($idProposta);
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque CONSUMIDO. Proposta: {$idProposta}");
+        }
+        // Caso 2: Consumia, agora não consome (Aprovada → Rascunho)
+        elseif ($statusAntigoConsome && !$novoStatusConsome) {
+            $this->devolverEstoqueProposta($idProposta);
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque DEVOLVIDO. Proposta: {$idProposta}");
+        }
+        // Caso 3: Sem mudança no comportamento de estoque
+        else {
+            log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - SEM alteração de estoque. Proposta: {$idProposta}");
+        }
+
+        $data = array('status' => $novoStatus);
+
+        if ($this->propostas_model->edit('propostas', $data, 'idProposta', $idProposta) == true) {
+            log_info('Atualizou status da proposta. ID: ' . $idProposta . ' | Novo status: ' . $novoStatus);
+            
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => true, 'message' => 'Status atualizado com sucesso!']));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['result' => false, 'message' => 'Erro ao atualizar status']));
         }
     }
 }

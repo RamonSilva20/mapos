@@ -166,7 +166,20 @@
             <?php if ($result->email_usuario) { ?>
                 <p><strong>E-mail:</strong> <?php echo $result->email_usuario; ?></p>
             <?php } ?>
-            <p><strong>Status:</strong> <span style="padding: 5px 10px; background: #<?php echo $result->status == 'Aprovada' ? '28a745' : ($result->status == 'Recusada' ? 'dc3545' : ($result->status == 'Enviada' ? '17a2b8' : '6c757d')); ?>; color: white; border-radius: 3px;"><?php echo $result->status; ?></span></p>
+            <p><strong>Status:</strong> <span style="padding: 5px 10px; background: #<?php 
+                $statusColor = '6c757d'; // default
+                switch($result->status) {
+                    case 'Em aberto': $statusColor = '17a2b8'; break;
+                    case 'Rascunho': $statusColor = '6c757d'; break;
+                    case 'Pendente': $statusColor = 'ffc107'; break;
+                    case 'Aguardando': $statusColor = 'fd7e14'; break;
+                    case 'Aprovada': $statusColor = '28a745'; break;
+                    case 'Não aprovada': $statusColor = 'dc3545'; break;
+                    case 'Concluído': $statusColor = '28a745'; break;
+                    case 'Modelo': $statusColor = '6f42c1'; break;
+                }
+                echo $statusColor;
+            ?>; color: white; border-radius: 3px;"><?php echo $result->status; ?></span></p>
         </div>
     </div>
 
