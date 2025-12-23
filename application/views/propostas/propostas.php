@@ -480,6 +480,22 @@
     <?php echo $this->pagination->create_links(); ?>
 </div>
 
+<!-- Modal Menu Mobile -->
+<div id="modalMenuMobile" class="modal-menu-mobile" style="display: none;">
+    <div class="modal-menu-backdrop" onclick="fecharMenuMobile();"></div>
+    <div class="modal-menu-content">
+        <div class="modal-menu-header">
+            <h4>Ações</h4>
+            <button type="button" class="btn-fechar-menu" onclick="fecharMenuMobile();">
+                <i class="bx bx-x"></i>
+            </button>
+        </div>
+        <ul class="modal-menu-list" id="modalMenuList">
+            <!-- Itens serão preenchidos via JavaScript -->
+        </ul>
+    </div>
+</div>
+
 <!-- Modal Excluir -->
 <div id="modalExcluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?php echo base_url(); ?>index.php/propostas/excluir" method="post">
