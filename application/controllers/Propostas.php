@@ -571,6 +571,16 @@ class Propostas extends MY_Controller
         $this->data['outros'] = $this->propostas_model->getOutros($result->idProposta);
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        
+        // QR Code Pix (se disponível)
+        if (isset($this->data['configuration']['pix_key']) && $this->data['configuration']['pix_key']) {
+            $this->data['qrCode'] = $this->propostas_model->getQrCode(
+                $result->idProposta,
+                $this->data['configuration']['pix_key'],
+                $this->data['emitente']
+            );
+            $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
+        }
 
         $this->load->view('propostas/imprimirProposta', $this->data);
     }
@@ -981,6 +991,35 @@ class Propostas extends MY_Controller
         }
         
         return $contadores;
+    }
+    
+    /**
+     * Formata chave Pix para exibição
+     */
+    public function formatarChave($chave)
+    {
+        if (!$chave) {
+            return '';
+        }
+        
+        // Remover caracteres não numéricos
+        $chaveLimpa = preg_replace('/[^0-9]/', '', $chave);
+        
+        // CPF (11 dígitos)
+        if (strlen($chaveLimpa) === 11) {
+            return substr($chaveLimpa, 0, 3) . '.' . substr($chaveLimpa, 3, 3) . '.' . substr($chaveLimpa, 6, 3) . '-' . substr($chaveLimpa, 9);
+        }
+        // CNPJ (14 dígitos)
+        elseif (strlen($chaveLimpa) === 14) {
+            return substr($chaveLimpa, 0, 2) . '.' . substr($chaveLimpa, 2, 3) . '.' . substr($chaveLimpa, 5, 3) . '/' . substr($chaveLimpa, 8, 4) . '-' . substr($chaveLimpa, 12);
+        }
+        // Telefone (11 dígitos com DDD)
+        elseif (strlen($chaveLimpa) === 11 && substr($chaveLimpa, 0, 2) >= 10) {
+            return '(' . substr($chaveLimpa, 0, 2) . ') ' . substr($chaveLimpa, 2, 5) . '-' . substr($chaveLimpa, 7);
+        }
+        
+        // Retornar chave original se não for nenhum dos formatos acima
+        return $chave;
     }
 }
 

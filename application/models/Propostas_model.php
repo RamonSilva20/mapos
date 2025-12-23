@@ -177,6 +177,64 @@ class Propostas_model extends CI_Model
     }
 
     /**
+     * Gera QR Code Pix para proposta
+     */
+    public function getQrCode($id, $pixKey, $emitente)
+    {
+        if (empty($id) || empty($pixKey) || empty($emitente)) {
+            return;
+        }
+
+        // Calcular valor total da proposta
+        $proposta = $this->getById($id);
+        if (!$proposta) {
+            return;
+        }
+
+        $produtos = $this->getProdutos($id);
+        $servicos = $this->getServicos($id);
+        $outros = $this->getOutros($id);
+
+        $totalProdutos = 0;
+        foreach ($produtos as $p) {
+            $totalProdutos += $p->subtotal;
+        }
+
+        $totalServicos = 0;
+        foreach ($servicos as $s) {
+            $totalServicos += ($s->preco * ($s->quantidade ?: 1));
+        }
+
+        $totalOutros = 0;
+        foreach ($outros as $o) {
+            $totalOutros += $o->preco;
+        }
+
+        $subtotal = $totalProdutos + $totalServicos + $totalOutros;
+        $desconto = floatval($proposta->valor_desconto ?? 0);
+        $amount = $subtotal - $desconto;
+
+        if ($amount <= 0) {
+            return;
+        }
+
+        // Usar biblioteca Piggly\Pix
+        if (!class_exists('Piggly\Pix\StaticPayload')) {
+            return;
+        }
+
+        $pix = (new StaticPayload())
+            ->setAmount($amount)
+            ->setTid($id)
+            ->setDescription(sprintf('%s PROP %s', substr($emitente->nome, 0, 18), $id), true)
+            ->setPixKey(getPixKeyType($pixKey), $pixKey)
+            ->setMerchantName($emitente->nome)
+            ->setMerchantCity($emitente->cidade);
+
+        return $pix->getQRCode();
+    }
+
+    /**
      * Conta propostas com filtros
      */
     public function countPropostas($where_array = [])

@@ -134,17 +134,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($servicos as $s) :
-                                    $preco = $s->preco;
-                                    $subtotal = $preco * ($s->quantidade ?: 1);
-                                    $totalServico = $totalServico + $subtotal;
-                                    echo '<tr>';
-                                    echo '  <td>' . $s->descricao . '</td>';
-                                    echo '  <td class="text-center">' . number_format($s->quantidade, 2, ',', '.') . '</td>';
-                                    echo '  <td class="text-center">R$ ' . number_format($preco, 2, ',', '.') . '</td>';
-                                    echo '  <td class="text-end">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                    echo '</tr>';
-                                endforeach; ?>
+                                <?php 
+                                    setlocale(LC_MONETARY, 'en_US'); 
+                                    foreach ($servicos as $s) :
+                                        $preco = $s->preco;
+                                        $subtotal = $preco * ($s->quantidade ?: 1);
+                                        $totalServico = $totalServico + $subtotal;
+                                        echo '<tr>';
+                                        echo '  <td>';
+                                        echo '    <strong>' . $s->descricao . '</strong>';
+                                        if (!empty($s->detalhes)) {
+                                            echo '<br><small style="color: #666;">' . htmlspecialchars($s->detalhes) . '</small>';
+                                        }
+                                        echo '  </td>';
+                                        echo '  <td class="text-center">' . number_format($s->quantidade, 2, ',', '.') . '</td>';
+                                        echo '  <td class="text-center">R$ ' . number_format($preco, 2, ',', '.') . '</td>';
+                                        echo '  <td class="text-end">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    endforeach; ?>
                                 <tr>
                                     <td colspan="3" class="text-end"><b>TOTAL SERVIÇOS:</b></td>
                                     <td class="text-end"><b>R$ <?= number_format($totalServico, 2, ',', '.') ?></b></td>
@@ -237,8 +244,16 @@
                 <?php if ($totalProdutos != 0 || $totalServico != 0 || $totalOutros > 0) : ?>
                     <div class="pagamento">
                         <div class="qrcode">
-                            <div></div>
-                            <div></div>
+                            <?php if (isset($this->data['configuration']['pix_key']) && $this->data['configuration']['pix_key']) : ?>
+                                <div><img width="130px" src="<?= $qrCode ?? '' ?>" alt="QR Code de Pagamento" /></div>
+                                <div style="display: flex; flex-wrap: wrap; align-content: center;">
+                                    <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
+                                    <div class="chavePix">Chave Pix: <b><?= $chaveFormatada ?? '' ?></b></div>
+                                </div>
+                            <?php else: ?>
+                                <div></div>
+                                <div></div>
+                            <?php endif; ?>
                         </div>
                         <div>
                             <div class="tabela">
