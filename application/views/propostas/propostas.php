@@ -430,6 +430,7 @@
         window.toggleMenuAcoes = function(id) {
             var $menu = $('#menu-' + id);
             var $allMenus = $('.menu-acoes-lista');
+            var $button = $('.btn-menu-acoes[data-id="' + id + '"]');
             
             // Fechar todos os menus
             $allMenus.not($menu).hide();
@@ -438,6 +439,46 @@
             if ($menu.is(':visible')) {
                 $menu.hide();
             } else {
+                // Calcular posição para mobile
+                if ($(window).width() <= 768) {
+                    var buttonOffset = $button.offset();
+                    var buttonHeight = $button.outerHeight();
+                    var scrollTop = $(window).scrollTop();
+                    var windowHeight = $(window).height();
+                    
+                    // Posicionar menu abaixo do botão
+                    var menuTop = buttonOffset.top + buttonHeight + 5 - scrollTop;
+                    var estimatedMenuHeight = 250; // altura estimada do menu
+                    
+                    // Se não houver espaço abaixo, posicionar acima
+                    if (menuTop + estimatedMenuHeight > windowHeight) {
+                        $menu.css({
+                            'position': 'fixed',
+                            'bottom': (windowHeight - buttonOffset.top + scrollTop + 5) + 'px',
+                            'top': 'auto',
+                            'right': '10px',
+                            'left': 'auto'
+                        });
+                    } else {
+                        $menu.css({
+                            'position': 'fixed',
+                            'top': (buttonOffset.top + buttonHeight + 5) + 'px',
+                            'right': '10px',
+                            'left': 'auto',
+                            'bottom': 'auto'
+                        });
+                    }
+                } else {
+                    // Desktop: usar posição absoluta padrão
+                    $menu.css({
+                        'position': 'absolute',
+                        'top': '100%',
+                        'right': '0',
+                        'left': 'auto',
+                        'bottom': 'auto'
+                    });
+                }
+                
                 $menu.show();
             }
         };
