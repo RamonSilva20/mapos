@@ -71,9 +71,7 @@
     }
     .dropdown-menu {
         display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
+        position: fixed !important;
         z-index: 9999 !important;
         background-color: #fff;
         border: 1px solid #ccc;
@@ -409,11 +407,38 @@
             
             // Fechar outros dropdowns
             $('.dropdown').not($dropdown).removeClass('open');
-            $('.dropdown-menu').not($menu).removeClass('show');
+            $('.dropdown-menu').not($menu).removeClass('show').css({
+                'position': '',
+                'top': '',
+                'right': '',
+                'left': ''
+            });
+            
+            // Calcular posição do dropdown
+            var offset = $toggle.offset();
+            var toggleHeight = $toggle.outerHeight();
+            var toggleWidth = $toggle.outerWidth();
             
             // Toggle do dropdown atual
-            $dropdown.toggleClass('open');
-            $menu.toggleClass('show');
+            if ($dropdown.hasClass('open')) {
+                // Fechar
+                $dropdown.removeClass('open');
+                $menu.removeClass('show').css({
+                    'position': '',
+                    'top': '',
+                    'right': '',
+                    'left': ''
+                });
+            } else {
+                // Abrir
+                $dropdown.addClass('open');
+                $menu.addClass('show').css({
+                    'position': 'fixed',
+                    'top': (offset.top + toggleHeight + 2) + 'px',
+                    'right': ($(window).width() - offset.left - toggleWidth) + 'px',
+                    'left': 'auto'
+                });
+            }
         });
         
         // Fechar dropdown ao clicar fora
