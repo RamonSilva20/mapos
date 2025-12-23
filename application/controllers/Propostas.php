@@ -616,7 +616,12 @@ class Propostas extends MY_Controller
         // Usar view específica para PDF (layout simples)
         $html = $this->load->view('propostas/pdfProposta', $this->data, true);
         
-        $numeroProposta = $result->numero_proposta ?: 'PROP-' . str_pad($result->idProposta, 6, 0, STR_PAD_LEFT);
+        // Número da proposta (apenas número)
+        $numeroProposta = $result->numero_proposta ?: $result->idProposta;
+        $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
+        if (empty($numeroProposta)) {
+            $numeroProposta = $result->idProposta;
+        }
         $filename = 'Proposta_' . $numeroProposta;
         
         // true = stream, false = landscape, true = download (força download ao invés de abrir)

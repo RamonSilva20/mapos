@@ -60,7 +60,14 @@
             </header>
             <section>
                 <div class="title">
-                    PROPOSTA COMERCIAL <?= $result->numero_proposta ? 'N° ' . $result->numero_proposta : '# ' . str_pad($result->idProposta, 4, 0, STR_PAD_LEFT) ?>
+                    PROPOSTA COMERCIAL N° <?php 
+                        $numeroProposta = $result->numero_proposta ?: $result->idProposta;
+                        $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
+                        if (empty($numeroProposta)) {
+                            $numeroProposta = $result->idProposta;
+                        }
+                        echo $numeroProposta;
+                    ?>
                     <span class="emissao">Emissão: <?= date('d/m/Y H:i:s', strtotime($result->data_proposta)) ?></span>
                 </div>
 

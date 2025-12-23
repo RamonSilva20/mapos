@@ -171,11 +171,20 @@ class Propostas_model extends CI_Model
 
     public function gerarNumeroProposta()
     {
-        $this->db->select_max('idProposta');
+        // Buscar o maior número de proposta (não o ID)
+        $this->db->select_max('numero_proposta');
         $result = $this->db->get('propostas')->row();
-        $nextId = ($result->idProposta ?? 0) + 1;
         
-        return 'PROP-' . str_pad($nextId, 6, '0', STR_PAD_LEFT);
+        if ($result && $result->numero_proposta) {
+            // Se já existe numeração, pegar o maior número e incrementar
+            // Remove qualquer prefixo e pega apenas o número
+            $numeroAtual = preg_replace('/[^0-9]/', '', $result->numero_proposta);
+            $numeroAtual = intval($numeroAtual);
+            return $numeroAtual + 1;
+        }
+        
+        // Se não existe nenhuma proposta, começar do 1
+        return 1;
     }
 
     /**

@@ -32,6 +32,36 @@
         font-size: 11px;
         padding: 2px 6px;
     }
+    /* Estilos para menu dropdown de ações */
+    .dropdown-menu {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        border: 1px solid #ddd;
+    }
+    .dropdown-menu li a {
+        padding: 8px 15px;
+        display: block;
+        color: #333;
+        text-decoration: none;
+    }
+    .dropdown-menu li a:hover {
+        background-color: #f5f5f5;
+    }
+    .dropdown-menu li.divider {
+        height: 1px;
+        margin: 5px 0;
+        overflow: hidden;
+        background-color: #e5e5e5;
+    }
+    .dropdown-menu li a i {
+        margin-right: 8px;
+        width: 18px;
+    }
+    .table tbody tr td:first-child {
+        cursor: default;
+    }
+    .table tbody tr td:first-child .dropdown {
+        cursor: pointer;
+    }
 </style>
 
 <div class="new122">
@@ -198,6 +228,7 @@
                 <table class="table table-bordered ">
                     <thead>
                         <tr>
+                            <th style="width: 50px;"></th>
                             <th>N°</th>
                             <th>Cliente</th>
                             <th>Data</th>
@@ -205,13 +236,12 @@
                             <th>Valor Total</th>
                             <th>Status</th>
                             <th>Vendedor</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!$results) {
                             echo '<tr>
-                            <td colspan="8">Nenhuma proposta cadastrada</td>
+                            <td colspan="8" style="text-align: center;">Nenhuma proposta cadastrada</td>
                             </tr>';
                         } else {
                             foreach ($results as $r) {
@@ -231,9 +261,37 @@
                                     case 'Concluído': $corStatus = '#28a745'; break;
                                     case 'Modelo': $corStatus = '#6f42c1'; break;
                                 }
+                                
+                                // Número da proposta (apenas número)
+                                $numeroProposta = $r->numero_proposta ?: $r->idProposta;
+                                // Se tiver prefixo, remover
+                                $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
+                                if (empty($numeroProposta)) {
+                                    $numeroProposta = $r->idProposta;
+                                }
                                 ?>
                                 <tr style="cursor: pointer;" onclick="window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
-                                    <td><?php echo $r->numero_proposta ?: '#' . $r->idProposta; ?></td>
+                                    <td onclick="event.stopPropagation();" style="width: 50px; text-align: center;">
+                                        <div class="dropdown" style="position: relative;">
+                                            <button class="btn btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666;" onclick="event.stopPropagation();">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-right" style="min-width: 180px;">
+                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank"><i class="bx bx-show"></i> Visualizar</a></li>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank"><i class="bx bx-printer"></i> Imprimir</a></li>
+                                                <?php } ?>
+                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) { ?>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $r->idProposta; ?>"><i class="bx bx-edit"></i> Editar</a></li>
+                                                <?php } ?>
+                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) { ?>
+                                                    <li class="divider"></li>
+                                                    <li><a href="#modalExcluir" role="button" data-toggle="modal" data-nome="<?php echo $numeroProposta; ?>" data-id="<?php echo $r->idProposta; ?>" onclick="event.stopPropagation();"><i class="bx bx-trash-alt"></i> Excluir</a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td><?php echo $numeroProposta; ?></td>
                                     <td><?php echo $r->nomeCliente; ?></td>
                                     <td><?php echo $dataProposta; ?></td>
                                     <td><?php echo $dataValidade; ?></td>
@@ -268,26 +326,6 @@
                                         <?php } ?>
                                     </td>
                                     <td><?php echo $r->nome; ?></td>
-                                    <td onclick="event.stopPropagation();">
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
-                                            <a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Imprimir">
-                                                <i class="bx bx-printer"></i>
-                                            </a>
-                                            <a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank" class="btn-nwe4" title="Visualizar">
-                                                <i class="bx bx-show"></i>
-                                            </a>
-                                        <?php } ?>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) { ?>
-                                            <a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $r->idProposta; ?>" class="btn-nwe4" title="Editar">
-                                                <i class="bx bx-edit"></i>
-                                            </a>
-                                        <?php } ?>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) { ?>
-                                            <a href="#modalExcluir" role="button" data-toggle="modal" data-nome="<?php echo $r->numero_proposta ?: '#' . $r->idProposta; ?>" data-id="<?php echo $r->idProposta; ?>" class="btn-nwe4" title="Excluir">
-                                                <i class="bx bx-trash-alt"></i>
-                                            </a>
-                                        <?php } ?>
-                                    </td>
                                 </tr>
                             <?php }
                         } ?>

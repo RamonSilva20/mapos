@@ -90,7 +90,12 @@
         <a href="<?php echo base_url(); ?>index.php/propostas/gerarPdf/<?php echo $result->idProposta; ?>" target="_blank">Salvar PDF</a>
         <?php 
         $clienteNome = $result->clientes_id ? ($result->nomeCliente ?? '') : ($result->cliente_nome ?? '');
-        $numeroProposta = $result->numero_proposta ?: '#' . $result->idProposta;
+        // Número da proposta (apenas número)
+        $numeroProposta = $result->numero_proposta ?: $result->idProposta;
+        $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
+        if (empty($numeroProposta)) {
+            $numeroProposta = $result->idProposta;
+        }
         $valorTotal = number_format($result->valor_total, 2, ',', '.');
         $telefoneCliente = $result->celular_cliente ? preg_replace('/[^0-9]/', '', $result->celular_cliente) : ($result->telefone ? preg_replace('/[^0-9]/', '', $result->telefone) : '');
         ?>

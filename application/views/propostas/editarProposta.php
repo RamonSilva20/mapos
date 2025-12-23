@@ -10,7 +10,14 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Editar Proposta Comercial - <?php echo $result->numero_proposta ?: '#' . $result->idProposta; ?></h5>
+                <h5>Editar Proposta Comercial - <?php 
+                    $numeroProposta = $result->numero_proposta ?: $result->idProposta;
+                    $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
+                    if (empty($numeroProposta)) {
+                        $numeroProposta = $result->idProposta;
+                    }
+                    echo $numeroProposta;
+                ?></h5>
             </div>
             <div class="widget-content nopadding">
                 <?php if ($custom_error == true) { ?>
