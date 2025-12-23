@@ -220,11 +220,6 @@ class Propostas_model extends CI_Model
             return;
         }
 
-        // Usar biblioteca Piggly\Pix
-        if (!class_exists('Piggly\Pix\StaticPayload')) {
-            return;
-        }
-
         $pix = (new StaticPayload())
             ->setAmount($amount)
             ->setTid($id)
