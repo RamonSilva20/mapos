@@ -94,11 +94,6 @@
     /* Estilos responsivos para mobile */
     @media (max-width: 768px) {
         .menu-acoes-lista {
-            position: fixed !important;
-            right: 10px !important;
-            left: auto !important;
-            top: auto !important;
-            bottom: auto !important;
             min-width: 200px !important;
             max-width: calc(100vw - 20px);
             z-index: 10000 !important;
@@ -119,7 +114,6 @@
     @media (max-width: 480px) {
         .menu-acoes-lista {
             min-width: 180px !important;
-            right: 5px !important;
         }
         .menu-acoes-lista li a {
             padding: 10px 12px !important;
@@ -443,31 +437,36 @@
                 if ($(window).width() <= 768) {
                     var buttonOffset = $button.offset();
                     var buttonHeight = $button.outerHeight();
+                    var buttonWidth = $button.outerWidth();
                     var scrollTop = $(window).scrollTop();
                     var windowHeight = $(window).height();
+                    var windowWidth = $(window).width();
                     
-                    // Posicionar menu abaixo do botão
-                    var menuTop = buttonOffset.top + buttonHeight + 5 - scrollTop;
-                    var estimatedMenuHeight = 250; // altura estimada do menu
+                    // Calcular posição do menu
+                    var menuTop = buttonOffset.top + buttonHeight + 5;
+                    var menuRight = windowWidth - buttonOffset.left - buttonWidth;
+                    var estimatedMenuHeight = 250;
                     
                     // Se não houver espaço abaixo, posicionar acima
-                    if (menuTop + estimatedMenuHeight > windowHeight) {
-                        $menu.css({
-                            'position': 'fixed',
-                            'bottom': (windowHeight - buttonOffset.top + scrollTop + 5) + 'px',
-                            'top': 'auto',
-                            'right': '10px',
-                            'left': 'auto'
-                        });
-                    } else {
-                        $menu.css({
-                            'position': 'fixed',
-                            'top': (buttonOffset.top + buttonHeight + 5) + 'px',
-                            'right': '10px',
-                            'left': 'auto',
-                            'bottom': 'auto'
-                        });
+                    if (menuTop + estimatedMenuHeight - scrollTop > windowHeight + scrollTop) {
+                        menuTop = buttonOffset.top - estimatedMenuHeight - 5;
                     }
+                    
+                    // Garantir que o menu não saia da tela
+                    if (menuRight < 10) {
+                        menuRight = 10;
+                    }
+                    if (menuTop < scrollTop + 10) {
+                        menuTop = scrollTop + 10;
+                    }
+                    
+                    $menu.css({
+                        'position': 'fixed',
+                        'top': menuTop + 'px',
+                        'right': menuRight + 'px',
+                        'left': 'auto',
+                        'bottom': 'auto'
+                    });
                 } else {
                     // Desktop: usar posição absoluta padrão
                     $menu.css({
