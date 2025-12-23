@@ -958,5 +958,29 @@ class Propostas extends MY_Controller
                 ->set_output(json_encode(['result' => false, 'message' => 'Erro ao atualizar status']));
         }
     }
+    
+    /**
+     * Retorna contadores de propostas por status
+     */
+    private function getContadoresStatus($where_array_excluindo_status = [])
+    {
+        $status_list = ['Em aberto', 'Rascunho', 'Pendente', 'Aguardando', 'Aprovada', 'Não aprovada', 'Concluído', 'Modelo'];
+        $contadores = [];
+        
+        // Contar total geral (sem filtro de status)
+        $where_geral = $where_array_excluindo_status;
+        unset($where_geral['status']);
+        $contadores['total'] = $this->propostas_model->countPropostas($where_geral);
+        
+        // Contar por status
+        foreach ($status_list as $status) {
+            $where_status = $where_array_excluindo_status;
+            unset($where_status['status']);
+            $where_status['status'] = [$status];
+            $contadores[$status] = $this->propostas_model->countPropostas($where_status);
+        }
+        
+        return $contadores;
+    }
 }
 
