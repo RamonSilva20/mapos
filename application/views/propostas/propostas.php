@@ -383,6 +383,30 @@
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
         });
+        
+        // Inicializar dropdowns manualmente
+        $('.dropdown-toggle').on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var $dropdown = $(this).parent('.dropdown');
+            var $menu = $dropdown.find('.dropdown-menu');
+            
+            // Fechar outros dropdowns
+            $('.dropdown').not($dropdown).removeClass('open');
+            $('.dropdown-menu').not($menu).removeClass('show');
+            
+            // Toggle do dropdown atual
+            $dropdown.toggleClass('open');
+            $menu.toggleClass('show');
+        });
+        
+        // Fechar dropdown ao clicar fora
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown').removeClass('open');
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
 
         // Capturar clique no link de excluir ANTES de abrir o modal
         $('a[href="#modalExcluir"]').on('click', function(e) {
