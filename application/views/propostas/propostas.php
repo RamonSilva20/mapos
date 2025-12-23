@@ -302,7 +302,7 @@
                                 <tr style="cursor: pointer;" onclick="if (!event.target.closest('.dropdown, .status-select-proposta')) { window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'; }" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
                                     <td style="width: 50px; text-align: center; position: relative;" onclick="event.stopPropagation();">
                                         <div class="dropdown-menu-proposta" style="position: relative; display: inline-block;">
-                                            <button type="button" class="btn-menu-acoes" data-id="<?php echo $r->idProposta; ?>" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666; cursor: pointer;">
+                                            <button type="button" class="btn-menu-acoes" data-id="<?php echo $r->idProposta; ?>" onclick="event.stopPropagation(); toggleMenuAcoes(<?php echo $r->idProposta; ?>); return false;" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666; cursor: pointer;">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <ul class="menu-acoes-lista" id="menu-<?php echo $r->idProposta; ?>" style="display: none; position: absolute; right: 0; top: 100%; z-index: 10000; background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 5px 0; margin-top: 2px; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); list-style: none;">
@@ -391,12 +391,8 @@
             dateFormat: 'dd/mm/yy'
         });
         
-        // Menu de ações simplificado
-        $(document).on('click', '.btn-menu-acoes', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            var id = $(this).attr('data-id');
+        // Função para toggle do menu
+        window.toggleMenuAcoes = function(id) {
             var $menu = $('#menu-' + id);
             var $allMenus = $('.menu-acoes-lista');
             
@@ -409,6 +405,15 @@
             } else {
                 $menu.show();
             }
+        };
+        
+        // Menu de ações simplificado (backup)
+        $(document).on('click', '.btn-menu-acoes', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            var id = $(this).attr('data-id');
+            toggleMenuAcoes(id);
         });
         
         // Fechar menu ao clicar fora
