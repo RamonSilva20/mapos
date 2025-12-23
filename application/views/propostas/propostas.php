@@ -62,6 +62,28 @@
     .table tbody tr td:first-child .dropdown {
         cursor: pointer;
     }
+    /* Estilos para dropdown funcionar */
+    .dropdown.open .dropdown-menu {
+        display: block;
+    }
+    .dropdown-menu.show {
+        display: block;
+    }
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 1000;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 0;
+        margin-top: 2px;
+    }
+    .dropdown {
+        position: relative;
+    }
 </style>
 
 <div class="new122">
