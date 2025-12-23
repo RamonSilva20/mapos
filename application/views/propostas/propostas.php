@@ -310,22 +310,22 @@
                                 }
                                 ?>
                                 <tr style="cursor: pointer;" onclick="if (!event.target.closest('.dropdown, .status-select-proposta')) { window.location.href='<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>'; }" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor=''">
-                                    <td style="width: 50px; text-align: center; position: relative;">
-                                        <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="display: inline-block; padding: 5px 10px; font-size: 18px; color: #666; text-decoration: none;" onclick="event.stopPropagation(); return false;">
+                                    <td style="width: 50px; text-align: center; position: relative;" onclick="event.stopPropagation();">
+                                        <div class="dropdown-menu-proposta" style="position: relative; display: inline-block;">
+                                            <button type="button" class="btn-menu-acoes" data-id="<?php echo $r->idProposta; ?>" style="background: none; border: none; padding: 5px 10px; font-size: 18px; color: #666; cursor: pointer;">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right" style="min-width: 180px;">
+                                            </button>
+                                            <ul class="menu-acoes-lista" id="menu-<?php echo $r->idProposta; ?>" style="display: none; position: absolute; right: 0; top: 100%; z-index: 10000; background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 5px 0; margin-top: 2px; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); list-style: none;">
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) { ?>
-                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank"><i class="bx bx-show"></i> Visualizar</a></li>
-                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank"><i class="bx bx-printer"></i> Imprimir</a></li>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/visualizar/<?php echo $r->idProposta; ?>" target="_blank" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-show"></i> Visualizar</a></li>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/imprimir/<?php echo $r->idProposta; ?>" target="_blank" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-printer"></i> Imprimir</a></li>
                                                 <?php } ?>
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) { ?>
-                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $r->idProposta; ?>"><i class="bx bx-edit"></i> Editar</a></li>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $r->idProposta; ?>" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-edit"></i> Editar</a></li>
                                                 <?php } ?>
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) { ?>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#modalExcluir" role="button" data-toggle="modal" data-nome="<?php echo $numeroProposta; ?>" data-id="<?php echo $r->idProposta; ?>" onclick="event.stopPropagation();"><i class="bx bx-trash-alt"></i> Excluir</a></li>
+                                                    <li style="height: 1px; margin: 5px 0; overflow: hidden; background-color: #e5e5e5;"></li>
+                                                    <li><a href="#modalExcluir" role="button" data-toggle="modal" data-nome="<?php echo $numeroProposta; ?>" data-id="<?php echo $r->idProposta; ?>" class="link-excluir-proposta" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-trash-alt"></i> Excluir</a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -401,55 +401,33 @@
             dateFormat: 'dd/mm/yy'
         });
         
-        // Inicializar dropdowns manualmente
-        $(document).on('click', '.dropdown-toggle', function(e) {
+        // Menu de ações simplificado
+        $(document).on('click', '.btn-menu-acoes', function(e) {
             e.stopPropagation();
             e.preventDefault();
             
-            var $toggle = $(this);
-            var $dropdown = $toggle.parent('.dropdown');
-            var $menu = $dropdown.find('.dropdown-menu');
+            var id = $(this).data('id');
+            var $menu = $('#menu-' + id);
+            var $allMenus = $('.menu-acoes-lista');
             
-            // Fechar outros dropdowns
-            $('.dropdown').not($dropdown).removeClass('open');
-            $('.dropdown-menu').not($menu).removeClass('show').css({
-                'position': '',
-                'top': '',
-                'right': '',
-                'left': ''
-            });
+            // Fechar todos os menus
+            $allMenus.not($menu).hide();
             
-            // Toggle do dropdown atual
-            if ($dropdown.hasClass('open')) {
-                // Fechar
-                $dropdown.removeClass('open');
-                $menu.removeClass('show').css({
-                    'position': '',
-                    'top': '',
-                    'right': '',
-                    'left': ''
-                });
-            } else {
-                // Abrir - calcular posição
-                var offset = $toggle.offset();
-                var toggleHeight = $toggle.outerHeight();
-                var toggleWidth = $toggle.outerWidth();
-                
-                $dropdown.addClass('open');
-                $menu.addClass('show').css({
-                    'position': 'fixed',
-                    'top': (offset.top + toggleHeight + 2) + 'px',
-                    'right': ($(window).width() - offset.left - toggleWidth) + 'px',
-                    'left': 'auto'
-                });
+            // Toggle do menu atual
+            $menu.toggle();
+        });
+        
+        // Fechar menu ao clicar fora
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.dropdown-menu-proposta').length) {
+                $('.menu-acoes-lista').hide();
             }
         });
         
-        // Fechar dropdown ao clicar fora
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.dropdown').length) {
-                $('.dropdown').removeClass('open');
-                $('.dropdown-menu').removeClass('show');
+        // Fechar menu ao clicar em um link
+        $(document).on('click', '.menu-acoes-lista a', function(e) {
+            if (!$(this).hasClass('link-excluir-proposta')) {
+                $('.menu-acoes-lista').hide();
             }
         });
 
