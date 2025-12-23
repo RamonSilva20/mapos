@@ -1,5 +1,7 @@
 <?php
 
+use Piggly\Pix\StaticPayload;
+
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
