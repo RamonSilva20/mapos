@@ -787,12 +787,14 @@ class Propostas extends MY_Controller
     
     /**
      * Verifica se o status da proposta deve consumir estoque
-     * Status que NÃO consomem: Rascunho, Modelo
-     * Status que consomem: Todos os outros (Em aberto, Pendente, Aguardando, Aprovada, Não aprovada, Concluído)
+     * Status que NÃO consomem: Rascunho, Modelo, Não aprovada
+     * Status que consomem: Em aberto, Pendente, Aguardando, Aprovada, Concluído
+     * 
+     * Nota: "Não aprovada" não consome estoque, similar a "Cancelado" na OS
      */
     private function statusConsumeEstoque($status)
     {
-        $statusQueNaoConsomem = ['Rascunho', 'Modelo'];
+        $statusQueNaoConsomem = ['Rascunho', 'Modelo', 'Não aprovada'];
         return !in_array($status, $statusQueNaoConsomem);
     }
     
