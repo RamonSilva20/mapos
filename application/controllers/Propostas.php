@@ -324,15 +324,24 @@ class Propostas extends MY_Controller
                 $subtotal = $preco * $quantidade;
                 $produtosId = !empty($produto['produtos_id']) ? $produto['produtos_id'] : null;
 
-                $this->db->insert('produtos_proposta', [
+                // Verificar se campo estoque_consumido existe
+                $campos = $this->db->list_fields('produtos_proposta');
+                $temEstoqueConsumido = in_array('estoque_consumido', $campos);
+                
+                $dataInsert = [
                     'proposta_id' => $idProposta,
                     'produtos_id' => $produtosId,
                     'descricao' => $produto['descricao'],
                     'quantidade' => $quantidade,
                     'preco' => $preco,
                     'subtotal' => $subtotal,
-                    'estoque_consumido' => 0,
-                ]);
+                ];
+                
+                if ($temEstoqueConsumido) {
+                    $dataInsert['estoque_consumido'] = 0;
+                }
+                
+                $this->db->insert('produtos_proposta', $dataInsert);
                 
                 $lastId = $this->db->insert_id();
                 
@@ -341,9 +350,11 @@ class Propostas extends MY_Controller
                     $this->load->model('produtos_model');
                     $this->produtos_model->updateEstoque($produtosId, $quantidade, '-');
                     
-                    // Marcar como consumido
-                    $this->db->where('idProdutoProposta', $lastId);
-                    $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+                    // Marcar como consumido (se campo existe)
+                    if ($temEstoqueConsumido) {
+                        $this->db->where('idProdutoProposta', $lastId);
+                        $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+                    }
                     
                     log_info("Estoque consumido ao adicionar produto. Proposta: {$idProposta}, Produto: {$produtosId}, Qtd: {$quantidade}, Status: {$proposta->status}");
                 }
@@ -778,8 +789,10 @@ class Propostas extends MY_Controller
                 $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '-');
             }
 
-            $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
-            $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+            if ($temEstoqueConsumido) {
+                $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
+                $this->db->update('produtos_proposta', ['estoque_consumido' => 1]);
+            }
 
             log_info("Estoque consumido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, Proposta: {$idProposta}");
             $produtosProcessados++;
@@ -794,9 +807,19 @@ class Propostas extends MY_Controller
      */
     private function devolverEstoqueProposta($idProposta)
     {
-        $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
-                  FROM produtos_proposta pp 
-                  WHERE pp.proposta_id = ? AND pp.estoque_consumido = 1 AND pp.produtos_id IS NOT NULL";
+        // Verificar se campo estoque_consumido existe
+        $campos = $this->db->list_fields('produtos_proposta');
+        $temEstoqueConsumido = in_array('estoque_consumido', $campos);
+        
+        if ($temEstoqueConsumido) {
+            $query = "SELECT pp.idProdutoProposta, pp.produtos_id, pp.quantidade 
+                      FROM produtos_proposta pp 
+                      WHERE pp.proposta_id = ? AND pp.estoque_consumido = 1 AND pp.produtos_id IS NOT NULL";
+        } else {
+            // Se campo não existe, não há como devolver (assumir que todos foram consumidos)
+            log_info("Campo estoque_consumido não existe. Não é possível devolver estoque. Proposta: {$idProposta}");
+            return true;
+        }
 
         $produtos = $this->db->query($query, [$idProposta])->result();
 
@@ -813,8 +836,10 @@ class Propostas extends MY_Controller
                 $this->produtos_model->updateEstoque($produto->produtos_id, $produto->quantidade, '+');
             }
 
-            $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
-            $this->db->update('produtos_proposta', ['estoque_consumido' => 0]);
+            if ($temEstoqueConsumido) {
+                $this->db->where('idProdutoProposta', $produto->idProdutoProposta);
+                $this->db->update('produtos_proposta', ['estoque_consumido' => 0]);
+            }
 
             log_info("Estoque devolvido: Produto {$produto->produtos_id}, Qtd: {$produto->quantidade}, Proposta: {$idProposta}");
             $produtosProcessados++;
