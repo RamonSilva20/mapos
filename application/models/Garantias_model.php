@@ -1,6 +1,6 @@
 <?php
 
-if (! defined('BASEPATH')) {
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -24,7 +24,7 @@ class Garantias_model extends CI_Model
 
         $query = $this->db->get();
 
-        $result = ! $one ? $query->result() : $query->row();
+        $result = !$one ? $query->result() : $query->row();
 
         return $result;
     }
@@ -48,7 +48,7 @@ class Garantias_model extends CI_Model
         $this->db->join('os', 'os.garantias_id = garantias.idGarantias');
         $this->db->join('clientes', 'os.clientes_id = clientes.idClientes');
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios');
-        $this->db->where('garantias.idGarantias', $id);
+        $this->db->where('os.idOs', $id);
         $this->db->limit(1);
 
         return $this->db->get()->row();
