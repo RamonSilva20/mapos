@@ -130,7 +130,7 @@ class Propostas extends MY_Controller
                 'numero_proposta' => $numeroProposta,
                 'data_proposta' => $dataProposta,
                 'data_validade' => $dataValidade ?: null,
-                'status' => $this->input->post('status') ?: 'Em aberto',
+                'status' => $this->input->post('status') ?: 'Aberto',
                 'clientes_id' => $clienteId,
                 'cliente_nome' => $clienteNome,
                 'usuarios_id' => $this->input->post('usuarios_id') ?: $this->session->userdata('id_admin'),
@@ -253,7 +253,7 @@ class Propostas extends MY_Controller
 
             $idProposta = $this->input->post('idProposta');
             $propostaAntiga = $this->propostas_model->getById($idProposta);
-            $statusAntigo = $propostaAntiga->status ?? 'Em aberto';
+            $statusAntigo = $propostaAntiga->status ?? 'Aberto';
             $novoStatus = $this->input->post('status');
             
             // Verificar mudanças de estoque necessárias
@@ -287,12 +287,12 @@ class Propostas extends MY_Controller
                 $this->salvarOutros($idProposta);
                 
                 // Gerenciar estoque baseado na mudança de status
-                // Caso 1: Não consumia, agora consome (Rascunho → Aprovada)
+                // Caso 1: Não consumia, agora consome (Orçamento → Aprovado)
                 if (!$statusAntigoConsome && $novoStatusConsome) {
                     $this->consumirEstoqueProposta($idProposta);
                     log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque CONSUMIDO. Proposta: {$idProposta}");
                 }
-                // Caso 2: Consumia, agora não consome (Aprovada → Rascunho)
+                // Caso 2: Consumia, agora não consome (Aprovado → Cancelado)
                 elseif ($statusAntigoConsome && !$novoStatusConsome) {
                     $this->devolverEstoqueProposta($idProposta);
                     log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque DEVOLVIDO. Proposta: {$idProposta}");
@@ -316,7 +316,7 @@ class Propostas extends MY_Controller
         if (is_array($produtos) && count($produtos) > 0) {
             // Buscar proposta para verificar status
             $proposta = $this->propostas_model->getById($idProposta);
-            $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Em aberto');
+            $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Aberto');
             
             foreach ($produtos as $produto) {
                 if (empty($produto['descricao'])) continue;
@@ -481,7 +481,7 @@ class Propostas extends MY_Controller
 
         // Devolver estoque antes de excluir (se houver estoque consumido)
         // Verificar se status consome estoque - se sim, precisa devolver
-        $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Em aberto');
+        $statusConsomeEstoque = $this->statusConsumeEstoque($proposta->status ?? 'Aberto');
         if ($statusConsomeEstoque) {
             $this->devolverEstoqueProposta($id);
             log_info("Estoque devolvido ao excluir proposta. ID: {$id}, Status: {$proposta->status}");
@@ -787,14 +787,12 @@ class Propostas extends MY_Controller
     
     /**
      * Verifica se o status da proposta deve consumir estoque
-     * Status que NÃO consomem: Rascunho, Modelo, Não aprovada
-     * Status que consomem: Em aberto, Pendente, Aguardando, Aprovada, Concluído
-     * 
-     * Nota: "Não aprovada" não consome estoque, similar a "Cancelado" na OS
+     * Status que NÃO consomem: Orçamento, Negociação (mesmos de OS)
+     * Status que consomem: Todos os outros (Aberto, Aprovado, Em Andamento, etc.)
      */
     private function statusConsumeEstoque($status)
     {
-        $statusQueNaoConsomem = ['Rascunho', 'Modelo', 'Não aprovada'];
+        $statusQueNaoConsomem = ['Orçamento', 'Negociação'];
         return !in_array($status, $statusQueNaoConsomem);
     }
     
@@ -953,18 +951,18 @@ class Propostas extends MY_Controller
             return;
         }
 
-        $statusAntigo = $proposta->status ?? 'Em aberto';
+        $statusAntigo = $proposta->status ?? 'Aberto';
 
         // Verificar mudanças de estoque necessárias
         $statusAntigoConsome = $this->statusConsumeEstoque($statusAntigo);
         $novoStatusConsome = $this->statusConsumeEstoque($novoStatus);
 
-        // Caso 1: Não consumia, agora consome (Rascunho → Aprovada)
+        // Caso 1: Não consumia, agora consome (Orçamento → Aprovado)
         if (!$statusAntigoConsome && $novoStatusConsome) {
             $this->consumirEstoqueProposta($idProposta);
             log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque CONSUMIDO. Proposta: {$idProposta}");
         }
-        // Caso 2: Consumia, agora não consome (Aprovada → Rascunho)
+        // Caso 2: Consumia, agora não consome (Aprovado → Cancelado)
         elseif ($statusAntigoConsome && !$novoStatusConsome) {
             $this->devolverEstoqueProposta($idProposta);
             log_info("Status mudou de '{$statusAntigo}' para '{$novoStatus}' - Estoque DEVOLVIDO. Proposta: {$idProposta}");
@@ -979,6 +977,26 @@ class Propostas extends MY_Controller
         if ($this->propostas_model->edit('propostas', $data, 'idProposta', $idProposta) == true) {
             log_info('Atualizou status da proposta. ID: ' . $idProposta . ' | Novo status: ' . $novoStatus);
             
+            // Gerar lançamento automático se mudou para Finalizado ou Faturado
+            if (($novoStatus === 'Finalizado' || $novoStatus === 'Faturado') && 
+                ($statusAntigo !== 'Finalizado' && $statusAntigo !== 'Faturado')) {
+                
+                // Verificar se já tem lançamento vinculado (verificar se campo existe)
+                $campos = $this->db->list_fields('propostas');
+                $temLancamento = false;
+                if (in_array('lancamento', $campos)) {
+                    $temLancamento = !empty($proposta->lancamento);
+                }
+                
+                if (!$temLancamento) {
+                    // Verificar se tem parcelas configuradas
+                    $parcelas = $this->propostas_model->getParcelas($idProposta);
+                    if (!empty($parcelas)) {
+                        $this->gerarLancamentoAutomatico($idProposta);
+                    }
+                }
+            }
+            
             $this->output
                 ->set_content_type('application/json')
                 ->set_output(json_encode(['result' => true, 'message' => 'Status atualizado com sucesso!']));
@@ -990,11 +1008,173 @@ class Propostas extends MY_Controller
     }
     
     /**
-     * Retorna contadores de propostas por status
+     * Gera lançamento financeiro automaticamente usando dados já salvos na Proposta
+     * Chamado quando a Proposta muda para Finalizado ou Faturado
+     */
+    private function gerarLancamentoAutomatico($idProposta)
+    {
+        // Buscar Proposta
+        $proposta = $this->propostas_model->getById($idProposta);
+        if (!$proposta) {
+            log_info("Erro ao gerar lançamento automático: Proposta #{$idProposta} não encontrada");
+            return false;
+        }
+
+        // Verificar se já tem lançamento
+        if (!empty($proposta->lancamento)) {
+            log_info("Proposta #{$idProposta} já possui lançamento vinculado. Pulando geração automática.");
+            return false;
+        }
+
+        // Verificar se tem parcelas configuradas
+        $parcelasConfiguradas = $this->propostas_model->getParcelas($idProposta);
+        
+        if (empty($parcelasConfiguradas)) {
+            log_info("Proposta #{$idProposta} não possui parcelas configuradas. Pulando geração automática.");
+            return false;
+        }
+
+        // Calcular valor total
+        $produtos = $this->propostas_model->getProdutos($idProposta);
+        $servicos = $this->propostas_model->getServicos($idProposta);
+        $outros = $this->propostas_model->getOutros($idProposta);
+        
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        $totalOutros = 0;
+        
+        foreach ($produtos as $p) {
+            $totalProdutos += $p->preco * $p->quantidade;
+        }
+        foreach ($servicos as $s) {
+            $totalServicos += $s->preco * $s->quantidade;
+        }
+        foreach ($outros as $o) {
+            $totalOutros += $o->preco ?? 0;
+        }
+        
+        $valorTotal = $totalProdutos + $totalServicos + $totalOutros;
+        
+        // Aplicar desconto se houver
+        if (!empty($proposta->desconto) && $proposta->desconto > 0) {
+            if ($proposta->tipo_desconto === 'percentual') {
+                $valorTotal = $valorTotal * (1 - ($proposta->desconto / 100));
+            } else {
+                $valorTotal = $valorTotal - $proposta->desconto;
+            }
+        }
+        
+        if ($valorTotal <= 0) {
+            log_info("Proposta #{$idProposta} tem valor total zero. Pulando geração automática.");
+            return false;
+        }
+
+        $this->load->model('financeiro_model');
+        $lancamentosIds = [];
+        
+        // Obter nome do cliente
+        $nomeCliente = $proposta->cliente_nome ?? '';
+        if (empty($nomeCliente) && !empty($proposta->clientes_id)) {
+            $this->load->model('clientes_model');
+            $cliente = $this->clientes_model->getById($proposta->clientes_id);
+            if ($cliente) {
+                $nomeCliente = $cliente->nomeCliente;
+            }
+        }
+        if (empty($nomeCliente)) {
+            $nomeCliente = 'Cliente não identificado';
+        }
+        
+        // Se tem parcelas configuradas, usar elas
+        if (!empty($parcelasConfiguradas) && count($parcelasConfiguradas) > 0) {
+            foreach ($parcelasConfiguradas as $parcela) {
+                $valor = floatval($parcela->valor) ?: 0;
+                if ($valor <= 0) {
+                    continue; // Pular parcelas sem valor
+                }
+                
+                // Usar data de vencimento da parcela ou calcular baseado em dias
+                $dataVencimento = date('Y-m-d');
+                if (!empty($parcela->data_vencimento)) {
+                    $dataVencimento = $parcela->data_vencimento;
+                } elseif (!empty($parcela->dias) && $parcela->dias > 0) {
+                    $dataBase = $proposta->data_proposta ?? date('Y-m-d');
+                    $dataVencimento = date('Y-m-d', strtotime($dataBase . ' +' . intval($parcela->dias) . ' days'));
+                }
+                
+                // Determinar status (parcelas de proposta são sempre pendentes inicialmente)
+                $statusPagamento = 'pendente';
+                $valorPago = 0;
+                $baixado = 0;
+                $dataPagamento = null;
+                
+                $dataLancamento = [
+                    'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - Parcela ' . $parcela->numero . ' - ' . htmlspecialchars($nomeCliente),
+                    'valor' => $valor,
+                    'valor_desconto' => $valor,
+                    'valor_pago' => $valorPago,
+                    'status_pagamento' => $statusPagamento,
+                    'desconto' => 0,
+                    'tipo_desconto' => 'real',
+                    'data_vencimento' => $dataVencimento,
+                    'data_pagamento' => $dataPagamento,
+                    'baixado' => $baixado,
+                    'cliente_fornecedor' => $nomeCliente,
+                    'clientes_id' => $proposta->clientes_id,
+                    'forma_pgto' => '', // Parcelas de proposta não têm forma de pagamento pré-configurada
+                    'tipo' => 'receita',
+                    'observacoes' => (!empty($parcela->observacao) ? $parcela->observacao . ' - ' : '') . 
+                                    'Referente à Proposta #' . ($proposta->numero_proposta ?: $idProposta),
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->financeiro_model->add('lancamentos', $dataLancamento);
+                $lancamentosIds[] = $this->db->insert_id();
+            }
+        } else {
+            // Se não tem parcelas configuradas, criar lançamento único
+            $dataLancamento = [
+                'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - ' . htmlspecialchars($nomeCliente),
+                'valor' => $valorTotal,
+                'valor_desconto' => $valorTotal,
+                'valor_pago' => 0,
+                'status_pagamento' => 'pendente',
+                'desconto' => 0,
+                'tipo_desconto' => 'real',
+                'data_vencimento' => $proposta->data_validade ?? date('Y-m-d'),
+                'data_pagamento' => null,
+                'baixado' => 0,
+                'cliente_fornecedor' => $nomeCliente,
+                'clientes_id' => $proposta->clientes_id,
+                'forma_pgto' => '',
+                'tipo' => 'receita',
+                'observacoes' => 'Referente à Proposta #' . ($proposta->numero_proposta ?: $idProposta),
+                'usuarios_id' => $this->session->userdata('id_admin')
+            ];
+            
+            $this->financeiro_model->add('lancamentos', $dataLancamento);
+            $lancamentosIds[] = $this->db->insert_id();
+        }
+
+        // Vincular primeiro lançamento à Proposta (se campo existir)
+        if (!empty($lancamentosIds)) {
+            // Verificar se campo lancamento existe
+            $campos = $this->db->list_fields('propostas');
+            if (in_array('lancamento', $campos)) {
+                $this->propostas_model->edit('propostas', ['lancamento' => $lancamentosIds[0]], 'idProposta', $idProposta);
+            }
+        }
+
+        log_info('Gerou lançamento financeiro automático para Proposta #' . $idProposta . '. Lançamentos: ' . implode(', ', $lancamentosIds));
+        return true;
+    }
+    
+    /**
+     * Retorna contadores de propostas por status (mesmos status de OS)
      */
     private function getContadoresStatus($where_array_excluindo_status = [])
     {
-        $status_list = ['Em aberto', 'Rascunho', 'Pendente', 'Aguardando', 'Aprovada', 'Não aprovada', 'Concluído', 'Modelo'];
+        $status_list = ['Aberto', 'Faturado', 'Negociação', 'Em Andamento', 'Orçamento', 'Finalizado', 'Cancelado', 'Aguardando Peças', 'Aprovado'];
         $contadores = [];
         
         // Contar total geral (sem filtro de status)
@@ -1011,6 +1191,208 @@ class Propostas extends MY_Controller
         }
         
         return $contadores;
+    }
+    
+    /**
+     * Gera lançamento financeiro usando parcelas configuradas
+     */
+    public function gerarLancamentoParcelas()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) {
+            echo json_encode(['result' => false, 'message' => 'Você não tem permissão']);
+            return;
+        }
+
+        $idProposta = $this->input->post('idProposta');
+        $parcelasJson = $this->input->post('parcelas');
+        $criarLancamento = $this->input->post('criar_lancamento');
+
+        if (!$idProposta) {
+            echo json_encode(['result' => false, 'message' => 'ID da proposta inválido']);
+            return;
+        }
+
+        // Buscar Proposta
+        $proposta = $this->propostas_model->getById($idProposta);
+        if (!$proposta) {
+            echo json_encode(['result' => false, 'message' => 'Proposta não encontrada']);
+            return;
+        }
+
+        // Verificar se já tem lançamento vinculado
+        if (!empty($proposta->lancamento)) {
+            echo json_encode(['result' => false, 'message' => 'Esta proposta já possui um lançamento financeiro vinculado']);
+            return;
+        }
+
+        // Decodificar parcelas
+        $parcelas = json_decode($parcelasJson, true);
+        if (!is_array($parcelas) || count($parcelas) === 0) {
+            echo json_encode(['result' => false, 'message' => 'Nenhuma parcela configurada']);
+            return;
+        }
+
+        // Se não deve criar lançamento, apenas retornar sucesso
+        if (!$criarLancamento || $criarLancamento == '0') {
+            echo json_encode(['result' => true, 'message' => 'Proposta atualizada. Lançamento não criado.']);
+            return;
+        }
+
+        $this->load->model('financeiro_model');
+        $lancamentosIds = [];
+
+        // Obter nome do cliente
+        $nomeCliente = $proposta->cliente_nome ?? '';
+        if (empty($nomeCliente) && !empty($proposta->clientes_id)) {
+            $this->load->model('clientes_model');
+            $cliente = $this->clientes_model->getById($proposta->clientes_id);
+            if ($cliente) {
+                $nomeCliente = $cliente->nomeCliente;
+            }
+        }
+        if (empty($nomeCliente)) {
+            $nomeCliente = 'Cliente não identificado';
+        }
+
+        foreach ($parcelas as $parcela) {
+            // Converter data de vencimento
+            $dataVencimento = date('Y-m-d');
+            if (!empty($parcela['data_vencimento'])) {
+                if (strpos($parcela['data_vencimento'], '/') !== false) {
+                    $dataParts = explode('/', $parcela['data_vencimento']);
+                    if (count($dataParts) == 3) {
+                        $dataVencimento = $dataParts[2] . '-' . $dataParts[1] . '-' . $dataParts[0];
+                    }
+                } else {
+                    $dataVencimento = $parcela['data_vencimento'];
+                }
+            } elseif (!empty($parcela['dias']) && $parcela['dias'] > 0) {
+                $dataBase = $proposta->data_proposta ?? date('Y-m-d');
+                $dataVencimento = date('Y-m-d', strtotime($dataBase . ' +' . intval($parcela['dias']) . ' days'));
+            }
+
+            $valor = floatval($parcela['valor']) ?: 0;
+            if ($valor <= 0) {
+                continue; // Pular parcelas sem valor
+            }
+
+            // Determinar status (parcelas de proposta são sempre pendentes inicialmente)
+            $statusPagamento = 'pendente';
+            $valorPago = 0;
+            $baixado = 0;
+            $dataPagamento = null;
+
+            $dataLancamento = [
+                'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - Parcela ' . $parcela['numero'] . ' - ' . htmlspecialchars($nomeCliente),
+                'valor' => $valor,
+                'valor_desconto' => $valor,
+                'valor_pago' => $valorPago,
+                'status_pagamento' => $statusPagamento,
+                'desconto' => 0,
+                'tipo_desconto' => 'real',
+                'data_vencimento' => $dataVencimento,
+                'data_pagamento' => $dataPagamento,
+                'baixado' => $baixado,
+                'cliente_fornecedor' => $nomeCliente,
+                'clientes_id' => $proposta->clientes_id,
+                'forma_pgto' => $parcela['forma_pgto'] ?? '',
+                'tipo' => 'receita',
+                'observacoes' => (!empty($parcela['observacao']) ? $parcela['observacao'] . ' - ' : '') . 
+                                'Referente à Proposta #' . ($proposta->numero_proposta ?: $idProposta),
+                'usuarios_id' => $this->session->userdata('id_admin')
+            ];
+            
+            // Adicionar conta bancária se fornecida
+            if (isset($parcela['conta_id']) && !empty($parcela['conta_id'])) {
+                $dataLancamento['contas_id'] = $parcela['conta_id'];
+            }
+            
+            $this->financeiro_model->add('lancamentos', $dataLancamento);
+            $lancamentosIds[] = $this->db->insert_id();
+        }
+
+        // Vincular primeiro lançamento à Proposta
+        if (!empty($lancamentosIds)) {
+            $this->propostas_model->edit('propostas', ['lancamento' => $lancamentosIds[0]], 'idProposta', $idProposta);
+        }
+
+        log_info('Gerou lançamento financeiro para Proposta #' . $idProposta . ' usando parcelas. Lançamentos: ' . implode(', ', $lancamentosIds));
+
+        $mensagem = count($lancamentosIds) . ' lançamento(s) criado(s) com sucesso!';
+        echo json_encode(['result' => true, 'message' => $mensagem, 'lancamentos' => $lancamentosIds]);
+    }
+    
+    /**
+     * Retorna dados da Proposta para o modal de faturamento
+     * Inclui parcelas se existirem
+     */
+    public function getDadosPropostaJson($idProposta)
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPropostas')) {
+            echo json_encode(['result' => false, 'message' => 'Sem permissão']);
+            return;
+        }
+
+        $proposta = $this->propostas_model->getById($idProposta);
+        if (!$proposta) {
+            echo json_encode(['result' => false, 'message' => 'Proposta não encontrada']);
+            return;
+        }
+
+        $produtos = $this->propostas_model->getProdutos($idProposta);
+        $servicos = $this->propostas_model->getServicos($idProposta);
+        $outros = $this->propostas_model->getOutros($idProposta);
+        
+        $totalProdutos = 0;
+        $totalServicos = 0;
+        $totalOutros = 0;
+        
+        foreach ($produtos as $p) {
+            $totalProdutos += $p->preco * $p->quantidade;
+        }
+        foreach ($servicos as $s) {
+            $totalServicos += $s->preco * $s->quantidade;
+        }
+        foreach ($outros as $o) {
+            $totalOutros += $o->preco ?? 0;
+        }
+        
+        $valorTotal = $totalProdutos + $totalServicos + $totalOutros;
+        
+        // Aplicar desconto se houver
+        if (!empty($proposta->desconto) && $proposta->desconto > 0) {
+            if ($proposta->tipo_desconto === 'percentual') {
+                $valorTotal = $valorTotal * (1 - ($proposta->desconto / 100));
+            } else {
+                $valorTotal = $valorTotal - $proposta->desconto;
+            }
+        }
+
+        // Buscar parcelas da Proposta
+        $parcelas = $this->propostas_model->getParcelas($idProposta);
+        
+        // Preparar parcelas para JSON
+        $parcelasArray = [];
+        foreach ($parcelas as $p) {
+            $parcelasArray[] = [
+                'id' => $p->idParcelaProposta ?? null,
+                'numero' => intval($p->numero),
+                'dias' => intval($p->dias),
+                'valor' => floatval($p->valor),
+                'observacao' => $p->observacao ?? '',
+                'data_vencimento' => $p->data_vencimento ?? null,
+                'forma_pgto' => '', // Parcelas de proposta não têm forma de pagamento pré-configurada
+                'status' => 'pendente'
+            ];
+        }
+
+        echo json_encode([
+            'result' => true,
+            'proposta' => $proposta,
+            'valorTotal' => $valorTotal,
+            'temLancamento' => !empty($proposta->lancamento),
+            'parcelas' => $parcelasArray
+        ]);
     }
     
     /**
