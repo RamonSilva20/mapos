@@ -2627,6 +2627,11 @@ class Os extends MY_Controller
         }
 
         log_info('Gerou lançamento financeiro automático para OS #' . $idOs . '. Lançamentos: ' . implode(', ', $lancamentosIds));
+        
+        if ($statusFaturado) {
+            log_info('Pagamentos automáticos registrados para OS #' . $idOs . ' (Status: Faturado - NF emitida)');
+        }
+        
         return true;
     }
 
