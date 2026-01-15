@@ -233,20 +233,24 @@
 
                             <?php if (!empty($produtos)): ?>
                             <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Materiais:</strong></p>
-                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px; list-style: none;">
+                            <div style="margin-left: 15px; margin-bottom: 10px;">
+                                <div style="display: flex; font-size: 11px; font-weight: bold; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #ddd;">
+                                    <div style="flex: 1; min-width: 0;">Descrição</div>
+                                    <div style="width: 80px; text-align: right; margin-left: 10px;">Qtd</div>
+                                    <div style="width: 90px; text-align: right; margin-left: 10px;">Unit.</div>
+                                    <div style="width: 100px; text-align: right; margin-left: 10px;">Preço</div>
+                                </div>
                                 <?php foreach ($produtos as $p): 
                                     $subtotal = floatval($p->quantidade) * floatval($p->preco);
                                 ?>
-                                <li style="margin-bottom: 3px; font-size: 11px; display: flex; justify-content: space-between;">
-                                    <span>
-                                        <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
-                                        - Qtd: <?= number_format($p->quantidade, 2, ',', '.') ?>
-                                        - Unit: R$ <?= number_format($p->preco, 2, ',', '.') ?>
-                                    </span>
-                                    <span style="margin-left: 10px; white-space: nowrap;"><strong>R$ <?= number_format($subtotal, 2, ',', '.') ?></strong></span>
-                                </li>
+                                <div style="display: flex; font-size: 11px; margin-bottom: 3px; align-items: flex-start;">
+                                    <div style="flex: 1; min-width: 0;"><?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?></div>
+                                    <div style="width: 80px; text-align: right; margin-left: 10px;"><?= number_format($p->quantidade, 2, ',', '.') ?></div>
+                                    <div style="width: 90px; text-align: right; margin-left: 10px;">R$ <?= number_format($p->preco, 2, ',', '.') ?></div>
+                                    <div style="width: 100px; text-align: right; margin-left: 10px; font-weight: bold;">R$ <?= number_format($subtotal, 2, ',', '.') ?></div>
+                                </div>
                                 <?php endforeach; ?>
-                            </ul>
+                            </div>
                             <?php endif; ?>
                             
                             <!-- Totais no final -->
