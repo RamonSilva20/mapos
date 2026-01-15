@@ -82,10 +82,11 @@ class Financeiro_model extends CI_Model
 
     public function getLancamentoById($id)
     {
-        $this->db->select('lancamentos.*, clientes.nomeCliente, clientes.documento, clientes.rua, clientes.numero, clientes.bairro, clientes.complemento, clientes.cidade, clientes.estado, clientes.cep, clientes.telefone, clientes.celular, clientes.email, usuarios.nome as usuario_nome');
+        $this->db->select('lancamentos.*, clientes.nomeCliente, clientes.documento, clientes.rua, clientes.numero, clientes.bairro, clientes.complemento, clientes.cidade, clientes.estado, clientes.cep, clientes.telefone, clientes.celular, clientes.email, usuarios.nome as usuario_nome, contas.conta as conta_nome, contas.banco as conta_banco, contas.numero as conta_numero, contas.tipo as conta_tipo');
         $this->db->from('lancamentos');
         $this->db->join('clientes', 'clientes.idClientes = lancamentos.clientes_id', 'left');
         $this->db->join('usuarios', 'usuarios.idUsuarios = lancamentos.usuarios_id', 'left');
+        $this->db->join('contas', 'contas.idContas = lancamentos.contas_id', 'left');
         $this->db->where('lancamentos.idLancamentos', $id);
         $this->db->limit(1);
 

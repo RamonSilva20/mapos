@@ -149,33 +149,38 @@ class Financeiro extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-            // Formatação correta dos valores
-            $valor = str_replace(',', '.', $this->input->post('valor'));
-            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));   
-            $desconto = $valor_desconto;
-            $total_sem_desconto = $valor + $valor_desconto;
-            $valor = $total_sem_desconto;
-            $total_com_desconto = $valor - $valor_desconto;
-            $valor_desconto = $total_com_desconto;
-            // Verifica se o valor está em formato monetário
-            if (!is_numeric($valor_desconto)) {
-                $valor_desconto = str_replace([',', '.'], ['', ''], $valor_desconto);
+            // Formatação correta dos valores - Lógica simplificada
+            $valor = str_replace(['.', ','], ['', '.'], $this->input->post('valor'));
+            // Aceitar tanto 'desconto' quanto 'descontos' (compatibilidade)
+            $descontoInput = $this->input->post('desconto') ?: $this->input->post('descontos') ?: '0';
+            $desconto = str_replace(['.', ','], ['', '.'], $descontoInput);
+            
+            $valor = floatval($valor) ?: 0;
+            $desconto = floatval($desconto) ?: 0;
+            
+            // Valor final após desconto
+            $valor_desconto = $valor - $desconto;
+            if ($valor_desconto < 0) {
+                $valor_desconto = 0;
+                $desconto = $valor; // Limitar desconto ao valor máximo
             }
-            if (!is_numeric($valor)) {
-                $valor = str_replace([',', '.'], ['', ''], $valor);
+            
+            // Verifica se o valor está em formato monetário (fallback)
+            if (!is_numeric($valor_desconto)) {
+                $valor_desconto = floatval(str_replace([',', '.'], ['', '.'], $this->input->post('valor_desconto') ?: '0'));
             }
             // Criação do array de dados
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => number_format($valor, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'valor_desconto' => number_format($valor_desconto, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'desconto' => $desconto,
+                'valor' => number_format($valor, 2, '.', ''), // Valor original
+                'valor_desconto' => number_format($valor_desconto, 2, '.', ''), // Valor final após desconto
+                'desconto' => number_format($desconto, 2, '.', ''), // Valor do desconto aplicado
                 'tipo_desconto' => 'real',
                 'data_vencimento' => $vencimento,
-                'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-                'baixado' => $this->input->post('recebido') ?: 0,
+                'data_pagamento' => ($this->input->post('recebido') && $recebimento) ? $recebimento : null,
+                'baixado' => $this->input->post('recebido') ? 1 : 0,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
+                'forma_pgto' => $this->input->post('formaPgto') ?: '',
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),
@@ -720,8 +725,83 @@ class Financeiro extends MY_Controller
             redirect('financeiro');
         }
 
+        // Opções de impressão
+        $opcoes = [
+            'mostrar_servicos' => $this->input->get('mostrar_servicos') !== '0',
+            'mostrar_preco_servicos' => $this->input->get('mostrar_preco_servicos') !== '0',
+            'mostrar_subtotais' => $this->input->get('mostrar_subtotais') !== '0',
+            'mostrar_detalhes_servicos' => $this->input->get('mostrar_detalhes_servicos') !== '0'
+        ];
+
+        // Buscar produtos e serviços relacionados (via OS ou Proposta)
+        $produtos = [];
+        $servicos = [];
+        $outros = [];
+        $tipoOrigem = null;
+        $idOrigem = null;
+
+        // Tentar encontrar OS relacionada
+        $this->load->model('os_model');
+        $os = $this->db->select('idOs')->where('lancamento', $id)->get('os')->row();
+        
+        if ($os) {
+            $tipoOrigem = 'os';
+            $idOrigem = $os->idOs;
+            $produtos = $this->os_model->getProdutos($os->idOs);
+            $servicos = $this->os_model->getServicos($os->idOs);
+            
+            // Buscar "outros produtos/serviços" da OS
+            $this->load->model('outros_produtos_servicos_os_model');
+            $outros = $this->outros_produtos_servicos_os_model->getByOs($os->idOs);
+        } else {
+            // Tentar encontrar Proposta relacionada
+            $this->load->model('propostas_model');
+            $proposta = $this->db->select('idProposta')->where('lancamento', $id)->get('propostas')->row();
+            
+            if ($proposta) {
+                $tipoOrigem = 'proposta';
+                $idOrigem = $proposta->idProposta;
+                $produtos = $this->propostas_model->getProdutos($proposta->idProposta);
+                $servicos = $this->propostas_model->getServicos($proposta->idProposta);
+                
+                // Buscar "outros produtos/serviços" da Proposta
+                $outros = $this->propostas_model->getOutros($proposta->idProposta);
+            }
+        }
+        
+        // Adicionar "outros" aos serviços (conforme solicitado)
+        if (!empty($outros)) {
+            foreach ($outros as $outro) {
+                // Criar objeto similar a serviço para manter compatibilidade
+                $servicoOutro = (object) [
+                    'nome' => $outro->descricao ?? 'Outro Item',
+                    'descricao' => $outro->descricao ?? 'Outro Item',
+                    'preco' => $outro->preco ?? 0,
+                    'quantidade' => 1,
+                    'detalhes' => null
+                ];
+                $servicos[] = $servicoOutro;
+            }
+        }
+
+        // Buscar pagamentos parciais
+        $this->load->model('pagamentos_parciais_model');
+        $pagamentos = $this->pagamentos_parciais_model->getByLancamento($id);
+
+        // Buscar chave PIX das configurações
+        $this->db->where('config', 'pix_key');
+        $configPix = $this->db->get('configuracoes')->row();
+        $pixKey = $configPix ? $configPix->valor : '';
+
         $this->data['lancamento'] = $lancamento;
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['opcoes'] = $opcoes;
+        $this->data['produtos'] = $produtos;
+        $this->data['servicos'] = $servicos; // Já inclui os "outros" como serviços
+        $this->data['tipoOrigem'] = $tipoOrigem;
+        $this->data['idOrigem'] = $idOrigem;
+        $this->data['pagamentos'] = $pagamentos;
+        $this->data['pixKey'] = $pixKey;
 
         // Calcular valor final (com desconto se houver)
         $valorFinal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;

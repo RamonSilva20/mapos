@@ -11,36 +11,30 @@
         .recibo-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px;
+            padding: 20px;
         }
         .recibo-header {
             text-align: center;
-            border-bottom: 3px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
         .recibo-title {
-            font-size: 28px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .recibo-numero {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            margin: 0;
         }
         .recibo-content {
-            margin: 30px 0;
-            line-height: 1.8;
+            margin: 15px 0;
+            line-height: 1.5;
         }
         .recibo-texto {
-            font-size: 16px;
+            font-size: 14px;
             text-align: justify;
-            margin: 20px 0;
-            padding: 20px;
+            margin: 10px 0;
+            padding: 12px;
             background-color: #f9f9f9;
-            border-left: 4px solid #333;
+            border-left: 3px solid #333;
         }
         .recibo-valor {
             font-size: 20px;
@@ -69,12 +63,12 @@
             min-width: 150px;
         }
         .recibo-footer {
-            margin-top: 60px;
-            padding-top: 40px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 2px solid #000;
         }
         .recibo-assinatura {
-            margin-top: 80px;
+            margin-top: 30px;
             text-align: center;
         }
         .recibo-assinatura-line {
@@ -82,18 +76,26 @@
             width: 300px;
             margin: 0 auto;
             padding-top: 5px;
+            font-size: 12px;
         }
         .recibo-data {
             text-align: right;
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 10px;
+            font-size: 12px;
         }
         @media print {
             .recibo-container {
-                padding: 20px;
+                padding: 15px;
             }
             .no-print {
                 display: none;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .recibo-content ul {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -131,75 +133,177 @@
             <section>
                 <div class="recibo-container">
                     <div class="recibo-header">
-                        <div class="recibo-title">Recibo de Pagamento</div>
-                        <div class="recibo-numero">Nº <?= str_pad($lancamento->idLancamentos, 6, 0, STR_PAD_LEFT) ?></div>
+                        <div class="recibo-title">Recibo Nº <?= str_pad($lancamento->idLancamentos, 6, 0, STR_PAD_LEFT) ?></div>
                     </div>
 
                     <div class="recibo-content">
                         <div class="recibo-texto">
-                            <p>
-                                Recebi de <strong><?= $lancamento->cliente_fornecedor ? htmlspecialchars($lancamento->cliente_fornecedor) : ($lancamento->nomeCliente ? htmlspecialchars($lancamento->nomeCliente) : 'Cliente') ?></strong>
-                                <?php if ($lancamento->documento) : ?>
-                                    , CPF/CNPJ: <strong><?= $lancamento->documento ?></strong>
+                            <?php
+                            // Buscar dados do cliente
+                            $nomeCliente = $lancamento->cliente_fornecedor ?: ($lancamento->nomeCliente ?: 'Cliente');
+                            
+                            // Montar endereço do cliente
+                            $enderecoCliente = '';
+                            if ($lancamento->rua || $lancamento->numero || $lancamento->bairro || $lancamento->cidade) {
+                                $enderecoParts = array_filter([
+                                    $lancamento->rua,
+                                    $lancamento->numero,
+                                    $lancamento->complemento,
+                                    $lancamento->bairro,
+                                    $lancamento->cidade,
+                                    $lancamento->estado,
+                                    $lancamento->cep
+                                ]);
+                                $enderecoCliente = implode(', ', $enderecoParts);
+                            } else {
+                                $enderecoCliente = 'Endereço não informado';
+                            }
+                            
+                            // Data do pagamento
+                            $dataPagamento = '';
+                            if ($lancamento->data_pagamento && $lancamento->data_pagamento != "0000-00-00") {
+                                $dataPagamento = date('d/m/Y', strtotime($lancamento->data_pagamento));
+                            } else {
+                                $dataPagamento = date('d/m/Y');
+                            }
+                            
+                            // Determinar texto referente conforme conteúdo
+                            $temProdutos = !empty($produtos);
+                            $temServicos = !empty($servicos) && $opcoes['mostrar_servicos'];
+                            
+                            $textoReferente = '';
+                            if ($temProdutos && $temServicos) {
+                                $textoReferente = 'referente aos seguintes serviços e materiais:';
+                            } elseif ($temProdutos) {
+                                $textoReferente = 'referente aos seguintes materiais:';
+                            } elseif ($temServicos) {
+                                $textoReferente = 'referente aos seguintes serviços:';
+                            } else {
+                                $textoReferente = 'referente a:';
+                            }
+                            ?>
+                            <p style="font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
+                                Declaro que recebi de <strong><?= htmlspecialchars($nomeCliente) ?></strong>, com endereço em <strong><?= htmlspecialchars($enderecoCliente) ?></strong>, o valor de <strong>R$ <?= number_format($valorFinal, 2, ',', '.') ?></strong> em <strong><?= $dataPagamento ?></strong>, <?= $textoReferente ?>
+                            </p>
+                        </div>
+
+                        <!-- Produtos e Serviços em formato texto simples -->
+                        <?php 
+                        $totalProdutos = 0;
+                        $totalServicos = 0;
+                        
+                        // Calcular totais
+                        if (!empty($produtos)) {
+                            foreach ($produtos as $p) {
+                                $totalProdutos += floatval($p->quantidade) * floatval($p->preco);
+                            }
+                        }
+                        
+                        if (!empty($servicos) && $opcoes['mostrar_servicos']) {
+                            foreach ($servicos as $s) {
+                                $preco = $s->preco ?? 0;
+                                $quantidade = $s->quantidade ?? 1;
+                                $totalServicos += $preco * $quantidade;
+                            }
+                        }
+                        ?>
+                        
+                        <?php if (!empty($produtos) || (!empty($servicos) && $opcoes['mostrar_servicos'])): ?>
+                        <div style="margin: 12px 0; font-size: 12px; line-height: 1.4;">
+                            <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
+                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Serviços:</strong></p>
+                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px; list-style: none;">
+                                <?php foreach ($servicos as $s): 
+                                    $preco = $s->preco ?? 0;
+                                    $quantidade = $s->quantidade ?? 1;
+                                    $subtotal = $preco * $quantidade;
+                                ?>
+                                <li style="margin-bottom: 3px; font-size: 11px; display: flex; justify-content: space-between;">
+                                    <span>
+                                        <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
+                                        <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
+                                            - <?= htmlspecialchars($s->detalhes) ?>
+                                        <?php endif; ?>
+                                    </span>
+                                    <span style="margin-left: 10px; white-space: nowrap;"><strong>R$ <?= number_format($subtotal, 2, ',', '.') ?></strong></span>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endif; ?>
+
+                            <?php if (!empty($produtos)): ?>
+                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Materiais:</strong></p>
+                            <div style="margin-left: 15px; margin-bottom: 10px;">
+                                <div style="display: flex; font-size: 11px; font-weight: bold; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #ddd;">
+                                    <div style="flex: 1; min-width: 0;">Descrição</div>
+                                    <div style="width: 80px; text-align: right; margin-left: 10px;">Qtd</div>
+                                    <div style="width: 90px; text-align: right; margin-left: 10px;">Unit.</div>
+                                    <div style="width: 100px; text-align: right; margin-left: 10px;">Preço</div>
+                                </div>
+                                <?php foreach ($produtos as $p): 
+                                    $subtotal = floatval($p->quantidade) * floatval($p->preco);
+                                ?>
+                                <div style="display: flex; font-size: 11px; margin-bottom: 3px; align-items: flex-start;">
+                                    <div style="flex: 1; min-width: 0;"><?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?></div>
+                                    <div style="width: 80px; text-align: right; margin-left: 10px;"><?= number_format($p->quantidade, 2, ',', '.') ?></div>
+                                    <div style="width: 90px; text-align: right; margin-left: 10px;">R$ <?= number_format($p->preco, 2, ',', '.') ?></div>
+                                    <div style="width: 100px; text-align: right; margin-left: 10px; font-weight: bold;">R$ <?= number_format($subtotal, 2, ',', '.') ?></div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <!-- Totais no final -->
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 13px; text-align: right;">
+                                <?php if ($totalServicos > 0): ?>
+                                <p style="margin: 2px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
                                 <?php endif; ?>
-                                , a quantia de:
-                            </p>
-
-                            <div class="recibo-valor">
-                                R$ <?= number_format($valorFinal, 2, ',', '.') ?>
-                                <div class="recibo-valor-extenso">
-                                    (<?= valorPorExtenso($valorFinal) ?>)
-                                </div>
+                                <?php if ($totalProdutos > 0): ?>
+                                <p style="margin: 2px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
+                                <?php endif; ?>
+                                <?php 
+                                $totalGeral = $totalProdutos + $totalServicos;
+                                if ($totalGeral > 0): 
+                                ?>
+                                <p style="margin: 5px 0 0 0; font-size: 14px; font-weight: bold; border-top: 1px solid #333; padding-top: 5px;">
+                                    <strong>TOTAL GERAL: R$ <?= number_format($totalGeral, 2, ',', '.') ?></strong>
+                                </p>
+                                <?php endif; ?>
                             </div>
-
-                            <p>
-                                Referente a: <strong><?= htmlspecialchars($lancamento->descricao) ?></strong>
-                            </p>
-
-                            <?php if ($lancamento->forma_pgto) : ?>
-                                <p>
-                                    Forma de pagamento: <strong><?= htmlspecialchars($lancamento->forma_pgto) ?></strong>
-                                </p>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <!-- Forma de Pagamento e Dados -->
+                        <?php if ($lancamento->forma_pgto || !empty($pagamentos) || $pixKey): ?>
+                        <div style="margin: 12px 0; font-size: 12px; line-height: 1.5;">
+                            <?php if ($lancamento->forma_pgto): ?>
+                            <p style="margin: 3px 0;"><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
                             <?php endif; ?>
-
-                            <?php if ($lancamento->observacoes) : ?>
-                                <p style="margin-top: 15px;">
-                                    <em><?= nl2br(htmlspecialchars($lancamento->observacoes)) ?></em>
-                                </p>
+                            
+                            <!-- Chave PIX em texto simples -->
+                            <?php if ($pixKey): ?>
+                            <p style="margin: 3px 0; font-size: 11px;"><strong>Chave PIX:</strong> <?= htmlspecialchars($pixKey) ?></p>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($pagamentos)): ?>
+                            <ul style="margin-left: 15px; padding-left: 10px; margin-top: 5px;">
+                                <?php foreach ($pagamentos as $pgto): ?>
+                                <li style="margin-bottom: 2px; font-size: 11px;">
+                                    R$ <?= number_format($pgto->valor, 2, ',', '.') ?> 
+                                    em <?= $pgto->data_pagamento && $pgto->data_pagamento != '0000-00-00' ? date('d/m/Y', strtotime($pgto->data_pagamento)) : '-' ?>
+                                    <?php if ($pgto->forma_pgto): ?>
+                                        - <?= htmlspecialchars($pgto->forma_pgto) ?>
+                                    <?php endif; ?>
+                                    <?php if ($pgto->observacao): ?>
+                                        (<?= htmlspecialchars($pgto->observacao) ?>)
+                                    <?php endif; ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
                             <?php endif; ?>
                         </div>
+                        <?php endif; ?>
 
-                        <div class="recibo-info">
-                            <?php if ($lancamento->data_pagamento && $lancamento->data_pagamento != "0000-00-00") : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Data do pagamento:</span>
-                                    <?= date('d/m/Y', strtotime($lancamento->data_pagamento)) ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($lancamento->data_vencimento) : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Data de vencimento:</span>
-                                    <?= date('d/m/Y', strtotime($lancamento->data_vencimento)) ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <div class="recibo-info-item">
-                                <span class="recibo-info-label">Tipo:</span>
-                                <?= ucfirst($lancamento->tipo) ?>
-                            </div>
-
-                            <?php if ($lancamento->valor_desconto > 0 && $lancamento->valor_desconto < $lancamento->valor) : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Valor original:</span>
-                                    R$ <?= number_format($lancamento->valor, 2, ',', '.') ?>
-                                </div>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Desconto:</span>
-                                    R$ <?= number_format($lancamento->valor - $lancamento->valor_desconto, 2, ',', '.') ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
                     </div>
 
                     <div class="recibo-footer">
@@ -213,8 +317,8 @@
 
                         <div class="recibo-assinatura">
                             <div class="recibo-assinatura-line">
-                                <?= $emitente->nome ?><br>
-                                <?= $lancamento->usuario_nome ? 'Emitido por: ' . $lancamento->usuario_nome : '' ?>
+                                Tecnico Litoral<br>
+                                Tiago Marques Bomfim
                             </div>
                         </div>
                     </div>
