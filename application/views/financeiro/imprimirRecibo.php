@@ -254,7 +254,7 @@
                             <?php endif; ?>
                             
                             <!-- Totais no final -->
-                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 13px;">
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 13px; text-align: right;">
                                 <?php if ($totalServicos > 0): ?>
                                 <p style="margin: 2px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
                                 <?php endif; ?>
