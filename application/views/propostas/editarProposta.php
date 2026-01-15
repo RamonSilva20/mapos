@@ -476,14 +476,32 @@ $(document).ready(function() {
     });
 
     $("#servico").autocomplete({
-        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
+        source: function(request, response) {
+            $.ajax({
+                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function(data) {
+                    response(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erro ao buscar serviços:", error);
+                    response([]);
+                }
+            });
+        },
         minLength: 2,
         select: function(event, ui) {
-            $("#idServico").val(ui.item.id);
-            // Converter preço corretamente (já vem como número do banco)
-            var preco = parseFloat(ui.item.preco);
-            $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-            $("#quantidade_servico").focus();
+            if (ui.item) {
+                $("#idServico").val(ui.item.id);
+                // Converter preço corretamente (já vem como número do banco)
+                var preco = parseFloat(ui.item.preco);
+                $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+                $("#quantidade_servico").focus();
+            }
+            return false;
         }
     });
 
