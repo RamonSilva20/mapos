@@ -423,6 +423,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             <div class="span12 alert alert-info" style="margin-left: 0; margin-bottom: 15px;">
                 <i class="bx bx-info-circle"></i> <strong>Lançamento Manual:</strong> Preencha apenas os campos essenciais. Campos com <strong>*</strong> são obrigatórios.
+                <br><small style="color: #666;">Nota: Lançamentos criados via OS/Propostas já vêm com forma de pagamento e data preenchidas automaticamente.</small>
             </div>
 
             <!-- Linha 1: Tipo e Descrição -->
