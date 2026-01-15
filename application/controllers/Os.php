@@ -735,6 +735,113 @@ class Os extends MY_Controller
         }
     }
 
+    public function clonar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para clonar OS.');
+            redirect('os');
+        }
+
+        $idOriginal = $this->uri->segment(3);
+        if (!$idOriginal || !is_numeric($idOriginal)) {
+            $this->session->set_flashdata('error', 'OS não encontrada.');
+            redirect('os');
+        }
+
+        // Buscar OS original
+        $osOriginal = $this->os_model->getById($idOriginal);
+        if (!$osOriginal) {
+            $this->session->set_flashdata('error', 'OS não encontrada.');
+            redirect('os');
+        }
+
+        // Preparar dados da nova OS (copiar tudo exceto ID e campos específicos)
+        $data = [
+            'dataInicial' => date('Y-m-d'),
+            'dataFinal' => null,
+            'garantia' => $osOriginal->garantia,
+            'descricaoProduto' => $osOriginal->descricaoProduto,
+            'defeito' => $osOriginal->defeito,
+            'observacoes' => $osOriginal->observacoes,
+            'laudoTecnico' => $osOriginal->laudoTecnico,
+            'clientes_id' => $osOriginal->clientes_id,
+            'usuarios_id' => $this->session->userdata('id_admin'),
+            'status' => 'Aberto', // Sempre começar como "Aberto" ao clonar
+            'faturado' => 0,
+            'valorTotal' => $osOriginal->valorTotal,
+            'desconto' => $osOriginal->desconto,
+            'valor_desconto' => $osOriginal->valor_desconto,
+            'tipo_desconto' => $osOriginal->tipo_desconto,
+            'forma_pgto' => $osOriginal->forma_pgto,
+            'parcelas' => $osOriginal->parcelas,
+            'valor_entrada' => $osOriginal->valor_entrada,
+            'lancamento' => null, // Não copiar lançamento financeiro
+        ];
+
+        // Criar nova OS
+        $idNovaOs = $this->os_model->add('os', $data, true);
+        
+        if (!$idNovaOs) {
+            $this->session->set_flashdata('error', 'Erro ao clonar OS.');
+            redirect('os');
+        }
+
+        // Copiar produtos
+        $produtos = $this->os_model->getProdutos($idOriginal);
+        foreach ($produtos as $produto) {
+            $this->db->insert('produtos_os', [
+                'idOs' => $idNovaOs,
+                'idProduto' => $produto->idProduto,
+                'quantidade' => $produto->quantidade,
+                'preco' => $produto->preco,
+            ]);
+        }
+
+        // Copiar serviços
+        $servicos = $this->os_model->getServicos($idOriginal);
+        foreach ($servicos as $servico) {
+            $this->db->insert('servicos_os', [
+                'idOs' => $idNovaOs,
+                'idServico' => $servico->idServico,
+                'quantidade' => $servico->quantidade,
+                'preco' => $servico->preco,
+            ]);
+        }
+
+        // Copiar parcelas
+        $this->load->model('parcelas_os_model');
+        $parcelas = $this->parcelas_os_model->getByOs($idOriginal);
+        foreach ($parcelas as $parcela) {
+            $this->db->insert('parcelas_os', [
+                'os_id' => $idNovaOs,
+                'numero' => $parcela->numero,
+                'valor' => $parcela->valor,
+                'data_vencimento' => $parcela->data_vencimento,
+                'dias' => $parcela->dias,
+                'forma_pgto' => $parcela->forma_pgto,
+                'conta_id' => $parcela->conta_id,
+                'observacao' => $parcela->observacao,
+                'detalhes' => $parcela->detalhes,
+            ]);
+        }
+
+        // Copiar outros produtos/serviços
+        $this->load->model('outros_produtos_servicos_os_model');
+        $outros = $this->outros_produtos_servicos_os_model->getByOs($idOriginal);
+        foreach ($outros as $outro) {
+            $this->db->insert('outros_produtos_servicos_os', [
+                'os_id' => $idNovaOs,
+                'descricao' => $outro->descricao,
+                'preco' => $outro->preco,
+                'ordem' => $outro->ordem,
+            ]);
+        }
+
+        log_info('Clonou OS #' . $idOriginal . ' para OS #' . $idNovaOs);
+        $this->session->set_flashdata('success', 'OS clonada com sucesso!');
+        redirect('os/editar/' . $idNovaOs);
+    }
+
     public function excluir()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
