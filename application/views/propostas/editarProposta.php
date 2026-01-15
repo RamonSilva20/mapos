@@ -438,10 +438,28 @@ $(document).ready(function() {
     });
 
     $("#vendedor").autocomplete({
-        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
+        source: function(request, response) {
+            $.ajax({
+                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function(data) {
+                    response(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erro ao buscar usuários:", error);
+                    response([]);
+                }
+            });
+        },
         minLength: 1,
         select: function(event, ui) {
-            $("#usuarios_id").val(ui.item.id);
+            if (ui.item) {
+                $("#usuarios_id").val(ui.item.id);
+            }
+            return false;
         }
     });
 
