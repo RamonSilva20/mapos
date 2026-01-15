@@ -446,6 +446,9 @@
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'ePropostas')) { ?>
                                                     <li><a href="<?php echo base_url(); ?>index.php/propostas/editar/<?php echo $r->idProposta; ?>" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-edit"></i> Editar</a></li>
                                                 <?php } ?>
+                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aPropostas')) { ?>
+                                                    <li><a href="<?php echo base_url(); ?>index.php/propostas/clonar/<?php echo $r->idProposta; ?>" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-copy"></i> Clonar</a></li>
+                                                <?php } ?>
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) { ?>
                                                     <li style="height: 1px; margin: 5px 0; overflow: hidden; background-color: #e5e5e5;"></li>
                                                     <li><a href="#modalExcluir" role="button" data-toggle="modal" data-nome="<?php echo $numeroProposta; ?>" data-id="<?php echo $r->idProposta; ?>" class="link-excluir-proposta" style="display: block; padding: 8px 15px; color: #333; text-decoration: none;"><i class="bx bx-trash-alt"></i> Excluir</a></li>

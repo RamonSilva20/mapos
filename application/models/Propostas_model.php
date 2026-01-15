@@ -187,6 +187,27 @@ class Propostas_model extends CI_Model
         return 1;
     }
 
+    public function autoCompleteUsuario($q)
+    {
+        $this->db->select('*');
+        $this->db->limit(25);
+        $this->db->like('nome', $q);
+        $this->db->where('situacao', 1);
+        $query = $this->db->get('usuarios');
+        $row_set = [];
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['nome'] . ' | Telefone: ' . ($row['telefone'] ?? ''),
+                    'id' => $row['idUsuarios'],
+                    'value' => $row['nome']
+                ];
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode($row_set);
+    }
+
     /**
      * Gera QR Code Pix para proposta
      */

@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<!-- jQuery UI deve ser carregado após jQuery base (que já está no topo.php) -->
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
@@ -398,36 +399,25 @@ $(document).ready(function() {
         atualizarResumo();
     }
 
-    // Autocomplete de cliente (opcional - pode digitar livremente)
+    // Autocomplete de cliente
     $("#cliente").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
-        minLength: 1,
+        minLength: 2,
         select: function(event, ui) {
             $("#clientes_id").val(ui.item.id);
-            return true;
-        },
-        change: function(event, ui) {
-            // Se não foi selecionado do autocomplete, limpar o ID
-            if (!ui.item) {
-                $("#clientes_id").val('');
-            }
         }
     });
-    
-    // Permitir digitação livre
-    $("#cliente").on('keyup', function() {
-        // Se o usuário está digitando livremente, permitir
-        console.log('Cliente digitando: ' + $(this).val());
-    });
 
+    // Autocomplete de vendedor
     $("#vendedor").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
-        minLength: 1,
+        minLength: 2,
         select: function(event, ui) {
             $("#usuarios_id").val(ui.item.id);
         }
     });
 
+    // Autocomplete de produto
     $("#produto").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
         minLength: 2,
@@ -440,6 +430,7 @@ $(document).ready(function() {
         }
     });
 
+    // Autocomplete de serviço
     $("#servico").autocomplete({
         source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
         minLength: 2,
