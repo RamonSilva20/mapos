@@ -445,6 +445,113 @@ class Propostas extends MY_Controller
         }
     }
 
+    public function clonar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPropostas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para clonar propostas.');
+            redirect('propostas/gerenciar');
+        }
+
+        $idOriginal = $this->uri->segment(3);
+        if (!$idOriginal || !is_numeric($idOriginal)) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        // Buscar proposta original
+        $propostaOriginal = $this->propostas_model->getById($idOriginal);
+        if (!$propostaOriginal) {
+            $this->session->set_flashdata('error', 'Proposta não encontrada.');
+            redirect('propostas/gerenciar');
+        }
+
+        // Gerar novo número de proposta
+        $numeroProposta = $this->propostas_model->gerarNumeroProposta();
+
+        // Preparar dados da nova proposta (copiar tudo exceto ID e número)
+        $data = [
+            'numero_proposta' => $numeroProposta,
+            'data_proposta' => date('Y-m-d'),
+            'data_validade' => $propostaOriginal->data_validade,
+            'status' => 'Aberto', // Sempre começar como "Aberto" ao clonar
+            'clientes_id' => $propostaOriginal->clientes_id,
+            'cliente_nome' => $propostaOriginal->cliente_nome,
+            'usuarios_id' => $this->session->userdata('id_admin'),
+            'observacoes' => $propostaOriginal->observacoes,
+            'desconto' => $propostaOriginal->desconto,
+            'valor_desconto' => $propostaOriginal->valor_desconto,
+            'tipo_desconto' => $propostaOriginal->tipo_desconto,
+            'valor_total' => $propostaOriginal->valor_total,
+            'tipo_cond_comerc' => $propostaOriginal->tipo_cond_comerc,
+            'cond_comerc_texto' => $propostaOriginal->cond_comerc_texto,
+            'validade_dias' => $propostaOriginal->validade_dias,
+            'prazo_entrega' => $propostaOriginal->prazo_entrega,
+            'lancamento' => null, // Não copiar lançamento financeiro
+        ];
+
+        // Criar nova proposta
+        $idNovaProposta = $this->propostas_model->add('propostas', $data, true);
+        
+        if (!$idNovaProposta) {
+            $this->session->set_flashdata('error', 'Erro ao clonar proposta.');
+            redirect('propostas/gerenciar');
+        }
+
+        // Copiar produtos
+        $produtos = $this->propostas_model->getProdutos($idOriginal);
+        foreach ($produtos as $produto) {
+            $this->db->insert('produtos_proposta', [
+                'proposta_id' => $idNovaProposta,
+                'produtos_id' => $produto->produtos_id,
+                'descricao' => $produto->descricao,
+                'quantidade' => $produto->quantidade,
+                'preco' => $produto->preco,
+                'subtotal' => $produto->subtotal,
+                'estoque_consumido' => 0, // Não copiar consumo de estoque
+            ]);
+        }
+
+        // Copiar serviços
+        $servicos = $this->propostas_model->getServicos($idOriginal);
+        foreach ($servicos as $servico) {
+            $this->db->insert('servicos_proposta', [
+                'proposta_id' => $idNovaProposta,
+                'servicos_id' => $servico->servicos_id,
+                'descricao' => $servico->descricao,
+                'quantidade' => $servico->quantidade,
+                'preco' => $servico->preco,
+                'subtotal' => $servico->subtotal,
+            ]);
+        }
+
+        // Copiar parcelas
+        $parcelas = $this->propostas_model->getParcelas($idOriginal);
+        foreach ($parcelas as $parcela) {
+            $this->db->insert('parcelas_proposta', [
+                'proposta_id' => $idNovaProposta,
+                'numero' => $parcela->numero,
+                'valor' => $parcela->valor,
+                'data_vencimento' => $parcela->data_vencimento,
+                'dias' => $parcela->dias,
+                'observacao' => $parcela->observacao,
+            ]);
+        }
+
+        // Copiar outros produtos/serviços
+        $outros = $this->propostas_model->getOutros($idOriginal);
+        foreach ($outros as $outro) {
+            $this->db->insert('outros_proposta', [
+                'proposta_id' => $idNovaProposta,
+                'descricao' => $outro->descricao,
+                'preco' => $outro->preco,
+            ]);
+        }
+
+        log_info('Clonou proposta #' . $idOriginal . ' para proposta #' . $idNovaProposta . ' (Número: ' . $numeroProposta . ')');
+        $this->session->set_flashdata('success', 'Proposta clonada com sucesso! Número: ' . $numeroProposta);
+        redirect('propostas/editar/' . $idNovaProposta);
+    }
+
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dPropostas')) {
