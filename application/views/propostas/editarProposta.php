@@ -345,15 +345,6 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    // Verificar se jQuery UI está carregado
-    if (typeof $.ui === 'undefined' || typeof $.ui.autocomplete === 'undefined') {
-        console.error('jQuery UI não está carregado corretamente!');
-        alert('Erro: jQuery UI não está carregado. Recarregue a página.');
-        return;
-    }
-    
-    console.log('jQuery UI carregado:', typeof $.ui !== 'undefined');
-    
     // Máscaras e datepicker
     $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy' });
     $(".money").maskMoney({
