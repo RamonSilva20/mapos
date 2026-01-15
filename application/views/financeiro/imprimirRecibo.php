@@ -233,17 +233,15 @@
 
                             <?php if (!empty($produtos)): ?>
                             <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Materiais:</strong></p>
-                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px;">
-                                <?php foreach ($produtos as $p): ?>
-                                <li style="margin-bottom: 3px; font-size: 11px;">
-                                    <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
-                                    <?php if ($opcoes['mostrar_preco_servicos']): ?>
-                                        - Qtd: <?= number_format($p->quantidade, 2, ',', '.') ?>
-                                        - Unit: R$ <?= number_format($p->preco, 2, ',', '.') ?>
-                                        <?php if ($opcoes['mostrar_subtotais']): ?>
-                                            - Subtotal: R$ <?= number_format(floatval($p->quantidade) * floatval($p->preco), 2, ',', '.') ?>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px; list-style: none;">
+                                <?php foreach ($produtos as $p): 
+                                    $subtotal = floatval($p->quantidade) * floatval($p->preco);
+                                ?>
+                                <li style="margin-bottom: 3px; font-size: 11px; display: flex; justify-content: space-between;">
+                                    <span>
+                                        <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
+                                    </span>
+                                    <span style="margin-left: 10px; white-space: nowrap;"><strong>R$ <?= number_format($subtotal, 2, ',', '.') ?></strong></span>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>
