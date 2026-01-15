@@ -164,94 +164,107 @@
                             </p>
                         </div>
 
-                        <!-- Produtos e Serviços -->
+                        <!-- Produtos e Serviços em formato texto simples -->
+                        <?php 
+                        $totalProdutos = 0;
+                        $totalServicos = 0;
+                        
+                        // Calcular totais
+                        if (!empty($produtos)) {
+                            foreach ($produtos as $p) {
+                                $totalProdutos += floatval($p->quantidade) * floatval($p->preco);
+                            }
+                        }
+                        
+                        if (!empty($servicos) && $opcoes['mostrar_servicos']) {
+                            foreach ($servicos as $s) {
+                                $preco = $s->preco ?? 0;
+                                $quantidade = $s->quantidade ?? 1;
+                                $totalServicos += $preco * $quantidade;
+                            }
+                        }
+                        ?>
+                        
                         <?php if (!empty($produtos) || (!empty($servicos) && $opcoes['mostrar_servicos'])): ?>
-                        <div style="margin: 30px 0;">
+                        <div style="margin: 25px 0; font-size: 16px; line-height: 1.8;">
                             <?php if (!empty($produtos)): ?>
-                            <h4 style="margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px;">PRODUTOS</h4>
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                                <thead>
-                                    <tr style="background-color: #f0f0f0; border-bottom: 2px solid #333;">
-                                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Descrição</th>
-                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 10%;">Qtd</th>
-                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 15%;">Preço Unit.</th>
-                                        <th style="text-align: right; padding: 10px; border: 1px solid #ddd; width: 15%;">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    $totalProdutos = 0;
-                                    foreach ($produtos as $p): 
-                                        $subtotal = floatval($p->quantidade) * floatval($p->preco);
-                                        $totalProdutos += $subtotal;
-                                    ?>
-                                    <tr>
-                                        <td style="padding: 8px; border: 1px solid #ddd;"><?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?></td>
-                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;"><?= number_format($p->quantidade, 2, ',', '.') ?></td>
-                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($p->preco, 2, ',', '.') ?></td>
-                                        <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                                <tfoot>
-                                    <tr style="background-color: #f9f9f9; font-weight: bold;">
-                                        <td colspan="3" style="text-align: right; padding: 10px; border: 1px solid #ddd;">Total Produtos:</td>
-                                        <td style="text-align: right; padding: 10px; border: 1px solid #ddd;">R$ <?= number_format($totalProdutos, 2, ',', '.') ?></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <p style="margin-bottom: 10px;"><strong>Materiais:</strong></p>
+                            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                                <?php foreach ($produtos as $p): ?>
+                                <li style="margin-bottom: 8px;">
+                                    <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
+                                    <?php if ($opcoes['mostrar_preco_servicos']): ?>
+                                        - Qtd: <?= number_format($p->quantidade, 2, ',', '.') ?>
+                                        - Unit: R$ <?= number_format($p->preco, 2, ',', '.') ?>
+                                        <?php if ($opcoes['mostrar_subtotais']): ?>
+                                            - Subtotal: R$ <?= number_format(floatval($p->quantidade) * floatval($p->preco), 2, ',', '.') ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
                             <?php endif; ?>
 
                             <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
-                            <h4 style="margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px;">SERVIÇOS</h4>
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                                <thead>
-                                    <tr style="background-color: #f0f0f0; border-bottom: 2px solid #333;">
-                                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Descrição</th>
-                                        <?php if ($opcoes['mostrar_preco_servicos']): ?>
-                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 10%;">Qtd</th>
-                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 15%;">Preço Unit.</th>
-                                        <?php endif; ?>
+                            <p style="margin-bottom: 10px;"><strong>Serviços:</strong></p>
+                            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                                <?php foreach ($servicos as $s): ?>
+                                <li style="margin-bottom: 8px;">
+                                    <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
+                                    <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
+                                        - <?= htmlspecialchars($s->detalhes) ?>
+                                    <?php endif; ?>
+                                    <?php if ($opcoes['mostrar_preco_servicos']): ?>
+                                        - Qtd: <?= number_format($s->quantidade ?? 1, 2, ',', '.') ?>
+                                        - Unit: R$ <?= number_format($s->preco ?? 0, 2, ',', '.') ?>
                                         <?php if ($opcoes['mostrar_subtotais']): ?>
-                                        <th style="text-align: right; padding: 10px; border: 1px solid #ddd; width: 15%;">Subtotal</th>
+                                            - Subtotal: R$ <?= number_format(($s->preco ?? 0) * ($s->quantidade ?? 1), 2, ',', '.') ?>
                                         <?php endif; ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    $totalServicos = 0;
-                                    foreach ($servicos as $s): 
-                                        $preco = $s->preco ?? 0;
-                                        $quantidade = $s->quantidade ?? 1;
-                                        $subtotal = $preco * $quantidade;
-                                        $totalServicos += $subtotal;
-                                    ?>
-                                    <tr>
-                                        <td style="padding: 8px; border: 1px solid #ddd;">
-                                            <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
-                                            <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
-                                            <br><small style="color: #666;"><?= htmlspecialchars($s->detalhes) ?></small>
-                                            <?php endif; ?>
-                                        </td>
-                                        <?php if ($opcoes['mostrar_preco_servicos']): ?>
-                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;"><?= number_format($quantidade, 2, ',', '.') ?></td>
-                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($preco, 2, ',', '.') ?></td>
-                                        <?php endif; ?>
-                                        <?php if ($opcoes['mostrar_subtotais']): ?>
-                                        <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
-                                        <?php endif; ?>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                                <?php if ($opcoes['mostrar_subtotais']): ?>
-                                <tfoot>
-                                    <tr style="background-color: #f9f9f9; font-weight: bold;">
-                                        <td colspan="<?= ($opcoes['mostrar_preco_servicos'] ? 3 : 1) ?>" style="text-align: right; padding: 10px; border: 1px solid #ddd;">Total Serviços:</td>
-                                        <td style="text-align: right; padding: 10px; border: 1px solid #ddd;">R$ <?= number_format($totalServicos, 2, ',', '.') ?></td>
-                                    </tr>
-                                </tfoot>
+                                    <?php endif; ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endif; ?>
+                            
+                            <!-- Totais no final -->
+                            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                                <?php if ($totalProdutos > 0): ?>
+                                <p style="margin: 5px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
                                 <?php endif; ?>
-                            </table>
+                                <?php if ($totalServicos > 0): ?>
+                                <p style="margin: 5px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <!-- Forma de Pagamento e Dados -->
+                        <?php if ($lancamento->forma_pgto): ?>
+                        <div style="margin: 25px 0; font-size: 16px; line-height: 1.8;">
+                            <p><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
+                            
+                            <?php
+                            // Buscar pagamentos parciais se houver
+                            $this->load->model('pagamentos_parciais_model');
+                            $pagamentos = $this->pagamentos_parciais_model->getByLancamento($lancamento->idLancamentos);
+                            
+                            if (!empty($pagamentos)):
+                            ?>
+                            <p style="margin-top: 10px;"><strong>Pagamentos Realizados:</strong></p>
+                            <ul style="margin-left: 20px;">
+                                <?php foreach ($pagamentos as $pgto): ?>
+                                <li style="margin-bottom: 5px;">
+                                    R$ <?= number_format($pgto->valor, 2, ',', '.') ?> 
+                                    em <?= $pgto->data_pagamento && $pgto->data_pagamento != '0000-00-00' ? date('d/m/Y', strtotime($pgto->data_pagamento)) : '-' ?>
+                                    <?php if ($pgto->forma_pgto): ?>
+                                        - <?= htmlspecialchars($pgto->forma_pgto) ?>
+                                    <?php endif; ?>
+                                    <?php if ($pgto->observacao): ?>
+                                        (<?= htmlspecialchars($pgto->observacao) ?>)
+                                    <?php endif; ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -269,8 +282,8 @@
 
                         <div class="recibo-assinatura">
                             <div class="recibo-assinatura-line">
-                                <?= $emitente->nome ?><br>
-                                <?= $lancamento->usuario_nome ? 'Emitido por: ' . $lancamento->usuario_nome : '' ?>
+                                Tecnico Litoral<br>
+                                Tiago Marques Bomfim
                             </div>
                         </div>
                     </div>
