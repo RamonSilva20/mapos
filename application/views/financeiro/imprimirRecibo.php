@@ -210,6 +210,27 @@
                         
                         <?php if (!empty($produtos) || (!empty($servicos) && $opcoes['mostrar_servicos'])): ?>
                         <div style="margin: 12px 0; font-size: 12px; line-height: 1.4;">
+                            <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
+                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Serviços:</strong></p>
+                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px; list-style: none;">
+                                <?php foreach ($servicos as $s): 
+                                    $preco = $s->preco ?? 0;
+                                    $quantidade = $s->quantidade ?? 1;
+                                    $subtotal = $preco * $quantidade;
+                                ?>
+                                <li style="margin-bottom: 3px; font-size: 11px; display: flex; justify-content: space-between;">
+                                    <span>
+                                        <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
+                                        <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
+                                            - <?= htmlspecialchars($s->detalhes) ?>
+                                        <?php endif; ?>
+                                    </span>
+                                    <span style="margin-left: 10px; white-space: nowrap;"><strong>R$ <?= number_format($subtotal, 2, ',', '.') ?></strong></span>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endif; ?>
+
                             <?php if (!empty($produtos)): ?>
                             <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Materiais:</strong></p>
                             <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px;">
@@ -227,35 +248,14 @@
                                 <?php endforeach; ?>
                             </ul>
                             <?php endif; ?>
-
-                            <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
-                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Serviços:</strong></p>
-                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px;">
-                                <?php foreach ($servicos as $s): ?>
-                                <li style="margin-bottom: 3px; font-size: 11px;">
-                                    <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
-                                    <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
-                                        - <?= htmlspecialchars($s->detalhes) ?>
-                                    <?php endif; ?>
-                                    <?php if ($opcoes['mostrar_preco_servicos']): ?>
-                                        - Qtd: <?= number_format($s->quantidade ?? 1, 2, ',', '.') ?>
-                                        - Unit: R$ <?= number_format($s->preco ?? 0, 2, ',', '.') ?>
-                                        <?php if ($opcoes['mostrar_subtotais']): ?>
-                                            - Subtotal: R$ <?= number_format(($s->preco ?? 0) * ($s->quantidade ?? 1), 2, ',', '.') ?>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <?php endif; ?>
                             
                             <!-- Totais no final -->
                             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 13px;">
-                                <?php if ($totalProdutos > 0): ?>
-                                <p style="margin: 2px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
-                                <?php endif; ?>
                                 <?php if ($totalServicos > 0): ?>
                                 <p style="margin: 2px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
+                                <?php endif; ?>
+                                <?php if ($totalProdutos > 0): ?>
+                                <p style="margin: 2px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
                                 <?php endif; ?>
                                 <?php 
                                 $totalGeral = $totalProdutos + $totalServicos;
