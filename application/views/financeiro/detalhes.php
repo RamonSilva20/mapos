@@ -192,38 +192,48 @@
                     <form id="formPagamento" class="row-fluid">
                         <input type="hidden" name="lancamento_id" value="<?php echo $lancamento->idLancamentos; ?>">
                         
-                        <div class="span3">
-                            <label for="valor_pgto">Valor *</label>
-                            <input type="text" id="valor_pgto" name="valor" class="span12 money" placeholder="0,00" required>
-                            <small style="color: #666;">Saldo: R$ <?php echo number_format($saldoRestante, 2, ',', '.'); ?></small>
+                        <div class="span12" style="margin-bottom: 15px;">
+                            <div class="span3" style="margin-left: 0">
+                                <label for="valor_pgto">Valor *</label>
+                                <input type="text" id="valor_pgto" name="valor" class="span12 money" value="<?php echo number_format($saldoRestante, 2, ',', '.'); ?>" required>
+                                <small style="color: #666;">Saldo restante: R$ <?php echo number_format($saldoRestante, 2, ',', '.'); ?></small>
+                            </div>
+                            
+                            <div class="span2">
+                                <label for="data_pgto">Data *</label>
+                                <input type="text" id="data_pgto" name="data_pagamento" class="span12 datepicker" value="<?php echo date('d/m/Y'); ?>" required>
+                            </div>
+                            
+                            <div class="span3">
+                                <label for="forma_pgto">Forma de Pagamento</label>
+                                <select id="forma_pgto" name="forma_pgto" class="span12">
+                                    <option value="">Selecione...</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="Pix" selected>Pix</option>
+                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                    <option value="Cartão de Débito">Cartão de Débito</option>
+                                    <option value="Boleto">Boleto</option>
+                                    <option value="Transferência">Transferência</option>
+                                    <option value="Cheque">Cheque</option>
+                                </select>
+                            </div>
+                            
+                            <div class="span2">
+                                <label for="obs_pgto">Observação</label>
+                                <input type="text" id="obs_pgto" name="observacao" class="span12" placeholder="Opcional">
+                            </div>
+                            
+                            <div class="span2" style="padding-top: 25px;">
+                                <button type="submit" class="btn btn-success btn-block" id="btnAddPgto" style="width: 100%;">
+                                    <i class="bx bx-check"></i> Registrar
+                                </button>
+                            </div>
                         </div>
                         
-                        <div class="span2">
-                            <label for="data_pgto">Data *</label>
-                            <input type="text" id="data_pgto" name="data_pagamento" class="span12 datepicker" value="<?php echo date('d/m/Y'); ?>" required>
-                        </div>
-                        
-                        <div class="span3">
-                            <label for="forma_pgto">Forma de Pagamento</label>
-                            <select id="forma_pgto" name="forma_pgto" class="span12">
-                                <option value="Dinheiro">Dinheiro</option>
-                                <option value="Pix">Pix</option>
-                                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                                <option value="Cartão de Débito">Cartão de Débito</option>
-                                <option value="Boleto">Boleto</option>
-                                <option value="Transferência">Transferência</option>
-                                <option value="Cheque">Cheque</option>
-                            </select>
-                        </div>
-                        
-                        <div class="span3">
-                            <label for="obs_pgto">Observação</label>
-                            <input type="text" id="obs_pgto" name="observacao" class="span12" placeholder="Ex: Sinal">
-                        </div>
-                        
-                        <div class="span1" style="padding-top: 25px;">
-                            <button type="submit" class="btn btn-success" id="btnAddPgto">
-                                <i class="bx bx-plus"></i> Add
+                        <!-- Botão rápido para pagar total -->
+                        <div class="span12" style="margin-top: 10px; text-align: center;">
+                            <button type="button" class="btn btn-link" id="btnPagarTotal" style="color: #28a745; text-decoration: none;">
+                                <i class="bx bx-check-double"></i> Pagar valor total (R$ <?php echo number_format($saldoRestante, 2, ',', '.'); ?>)
                             </button>
                         </div>
                     </form>
@@ -313,39 +323,83 @@ $(document).ready(function() {
     $('#formPagamento').on('submit', function(e) {
         e.preventDefault();
         
-        var valor = $('#valor_pgto').val().replace('.', '').replace(',', '.');
-        if (parseFloat(valor) <= 0) {
+        var valor = $('#valor_pgto').val().replace(/\./g, '').replace(',', '.');
+        var valorNum = parseFloat(valor) || 0;
+        var saldoRestante = <?php echo $saldoRestante; ?>;
+        
+        if (valorNum <= 0) {
             Swal.fire('Erro', 'Informe um valor válido', 'error');
             return;
         }
         
-        $('#btnAddPgto').prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i>');
+        // Validar se valor não excede saldo restante
+        if (valorNum > saldoRestante + 0.01) { // Margem para arredondamento
+            Swal.fire({
+                icon: 'warning',
+                title: 'Valor excede saldo',
+                text: 'O valor informado (R$ ' + valorNum.toFixed(2).replace('.', ',') + ') é maior que o saldo restante (R$ ' + saldoRestante.toFixed(2).replace('.', ',') + '). Deseja ajustar para o valor total?',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, ajustar',
+                cancelButtonText: 'Cancelar'
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    $('#valor_pgto').val(saldoRestante.toFixed(2).replace('.', ','));
+                    $('#formPagamento').submit();
+                }
+            });
+            return;
+        }
+        
+        // Se forma de pagamento não foi selecionada, usar Pix como padrão
+        var formaPgto = $('#forma_pgto').val();
+        if (!formaPgto) {
+            formaPgto = 'Pix';
+            $('#forma_pgto').val(formaPgto);
+        }
+        
+        $('#btnAddPgto').prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Registrando...');
         
         $.ajax({
             url: '<?php echo site_url('financeiro/adicionarPagamentoParcial'); ?>',
             type: 'POST',
             data: {
                 lancamento_id: $('input[name="lancamento_id"]').val(),
-                valor: valor,
+                valor: valorNum.toFixed(2).replace('.', ','),
                 data_pagamento: $('#data_pgto').val(),
-                forma_pgto: $('#forma_pgto').val(),
-                observacao: $('#obs_pgto').val()
+                forma_pgto: formaPgto,
+                observacao: $('#obs_pgto').val() || ''
             },
             dataType: 'json',
             success: function(response) {
                 if (response.result) {
-                    Swal.fire('Sucesso', response.message, 'success').then(function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pagamento registrado!',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(function() {
                         location.reload();
                     });
                 } else {
-                    Swal.fire('Erro', response.message, 'error');
+                    Swal.fire('Erro', response.message || 'Erro ao registrar pagamento', 'error');
+                    $('#btnAddPgto').prop('disabled', false).html('<i class="bx bx-check"></i> Registrar');
                 }
             },
-            error: function() {
-                Swal.fire('Erro', 'Erro ao comunicar com o servidor', 'error');
-            },
-            complete: function() {
-                $('#btnAddPgto').prop('disabled', false).html('<i class="bx bx-plus"></i> Add');
+            error: function(xhr) {
+                var message = 'Erro ao comunicar com o servidor';
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        message = response.message;
+                    }
+                } catch(e) {
+                    if (xhr.responseText) {
+                        message = xhr.responseText.substring(0, 200);
+                    }
+                }
+                Swal.fire('Erro', message, 'error');
+                $('#btnAddPgto').prop('disabled', false).html('<i class="bx bx-check"></i> Registrar');
             }
         });
     });
@@ -388,10 +442,39 @@ $(document).ready(function() {
         });
     });
     
-    // Pagar valor total restante
+    // Pagar valor total restante - preencher e submeter automaticamente
     $('#btnPagarTotal').on('click', function() {
         var saldoRestante = <?php echo $saldoRestante; ?>;
         $('#valor_pgto').val(saldoRestante.toFixed(2).replace('.', ','));
+        
+        // Se forma de pagamento não estiver selecionada, selecionar Pix como padrão
+        if (!$('#forma_pgto').val()) {
+            $('#forma_pgto').val('Pix');
+        }
+        
+        // Submeter automaticamente após um pequeno delay para garantir que o valor foi atualizado
+        setTimeout(function() {
+            $('#formPagamento').submit();
+        }, 300);
+    });
+    
+    // Auto-focus no campo de forma de pagamento quando valor for preenchido
+    $('#valor_pgto').on('blur', function() {
+        var valor = parseFloat($(this).val().replace(/\./g, '').replace(',', '.')) || 0;
+        var saldoRestante = <?php echo $saldoRestante; ?>;
+        
+        // Se o valor digitado for igual ao saldo restante, focar na forma de pagamento
+        if (Math.abs(valor - saldoRestante) < 0.01) {
+            $('#forma_pgto').focus();
+        }
+    });
+    
+    // Atalho de teclado: Enter no campo de forma de pagamento submete o formulário
+    $('#forma_pgto').on('keypress', function(e) {
+        if (e.which === 13) { // Enter
+            e.preventDefault();
+            $('#formPagamento').submit();
+        }
     });
 });
 </script>
