@@ -1070,7 +1070,11 @@ class Propostas extends MY_Controller
         }
 
         $this->load->model('financeiro_model');
+        $this->load->model('pagamentos_parciais_model');
         $lancamentosIds = [];
+        
+        // Verificar se o status é "Faturado" (NF emitida = pagamento automático)
+        $statusFaturado = ($proposta->status === 'Faturado');
         
         // Obter nome do cliente
         $nomeCliente = $proposta->cliente_nome ?? '';
@@ -1102,11 +1106,19 @@ class Propostas extends MY_Controller
                     $dataVencimento = date('Y-m-d', strtotime($dataBase . ' +' . intval($parcela->dias) . ' days'));
                 }
                 
-                // Determinar status (parcelas de proposta são sempre pendentes inicialmente)
-                $statusPagamento = 'pendente';
-                $valorPago = 0;
-                $baixado = 0;
-                $dataPagamento = null;
+                // Se status é "Faturado", registrar pagamento automaticamente
+                if ($statusFaturado) {
+                    $statusPagamento = 'pago';
+                    $valorPago = $valor;
+                    $baixado = 1;
+                    $dataPagamento = $dataVencimento; // Usar data de vencimento como data de pagamento
+                } else {
+                    // Status pendente para outros casos
+                    $statusPagamento = 'pendente';
+                    $valorPago = 0;
+                    $baixado = 0;
+                    $dataPagamento = null;
+                }
                 
                 $dataLancamento = [
                     'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - Parcela ' . $parcela->numero . ' - ' . htmlspecialchars($nomeCliente),
@@ -1121,7 +1133,7 @@ class Propostas extends MY_Controller
                     'baixado' => $baixado,
                     'cliente_fornecedor' => $nomeCliente,
                     'clientes_id' => $proposta->clientes_id,
-                    'forma_pgto' => '', // Parcelas de proposta não têm forma de pagamento pré-configurada
+                    'forma_pgto' => $proposta->forma_pgto ?? '', // Usar forma de pagamento da proposta se disponível
                     'tipo' => 'receita',
                     'observacoes' => (!empty($parcela->observacao) ? $parcela->observacao . ' - ' : '') . 
                                     'Referente à Proposta #' . ($proposta->numero_proposta ?: $idProposta),
@@ -1129,31 +1141,76 @@ class Propostas extends MY_Controller
                 ];
                 
                 $this->financeiro_model->add('lancamentos', $dataLancamento);
-                $lancamentosIds[] = $this->db->insert_id();
+                $lancamentoId = $this->db->insert_id();
+                $lancamentosIds[] = $lancamentoId;
+                
+                // Se status é "Faturado", registrar pagamento parcial automaticamente
+                if ($statusFaturado && $lancamentoId) {
+                    $dataPagamentoParcial = [
+                        'lancamentos_id' => $lancamentoId,
+                        'valor' => $valor,
+                        'data_pagamento' => $dataPagamento,
+                        'forma_pgto' => $proposta->forma_pgto ?? '',
+                        'observacao' => 'Pagamento automático - NF emitida (Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ')',
+                        'usuarios_id' => $this->session->userdata('id_admin')
+                    ];
+                    
+                    $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                    log_info('Registrou pagamento automático de R$ ' . number_format($valor, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (Proposta #' . $idProposta . ' - Status: Faturado)');
+                }
             }
         } else {
             // Se não tem parcelas configuradas, criar lançamento único
+            // Se status é "Faturado", registrar pagamento automaticamente
+            if ($statusFaturado) {
+                $statusPagamento = 'pago';
+                $valorPago = $valorTotal;
+                $baixado = 1;
+                $dataPagamento = $proposta->data_validade ?? date('Y-m-d');
+            } else {
+                $statusPagamento = 'pendente';
+                $valorPago = 0;
+                $baixado = 0;
+                $dataPagamento = null;
+            }
+            
             $dataLancamento = [
                 'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - ' . htmlspecialchars($nomeCliente),
                 'valor' => $valorTotal,
                 'valor_desconto' => $valorTotal,
-                'valor_pago' => 0,
-                'status_pagamento' => 'pendente',
+                'valor_pago' => $valorPago,
+                'status_pagamento' => $statusPagamento,
                 'desconto' => 0,
                 'tipo_desconto' => 'real',
                 'data_vencimento' => $proposta->data_validade ?? date('Y-m-d'),
-                'data_pagamento' => null,
-                'baixado' => 0,
+                'data_pagamento' => $dataPagamento,
+                'baixado' => $baixado,
                 'cliente_fornecedor' => $nomeCliente,
                 'clientes_id' => $proposta->clientes_id,
-                'forma_pgto' => '',
+                'forma_pgto' => $proposta->forma_pgto ?? '',
                 'tipo' => 'receita',
                 'observacoes' => 'Referente à Proposta #' . ($proposta->numero_proposta ?: $idProposta),
                 'usuarios_id' => $this->session->userdata('id_admin')
             ];
             
             $this->financeiro_model->add('lancamentos', $dataLancamento);
-            $lancamentosIds[] = $this->db->insert_id();
+            $lancamentoId = $this->db->insert_id();
+            $lancamentosIds[] = $lancamentoId;
+            
+            // Se status é "Faturado", registrar pagamento parcial automaticamente
+            if ($statusFaturado && $lancamentoId) {
+                $dataPagamentoParcial = [
+                    'lancamentos_id' => $lancamentoId,
+                    'valor' => $valorTotal,
+                    'data_pagamento' => $dataPagamento,
+                    'forma_pgto' => $proposta->forma_pgto ?? '',
+                    'observacao' => 'Pagamento automático - NF emitida (Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ')',
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                log_info('Registrou pagamento automático de R$ ' . number_format($valorTotal, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (Proposta #' . $idProposta . ' - Status: Faturado)');
+            }
         }
 
         // Vincular primeiro lançamento à Proposta (se campo existir)
@@ -1166,6 +1223,11 @@ class Propostas extends MY_Controller
         }
 
         log_info('Gerou lançamento financeiro automático para Proposta #' . $idProposta . '. Lançamentos: ' . implode(', ', $lancamentosIds));
+        
+        if ($statusFaturado) {
+            log_info('Pagamentos automáticos registrados para Proposta #' . $idProposta . ' (Status: Faturado - NF emitida)');
+        }
+        
         return true;
     }
     
@@ -1239,8 +1301,12 @@ class Propostas extends MY_Controller
         }
 
         $this->load->model('financeiro_model');
+        $this->load->model('pagamentos_parciais_model');
         $lancamentosIds = [];
 
+        // Verificar se o status é "Faturado" (NF emitida = pagamento automático)
+        $statusFaturado = ($proposta->status === 'Faturado');
+        
         // Obter nome do cliente
         $nomeCliente = $proposta->cliente_nome ?? '';
         if (empty($nomeCliente) && !empty($proposta->clientes_id)) {
@@ -1276,11 +1342,19 @@ class Propostas extends MY_Controller
                 continue; // Pular parcelas sem valor
             }
 
-            // Determinar status (parcelas de proposta são sempre pendentes inicialmente)
-            $statusPagamento = 'pendente';
-            $valorPago = 0;
-            $baixado = 0;
-            $dataPagamento = null;
+            // Se status é "Faturado", registrar pagamento automaticamente
+            if ($statusFaturado) {
+                $statusPagamento = 'pago';
+                $valorPago = $valor;
+                $baixado = 1;
+                $dataPagamento = $dataVencimento; // Usar data de vencimento como data de pagamento
+            } else {
+                // Status pendente para outros casos
+                $statusPagamento = 'pendente';
+                $valorPago = 0;
+                $baixado = 0;
+                $dataPagamento = null;
+            }
 
             $dataLancamento = [
                 'descricao' => 'Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ' - Parcela ' . $parcela['numero'] . ' - ' . htmlspecialchars($nomeCliente),
@@ -1308,7 +1382,23 @@ class Propostas extends MY_Controller
             }
             
             $this->financeiro_model->add('lancamentos', $dataLancamento);
-            $lancamentosIds[] = $this->db->insert_id();
+            $lancamentoId = $this->db->insert_id();
+            $lancamentosIds[] = $lancamentoId;
+            
+            // Se status é "Faturado", registrar pagamento parcial automaticamente
+            if ($statusFaturado && $lancamentoId) {
+                $dataPagamentoParcial = [
+                    'lancamentos_id' => $lancamentoId,
+                    'valor' => $valor,
+                    'data_pagamento' => $dataPagamento,
+                    'forma_pgto' => $parcela['forma_pgto'] ?? '',
+                    'observacao' => 'Pagamento automático - NF emitida (Proposta #' . ($proposta->numero_proposta ?: $idProposta) . ')',
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                log_info('Registrou pagamento automático de R$ ' . number_format($valor, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (Proposta #' . $idProposta . ' - Status: Faturado)');
+            }
         }
 
         // Vincular primeiro lançamento à Proposta
@@ -1317,8 +1407,15 @@ class Propostas extends MY_Controller
         }
 
         log_info('Gerou lançamento financeiro para Proposta #' . $idProposta . ' usando parcelas. Lançamentos: ' . implode(', ', $lancamentosIds));
+        
+        if ($statusFaturado) {
+            log_info('Pagamentos automáticos registrados para Proposta #' . $idProposta . ' (Status: Faturado - NF emitida)');
+        }
 
         $mensagem = count($lancamentosIds) . ' lançamento(s) criado(s) com sucesso!';
+        if ($statusFaturado) {
+            $mensagem .= ' Pagamentos registrados automaticamente (NF emitida).';
+        }
         echo json_encode(['result' => true, 'message' => $mensagem, 'lancamentos' => $lancamentosIds]);
     }
     
