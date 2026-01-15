@@ -198,12 +198,13 @@ class Propostas_model extends CI_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
                 $row_set[] = [
-                    'label' => $row['nome'] . ' | Telefone: ' . $row['telefone'],
+                    'label' => $row['nome'] . ' | Telefone: ' . ($row['telefone'] ?? ''),
                     'id' => $row['idUsuarios'],
                     'value' => $row['nome']
                 ];
             }
         }
+        header('Content-Type: application/json');
         echo json_encode($row_set);
     }
 

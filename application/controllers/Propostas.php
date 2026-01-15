@@ -836,8 +836,10 @@ class Propostas extends MY_Controller
                     ];
                 }
             }
+            header('Content-Type: application/json');
             echo json_encode($row_set);
         } else {
+            header('Content-Type: application/json');
             echo json_encode([]);
         }
     }
@@ -856,8 +858,10 @@ class Propostas extends MY_Controller
             $q = strtolower($_GET['term']);
             $this->db->select('*');
             $this->db->limit(25);
+            $this->db->group_start();
             $this->db->like('codDeBarra', $q);
             $this->db->or_like('descricao', $q);
+            $this->db->group_end();
             $query = $this->db->get('produtos');
             $row_set = [];
             if ($query->num_rows() > 0) {
@@ -866,13 +870,15 @@ class Propostas extends MY_Controller
                         'label' => $row['descricao'] . ' | Preço: R$ ' . number_format($row['precoVenda'], 2, ',', '.') . ' | Estoque: ' . $row['estoque'], 
                         'estoque' => $row['estoque'], 
                         'id' => $row['idProdutos'], 
-                        'preco' => $row['precoVenda'],  // Retornar como número (ex: 45.22)
+                        'preco' => floatval($row['precoVenda']),  // Retornar como número (ex: 45.22)
                         'value' => $row['descricao']
                     ];
                 }
             }
+            header('Content-Type: application/json');
             echo json_encode($row_set);
         } else {
+            header('Content-Type: application/json');
             echo json_encode([]);
         }
     }
@@ -891,13 +897,15 @@ class Propostas extends MY_Controller
                     $row_set[] = [
                         'label' => $row['nome'] . ' | Preço: R$ ' . number_format($row['preco'], 2, ',', '.'), 
                         'id' => $row['idServicos'], 
-                        'preco' => $row['preco'],  // Retornar como número
+                        'preco' => floatval($row['preco']),  // Retornar como número
                         'value' => $row['nome']
                     ];
                 }
             }
+            header('Content-Type: application/json');
             echo json_encode($row_set);
         } else {
+            header('Content-Type: application/json');
             echo json_encode([]);
         }
     }
