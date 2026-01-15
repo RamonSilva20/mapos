@@ -459,9 +459,14 @@ $(document).ready(function() {
         var saldoRestante = <?php echo $saldoRestante; ?>;
         $('#valor_pgto').val(saldoRestante.toFixed(2).replace('.', ','));
         
-        // Se forma de pagamento não estiver selecionada, selecionar Pix como padrão
+        // Se forma de pagamento não estiver selecionada, usar a do lançamento ou Pix como padrão
         if (!$('#forma_pgto').val()) {
-            $('#forma_pgto').val('Pix');
+            var formaPgtoLancamento = '<?php echo addslashes($lancamento->forma_pgto ?? ''); ?>';
+            if (formaPgtoLancamento) {
+                $('#forma_pgto').val(formaPgtoLancamento);
+            } else {
+                $('#forma_pgto').val('Pix');
+            }
         }
         
         // Submeter automaticamente após um pequeno delay para garantir que o valor foi atualizado
