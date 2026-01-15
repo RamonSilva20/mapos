@@ -201,20 +201,26 @@
                             
                             <div class="span2">
                                 <label for="data_pgto">Data *</label>
-                                <input type="text" id="data_pgto" name="data_pagamento" class="span12 datepicker" value="<?php echo date('d/m/Y'); ?>" required>
+                                <input type="text" id="data_pgto" name="data_pagamento" class="span12 datepicker" value="<?php 
+                                    // Se o lançamento tem data de vencimento, usar ela; senão usar data atual
+                                    echo $lancamento->data_vencimento && $lancamento->data_vencimento != '0000-00-00' 
+                                        ? date('d/m/Y', strtotime($lancamento->data_vencimento)) 
+                                        : date('d/m/Y'); 
+                                ?>" required>
                             </div>
                             
                             <div class="span3">
                                 <label for="forma_pgto">Forma de Pagamento</label>
                                 <select id="forma_pgto" name="forma_pgto" class="span12">
                                     <option value="">Selecione...</option>
-                                    <option value="Dinheiro">Dinheiro</option>
-                                    <option value="Pix" selected>Pix</option>
-                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
-                                    <option value="Cartão de Débito">Cartão de Débito</option>
-                                    <option value="Boleto">Boleto</option>
-                                    <option value="Transferência">Transferência</option>
-                                    <option value="Cheque">Cheque</option>
+                                    <option value="Dinheiro" <?php echo ($lancamento->forma_pgto == 'Dinheiro') ? 'selected' : ''; ?>>Dinheiro</option>
+                                    <option value="Pix" <?php echo (empty($lancamento->forma_pgto) || $lancamento->forma_pgto == 'Pix') ? 'selected' : ''; ?>>Pix</option>
+                                    <option value="Cartão de Crédito" <?php echo ($lancamento->forma_pgto == 'Cartão de Crédito') ? 'selected' : ''; ?>>Cartão de Crédito</option>
+                                    <option value="Cartão de Débito" <?php echo ($lancamento->forma_pgto == 'Cartão de Débito') ? 'selected' : ''; ?>>Cartão de Débito</option>
+                                    <option value="Boleto" <?php echo ($lancamento->forma_pgto == 'Boleto') ? 'selected' : ''; ?>>Boleto</option>
+                                    <option value="Transferência" <?php echo ($lancamento->forma_pgto == 'Transferência' || $lancamento->forma_pgto == 'Transferência DOC' || $lancamento->forma_pgto == 'Transferência TED') ? 'selected' : ''; ?>>Transferência</option>
+                                    <option value="Cheque" <?php echo ($lancamento->forma_pgto == 'Cheque' || $lancamento->forma_pgto == 'Cheque Pré-datado') ? 'selected' : ''; ?>>Cheque</option>
+                                    <option value="Depósito" <?php echo ($lancamento->forma_pgto == 'Depósito') ? 'selected' : ''; ?>>Depósito</option>
                                 </select>
                             </div>
                             
@@ -350,11 +356,17 @@ $(document).ready(function() {
             return;
         }
         
-        // Se forma de pagamento não foi selecionada, usar Pix como padrão
+        // Se forma de pagamento não foi selecionada, usar a do lançamento ou Pix como padrão
         var formaPgto = $('#forma_pgto').val();
         if (!formaPgto) {
-            formaPgto = 'Pix';
-            $('#forma_pgto').val(formaPgto);
+            var formaPgtoLancamento = '<?php echo addslashes($lancamento->forma_pgto ?? ''); ?>';
+            if (formaPgtoLancamento) {
+                formaPgto = formaPgtoLancamento;
+                $('#forma_pgto').val(formaPgto);
+            } else {
+                formaPgto = 'Pix';
+                $('#forma_pgto').val(formaPgto);
+            }
         }
         
         $('#btnAddPgto').prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Registrando...');
