@@ -765,6 +765,11 @@ class Financeiro extends MY_Controller
         $this->load->model('pagamentos_parciais_model');
         $pagamentos = $this->pagamentos_parciais_model->getByLancamento($id);
 
+        // Buscar chave PIX das configurações
+        $this->db->where('config', 'pix_key');
+        $configPix = $this->db->get('configuracoes')->row();
+        $pixKey = $configPix ? $configPix->valor : '';
+
         $this->data['lancamento'] = $lancamento;
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['opcoes'] = $opcoes;
@@ -773,6 +778,7 @@ class Financeiro extends MY_Controller
         $this->data['tipoOrigem'] = $tipoOrigem;
         $this->data['idOrigem'] = $idOrigem;
         $this->data['pagamentos'] = $pagamentos;
+        $this->data['pixKey'] = $pixKey;
 
         // Calcular valor final (com desconto se houver)
         $valorFinal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
