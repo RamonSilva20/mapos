@@ -15,20 +15,14 @@
         }
         .recibo-header {
             text-align: center;
-            border-bottom: 3px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
         .recibo-title {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .recibo-numero {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            margin: 0;
         }
         .recibo-content {
             margin: 30px 0;
@@ -131,42 +125,43 @@
             <section>
                 <div class="recibo-container">
                     <div class="recibo-header">
-                        <div class="recibo-title">Recibo de Pagamento</div>
-                        <div class="recibo-numero">Nº <?= str_pad($lancamento->idLancamentos, 6, 0, STR_PAD_LEFT) ?></div>
+                        <div class="recibo-title">Recibo Nº <?= str_pad($lancamento->idLancamentos, 6, 0, STR_PAD_LEFT) ?></div>
                     </div>
 
                     <div class="recibo-content">
                         <div class="recibo-texto">
-                            <p>
-                                Recebi de <strong><?= $lancamento->cliente_fornecedor ? htmlspecialchars($lancamento->cliente_fornecedor) : ($lancamento->nomeCliente ? htmlspecialchars($lancamento->nomeCliente) : 'Cliente') ?></strong>
-                                <?php if ($lancamento->documento) : ?>
-                                    , CPF/CNPJ: <strong><?= $lancamento->documento ?></strong>
-                                <?php endif; ?>
-                                , a quantia de:
+                            <?php
+                            // Buscar dados do cliente
+                            $nomeCliente = $lancamento->cliente_fornecedor ?: ($lancamento->nomeCliente ?: 'Cliente');
+                            
+                            // Montar endereço do cliente
+                            $enderecoCliente = '';
+                            if ($lancamento->rua || $lancamento->numero || $lancamento->bairro || $lancamento->cidade) {
+                                $enderecoParts = array_filter([
+                                    $lancamento->rua,
+                                    $lancamento->numero,
+                                    $lancamento->complemento,
+                                    $lancamento->bairro,
+                                    $lancamento->cidade,
+                                    $lancamento->estado,
+                                    $lancamento->cep
+                                ]);
+                                $enderecoCliente = implode(', ', $enderecoParts);
+                            } else {
+                                $enderecoCliente = 'Endereço não informado';
+                            }
+                            
+                            // Data do pagamento
+                            $dataPagamento = '';
+                            if ($lancamento->data_pagamento && $lancamento->data_pagamento != "0000-00-00") {
+                                $dataPagamento = date('d/m/Y', strtotime($lancamento->data_pagamento));
+                            } else {
+                                $dataPagamento = date('d/m/Y');
+                            }
+                            ?>
+                            <p style="font-size: 16px; line-height: 1.8; text-align: justify;">
+                                Declaro que recebi de <strong><?= htmlspecialchars($nomeCliente) ?></strong>, com endereço em <strong><?= htmlspecialchars($enderecoCliente) ?></strong>, o valor de <strong>R$ <?= number_format($valorFinal, 2, ',', '.') ?></strong> em <strong><?= $dataPagamento ?></strong>, referente aos seguintes serviços e materiais:
                             </p>
-
-                            <div class="recibo-valor">
-                                R$ <?= number_format($valorFinal, 2, ',', '.') ?>
-                                <div class="recibo-valor-extenso">
-                                    (<?= valorPorExtenso($valorFinal) ?>)
-                                </div>
-                            </div>
-
-                            <p>
-                                Referente a: <strong><?= htmlspecialchars($lancamento->descricao) ?></strong>
-                            </p>
-
-                            <?php if ($lancamento->forma_pgto) : ?>
-                                <p>
-                                    Forma de pagamento: <strong><?= htmlspecialchars($lancamento->forma_pgto) ?></strong>
-                                </p>
-                            <?php endif; ?>
-
-                            <?php if ($lancamento->observacoes) : ?>
-                                <p style="margin-top: 15px;">
-                                    <em><?= nl2br(htmlspecialchars($lancamento->observacoes)) ?></em>
-                                </p>
-                            <?php endif; ?>
                         </div>
 
                         <!-- Produtos e Serviços -->
@@ -261,37 +256,6 @@
                         </div>
                         <?php endif; ?>
 
-                        <div class="recibo-info">
-                            <?php if ($lancamento->data_pagamento && $lancamento->data_pagamento != "0000-00-00") : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Data do pagamento:</span>
-                                    <?= date('d/m/Y', strtotime($lancamento->data_pagamento)) ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($lancamento->data_vencimento) : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Data de vencimento:</span>
-                                    <?= date('d/m/Y', strtotime($lancamento->data_vencimento)) ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <div class="recibo-info-item">
-                                <span class="recibo-info-label">Tipo:</span>
-                                <?= ucfirst($lancamento->tipo) ?>
-                            </div>
-
-                            <?php if ($lancamento->valor_desconto > 0 && $lancamento->valor_desconto < $lancamento->valor) : ?>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Valor original:</span>
-                                    R$ <?= number_format($lancamento->valor, 2, ',', '.') ?>
-                                </div>
-                                <div class="recibo-info-item">
-                                    <span class="recibo-info-label">Desconto:</span>
-                                    R$ <?= number_format($lancamento->valor - $lancamento->valor_desconto, 2, ',', '.') ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
                     </div>
 
                     <div class="recibo-footer">
