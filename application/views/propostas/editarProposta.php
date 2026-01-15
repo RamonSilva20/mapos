@@ -511,6 +511,9 @@ $(document).ready(function() {
 
     // Aguardar um pouco para garantir que todos os elementos estejam prontos
     setTimeout(function() {
+        // Reinicializar autocompletes caso necessário
+        inicializarAutocompletes();
+        
         // Carregar dados existentes
         if (produtos.length > 0) {
             atualizarTabelaProdutos();
