@@ -38,12 +38,11 @@
                     <div class="contatoEmitente">
                         <span style="font-weight: bold;">Tel: <?= $emitente->telefone ?></span></br>
                         <span style="font-weight: bold;"><?= $emitente->email ?></span></br>
-                        <span style="word-break: break-word;">Vendedor: <b><?= $result->nome ?></b></span>
                     </div>
                 <?php endif; ?>
             </header>
             <section>
-                <div class="title">
+                <div class="" style="text-align: center;">
                     PROPOSTA COMERCIAL N° <?php 
                         $numeroProposta = $result->numero_proposta ?: $result->idProposta;
                         $numeroProposta = preg_replace('/[^0-9]/', '', $numeroProposta);
@@ -52,7 +51,7 @@
                         }
                         echo $numeroProposta;
                     ?>
-                    <span class="emissao">Emissão: <?= date('d/m/Y H:i:s', strtotime($result->data_proposta)) ?></span>
+                    
                 </div>
 
                 <?php if ($result->data_validade) : ?>
@@ -337,7 +336,7 @@
             <br>
             <div class="detalhes">
                 <span>Atenciosamente<br>
-                <?= $result->nome ? $result->nome : 'Departamento de Vendas' ?></span>
+                <span style="font-size: 12px;">Departamento de vendas</span>
             </div>
         </div>
     </div>
