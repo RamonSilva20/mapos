@@ -417,12 +417,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     <form id="formReceita" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Adicionar Receita/Despesa</h3>
+            <h3 id="myModalLabel"><i class="bx bx-plus-circle"></i> Novo Lançamento Manual</h3>
         </div>
         <div class="modal-body">
 
             <div class="span12 alert alert-info" style="margin-left: 0; margin-bottom: 15px;">
-                <i class="bx bx-info-circle"></i> Campos com <strong>*</strong> são obrigatórios. Os demais são opcionais.
+                <i class="bx bx-info-circle"></i> <strong>Lançamento Manual:</strong> Preencha apenas os campos essenciais. Campos com <strong>*</strong> são obrigatórios.
             </div>
 
             <!-- Linha 1: Tipo e Descrição -->
@@ -467,22 +467,22 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 </div>
             </div>
 
-            <!-- Linha 4: Categoria, Conta e Parcelas -->
+            <!-- Linha 4: Categoria, Conta e Parcelas (opcionais) -->
             <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                 <div class="span4" style="margin-left: 0">
-                    <label for="categoria">Categoria</label>
+                    <label for="categoria">Categoria <small style="color: #999;">(opcional)</small></label>
                     <select name="categoria" id="categoria" class="span12">
                         <option value="">Selecione uma categoria...</option>
                     </select>
                 </div>
                 <div class="span4">
-                    <label for="conta">Conta Bancária</label>
+                    <label for="conta">Conta Bancária <small style="color: #999;">(opcional)</small></label>
                     <select name="conta" id="conta" class="span12">
                         <option value="">Selecione uma conta...</option>
                     </select>
                 </div>
                 <div class="span4">
-                    <label for="qtdparcelas">Parcelas</label>
+                    <label for="qtdparcelas">Parcelas <small style="color: #999;">(opcional)</small></label>
                     <select name="qtdparcelas" id="qtdparcelas" class="span12">
                         <option value="0">À vista (1x)</option>
                         <option value="2">2x</option>			
@@ -496,12 +496,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 </div>
             </div>
 
-            <!-- Linha 5: Status de Pagamento -->
+            <!-- Linha 5: Status de Pagamento (apenas para lançamentos manuais) -->
             <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                 <div class="span12" style="margin-left: 0; padding: 10px; background: #f8f9fa; border-radius: 4px;">
                     <label style="margin-bottom: 10px; display: block;">
                         <input id="recebido" type="checkbox" name="recebido" value="1" />
-                        <strong>Marcar como recebido/pago</strong>
+                        <strong>Marcar como recebido/pago agora</strong> <small style="color: #999;">(opcional - pode pagar depois)</small>
                     </label>
                     
                     <div id="divRecebimento" style="display: none; margin-top: 10px;">
@@ -514,7 +514,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                             <select name="formaPgto" id="formaPgto" class="span12">
                                 <option value="">Selecione...</option>
                                 <option value="Dinheiro">Dinheiro</option>
-                                <option value="Pix">Pix</option>
+                                <option value="Pix" selected>Pix</option>
                                 <option value="Boleto">Boleto</option>
                                 <option value="Cartão de Crédito">Cartão de Crédito</option>
                                 <option value="Cartão de Débito">Cartão de Débito</option>
@@ -530,7 +530,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <!-- Linha 6: Observações -->
             <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                 <div class="span12" style="margin-left: 0">
-                    <label for="observacoes">Observações</label>
+                    <label for="observacoes">Observações <small style="color: #999;">(opcional)</small></label>
                     <textarea class="span12" id="observacoes" name="observacoes" rows="2" placeholder="Informações adicionais (opcional)"></textarea>
                 </div>
             </div>
