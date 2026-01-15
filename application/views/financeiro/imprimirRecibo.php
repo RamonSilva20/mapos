@@ -270,34 +270,15 @@
                         <?php endif; ?>
                         
                         <!-- Forma de Pagamento e Dados -->
-                        <?php if ($lancamento->forma_pgto || !empty($pagamentos) || $lancamento->contas_id || $pixKey): ?>
+                        <?php if ($lancamento->forma_pgto || !empty($pagamentos) || $pixKey): ?>
                         <div style="margin: 12px 0; font-size: 12px; line-height: 1.5;">
                             <?php if ($lancamento->forma_pgto): ?>
                             <p style="margin: 3px 0;"><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
                             <?php endif; ?>
                             
-                            <!-- Informações de Conta Bancária ou PIX -->
-                            <?php if ($lancamento->contas_id && ($lancamento->conta_nome || $lancamento->conta_banco || $lancamento->conta_numero)): ?>
-                            <div style="margin: 8px 0; padding: 8px; background-color: #f0f8ff; border-left: 3px solid #0066cc;">
-                                <p style="margin: 2px 0; font-size: 12px;"><strong>Dados para Pagamento:</strong></p>
-                                <?php if ($lancamento->conta_nome): ?>
-                                <p style="margin: 2px 0; font-size: 11px;"><strong>Conta:</strong> <?= htmlspecialchars($lancamento->conta_nome) ?></p>
-                                <?php endif; ?>
-                                <?php if ($lancamento->conta_banco): ?>
-                                <p style="margin: 2px 0; font-size: 11px;"><strong>Banco:</strong> <?= htmlspecialchars($lancamento->conta_banco) ?></p>
-                                <?php endif; ?>
-                                <?php if ($lancamento->conta_numero): ?>
-                                <p style="margin: 2px 0; font-size: 11px;"><strong>Agência/Conta:</strong> <?= htmlspecialchars($lancamento->conta_numero) ?></p>
-                                <?php endif; ?>
-                            </div>
-                            <?php endif; ?>
-                            
-                            <!-- Chave PIX -->
-                            <?php if ($pixKey && ($lancamento->forma_pgto == 'Pix' || $lancamento->forma_pgto == 'PIX' || empty($lancamento->contas_id))): ?>
-                            <div style="margin: 8px 0; padding: 8px; background-color: #f0fff0; border-left: 3px solid #28a745;">
-                                <p style="margin: 2px 0; font-size: 12px;"><strong>Chave PIX:</strong></p>
-                                <p style="margin: 2px 0; font-size: 11px; word-break: break-all; font-family: monospace;"><?= htmlspecialchars($pixKey) ?></p>
-                            </div>
+                            <!-- Chave PIX em texto simples -->
+                            <?php if ($pixKey): ?>
+                            <p style="margin: 3px 0; font-size: 11px;"><strong>Chave PIX:</strong> <?= htmlspecialchars($pixKey) ?></p>
                             <?php endif; ?>
                             
                             <?php if (!empty($pagamentos)): ?>
