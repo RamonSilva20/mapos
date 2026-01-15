@@ -2135,7 +2135,11 @@ class Os extends MY_Controller
         }
 
         $this->load->model('financeiro_model');
+        $this->load->model('pagamentos_parciais_model');
         $lancamentosIds = [];
+
+        // Verificar se o status é "Faturado" (NF emitida = pagamento automático)
+        $statusFaturado = ($os->status === 'Faturado');
 
         foreach ($parcelas as $parcela) {
             // Converter data de vencimento
@@ -2158,12 +2162,20 @@ class Os extends MY_Controller
                 continue; // Pular parcelas sem valor
             }
 
-            // Determinar status (se já está pago ou pendente)
-            $statusPagamento = (isset($parcela['status']) && $parcela['status'] === 'pago') ? 'pago' : 'pendente';
-            $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
-            $baixado = ($statusPagamento === 'pago') ? 1 : 0;
-            // Se está pago, a data de pagamento é a data de vencimento
-            $dataPagamento = ($statusPagamento === 'pago') ? $dataVencimento : null;
+            // Se status é "Faturado", registrar pagamento automaticamente
+            if ($statusFaturado) {
+                $statusPagamento = 'pago';
+                $valorPago = $valor;
+                $baixado = 1;
+                $dataPagamento = $dataVencimento; // Usar data de vencimento como data de pagamento
+            } else {
+                // Determinar status (se já está pago ou pendente)
+                $statusPagamento = (isset($parcela['status']) && $parcela['status'] === 'pago') ? 'pago' : 'pendente';
+                $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
+                $baixado = ($statusPagamento === 'pago') ? 1 : 0;
+                // Se está pago, a data de pagamento é a data de vencimento
+                $dataPagamento = ($statusPagamento === 'pago') ? $dataVencimento : null;
+            }
 
             $dataLancamento = [
                 'descricao' => 'OS #' . $idOs . ' - Parcela ' . $parcela['numero'] . ' - ' . htmlspecialchars($os->nomeCliente),
@@ -2191,7 +2203,23 @@ class Os extends MY_Controller
             }
             
             $this->financeiro_model->add('lancamentos', $dataLancamento);
-            $lancamentosIds[] = $this->db->insert_id();
+            $lancamentoId = $this->db->insert_id();
+            $lancamentosIds[] = $lancamentoId;
+            
+            // Se status é "Faturado", registrar pagamento parcial automaticamente
+            if ($statusFaturado && $lancamentoId) {
+                $dataPagamentoParcial = [
+                    'lancamentos_id' => $lancamentoId,
+                    'valor' => $valor,
+                    'data_pagamento' => $dataPagamento,
+                    'forma_pgto' => $parcela['forma_pgto'] ?? '',
+                    'observacao' => 'Pagamento automático - NF emitida (OS #' . $idOs . ')',
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                log_info('Registrou pagamento automático de R$ ' . number_format($valor, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (OS #' . $idOs . ' - Status: Faturado)');
+            }
         }
 
         // Atualizar parcelas na tabela parcelas_os com dados finais
@@ -2204,8 +2232,15 @@ class Os extends MY_Controller
         }
 
         log_info('Gerou lançamento financeiro para OS #' . $idOs . ' usando parcelas. Lançamentos: ' . implode(', ', $lancamentosIds));
+        
+        if ($statusFaturado) {
+            log_info('Pagamentos automáticos registrados para OS #' . $idOs . ' (Status: Faturado - NF emitida)');
+        }
 
         $mensagem = count($lancamentosIds) . ' lançamento(s) criado(s) com sucesso!';
+        if ($statusFaturado) {
+            $mensagem .= ' Pagamentos registrados automaticamente (NF emitida).';
+        }
         echo json_encode(['result' => true, 'message' => $mensagem, 'lancamentos' => $lancamentosIds]);
     }
 
@@ -2451,7 +2486,11 @@ class Os extends MY_Controller
         $parcelasConfiguradas = $this->parcelas_os_model->getByOs($idOs);
         
         $this->load->model('financeiro_model');
+        $this->load->model('pagamentos_parciais_model');
         $lancamentosIds = [];
+        
+        // Verificar se o status é "Faturado" (NF emitida = pagamento automático)
+        $statusFaturado = ($os->status === 'Faturado');
         
         // Se tem parcelas configuradas, usar elas
         if (!empty($parcelasConfiguradas) && count($parcelasConfiguradas) > 0) {
@@ -2469,11 +2508,19 @@ class Os extends MY_Controller
                     $dataVencimento = date('Y-m-d', strtotime('+' . intval($parcela->dias) . ' days'));
                 }
                 
-                // Determinar status
-                $statusPagamento = ($parcela->status === 'pago') ? 'pago' : 'pendente';
-                $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
-                $baixado = ($statusPagamento === 'pago') ? 1 : 0;
-                $dataPagamento = ($statusPagamento === 'pago') ? date('Y-m-d') : null;
+                // Se status é "Faturado", registrar pagamento automaticamente
+                if ($statusFaturado) {
+                    $statusPagamento = 'pago';
+                    $valorPago = $valor;
+                    $baixado = 1;
+                    $dataPagamento = $dataVencimento; // Usar data de vencimento como data de pagamento
+                } else {
+                    // Determinar status
+                    $statusPagamento = ($parcela->status === 'pago') ? 'pago' : 'pendente';
+                    $valorPago = ($statusPagamento === 'pago') ? $valor : 0;
+                    $baixado = ($statusPagamento === 'pago') ? 1 : 0;
+                    $dataPagamento = ($statusPagamento === 'pago') ? date('Y-m-d') : null;
+                }
                 
                 $dataLancamento = [
                     'descricao' => 'OS #' . $idOs . ' - Parcela ' . $parcela->numero . ' - ' . htmlspecialchars($os->nomeCliente),
@@ -2502,21 +2549,50 @@ class Os extends MY_Controller
                 }
                 
                 $this->financeiro_model->add('lancamentos', $dataLancamento);
-                $lancamentosIds[] = $this->db->insert_id();
+                $lancamentoId = $this->db->insert_id();
+                $lancamentosIds[] = $lancamentoId;
+                
+                // Se status é "Faturado", registrar pagamento parcial automaticamente
+                if ($statusFaturado && $lancamentoId) {
+                    $dataPagamentoParcial = [
+                        'lancamentos_id' => $lancamentoId,
+                        'valor' => $valor,
+                        'data_pagamento' => $dataPagamento,
+                        'forma_pgto' => $parcela->forma_pgto ?? '',
+                        'observacao' => 'Pagamento automático - NF emitida (OS #' . $idOs . ')',
+                        'usuarios_id' => $this->session->userdata('id_admin')
+                    ];
+                    
+                    $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                    log_info('Registrou pagamento automático de R$ ' . number_format($valor, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (OS #' . $idOs . ' - Status: Faturado)');
+                }
             }
         } else {
             // Se não tem parcelas configuradas, criar lançamento único (compatibilidade)
+            // Se status é "Faturado", registrar pagamento automaticamente
+            if ($statusFaturado) {
+                $statusPagamento = 'pago';
+                $valorPago = $valorTotal;
+                $baixado = 1;
+                $dataPagamento = date('Y-m-d');
+            } else {
+                $statusPagamento = 'pendente';
+                $valorPago = 0;
+                $baixado = 0;
+                $dataPagamento = null;
+            }
+            
             $dataLancamento = [
                 'descricao' => 'OS #' . $idOs . ' - ' . htmlspecialchars($os->nomeCliente),
                 'valor' => $valorTotal,
                 'valor_desconto' => $valorTotal,
-                'valor_pago' => 0,
-                'status_pagamento' => 'pendente',
+                'valor_pago' => $valorPago,
+                'status_pagamento' => $statusPagamento,
                 'desconto' => 0,
                 'tipo_desconto' => 'real',
                 'data_vencimento' => date('Y-m-d'),
-                'data_pagamento' => null,
-                'baixado' => 0,
+                'data_pagamento' => $dataPagamento,
+                'baixado' => $baixado,
                 'cliente_fornecedor' => $os->nomeCliente,
                 'clientes_id' => $os->clientes_id,
                 'forma_pgto' => $os->forma_pgto ?? '',
@@ -2526,7 +2602,23 @@ class Os extends MY_Controller
             ];
             
             $this->financeiro_model->add('lancamentos', $dataLancamento);
-            $lancamentosIds[] = $this->db->insert_id();
+            $lancamentoId = $this->db->insert_id();
+            $lancamentosIds[] = $lancamentoId;
+            
+            // Se status é "Faturado", registrar pagamento parcial automaticamente
+            if ($statusFaturado && $lancamentoId) {
+                $dataPagamentoParcial = [
+                    'lancamentos_id' => $lancamentoId,
+                    'valor' => $valorTotal,
+                    'data_pagamento' => $dataPagamento,
+                    'forma_pgto' => $os->forma_pgto ?? '',
+                    'observacao' => 'Pagamento automático - NF emitida (OS #' . $idOs . ')',
+                    'usuarios_id' => $this->session->userdata('id_admin')
+                ];
+                
+                $this->pagamentos_parciais_model->add($dataPagamentoParcial);
+                log_info('Registrou pagamento automático de R$ ' . number_format($valorTotal, 2, ',', '.') . ' para lançamento #' . $lancamentoId . ' (OS #' . $idOs . ' - Status: Faturado)');
+            }
         }
 
         // Vincular primeiro lançamento à OS
