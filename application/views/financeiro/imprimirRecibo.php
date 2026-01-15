@@ -11,30 +11,30 @@
         .recibo-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px;
+            padding: 20px;
         }
         .recibo-header {
             text-align: center;
             border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
         .recibo-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             margin: 0;
         }
         .recibo-content {
-            margin: 30px 0;
-            line-height: 1.8;
+            margin: 15px 0;
+            line-height: 1.5;
         }
         .recibo-texto {
-            font-size: 16px;
+            font-size: 14px;
             text-align: justify;
-            margin: 20px 0;
-            padding: 20px;
+            margin: 10px 0;
+            padding: 12px;
             background-color: #f9f9f9;
-            border-left: 4px solid #333;
+            border-left: 3px solid #333;
         }
         .recibo-valor {
             font-size: 20px;
@@ -63,12 +63,12 @@
             min-width: 150px;
         }
         .recibo-footer {
-            margin-top: 60px;
-            padding-top: 40px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 2px solid #000;
         }
         .recibo-assinatura {
-            margin-top: 80px;
+            margin-top: 30px;
             text-align: center;
         }
         .recibo-assinatura-line {
@@ -76,18 +76,26 @@
             width: 300px;
             margin: 0 auto;
             padding-top: 5px;
+            font-size: 12px;
         }
         .recibo-data {
             text-align: right;
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 10px;
+            font-size: 12px;
         }
         @media print {
             .recibo-container {
-                padding: 20px;
+                padding: 15px;
             }
             .no-print {
                 display: none;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .recibo-content ul {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -159,7 +167,7 @@
                                 $dataPagamento = date('d/m/Y');
                             }
                             ?>
-                            <p style="font-size: 16px; line-height: 1.8; text-align: justify;">
+                            <p style="font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
                                 Declaro que recebi de <strong><?= htmlspecialchars($nomeCliente) ?></strong>, com endereço em <strong><?= htmlspecialchars($enderecoCliente) ?></strong>, o valor de <strong>R$ <?= number_format($valorFinal, 2, ',', '.') ?></strong> em <strong><?= $dataPagamento ?></strong>, referente aos seguintes serviços e materiais:
                             </p>
                         </div>
@@ -186,12 +194,12 @@
                         ?>
                         
                         <?php if (!empty($produtos) || (!empty($servicos) && $opcoes['mostrar_servicos'])): ?>
-                        <div style="margin: 25px 0; font-size: 16px; line-height: 1.8;">
+                        <div style="margin: 12px 0; font-size: 12px; line-height: 1.4;">
                             <?php if (!empty($produtos)): ?>
-                            <p style="margin-bottom: 10px;"><strong>Materiais:</strong></p>
-                            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Materiais:</strong></p>
+                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px;">
                                 <?php foreach ($produtos as $p): ?>
-                                <li style="margin-bottom: 8px;">
+                                <li style="margin-bottom: 3px; font-size: 11px;">
                                     <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
                                     <?php if ($opcoes['mostrar_preco_servicos']): ?>
                                         - Qtd: <?= number_format($p->quantidade, 2, ',', '.') ?>
@@ -206,10 +214,10 @@
                             <?php endif; ?>
 
                             <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
-                            <p style="margin-bottom: 10px;"><strong>Serviços:</strong></p>
-                            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                            <p style="margin: 5px 0 3px 0; font-size: 13px;"><strong>Serviços:</strong></p>
+                            <ul style="margin-left: 15px; margin-bottom: 10px; padding-left: 10px;">
                                 <?php foreach ($servicos as $s): ?>
-                                <li style="margin-bottom: 8px;">
+                                <li style="margin-bottom: 3px; font-size: 11px;">
                                     <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
                                     <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
                                         - <?= htmlspecialchars($s->detalhes) ?>
@@ -227,12 +235,20 @@
                             <?php endif; ?>
                             
                             <!-- Totais no final -->
-                            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 13px;">
                                 <?php if ($totalProdutos > 0): ?>
-                                <p style="margin: 5px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
+                                <p style="margin: 2px 0;"><strong>Total de Materiais: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong></p>
                                 <?php endif; ?>
                                 <?php if ($totalServicos > 0): ?>
-                                <p style="margin: 5px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
+                                <p style="margin: 2px 0;"><strong>Total de Serviços: R$ <?= number_format($totalServicos, 2, ',', '.') ?></strong></p>
+                                <?php endif; ?>
+                                <?php 
+                                $totalGeral = $totalProdutos + $totalServicos;
+                                if ($totalGeral > 0): 
+                                ?>
+                                <p style="margin: 5px 0 0 0; font-size: 14px; font-weight: bold; border-top: 1px solid #333; padding-top: 5px;">
+                                    <strong>TOTAL GERAL: R$ <?= number_format($totalGeral, 2, ',', '.') ?></strong>
+                                </p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -240,16 +256,15 @@
                         
                         <!-- Forma de Pagamento e Dados -->
                         <?php if ($lancamento->forma_pgto || !empty($pagamentos)): ?>
-                        <div style="margin: 25px 0; font-size: 16px; line-height: 1.8;">
+                        <div style="margin: 12px 0; font-size: 12px; line-height: 1.5;">
                             <?php if ($lancamento->forma_pgto): ?>
-                            <p><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
+                            <p style="margin: 3px 0;"><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
                             <?php endif; ?>
                             
                             <?php if (!empty($pagamentos)): ?>
-                            <p style="margin-top: 10px;"><strong>Pagamentos Realizados:</strong></p>
-                            <ul style="margin-left: 20px;">
+                            <ul style="margin-left: 15px; padding-left: 10px; margin-top: 5px;">
                                 <?php foreach ($pagamentos as $pgto): ?>
-                                <li style="margin-bottom: 5px;">
+                                <li style="margin-bottom: 2px; font-size: 11px;">
                                     R$ <?= number_format($pgto->valor, 2, ',', '.') ?> 
                                     em <?= $pgto->data_pagamento && $pgto->data_pagamento != '0000-00-00' ? date('d/m/Y', strtotime($pgto->data_pagamento)) : '-' ?>
                                     <?php if ($pgto->forma_pgto): ?>
