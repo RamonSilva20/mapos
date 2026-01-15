@@ -816,14 +816,16 @@ class Propostas extends MY_Controller
             $q = strtolower($_GET['term']);
             $this->db->select('idClientes, nomeCliente, documento, telefone, celular');
             $this->db->limit(25);
+            $this->db->group_start();
             $this->db->like('nomeCliente', $q);
             $this->db->or_like('documento', $q);
             $this->db->or_like('telefone', $q);
             $this->db->or_like('celular', $q);
+            $this->db->group_end();
             $query = $this->db->get('clientes');
             
+            $row_set = [];
             if ($query->num_rows() > 0) {
-                $row_set = [];
                 foreach ($query->result_array() as $row) {
                     $documento = $row['documento'] ? ' | ' . $row['documento'] : '';
                     $telefone = $row['telefone'] ? ' | ' . $row['telefone'] : ($row['celular'] ? ' | ' . $row['celular'] : '');
@@ -833,10 +835,10 @@ class Propostas extends MY_Controller
                         'value' => $row['nomeCliente']
                     ];
                 }
-                echo json_encode($row_set);
-            } else {
-                echo json_encode([]);
             }
+            echo json_encode($row_set);
+        } else {
+            echo json_encode([]);
         }
     }
 
@@ -857,17 +859,21 @@ class Propostas extends MY_Controller
             $this->db->like('codDeBarra', $q);
             $this->db->or_like('descricao', $q);
             $query = $this->db->get('produtos');
+            $row_set = [];
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $row) {
                     $row_set[] = [
                         'label' => $row['descricao'] . ' | Preço: R$ ' . number_format($row['precoVenda'], 2, ',', '.') . ' | Estoque: ' . $row['estoque'], 
                         'estoque' => $row['estoque'], 
                         'id' => $row['idProdutos'], 
-                        'preco' => $row['precoVenda']  // Retornar como número (ex: 45.22)
+                        'preco' => $row['precoVenda'],  // Retornar como número (ex: 45.22)
+                        'value' => $row['descricao']
                     ];
                 }
-                echo json_encode($row_set);
             }
+            echo json_encode($row_set);
+        } else {
+            echo json_encode([]);
         }
     }
 

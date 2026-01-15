@@ -400,11 +400,28 @@ $(document).ready(function() {
 
     // Autocomplete de cliente (opcional - pode digitar livremente)
     $("#cliente").autocomplete({
-        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
+        source: function(request, response) {
+            $.ajax({
+                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function(data) {
+                    response(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erro ao buscar clientes:", error);
+                    response([]);
+                }
+            });
+        },
         minLength: 1,
         select: function(event, ui) {
-            $("#clientes_id").val(ui.item.id);
-            return true;
+            if (ui.item) {
+                $("#clientes_id").val(ui.item.id);
+            }
+            return false;
         },
         change: function(event, ui) {
             // Se não foi selecionado do autocomplete, limpar o ID
@@ -429,14 +446,32 @@ $(document).ready(function() {
     });
 
     $("#produto").autocomplete({
-        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
+        source: function(request, response) {
+            $.ajax({
+                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function(data) {
+                    response(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erro ao buscar produtos:", error);
+                    response([]);
+                }
+            });
+        },
         minLength: 2,
         select: function(event, ui) {
-            $("#idProduto").val(ui.item.id);
-            // Converter preço corretamente (já vem como número do banco)
-            var preco = parseFloat(ui.item.preco);
-            $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-            $("#quantidade_produto").focus();
+            if (ui.item) {
+                $("#idProduto").val(ui.item.id);
+                // Converter preço corretamente (já vem como número do banco)
+                var preco = parseFloat(ui.item.preco);
+                $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+                $("#quantidade_produto").focus();
+            }
+            return false;
         }
     });
 
