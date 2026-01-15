@@ -409,44 +409,26 @@ $(document).ready(function() {
     }
 
     // Autocomplete de cliente (opcional - pode digitar livremente)
-    if ($("#cliente").length) {
-        $("#cliente").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-                        if (Array.isArray(data)) {
-                            response(data);
-                        } else {
-                            console.error("Resposta inválida do servidor:", data);
-                            response([]);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao buscar clientes:", error, xhr.responseText);
-                        response([]);
-                    }
-                });
-            },
-            minLength: 1,
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#clientes_id").val(ui.item.id);
-                }
-                return false;
-            },
-            change: function(event, ui) {
-                // Se não foi selecionado do autocomplete, limpar o ID
-                if (!ui.item) {
-                    $("#clientes_id").val('');
-                }
+    $("#cliente").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
+        minLength: 1,
+        select: function(event, ui) {
+            $("#clientes_id").val(ui.item.id);
+            return true;
+        },
+        change: function(event, ui) {
+            // Se não foi selecionado do autocomplete, limpar o ID
+            if (!ui.item) {
+                $("#clientes_id").val('');
             }
-        });
-    }
+        }
+    });
+    
+    // Permitir digitação livre
+    $("#cliente").on('keyup', function() {
+        // Se o usuário está digitando livremente, permitir
+        console.log('Cliente digitando: ' + $(this).val());
+    });
     
     // Permitir digitação livre
     $("#cliente").on('keyup', function() {
@@ -454,112 +436,37 @@ $(document).ready(function() {
         console.log('Cliente digitando: ' + $(this).val());
     });
 
-    if ($("#vendedor").length) {
-        $("#vendedor").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-                        if (Array.isArray(data)) {
-                            response(data);
-                        } else {
-                            console.error("Resposta inválida do servidor:", data);
-                            response([]);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao buscar usuários:", error, xhr.responseText);
-                        response([]);
-                    }
-                });
-            },
-            minLength: 1,
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#usuarios_id").val(ui.item.id);
-                }
-                return false;
-            }
-        });
-    }
+    $("#vendedor").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
+        minLength: 1,
+        select: function(event, ui) {
+            $("#usuarios_id").val(ui.item.id);
+        }
+    });
 
-    if ($("#produto").length) {
-        $("#produto").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-                        if (Array.isArray(data)) {
-                            response(data);
-                        } else {
-                            console.error("Resposta inválida do servidor:", data);
-                            response([]);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao buscar produtos:", error, xhr.responseText);
-                        response([]);
-                    }
-                });
-            },
-            minLength: 2,
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#idProduto").val(ui.item.id);
-                    // Converter preço corretamente (já vem como número do banco)
-                    var preco = parseFloat(ui.item.preco);
-                    $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-                    $("#quantidade_produto").focus();
-                }
-                return false;
-            }
-        });
-    }
+    $("#produto").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
+        minLength: 2,
+        select: function(event, ui) {
+            $("#idProduto").val(ui.item.id);
+            // Converter preço corretamente (já vem como número do banco)
+            var preco = parseFloat(ui.item.preco);
+            $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+            $("#quantidade_produto").focus();
+        }
+    });
 
-    if ($("#servico").length) {
-        $("#servico").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-                        if (Array.isArray(data)) {
-                            response(data);
-                        } else {
-                            console.error("Resposta inválida do servidor:", data);
-                            response([]);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao buscar serviços:", error, xhr.responseText);
-                        response([]);
-                    }
-                });
-            },
-            minLength: 2,
-            select: function(event, ui) {
-                if (ui.item) {
-                    $("#idServico").val(ui.item.id);
-                    // Converter preço corretamente (já vem como número do banco)
-                    var preco = parseFloat(ui.item.preco);
-                    $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-                    $("#quantidade_servico").focus();
-                }
-                return false;
-            }
-        });
-    }
+    $("#servico").autocomplete({
+        source: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
+        minLength: 2,
+        select: function(event, ui) {
+            $("#idServico").val(ui.item.id);
+            // Converter preço corretamente (já vem como número do banco)
+            var preco = parseFloat(ui.item.preco);
+            $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+            $("#quantidade_servico").focus();
+        }
+    });
 
     // Variáveis globais
     var produtos = [];
