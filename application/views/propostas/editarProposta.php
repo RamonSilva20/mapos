@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<!-- jQuery UI deve ser carregado após jQuery base (que já está no topo.php) -->
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
@@ -399,37 +400,44 @@ $(document).ready(function() {
     }
 
     // Autocomplete de cliente (opcional - pode digitar livremente)
-    $("#cliente").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
-                dataType: "json",
-                data: {
-                    term: request.term
-                },
-                success: function(data) {
-                    response(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erro ao buscar clientes:", error);
-                    response([]);
+    if ($("#cliente").length) {
+        $("#cliente").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteCliente",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            response(data);
+                        } else {
+                            console.error("Resposta inválida do servidor:", data);
+                            response([]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao buscar clientes:", error, xhr.responseText);
+                        response([]);
+                    }
+                });
+            },
+            minLength: 1,
+            select: function(event, ui) {
+                if (ui.item) {
+                    $("#clientes_id").val(ui.item.id);
                 }
-            });
-        },
-        minLength: 1,
-        select: function(event, ui) {
-            if (ui.item) {
-                $("#clientes_id").val(ui.item.id);
+                return false;
+            },
+            change: function(event, ui) {
+                // Se não foi selecionado do autocomplete, limpar o ID
+                if (!ui.item) {
+                    $("#clientes_id").val('');
+                }
             }
-            return false;
-        },
-        change: function(event, ui) {
-            // Se não foi selecionado do autocomplete, limpar o ID
-            if (!ui.item) {
-                $("#clientes_id").val('');
-            }
-        }
-    });
+        });
+    }
     
     // Permitir digitação livre
     $("#cliente").on('keyup', function() {
@@ -437,91 +445,112 @@ $(document).ready(function() {
         console.log('Cliente digitando: ' + $(this).val());
     });
 
-    $("#vendedor").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
-                dataType: "json",
-                data: {
-                    term: request.term
-                },
-                success: function(data) {
-                    response(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erro ao buscar usuários:", error);
-                    response([]);
+    if ($("#vendedor").length) {
+        $("#vendedor").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteUsuario",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            response(data);
+                        } else {
+                            console.error("Resposta inválida do servidor:", data);
+                            response([]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao buscar usuários:", error, xhr.responseText);
+                        response([]);
+                    }
+                });
+            },
+            minLength: 1,
+            select: function(event, ui) {
+                if (ui.item) {
+                    $("#usuarios_id").val(ui.item.id);
                 }
-            });
-        },
-        minLength: 1,
-        select: function(event, ui) {
-            if (ui.item) {
-                $("#usuarios_id").val(ui.item.id);
+                return false;
             }
-            return false;
-        }
-    });
+        });
+    }
 
-    $("#produto").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
-                dataType: "json",
-                data: {
-                    term: request.term
-                },
-                success: function(data) {
-                    response(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erro ao buscar produtos:", error);
-                    response([]);
+    if ($("#produto").length) {
+        $("#produto").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteProduto",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            response(data);
+                        } else {
+                            console.error("Resposta inválida do servidor:", data);
+                            response([]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao buscar produtos:", error, xhr.responseText);
+                        response([]);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                if (ui.item) {
+                    $("#idProduto").val(ui.item.id);
+                    // Converter preço corretamente (já vem como número do banco)
+                    var preco = parseFloat(ui.item.preco);
+                    $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+                    $("#quantidade_produto").focus();
                 }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            if (ui.item) {
-                $("#idProduto").val(ui.item.id);
-                // Converter preço corretamente (já vem como número do banco)
-                var preco = parseFloat(ui.item.preco);
-                $("#preco_produto").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-                $("#quantidade_produto").focus();
+                return false;
             }
-            return false;
-        }
-    });
+        });
+    }
 
-    $("#servico").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
-                dataType: "json",
-                data: {
-                    term: request.term
-                },
-                success: function(data) {
-                    response(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erro ao buscar serviços:", error);
-                    response([]);
+    if ($("#servico").length) {
+        $("#servico").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>index.php/propostas/autoCompleteServico",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            response(data);
+                        } else {
+                            console.error("Resposta inválida do servidor:", data);
+                            response([]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao buscar serviços:", error, xhr.responseText);
+                        response([]);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                if (ui.item) {
+                    $("#idServico").val(ui.item.id);
+                    // Converter preço corretamente (já vem como número do banco)
+                    var preco = parseFloat(ui.item.preco);
+                    $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
+                    $("#quantidade_servico").focus();
                 }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            if (ui.item) {
-                $("#idServico").val(ui.item.id);
-                // Converter preço corretamente (já vem como número do banco)
-                var preco = parseFloat(ui.item.preco);
-                $("#preco_servico").val(preco.toFixed(2).replace('.', ',')).maskMoney('mask');
-                $("#quantidade_servico").focus();
+                return false;
             }
-            return false;
-        }
-    });
+        });
+    }
 
     // Variáveis globais
     var produtos = [];
