@@ -239,17 +239,13 @@
                         <?php endif; ?>
                         
                         <!-- Forma de Pagamento e Dados -->
-                        <?php if ($lancamento->forma_pgto): ?>
+                        <?php if ($lancamento->forma_pgto || !empty($pagamentos)): ?>
                         <div style="margin: 25px 0; font-size: 16px; line-height: 1.8;">
+                            <?php if ($lancamento->forma_pgto): ?>
                             <p><strong>Forma de Pagamento:</strong> <?= htmlspecialchars($lancamento->forma_pgto) ?></p>
+                            <?php endif; ?>
                             
-                            <?php
-                            // Buscar pagamentos parciais se houver
-                            $this->load->model('pagamentos_parciais_model');
-                            $pagamentos = $this->pagamentos_parciais_model->getByLancamento($lancamento->idLancamentos);
-                            
-                            if (!empty($pagamentos)):
-                            ?>
+                            <?php if (!empty($pagamentos)): ?>
                             <p style="margin-top: 10px;"><strong>Pagamentos Realizados:</strong></p>
                             <ul style="margin-left: 20px;">
                                 <?php foreach ($pagamentos as $pgto): ?>

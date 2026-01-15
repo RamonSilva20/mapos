@@ -761,6 +761,10 @@ class Financeiro extends MY_Controller
             }
         }
 
+        // Buscar pagamentos parciais
+        $this->load->model('pagamentos_parciais_model');
+        $pagamentos = $this->pagamentos_parciais_model->getByLancamento($id);
+
         $this->data['lancamento'] = $lancamento;
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['opcoes'] = $opcoes;
@@ -768,6 +772,7 @@ class Financeiro extends MY_Controller
         $this->data['servicos'] = $servicos;
         $this->data['tipoOrigem'] = $tipoOrigem;
         $this->data['idOrigem'] = $idOrigem;
+        $this->data['pagamentos'] = $pagamentos;
 
         // Calcular valor final (com desconto se houver)
         $valorFinal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
