@@ -736,6 +736,7 @@ class Financeiro extends MY_Controller
         // Buscar produtos e serviços relacionados (via OS ou Proposta)
         $produtos = [];
         $servicos = [];
+        $outros = [];
         $tipoOrigem = null;
         $idOrigem = null;
 
@@ -748,6 +749,10 @@ class Financeiro extends MY_Controller
             $idOrigem = $os->idOs;
             $produtos = $this->os_model->getProdutos($os->idOs);
             $servicos = $this->os_model->getServicos($os->idOs);
+            
+            // Buscar "outros produtos/serviços" da OS
+            $this->load->model('outros_produtos_servicos_os_model');
+            $outros = $this->outros_produtos_servicos_os_model->getByOs($os->idOs);
         } else {
             // Tentar encontrar Proposta relacionada
             $this->load->model('propostas_model');
@@ -758,6 +763,24 @@ class Financeiro extends MY_Controller
                 $idOrigem = $proposta->idProposta;
                 $produtos = $this->propostas_model->getProdutos($proposta->idProposta);
                 $servicos = $this->propostas_model->getServicos($proposta->idProposta);
+                
+                // Buscar "outros produtos/serviços" da Proposta
+                $outros = $this->propostas_model->getOutros($proposta->idProposta);
+            }
+        }
+        
+        // Adicionar "outros" aos serviços (conforme solicitado)
+        if (!empty($outros)) {
+            foreach ($outros as $outro) {
+                // Criar objeto similar a serviço para manter compatibilidade
+                $servicoOutro = (object) [
+                    'nome' => $outro->descricao ?? 'Outro Item',
+                    'descricao' => $outro->descricao ?? 'Outro Item',
+                    'preco' => $outro->preco ?? 0,
+                    'quantidade' => 1,
+                    'detalhes' => null
+                ];
+                $servicos[] = $servicoOutro;
             }
         }
 
@@ -774,7 +797,7 @@ class Financeiro extends MY_Controller
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['opcoes'] = $opcoes;
         $this->data['produtos'] = $produtos;
-        $this->data['servicos'] = $servicos;
+        $this->data['servicos'] = $servicos; // Já inclui os "outros" como serviços
         $this->data['tipoOrigem'] = $tipoOrigem;
         $this->data['idOrigem'] = $idOrigem;
         $this->data['pagamentos'] = $pagamentos;
