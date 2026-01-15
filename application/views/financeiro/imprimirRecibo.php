@@ -166,9 +166,24 @@
                             } else {
                                 $dataPagamento = date('d/m/Y');
                             }
+                            
+                            // Determinar texto referente conforme conteúdo
+                            $temProdutos = !empty($produtos);
+                            $temServicos = !empty($servicos) && $opcoes['mostrar_servicos'];
+                            
+                            $textoReferente = '';
+                            if ($temProdutos && $temServicos) {
+                                $textoReferente = 'referente aos seguintes serviços e materiais:';
+                            } elseif ($temProdutos) {
+                                $textoReferente = 'referente aos seguintes materiais:';
+                            } elseif ($temServicos) {
+                                $textoReferente = 'referente aos seguintes serviços:';
+                            } else {
+                                $textoReferente = 'referente a:';
+                            }
                             ?>
                             <p style="font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
-                                Declaro que recebi de <strong><?= htmlspecialchars($nomeCliente) ?></strong>, com endereço em <strong><?= htmlspecialchars($enderecoCliente) ?></strong>, o valor de <strong>R$ <?= number_format($valorFinal, 2, ',', '.') ?></strong> em <strong><?= $dataPagamento ?></strong>, referente aos seguintes serviços e materiais:
+                                Declaro que recebi de <strong><?= htmlspecialchars($nomeCliente) ?></strong>, com endereço em <strong><?= htmlspecialchars($enderecoCliente) ?></strong>, o valor de <strong>R$ <?= number_format($valorFinal, 2, ',', '.') ?></strong> em <strong><?= $dataPagamento ?></strong>, <?= $textoReferente ?>
                             </p>
                         </div>
 
