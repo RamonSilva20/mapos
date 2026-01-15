@@ -149,33 +149,38 @@ class Financeiro extends MY_Controller
             } catch (Exception $e) {
                 $vencimento = date('Y/m/d');
             }
-            // Formatação correta dos valores
-            $valor = str_replace(',', '.', $this->input->post('valor'));
-            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));   
-            $desconto = $valor_desconto;
-            $total_sem_desconto = $valor + $valor_desconto;
-            $valor = $total_sem_desconto;
-            $total_com_desconto = $valor - $valor_desconto;
-            $valor_desconto = $total_com_desconto;
-            // Verifica se o valor está em formato monetário
-            if (!is_numeric($valor_desconto)) {
-                $valor_desconto = str_replace([',', '.'], ['', ''], $valor_desconto);
+            // Formatação correta dos valores - Lógica simplificada
+            $valor = str_replace(['.', ','], ['', '.'], $this->input->post('valor'));
+            // Aceitar tanto 'desconto' quanto 'descontos' (compatibilidade)
+            $descontoInput = $this->input->post('desconto') ?: $this->input->post('descontos') ?: '0';
+            $desconto = str_replace(['.', ','], ['', '.'], $descontoInput);
+            
+            $valor = floatval($valor) ?: 0;
+            $desconto = floatval($desconto) ?: 0;
+            
+            // Valor final após desconto
+            $valor_desconto = $valor - $desconto;
+            if ($valor_desconto < 0) {
+                $valor_desconto = 0;
+                $desconto = $valor; // Limitar desconto ao valor máximo
             }
-            if (!is_numeric($valor)) {
-                $valor = str_replace([',', '.'], ['', ''], $valor);
+            
+            // Verifica se o valor está em formato monetário (fallback)
+            if (!is_numeric($valor_desconto)) {
+                $valor_desconto = floatval(str_replace([',', '.'], ['', '.'], $this->input->post('valor_desconto') ?: '0'));
             }
             // Criação do array de dados
             $data = [
                 'descricao' => set_value('descricao'),
-                'valor' => number_format($valor, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'valor_desconto' => number_format($valor_desconto, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'desconto' => $desconto,
+                'valor' => number_format($valor, 2, '.', ''), // Valor original
+                'valor_desconto' => number_format($valor_desconto, 2, '.', ''), // Valor final após desconto
+                'desconto' => number_format($desconto, 2, '.', ''), // Valor do desconto aplicado
                 'tipo_desconto' => 'real',
                 'data_vencimento' => $vencimento,
-                'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-                'baixado' => $this->input->post('recebido') ?: 0,
+                'data_pagamento' => ($this->input->post('recebido') && $recebimento) ? $recebimento : null,
+                'baixado' => $this->input->post('recebido') ? 1 : 0,
                 'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
+                'forma_pgto' => $this->input->post('formaPgto') ?: '',
                 'tipo' => set_value('tipo'),
                 'observacoes' => set_value('observacoes'),
                 'usuarios_id' => $this->session->userdata('id_admin'),

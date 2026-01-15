@@ -421,128 +421,125 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         </div>
         <div class="modal-body">
 
-            <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com
-                asterisco.
+            <div class="span12 alert alert-info" style="margin-left: 0; margin-bottom: 15px;">
+                <i class="bx bx-info-circle"></i> Campos com <strong>*</strong> são obrigatórios. Os demais são opcionais.
             </div>
 
-            <div class="span3" style="margin-left: 0">
-		    		<label for="tipo">Tipo</label>
-		    		<select name="tipo" id="tipo" class="span10">
-		    			<option value="receita">Receita</option>
-		    			<option value="despesa">Despesa</option>				
-		    		</select>
-	    	</div>
-
-            <div class="span6" style="margin-left: 0">
-                <label for="descricao">Descrição/Referência*</label>
-                <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+            <!-- Linha 1: Tipo e Descrição -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                <div class="span3" style="margin-left: 0">
+                    <label for="tipo">Tipo*</label>
+                    <select name="tipo" id="tipo" class="span12" required>
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>				
+                    </select>
+                </div>
+                <div class="span9">
+                    <label for="descricao">Descrição/Referência*</label>
+                    <input class="span12" id="descricao" type="text" name="descricao" placeholder="Ex: Venda de produto, Pagamento de fornecedor..." required />
+                    <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+                </div>
             </div>
-            <div class="span12" style="margin-left: 0">
+
+            <!-- Linha 2: Cliente/Fornecedor -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente/Fornecedor*</label>
-                    <input class="span12" id="cliente" type="text" name="cliente" value="" required />
+                    <input class="span12" id="cliente" type="text" name="cliente" value="" placeholder="Digite o nome ou selecione..." required />
                     <input class="span12" id="idCliente" type="hidden" name="idCliente" value="" />
                 </div>
+            </div>
 
-                <div class="span6" style="margin-left: 0">
+            <!-- Linha 3: Valor, Desconto e Vencimento -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                <div class="span4" style="margin-left: 0">
+                    <label for="valor">Valor*</label>
+                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." placeholder="0,00" required />
+                </div>
+                <div class="span3">  
+                    <label for="desconto">Desconto (R$)</label>
+                    <input class="span12 money" id="desconto" type="text" name="desconto" value="" placeholder="0,00" />
+                    <input id="valor_desconto" type="hidden" name="valor_desconto" value="0" />
+                </div>
+                <div class="span5">
+                    <label for="vencimento">Data Vencimento*</label>
+                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" value="<?php echo date('d/m/Y'); ?>" required />
+                </div>
+            </div>
+
+            <!-- Linha 4: Categoria, Conta e Parcelas -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                <div class="span4" style="margin-left: 0">
                     <label for="categoria">Categoria</label>
                     <select name="categoria" id="categoria" class="span12">
                         <option value="">Selecione uma categoria...</option>
                     </select>
                 </div>
-
-                <div class="span6">
-                    <label for="conta">Conta</label>
+                <div class="span4">
+                    <label for="conta">Conta Bancária</label>
                     <select name="conta" id="conta" class="span12">
                         <option value="">Selecione uma conta...</option>
                     </select>
                 </div>
+                <div class="span4">
+                    <label for="qtdparcelas">Parcelas</label>
+                    <select name="qtdparcelas" id="qtdparcelas" class="span12">
+                        <option value="0">À vista (1x)</option>
+                        <option value="2">2x</option>			
+                        <option value="3">3x</option>			
+                        <option value="4">4x</option>			
+                        <option value="5">5x</option>			
+                        <option value="6">6x</option>			
+                        <option value="12">12x</option>			
+                    </select>
+                    <a href="#modalReceitaParcelada" id="abrirmodalreceitaparcelada" data-toggle="modal" style="display: none;" role="button"> </a>   
+                </div>
+            </div>
 
+            <!-- Linha 5: Status de Pagamento -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                <div class="span12" style="margin-left: 0; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+                    <label style="margin-bottom: 10px; display: block;">
+                        <input id="recebido" type="checkbox" name="recebido" value="1" />
+                        <strong>Marcar como recebido/pago</strong>
+                    </label>
+                    
+                    <div id="divRecebimento" style="display: none; margin-top: 10px;">
+                        <div class="span6" style="margin-left: 0">
+                            <label for="recebimento">Data Recebimento</label>
+                            <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" value="<?php echo date('d/m/Y'); ?>" />
+                        </div>
+                        <div class="span6">
+                            <label for="formaPgto">Forma de Pagamento</label>
+                            <select name="formaPgto" id="formaPgto" class="span12">
+                                <option value="">Selecione...</option>
+                                <option value="Dinheiro">Dinheiro</option>
+                                <option value="Pix">Pix</option>
+                                <option value="Boleto">Boleto</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                <option value="Cartão de Débito">Cartão de Débito</option>
+                                <option value="Cheque">Cheque</option> 
+                                <option value="Transferência">Transferência</option>
+                                <option value="Depósito">Depósito</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Linha 6: Observações -->
+            <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
                 <div class="span12" style="margin-left: 0">
                     <label for="observacoes">Observações</label>
-                    <textarea class="span12" id="observacoes" name="observacoes"></textarea>
+                    <textarea class="span12" id="observacoes" name="observacoes" rows="2" placeholder="Informações adicionais (opcional)"></textarea>
                 </div>
-
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span4" style="margin-left: 0">
-                    <label for="valor">Valor*</label>
-                    <input class="span12 money" id="valor" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." required />
-                </div>
-
-        <div class="span4">  
-	        <label for="descontos">Desconto</label>
-	        <input class="span6 money" id="descontos" type="text" name="descontos" value="" placeholder="em R$" style="float: left;" />
-            <input class="btn btn-inverse" onclick="mostrarValores();" type="button" name="valor_desconto" value="Aplicar" placeholder="R$" style="margin-left:3px; width: 70px;" />
-	      </div>
-		            
-          <div class="span3">  
-          <label for="valor_desconto">Val.Desc <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00", 2, ',', '.') ?>"/>
-        </div>
-
-                <div class="span4" style="margin-left: 0">
-                    <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" autocomplete="off" id="vencimento" type="text" name="vencimento" required />
-                </div>
-
-                <div class="span5">
-		    		<label for="qtdparcelas">Qtd Parcelas</label>
-		    		<select name="qtdparcelas" id="qtdparcelas" class="span10">
-		    			<option value="0">Pagamento á vista</option>
-		    			<option value="1">1x</option>			
-		    			<option value="2">2x</option>			
-		    			<option value="3">3x</option>			
-		    			<option value="4">4x</option>			
-		    			<option value="5">5x</option>			
-		    			<option value="6">6x</option>			
-		    			<option value="7">7x</option>			
-		    			<option value="8">8x</option>			
-		    			<option value="9">9x</option>			
-		    			<option value="10">10x</option>			
-		    			<option value="11">11x</option>			
-		    			<option value="12">12x</option>			
-		    		</select>
-		    	<a href="#modalReceitaParcelada" id="abrirmodalreceitaparcelada" data-toggle="modal" style="display: none;" role="button"> </a>   
-	    	</div>    
-            <div class="span3" style="margin-left: 0">
-                <div class="span3" style="margin-left: 0">
-                    <label for="recebido">Recebido?</label>
-                  <input id="recebido" type="checkbox" name="recebido" value="1" />
-                </div>
-            </div>
-            
-                <div id="divRecebimento" class="span8" style="display: none; margin-left: 0">
-                    <div class="span6" style="margin-left: 0">
-                        <label for="recebimento">Data Recebimento</label>
-                        <input class="span12 datepicker" autocomplete="off" id="recebimento" type="text" name="recebimento" />
-                    </div>
-                    <div class="span6">
-                        <label for="formaPgto">Forma Pgto</label>
-                        <select name="formaPgto" id="formaPgto" class="span12">
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="Pix">Pix</option>
-                            <option value="Boleto">Boleto</option>
-                            <option value="Cartão de Crédito" selected>Cartão de Crédito</option>
-                            <option value="Cartão de Débito">Cartão de Débito</option>
-                            <option value="Cheque">Cheque</option> 
-                            <option value="Cheque Pré-datado">Cheque Pré-datado</option> 
-                            <option value="Depósito">Depósito</option>
-                            <option value="Transferência DOC">Transferência DOC</option>
-                            <option value="Transferência TED">Transferência TED</option>
-                            <option value="Promissória">Promissória</option> 
-                        </select>
-                    </div>
-                </div>
-
             </div>
 
         </div>
         <div class="modal-footer" style="display:flex;justify-content: right">
             <button class="button btn btn-warning" id="cancelar_nova_receita" data-dismiss="modal" aria-hidden="true" style="min-width: 110px">
             <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-primary" style="min-width: 110px">
+            <button type="submit" class="button btn btn-primary" id="btn-submit-receita" style="min-width: 110px">
             <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Adicionar Registro</span></button>
         </div>
     </form>
@@ -951,24 +948,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 			}
 	}
 	
-    function mostrarValores() {
-		if (document.getElementById('valor').value == "" || document.getElementById('descontos').value == "" || document.getElementById('valor_desconto').value == ""){
-			
-		}else{
-			var valor = parseFloat(document.getElementById('valor').value);
-			var desconto = parseFloat(document.getElementById('descontos').value); 
-			var valor_desconto = parseFloat(document.getElementById('valor_desconto').value);
-			var resultado, total;
-			resultado = valor;
-			total = valor-desconto;
-			
-			resultdesc = total ;
-			totaldesc = valor-(resultdesc);	
-			
-			document.getElementById('valor').value = total.toFixed(2);
-			document.getElementById('valor_desconto').value = totaldesc.toFixed(2);
-			}
-	}
+    // Função removida - desconto agora é calculado automaticamente via JavaScript
 
     function mostrarValoresEditar() {
 		if (document.getElementById('valorEditar').value == "" || document.getElementById('descontos_editar').value == "" || document.getElementById('descontoEditar').value == ""){
@@ -1012,6 +992,60 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
         $(".money").maskMoney();
 
+        // Preencher data de vencimento automaticamente ao abrir modal
+        $('#modalReceita').on('shown', function() {
+            if (!$('#vencimento').val()) {
+                $('#vencimento').val('<?php echo date('d/m/Y'); ?>');
+            }
+            // Limpar campos ao abrir
+            $('#descricao').val('');
+            $('#cliente').val('');
+            $('#idCliente').val('');
+            $('#valor').val('');
+            $('#desconto').val('');
+            $('#valor_desconto').val('0');
+            $('#observacoes').val('');
+            $('#categoria').val('');
+            $('#conta').val('');
+            $('#recebido').prop('checked', false);
+            $('#divRecebimento').hide();
+        });
+
+        // Simplificar desconto - calcular automaticamente
+        $('#desconto').on('blur change', function() {
+            var valor = parseFloat($('#valor').val().replace(/\./g, '').replace(',', '.')) || 0;
+            var desconto = parseFloat($(this).val().replace(/\./g, '').replace(',', '.')) || 0;
+            
+            if (desconto > 0 && valor > 0) {
+                var valorFinal = valor - desconto;
+                if (valorFinal < 0) {
+                    valorFinal = 0;
+                    desconto = valor;
+                    $(this).val(desconto.toFixed(2).replace('.', ','));
+                }
+                $('#valor_desconto').val(valorFinal.toFixed(2).replace('.', ','));
+            } else {
+                $('#valor_desconto').val(valor.toFixed(2).replace('.', ','));
+            }
+        });
+
+        // Quando valor mudar, recalcular desconto
+        $('#valor').on('blur change', function() {
+            var valor = parseFloat($(this).val().replace(/\./g, '').replace(',', '.')) || 0;
+            var desconto = parseFloat($('#desconto').val().replace(/\./g, '').replace(',', '.')) || 0;
+            
+            if (desconto > 0) {
+                var valorFinal = valor - desconto;
+                if (valorFinal < 0) {
+                    valorFinal = 0;
+                    $('#desconto').val(valor.toFixed(2).replace('.', ','));
+                }
+                $('#valor_desconto').val(valorFinal.toFixed(2).replace('.', ','));
+            } else {
+                $('#valor_desconto').val(valor.toFixed(2).replace('.', ','));
+            }
+        });
+
         $('#pago').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
@@ -1021,11 +1055,14 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             }
         });
 
-
         $('#recebido').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divRecebimento').show();
+                // Preencher data de recebimento automaticamente se vazio
+                if (!$('#recebimento').val()) {
+                    $('#recebimento').val('<?php echo date('d/m/Y'); ?>');
+                }
             } else {
                 $('#divRecebimento').hide();
             }
@@ -1072,7 +1109,15 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 }
             },
             submitHandler: function(form) {
-                $("#submitReceita").attr("disabled", true);
+                // Garantir que valor_desconto está preenchido antes de enviar
+                var valor = parseFloat($('#valor').val().replace(/\./g, '').replace(',', '.')) || 0;
+                var desconto = parseFloat($('#desconto').val().replace(/\./g, '').replace(',', '.')) || 0;
+                var valorFinal = valor - desconto;
+                if (valorFinal < 0) valorFinal = 0;
+                $('#valor_desconto').val(valorFinal.toFixed(2).replace('.', ','));
+                
+                // Desabilitar botão de submit
+                $('#btn-submit-receita').prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin"></i> Salvando...');
                 form.submit();
             }
         });
