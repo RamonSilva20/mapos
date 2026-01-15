@@ -240,6 +240,8 @@
                                 <li style="margin-bottom: 3px; font-size: 11px; display: flex; justify-content: space-between;">
                                     <span>
                                         <?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?>
+                                        - Qtd: <?= number_format($p->quantidade, 2, ',', '.') ?>
+                                        - Unit: R$ <?= number_format($p->preco, 2, ',', '.') ?>
                                     </span>
                                     <span style="margin-left: 10px; white-space: nowrap;"><strong>R$ <?= number_format($subtotal, 2, ',', '.') ?></strong></span>
                                 </li>
