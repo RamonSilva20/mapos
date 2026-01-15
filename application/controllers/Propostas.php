@@ -885,16 +885,20 @@ class Propostas extends MY_Controller
             $this->db->limit(25);
             $this->db->like('nome', $q);
             $query = $this->db->get('servicos');
+            $row_set = [];
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $row) {
                     $row_set[] = [
                         'label' => $row['nome'] . ' | Preço: R$ ' . number_format($row['preco'], 2, ',', '.'), 
                         'id' => $row['idServicos'], 
-                        'preco' => $row['preco']  // Retornar como número
+                        'preco' => $row['preco'],  // Retornar como número
+                        'value' => $row['nome']
                     ];
                 }
-                echo json_encode($row_set);
             }
+            echo json_encode($row_set);
+        } else {
+            echo json_encode([]);
         }
     }
     
