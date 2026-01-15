@@ -169,6 +169,98 @@
                             <?php endif; ?>
                         </div>
 
+                        <!-- Produtos e Serviços -->
+                        <?php if (!empty($produtos) || (!empty($servicos) && $opcoes['mostrar_servicos'])): ?>
+                        <div style="margin: 30px 0;">
+                            <?php if (!empty($produtos)): ?>
+                            <h4 style="margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px;">PRODUTOS</h4>
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                <thead>
+                                    <tr style="background-color: #f0f0f0; border-bottom: 2px solid #333;">
+                                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Descrição</th>
+                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 10%;">Qtd</th>
+                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 15%;">Preço Unit.</th>
+                                        <th style="text-align: right; padding: 10px; border: 1px solid #ddd; width: 15%;">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $totalProdutos = 0;
+                                    foreach ($produtos as $p): 
+                                        $subtotal = floatval($p->quantidade) * floatval($p->preco);
+                                        $totalProdutos += $subtotal;
+                                    ?>
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;"><?= htmlspecialchars($p->descricao ?? $p->nome ?? '') ?></td>
+                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;"><?= number_format($p->quantidade, 2, ',', '.') ?></td>
+                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($p->preco, 2, ',', '.') ?></td>
+                                        <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #f9f9f9; font-weight: bold;">
+                                        <td colspan="3" style="text-align: right; padding: 10px; border: 1px solid #ddd;">Total Produtos:</td>
+                                        <td style="text-align: right; padding: 10px; border: 1px solid #ddd;">R$ <?= number_format($totalProdutos, 2, ',', '.') ?></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <?php endif; ?>
+
+                            <?php if (!empty($servicos) && $opcoes['mostrar_servicos']): ?>
+                            <h4 style="margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px;">SERVIÇOS</h4>
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                <thead>
+                                    <tr style="background-color: #f0f0f0; border-bottom: 2px solid #333;">
+                                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Descrição</th>
+                                        <?php if ($opcoes['mostrar_preco_servicos']): ?>
+                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 10%;">Qtd</th>
+                                        <th style="text-align: center; padding: 10px; border: 1px solid #ddd; width: 15%;">Preço Unit.</th>
+                                        <?php endif; ?>
+                                        <?php if ($opcoes['mostrar_subtotais']): ?>
+                                        <th style="text-align: right; padding: 10px; border: 1px solid #ddd; width: 15%;">Subtotal</th>
+                                        <?php endif; ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $totalServicos = 0;
+                                    foreach ($servicos as $s): 
+                                        $preco = $s->preco ?? 0;
+                                        $quantidade = $s->quantidade ?? 1;
+                                        $subtotal = $preco * $quantidade;
+                                        $totalServicos += $subtotal;
+                                    ?>
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">
+                                            <strong><?= htmlspecialchars($s->nome ?? $s->descricao ?? $s->nome_servico ?? '') ?></strong>
+                                            <?php if ($opcoes['mostrar_detalhes_servicos'] && !empty($s->detalhes)): ?>
+                                            <br><small style="color: #666;"><?= htmlspecialchars($s->detalhes) ?></small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <?php if ($opcoes['mostrar_preco_servicos']): ?>
+                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;"><?= number_format($quantidade, 2, ',', '.') ?></td>
+                                        <td style="text-align: center; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($preco, 2, ',', '.') ?></td>
+                                        <?php endif; ?>
+                                        <?php if ($opcoes['mostrar_subtotais']): ?>
+                                        <td style="text-align: right; padding: 8px; border: 1px solid #ddd;">R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
+                                        <?php endif; ?>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <?php if ($opcoes['mostrar_subtotais']): ?>
+                                <tfoot>
+                                    <tr style="background-color: #f9f9f9; font-weight: bold;">
+                                        <td colspan="<?= ($opcoes['mostrar_preco_servicos'] ? 3 : 1) ?>" style="text-align: right; padding: 10px; border: 1px solid #ddd;">Total Serviços:</td>
+                                        <td style="text-align: right; padding: 10px; border: 1px solid #ddd;">R$ <?= number_format($totalServicos, 2, ',', '.') ?></td>
+                                    </tr>
+                                </tfoot>
+                                <?php endif; ?>
+                            </table>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
                         <div class="recibo-info">
                             <?php if ($lancamento->data_pagamento && $lancamento->data_pagamento != "0000-00-00") : ?>
                                 <div class="recibo-info-item">

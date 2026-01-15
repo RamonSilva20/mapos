@@ -302,9 +302,9 @@
                         <i class="bx bx-arrow-back"></i> Voltar
                     </a>
                     <?php if ($lancamento->baixado == 1): ?>
-                    <a href="<?php echo site_url('financeiro/imprimirRecibo/' . $lancamento->idLancamentos); ?>" target="_blank" class="btn btn-info">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalOpcoesRecibo">
                         <i class="bx bx-printer"></i> Imprimir Recibo
-                    </a>
+                    </button>
                     <?php endif; ?>
                 </div>
                 
@@ -493,6 +493,103 @@ $(document).ready(function() {
             $('#formPagamento').submit();
         }
     });
+});
+</script>
+
+<!-- Modal Opções de Impressão de Recibo -->
+<div id="modalOpcoesRecibo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalOpcoesReciboLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="modalOpcoesReciboLabel"><i class="bx bx-printer"></i> Opções de Impressão do Recibo</h3>
+    </div>
+    <div class="modal-body">
+        <div class="span12 alert alert-info" style="margin-left: 0; margin-bottom: 15px;">
+            <i class="bx bx-info-circle"></i> Configure o que será exibido no recibo de pagamento.
+        </div>
+        
+        <form id="formOpcoesRecibo">
+            <input type="hidden" name="lancamento_id" value="<?php echo $lancamento->idLancamentos; ?>">
+            
+            <div class="span12" style="margin-left: 0; margin-bottom: 20px;">
+                <h4 style="margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+                    <i class="bx bx-cog"></i> Opções de Exibição
+                </h4>
+                
+                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="mostrar_servicos" id="mostrar_servicos" value="1" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Mostrar Serviços</strong>
+                        <small style="color: #666; margin-left: 10px;">Exibe lista de serviços no recibo</small>
+                    </label>
+                </div>
+                
+                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="mostrar_preco_servicos" id="mostrar_preco_servicos" value="1" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Mostrar Preço de cada Serviço</strong>
+                        <small style="color: #666; margin-left: 10px;">Exibe preço unitário de cada serviço</small>
+                    </label>
+                </div>
+                
+                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="mostrar_subtotais" id="mostrar_subtotais" value="1" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Mostrar Subtotais</strong>
+                        <small style="color: #666; margin-left: 10px;">Exibe subtotal de cada item (quantidade × preço)</small>
+                    </label>
+                </div>
+                
+                <div class="span12" style="margin-left: 0; margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="mostrar_detalhes_servicos" id="mostrar_detalhes_servicos" value="1" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Mostrar Detalhes dos Serviços</strong>
+                        <small style="color: #666; margin-left: 10px;">Exibe informações detalhadas de cada serviço</small>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content: right">
+        <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true" style="min-width: 110px">
+            <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span>
+        </button>
+        <button type="button" class="button btn btn-primary" id="btnImprimirRecibo" style="min-width: 110px">
+            <span class="button__icon"><i class='bx bx-printer'></i></span><span class="button__text2">Imprimir</span>
+        </button>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Imprimir recibo com opções
+    $('#btnImprimirRecibo').on('click', function() {
+        var opcoes = {
+            mostrar_servicos: $('#mostrar_servicos').is(':checked') ? '1' : '0',
+            mostrar_preco_servicos: $('#mostrar_preco_servicos').is(':checked') ? '1' : '0',
+            mostrar_subtotais: $('#mostrar_subtotais').is(':checked') ? '1' : '0',
+            mostrar_detalhes_servicos: $('#mostrar_detalhes_servicos').is(':checked') ? '1' : '0'
+        };
+        
+        var queryString = $.param(opcoes);
+        var url = '<?php echo site_url('financeiro/imprimirRecibo/' . $lancamento->idLancamentos); ?>?' + queryString;
+        
+        window.open(url, '_blank');
+        $('#modalOpcoesRecibo').modal('hide');
+    });
+    
+    // Desabilitar opções dependentes se "Mostrar Serviços" estiver desmarcado
+    $('#mostrar_servicos').on('change', function() {
+        var mostrar = $(this).is(':checked');
+        $('#mostrar_preco_servicos, #mostrar_subtotais, #mostrar_detalhes_servicos').prop('disabled', !mostrar);
+        if (!mostrar) {
+            $('#mostrar_preco_servicos, #mostrar_subtotais, #mostrar_detalhes_servicos').prop('checked', false);
+        }
+    });
+    
+    // Inicializar estado dos checkboxes dependentes
+    if (!$('#mostrar_servicos').is(':checked')) {
+        $('#mostrar_preco_servicos, #mostrar_subtotais, #mostrar_detalhes_servicos').prop('disabled', true);
+    }
 });
 </script>
 

@@ -725,8 +725,49 @@ class Financeiro extends MY_Controller
             redirect('financeiro');
         }
 
+        // Opções de impressão
+        $opcoes = [
+            'mostrar_servicos' => $this->input->get('mostrar_servicos') !== '0',
+            'mostrar_preco_servicos' => $this->input->get('mostrar_preco_servicos') !== '0',
+            'mostrar_subtotais' => $this->input->get('mostrar_subtotais') !== '0',
+            'mostrar_detalhes_servicos' => $this->input->get('mostrar_detalhes_servicos') !== '0'
+        ];
+
+        // Buscar produtos e serviços relacionados (via OS ou Proposta)
+        $produtos = [];
+        $servicos = [];
+        $tipoOrigem = null;
+        $idOrigem = null;
+
+        // Tentar encontrar OS relacionada
+        $this->load->model('os_model');
+        $os = $this->db->select('idOs')->where('lancamento', $id)->get('os')->row();
+        
+        if ($os) {
+            $tipoOrigem = 'os';
+            $idOrigem = $os->idOs;
+            $produtos = $this->os_model->getProdutos($os->idOs);
+            $servicos = $this->os_model->getServicos($os->idOs);
+        } else {
+            // Tentar encontrar Proposta relacionada
+            $this->load->model('propostas_model');
+            $proposta = $this->db->select('idProposta')->where('lancamento', $id)->get('propostas')->row();
+            
+            if ($proposta) {
+                $tipoOrigem = 'proposta';
+                $idOrigem = $proposta->idProposta;
+                $produtos = $this->propostas_model->getProdutos($proposta->idProposta);
+                $servicos = $this->propostas_model->getServicos($proposta->idProposta);
+            }
+        }
+
         $this->data['lancamento'] = $lancamento;
         $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['opcoes'] = $opcoes;
+        $this->data['produtos'] = $produtos;
+        $this->data['servicos'] = $servicos;
+        $this->data['tipoOrigem'] = $tipoOrigem;
+        $this->data['idOrigem'] = $idOrigem;
 
         // Calcular valor final (com desconto se houver)
         $valorFinal = $lancamento->valor_desconto > 0 ? $lancamento->valor_desconto : $lancamento->valor;
