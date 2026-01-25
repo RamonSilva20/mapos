@@ -4,6 +4,44 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.53.0] - 2025-02-01
+### Added
+- Adequação para habilitar/desabilitar a página de erro do whoops de acordo com variável de ambiente e fazer blacklist de todas as variáveis do arquivo env. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Adicionado em validação de IDS em Os, Cliente, Serviço, Produtos, Venda, Termo de Garantia, Arquivo e Usuário. [@viniciusvams](https://github.com/viniciusvams)
+- Adicionado suporte ao novo modelo de CNPJ alfanumérico. [@viniciusvams](https://github.com/viniciusvams)
+- Adicionado validação de email duplicado em Clientes. [@lukasabino](https://github.com/lukasabino)
+
+### Changed
+- Atualizado versão do PHP (versão mínima 8.4 e atualizado versão com docker para 8.5). [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Atualização em auto instalador Windows/Linux. [@barretowiisk](https://github.com/barretowiisk)
+- Atualizado SDK do Mercado Pago. [@barretowiisk](https://github.com/barretowiisk)
+
+### Fixed
+- Correção em campo contato na área do cliente. [@cabralwms](https://github.com/cabralwms)
+- Correção em paginação em vendas. [@cabralwms](https://github.com/cabralwms)
+- Correção em possíveis problemas com datas em OS. [@cabralwms](https://github.com/cabralwms)
+- Correção em adicionar fornecedor. [@cabralwms](https://github.com/cabralwms)
+- Correção em dockerfile. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Correção em dashboard e no calendários de OS. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em termos de garantia. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em botão voltar em área do cliente. [@barretowiisk](https://github.com/barretowiisk)
+- Padronização em layout de vendas. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em número do WhatsApp em vendas. [@cabralwms](https://github.com/cabralwms)
+- Correçao do valor de desconto por porcentagem. [@cabralwms](https://github.com/cabralwms)
+- Correção em total de produtos e serviços na API. [@cabralwms](https://github.com/cabralwms)
+- Correção em observações em vendas. [@barretowiisk](https://github.com/barretowiisk)
+- Correção de quebra de linha em impressões. [@juliolobo](https://github.com/juliolobo)
+- Correção em background de textarea e centralização de botões. [@juliolobo](https://github.com/juliolobo)
+- Correção do problema ao cancelar/excluir cobrança do ASAAS e do Mercado Livre. [@barretowiisk](https://github.com/barretowiisk)
+- Correção em uso do pacote Whoops. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Correção em credenciais de gateways de pagamento. [@cezargf](https://github.com/cezargf)
+- Correções de frontend. [MilsonElias](https://github.com/MilsonElias)
+- Correções em Mine Controller. [@Fesantt](https://github.com/Fesantt)
+- Correções em validação de email duplicado. [@Fesantt](https://github.com/Fesantt)
+- Correções em funções JS. [@Fesantt](https://github.com/Fesantt)
+- Correções na API de OS. [@Fesantt](https://github.com/Fesantt)
+- Correção em impressão de garantia. [@Wilmerson](https://github.com/willph)
+
 ## [4.52.0] - 2025-02-01
 ### Added
 - Action de release no GitHub. [@Pr3d4dor](https://github.com/Pr3d4dor)

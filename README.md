@@ -1,7 +1,7 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.52.0-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-4.53.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-Apache-green.svg?longCache=true&style=flat-square)
 ![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
@@ -119,7 +119,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * [filp/whoops](https://github.com/filp/whoops)
 
 ### Requerimentos
-* PHP >= 8.3
+* PHP >= 8.4
 * MySQL >= 5.7 ou >= 8.0
 * Composer >= 2
 
