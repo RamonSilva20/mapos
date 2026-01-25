@@ -4,7 +4,7 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.53.0] - 2025-02-01
+## [4.53.0] - 2026-01-25
 ### Added
 - Adequação para habilitar/desabilitar a página de erro do whoops de acordo com variável de ambiente e fazer blacklist de todas as variáveis do arquivo env. [@Pr3d4dor](https://github.com/Pr3d4dor)
 - Adicionado em validação de IDS em Os, Cliente, Serviço, Produtos, Venda, Termo de Garantia, Arquivo e Usuário. [@viniciusvams](https://github.com/viniciusvams)
