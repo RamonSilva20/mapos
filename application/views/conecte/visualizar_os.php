@@ -42,7 +42,7 @@ $totalProdutos = 0; ?>
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div style="margin-top: 0; padding-top: 0">
                         <table class="table table-condensed">
                             <tbody>
@@ -80,7 +80,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>DESCRIÇÃO: </strong><br>
-                                                <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                                <?php echo printSafeHtml($result->descricaoProduto) ?>
                                             </td>
                                         </tr>
 
@@ -90,7 +90,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>DEFEITO APRESENTADO: </strong><br>
-                                                <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                                <?php echo printSafeHtml($result->defeito) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -99,7 +99,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>OBSERVAÇÕES: </strong><br>
-                                                <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                                <?php echo printSafeHtml($result->observacoes) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -108,7 +108,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>LAUDO TÉCNICO: </strong><br>
-                                                <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                                <?php echo printSafeHtml($result->laudoTecnico) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -117,13 +117,13 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>TERMO DE GARANTIA </strong><br>
-                                                <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
+                                                <?php echo printSafeHtml($result->textoGarantia) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
                             <?php } ?>
                         </table>
-                        
+
                         <?php if ($anexos != null) { ?>
                             <table class="table table-bordered table-condensed">
                                 <thead>

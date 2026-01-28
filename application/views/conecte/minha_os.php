@@ -109,7 +109,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Descrição</strong><br>
-                                                                <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                                                <?php echo printSafeHtml($result->descricaoProduto) ?>
                                                             </td>
                                                         </tr>
 
@@ -119,7 +119,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Defeito</strong><br>
-                                                                <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                                                <?php echo printSafeHtml($result->defeito) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -128,7 +128,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Laudo Técnico</strong> <br>
-                                                                <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                                                <?php echo printSafeHtml($result->laudoTecnico) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -137,7 +137,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Observações</strong> <br>
-                                                                <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                                                <?php echo printSafeHtml($result->observacoes) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>

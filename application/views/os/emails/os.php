@@ -177,7 +177,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->descricaoProduto) ?>
+                        <?= printSafeHtml($result->descricaoProduto) ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -190,7 +190,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->defeito) ?>
+                        <?= printSafeHtml($result->defeito) ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -203,7 +203,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->observacoes) ?>
+                        <?= printSafeHtml($result->observacoes) ?>
                     </td>
                 </tr>
             <?php } ?>
@@ -216,7 +216,7 @@ $totalProdutos = 0; ?>
                 </tr>
                 <tr>
                     <td class="justify" colspan="4">
-                        <?= htmlspecialchars_decode($result->laudoTecnico) ?>
+                        <?= printSafeHtml($result->laudoTecnico) ?>
                     </td>
                 </tr>
             <?php } ?>

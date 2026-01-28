@@ -4,7 +4,7 @@
         <div class="widget-box">
             <div class="widget-title" style="margin: 10px 0 0">
                     <div class="buttons">
-                        <?php 
+                        <?php
                         $editavel = $this->vendas_model->isEditable($result->idVendas);
                         if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')): ?>
                             <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?php echo base_url() . 'index.php/vendas/editar/' . $result->idVendas; ?>">
@@ -140,12 +140,12 @@
                                     <?php endif; ?>
                                     <?php if ($result->observacoes != null): ?>
                                     <tr>
-                                        <td colspan="4"><b>Observações Internas: </b><?php echo htmlspecialchars_decode($result->observacoes); ?></td>
+                                        <td colspan="4"><b>Observações Internas: </b><?php echo printSafeHtml($result->observacoes); ?></td>
                                     </tr>
                                     <?php endif; ?>
                                     <?php if ($result->observacoes_cliente != null): ?>
                                     <tr>
-                                        <td colspan="4"><b>Observações ao Cliente: </b><?php echo htmlspecialchars_decode($result->observacoes_cliente); ?></td>
+                                        <td colspan="4"><b>Observações ao Cliente: </b><?php echo printSafeHtml($result->observacoes_cliente); ?></td>
                                     </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -182,7 +182,7 @@
                                     <h4>SUBTOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
                                     <h4>DESCONTO: R$ <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?></h4>
                                     <h4>TOTAL: R$ <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></h4>
-                                    
+
                                 <?php else: ?>
                                     <h4 style="text-align: right">TOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
                                 <?php endif; ?>

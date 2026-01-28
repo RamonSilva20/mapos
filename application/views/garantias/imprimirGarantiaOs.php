@@ -130,7 +130,7 @@
                                             <ul>
                                                 <li>
 
-                                                    <span><?php echo htmlspecialchars_decode($osGarantia->textoGarantia) ?></span><br />
+                                                    <span><?php echo printSafeHtml($osGarantia->textoGarantia) ?></span><br />
                                                 </li>
                                             </ul>
                                         </td>
@@ -145,7 +145,7 @@
                                         </td>
                                         <td>Assinatura do Cliente
                                             <hr>
-                                            
+
                                         </td>
                                         <td>Assinatura do Técnico Responsável
                                             <hr>

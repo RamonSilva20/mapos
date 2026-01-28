@@ -103,7 +103,7 @@
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
                         <div>
-                            <?= htmlspecialchars_decode($result->observacoes_cliente) ?>
+                            <?= printSafeHtml($result->observacoes_cliente) ?>
                         </div>
                     </div>
                 <?php endif; ?>

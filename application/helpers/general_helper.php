@@ -84,3 +84,17 @@ if (! function_exists('getAmount')) {
         return floatval(str_replace(',', '.', $removedThousandSeparator));
     }
 }
+
+if (! function_exists('printSafeHtml')) {
+    function printSafeHtml(string $html): string
+    {
+        static $purifier = null;
+
+        if ($purifier === null) {
+            $config = HTMLPurifier_Config::createDefault();
+            $purifier = new HTMLPurifier($config);
+        }
+
+        return $purifier->purify($html);
+    }
+}

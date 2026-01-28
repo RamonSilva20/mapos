@@ -100,7 +100,7 @@
                     <div class="subtitle">DESCRIÇÃO</div>
                     <div class="dados">
                         <div>
-                            <?= htmlspecialchars_decode($result->descricaoProduto) ?>
+                            <?= printSafeHtml($result->descricaoProduto) ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -109,7 +109,7 @@
                     <div class="subtitle">DEFEITO APRESENTADO</div>
                     <div class="dados">
                         <div>
-                            <?= htmlspecialchars_decode($result->defeito) ?>
+                            <?= printSafeHtml($result->defeito) ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -118,7 +118,7 @@
                     <div class="subtitle">OBSERVAÇÕES</div>
                     <div class="dados">
                         <div>
-                            <?= htmlspecialchars_decode($result->observacoes) ?>
+                            <?= printSafeHtml($result->observacoes) ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -127,7 +127,7 @@
                     <div class="subtitle">PARECER TÉCNICO</div>
                     <div class="dados">
                         <div>
-                            <?= htmlspecialchars_decode($result->laudoTecnico) ?>
+                            <?= printSafeHtml($result->laudoTecnico) ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -161,7 +161,7 @@
                         </table>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if ($servicos) : ?>
                     <div class="tabela">
                         <table class="table table-bordered">
@@ -174,8 +174,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    setlocale(LC_MONETARY, 'en_US'); 
+                                <?php
+                                    setlocale(LC_MONETARY, 'en_US');
                                     foreach ($servicos as $s) :
                                         $preco = $s->preco ?: $s->precoVenda;
                                         $subtotal = $preco * ($s->quantidade ?: 1);
@@ -257,4 +257,3 @@
                 </div>
             </footer>
         </div>
-        

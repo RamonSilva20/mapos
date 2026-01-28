@@ -82,7 +82,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    
+
                     <div style="margin-top: 0; padding-top: 0">
                         <table class="table table-condensed">
                             <tbody>
@@ -110,9 +110,9 @@
                                     </tr>
                                 <?php } ?>
                                 <tr>
-                                    <td colspan="4"> 
+                                    <td colspan="4">
                                             <b>Observações: </b>
-                                        <?php echo htmlspecialchars_decode($result->observacoes_cliente) ?>
+                                        <?php echo printSafeHtml($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
                             </tbody>

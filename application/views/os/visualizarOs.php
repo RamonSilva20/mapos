@@ -163,7 +163,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <b>DESCRIÇÃO: </b>
-                                            <?php echo htmlspecialchars_decode($result->descricaoProduto) ?>
+                                            <?php echo printSafeHtml($result->descricaoProduto) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -172,7 +172,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <b>DEFEITO APRESENTADO: </b>
-                                            <?php echo htmlspecialchars_decode($result->defeito) ?>
+                                            <?php echo printSafeHtml($result->defeito) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -181,7 +181,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <b>OBSERVAÇÕES: </b>
-                                            <?php echo htmlspecialchars_decode($result->observacoes) ?>
+                                            <?php echo printSafeHtml($result->observacoes) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -190,7 +190,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <b>LAUDO TÉCNICO: </b>
-                                            <?php echo htmlspecialchars_decode($result->laudoTecnico) ?>
+                                            <?php echo printSafeHtml($result->laudoTecnico) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -199,7 +199,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <strong>TERMO DE GARANTIA </strong><br>
-                                            <?php echo htmlspecialchars_decode($result->textoGarantia) ?>
+                                            <?php echo printSafeHtml($result->textoGarantia) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
