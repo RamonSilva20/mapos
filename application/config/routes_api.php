@@ -47,4 +47,3 @@ $route['api/v1/client/compras'] = 'api/v1/client/ClientComprasController/index';
 $route['api/v1/client/compras/(:num)'] = 'api/v1/client/ClientComprasController/index/$1';
 
 $route['api/v1/client/cobrancas'] = 'api/v1/client/ClientCobrancasController/index';
-

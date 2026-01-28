@@ -121,19 +121,19 @@
         <?php
         function saudacao()
         {
-          $hora = date('H');
-          if ($hora >= 00 && $hora < 12) {
-            return 'Bom dia, ';
-          } elseif ($hora >= 12 && $hora < 18) {
-            return 'Boa tarde, ';
-          } else {
-            return 'Boa noite, ';
-          }
+            $hora = date('H');
+            if ($hora >= 00 && $hora < 12) {
+                return 'Bom dia, ';
+            } elseif ($hora >= 12 && $hora < 18) {
+                return 'Boa tarde, ';
+            } else {
+                return 'Boa noite, ';
+            }
         }
 
-        $login = '';
-        echo saudacao($login); // Irá retornar conforme o horário
-        ?>
+  $login = '';
+  echo saudacao($login); // Irá retornar conforme o horário
+  ?>
       </div>
       <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
 

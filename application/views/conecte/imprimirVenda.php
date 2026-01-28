@@ -1,5 +1,5 @@
 <?php
-    $totalProdutos = 0;
+$totalProdutos = 0;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="emitente">
                         <span style="font-size: 16px;"><b><?= $emitente->nome ?></b></span><br>
-                        <?php if($emitente->cnpj != "00.000.000/0000-00") : ?>
+                        <?php if ($emitente->cnpj != "00.000.000/0000-00") : ?>
                             <span class="align-middle">CNPJ: <?= $emitente->cnpj ?></span><br>
                         <?php endif; ?>
                         <span class="align-middle">
@@ -72,8 +72,8 @@
                                         <?php if ($result->garantia > 0): ?>
                                             <?php
                                                 $dataVenda = strtotime($result->dataVenda);
-                                                $vencimentoGarantia = date('d/m/Y', strtotime("+{$result->garantia} days", $dataVenda));
-                                                echo $vencimentoGarantia;
+                                            $vencimentoGarantia = date('d/m/Y', strtotime("+{$result->garantia} days", $dataVenda));
+                                            echo $vencimentoGarantia;
                                             ?>
                                         <?php else: ?>
                                             Sem garantia

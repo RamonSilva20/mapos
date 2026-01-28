@@ -35,30 +35,30 @@
                                 <td colspan="6">Nenhum Termo de Garantia Cadastrada</td>
                                 </tr>';
                     }
-                    foreach ($results as $r) {
-                        $dataGarantia = date(('d/m/Y'), strtotime($r->dataGarantia));
-                        $textoGarantiaShort = mb_strimwidth(strip_tags($r->textoGarantia), 0, 50, "...");
+    foreach ($results as $r) {
+        $dataGarantia = date(('d/m/Y'), strtotime($r->dataGarantia));
+        $textoGarantiaShort = mb_strimwidth(strip_tags($r->textoGarantia), 0, 50, "...");
 
-                        echo '<tr>';
-                        echo '<td>' . $r->idGarantias . '</td>';
-                        echo '<td>' . $dataGarantia . '</td>';
-                        echo '<td>' . $r->refGarantia . '</td>';
-                        echo '<td>' . $textoGarantiaShort . '</td>';
-                        echo '<td><a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '">' . $r->nome . '</a></td>';
-                        echo '<td>';
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/visualizar/' . $r->idGarantias . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/imprimir/' . $r->idGarantias . '" target="_blank" class="btn-nwe6" title="Imprimir"><i class="bx bx-printer bx-xs"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/editar/' . $r->idGarantias . '" class="btn-nwe3" title="Editar"><i class="bx bx-edit bx-xs"></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dGarantia')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" garantia="' . $r->idGarantias . '" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt bx-xs"></a>';
-                        }
-                        echo '</td>';
-                        echo '</tr>';
-                    } ?>
+        echo '<tr>';
+        echo '<td>' . $r->idGarantias . '</td>';
+        echo '<td>' . $dataGarantia . '</td>';
+        echo '<td>' . $r->refGarantia . '</td>';
+        echo '<td>' . $textoGarantiaShort . '</td>';
+        echo '<td><a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '">' . $r->nome . '</a></td>';
+        echo '<td>';
+        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vGarantia')) {
+            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/visualizar/' . $r->idGarantias . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
+            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/imprimir/' . $r->idGarantias . '" target="_blank" class="btn-nwe6" title="Imprimir"><i class="bx bx-printer bx-xs"></i></a>';
+        }
+        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eGarantia')) {
+            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/garantias/editar/' . $r->idGarantias . '" class="btn-nwe3" title="Editar"><i class="bx bx-edit bx-xs"></i></a>';
+        }
+        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dGarantia')) {
+            echo '<a href="#modal-excluir" role="button" data-toggle="modal" garantia="' . $r->idGarantias . '" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt bx-xs"></a>';
+        }
+        echo '</td>';
+        echo '</tr>';
+    } ?>
             </tbody>
         </table>
     </div>

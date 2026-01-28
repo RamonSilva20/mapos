@@ -33,7 +33,7 @@ class Produtos extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
-        if($pesquisa) {
+        if ($pesquisa) {
             $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
             $this->data['configuration']['first_url'] = base_url("index.php/produtos")."\?pesquisa={$pesquisa}";
         }

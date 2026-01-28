@@ -30,7 +30,7 @@ class ClientOsController extends REST_Controller
         $data['os'] = $this->Conecte_model->getLastOs($this->logged_client()->usuario->idClientes);
         $data['compras'] = $this->Conecte_model->getLastCompras($this->logged_client()->usuario->idClientes);
         
-        if(empty($data['os'])) {
+        if (empty($data['os'])) {
             $this->response([
                 'status' => true,
                 'message' => 'Nenhuma ordem de serviço encontrada'
@@ -93,7 +93,7 @@ class ClientOsController extends REST_Controller
             );
         }
 
-        foreach ($anexos as $anexo){
+        foreach ($anexos as $anexo) {
             unset($anexo->path);
         }
 

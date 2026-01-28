@@ -240,10 +240,10 @@ class Mine extends CI_Controller
                 // Verificar credenciais do usuário
                 if (password_verify($password, $cliente->senha)) {
                     $session_mine_data = [
-                        'nome' => $cliente->nomeCliente, 
-                        'cliente_id' => $cliente->idClientes, 
-                        'email' => $cliente->email, 
-                        'conectado' => true, 
+                        'nome' => $cliente->nomeCliente,
+                        'cliente_id' => $cliente->idClientes,
+                        'email' => $cliente->email,
+                        'conectado' => true,
                         'isCliente' => true
                     ];
                     $this->session->set_userdata($session_mine_data);
@@ -348,7 +348,7 @@ class Mine extends CI_Controller
                 ];
             }
 
-             if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->session->userdata('cliente_id')) == true) {
+            if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->session->userdata('cliente_id')) == true) {
                 $this->session->set_flashdata('success', 'Dados editados com sucesso!');
                 redirect(base_url() . 'index.php/mine/conta');
             } else {
@@ -655,7 +655,7 @@ class Mine extends CI_Controller
             $data['pix_key'],
             $data['emitente']
         );
-        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);      
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
@@ -677,7 +677,7 @@ class Mine extends CI_Controller
         $this->CI->load->database();
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $this->load->model('vendas_model');        
+        $this->load->model('vendas_model');
 
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
@@ -1117,7 +1117,7 @@ class Mine extends CI_Controller
 
         $this->session->set_userdata('captchaWord', $codigoCaptcha);
     }
-    
+
 }
 
 /* End of file conecte.php */

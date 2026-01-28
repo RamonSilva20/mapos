@@ -1,5 +1,8 @@
-<?php if (!defined('BASEPATH')) { exit('No direct script access allowed'); }
-class Mapos extends MY_Controller {
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+class Mapos extends MY_Controller
+{
     public function __construct()
     {
         parent::__construct();
@@ -8,9 +11,9 @@ class Mapos extends MY_Controller {
 
     public function index()
     {
-        $status = array('Em Andamento', 'Aguardando Peças');
+        $status = ['Em Andamento', 'Aguardando Peças'];
         $this->data['ordens_status'] = $this->mapos_model->getOsStatus($status);
-        $vstatus = array('Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento');
+        $vstatus = ['Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento'];
         $this->data['vendasstatus'] = $this->mapos_model->getVendasStatus($vstatus);
         $this->data['lancamentos'] = $this->mapos_model->getLancamentos();
         $this->data['ordens_orcamentos'] = $this->mapos_model->getOsOrcamentos();

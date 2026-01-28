@@ -50,7 +50,7 @@
                                         echo '<td align="center">R$: ' . number_format(floatval($p->estoque) * floatval($p->precoCompra), 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     }
-                                   ?>
+    ?>
                                 
                  
                                 <tr>

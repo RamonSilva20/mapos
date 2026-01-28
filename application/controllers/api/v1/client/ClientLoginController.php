@@ -71,7 +71,7 @@ class ClientLoginController extends REST_Controller
             'status' => true,
             'message' => 'Login bem-sucedido',
             'result' => $result
-        ],  REST_Controller::HTTP_OK);
+        ], REST_Controller::HTTP_OK);
     }
 
     private function check_credentials($email)

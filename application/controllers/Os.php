@@ -52,7 +52,7 @@ class Os extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->os_model->count('os');
-        if(count($where_array) > 0) {
+        if (count($where_array) > 0) {
             $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
             $this->data['configuration']['first_url'] = base_url("index.php/os/gerenciar")."\?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
         }
@@ -1082,7 +1082,7 @@ class Os extends MY_Controller
 
                 $this->db->trans_complete();
 
-                if ($this->db->trans_status() === FALSE) {
+                if ($this->db->trans_status() === false) {
                     $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar OS.');
                     $json = ['result' => false];
                 } else {

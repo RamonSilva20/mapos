@@ -148,7 +148,7 @@
                                 <select name="PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION" id="EFI_BOLETO_EXPIRATION">
                                     <?php for ($i = 1; $i <= 30; $i++) :
                                         $diasEFI = "P{$i}D";
-                                    ?>
+                                        ?>
                                         <option value="<?= $diasEFI ?>" <?= $diasEFI == $_ENV['PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
                                     <?php endfor; ?>
                                 </select>
@@ -193,7 +193,7 @@
                                 <select name="PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION" id="MERCADO_PAGO_BOLETO_EXPIRATION">
                                     <?php for ($i = 1; $i <= 30; $i++) :
                                         $diasMP = "P{$i}D";
-                                    ?>
+                                        ?>
                                         <option value="<?= $diasMP ?>" <?= $diasMP == $_ENV['PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
                                     <?php endfor; ?>
                                 </select>
@@ -237,7 +237,7 @@
                                 <select name="PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION" id="ASAAS_BOLETO_EXPIRATION">
                                     <?php for ($i = 1; $i <= 30; $i++) :
                                         $diasASAAS = "P{$i}D";
-                                    ?>
+                                        ?>
                                         <option value="<?= $diasASAAS ?>" <?= $diasASAAS == $_ENV['PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'] ? 'selected' : '' ?>><?= $i ?> dia<?= $i > 1 ? 's' : '' ?></option>
                                     <?php endfor; ?>
                                 </select>

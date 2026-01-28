@@ -90,15 +90,33 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Aberto') { echo 'selected'; } ?> value="Aberto">Aberto</option>
-                                                <option <?php if ($result->status == 'Orçamento') { echo 'selected'; } ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if ($result->status == 'Negociação') { echo 'selected'; } ?> value="Negociação">Negociação</option>
-                                                <option <?php if ($result->status == 'Aprovado') { echo 'selected'; } ?> value="Aprovado">Aprovado</option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') { echo 'selected'; } ?> value="Aguardando Peças">Aguardando Peças</option>
-                                                <option <?php if ($result->status == 'Em Andamento') { echo 'selected'; } ?> value="Em Andamento">Em Andamento</option>
-                                                <option <?php if ($result->status == 'Finalizado') { echo 'selected'; } ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if ($result->status == 'Faturado') { echo 'selected'; } ?> value="Faturado">Faturado</option>
-                                                <option <?php if ($result->status == 'Cancelado') { echo 'selected'; } ?> value="Cancelado">Cancelado</option>                                                          
+                                                <option <?php if ($result->status == 'Aberto') {
+                                                    echo 'selected';
+                                                } ?> value="Aberto">Aberto</option>
+                                                <option <?php if ($result->status == 'Orçamento') {
+                                                    echo 'selected';
+                                                } ?> value="Orçamento">Orçamento</option>
+                                                <option <?php if ($result->status == 'Negociação') {
+                                                    echo 'selected';
+                                                } ?> value="Negociação">Negociação</option>
+                                                <option <?php if ($result->status == 'Aprovado') {
+                                                    echo 'selected';
+                                                } ?> value="Aprovado">Aprovado</option>
+                                                <option <?php if ($result->status == 'Aguardando Peças') {
+                                                    echo 'selected';
+                                                } ?> value="Aguardando Peças">Aguardando Peças</option>
+                                                <option <?php if ($result->status == 'Em Andamento') {
+                                                    echo 'selected';
+                                                } ?> value="Em Andamento">Em Andamento</option>
+                                                <option <?php if ($result->status == 'Finalizado') {
+                                                    echo 'selected';
+                                                } ?> value="Finalizado">Finalizado</option>
+                                                <option <?php if ($result->status == 'Faturado') {
+                                                    echo 'selected';
+                                                } ?> value="Faturado">Faturado</option>
+                                                <option <?php if ($result->status == 'Cancelado') {
+                                                    echo 'selected';
+                                                } ?> value="Cancelado">Cancelado</option>                                                          
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -145,8 +163,16 @@
                         </div>
 
                         <!--Desconto-->
-                        <?php $total = 0; foreach ($produtos as $p) {$total = $total + $p->subTotal;}?>
-                        <?php $totals = 0; foreach ($servicos as $s) { $preco = $s->preco ?: $s->precoVenda; $subtotals = $preco * ($s->quantidade ?: 1); $totals = $totals + $subtotals;}?>
+                        <?php $total = 0;
+foreach ($produtos as $p) {
+    $total = $total + $p->subTotal;
+}?>
+                        <?php $totals = 0;
+foreach ($servicos as $s) {
+    $preco = $s->preco ?: $s->precoVenda;
+    $subtotals = $preco * ($s->quantidade ?: 1);
+    $totals = $totals + $subtotals;
+}?>
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formDesconto" action="<?php echo base_url(); ?>index.php/os/adicionarDesconto" method="POST">
@@ -228,17 +254,17 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $total = 0;
-                                            foreach ($produtos as $p) {
-                                                $total = $total + $p->subTotal;
-                                                echo '<tr>';
-                                                echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td><div align="center">' . $p->quantidade . '</td>';
-                                                echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                                echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
-                                                echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                                echo '</tr>';
-                                            } ?>
+                    $total = 0;
+foreach ($produtos as $p) {
+    $total = $total + $p->subTotal;
+    echo '<tr>';
+    echo '<td>' . $p->descricao . '</td>';
+    echo '<td><div align="center">' . $p->quantidade . '</td>';
+    echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda) . '</td>';
+    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
+    echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+    echo '</tr>';
+} ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -304,19 +330,19 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $totals = 0;
-                                            foreach ($servicos as $s) {
-                                                $preco = $s->preco ?: $s->precoVenda;
-                                                $subtotals = $preco * ($s->quantidade ?: 1);
-                                                $totals = $totals + $subtotals;
-                                                echo '<tr>';
-                                                echo '<td>' . $s->nome . '</td>';
-                                                echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
-                                                echo '<td><div align="center">R$ ' . $preco . '</div></td>';
-                                                echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
-                                                echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
-                                                echo '</tr>';
-                                            } ?>
+$totals = 0;
+foreach ($servicos as $s) {
+    $preco = $s->preco ?: $s->precoVenda;
+    $subtotals = $preco * ($s->quantidade ?: 1);
+    $totals = $totals + $subtotals;
+    echo '<tr>';
+    echo '<td>' . $s->nome . '</td>';
+    echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
+    echo '<td><div align="center">R$ ' . $preco . '</div></td>';
+    echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
+    echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
+    echo '</tr>';
+} ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -373,7 +399,7 @@
                                                     </a>
                                                 </div>';
                                     }
-                                    ?>
+?>
                                 </div>
                             </div>
                         </div>
@@ -399,18 +425,18 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            foreach ($anotacoes as $a) {
-                                                echo '<tr>';
-                                                echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-                                                echo '<td>' . $a->anotacao . '</td>';
-                                                echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
-                                                echo '</tr>';
-                                            }
-                                            if (!$anotacoes) {
-                                                echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
-                                            }
+        foreach ($anotacoes as $a) {
+            echo '<tr>';
+            echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
+            echo '<td>' . $a->anotacao . '</td>';
+            echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
+            echo '</tr>';
+        }
+if (!$anotacoes) {
+    echo '<tr><td colspan="3">Nenhuma anotação cadastrada</td></tr>';
+}
 
-                                            ?>
+?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -937,7 +963,7 @@
                 <?php if (!$configuration['control_estoque']) {
                     echo 'estoque = 1000000';
                 }
-                ; ?>
+; ?>
 
                 if (estoque < quantidade) {
                     Swal.fire({

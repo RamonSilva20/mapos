@@ -6,7 +6,7 @@
                     <div class="buttons">
                         <?php
                         $editavel = $this->vendas_model->isEditable($result->idVendas);
-                        if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')): ?>
+if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')): ?>
                             <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?php echo base_url() . 'index.php/vendas/editar/' . $result->idVendas; ?>">
                                 <span class="button__icon"><i class="bx bx-edit"></i></span>
                                 <span class="button__text">Editar</span>
@@ -90,15 +90,15 @@
                                                             </span></br>
                                                         <?php endif; ?>
                                                         <?php $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro . ' - ']);
-                                                            $endereco = implode(', ', $retorno_end);
-                                                            echo '<i class="fas fa-map-marker-alt"></i> ';
-                                                            if (!empty($endereco)) {
-                                                                echo $endereco;
-                                                            }
-                                                            if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
-                                                                echo "<span> {$result->cep}, {$result->cidade}/{$result->estado}</span><br>";
-                                                            }
-                                                        ?>
+$endereco = implode(', ', $retorno_end);
+echo '<i class="fas fa-map-marker-alt"></i> ';
+if (!empty($endereco)) {
+    echo $endereco;
+}
+if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
+    echo "<span> {$result->cep}, {$result->cidade}/{$result->estado}</span><br>";
+}
+?>
                                                         <?php if (!empty($result->email)): ?>
                                                             <span>
                                                                 <i class="fas fa-envelope"></i> <?php echo $result->email ?>
@@ -170,7 +170,7 @@
                                                 <td style="width: 10%;"><?php echo $p->codDeBarra; ?></td>
                                                 <td style="width: 70%;"><?php echo $p->descricao; ?></td>
                                                 <td style="width: 5%;"><?php echo $p->quantidade; ?></td>
-                                                <td style="width: 10%;">R$ <?php echo ($p->preco ?: $p->precoVenda); ?></td>
+                                                <td style="width: 10%;">R$ <?php echo($p->preco ?: $p->precoVenda); ?></td>
                                                 <td style="width: 10%;">R$ <?php echo number_format($p->subTotal, 2, ',', '.'); ?></td>
                                             </tr>
                                         <?php endforeach; ?>

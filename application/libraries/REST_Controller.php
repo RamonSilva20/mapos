@@ -1133,7 +1133,8 @@ abstract class REST_Controller extends CI_Controller
         // Insert the request into the log table
         $is_inserted = $this->rest->db
             ->insert(
-                $this->config->item('rest_logs_table'), [
+                $this->config->item('rest_logs_table'),
+                [
                     'uri' => $this->uri->uri_string(),
                     'method' => $this->request->method,
                     'params' => $this->_args ? ($this->config->item('rest_logs_json_params') === true ? json_encode($this->_args) : serialize($this->_args)) : null,
@@ -1141,7 +1142,8 @@ abstract class REST_Controller extends CI_Controller
                     'ip_address' => $this->input->ip_address(),
                     'time' => time(),
                     'authorized' => $authorized,
-                ]);
+                ]
+            );
 
         // Get the last insert id to update at a later stage of the request
         $this->_insert_id = $this->rest->db->insert_id();
@@ -2041,7 +2043,8 @@ abstract class REST_Controller extends CI_Controller
             header(
                 'WWW-Authenticate: Digest realm="' . $rest_realm
                 . '", qop="auth", nonce="' . $nonce
-                . '", opaque="' . md5($rest_realm) . '"');
+                . '", opaque="' . md5($rest_realm) . '"'
+            );
         }
 
         if ($this->config->item('strict_api_and_auth') === true) {
@@ -2071,9 +2074,12 @@ abstract class REST_Controller extends CI_Controller
         $payload['rtime'] = $this->_end_rtime - $this->_start_rtime;
 
         return $this->rest->db->update(
-            $this->config->item('rest_logs_table'), $payload, [
+            $this->config->item('rest_logs_table'),
+            $payload,
+            [
                 'id' => $this->_insert_id,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -2093,9 +2099,12 @@ abstract class REST_Controller extends CI_Controller
         $payload['response_code'] = $http_code;
 
         return $this->rest->db->update(
-            $this->config->item('rest_logs_table'), $payload, [
+            $this->config->item('rest_logs_table'),
+            $payload,
+            [
                 'id' => $this->_insert_id,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -2112,10 +2121,12 @@ abstract class REST_Controller extends CI_Controller
 
         // Fetch controller based on path and controller name
         $controller = implode(
-            '/', [
+            '/',
+            [
                 $this->router->directory,
                 $this->router->class,
-            ]);
+            ]
+        );
 
         // Remove any double slashes for safety
         $controller = str_replace('//', '/', $controller);

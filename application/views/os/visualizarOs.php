@@ -88,15 +88,15 @@
                                             <?php endif; ?>
                                             <?php
                                             $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro . ' - ']);
-                                            $endereco = implode(', ', $retorno_end);
-                                            echo '<i class="fas fa-map-marker-alt"></i> ';
-                                            if (!empty($endereco)) {
-                                                echo $endereco;
-                                            }
-                                            if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
-                                                echo "<span> {$result->cep}, {$result->cidade}/{$result->estado}</span><br>";
-                                            }
-                                            ?>
+$endereco = implode(', ', $retorno_end);
+echo '<i class="fas fa-map-marker-alt"></i> ';
+if (!empty($endereco)) {
+    echo $endereco;
+}
+if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
+    echo "<span> {$result->cep}, {$result->cidade}/{$result->estado}</span><br>";
+}
+?>
                                             <?php if (!empty($result->email)): ?>
                                                 <span><i class="fas fa-envelope"></i>
                                                     <?php echo $result->email ?></span><br>
@@ -221,9 +221,9 @@
                                         echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
                                         echo '</tr>';
                                     }
-                                    if (!$anotacoes) {
-                                        echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
-                                    } ?>
+                            if (!$anotacoes) {
+                                echo '<tr><td colspan="2">Nenhuma anotação cadastrada</td></tr>';
+                            } ?>
                                 </tbody>
                             </table>
                         <?php } ?>
@@ -293,16 +293,16 @@
                                 </thead>
                                 <tbody>
                                     <?php setlocale(LC_MONETARY, 'en_US');
-                                    foreach ($servicos as $s) {
-                                        $preco = $s->preco ?: $s->precoVenda;
-                                        $subtotal = $preco * ($s->quantidade ?: 1);
-                                        echo '<tr>';
-                                        echo '<td>' . $s->nome . '</td>';
-                                        echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                        echo '<td>R$ ' . $preco . '</td>';
-                                        echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+                            foreach ($servicos as $s) {
+                                $preco = $s->preco ?: $s->precoVenda;
+                                $subtotal = $preco * ($s->quantidade ?: 1);
+                                echo '<tr>';
+                                echo '<td>' . $s->nome . '</td>';
+                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
+                                echo '<td>R$ ' . $preco . '</td>';
+                                echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
+                                echo '</tr>';
+                            } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
                                         <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>

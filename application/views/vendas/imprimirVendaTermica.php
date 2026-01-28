@@ -53,7 +53,7 @@
                                         </td>
                                     </tr>
                                 <?php
-                                } ?>
+                                            } ?>
                             </tbody>
                         </table>
                         <table class="table">
@@ -93,15 +93,15 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($produtos as $p) {
-                                        $totalProdutos = $totalProdutos + $p->subTotal;
-                                        echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
-                                        echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
-                                        echo '</tr>';
-                                    } ?>
+                                                foreach ($produtos as $p) {
+                                                    $totalProdutos = $totalProdutos + $p->subTotal;
+                                                    echo '<tr>';
+                                                    echo '<td>' . $p->descricao . '</td>';
+                                                    echo '<td>' . $p->quantidade . '</td>';
+                                                    echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                                    echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
+                                                    echo '</tr>';
+                                                } ?>
                                     <?php if ($result->valor_desconto != 0 && $result->desconto != 0) { ?>
                                         <tr>
                                         <td colspan="3" style="text-align: right"><strong>Total: R$</strong></td>

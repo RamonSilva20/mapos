@@ -32,7 +32,7 @@ class Clientes extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('clientes/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->clientes_model->count('clientes');
-        if($pesquisa) {
+        if ($pesquisa) {
             $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
             $this->data['configuration']['first_url'] = base_url("index.php/clientes")."\?pesquisa={$pesquisa}";
         }
@@ -93,13 +93,13 @@ class Clientes extends MY_Controller
                 'fornecedor' => $this->input->post('fornecedor') ? 1 : 0,
             ];
 
-            if ($this->clientes_model->add('clientes', $data) == true) {
-                $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
-                log_info('Adicionou um cliente.');
-                redirect(site_url('clientes/'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
+                if ($this->clientes_model->add('clientes', $data) == true) {
+                    $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
+                    log_info('Adicionou um cliente.');
+                    redirect(site_url('clientes/'));
+                } else {
+                    $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                }
             }
         }
 
@@ -133,52 +133,52 @@ class Clientes extends MY_Controller
                 $this->data['custom_error'] = '<div class="form_error"><p>Este e-mail já está sendo utilizado por outro cliente.</p></div>';
             } else {
                 $senha = $this->input->post('senha');
-            if ($senha != null) {
-                $senha = password_hash($senha, PASSWORD_DEFAULT);
+                if ($senha != null) {
+                    $senha = password_hash($senha, PASSWORD_DEFAULT);
 
-                $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'contato' => $this->input->post('contato'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
-                    'senha' => $senha,
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
-                    'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
-                ];
-            } else {
-                $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'contato' => $this->input->post('contato'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
-                    'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
-                ];
-            }
+                    $data = [
+                        'nomeCliente' => $this->input->post('nomeCliente'),
+                        'contato' => $this->input->post('contato'),
+                        'documento' => $this->input->post('documento'),
+                        'telefone' => $this->input->post('telefone'),
+                        'celular' => $this->input->post('celular'),
+                        'email' => $this->input->post('email'),
+                        'senha' => $senha,
+                        'rua' => $this->input->post('rua'),
+                        'numero' => $this->input->post('numero'),
+                        'complemento' => $this->input->post('complemento'),
+                        'bairro' => $this->input->post('bairro'),
+                        'cidade' => $this->input->post('cidade'),
+                        'estado' => $this->input->post('estado'),
+                        'cep' => $this->input->post('cep'),
+                        'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                    ];
+                } else {
+                    $data = [
+                        'nomeCliente' => $this->input->post('nomeCliente'),
+                        'contato' => $this->input->post('contato'),
+                        'documento' => $this->input->post('documento'),
+                        'telefone' => $this->input->post('telefone'),
+                        'celular' => $this->input->post('celular'),
+                        'email' => $this->input->post('email'),
+                        'rua' => $this->input->post('rua'),
+                        'numero' => $this->input->post('numero'),
+                        'complemento' => $this->input->post('complemento'),
+                        'bairro' => $this->input->post('bairro'),
+                        'cidade' => $this->input->post('cidade'),
+                        'estado' => $this->input->post('estado'),
+                        'cep' => $this->input->post('cep'),
+                        'fornecedor' => (set_value('fornecedor') == true ? 1 : 0),
+                    ];
+                }
 
-            if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
-                $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
-                log_info('Alterou um cliente. ID' . $this->input->post('idClientes'));
-                redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
-            }
+                if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
+                    $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
+                    log_info('Alterou um cliente. ID' . $this->input->post('idClientes'));
+                    redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
+                } else {
+                    $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+                }
             }
         }
 

@@ -2,10 +2,10 @@
 
 use Libraries\Gateways\BasePaymentGateway;
 use Libraries\Gateways\Contracts\PaymentGateway;
-use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\Exceptions\MPApiException;
 use MercadoPago\Exceptions\MPException;
+use MercadoPago\MercadoPagoConfig;
 
 class MercadoPago extends BasePaymentGateway
 {
@@ -160,7 +160,9 @@ class MercadoPago extends BasePaymentGateway
 
             if ($payment->status === 'authorized') {
                 $valor = isset($cobranca->total) ? (float) $cobranca->total : 0;
-                if ($valor > 1000) $valor /= 100;
+                if ($valor > 1000) {
+                    $valor /= 100;
+                }
 
                 $payment = $client->capture(
                     (int) $cobranca->charge_id,
@@ -203,10 +205,16 @@ class MercadoPago extends BasePaymentGateway
         $tipoDesconto = array_reduce($tipo_desconto, fn ($t, $i) => $i->tipo_desconto, 0);
         $totalDesconto = array_reduce($desconto, fn ($t, $i) => $i->desconto, 0);
 
-        if (empty($entity)) throw new \Exception('OS ou venda não existe!');
-        if (($totalProdutos + $totalServicos) <= 0) throw new \Exception('Valor inválido!');
+        if (empty($entity)) {
+            throw new \Exception('OS ou venda não existe!');
+        }
+        if (($totalProdutos + $totalServicos) <= 0) {
+            throw new \Exception('Valor inválido!');
+        }
 
-        if ($err = $this->errosCadastro($entity)) throw new \Exception($err);
+        if ($err = $this->errosCadastro($entity)) {
+            throw new \Exception($err);
+        }
 
         $clientNameParts = explode(' ', $entity->nomeCliente);
         $documento = preg_replace('/[^0-9]/', '', $entity->documento);

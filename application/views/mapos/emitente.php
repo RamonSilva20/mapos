@@ -175,7 +175,9 @@
                                 <td style="width: 25%"><img src="<?= $dados->url_logo; ?>"></td>
                                 <td>
                                     <span style="font-size: 20px; "><b><?= $dados->nome; ?></b></span></br>
-                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= $dados->cnpj; ?> <?php if (!empty($dados->ie)) echo ' - IE:' . $dados->ie ?></br>
+                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= $dados->cnpj; ?> <?php if (!empty($dados->ie)) {
+                                        echo ' - IE:' . $dados->ie;
+                                    } ?></br>
                                     <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?= $dados->rua . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cep . ', ' . $dados->cidade . '/' . $dados->uf; ?></br>
                                     <i class="fas fa-phone" style="margin:5px 1px"></i> <?= $dados->telefone; ?></br>
                                     <i class="fas fa-envelope" style="margin:5px 1px"></i> <?= $dados->email; ?></br>

@@ -77,11 +77,11 @@
                             if (!empty($vencGarantia)) {
                                 $dataGarantia = explode('/', $vencGarantia);
                                 $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                            if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
                                     $corGarantia = '#4d9c79';
-                            } else {
+                                } else {
                                     $corGarantia = '#f24c6f';
-                            }
+                                }
                             } elseif ($o->garantia == "0") {
                                 $vencGarantia = 'Sem Garantia';
                                 $corGarantia = '';
@@ -170,30 +170,30 @@
                 foreach ($compras as $c) {
                     $vencGarantia = '';
 
-                            if ($c->garantia && is_numeric($c->garantia)) {
-                                $vencGarantia = dateInterval($c->dataVenda, $c->garantia);
-                            }
-                            $corGarantia = '';
-                            if (!empty($vencGarantia)) {
-                                    $dataGarantia = explode('/', $vencGarantia);
-                                    $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#4d9c79';
-                                } else {
-                                    $corGarantia = '#f24c6f';
-                                }
-                                } elseif ($c->garantia == "0") {
-                                    $vencGarantia = 'Sem Garantia';
-                                    $corGarantia = '';
-                                } else {
-                                    $vencGarantia = '';
-                                    $corGarantia = '';
-                                }
-                            if ($c->faturado == 1) {
-                                    $faturado = 'Sim';
-                                } else {
-                                    $faturado = 'Não';
-                                }
+                    if ($c->garantia && is_numeric($c->garantia)) {
+                        $vencGarantia = dateInterval($c->dataVenda, $c->garantia);
+                    }
+                    $corGarantia = '';
+                    if (!empty($vencGarantia)) {
+                        $dataGarantia = explode('/', $vencGarantia);
+                        $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
+                        if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
+                            $corGarantia = '#4d9c79';
+                        } else {
+                            $corGarantia = '#f24c6f';
+                        }
+                    } elseif ($c->garantia == "0") {
+                        $vencGarantia = 'Sem Garantia';
+                        $corGarantia = '';
+                    } else {
+                        $vencGarantia = '';
+                        $corGarantia = '';
+                    }
+                    if ($c->faturado == 1) {
+                        $faturado = 'Sim';
+                    } else {
+                        $faturado = 'Não';
+                    }
                     
                     switch ($c->status) {
                         case 'Aberto':

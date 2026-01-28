@@ -79,8 +79,8 @@ class OsController extends REST_Controller
         $os->anotacoes = $this->os_model->getAnotacoes($id);
         $os->calcTotal = $this->calcTotal($id);
         unset($os->senha);
-        $os->totalProdutos = array_sum(array_map(fn($p) => $p->preco * $p->quantidade, $os->produtos));
-        $os->totalServicos = array_sum(array_map(fn($p) => $p->preco * $p->quantidade, $os->servicos));
+        $os->totalProdutos = array_sum(array_map(fn ($p) => $p->preco * $p->quantidade, $os->produtos));
+        $os->totalServicos = array_sum(array_map(fn ($p) => $p->preco * $p->quantidade, $os->servicos));
 
         // Montando texto para whatsapp
         if ($return = $this->os_model->valorTotalOS($id)) {
@@ -1013,10 +1013,14 @@ class OsController extends REST_Controller
             strip_tags($os->observacoes),
             strip_tags($os->defeito),
             strip_tags($os->laudoTecnico),
-            date('d/m/Y',
-                strtotime($os->dataFinal)),
-            date('d/m/Y',
-                strtotime($os->dataInicial)),
+            date(
+                'd/m/Y',
+                strtotime($os->dataFinal)
+            ),
+            date(
+                'd/m/Y',
+                strtotime($os->dataInicial)
+            ),
             $os->garantia . ' dias',
         ];
 

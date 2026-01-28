@@ -530,7 +530,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -619,7 +619,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -709,7 +709,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -798,7 +798,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -887,7 +887,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $o->idOs ?>
@@ -974,7 +974,7 @@
                                             $cor = '#E0E4CC';
                                             break;
                                     }
-                                ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $v->idVendas ?>
@@ -1141,13 +1141,13 @@
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                 echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
             }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-                echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
-            }
-        ?>
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+    echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+}
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
+    echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+}
+?>
     </div>
 </div>
 

@@ -24,7 +24,7 @@ class ClientCobrancasController extends REST_Controller
         
         $cobrancas = $this->Conecte_model->getCobrancas('cobrancas', '*', '', 20, $this->uri->segment(3), '', '', $this->logged_client()->usuario->idClientes);
         
-        if(empty($cobrancas)) {
+        if (empty($cobrancas)) {
             $this->response([
                 'status' => false,
                 'message' => 'Nenhum resultado encontrado'

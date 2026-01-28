@@ -481,7 +481,7 @@ class Vendas extends MY_Controller
         $this->db->where('idVendas', $idVendas);
         $this->db->update('vendas');
 
-        if ($this->db->trans_status() === FALSE) {
+        if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             echo json_encode(['result' => false, 'messages' => 'Erro ao excluir o produto']);
         } else {
@@ -617,7 +617,7 @@ class Vendas extends MY_Controller
 
                 $this->db->trans_complete();
 
-                if ($this->db->trans_status() === FALSE) {
+                if ($this->db->trans_status() === false) {
                     $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar faturar venda.');
                     $json = ['result' => false];
                 } else {
@@ -639,7 +639,8 @@ class Vendas extends MY_Controller
         echo json_encode($json);
     }
 
-    public function validarCPF($cpf) {
+    public function validarCPF($cpf)
+    {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
         if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
             return false;
@@ -663,7 +664,8 @@ class Vendas extends MY_Controller
         return $dv2 == $cpf[10];
     }
     
-    public function validarCNPJ($cnpj) {
+    public function validarCNPJ($cnpj)
+    {
         $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
         if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
             return false;
@@ -687,14 +689,13 @@ class Vendas extends MY_Controller
         return $dv2 == $cnpj[13];
     }
     
-    public function formatarChave($chave) {
+    public function formatarChave($chave)
+    {
         if ($this->validarCPF($chave)) {
             return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
-        }
-        elseif ($this->validarCNPJ($chave)) {
+        } elseif ($this->validarCNPJ($chave)) {
             return substr($chave, 0, 2) . '.' . substr($chave, 2, 3) . '.' . substr($chave, 5, 3) . '/' . substr($chave, 8, 4) . '-' . substr($chave, 12);
-        }
-        elseif (strlen($chave) === 11) {
+        } elseif (strlen($chave) === 11) {
             return '(' . substr($chave, 0, 2) . ') ' . substr($chave, 2, 5) . '-' . substr($chave, 7);
         }
         return $chave;
@@ -712,5 +713,5 @@ class Vendas extends MY_Controller
 
         $this->load->view('vendas/vendas', $data);
     }
-    
+
 }

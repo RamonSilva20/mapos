@@ -48,22 +48,22 @@
                                     <td colspan="5">Nenhum Serviço Cadastrado</td>
                                 </tr>';
                         }
-                        foreach ($results as $r) {
-                            echo '<tr>';
-                            echo '<td>' . $r->idServicos . '</td>';
-                            echo '<td>' . $r->nome . '</td>';
-                            echo '<td>' . number_format($r->preco, 2, ',', '.') . '</td>';
-                            echo '<td>' . $r->descricao . '</td>';
-                            echo '<td>';
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
-                                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn-nwe3" title="Editar Serviço"><i class="bx bx-edit bx-xs"></i></a>';
-                            }
-                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
-                                echo '<a href="#modal-excluir" role="button" data-toggle="modal" servico="' . $r->idServicos . '" class="btn-nwe4" title="Excluir Serviço"><i class="bx bx-trash-alt bx-xs"></i></a>  ';
-                            }
-                            echo '</td>';
-                            echo '</tr>';
-                        } ?>
+        foreach ($results as $r) {
+            echo '<tr>';
+            echo '<td>' . $r->idServicos . '</td>';
+            echo '<td>' . $r->nome . '</td>';
+            echo '<td>' . number_format($r->preco, 2, ',', '.') . '</td>';
+            echo '<td>' . $r->descricao . '</td>';
+            echo '<td>';
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
+                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn-nwe3" title="Editar Serviço"><i class="bx bx-edit bx-xs"></i></a>';
+            }
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" servico="' . $r->idServicos . '" class="btn-nwe4" title="Excluir Serviço"><i class="bx bx-trash-alt bx-xs"></i></a>  ';
+            }
+            echo '</td>';
+            echo '</tr>';
+        } ?>
                 </tbody>
             </table>
         </div>

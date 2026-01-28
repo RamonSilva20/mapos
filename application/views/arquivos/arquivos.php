@@ -54,7 +54,7 @@
                                 <td colspan="8">Nenhum Arquivo Encontrado</td>
                             </tr>';
                         }
-                        foreach ($results as $r) : ?>
+    foreach ($results as $r) : ?>
                             <tr>
                                 <td><?= $r->idDocumentos ?></td>
                                 <td>

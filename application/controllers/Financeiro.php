@@ -129,7 +129,7 @@ class Financeiro extends MY_Controller
             }
             // Formatação correta dos valores
             $valor = str_replace(',', '.', $this->input->post('valor'));
-            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));   
+            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));
             $desconto = $valor_desconto;
             $total_sem_desconto = $valor + $valor_desconto;
             $valor = $total_sem_desconto;
@@ -569,7 +569,7 @@ class Financeiro extends MY_Controller
         if ($result) {
             $this->db->trans_complete();
 
-            if ($this->db->trans_status() === FALSE) {
+            if ($this->db->trans_status() === false) {
                 $this->db->trans_rollback();
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
                 $json = ['result' => false, 'message' => 'Erro na transação'];

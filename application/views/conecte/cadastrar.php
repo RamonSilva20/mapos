@@ -135,7 +135,8 @@
             <div class="widget-title">
                 <h5>Cadastre-se no Sistema</h5>
                  <?php if (isset($custom_error) && $custom_error != '') {
-                            echo '<div class="alert alert-danger">' . $custom_error . '</div>'; } ?>
+                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
+                 } ?>
             </div>
             <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">

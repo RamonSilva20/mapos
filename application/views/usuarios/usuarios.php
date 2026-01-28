@@ -56,8 +56,8 @@
                                 <td><?= $r->permissao ?></td>
                                 <?php
                                 $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';
-                                $situacaoClasse = ($r->situacao == 1) ? 'situacao-ativo' : 'situacao-inativo';
-                                ?>
+                            $situacaoClasse = ($r->situacao == 1) ? 'situacao-ativo' : 'situacao-inativo';
+                            ?>
                                 <td><span class="badge <?= $situacaoClasse ?>"><?= ucfirst($situacao) ?></span></td>
                                 <td><?= $r->dataExpiracao ?></td>
                                 <td>

@@ -33,7 +33,7 @@ class Servicos extends MY_Controller
 
         $this->data['configuration']['base_url'] = site_url('servicos/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->servicos_model->count('servicos');
-        if($pesquisa) {
+        if ($pesquisa) {
             $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
             $this->data['configuration']['first_url'] = base_url("index.php/servicos")."\?pesquisa={$pesquisa}";
         }
