@@ -5,11 +5,14 @@
 1. [Introdução](#introdução)
 2. [Autenticação](#autenticação)
 3. [Base URL](#base-url)
-4. [Endpoints Administrativos](#endpoints-administrativos)
-5. [Endpoints de Clientes](#endpoints-de-clientes)
-6. [Códigos de Status HTTP](#códigos-de-status-http)
-7. [Formato de Resposta](#formato-de-resposta)
-8. [Exemplos de Uso](#exemplos-de-uso)
+4. [Status da Aplicação (Health Check)](#status-da-aplicação-health-check)
+5. [Endpoints Administrativos](#endpoints-administrativos)
+6. [Endpoints de Clientes](#endpoints-de-clientes)
+6.1. [Propostas Comerciais](#propostas-comerciais)
+7. [Códigos de Status HTTP](#códigos-de-status-http)
+8. [Formato de Resposta](#formato-de-resposta)
+9. [Exemplos de Uso](#exemplos-de-uso)
+10. [Troubleshooting – Aplicação offline](#troubleshooting--aplica%C3%A7%C3%A3o-offline)
 
 ---
 
@@ -117,6 +120,31 @@ A base URL da API depende da configuração do servidor. Exemplos:
 
 - Desenvolvimento: `http://localhost/mapos/api/v1`
 - Produção: `https://seudominio.com/api/v1`
+
+---
+
+## Status da Aplicação (Health Check)
+
+**Endpoints:** `GET /api/v1/status` ou `GET /api/v1/Mapos/status`
+
+**Autenticação:** Não requerida.
+
+Útil para verificar se a API está online e se o banco de dados responde (monitores, uptime, integrações).
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Map-OS online",
+  "online": true,
+  "result": {
+    "application": "Map-OS",
+    "database": "ok"
+  }
+}
+```
+
+Se o MySQL estiver indisponível, `result.database` será `"error"`.
 
 ---
 
@@ -281,14 +309,14 @@ GET /api/v1/clientes?search=João&perPage=10&page=0
 }
 ```
 
-**Resposta de Sucesso (201):**
+**Resposta de Sucesso (201 Created):**
 ```json
 {
   "status": true,
   "message": "Cliente adicionado com sucesso!",
   "result": {
-    "idClientes": 1,
-    ...
+    "idClientes": 206,
+    "nomeCliente": "Novo Cliente Ltda"
   }
 }
 ```
@@ -299,7 +327,19 @@ GET /api/v1/clientes?search=João&perPage=10&page=0
 
 **Autenticação:** Requerida (Permissão: eCliente)
 
-**Body:** (mesmos campos do POST, todos opcionais exceto os obrigatórios)
+**Body:** (mesmos campos do POST, todos opcionais; envie `senha` apenas se quiser alterá-la)
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Cliente editado com sucesso!",
+  "result": {
+    "idClientes": 206,
+    "nomeCliente": "Novo Cliente Ltda"
+  }
+}
+```
 
 ### Excluir Cliente
 
@@ -326,9 +366,19 @@ GET /api/v1/clientes?search=João&perPage=10&page=0
 **Autenticação:** Requerida (Permissão: vProduto)
 
 **Parâmetros Query:**
-- `search` (opcional): Buscar por código de barras ou descrição
+- `search` (opcional): Busca por **palavras ou partes** do nome ou do código de barras. Você pode enviar uma ou várias palavras separadas por espaço; cada uma é buscada com `LIKE` em `codDeBarra` ou `descricao`, e todos os termos devem bater (AND). Ex.: `teclado`, `not gamer`, `789` — ideal para consultar preços (`precoVenda`) de produtos.
 - `perPage` (opcional): Itens por página (padrão: 20)
 - `page` (opcional): Número da página (padrão: 0)
+
+**Resposta:** `result` é um array de produtos. Cada item inclui, entre outros, `idProdutos`, `descricao`, `codDeBarra`, `precoVenda`, `precoCompra`, `estoque`, `unidade`. Use `precoVenda` para preço de venda.
+
+**Exemplos de busca:**
+```http
+GET /api/v1/produtos?search=teclado
+GET /api/v1/produtos?search=not+gamer
+GET /api/v1/produtos?search=789
+GET /api/v1/produtos?search=monitor+led&perPage=10
+```
 
 ### Obter Produto por ID
 
@@ -712,13 +762,39 @@ GET /api/v1/clientes?search=João&perPage=10&page=0
 }
 ```
 
+**Resposta de Sucesso (201 Created):**
+```json
+{
+  "status": true,
+  "message": "Usuário adicionado com sucesso!",
+  "result": {
+    "idUsuarios": 42,
+    "nome": "João Silva",
+    "email": "joao@exemplo.com"
+  }
+}
+```
+
 ### Atualizar Usuário
 
 **Endpoint:** `PUT /api/v1/usuarios/{id}`
 
 **Autenticação:** Requerida (Permissão: cUsuario ou próprio usuário)
 
-**Nota:** Usuários podem editar seus próprios dados, mas não podem alterar permissões ou situação.
+**Nota:** Usuários podem editar seus próprios dados, mas não podem alterar permissões ou situação. Envie `senha` no body apenas se quiser alterá-la (será hasheada).
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Usuário editado com sucesso!",
+  "result": {
+    "idUsuarios": 42,
+    "nome": "João Silva",
+    "email": "joao@exemplo.com"
+  }
+}
+```
 
 ### Excluir Usuário
 
@@ -751,6 +827,335 @@ GET /api/v1/clientes?search=João&perPage=10&page=0
   }
 }
 ```
+
+---
+
+## Propostas Comerciais
+
+### Listar Propostas
+
+**Endpoint:** `GET /api/v1/propostas`
+
+**Autenticação:** Requerida (Permissão: vPropostas)
+
+**Parâmetros Query:**
+- `search` (opcional): Buscar por nome do cliente ou documento
+- `status` (opcional): Filtrar por status (ex.: Aberto, Faturado, Orçamento, etc.)
+- `from` (opcional): Data inicial (formato: YYYY-MM-DD ou DD/MM/YYYY)
+- `to` (opcional): Data final (formato: YYYY-MM-DD ou DD/MM/YYYY)
+- `perPage` (opcional): Itens por página (padrão: 20)
+- `page` (opcional): Número da página (padrão: 0)
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Lista de Propostas Comerciais",
+  "result": [
+    {
+      "idProposta": 1,
+      "numero_proposta": "1",
+      "data_proposta": "2024-01-15",
+      "data_validade": "2024-02-15",
+      "status": "Aberto",
+      "nomeCliente": "Cliente Exemplo",
+      "valor_total": "1500.00",
+      ...
+    }
+  ]
+}
+```
+
+### Obter Proposta por ID
+
+**Endpoint:** `GET /api/v1/propostas/{id}`
+
+**Autenticação:** Requerida (Permissão: vPropostas)
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Detalhes da Proposta",
+  "result": {
+    "idProposta": 1,
+    "numero_proposta": "1",
+    "data_proposta": "2024-01-15",
+    "data_validade": "2024-02-15",
+    "status": "Aberto",
+    "clientes_id": 1,
+    "cliente_nome": null,
+    "nomeCliente": "Cliente Exemplo",
+    "observacoes": "Observações adicionais sobre a proposta...",
+    "desconto": 0,
+    "valor_total": "1500.00",
+    "tipo_cond_comerc": "T",
+    "cond_comerc_texto": "30% à vista, restante em 2x no cartão.",
+    "validade_dias": 30,
+    "prazo_entrega": "15 dias úteis",
+    "produtos": [
+      { "descricao": "Produto X", "quantidade": 1, "preco": 100.00, "subtotal": 100.00, "produtos_id": 1 }
+    ],
+    "servicos": [],
+    "parcelas": [],
+    "outros": [
+      { "descricao": "Instalação e configuração", "preco": 50.00 }
+    ],
+    "totalProdutos": 100.00,
+    "totalServicos": 0.00
+  }
+}
+```
+
+**Campos retornados (resumo):**
+- **Produtos:** `produtos` – itens do catálogo ou descrição livre.
+- **Outros itens ou serviços:** `outros` – produtos/serviços não cadastrados (ex.: serviços que você descreve em texto).
+- **Condições Comerciais:** `tipo_cond_comerc` (`N`=Nenhuma, `P`=Parcelas, `T`=Texto livre), `cond_comerc_texto` (quando tipo `T`), `parcelas` (quando tipo `P`).
+- **Validade da Proposta:** `validade_dias` (em dias), `data_validade` (data limite).
+- **Observações:** `observacoes`.
+- **Prazo de entrega:** `prazo_entrega` (texto livre).
+
+### Download PDF da Proposta
+
+**Endpoint:** `GET /api/v1/propostas/{id}/pdf`
+
+**Autenticação:** Requerida (Permissão: vPropostas)
+
+Gera e retorna o PDF da proposta usando o **mesmo modelo da tela "Imprimir"** na área web (layout idêntico, inclusive QR Code Pix quando configurado).
+
+**Parâmetros Query:**
+- `inline` (opcional): `1` ou `true` para abrir no navegador; omitir para forçar download.
+
+**Resposta:** O corpo da resposta é o arquivo PDF (`Content-Type: application/pdf`).  
+- Sem `?inline=1`: `Content-Disposition: attachment` → download.  
+- Com `?inline=1`: `Content-Disposition: inline` → abre no navegador.
+
+**Exemplo (download):**
+```http
+GET /api/v1/propostas/123/pdf
+Authorization: Bearer {seu_token}
+```
+
+**Exemplo (abrir no navegador):**
+```http
+GET /api/v1/propostas/123/pdf?inline=1
+Authorization: Bearer {seu_token}
+```
+
+**Exemplo com cURL (salvar arquivo):**
+```bash
+curl -X GET "http://localhost/mapos/api/v1/propostas/123/pdf" \
+  -H "Authorization: Bearer {seu_token}" \
+  -o Proposta_123.pdf
+```
+
+### Criar Proposta
+
+**Endpoint:** `POST /api/v1/propostas`
+
+**Autenticação:** Requerida (Permissão: aPropostas)
+
+#### Campos disponíveis (mapeados ao formulário)
+
+| Formulário | Campo(s) API | Descrição |
+|------------|--------------|-----------|
+| **Produtos** | `produtos` | Array de itens. Cada um: `descricao`, `quantidade`, `preco`; opcional `produtos_id` se vinculado ao catálogo. |
+| **Outros itens ou serviços** | `outros` ou `descricao_outros` + `preco_outros` | Serviços ou itens não cadastrados. Use `outros`: `[{ "descricao": "...", "preco": 0 }]` ou, no formato do formulário, `descricao_outros` (texto) e `preco_outros` (número). |
+| **Condições Comerciais → Tipo** | `tipo_cond_comerc` | `N` = Nenhuma, `P` = Parcelas, `T` = Texto livre. |
+| **Condições de Pagamento (Texto Livre)** | `cond_comerc_texto` | Quando `tipo_cond_comerc` = `T`. Texto livre com as condições de pagamento. |
+| **Parcelas** | `parcelas` | Quando `tipo_cond_comerc` = `P`. Array de `{ "numero", "dias", "valor", "observacao" }`. |
+| **Validade da Proposta** | `validade_dias` e/ou `data_validade` | `validade_dias` = quantidade de dias; `data_validade` = data limite (YYYY-MM-DD ou DD/MM/YYYY). |
+| **Prazo de entrega** | `prazo_entrega` | Texto livre (ex.: "15 dias úteis"). |
+| **Observações** | `observacoes` | Observações adicionais sobre a proposta. |
+
+#### Exemplo: Produtos + Outros (serviços) + Condições Texto Livre + Validade + Observações
+
+```json
+{
+  "data_proposta": "2024-01-15",
+  "clientes_id": 1,
+  "status": "Aberto",
+  "produtos": [
+    { "descricao": "Notebook Dell", "quantidade": 1, "preco": 3500.00 }
+  ],
+  "descricao_outros": "Instalação, configuração e suporte remoto por 30 dias.",
+  "preco_outros": 450.00,
+  "tipo_cond_comerc": "T",
+  "cond_comerc_texto": "30% à vista no PIX. Restante em 2x no cartão (parcela em 30 e 60 dias).",
+  "validade_dias": 15,
+  "observacoes": "Proposta válida para retirada em nossa loja. Entrega sob consulta.",
+  "prazo_entrega": "5 dias úteis após aprovação"
+}
+```
+
+#### Exemplo completo (com serviços, parcelas e todos os campos)
+
+```json
+{
+  "data_proposta": "2024-01-15",
+  "data_validade": "2024-02-15",
+  "status": "Aberto",
+  "clientes_id": 1,
+  "usuarios_id": 1,
+  "observacoes": "Observações gerais.",
+  "desconto": 0,
+  "valor_desconto": 0,
+  "tipo_desconto": "real",
+  "valor_total": 1500.00,
+  "tipo_cond_comerc": "P",
+  "validade_dias": 30,
+  "prazo_entrega": "15 dias úteis",
+  "produtos": [
+    { "produtos_id": 1, "descricao": "Produto X", "quantidade": 1, "preco": 100.00 }
+  ],
+  "servicos": [
+    { "servicos_id": 1, "descricao": "Serviço Y", "quantidade": 1, "preco": 50.00 }
+  ],
+  "outros": [ { "descricao": "Outros itens ou serviços", "preco": 50.00 } ],
+  "parcelas": [
+    { "numero": 1, "dias": 30, "valor": 500.00, "observacao": "" },
+    { "numero": 2, "dias": 60, "valor": 500.00, "observacao": "" }
+  ]
+}
+```
+
+**Campos obrigatórios (apenas na criação):** um de `clientes_id` ou `cliente_nome`.  
+**Opcionais:** `data_proposta` (padrão: hoje), `produtos`, `servicos`, `outros`, `parcelas`. Você pode criar uma proposta mínima e ir adicionando itens depois (ver [Fluxo passo a passo](#fluxo-passo-a-passo-whatsapp--agente-ia)).
+
+**Datas:** Aceita `YYYY-MM-DD` ou `DD/MM/YYYY`.
+
+**Cliente:** Use `clientes_id` (ID cadastrado) ou `cliente_nome` (texto livre). Não envie ambos.
+
+**Produtos:** `descricao` obrigatório; `quantidade` (padrão 1) e `preco`; opcional `produtos_id`.
+
+**Outros itens ou serviços:** use `outros` (array) **ou** `descricao_outros` + `preco_outros`. Ideal para serviços ou itens que você descreve em texto.
+
+**Condições Comerciais:** Se `tipo_cond_comerc` = `T`, preencha `cond_comerc_texto`. Se `P`, preencha `parcelas`.
+
+**Parcelas:** `numero`, `dias`, `valor`. `data_vencimento` opcional; se omitida, calculada a partir de `data_proposta` + `dias`.
+
+---
+
+### Fluxo passo a passo (WhatsApp / agente IA)
+
+Para criar propostas **passo a passo** (ex.: via WhatsApp, com um agente de IA solicitando dados aos poucos), use:
+
+1. **Criar proposta mínima** – `POST /api/v1/propostas` apenas com cliente:
+   ```json
+   { "cliente_nome": "Nome do Cliente" }
+   ```
+   ou `{ "clientes_id": 1 }`. Opcional: `observacoes`, `data_proposta`. A API retorna a proposta com `idProposta`.
+
+2. **Adicionar produtos** – `POST /api/v1/propostas/{id}/produtos`  
+   Body: `{ "itens": [ { "descricao", "quantidade", "preco" } ] }` ou um único `{ "descricao", "quantidade", "preco" }`.  
+   Aceita também `description`/`name`, `quantity`, `price`, `produtos_id` (se vinculado ao catálogo).
+
+3. **Adicionar serviços** – `POST /api/v1/propostas/{id}/servicos`  
+   Mesmo formato: `itens` ou objeto único com `descricao`, `quantidade`, `preco`.
+
+4. **Adicionar “outros” (mão de obra, itens avulsos)** – `POST /api/v1/propostas/{id}/outros`  
+   Body: `{ "itens": [ { "descricao", "preco" } ] }` ou `{ "descricao", "preco" }`.
+
+Os endpoints de acréscimo **somam** itens à proposta (não substituem). O `valor_total` é recalculado automaticamente. Em cada resposta você recebe a proposta atualizada com `produtos`, `servicos`, `outros` e `valor_total`.
+
+#### Exemplo de solicitação (ponto de partida para o agente IA)
+
+> *"Olá, por favor gere uma proposta comercial: material 50 m de cabo condutti CAT5, 3 VBox, 3 conector P4, mão de obra instalação de 3 câmeras wi-fi valor R$ 750,00"*
+
+O agente pode:
+
+1. **Criar a proposta** (antes: obter nome do cliente; se não houver, usar “Cliente a definir” ou perguntar):
+   ```http
+   POST /api/v1/propostas
+   {"cliente_nome": "Cliente a definir"}
+   ```
+2. **Adicionar produtos** (quantidade + descrição; preço pode vir do catálogo ou ser informado depois):
+   ```http
+   POST /api/v1/propostas/{id}/produtos
+   {"itens": [
+     {"descricao": "Cabo condutti CAT5", "quantidade": 50, "preco": 0},
+     {"descricao": "VBox", "quantidade": 3, "preco": 0},
+     {"descricao": "Conector P4", "quantidade": 3, "preco": 0}
+   ]}
+   ```
+3. **Adicionar “outros”** (mão de obra com valor fixo):
+   ```http
+   POST /api/v1/propostas/{id}/outros
+   {"descricao": "Mão de obra instalação de 3 câmeras wi-fi", "preco": 750}
+   ```
+4. (Opcional) **Atualizar preços** dos produtos via `PUT /api/v1/propostas/{id}` com `produtos` já preenchidos, ou perguntar ao usuário e refazer os itens se a API permitir edição incremental.
+
+Use `GET /api/v1/propostas/{id}` para conferir o resumo e `GET /api/v1/propostas/{id}/pdf` para gerar o PDF.
+
+#### Endpoints de acréscimo (incremental)
+
+| Método | Endpoint | Body | Descrição |
+|--------|----------|------|-----------|
+| `POST` | `/api/v1/propostas/{id}/produtos` | `{ "itens": [ { "descricao", "quantidade", "preco", "produtos_id"? } ] }` ou um único objeto | Adiciona produtos à proposta. |
+| `POST` | `/api/v1/propostas/{id}/servicos` | `{ "itens": [ { "descricao", "quantidade", "preco", "servicos_id"? } ] }` ou um único objeto | Adiciona serviços à proposta. |
+| `POST` | `/api/v1/propostas/{id}/outros` | `{ "itens": [ { "descricao", "preco" } ] }` ou `{ "descricao", "preco" }` | Adiciona itens avulsos (mão de obra, etc.). |
+
+Todos retornam `201 Created` e `result` com a proposta atualizada (`produtos`, `servicos`, `outros`, `valor_total`). Permissão: **ePropostas**.
+
+### Atualizar Proposta
+
+**Endpoints:** `PUT /api/v1/propostas/{id}` ou `PATCH /api/v1/propostas/{id}`
+
+**Autenticação:** Requerida (Permissão: ePropostas)
+
+**Body (JSON):** Mesmos campos do POST (ver [Campos disponíveis](#campos-disponíveis-mapeados-ao-formulário) em Criar Proposta).
+
+- **Campos opcionais** (`observacoes`, `cond_comerc_texto`, `tipo_cond_comerc`, `validade_dias`, `data_validade`, `prazo_entrega`, etc.): se não enviados, mantêm o valor atual.
+- **Produtos, serviços, parcelas e outros:** só são alterados se você enviar `produtos`/`produtos_json`, `servicos`/`servicos_json`, `parcelas`/`parcelas_json` ou `outros`/`descricao_outros`+`preco_outros`. Se não enviar, os atuais são preservados. Para limpar, envie array vazio (ex.: `"produtos": []`).
+
+**Atualizar apenas o status:**
+- **Opção 1 – Body:** `PUT` ou `PATCH` com `Content-Type: application/json` e body `{"status": "Aprovado"}` (ou outro status: Aberto, Faturado, Negociação, Em Andamento, Orçamento, Finalizado, Cancelado, Aguardando Peças, Aprovado).
+- **Opção 2 – Query:** `PUT /api/v1/propostas/{id}?status=Negociação` (útil quando o body não é JSON ou está vazio). Use **URL encode** para acentos: `Negociação` → `Negocia%C3%A7%C3%A3o`.
+
+**Normalização:** Valores como `Negociacao`, `Orcamento`, `Aguardando Pecas` são convertidos automaticamente para a forma canônica (`Negociação`, `Orçamento`, `Aguardando Peças`).
+
+**Exemplo (só status):**
+```http
+PATCH /api/v1/propostas/123
+Content-Type: application/json
+
+{"status": "Aprovado"}
+```
+```http
+PUT /api/v1/propostas/123?status=Aprovado
+```
+
+### Atualizar Status da Proposta
+
+**Endpoint:** `PUT /api/v1/propostas/{id}/status`
+
+**Autenticação:** Requerida (Permissão: ePropostas)
+
+Endpoint simplificado para atualizar **apenas o status**. Útil para integrações rápidas ou quando o body JSON não é necessário.
+
+**Parâmetros Query ou Body:**
+- `status`: Novo status (Aberto, Aprovado, Faturado, Negociação, Em Andamento, Orçamento, Finalizado, Cancelado, Aguardando Peças).
+
+**Exemplo:**
+```http
+PUT /api/v1/propostas/123/status?status=Negociacao
+```
+
+### Excluir Proposta
+
+**Endpoint:** `DELETE /api/v1/propostas/{id}`
+
+**Autenticação:** Requerida (Permissão: dPropostas)
+
+**Resposta de Sucesso (200):**
+```json
+{
+  "status": true,
+  "message": "Proposta excluída com sucesso!"
+}
+```
+
+**Nota:** Ao excluir, o estoque dos produtos vinculados (quando aplicável) é devolvido automaticamente.
 
 ---
 
@@ -1019,6 +1424,10 @@ A API utiliza um sistema de permissões baseado em níveis de usuário. As princ
 - **vOs**: Visualizar ordens de serviço
 - **aOs**: Adicionar ordens de serviço
 - **eOs**: Editar ordens de serviço
+- **vPropostas**: Visualizar propostas comerciais
+- **aPropostas**: Adicionar propostas comerciais
+- **ePropostas**: Editar propostas comerciais
+- **dPropostas**: Excluir propostas comerciais
 - **cUsuario**: Gerenciar usuários
 - **cAuditoria**: Visualizar auditoria
 
@@ -1039,6 +1448,33 @@ A API utiliza um sistema de permissões baseado em níveis de usuário. As princ
 6. **Paginação**: A maioria dos endpoints de listagem suporta paginação através dos parâmetros `perPage` e `page`.
 
 7. **Busca**: Muitos endpoints suportam busca através do parâmetro `search` na query string.
+
+---
+
+## Troubleshooting – Aplicação offline
+
+Se a aplicação ou a API aparecer **offline** ou indisponível:
+
+1. **LAMPP (Apache + MySQL)**  
+   O Map-OS em `/opt/lampp/htdocs/mapos` normalmente usa o LAMPP. Verifique e inicie os serviços:
+   ```bash
+   /opt/lampp/lampp status
+   sudo /opt/lampp/lampp start
+   ```
+   Apache e MySQL precisam estar em execução.
+
+2. **Health check**  
+   Teste o endpoint de status (não requer autenticação):
+   ```bash
+   curl -s http://localhost/mapos/api/v1/status
+   ```
+   Ou `GET /api/v1/Mapos/status`. Se retornar `"online": true` e `"database": "ok"`, a API e o banco estão ok.
+
+3. **Banco de dados**  
+   Confira o `.env` em `application/` (`DB_HOSTNAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`). Se `GET /api/v1/status` retornar `"database": "error"`, o MySQL está inacessível ou as credenciais estão incorretas.
+
+4. **Ambiente**  
+   No `.env`, `APP_ENVIRONMENT` deve ser `production` ou `development` (e não `pre_installation`) após a instalação.
 
 ---
 

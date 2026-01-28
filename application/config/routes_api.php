@@ -6,6 +6,8 @@ if (! defined('BASEPATH')) {
 
 // Rotas API V1
 $route['api/v1'] = 'api/v1/ApiController/index';
+$route['api/v1/status'] = 'api/v1/ApiController/status';
+$route['api/v1/Mapos/status'] = 'api/v1/ApiController/status';
 $route['api/v1/audit'] = 'api/v1/ApiController/audit';
 $route['api/v1/emitente'] = 'api/v1/ApiController/emitente';
 $route['api/v1/calendario'] = 'api/v1/ApiController/calendario';
@@ -22,6 +24,13 @@ $route['api/v1/usuarios'] = 'api/v1/UsuariosController/index';
 $route['api/v1/usuarios/(:num)'] = 'api/v1/UsuariosController/index/$1';
 $route['api/v1/os'] = 'api/v1/OsController/index';
 $route['api/v1/os/(:num)'] = 'api/v1/OsController/index/$1';
+$route['api/v1/propostas'] = 'api/v1/PropostasController/index';
+$route['api/v1/propostas/(:num)/pdf'] = 'api/v1/PropostasController/pdf/$1';
+$route['api/v1/propostas/(:num)/status'] = 'api/v1/PropostasController/status/$1';
+$route['api/v1/propostas/(:num)/produtos'] = 'api/v1/PropostasController/produtos/$1';
+$route['api/v1/propostas/(:num)/servicos'] = 'api/v1/PropostasController/servicos/$1';
+$route['api/v1/propostas/(:num)/outros'] = 'api/v1/PropostasController/outros/$1';
+$route['api/v1/propostas/(:num)'] = 'api/v1/PropostasController/index/$1';
 $route['api/v1/os/(:num)/produtos'] = 'api/v1/OsController/produtos/$1';
 $route['api/v1/os/(:num)/produtos/(:num)'] = 'api/v1/OsController/produtos/$1/$2';
 $route['api/v1/os/(:num)/servicos'] = 'api/v1/OsController/servicos/$1';

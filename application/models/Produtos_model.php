@@ -25,6 +25,38 @@ class Produtos_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Busca produtos por uma ou mais palavras/partes do nome ou código de barras.
+     * Cada termo é buscado com LIKE em codDeBarra OU descricao; todos os termos devem bater (AND).
+     * Útil para buscar por palavras soltas ou trechos, ex.: "teclado gamer" ou "not".
+     *
+     * @param array $words Lista de termos (ex.: ['teclado', 'gamer'])
+     * @param int   $perPage
+     * @param int   $start
+     * @return object[]
+     */
+    public function searchProducts(array $words, $perPage = 20, $start = 0)
+    {
+        $this->db->select('*');
+        $this->db->from('produtos');
+        $this->db->order_by('descricao', 'asc');
+
+        foreach ($words as $term) {
+            $term = trim($term);
+            if ($term === '') {
+                continue;
+            }
+            $this->db->group_start();
+            $this->db->like('codDeBarra', $term);
+            $this->db->or_like('descricao', $term);
+            $this->db->group_end();
+        }
+
+        $this->db->limit($perPage, $start);
+
+        return $this->db->get()->result();
+    }
+
     public function getById($id)
     {
         $this->db->where('idProdutos', $id);

@@ -14,6 +14,33 @@ class ApiController extends REST_Controller
         $this->load->model('mapos_model');
     }
 
+    /**
+     * Health check / status da aplicação.
+     * GET /api/v1/status ou GET /api/v1/Mapos/status
+     * Não requer autenticação. Útil para monitors e verificar se a API está online.
+     */
+    public function status_get()
+    {
+        $dbOk = false;
+        try {
+            if ($this->db->query('SELECT 1') !== false) {
+                $dbOk = true;
+            }
+        } catch (Throwable $e) {
+            // MySQL indisponível ou erro de conexão
+        }
+
+        $this->response([
+            'status' => true,
+            'message' => 'Map-OS online',
+            'online' => true,
+            'result' => [
+                'application' => 'Map-OS',
+                'database' => $dbOk ? 'ok' : 'error',
+            ],
+        ], REST_Controller::HTTP_OK);
+    }
+
     public function index_get()
     {
         $user = $this->logged_user();

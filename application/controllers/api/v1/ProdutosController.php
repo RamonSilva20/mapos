@@ -25,14 +25,22 @@ class ProdutosController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->get('search', true));
-            $where = $search ? "codDeBarra LIKE '%{$search}%' OR descricao LIKE '%{$search}%'" : '';
+            $search = trim((string) $this->get('search', true));
+            $perPage = (int) ($this->get('perPage', true) ?: 20) ?: 20;
+            $page = (int) ($this->get('page', true) ?: 0);
+            $start = $page > 0 ? ($perPage * $page) : 0;
 
-            $perPage = $this->get('perPage', true) ?: 20;
-            $page = $this->get('page', true) ?: 0;
-            $start = $page ? ($perPage * $page) : 0;
-
-            $produtos = $this->produtos_model->get('produtos', '*', $where, $perPage, $start);
+            if ($search !== '') {
+                $words = array_filter(preg_split('/\s+/', $search, -1, PREG_SPLIT_NO_EMPTY));
+                $words = array_values($words);
+                if (! empty($words)) {
+                    $produtos = $this->produtos_model->searchProducts($words, $perPage, $start);
+                } else {
+                    $produtos = $this->produtos_model->get('produtos', '*', '', $perPage, $start);
+                }
+            } else {
+                $produtos = $this->produtos_model->get('produtos', '*', '', $perPage, $start);
+            }
 
             $this->response([
                 'status' => true,

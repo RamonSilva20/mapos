@@ -79,7 +79,7 @@ class UsuariosController extends REST_Controller
         if ($this->form_validation->run('usuarios') == false) {
             $this->response([
                 'status' => false,
-                'message' => validation_errors(),
+                'message' => strip_tags(validation_errors()),
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
@@ -103,17 +103,27 @@ class UsuariosController extends REST_Controller
             'dataCadastro' => date('Y-m-d'),
         ];
 
-        if ($this->usuarios_model->add('usuarios', $data)) {
-
-            $this->load->model('api_model');
-            $data = $this->api_model->lastRow('usuarios', 'idUsuarios');
-
+        if (! $this->usuarios_model->add('usuarios', $data)) {
             $this->response([
-                'status' => true,
-                'message' => 'Usuário adicionado com sucesso!',
-                'result' => $data,
-            ], REST_Controller::HTTP_OK);
+                'status' => false,
+                'message' => 'Não foi possível adicionar o usuário.',
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        $id = (int) $this->db->insert_id();
+        $usuario = $this->usuarios_model->getById($id);
+
+        $result = [
+            'idUsuarios' => (int) $usuario->idUsuarios,
+            'nome' => $usuario->nome,
+            'email' => $usuario->email,
+        ];
+
+        $this->response([
+            'status' => true,
+            'message' => 'Usuário adicionado com sucesso!',
+            'result' => $result,
+        ], REST_Controller::HTTP_CREATED);
     }
 
     public function index_put($id)
@@ -159,7 +169,7 @@ class UsuariosController extends REST_Controller
         if ($id == 1 && $this->put('situacao', true) == 0) {
             $this->response([
                 'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser desativado!',
+                'message' => 'O usuário super admin não pode ser desativado!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
@@ -182,15 +192,20 @@ class UsuariosController extends REST_Controller
         ];
 
         if ($this->put('senha', true)) {
-            $data['senha'] = $this->put('senha', true);
+            $data['senha'] = password_hash($this->put('senha', true), PASSWORD_DEFAULT);
         }
 
         if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
             $this->log_app('Alterou um usuário. ID: ' . $id);
+            $u = $this->usuarios_model->getById($id);
             $this->response([
                 'status' => true,
-                'message' => 'Cliente editado com sucesso!',
-                'result' => $this->usuarios_model->getById($id),
+                'message' => 'Usuário editado com sucesso!',
+                'result' => [
+                    'idUsuarios' => (int) $u->idUsuarios,
+                    'nome' => $u->nome,
+                    'email' => $u->email,
+                ],
             ], REST_Controller::HTTP_OK);
         }
 
@@ -220,7 +235,7 @@ class UsuariosController extends REST_Controller
         if ($id == 1) {
             $this->response([
                 'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser deletado!',
+                'message' => 'O usuário super admin não pode ser deletado!',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 

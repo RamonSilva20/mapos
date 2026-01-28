@@ -86,7 +86,7 @@ class ClientesController extends REST_Controller
         if ($this->form_validation->run('clientes') == false) {
             $this->response([
                 'status' => false,
-                'message' => validation_errors(),
+                'message' => strip_tags(validation_errors()),
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
@@ -114,18 +114,24 @@ class ClientesController extends REST_Controller
             'fornecedor' => $this->post('fornecedor', true) == true ? 1 : 0,
         ];
 
-        if ($this->clientes_model->add('clientes', $data) == true) {
+        $id = $this->clientes_model->add('clientes', $data);
+        if (! $id) {
             $this->response([
-                'status' => true,
-                'message' => 'Cliente adicionado com sucesso!',
-                'result' => $this->clientes_model->get('clientes', '*', "telefone = '{$data['telefone']}'", 1, 0, true),
-            ], REST_Controller::HTTP_CREATED);
+                'status' => false,
+                'message' => 'Não foi possível adicionar o cliente.',
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        $result = [
+            'idClientes' => (int) $id,
+            'nomeCliente' => $data['nomeCliente'],
+        ];
+
         $this->response([
-            'status' => false,
-            'message' => 'Não foi possível adicionar o Cliente.',
-        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            'status' => true,
+            'message' => 'Cliente adicionado com sucesso!',
+            'result' => $result,
+        ], REST_Controller::HTTP_CREATED);
     }
 
     public function index_put($id)
@@ -167,10 +173,14 @@ class ClientesController extends REST_Controller
         }
 
         if ($this->clientes_model->edit('clientes', $data, 'idClientes', $id) == true) {
+            $c = $this->clientes_model->getById($id);
             $this->response([
                 'status' => true,
                 'message' => 'Cliente editado com sucesso!',
-                'result' => $this->clientes_model->getById($id),
+                'result' => [
+                    'idClientes' => (int) $c->idClientes,
+                    'nomeCliente' => $c->nomeCliente,
+                ],
             ], REST_Controller::HTTP_OK);
         }
 
@@ -208,7 +218,7 @@ class ClientesController extends REST_Controller
         }
 
         if ($this->clientes_model->delete('clientes', 'idClientes', $id) == true) {
-            $this->log_app('Removeu um cliente. ID' . $id);
+            $this->log_app('Removeu um cliente. ID: ' . $id);
             $this->response([
                 'status' => true,
                 'message' => 'Cliente excluído com sucesso!',
