@@ -4,6 +4,10 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.53.1] - 2026-02-28
+### Fixed
+- Corrigido problema com XSS e RBAC. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.53.0] - 2026-01-25
 ### Added
 - Adequação para habilitar/desabilitar a página de erro do whoops de acordo com variável de ambiente e fazer blacklist de todas as variáveis do arquivo env. [@Pr3d4dor](https://github.com/Pr3d4dor)
