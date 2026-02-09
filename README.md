@@ -12,6 +12,22 @@
 
 ![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
 
+### Apoie o Projeto Map-OS - Doações
+
+O **Map-OS** é um projeto open source mantido com muito esforço, dedicação e tempo.
+Se ele te ajuda no dia a dia, considere apoiar o desenvolvimento para que o sistema continue evoluindo, recebendo melhorias, correções e novos recursos.
+
+Você pode contribuir de forma simples e segura pelo link abaixo:
+
+**Faça uma doação:** https://donate.mapos.com.br
+
+Toda contribuição, independente do valor, faz a diferença.
+Obrigado por apoiar o Map-OS!
+
+### Manutenção do Projeto
+
+O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empresa [MountBit](https://mountbit.com.br)**, responsável pela sua evolução contínua, correções, e apoio à comunidade.
+
 ### [Instalação](Instalacao_xampp_windows.md)
 
 1. Faça o download dos arquivos.
@@ -117,18 +133,12 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
 * [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
 * [filp/whoops](https://github.com/filp/whoops)
+* [ezyang/htmlpurifier](https://github.com/ezyang/htmlpurifier)
 
 ### Requerimentos
 * PHP >= 8.4
 * MySQL >= 5.7 ou >= 8.0
 * Composer >= 2
-
-### Doações
-Gosta do mapos e gostaria de contribuir com seu desenvolvimento?
-
-Doações podem ser realizadas nos links:
-* [catarse/mapos](https://www.catarse.me/mapos) - Mensal
-* [kofi/mapos](https://ko-fi.com/mapos) - Exporádica
 
 ### Estrelas
 [![Estrelas](https://api.star-history.com/svg?repos=RamonSilva20/mapos&type=Date)](https://star-history.com/#RamonSilva20/mapos&Date)
