@@ -24,9 +24,16 @@ Você pode contribuir de forma simples e segura pelo link abaixo:
 Toda contribuição, independente do valor, faz a diferença.
 Obrigado por apoiar o Map-OS!
 
+### Comunidade no WhatsApp
+
+Participe da comunidade oficial do **Map-OS** no WhatsApp para tirar dúvidas, trocar experiências e acompanhar novidades do projeto:
+
+**Entre na comunidade:**
+https://chat.whatsapp.com/GVSg8tPQzXy0grfYpRfQps
+
 ### Manutenção do Projeto
 
-O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empresa [MountBit](https://mountbit.com.br)**, responsável pela sua evolução contínua, correções, e apoio à comunidade.
+O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empresa [MountBit](https://mountbit.com.br)**, responsável pela sua evolução contínua, correções e apoio à comunidade.
 
 ### [Instalação](Instalacao_xampp_windows.md)
 
