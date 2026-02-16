@@ -171,8 +171,12 @@ class Propostas_model extends CI_Model
 
     public function gerarNumeroProposta()
     {
-        // Buscar o maior número de proposta (não o ID)
-        $this->db->select_max('numero_proposta');
+        // Buscar o maior número de proposta (não o ID) ordenando por tamanho e depois valor
+        // Isso resolve problema de '9' > '10' em strings
+        $this->db->select('numero_proposta');
+        $this->db->order_by('LENGTH(numero_proposta)', 'DESC');
+        $this->db->order_by('numero_proposta', 'DESC');
+        $this->db->limit(1);
         $result = $this->db->get('propostas')->row();
         
         if ($result && $result->numero_proposta) {
