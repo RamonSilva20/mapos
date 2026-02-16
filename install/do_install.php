@@ -57,7 +57,8 @@ if (! empty($_POST)) {
      * check the db config file
      * if db already configured, we'll assume that the installation has completed
      */
-    $is_installed = file_exists('..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env');
+    $env_path = '..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env';
+    $is_installed = file_exists($env_path) && strpos(file_get_contents($env_path), 'APP_ENVIRONMENT="pre_installation"') === false;
 
     if ($is_installed) {
         echo json_encode(['success' => false, 'message' => 'Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente.']);

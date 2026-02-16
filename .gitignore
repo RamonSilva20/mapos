@@ -30,3 +30,4 @@ uploads
 application/.env
 assets/userImage
 assets/certificados/
+.env
