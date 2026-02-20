@@ -4,7 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.53.1] - 2026-02-28
+## [4.53.2] - 2026-02-19
+### Fixed
+- Ajuste para não ficar gerando logs de erro por conta da constante E_STRICT. [@cabralwms](https://github.com/cabralwms)
+
+## [4.53.1] - 2026-01-28
 ### Fixed
 - Corrigido problema com XSS e RBAC. [@Pr3d4dor](https://github.com/Pr3d4dor)
 
