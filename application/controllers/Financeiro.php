@@ -466,19 +466,35 @@ class Financeiro extends MY_Controller
                 $vencimento = date('Y/m/d');
             }
 
-            $valor = floatval($this->input->post('valor'));
-            //Se o valor_desconto for vázio, seta a variavel com valor 0, se não for vazio recebe o valor de desconto
-            $valor_desconto = floatval($this->input->post('valor_desconto_editar')); // valor do total + desconto
+            $parseMoney = static function ($value) {
+                if ($value === null || $value === '') {
+                    return 0.0;
+                }
+                return (float) str_replace(',', '.', $value);
+            };
 
-            $valor_total = $valor + $valor_desconto; //90 + 10=100
-            $valor_com_desconto = $valor_total - $valor_desconto;
+            // Regra dos campos no modal:
+            // valor = total sem desconto | descontos_editar = desconto aplicado | valor_desconto_editar = total com desconto
+            $valor_total = $parseMoney($this->input->post('valor'));
+            $desconto = $parseMoney($this->input->post('descontos_editar'));
+            $valor_com_desconto = $parseMoney($this->input->post('valor_desconto_editar'));
+
+            if ($valor_com_desconto <= 0) {
+                $valor_com_desconto = $valor_total - $desconto;
+            }
+            if ($desconto <= 0 && $valor_total > $valor_com_desconto) {
+                $desconto = $valor_total - $valor_com_desconto;
+            }
+            if ($valor_com_desconto < 0) {
+                $valor_com_desconto = 0;
+            }
 
             $data = [
                 'descricao' => $this->input->post('descricao'),
                 'data_vencimento' => $vencimento,
                 'data_pagamento' => $pagamento,
                 'valor' => $valor_total,
-                'desconto' => $valor_desconto,
+                'desconto' => $desconto,
                 'tipo_desconto' => 'real',
                 'valor_desconto' => $valor_com_desconto,
                 'baixado' => $this->input->post('pago') ?: 0,
