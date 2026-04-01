@@ -161,7 +161,7 @@ foreach ($results as $r) {
     }
 
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . $r->desconto . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . ($r->valor_desconto != 0 ? $r->valor_desconto : $r->valor) . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
     }
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
         echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
@@ -729,21 +729,22 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 	}
 
     function mostrarValoresEditar() {
-		if (document.getElementById('valorEditar').value == "" || document.getElementById('descontos_editar').value == "" || document.getElementById('descontoEditar').value == ""){
-			
+		if (document.getElementById('valorEditar').value == "" || document.getElementById('descontos_editar').value == ""){
 		}else{
 			var valor = parseFloat(document.getElementById('valorEditar').value);
-			var desconto = parseFloat(document.getElementById('descontos_editar').value); 
-			var valor_desconto = parseFloat(document.getElementById('descontoEditar').value);
-			var resultado, total;
-			resultado = valor;
-			total = valor-desconto;
-			
-			resultdesc = total ;
-			totaldesc = valor-(resultdesc);	
-			
-			document.getElementById('valorEditar').value = total.toFixed(2);
-			document.getElementById('descontoEditar').value = totaldesc.toFixed(2);
+			var desconto = parseFloat(document.getElementById('descontos_editar').value);
+
+			if (isNaN(valor) || isNaN(desconto)) {
+				return;
+			}
+
+			var valorComDesconto = valor - desconto;
+			if (valorComDesconto < 0) {
+				valorComDesconto = 0;
+			}
+
+			// Mantém "Valor" como total original e atualiza apenas "Val.Desc".
+			document.getElementById('descontoEditar').value = valorComDesconto.toFixed(2);
 			}
 	}
 
