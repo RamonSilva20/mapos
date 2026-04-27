@@ -69,8 +69,12 @@ class Permission
             $array = $this->CI->db->get($this->table)->row_array();
 
             if (count($array) > 0) {
-                $array = unserialize($array[$this->select]);
-                //Atribui as permissoes ao atributo permissions
+                $raw = $array[$this->select];
+                $decoded = json_decode($raw, true);
+                if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
+                    $decoded = unserialize($raw, ['allowed_classes' => false]);
+                }
+                $array = $decoded;
                 $this->permissions = [$array];
 
                 return true;

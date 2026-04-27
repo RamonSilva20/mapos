@@ -1135,7 +1135,7 @@ class Os extends MY_Controller
                     'message' => $html,
                     'status' => 'pending',
                     'date' => date('Y-m-d H:i:s'),
-                    'headers' => serialize($headers),
+                    'headers' => json_encode($headers),
                 ];
                 $this->email_model->add('email_queue', $email);
             } else {

@@ -272,7 +272,11 @@ class UsuariosController extends REST_Controller
             if (password_verify($password, $user->senha)) {
                 $this->log_app('Efetuou login no sistema', $user->nome);
                 $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true);
-                $permissoes = unserialize($permissoes['permissoes']);
+                $raw = $permissoes['permissoes'];
+                $permissoes = json_decode($raw, true);
+                if ($permissoes === null && json_last_error() !== JSON_ERROR_NONE) {
+                    $permissoes = unserialize($raw, ['allowed_classes' => false]);
+                }
 
                 $token_data = [
                     'uid' => $user->idUsuarios,
@@ -323,7 +327,11 @@ class UsuariosController extends REST_Controller
                 ];
 
                 $permissoes = $this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true);
-                $permissoes = unserialize($permissoes['permissoes']);
+                $raw = $permissoes['permissoes'];
+                $permissoes = json_decode($raw, true);
+                if ($permissoes === null && json_last_error() !== JSON_ERROR_NONE) {
+                    $permissoes = unserialize($raw, ['allowed_classes' => false]);
+                }
 
                 $result = [
                     'access_token' => $this->authorization_token->generateToken($token_data),

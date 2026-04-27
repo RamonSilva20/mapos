@@ -121,7 +121,7 @@ class Permissoes extends MY_Controller
                 'dCobranca' => $this->input->post('dCobranca'),
                 'vCobranca' => $this->input->post('vCobranca'),
             ];
-            $permissoes = serialize($permissoes);
+            $permissoes = json_encode($permissoes);
 
             $data = [
                 'nome' => $nomePermissao,
@@ -223,7 +223,7 @@ class Permissoes extends MY_Controller
                 'vCobranca' => $this->input->post('vCobranca'),
 
             ];
-            $permissoes = serialize($permissoes);
+            $permissoes = json_encode($permissoes);
 
             $data = [
                 'nome' => $nomePermissao,

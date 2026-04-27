@@ -471,7 +471,7 @@ class Format
      */
     protected function _from_serialize($data)
     {
-        return unserialize(trim($data));
+        return unserialize(trim($data), ['allowed_classes' => false]);
     }
 
     /**
