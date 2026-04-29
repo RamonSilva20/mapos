@@ -70,11 +70,7 @@ class Permission
 
             if (count($array) > 0) {
                 $raw = $array[$this->select];
-                $decoded = json_decode($raw, true);
-                if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
-                    $decoded = unserialize($raw, ['allowed_classes' => false]);
-                }
-                $array = $decoded;
+                $array = json_decode_legacy($raw);
                 $this->permissions = [$array];
 
                 return true;

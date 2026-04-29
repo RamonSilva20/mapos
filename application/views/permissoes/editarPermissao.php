@@ -81,13 +81,7 @@
 
 </style>
 
-<?php
-$raw = $result->permissoes;
-$permissoes = json_decode($raw, true);
-if ($permissoes === null && json_last_error() !== JSON_ERROR_NONE) {
-    $permissoes = unserialize($raw, ['allowed_classes' => false]);
-}
-?>
+<?php $permissoes = json_decode_legacy($result->permissoes); ?>
 <div class="span12" style="margin-left: 0">
     <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">

@@ -142,12 +142,7 @@ class MY_Email extends CI_Email
             $cc = ! empty($email->cc) ? explode(', ', $email->cc) : [];
             $bcc = ! empty($email->bcc) ? explode(', ', $email->bcc) : [];
 
-            $raw = $email->headers;
-            $decoded = json_decode($raw, true);
-            if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
-                $decoded = unserialize($raw, ['allowed_classes' => false]);
-            }
-            $this->_headers = $decoded;
+            $this->_headers = json_decode_legacy($email->headers);
 
             $this->to($recipients);
             $this->cc($cc);
