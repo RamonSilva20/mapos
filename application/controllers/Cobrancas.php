@@ -120,7 +120,7 @@ class Cobrancas extends MY_Controller
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
-        redirect(site_url('cobrancas/cobrancas/'));
+        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
     }
 
     public function atualizar()
@@ -140,7 +140,7 @@ class Cobrancas extends MY_Controller
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
-        redirect(site_url('cobrancas/cobrancas/'));
+        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
     }
 
     public function confirmarPagamento()
@@ -155,7 +155,7 @@ class Cobrancas extends MY_Controller
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
-        redirect(site_url('cobrancas/cobrancas/'));
+        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
     }
 
     public function cancelar()
@@ -170,7 +170,7 @@ class Cobrancas extends MY_Controller
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
-        redirect(site_url('cobrancas/cobrancas/'));
+        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
     }
 
     public function visualizar()
@@ -214,6 +214,6 @@ class Cobrancas extends MY_Controller
         $this->cobrancas_model->enviarEmail($this->uri->segment(3));
         $this->session->set_flashdata('success', 'Email adicionado na fila.');
 
-        redirect(site_url('cobrancas/cobrancas/'));
+        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
     }
 }
