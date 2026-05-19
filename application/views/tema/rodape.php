@@ -14,6 +14,7 @@
         var dataTableEnabled = '<?= $configuration['control_datatable'] ?>';
         if(dataTableEnabled == '1') {
             $('#tabela').dataTable( {
+                "pageLength": <?= $configuration['per_page'] ?>,
                 "ordering": false,
                 "info": false,
                 "language": {
