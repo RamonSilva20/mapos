@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <div class="row-fluid" style="width: 100vw;height: 100vh;display: flex;align-items: center;justify-content: center">
+    <div class="row-fluid nova-senha-wrapper" style="width: 100%;min-height: 100vh;display: flex;align-items: center;justify-content: center;box-sizing: border-box">
         <div class="widget-box" style="align-items: center;padding: 0 15px">
             <div class="widget-title">
                 <h5 style="padding-left: 10px">Cadastra Nova Senha</h5>
