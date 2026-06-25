@@ -1,0 +1,326 @@
+/* ===================================================
+   Responsividade Mobile - Área do Cliente (conecte)
+   =================================================== */
+
+/* Botão hamburger - oculto em desktop */
+.c-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 6px;
+    left: 12px;
+    z-index: 1050;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--cinza0, #9aa6b3);
+    font-size: 1.7em;
+    padding: 4px 6px;
+    border-radius: 6px;
+    line-height: 1;
+}
+
+/* Overlay escuro quando sidebar está aberta */
+.c-sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 998;
+}
+
+.c-sidebar-overlay.active {
+    display: block;
+}
+
+/* =====================
+   Desktop: 4 cards com largura fixa, alinhados à esquerda
+   Layout: ícone à esquerda + texto à direita (igual ao sistema de produção)
+   ===================== */
+.cardBox {
+    grid-template-columns: repeat(4, minmax(190px, 240px)) !important;
+    justify-content: start !important;
+}
+
+.cardBox .card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 14px 18px !important;
+    gap: 14px;
+    min-height: 75px;
+    cursor: pointer;
+}
+
+.cardBox .card > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+/* Remove o margin-top negativo do ícone (projetado para outro contexto) */
+.cardBox .card [class*="lord-icon"] {
+    margin-top: 0 !important;
+}
+
+.cardBox .card .numbers {
+    font-size: 1.1em;
+    color: var(--subtitle);
+    white-space: normal;
+    flex-shrink: 1;
+}
+
+/* =====================
+   Tablets (max 992px)
+   ===================== */
+@media (max-width: 992px) {
+    .cardBox {
+        grid-template-columns: repeat(4, minmax(140px, 1fr)) !important;
+        grid-gap: 10px !important;
+    }
+}
+
+/* =====================
+   Mobile (max 768px)
+   ===================== */
+@media (max-width: 768px) {
+
+    /* Mostrar botão hamburger */
+    .c-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Sidebar escondida fora da tela */
+    #sidebar {
+        left: -280px !important;
+        transition: left 0.3s ease !important;
+        z-index: 1000 !important;
+    }
+
+    #sidebar.mobile-open {
+        left: 0 !important;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Navbar ocupa largura total com espaço para o hamburger */
+    .navebarn {
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        height: auto !important;
+        min-height: 40px !important;
+        padding: 6px 12px 6px 52px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Conteúdo ocupa largura total */
+    #content {
+        margin-left: 0 !important;
+        padding: 0 8px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Footer sem padding fixo lateral */
+    #footer {
+        padding: 10px 15px !important;
+        text-align: center !important;
+    }
+
+    /* Cards: 2 colunas no celular */
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-gap: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Tabela com scroll horizontal */
+    .c-table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 6px;
+    }
+
+    /* Botões de ação: área de toque maior */
+    .btn-nwe,
+    .btn-nwe2,
+    .btn-nwe3,
+    .btn-nwe4,
+    .btn-nwe5,
+    .btn-nwe6 {
+        padding: 6px 10px !important;
+        font-size: 1.25em !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        min-height: 34px;
+    }
+
+    /* Botão padrão */
+    .button {
+        height: 38px !important;
+        min-height: 38px;
+    }
+
+    /* Colunas Bootstrap 2 em largura total no mobile */
+    .row-fluid .span6,
+    .row-fluid .span4,
+    .row-fluid .span3,
+    .row-fluid .span8,
+    .row-fluid .span9 {
+        width: 100% !important;
+        margin-left: 0 !important;
+        float: none !important;
+        display: block !important;
+    }
+
+    /* Inputs e selects largura total */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="search"],
+    select,
+    textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Formulário horizontal: labels acima dos campos */
+    .form-horizontal .control-label {
+        width: 100% !important;
+        text-align: left !important;
+        padding-top: 5px !important;
+        padding-bottom: 2px !important;
+        float: none !important;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 0 !important;
+        width: 100% !important;
+        float: none !important;
+    }
+
+    .form-horizontal .control-group {
+        margin-bottom: 10px !important;
+    }
+
+    /* Content header */
+    #content-header,
+    .content-header {
+        flex-direction: column !important;
+        padding: 8px 0 5px !important;
+        margin: 4px 0 !important;
+    }
+
+    /* Breadcrumb menor */
+    #breadcrumb a {
+        font-size: 1em !important;
+        padding: 2px 5px !important;
+    }
+
+    /* Widget content padding reduzido */
+    .widget-content {
+        padding: 10px !important;
+    }
+
+    /* Widget box sem overflow quebrado */
+    .widget-box {
+        overflow: hidden;
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Accordion com scroll se necessário */
+    .accordion-group {
+        overflow-x: auto;
+    }
+
+    /* Offset não funciona bem em mobile */
+    .row-fluid .offset3,
+    .row-fluid .offset2,
+    .row-fluid .offset1 {
+        margin-left: 0 !important;
+    }
+
+    /* Botões em linha: envolver e centralizar */
+    .form-actions .span6 {
+        width: 100% !important;
+        margin-left: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Badges nas tabelas: sem quebra */
+    .badge {
+        white-space: nowrap;
+        font-size: 0.85em;
+    }
+
+    /* Nova senha: corrigir 100vw */
+    .row-fluid.nova-senha-wrapper {
+        width: 100% !important;
+        min-height: 80vh;
+        padding: 20px 15px;
+        box-sizing: border-box;
+    }
+}
+
+/* =====================
+   Mobile pequeno (max 480px)
+   ===================== */
+@media (max-width: 480px) {
+
+    /* Cards: ainda 2 colunas mas gap menor */
+    .cardBox {
+        grid-gap: 8px !important;
+        padding: 0 !important;
+    }
+
+    /* Título da página menor */
+    .widget-title h5 {
+        font-size: 1.3em !important;
+    }
+
+    /* Tabela: fonte menor para caber mais */
+    .c-table-responsive table.table td,
+    .c-table-responsive table.table th {
+        font-size: 0.85em;
+        padding: 5px 6px !important;
+    }
+
+    /* Navbar: nome de usuário encurtado */
+    .navebarn #user-nav .nav > li > a {
+        font-size: 0.9em;
+        padding: 2px 4px;
+    }
+
+    /* Ocultar texto do nome na navebar em telas muito pequenas */
+    #userr .userT0,
+    #userr .userT {
+        display: none;
+    }
+
+    .sec_profile {
+        position: static !important;
+    }
+}

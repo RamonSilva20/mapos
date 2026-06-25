@@ -11,8 +11,7 @@ if (!$results) { ?>
         </div>
 
         <div class="widget-content nopadding tab-content">
-
-
+            <div class="c-table-responsive">
             <table id="tabela" class="table table-bordered ">
                 <thead>
                     <tr>
@@ -30,6 +29,7 @@ if (!$results) { ?>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 <?php
@@ -46,8 +46,7 @@ if (!$results) { ?>
         </div>
 
         <div class="widget-content nopadding tab-content">
-
-
+            <div class="c-table-responsive">
             <table id="tabela" class="table table-bordered ">
                 <thead>
                     <tr>
@@ -137,6 +136,7 @@ if (!$results) { ?>
                     } ?>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 

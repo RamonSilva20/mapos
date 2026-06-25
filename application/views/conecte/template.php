@@ -15,6 +15,7 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/conecte-mobile.css" />
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
@@ -24,6 +25,13 @@
 </head>
 
 <body>
+    <!-- Botão hamburger para mobile -->
+    <button class="c-menu-toggle" id="c-menu-toggle" aria-label="Abrir menu">
+        <i class='bx bx-menu'></i>
+    </button>
+    <!-- Overlay escuro ao abrir sidebar no mobile -->
+    <div class="c-sidebar-overlay" id="c-sidebar-overlay"></div>
+
     <!--Header-part-->
     <div id="header">
         <h1><a href="dashboard.html"><?php echo $this->config->item('app_name'); ?></a></h1>
@@ -134,6 +142,22 @@
 
     <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/matrix.js"></script>
+    <script>
+        (function () {
+            var toggle   = document.getElementById('c-menu-toggle');
+            var sidebar  = document.getElementById('sidebar');
+            var overlay  = document.getElementById('c-sidebar-overlay');
+            if (!toggle || !sidebar || !overlay) return;
+            toggle.addEventListener('click', function () {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('active');
+            });
+            overlay.addEventListener('click', function () {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+            });
+        })();
+    </script>
 </body>
 
 </html>
