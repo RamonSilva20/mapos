@@ -659,6 +659,37 @@ INSERT IGNORE INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `cep`, `rua`, 
 
 INSERT IGNORE INTO `migrations`(`version`) VALUES ('20210125173741');
 
+-- -----------------------------------------------------
+-- Table `modulos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `modulos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `slug` VARCHAR(100) NOT NULL UNIQUE,
+  `nome` VARCHAR(255) NOT NULL,
+  `versao` VARCHAR(20) NOT NULL,
+  `descricao` TEXT NULL,
+  `autor` VARCHAR(255) NULL,
+  `status` ENUM('ativo','inativo') DEFAULT 'ativo',
+  `instalado_em` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table `modulo_menu_items`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `modulo_menu_items` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `modulo_slug` VARCHAR(100) NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `icone` VARCHAR(100) NOT NULL DEFAULT 'bx bx-extension',
+  `permissao` VARCHAR(100) NULL,
+  `tooltip` VARCHAR(100) NULL,
+  `ordem` INT DEFAULT 100,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`modulo_slug`) REFERENCES `modulos`(`slug`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

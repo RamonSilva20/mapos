@@ -149,6 +149,7 @@
                     </div>
                 </div>
             </div>
+            <?php module_hook('cliente_visualizar_extras'); ?>
         </div>
         <!--Tab 2-->
         <div id="tab2" class="tab-pane" style="min-height: 300px">

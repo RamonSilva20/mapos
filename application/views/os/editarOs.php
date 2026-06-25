@@ -66,6 +66,7 @@
                         <li id="tabServicos"><a href="#tab4" data-toggle="tab">Serviços</a></li>
                         <li id="tabAnexos"><a href="#tab5" data-toggle="tab">Anexos</a></li>
                         <li id="tabAnotacoes"><a href="#tab6" data-toggle="tab">Anotações</a></li>
+                        <?php module_hook('os_editar_tabs'); ?>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
@@ -444,6 +445,7 @@ if (!$anotacoes) {
                             </div>
                         </div>
                         <!-- Fim tab anotações -->
+                        <?php module_hook('os_editar_tab_panes'); ?>
                     </div>
                 </div>
                 &nbsp

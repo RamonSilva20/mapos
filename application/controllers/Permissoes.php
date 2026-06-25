@@ -121,6 +121,21 @@ class Permissoes extends MY_Controller
                 'dCobranca' => $this->input->post('dCobranca'),
                 'vCobranca' => $this->input->post('vCobranca'),
             ];
+
+            // Coleta permissoes declaradas por modulos ativos
+            $modsAtivos = $this->db->where('status', 'ativo')->get('modulos')->result();
+            foreach ($modsAtivos as $m) {
+                $manifestPath = FCPATH . 'modules/' . $m->slug . '/module.json';
+                if (file_exists($manifestPath)) {
+                    $manifest = json_decode(file_get_contents($manifestPath), true);
+                    foreach ((array) ($manifest['permissions'] ?? []) as $perm) {
+                        if (! array_key_exists($perm, $permissoes)) {
+                            $permissoes[$perm] = $this->input->post($perm);
+                        }
+                    }
+                }
+            }
+
             $permissoes = json_encode($permissoes);
 
             $data = [
@@ -223,6 +238,21 @@ class Permissoes extends MY_Controller
                 'vCobranca' => $this->input->post('vCobranca'),
 
             ];
+
+            // Coleta permissoes declaradas por modulos ativos
+            $modsAtivos = $this->db->where('status', 'ativo')->get('modulos')->result();
+            foreach ($modsAtivos as $m) {
+                $manifestPath = FCPATH . 'modules/' . $m->slug . '/module.json';
+                if (file_exists($manifestPath)) {
+                    $manifest = json_decode(file_get_contents($manifestPath), true);
+                    foreach ((array) ($manifest['permissions'] ?? []) as $perm) {
+                        if (! array_key_exists($perm, $permissoes)) {
+                            $permissoes[$perm] = $this->input->post($perm);
+                        }
+                    }
+                }
+            }
+
             $permissoes = json_encode($permissoes);
 
             $data = [

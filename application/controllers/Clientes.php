@@ -94,6 +94,9 @@ class Clientes extends MY_Controller
             ];
 
                 if ($this->clientes_model->add('clientes', $data) == true) {
+                    $newId   = $this->db->insert_id();
+                    $context = ['idClientes' => (int) $newId];
+                    module_controller_hook('clientes_adicionar_after_insert', $context);
                     $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
                     log_info('Adicionou um cliente.');
                     redirect(site_url('clientes/'));

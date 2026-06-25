@@ -9,7 +9,7 @@
 
 /vendor/
 /application/vendor/
-
+/modules/
 .env.local
 .env.development.local
 .env.test.local

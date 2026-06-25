@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Modulos — Map-OS Developer Docs</title>
+  <style>
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2128;
+      --border:      #30363d;
+      --accent:      #58a6ff;
+      --accent-dim:  #1f3a5f;
+      --success:     #3fb950;
+      --warning:     #d29922;
+      --danger:      #f85149;
+      --text:        #c9d1d9;
+      --text-strong: #f0f6fc;
+      --muted:       #8b949e;
+      --code-bg:     #0d1117;
+      --code-border: #30363d;
+      --sidebar-w:   272px;
+      --header-h:    48px;
+      --font-mono:   'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+      --font-sans:   -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --radius:      6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    /* ── Layout ──────────────────────────────── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+    }
+
+    #main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+
+    #topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-h);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      gap: 16px;
+      z-index: 100;
+    }
+
+    #topbar-breadcrumb {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    #topbar-breadcrumb span { color: var(--text); }
+
+    #progress-bar {
+      position: fixed;
+      top: 0; left: var(--sidebar-w);
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform .1s linear;
+      z-index: 300;
+    }
+
+    article {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 40px 120px;
+    }
+
+    /* ── Sidebar ──────────────────────────────── */
+    .sidebar-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo-mark {
+      width: 30px; height: 30px;
+      border-radius: var(--radius);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -.5px;
+    }
+
+    .sidebar-logo-text { font-size: 14px; font-weight: 600; color: var(--text-strong); }
+    .sidebar-logo-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .sidebar-version {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 8px;
+      color: var(--muted);
+    }
+
+    #sidebar nav { padding: 8px 0; flex: 1; }
+
+    .nav-group-label {
+      padding: 12px 16px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .nav-item {
+      display: block;
+      padding: 6px 16px 6px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+
+    .nav-item:hover { color: var(--text); }
+    .nav-item.active { color: var(--accent); border-left-color: var(--accent); }
+
+    .nav-item.sub { padding-left: 32px; font-size: 12px; }
+
+    /* ── Typography ──────────────────────────── */
+    h1 {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text-strong);
+      letter-spacing: -.5px;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-top: 56px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-top: 32px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+
+    p { margin-bottom: 14px; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    strong { color: var(--text-strong); font-weight: 600; }
+
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 4px; }
+    li > ul, li > ol { margin-top: 4px; margin-bottom: 0; }
+
+    .lead {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    /* ── Section anchor offset ─────────────────── */
+    section { padding-top: 8px; }
+    section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+    /* ── Inline code ──────────────────────────── */
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: #e6edf3;
+    }
+
+    /* ── Code blocks ──────────────────────────── */
+    .code-block {
+      position: relative;
+      margin: 16px 0 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--code-border);
+      background: var(--code-bg);
+      overflow: hidden;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--code-border);
+    }
+
+    .code-lang {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .code-file {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3px 10px;
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+
+    .copy-btn:hover { color: var(--text); border-color: var(--text); }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+    pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 0;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e6edf3;
+    }
+
+    /* simple token colors */
+    .t-kw  { color: #ff7b72; }   /* keywords */
+    .t-str { color: #a5d6ff; }   /* strings */
+    .t-cm  { color: #8b949e; font-style: italic; } /* comments */
+    .t-fn  { color: #d2a8ff; }   /* functions */
+    .t-nb  { color: #ffa657; }   /* numbers, booleans */
+    .t-var { color: #79c0ff; }   /* variables */
+    .t-key { color: #7ee787; }   /* json keys */
+    .t-op  { color: #ff7b72; }   /* operators */
+    .t-hl  { background: rgba(88,166,255,.08); display: block; margin: 0 -20px; padding: 0 20px; }
+
+    /* ── Callouts ─────────────────────────────── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-left: 3px solid;
+      font-size: 14px;
+    }
+
+    .callout p { margin: 0; }
+    .callout p + p { margin-top: 8px; }
+
+    .callout.info    { background: rgba(88,166,255,.07); border-color: var(--accent); }
+    .callout.warning { background: rgba(210,153,34,.08); border-color: var(--warning); }
+    .callout.danger  { background: rgba(248,81,73,.07);  border-color: var(--danger); }
+    .callout.success { background: rgba(63,185,80,.07);  border-color: var(--success); }
+
+    .callout-title {
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+
+    .callout.info    .callout-title { color: var(--accent); }
+    .callout.warning .callout-title { color: var(--warning); }
+    .callout.danger  .callout-title { color: var(--danger); }
+    .callout.success .callout-title { color: var(--success); }
+
+    /* ── Tables ───────────────────────────────── */
+    .table-wrap { overflow-x: auto; margin: 16px 0 24px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th {
+      background: var(--surface2);
+      color: var(--text-strong);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    td code { font-size: 12px; }
+
+    /* ── Badges ───────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .badge-required { background: rgba(248,81,73,.15); color: var(--danger); }
+    .badge-optional { background: rgba(139,148,158,.12); color: var(--muted); }
+    .badge-new      { background: rgba(63,185,80,.15);  color: var(--success); }
+
+    /* ── File tree ────────────────────────────── */
+    .file-tree {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      line-height: 1.9;
+      margin: 16px 0 24px;
+    }
+
+    .file-tree .dir  { color: var(--accent); }
+    .file-tree .file { color: var(--text); }
+    .file-tree .note { color: var(--muted); }
+    .file-tree .req  { color: var(--danger); }
+
+    /* ── Step list ────────────────────────────── */
+    .step-list { counter-reset: step; list-style: none; padding: 0; margin: 0 0 24px; }
+
+    .step-list li {
+      counter-increment: step;
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .step-list li > div { flex: 1; }
+    .step-list li > div h4 { margin-top: 0; }
+
+    /* ── Hook reference ───────────────────────── */
+    .hook-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .hook-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hook-name {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hook-location {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .hook-card-body {
+      padding: 12px 16px;
+      font-size: 13.5px;
+    }
+
+    /* ── Divider ──────────────────────────────── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 768px) {
+      #sidebar  { transform: translateX(-100%); transition: transform .2s; }
+      #sidebar.open { transform: translateX(0); }
+      #main     { margin-left: 0; }
+      article   { padding: 24px 20px 80px; }
+      #progress-bar { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── Sidebar ──────────────────────────────────────────────── -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">MO</div>
+      <div>
+        <div class="sidebar-logo-text">Map-OS</div>
+        <div class="sidebar-logo-sub">Developer Documentation</div>
+      </div>
+    </div>
+    <span class="sidebar-version">Module System v1.0</span>
+  </div>
+
+  <nav>
+    <div class="nav-group-label">Introducao</div>
+    <a class="nav-item" href="#overview">Visao Geral</a>
+    <a class="nav-item" href="#architecture">Arquitetura</a>
+    <a class="nav-item" href="#install-flow">Fluxo de Instalacao</a>
+
+    <div class="nav-group-label">Estrutura do Modulo</div>
+    <a class="nav-item" href="#directory">Estrutura de Diretorios</a>
+    <a class="nav-item" href="#manifest">module.json</a>
+    <a class="nav-item sub" href="#manifest-fields">Campos do Manifest</a>
+    <a class="nav-item" href="#migrations">SQL Migrations</a>
+    <a class="nav-item" href="#install-scripts">Scripts de Instalacao</a>
+
+    <div class="nav-group-label">Desenvolvimento</div>
+    <a class="nav-item" href="#controllers">Controllers</a>
+    <a class="nav-item" href="#models">Models</a>
+    <a class="nav-item" href="#views">Views</a>
+    <a class="nav-item" href="#view-hooks">View Hooks</a>
+    <a class="nav-item sub" href="#hook-points">Pontos de Injecao (Views)</a>
+    <a class="nav-item" href="#controller-hooks">Controller Hooks</a>
+    <a class="nav-item sub" href="#proxy-system">Sistema de Proxy</a>
+    <a class="nav-item sub" href="#manual-controller-hooks">Hooks Manuais</a>
+    <a class="nav-item sub" href="#controller-hook-points">Pontos de Injecao (Controllers)</a>
+    <a class="nav-item" href="#menu">Menu Dinamico</a>
+    <a class="nav-item" href="#configurations">Configuracoes</a>
+
+    <div class="nav-group-label">Referencia</div>
+    <a class="nav-item" href="#api">API Reference</a>
+    <a class="nav-item" href="#example-module">Modulo de Exemplo</a>
+    <a class="nav-item sub" href="#example-structure">Estrutura</a>
+    <a class="nav-item sub" href="#example-manifest">manifest</a>
+    <a class="nav-item sub" href="#example-migration">migration</a>
+    <a class="nav-item sub" href="#example-controller">controller</a>
+    <a class="nav-item sub" href="#example-hooks">view hooks</a>
+    <a class="nav-item" href="#troubleshooting">Troubleshooting</a>
+  </nav>
+</aside>
+
+<!-- ── Main ─────────────────────────────────────────────────── -->
+<div id="main">
+  <div id="topbar">
+    <div id="topbar-breadcrumb">
+      Map-OS &rsaquo; <span>Sistema de Modulos</span>
+    </div>
+  </div>
+
+  <article>
+
+    <!-- ── Overview ─────────────────────────────── -->
+    <section id="overview">
+      <h1>Sistema de Modulos</h1>
+      <p class="lead">
+        O sistema de modulos do Map-OS permite estender a aplicacao sem modificar o
+        codigo principal. Um modulo e um pacote ZIP autocontido que pode adicionar novas
+        paginas, executar SQL, injetar conteudo em views existentes e registrar
+        configuracoes — tudo gerenciado pelo painel administrativo.
+      </p>
+
+      <h3>O que um modulo pode fazer</h3>
+      <ul>
+        <li>Criar novas tabelas no banco de dados</li>
+        <li>Adicionar controllers e models acessiveis via URL normal</li>
+        <li>Injetar blocos HTML em pontos especificos de views existentes</li>
+        <li>Adicionar itens ao menu lateral</li>
+        <li>Registrar entradas na tabela <code>configuracoes</code></li>
+        <li>Executar logica arbitraria no install e uninstall via PHP</li>
+      </ul>
+
+      <h3>O que um modulo nao pode fazer</h3>
+      <ul>
+        <li>Modificar arquivos do core da aplicacao</li>
+        <li>Sobrescrever controllers ou models existentes</li>
+        <li>Injetar conteudo em pontos que nao possuem um hook declarado</li>
+      </ul>
+    </section>
+
+    <!-- ── Architecture ──────────────────────────── -->
+    <section id="architecture">
+      <h2>Arquitetura</h2>
+
+      <p>
+        Os arquivos do modulo residem permanentemente em <code>modules/&lt;slug&gt;/</code>
+        na raiz do projeto. Nenhum arquivo e copiado para dentro de
+        <code>application/</code> durante a instalacao, com excecao de arquivos
+        wrapper finos para controllers e models.
+      </p>
+
+      <h3>Componentes do sistema</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Componente</th>
+              <th>Localizacao</th>
+              <th>Responsabilidade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Module_manager</code></td>
+              <td><code>application/libraries/</code></td>
+              <td>Upload, instalacao, desinstalacao, toggle de status</td>
+            </tr>
+            <tr>
+              <td><code>MY_Controller</code></td>
+              <td><code>application/core/</code></td>
+              <td>Carrega modulos ativos, registra view hooks, popula menu</td>
+            </tr>
+            <tr>
+              <td><code>module_hook()</code></td>
+              <td><code>application/helpers/</code></td>
+              <td>Executa pontos de injecao nas views existentes</td>
+            </tr>
+            <tr>
+              <td><code>Module_dispatch</code></td>
+              <td><code>application/controllers/</code></td>
+              <td>Proxy que roteia requisicoes para controllers de modulos</td>
+            </tr>
+            <tr>
+              <td>Tabela <code>modulos</code></td>
+              <td>Banco de dados</td>
+              <td>Registro de modulos instalados e seus status</td>
+            </tr>
+            <tr>
+              <td>Tabela <code>modulo_menu_items</code></td>
+              <td>Banco de dados</td>
+              <td>Itens de menu dinamicos por modulo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Ciclo de vida de uma requisicao com modulo ativo</h3>
+      <ol>
+        <li><code>MY_Controller::load_configuration()</code> executa em todo request autenticado</li>
+        <li>Consulta a tabela <code>modulos</code> por registros com <code>status = 'ativo'</code></li>
+        <li>Para cada modulo ativo, chama <code>add_package_path()</code> com o diretorio do modulo</li>
+        <li>Le o arquivo <code>hooks/module_hooks.php</code> do modulo e registra os view hooks na config do CI</li>
+        <li>Popula <code>$data['module_menu_items']</code> com os itens de menu do banco</li>
+        <li>Quando uma view chama <code>module_hook('nome_do_hook')</code>, o arquivo de hook correspondente e incluido no escopo da funcao com as variaveis da view disponibilizadas via <code>extract()</code></li>
+      </ol>
+
+      <h3>Roteamento de controllers de modulos</h3>
+      <p>
+        O CI3 resolve controllers exclusivamente em <code>application/controllers/</code>.
+        Para suportar controllers em <code>modules/&lt;slug&gt;/controllers/</code>, o
+        sistema utiliza duas estrategias em conjunto:
+      </p>
+      <ol>
+        <li>
+          Durante a instalacao, o <code>Module_manager</code> cria um arquivo wrapper
+          thin em <code>application/controllers/</code> que faz <code>require_once</code>
+          do arquivo real no diretorio do modulo.
+        </li>
+        <li>
+          Como fallback (caso o diretorio nao tenha permissao de escrita),
+          <code>$route['404_override'] = 'module_dispatch'</code> captura a requisicao
+          e despacha para o controller correto via <code>Module_dispatch</code>.
+        </li>
+      </ol>
+    </section>
+
+    <!-- ── Install Flow ───────────────────────────── -->
+    <section id="install-flow">
+      <h2>Fluxo de Instalacao</h2>
+
+      <ol class="step-list">
+        <li>
+          <div>
+            <h4>Upload do ZIP</h4>
+            <p>
+              O usuario acessa <strong>Modulos &rsaquo; Instalar Modulo</strong> e faz
+              upload de um arquivo <code>.zip</code>. O <code>Module_manager::upload()</code>
+              extrai o ZIP em um diretorio temporario (<code>modules/tmp_xxx/</code>),
+              realiza o unwrap caso o ZIP contenha uma subpasta raiz, valida o
+              <code>module.json</code> e move o conteudo para <code>modules/&lt;slug&gt;/</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Confirmacao</h4>
+            <p>
+              O usuario e redirecionado para uma pagina de confirmacao que exibe as
+              informacoes do modulo (nome, versao, autor, descricao), os itens de menu
+              que serao criados, as configuracoes que serao inseridas e se ha SQL de
+              migracao a ser executado.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Instalacao</h4>
+            <p>O <code>Module_manager::install()</code> executa na ordem:</p>
+            <ol>
+              <li>Executa <code>migrations/install.sql</code> query por query</li>
+              <li>Inclui <code>install.php</code> do modulo (com <code>$CI</code> disponivel)</li>
+              <li>Cria wrappers em <code>application/controllers/</code> e <code>application/models/</code></li>
+              <li>Insere itens de menu em <code>modulo_menu_items</code></li>
+              <li>Insere configuracoes em <code>configuracoes</code> via <code>INSERT IGNORE</code></li>
+              <li>Registra o modulo em <code>modulos</code> com <code>status = 'ativo'</code></li>
+            </ol>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Desinstalacao</h4>
+            <p>O processo reverso: executa <code>migrations/uninstall.sql</code>,
+            inclui <code>uninstall.php</code>, remove os wrappers, remove configuracoes,
+            deleta o registro do banco e remove o diretorio <code>modules/&lt;slug&gt;/</code>.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ── Directory Structure ───────────────────── -->
+    <section id="directory">
+      <h2>Estrutura de Diretorios</h2>
+
+      <div class="file-tree">
+<span class="dir">modules/</span>
+<span class="dir">  meu_modulo/</span>
+<span class="req">    module.json</span>            <span class="note">&lt;-- obrigatorio</span>
+    install.php             <span class="note">&lt;-- executa na instalacao</span>
+    uninstall.php           <span class="note">&lt;-- executa na desinstalacao</span>
+<span class="dir">    controllers/</span>
+<span class="file">      Meu_modulo.php</span>
+<span class="dir">    models/</span>
+<span class="file">      Meu_modulo_model.php</span>
+<span class="dir">    views/</span>
+<span class="file">      index.php</span>
+<span class="dir">      hooks/</span>
+<span class="file">        meu_hook.php</span>       <span class="note">&lt;-- conteudo injetado em views existentes</span>
+<span class="dir">    hooks/</span>
+<span class="file">      module_hooks.php</span>    <span class="note">&lt;-- registra os view hooks</span>
+<span class="dir">    migrations/</span>
+<span class="file">      install.sql</span>
+<span class="file">      uninstall.sql</span>
+<span class="dir">    assets/</span>
+<span class="dir">      css/</span>
+<span class="dir">      js/</span>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Convencao de nomenclatura</div>
+        <p>
+          O <code>slug</code> do modulo deve conter apenas letras minusculas, numeros e
+          underscores. O nome do arquivo do controller deve ser <code>ucfirst(slug).php</code>
+          (ex: slug <code>meu_modulo</code> &rarr; arquivo <code>Meu_modulo.php</code>
+          &rarr; classe <code>Meu_modulo</code>).
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Manifest ──────────────────────────────── -->
+    <section id="manifest">
+      <h2>module.json</h2>
+
+      <p>
+        O <code>module.json</code> e o unico arquivo obrigatorio em um modulo. Ele
+        descreve o modulo e declara todos os recursos que serao provisionados durante
+        a instalacao.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">json</span>
+          <span class="code-file">module.json</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code>{
+  <span class="t-key">"slug"</span>:        <span class="t-str">"meu_modulo"</span>,
+  <span class="t-key">"name"</span>:        <span class="t-str">"Meu Modulo"</span>,
+  <span class="t-key">"version"</span>:     <span class="t-str">"1.0.0"</span>,
+  <span class="t-key">"description"</span>: <span class="t-str">"Descricao breve do modulo."</span>,
+  <span class="t-key">"author"</span>:      <span class="t-str">"Seu Nome"</span>,
+
+  <span class="t-key">"menu"</span>: [
+    {
+      <span class="t-key">"title"</span>:      <span class="t-str">"Meu Modulo"</span>,
+      <span class="t-key">"url"</span>:        <span class="t-str">"meu_modulo"</span>,
+      <span class="t-key">"icon"</span>:       <span class="t-str">"bx bx-extension"</span>,
+      <span class="t-key">"permission"</span>: <span class="t-str">"vMeuModulo"</span>,
+      <span class="t-key">"tooltip"</span>:    <span class="t-str">"Meu Modulo"</span>,
+      <span class="t-key">"ordem"</span>:      <span class="nb">150</span>
+    }
+  ],
+
+  <span class="t-key">"configurations"</span>: [
+    { <span class="t-key">"key"</span>: <span class="t-str">"meu_modulo_opcao"</span>, <span class="t-key">"value"</span>: <span class="t-str">"padrao"</span> }
+  ],
+
+  <span class="t-key">"view_hooks"</span>: [
+    {
+      <span class="t-key">"hook"</span>: <span class="t-str">"os_detail_extras"</span>,
+      <span class="t-key">"view"</span>: <span class="t-str">"hooks/meu_hook.php"</span>
+    }
+  ],
+
+  <span class="t-key">"screenshots"</span>: [
+    <span class="t-str">"https://exemplo.com/img/screen1.png"</span>,
+    <span class="t-str">"https://exemplo.com/img/screen2.png"</span>
+  ],
+  <span class="t-key">"video_url"</span>: <span class="t-str">"https://www.youtube.com/watch?v=VIDEO_ID"</span>
+}</code></pre>
+      </div>
+
+      <section id="manifest-fields">
+        <h3>Campos do Manifest</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Obrigatorio</th>
+                <th>Descricao</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>slug</code></td>
+                <td>string</td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Identificador unico. Apenas <code>[a-z0-9_]</code>. Define o nome do diretorio e das URLs.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Nome de exibicao no painel.</td>
+              </tr>
+              <tr>
+                <td><code>version</code></td>
+                <td>string</td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Versao no formato semver. Ex: <code>"1.0.0"</code>.</td>
+              </tr>
+              <tr>
+                <td><code>description</code></td>
+                <td>string</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Descricao exibida na pagina de confirmacao de instalacao.</td>
+              </tr>
+              <tr>
+                <td><code>author</code></td>
+                <td>string</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Nome do autor ou organizacao.</td>
+              </tr>
+              <tr>
+                <td><code>menu</code></td>
+                <td>array</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Lista de itens a serem adicionados ao menu lateral. Ver tabela abaixo.</td>
+              </tr>
+              <tr>
+                <td><code>configurations</code></td>
+                <td>array</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Pares <code>key/value</code> inseridos via <code>INSERT IGNORE</code> em <code>configuracoes</code>.</td>
+              </tr>
+              <tr>
+                <td><code>view_hooks</code></td>
+                <td>array</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Declarativo — apenas documentacao. O registro real ocorre em <code>hooks/module_hooks.php</code>.</td>
+              </tr>
+              <tr>
+                <td><code>screenshots</code></td>
+                <td>array</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Lista de URLs de imagens exibidas na pagina <code>modulos/visualizar/$slug</code> e na tela de confirmacao de instalacao. Imagens invalidas sao ocultadas silenciosamente.</td>
+              </tr>
+              <tr>
+                <td><code>video_url</code></td>
+                <td>string</td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>URL de video do YouTube (<code>youtube.com/watch?v=…</code> ou <code>youtu.be/…</code>). Exibido como iframe responsivo na pagina de detalhes e na confirmacao de instalacao.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Campos de um item de menu</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Campo</th><th>Obrigatorio</th><th>Descricao</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>title</code></td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Texto do item no menu.</td>
+              </tr>
+              <tr>
+                <td><code>url</code></td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Segmento de URL relativo ao <code>site_url()</code>. Ex: <code>"meu_modulo/lista"</code>.</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td><span class="badge badge-required">Sim</span></td>
+                <td>Classe de icone Boxicons. Ex: <code>"bx bx-list-ul"</code>.</td>
+              </tr>
+              <tr>
+                <td><code>permission</code></td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Permissao requerida para exibir o item. Se vazio, visivel para todos os logados.</td>
+              </tr>
+              <tr>
+                <td><code>tooltip</code></td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Texto do tooltip. Usa <code>title</code> se omitido.</td>
+              </tr>
+              <tr>
+                <td><code>ordem</code></td>
+                <td><span class="badge badge-optional">Nao</span></td>
+                <td>Ordem de exibicao ascendente. Padrao: <code>100</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ── Migrations ─────────────────────────────── -->
+    <section id="migrations">
+      <h2>SQL Migrations</h2>
+
+      <p>
+        Os arquivos SQL sao executados statement por statement, separados por
+        ponto-e-virgula. Use <code>IF NOT EXISTS</code> e <code>IF EXISTS</code> para
+        tornar as migracoes idempotentes.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">sql</span>
+          <span class="code-file">migrations/install.sql</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-kw">CREATE TABLE IF NOT EXISTS</span> `meu_modulo_dados` (
+  `id`           INT          NOT NULL AUTO_INCREMENT,
+  `clientes_id`  INT          NOT NULL,
+  `conteudo`     TEXT         NULL,
+  `criado_em`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `atualizado_em` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+                              ON UPDATE CURRENT_TIMESTAMP,
+  <span class="t-kw">PRIMARY KEY</span> (`id`),
+  <span class="t-kw">INDEX</span> `idx_clientes_id` (`clientes_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">sql</span>
+          <span class="code-file">migrations/uninstall.sql</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-kw">DROP TABLE IF EXISTS</span> `meu_modulo_dados`;</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-title">Atencao</div>
+        <p>
+          O <code>uninstall.sql</code> e executado antes da remocao do modulo.
+          Certifique-se de incluir <code>DROP TABLE IF EXISTS</code> para todas as
+          tabelas criadas pelo <code>install.sql</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Install Scripts ───────────────────────── -->
+    <section id="install-scripts">
+      <h2>Scripts de Instalacao e Desinstalacao</h2>
+
+      <p>
+        Os arquivos <code>install.php</code> e <code>uninstall.php</code> sao incluidos
+        pelo <code>Module_manager</code> com a variavel <code>$CI</code> disponivel no
+        escopo, alem de <code>$moduleSlug</code> e <code>$moduleManifest</code>.
+        Use-os para logica que nao pode ser expressa em SQL puro.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <span class="code-file">install.php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-cm">// $CI, $moduleSlug e $moduleManifest estao disponíveis</span>
+
+<span class="t-cm">// Exemplo: inserir permissao padrao para o grupo Administrador</span>
+<span class="t-var">$grupo</span> = <span class="t-var">$CI</span>-><span class="t-var">db</span>
+    -><span class="t-fn">where</span>(<span class="t-str">'nome'</span>, <span class="t-str">'Administrador'</span>)
+    -><span class="t-fn">get</span>(<span class="t-str">'grupos'</span>)
+    -><span class="t-fn">row</span>();
+
+<span class="t-kw">if</span> (<span class="t-var">$grupo</span>) {
+    <span class="t-var">$CI</span>-><span class="t-var">db</span>-><span class="t-fn">query</span>(
+        <span class="t-str">"INSERT IGNORE INTO `grupos_permissoes`
+         (`grupos_id`, `permissao`) VALUES (?, ?)"</span>,
+        [<span class="t-var">$grupo</span>-><span class="t-var">id</span>, <span class="t-str">'vMeuModulo'</span>]
+    );
+}</code></pre>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Nota</div>
+        <p>
+          Se o modulo nao precisar executar nenhuma logica PHP adicional,
+          basta deixar o arquivo com um comentario vazio. O arquivo deve existir
+          mas pode estar em branco.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Controllers ───────────────────────────── -->
+    <section id="controllers">
+      <h2>Controllers</h2>
+
+      <p>
+        Controllers de modulos seguem exatamente as mesmas convencoes do CI3. Eles
+        devem estender <code>MY_Controller</code> para herdar autenticacao, carregamento
+        de configuracoes e permissoes.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <span class="code-file">controllers/Meu_modulo.php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-kw">if</span> (!<span class="t-fn">defined</span>(<span class="t-str">'BASEPATH'</span>)) <span class="t-fn">exit</span>(<span class="t-str">'No direct script access allowed'</span>);
+
+<span class="t-kw">class</span> <span class="t-fn">Meu_modulo</span> <span class="t-kw">extends</span> <span class="t-fn">MY_Controller</span>
+{
+    <span class="t-kw">public function</span> <span class="t-fn">__construct</span>()
+    {
+        <span class="t-kw">parent</span>::<span class="t-fn">__construct</span>();
+
+        <span class="t-kw">if</span> (!<span class="t-var">$this</span>-><span class="t-var">permission</span>-><span class="t-fn">checkPermission</span>(
+            <span class="t-var">$this</span>-><span class="t-var">session</span>-><span class="t-fn">userdata</span>(<span class="t-str">'permissao'</span>),
+            <span class="t-str">'vMeuModulo'</span>
+        )) {
+            <span class="t-fn">redirect</span>(<span class="t-fn">site_url</span>(<span class="t-str">'dashboard'</span>));
+        }
+    }
+
+    <span class="t-kw">public function</span> <span class="t-fn">index</span>()
+    {
+        <span class="t-var">$this</span>-><span class="t-var">data</span>[<span class="t-str">'view'</span>] = <span class="t-str">'meu_modulo/index'</span>;
+        <span class="t-kw">return</span> <span class="t-var">$this</span>-><span class="t-fn">layout</span>();
+    }
+
+    <span class="t-cm">// Endpoint AJAX — retorna JSON, sem layout</span>
+    <span class="t-kw">public function</span> <span class="t-fn">get</span>(<span class="t-nb">int</span> <span class="t-var">$id</span>)
+    {
+        <span class="t-var">$row</span> = <span class="t-var">$this</span>-><span class="t-var">db</span>
+            -><span class="t-fn">where</span>(<span class="t-str">'id'</span>, <span class="t-var">$id</span>)
+            -><span class="t-fn">get</span>(<span class="t-str">'meu_modulo_dados'</span>)
+            -><span class="t-fn">row</span>();
+
+        <span class="t-var">$this</span>-><span class="t-var">output</span>
+            -><span class="t-fn">set_content_type</span>(<span class="t-str">'application/json'</span>)
+            -><span class="t-fn">set_output</span>(<span class="t-fn">json_encode</span>([
+                <span class="t-str">'dados'</span> => <span class="t-var">$row</span> ? <span class="t-var">$row</span>-><span class="t-var">conteudo</span> : <span class="t-str">''</span>
+            ]));
+    }
+}</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-title">Convencao de nomenclatura</div>
+        <p>
+          O nome da classe deve ser <code>ucfirst</code> do slug. Para o slug
+          <code>meu_modulo</code>, a classe e <code>Meu_modulo</code> (nao
+          <code>MeuModulo</code>). O arquivo deve se chamar <code>Meu_modulo.php</code>.
+        </p>
+      </div>
+
+      <p>
+        O controller e acessivel via <code>/meu_modulo/index</code> ou
+        <code>/meu_modulo/get/1</code> sem nenhuma configuracao de rotas adicional.
+      </p>
+    </section>
+
+    <!-- ── Models ────────────────────────────────── -->
+    <section id="models">
+      <h2>Models</h2>
+
+      <p>
+        Models de modulos seguem o mesmo padrao do CI3. Como o diretorio do modulo e
+        adicionado ao <code>package_path</code> durante o carregamento, voce pode
+        usar <code>$this->load->model()</code> normalmente de dentro do controller do modulo.
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <span class="code-file">models/Meu_modulo_model.php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-kw">if</span> (!<span class="t-fn">defined</span>(<span class="t-str">'BASEPATH'</span>)) <span class="t-fn">exit</span>(<span class="t-str">'No direct script access allowed'</span>);
+
+<span class="t-kw">class</span> <span class="t-fn">Meu_modulo_model</span> <span class="t-kw">extends</span> <span class="t-fn">CI_Model</span>
+{
+    <span class="t-kw">public function</span> <span class="t-fn">getPorCliente</span>(<span class="t-nb">int</span> <span class="t-var">$clienteId</span>)
+    {
+        <span class="t-kw">return</span> <span class="t-var">$this</span>-><span class="t-var">db</span>
+            -><span class="t-fn">where</span>(<span class="t-str">'clientes_id'</span>, <span class="t-var">$clienteId</span>)
+            -><span class="t-fn">get</span>(<span class="t-str">'meu_modulo_dados'</span>)
+            -><span class="t-fn">row</span>();
+    }
+
+    <span class="t-kw">public function</span> <span class="t-fn">salvar</span>(<span class="t-nb">int</span> <span class="t-var">$clienteId</span>, <span class="t-nb">string</span> <span class="t-var">$conteudo</span>)
+    {
+        <span class="t-var">$existe</span> = <span class="t-var">$this</span>-><span class="t-var">db</span>
+            -><span class="t-fn">where</span>(<span class="t-str">'clientes_id'</span>, <span class="t-var">$clienteId</span>)
+            -><span class="t-fn">count_all_results</span>(<span class="t-str">'meu_modulo_dados'</span>) > <span class="t-nb">0</span>;
+
+        <span class="t-kw">if</span> (<span class="t-var">$existe</span>) {
+            <span class="t-kw">return</span> <span class="t-var">$this</span>-><span class="t-var">db</span>-><span class="t-fn">update</span>(
+                <span class="t-str">'meu_modulo_dados'</span>,
+                [<span class="t-str">'conteudo'</span> => <span class="t-var">$conteudo</span>],
+                [<span class="t-str">'clientes_id'</span> => <span class="t-var">$clienteId</span>]
+            );
+        }
+        <span class="t-kw">return</span> <span class="t-var">$this</span>-><span class="t-var">db</span>-><span class="t-fn">insert</span>(<span class="t-str">'meu_modulo_dados'</span>, [
+            <span class="t-str">'clientes_id'</span> => <span class="t-var">$clienteId</span>,
+            <span class="t-str">'conteudo'</span>     => <span class="t-var">$conteudo</span>,
+        ]);
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ── Views ─────────────────────────────────── -->
+    <section id="views">
+      <h2>Views</h2>
+
+      <p>
+        Views de modulos ficam em <code>modules/&lt;slug&gt;/views/</code>. Como o
+        diretorio do modulo e adicionado ao <code>package_path</code>, o CI3 consegue
+        encontra-las automaticamente:
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <span class="code-file">controllers/Meu_modulo.php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-var">$this</span>-><span class="t-var">data</span>[<span class="t-str">'view'</span>] = <span class="t-str">'meu_modulo/index'</span>;
+<span class="t-kw">return</span> <span class="t-var">$this</span>-><span class="t-fn">layout</span>();</code></pre>
+      </div>
+
+      <p>
+        O CI3 ira procurar por <code>meu_modulo/index.php</code> no diretorio de views
+        do modulo (<code>modules/meu_modulo/views/meu_modulo/index.php</code>) alem
+        do diretorio padrao.
+      </p>
+
+      <p>
+        Dentro das views, todas as variaveis passadas pelo controller via
+        <code>$this->data</code> estao disponíveis normalmente, assim como os helpers
+        globais do CI3 (<code>site_url()</code>, <code>base_url()</code>, etc.).
+      </p>
+    </section>
+
+    <!-- ── View Hooks ────────────────────────────── -->
+    <section id="view-hooks">
+      <h2>View Hooks</h2>
+
+      <p>
+        View hooks permitem que um modulo injete conteudo HTML em pontos especificos
+        de views existentes da aplicacao sem modificar os arquivos originais.
+      </p>
+
+      <h3>Como funcionam</h3>
+
+      <ol class="step-list">
+        <li>
+          <div>
+            <h4>Declarar o hook no modulo</h4>
+            <p>Crie o arquivo <code>hooks/module_hooks.php</code> no modulo:</p>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">php</span>
+                <span class="code-file">hooks/module_hooks.php</span>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code><span class="t-var">$moduleViewHooks</span> = [
+    <span class="t-str">'os_detail_extras'</span> => [
+        FCPATH . <span class="t-str">'modules/meu_modulo/views/hooks/os_extras.php'</span>,
+    ],
+];</code></pre>
+            </div>
+            <p>
+              O array pode conter multiplos arquivos para o mesmo hook. Todos serao
+              incluidos em ordem.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Chamar o hook na view existente</h4>
+            <p>
+              Adicione <code>module_hook()</code> nos pontos da view onde o conteudo
+              deve ser injetado. Isso ja foi feito nas views listadas na secao
+              <a href="#hook-points">Pontos de Injecao</a>.
+            </p>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">php</span>
+                <span class="code-file">application/views/os/visualizar.php</span>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code><span class="t-cm">&lt;!-- ... conteudo existente ... --&gt;</span>
+&lt;?<span class="t-kw">php</span> <span class="t-fn">module_hook</span>(<span class="t-str">'os_detail_extras'</span>); ?&gt;
+<span class="t-cm">&lt;!-- ... continua ... --&gt;</span></code></pre>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Escrever o arquivo de hook</h4>
+            <p>
+              O arquivo incluido roda com acesso a todas as variaveis da view
+              (via <code>extract()</code>) e ao CI via <code>get_instance()</code>.
+              Use sempre <code>$CI = &amp;get_instance()</code> em vez de <code>$this</code>
+              pois o arquivo nao esta dentro de um metodo de classe.
+            </p>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">php</span>
+                <span class="code-file">views/hooks/os_extras.php</span>
+                <button class="copy-btn">Copiar</button>
+              </div>
+              <pre><code><span class="t-var">$CI</span>  = &amp;<span class="t-fn">get_instance</span>();
+<span class="t-var">$osId</span> = <span class="t-nb">isset</span>(<span class="t-var">$result</span>) ? (<span class="t-nb">int</span>) <span class="t-var">$result</span>-><span class="t-var">idOs</span> : (<span class="t-nb">int</span>) <span class="t-var">$CI</span>-><span class="t-var">uri</span>-><span class="t-fn">segment</span>(<span class="t-nb">3</span>);
+<span class="t-kw">if</span> (!<span class="t-var">$osId</span>) <span class="t-kw">return</span>;
+
+<span class="t-var">$dados</span> = <span class="t-var">$CI</span>-><span class="t-var">db</span>
+    -><span class="t-fn">where</span>(<span class="t-str">'os_id'</span>, <span class="t-var">$osId</span>)
+    -><span class="t-fn">get</span>(<span class="t-str">'meu_modulo_dados'</span>)
+    -><span class="t-fn">row</span>();
+?&gt;
+&lt;div class="widget-box"&gt;
+    &lt;div class="widget-title"&gt;
+        &lt;h5&gt;Dados Extras&lt;/h5&gt;
+    &lt;/div&gt;
+    &lt;div class="widget-content"&gt;
+        &lt;?= $dados ? htmlspecialchars($dados-&gt;conteudo) : 'Nenhum dado.' ?&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <section id="hook-points">
+        <h3>Pontos de Injecao Disponiveis (Views)</h3>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_listagem_th</span>
+            <span class="hook-location">views/clientes/clientes.php — &lt;thead&gt;, antes de "Acoes"</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado na linha de cabecalho da tabela de clientes. Use para adicionar um <code>&lt;th&gt;</code>.
+            Nenhuma variavel de contexto; e renderizado uma unica vez.
+          </div>
+        </div>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_listagem_td</span>
+            <span class="hook-location">views/clientes/clientes.php — &lt;tbody&gt;, antes da coluna "Acoes", por linha</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado uma vez por linha do foreach de clientes. A variavel
+            <code>$cliente_row</code> contem o objeto da linha atual (injetada via
+            <code>get_instance()-&gt;load-&gt;vars(['cliente_row' => $r])</code> antes da chamada).
+            Use para adicionar um <code>&lt;td&gt;</code> por cliente.
+          </div>
+        </div>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_editar_form_extras</span>
+            <span class="hook-location">views/clientes/editarCliente.php — dentro do &lt;form&gt;, antes dos botoes</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado <strong>dentro</strong> do formulario de edicao, imediatamente antes de
+            <code>&lt;div class="form-actions"&gt;</code>. Ideal para adicionar campos
+            <code>control-group</code> que se integram visualmente ao formulario existente.
+            A variavel <code>$result</code> contem o objeto do cliente.
+          </div>
+        </div>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_adicionar_form_extras</span>
+            <span class="hook-location">views/clientes/adicionarCliente.php — dentro do &lt;form&gt;, antes dos botoes</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado <strong>dentro</strong> do formulario de criacao de cliente, imediatamente antes de
+            <code>&lt;div class="form-actions"&gt;</code>. Campos de input com <code>name</code> definido
+            serao submetidos junto com o formulario. Use o hook de controller
+            <code>clientes_adicionar_after_insert</code> para processar esses campos apos o insert.
+          </div>
+        </div>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_editar_extras</span>
+            <span class="hook-location">views/clientes/editarCliente.php — apos o fechamento do &lt;form&gt;</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado apos o fechamento do formulario principal de edicao de cliente.
+            A variavel <code>$result</code> contem o objeto do cliente.
+            Util para widgets independentes ou paineis fora do form.
+          </div>
+        </div>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">cliente_visualizar_extras</span>
+            <span class="hook-location">views/clientes/visualizar.php — dentro da aba principal</span>
+          </div>
+          <div class="hook-card-body">
+            Injetado dentro da primeira aba da pagina de visualizacao do cliente, apos os acordeons de dados existentes.
+            A variavel <code>$result</code> contem o objeto do cliente.
+            Ideal para adicionar um novo bloco accordion-group.
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Adicionando novos pontos de injecao</div>
+          <p>
+            Para adicionar um novo ponto de injecao em qualquer view existente, insira
+            <code>&lt;?php module_hook('nome_do_hook'); ?&gt;</code> no local desejado.
+            O helper <code>module_hook</code> e carregado automaticamente via autoload.
+            Para passar dados de contexto (ex: objeto de uma linha de loop), use
+            <code>get_instance()-&gt;load-&gt;vars(['chave' => $valor])</code> antes da chamada.
+          </p>
+        </div>
+      </section>
+    </section>
+
+
+    <!-- ── Controller Hooks ─────────────────────── -->
+    <section id="controller-hooks">
+      <h2>Controller Hooks</h2>
+
+      <p>
+        Controller hooks permitem que um modulo execute logica em pontos especificos de
+        controllers existentes — sem modificar os arquivos originais. Ao contrario dos
+        view hooks (que apenas injetam HTML), os controller hooks podem alterar o fluxo
+        de execucao, adicionar dados a operacoes de save, ou interromper uma operacao
+        inteiramente (ex: bloquear um login).
+      </p>
+
+      <p>
+        Ha dois tipos de controller hooks: <strong>hooks de proxy</strong> (gerados
+        automaticamente para qualquer metodo de qualquer controller) e
+        <strong>hooks manuais</strong> (inseridos explicitamente no controller para
+        cenarios onde o proxy nao e suficiente).
+      </p>
+
+      <!-- ── Sistema de Proxy Automatico ── -->
+      <section id="proxy-system">
+        <h3>Sistema de Proxy Automatico</h3>
+
+        <p>
+          Quando um modulo declara um hook com a convencao
+          <code>before::Controller::metodo</code> ou <code>after::Controller::metodo</code>,
+          o sistema de modulos gera automaticamente uma <em>classe proxy</em> para o
+          controller referenciado. Isso acontece no momento da instalacao e nenhuma
+          alteracao manual no controller e necessaria.
+        </p>
+
+        <h4>O que o sistema faz ao instalar o modulo</h4>
+
+        <ol class="step-list">
+          <li>
+            <div>
+              <h4>Detecta os controllers necessarios</h4>
+              <p>
+                O sistema analisa as chaves de <code>$moduleControllerHooks</code> que
+                seguem o padrao <code>before::X::*</code> ou <code>after::X::*</code>
+                e extrai o nome do controller (<code>X</code>).
+              </p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h4>Faz backup do controller original</h4>
+              <p>
+                O arquivo <code>application/controllers/Mine.php</code> e copiado para
+                <code>application/controllers/__originals/Mine.php</code> e a classe e
+                renomeada internamente de <code>Mine</code> para <code>Mine__real</code>.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h4>Gera o arquivo proxy</h4>
+              <p>
+                Um novo <code>application/controllers/Mine.php</code> e gerado. Ele inclui
+                o backup e declara uma classe <code>Mine extends Mine__real</code> onde
+                cada metodo publico e envolvido com as chamadas de hook:
+              </p>
+              <div class="code-block">
+                <div class="code-block-header">
+                  <span class="code-lang">php</span>
+                  <span class="code-file">application/controllers/Mine.php (gerado)</span>
+                  <button class="copy-btn">Copiar</button>
+                </div>
+                <pre><code><span class="t-cm">// Auto-gerado pelo Module_manager — nao edite manualmente.</span>
+<span class="t-kw">require_once</span> <span class="t-kw">__DIR__</span> . <span class="t-str">'/__originals/Mine.php'</span>;
+
+<span class="t-kw">class</span> <span class="t-class">Mine</span> <span class="t-kw">extends</span> <span class="t-class">Mine__real</span>
+{
+    <span class="t-kw">public function</span> <span class="t-fn">login</span>()
+    {
+        <span class="t-var">$args</span> = <span class="t-fn">func_get_args</span>();
+        <span class="t-var">$ctx</span>  = [
+            <span class="t-str">'controller'</span> =&gt; <span class="t-str">'Mine'</span>,
+            <span class="t-str">'method'</span>     =&gt; <span class="t-str">'login'</span>,
+            <span class="t-str">'args'</span>       =&gt; &amp;<span class="t-var">$args</span>,
+            <span class="t-str">'result'</span>     =&gt; <span class="t-nb">null</span>,
+        ];
+
+        <span class="t-fn">module_controller_hook</span>(<span class="t-str">'before::Mine::login'</span>, <span class="t-var">$ctx</span>);
+
+        <span class="t-kw">if</span> (!<span class="t-fn">empty</span>(<span class="t-var">$ctx</span>[<span class="t-str">'abort'</span>])) {
+            <span class="t-kw">if</span> (<span class="t-fn">isset</span>(<span class="t-var">$ctx</span>[<span class="t-str">'response'</span>])) <span class="t-kw">echo</span> <span class="t-var">$ctx</span>[<span class="t-str">'response'</span>];
+            <span class="t-kw">return</span>;
+        }
+
+        <span class="t-var">$ctx</span>[<span class="t-str">'result'</span>] = <span class="t-kw">parent</span>::<span class="t-fn">login</span>(...<span class="t-var">$args</span>);
+        <span class="t-fn">module_controller_hook</span>(<span class="t-str">'after::Mine::login'</span>, <span class="t-var">$ctx</span>);
+        <span class="t-kw">return</span> <span class="t-var">$ctx</span>[<span class="t-str">'result'</span>];
+    }
+
+    <span class="t-cm">// ... todos os outros metodos publicos seguem o mesmo padrao ...</span>
+}</code></pre>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h4>Restaura ao desinstalar</h4>
+              <p>
+                Ao desinstalar o modulo, o sistema verifica se algum outro modulo ativo
+                ainda precisa do proxy. Se nenhum precisar, o backup e restaurado e o
+                controller volta ao estado original.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="callout warning">
+          <div class="callout-title">Limitacao: hooks after:: com redirect()</div>
+          <p>
+            Quando um metodo do controller original chama <code>redirect()</code>, o PHP
+            executa <code>exit</code> internamente. Isso impede que o hook
+            <code>after::</code> seja disparado. Para esses casos, use um hook manual
+            inserido explicitamente antes do redirect (ver secao abaixo).
+          </p>
+        </div>
+
+        <h4>Convencao de nomenclatura</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Padrao</th><th>Quando dispara</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>before::Controller::metodo</code></td>
+                <td>Antes de o metodo original ser chamado. Pode setar <code>abort = true</code> para cancelar a execucao.</td>
+              </tr>
+              <tr>
+                <td><code>after::Controller::metodo</code></td>
+                <td>Apos o metodo original retornar. <code>$context['result']</code> contem o valor de retorno. Nao dispara se o metodo chamou <code>redirect()</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Chaves padrao do $context nos hooks de proxy</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Chave</th><th>Tipo</th><th>Disponivel em</th><th>Descricao</th></tr></thead>
+            <tbody>
+              <tr><td><code>controller</code></td><td>string</td><td>before, after</td><td>Nome do controller (ex: <code>'Mine'</code>).</td></tr>
+              <tr><td><code>method</code></td><td>string</td><td>before, after</td><td>Nome do metodo (ex: <code>'login'</code>).</td></tr>
+              <tr><td><code>args</code></td><td>array (ref)</td><td>before, after</td><td>Argumentos passados ao metodo. Modificavel antes do before.</td></tr>
+              <tr><td><code>result</code></td><td>mixed</td><td>after apenas</td><td>Valor retornado pelo metodo original.</td></tr>
+              <tr><td><code>abort</code></td><td>bool</td><td>before apenas</td><td>Setar <code>true</code> cancela a execucao do metodo original.</td></tr>
+              <tr><td><code>response</code></td><td>string</td><td>before apenas</td><td>Conteudo enviado ao cliente quando <code>abort = true</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Hooks Manuais ── -->
+      <section id="manual-controller-hooks">
+        <h3>Hooks Manuais</h3>
+
+        <p>
+          Para metodos que terminam com <code>redirect()</code> — onde o hook
+          <code>after::</code> nunca dispararia — o proprio controller declara um ponto
+          de hook explicito antes do redirect. Esses hooks sao convencionados pelo nome
+          do controller e da operacao, sem o prefixo <code>before::</code>.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">application/controllers/Clientes.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-kw">if</span> (<span class="t-var">$this</span>-&gt;clientes_model-&gt;<span class="t-fn">add</span>(<span class="t-str">'clientes'</span>, <span class="t-var">$data</span>) == <span class="t-nb">true</span>) {
+    <span class="t-var">$newId</span>   = <span class="t-var">$this</span>-&gt;db-&gt;<span class="t-fn">insert_id</span>();
+    <span class="t-var">$context</span> = [<span class="t-str">'idClientes'</span> =&gt; (<span class="t-nb">int</span>) <span class="t-var">$newId</span>];
+    <span class="t-fn">module_controller_hook</span>(<span class="t-str">'clientes_adicionar_after_insert'</span>, <span class="t-var">$context</span>);
+    <span class="t-fn">redirect</span>(<span class="t-fn">site_url</span>(<span class="t-str">'clientes/'</span>));
+}</code></pre>
+        </div>
+
+        <p>
+          O arquivo de hook do modulo usa as chaves do <code>$context</code> que o
+          controller declara explicitamente:
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">hooks/controller/clientes_adicionar.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-cm">// $context e $CI estao disponiveis aqui</span>
+<span class="t-var">$CI</span>        = &amp;<span class="t-fn">get_instance</span>();
+<span class="t-var">$clienteId</span> = (<span class="t-nb">int</span>) <span class="t-var">$context</span>[<span class="t-str">'idClientes'</span>];
+<span class="t-var">$permitido</span> = <span class="t-var">$CI</span>-&gt;input-&gt;<span class="t-fn">post</span>(<span class="t-str">'login_permitido'</span>) !== <span class="t-nb">null</span> ? <span class="t-nb">1</span> : <span class="t-nb">0</span>;
+
+<span class="t-kw">if</span> (<span class="t-var">$permitido</span> === <span class="t-nb">0</span>) {
+    <span class="t-var">$CI</span>-&gt;db-&gt;<span class="t-fn">update</span>(<span class="t-str">'clientes'</span>, [<span class="t-str">'login_permitido'</span> =&gt; <span class="t-nb">0</span>], [<span class="t-str">'idClientes'</span> =&gt; <span class="t-var">$clienteId</span>]);
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- ── Convencoes do $context ── -->
+      <h3>Convencoes do $context</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Chave</th><th>Tipo</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>abort</code></td>
+              <td>bool</td>
+              <td>Sete como <code>true</code> para interromper o metodo original (apenas em hooks <code>before::</code>).</td>
+            </tr>
+            <tr>
+              <td><code>response</code></td>
+              <td>string</td>
+              <td>Conteudo enviado ao cliente quando <code>abort = true</code>. Geralmente JSON.</td>
+            </tr>
+            <tr>
+              <td><em>chaves especificas do hook</em></td>
+              <td>mixed</td>
+              <td>Dados da operacao. Variam por hook. Documentados na tabela de pontos de hook abaixo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Declarando hooks no modulo ── -->
+      <h3>Declarando controller hooks no modulo</h3>
+
+      <p>
+        Em <code>hooks/module_hooks.php</code>, declare o array <code>$moduleControllerHooks</code>
+        usando a convencao <code>before::Controller::metodo</code> para hooks de proxy, ou
+        o nome livre para hooks manuais:
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <span class="code-file">hooks/module_hooks.php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-var">$moduleControllerHooks</span> = [
+    <span class="t-cm">// Hook de proxy — dispara antes de Mine::login()</span>
+    <span class="t-str">'before::Mine::login'</span> =&gt; [
+        FCPATH . <span class="t-str">'modules/meu_modulo/hooks/controller/mine_login.php'</span>,
+    ],
+
+    <span class="t-cm">// Hook manual — declarado explicitamente em Clientes::adicionar()</span>
+    <span class="t-str">'clientes_adicionar_after_insert'</span> =&gt; [
+        FCPATH . <span class="t-str">'modules/meu_modulo/hooks/controller/clientes_adicionar.php'</span>,
+    ],
+];</code></pre>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Um hook pode ter varios modulos</div>
+        <p>
+          Varios modulos podem registrar arquivos para o mesmo hook. Eles serao
+          executados em ordem de instalacao. Nenhum modulo precisa saber da existencia
+          dos outros.
+        </p>
+      </div>
+
+      <!-- ── Pontos de hook disponiveis ── -->
+      <section id="controller-hook-points">
+        <h3>Pontos de Hook Disponiveis</h3>
+
+        <h4>Hooks de Proxy (before:: / after::)</h4>
+        <p>
+          O sistema de proxy gera automaticamente hooks <code>before::</code> e
+          <code>after::</code> para <strong>todos os metodos publicos</strong> de um
+          controller quando pelo menos um modulo declara um hook nesse controller.
+          A tabela abaixo lista os mais relevantes.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hook</th>
+                <th>Controller</th>
+                <th>Quando dispara</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>before::Mine::login</code></td>
+                <td>Mine.php</td>
+                <td>Antes de qualquer validacao de credenciais na area do cliente.</td>
+                <td>Use <code>abort = true</code> para bloquear o login antes de verificar a senha.</td>
+              </tr>
+              <tr>
+                <td><code>after::Mine::login</code></td>
+                <td>Mine.php</td>
+                <td>Apos <code>login()</code> retornar — so dispara se o metodo nao chamou <code>redirect()</code>.</td>
+                <td>Util para post-processamento de login mal-sucedido.</td>
+              </tr>
+              <tr>
+                <td><code>before::Clientes::editar</code></td>
+                <td>Clientes.php</td>
+                <td>Antes de qualquer logica do metodo editar.</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><code>before::Clientes::adicionar</code></td>
+                <td>Clientes.php</td>
+                <td>Antes de qualquer logica do metodo adicionar.</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Como obter hooks para qualquer controller</div>
+          <p>
+            Qualquer controller pode ser alvo de um hook de proxy. Basta declarar
+            <code>before::NomeDoController::nomeDoMetodo</code> no
+            <code>$moduleControllerHooks</code> do modulo. O sistema gera o proxy
+            automaticamente na instalacao — sem nenhuma modificacao manual.
+          </p>
+        </div>
+
+        <h4>Hooks Manuais Disponiveis</h4>
+
+        <div class="hook-card">
+          <div class="hook-card-header">
+            <span class="hook-name">clientes_adicionar_after_insert</span>
+            <span class="hook-location">Clientes.php :: adicionar() — apos insert bem-sucedido, antes de redirect()</span>
+          </div>
+          <div class="hook-card-body">
+            <p>
+              Executado imediatamente apos um novo cliente ser inserido no banco.
+              Nao e um hook de proxy porque <code>adicionar()</code> chama
+              <code>redirect()</code>, o que impediria o <code>after::</code> de disparar.
+            </p>
+            <div class="table-wrap" style="margin-top:10px">
+              <table>
+                <thead><tr><th>Chave em $context</th><th>Tipo</th><th>Descricao</th></tr></thead>
+                <tbody>
+                  <tr><td><code>idClientes</code></td><td>int</td><td>ID do cliente recem-inserido (<code>$this-&gt;db-&gt;insert_id()</code>).</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Adicionando hooks manuais em novos pontos</div>
+          <p>
+            Para expor um ponto de hook manual em qualquer controller, adicione as
+            linhas abaixo no local desejado. A verificacao de <code>abort</code> so
+            e necessaria se o hook pode interromper a operacao.
+          </p>
+          <div class="code-block" style="margin-top:10px">
+            <div class="code-block-header"><span class="code-lang">php</span><button class="copy-btn">Copiar</button></div>
+            <pre><code><span class="t-var">$context</span> = [<span class="t-str">'dado_relevante'</span> =&gt; <span class="t-var">$valor</span>];
+<span class="t-fn">module_controller_hook</span>(<span class="t-str">'nome_do_hook'</span>, <span class="t-var">$context</span>);
+<span class="t-kw">if</span> (!<span class="t-fn">empty</span>(<span class="t-var">$context</span>[<span class="t-str">'abort'</span>])) { <span class="t-kw">echo</span> <span class="t-var">$context</span>[<span class="t-str">'response'</span>]; <span class="t-kw">return</span>; }</code></pre>
+          </div>
+        </div>
+      </section>
+    </section>
+
+
+    <!-- ── Menu ──────────────────────────────────── -->
+    <section id="menu">
+      <h2>Menu Dinamico</h2>
+
+      <p>
+        Itens de menu declarados no <code>module.json</code> sao inseridos na tabela
+        <code>modulo_menu_items</code> durante a instalacao. O <code>MY_Controller</code>
+        carrega esses itens em cada requisicao autenticada e os disponibiliza como
+        <code>$module_menu_items</code> para o template de menu.
+      </p>
+
+      <p>
+        Apenas modulos com <code>status = 'ativo'</code> tem seus itens exibidos.
+        Ao desativar um modulo via toggle, os itens desaparecem do menu imediatamente,
+        sem reinstalacao.
+      </p>
+
+      <div class="callout info">
+        <div class="callout-title">Permissoes de menu</div>
+        <p>
+          Se o campo <code>permission</code> do item estiver preenchido, o item so
+          aparece para usuarios cujo grupo de permissao inclua aquela permissao.
+          Se estiver vazio, o item e visível para todos os usuarios autenticados.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Configurations ────────────────────────── -->
+    <section id="configurations">
+      <h2>Configuracoes</h2>
+
+      <p>
+        Configuracoes declaradas no <code>module.json</code> sao inseridas na tabela
+        <code>configuracoes</code> via <code>INSERT IGNORE</code>, preservando qualquer
+        valor que o usuario tenha alterado manualmente.
+      </p>
+
+      <p>
+        Para acessar uma configuracao dentro do modulo:
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">php</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+        <pre><code><span class="t-cm">// Em qualquer controller ou view hook</span>
+<span class="t-var">$valor</span> = <span class="t-var">$this</span>-><span class="t-var">data</span>[<span class="t-str">'configuration'</span>][<span class="t-str">'meu_modulo_opcao'</span>];
+
+<span class="t-cm">// Em um arquivo de view hook (via extract)</span>
+<span class="t-var">$valor</span> = <span class="t-var">$configuration</span>[<span class="t-str">'meu_modulo_opcao'</span>] ?? <span class="t-str">'padrao'</span>;</code></pre>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- ── API Reference ─────────────────────────── -->
+    <section id="api">
+      <h2>API Reference</h2>
+
+      <h3><code>module_hook(string $hookName)</code></h3>
+      <p>
+        Executa um ponto de injecao em uma view. Busca os arquivos registrados para
+        <code>$hookName</code> e inclui cada um com as variaveis da view disponíveis
+        no escopo via <code>extract()</code>. Silencioso quando o hook nao tem
+        arquivos registrados.
+      </p>
+
+      <h3><code>module_controller_hook(string $hookName, array &$context = [])</code></h3>
+      <p>
+        Executa um ponto de hook em um controller. Inclui cada arquivo registrado com
+        <code>$CI</code> e <code>$context</code> disponiveis no escopo. O
+        <code>$context</code> e passado por referencia — modificacoes feitas pelo
+        hook file sao refletidas no array original no controller. Silencioso quando
+        o hook nao tem arquivos registrados.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Parametro</th><th>Tipo</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>$hookName</code></td>
+              <td>string</td>
+              <td>Nome do ponto de hook. Ex: <code>'mine_login_after_verify'</code>.</td>
+            </tr>
+            <tr>
+              <td><code>$context</code></td>
+              <td>array (ref)</td>
+              <td>Dados do contexto. O hook file pode ler e modificar este array.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Parametro</th><th>Tipo</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>$hookName</code></td>
+              <td>string</td>
+              <td>Nome do ponto de injecao. Ex: <code>'cliente_editar_extras'</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3><code>Module_manager::upload(array $file)</code></h3>
+      <p>
+        Processa um upload de ZIP. Extrai, valida o <code>module.json</code> e
+        move para <code>modules/&lt;slug&gt;/</code>. Retorna
+        <code>['slug' =&gt; ..., 'manifest' =&gt; ...]</code> em caso de sucesso ou
+        <code>['error' =&gt; ...]</code> em caso de falha.
+      </p>
+
+      <h3><code>Module_manager::install(string $slug)</code></h3>
+      <p>
+        Instala um modulo que ja esta em <code>modules/&lt;slug&gt;/</code>. Retorna
+        <code>['success' =&gt; true]</code> ou <code>['error' =&gt; ...]</code>.
+      </p>
+
+      <h3><code>Module_manager::uninstall(string $slug)</code></h3>
+      <p>
+        Desinstala o modulo, revertendo todas as alteracoes feitas na instalacao e
+        removendo o diretorio do modulo.
+      </p>
+
+      <h3><code>Module_manager::toggle(string $slug)</code></h3>
+      <p>
+        Alterna o status do modulo entre <code>ativo</code> e <code>inativo</code>.
+        Modulos inativos nao carregam hooks, nao aparecem no menu e seus controllers
+        ainda sao acessiveis mas as permissoes do controller devem bloquear o acesso.
+      </p>
+
+      <h3><code>Module_manager::getManifest(string $slug)</code></h3>
+      <p>
+        Le e decodifica o <code>module.json</code> do modulo localizado em
+        <code>modules/&lt;slug&gt;/module.json</code>. Retorna o manifest como array
+        associativo, ou <code>null</code> se o arquivo nao existir ou for invalido.
+        Usado internamente pelo controller <code>Modulos::visualizar()</code> e
+        <code>Modulos::confirmar()</code> para passar os dados a view.
+      </p>
+
+      <h3>Rotas do painel</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metodo</th><th>Rota</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr><td>GET</td><td><code>modulos/</code></td><td>Lista todos os modulos instalados e os disponiveis para instalacao.</td></tr>
+            <tr><td>POST</td><td><code>modulos/upload</code></td><td>Recebe o ZIP, extrai e redireciona para <code>confirmar/</code>.</td></tr>
+            <tr><td>GET</td><td><code>modulos/visualizar/$slug</code></td><td>Pagina de detalhes: info, screenshots e video. Funciona para modulos instalados e disponiveis.</td></tr>
+            <tr><td>GET</td><td><code>modulos/confirmar/$slug</code></td><td>Preview do modulo antes de instalar, com screenshots e video se declarados.</td></tr>
+            <tr><td>POST</td><td><code>modulos/instalar/$slug</code></td><td>Executa a instalacao.</td></tr>
+            <tr><td>POST</td><td><code>modulos/desinstalar/$slug</code></td><td>Desinstala o modulo.</td></tr>
+            <tr><td>POST</td><td><code>modulos/toggle/$slug</code></td><td>Ativa ou desativa o modulo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- ── Example Module ────────────────────────── -->
+    <section id="example-module">
+      <h2>Modulo de Exemplo: <code>cliente_observacao</code></h2>
+
+      <p>
+        Este modulo adiciona um campo de observacoes internas ao cadastro de clientes.
+        As observacoes sao salvas em uma tabela separada e exibidas tanto na tela de
+        edicao (com botao de salvar via AJAX) quanto na tela de visualizacao
+        (leitura somente).
+      </p>
+
+      <section id="example-structure">
+        <h3>Estrutura</h3>
+        <div class="file-tree">
+<span class="dir">modules/cliente_observacao/</span>
+<span class="req">  module.json</span>
+  install.php
+  uninstall.php
+<span class="dir">  controllers/</span>
+<span class="file">    Cliente_observacao.php</span>
+<span class="dir">  migrations/</span>
+<span class="file">    install.sql</span>
+<span class="file">    uninstall.sql</span>
+<span class="dir">  views/hooks/</span>
+<span class="file">    editar.php</span>
+<span class="file">    visualizar.php</span>
+<span class="dir">  hooks/</span>
+<span class="file">    module_hooks.php</span>
+        </div>
+      </section>
+
+      <section id="example-manifest">
+        <h3>module.json</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">json</span>
+            <span class="code-file">module.json</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code>{
+  <span class="t-key">"slug"</span>:        <span class="t-str">"cliente_observacao"</span>,
+  <span class="t-key">"name"</span>:        <span class="t-str">"Observacoes de Clientes"</span>,
+  <span class="t-key">"version"</span>:     <span class="t-str">"1.0.0"</span>,
+  <span class="t-key">"description"</span>: <span class="t-str">"Adiciona campo de observacoes internas ao cadastro de clientes."</span>,
+  <span class="t-key">"author"</span>:      <span class="t-str">"Map-OS"</span>,
+  <span class="t-key">"menu"</span>:        [],
+  <span class="t-key">"configurations"</span>: [],
+  <span class="t-key">"view_hooks"</span>: [
+    { <span class="t-key">"hook"</span>: <span class="t-str">"cliente_editar_extras"</span>,    <span class="t-key">"view"</span>: <span class="t-str">"views/hooks/editar.php"</span> },
+    { <span class="t-key">"hook"</span>: <span class="t-str">"cliente_visualizar_extras"</span>, <span class="t-key">"view"</span>: <span class="t-str">"views/hooks/visualizar.php"</span> }
+  ],
+
+  <span class="t-key">"screenshots"</span>: [
+    <span class="t-str">"https://exemplo.com/img/screen1.png"</span>
+  ],
+  <span class="t-key">"video_url"</span>: <span class="t-str">"https://www.youtube.com/watch?v=VIDEO_ID"</span>
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="example-migration">
+        <h3>SQL</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">sql</span>
+            <span class="code-file">migrations/install.sql</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-kw">CREATE TABLE IF NOT EXISTS</span> `clientes_observacao` (
+  `clientes_id`  INT       NOT NULL,
+  `observacao`   TEXT      NULL,
+  `atualizado_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                 ON UPDATE CURRENT_TIMESTAMP,
+  <span class="t-kw">PRIMARY KEY</span> (`clientes_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">sql</span>
+            <span class="code-file">migrations/uninstall.sql</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-kw">DROP TABLE IF EXISTS</span> `clientes_observacao`;</code></pre>
+        </div>
+      </section>
+
+      <section id="example-controller">
+        <h3>Controller</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">controllers/Cliente_observacao.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-kw">if</span> (!<span class="t-fn">defined</span>(<span class="t-str">'BASEPATH'</span>)) <span class="t-fn">exit</span>(<span class="t-str">'No direct script access allowed'</span>);
+
+<span class="t-kw">class</span> <span class="t-fn">Cliente_observacao</span> <span class="t-kw">extends</span> <span class="t-fn">MY_Controller</span>
+{
+    <span class="t-kw">public function</span> <span class="t-fn">__construct</span>()
+    {
+        <span class="t-kw">parent</span>::<span class="t-fn">__construct</span>();
+
+        <span class="t-kw">if</span> (!<span class="t-var">$this</span>-><span class="t-var">permission</span>-><span class="t-fn">checkPermission</span>(
+            <span class="t-var">$this</span>-><span class="t-var">session</span>-><span class="t-fn">userdata</span>(<span class="t-str">'permissao'</span>),
+            <span class="t-str">'eCliente'</span>
+        )) {
+            <span class="t-var">$this</span>-><span class="t-var">output</span>-><span class="t-fn">set_status_header</span>(<span class="t-nb">403</span>);
+            <span class="t-fn">exit</span>(<span class="t-fn">json_encode</span>([<span class="t-str">'error'</span> => <span class="t-str">'Sem permissao.'</span>]));
+        }
+    }
+
+    <span class="t-cm">/** GET /cliente_observacao/get/&lt;id&gt; */</span>
+    <span class="t-kw">public function</span> <span class="t-fn">get</span>(<span class="t-nb">int</span> <span class="t-var">$clienteId</span>)
+    {
+        <span class="t-var">$row</span> = <span class="t-var">$this</span>-><span class="t-var">db</span>
+            -><span class="t-fn">where</span>(<span class="t-str">'clientes_id'</span>, (<span class="t-nb">int</span>) <span class="t-var">$clienteId</span>)
+            -><span class="t-fn">get</span>(<span class="t-str">'clientes_observacao'</span>)
+            -><span class="t-fn">row</span>();
+
+        <span class="t-var">$this</span>-><span class="t-var">output</span>
+            -><span class="t-fn">set_content_type</span>(<span class="t-str">'application/json'</span>)
+            -><span class="t-fn">set_output</span>(<span class="t-fn">json_encode</span>([
+                <span class="t-str">'observacao'</span> => <span class="t-var">$row</span> ? <span class="t-var">$row</span>-><span class="t-var">observacao</span> : <span class="t-str">''</span>
+            ]));
+    }
+
+    <span class="t-cm">/** POST /cliente_observacao/salvar */</span>
+    <span class="t-kw">public function</span> <span class="t-fn">salvar</span>()
+    {
+        <span class="t-var">$clienteId</span>  = (<span class="t-nb">int</span>)    <span class="t-var">$this</span>-><span class="t-var">input</span>-><span class="t-fn">post</span>(<span class="t-str">'clientes_id'</span>);
+        <span class="t-var">$observacao</span> = (<span class="t-nb">string</span>) <span class="t-var">$this</span>-><span class="t-var">input</span>-><span class="t-fn">post</span>(<span class="t-str">'observacao'</span>);
+
+        <span class="t-kw">if</span> (!<span class="t-var">$clienteId</span>) {
+            <span class="t-var">$this</span>-><span class="t-var">output</span>
+                -><span class="t-fn">set_content_type</span>(<span class="t-str">'application/json'</span>)
+                -><span class="t-fn">set_output</span>(<span class="t-fn">json_encode</span>([<span class="t-str">'error'</span> => <span class="t-str">'ID invalido.'</span>]));
+            <span class="t-kw">return</span>;
+        }
+
+        <span class="t-var">$existe</span> = <span class="t-var">$this</span>-><span class="t-var">db</span>
+            -><span class="t-fn">where</span>(<span class="t-str">'clientes_id'</span>, <span class="t-var">$clienteId</span>)
+            -><span class="t-fn">count_all_results</span>(<span class="t-str">'clientes_observacao'</span>) > <span class="t-nb">0</span>;
+
+        <span class="t-kw">if</span> (<span class="t-var">$existe</span>) {
+            <span class="t-var">$this</span>-><span class="t-var">db</span>-><span class="t-fn">update</span>(
+                <span class="t-str">'clientes_observacao'</span>,
+                [<span class="t-str">'observacao'</span> => <span class="t-var">$observacao</span>],
+                [<span class="t-str">'clientes_id'</span> => <span class="t-var">$clienteId</span>]
+            );
+        } <span class="t-kw">else</span> {
+            <span class="t-var">$this</span>-><span class="t-var">db</span>-><span class="t-fn">insert</span>(<span class="t-str">'clientes_observacao'</span>, [
+                <span class="t-str">'clientes_id'</span> => <span class="t-var">$clienteId</span>,
+                <span class="t-str">'observacao'</span>  => <span class="t-var">$observacao</span>,
+            ]);
+        }
+
+        <span class="t-var">$this</span>-><span class="t-var">output</span>
+            -><span class="t-fn">set_content_type</span>(<span class="t-str">'application/json'</span>)
+            -><span class="t-fn">set_output</span>(<span class="t-fn">json_encode</span>([<span class="t-str">'success'</span> => <span class="t-nb">true</span>]));
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="example-hooks">
+        <h3>View Hooks</h3>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">hooks/module_hooks.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-var">$moduleViewHooks</span> = [
+    <span class="t-str">'cliente_editar_extras'</span> => [
+        FCPATH . <span class="t-str">'modules/cliente_observacao/views/hooks/editar.php'</span>,
+    ],
+    <span class="t-str">'cliente_visualizar_extras'</span> => [
+        FCPATH . <span class="t-str">'modules/cliente_observacao/views/hooks/visualizar.php'</span>,
+    ],
+];</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">views/hooks/editar.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-var">$CI</span> = &amp;<span class="t-fn">get_instance</span>();
+<span class="t-var">$clienteId</span> = <span class="t-nb">isset</span>(<span class="t-var">$result</span>->idClientes)
+    ? (<span class="t-nb">int</span>) <span class="t-var">$result</span>->idClientes
+    : (<span class="t-nb">int</span>) <span class="t-var">$CI</span>-><span class="t-var">uri</span>-><span class="t-fn">segment</span>(<span class="t-nb">3</span>);
+<span class="t-kw">if</span> (!<span class="t-var">$clienteId</span>) <span class="t-kw">return</span>;
+?&gt;
+&lt;div class="row-fluid" style="margin-top:16px"&gt;
+  &lt;div class="span12"&gt;
+    &lt;div class="widget-box"&gt;
+      &lt;div class="widget-title"&gt;
+        &lt;span class="icon"&gt;&lt;i class="bx bx-note"&gt;&lt;/i&gt;&lt;/span&gt;
+        &lt;h5&gt;Observacoes Internas&lt;/h5&gt;
+      &lt;/div&gt;
+      &lt;div class="widget-content"&gt;
+        &lt;textarea id="obs-textarea" rows="5"
+          style="width:100%;resize:vertical;padding:8px"&gt;&lt;/textarea&gt;
+        &lt;div style="margin-top:8px"&gt;
+          &lt;button type="button" id="obs-salvar" class="btn btn-success btn-small"&gt;
+            Salvar Observacao
+          &lt;/button&gt;
+          &lt;span id="obs-status" style="font-size:12px;color:#888;margin-left:10px"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  var id       = &lt;?= $clienteId ?&gt;;
+  var base     = '&lt;?= base_url() ?&gt;';
+  var csrf     = '&lt;?= $CI-&gt;security-&gt;get_csrf_token_name() ?&gt;';
+  var token    = '&lt;?= $CI-&gt;security-&gt;get_csrf_hash() ?&gt;';
+  var textarea = document.getElementById('obs-textarea');
+  var btn      = document.getElementById('obs-salvar');
+  var status   = document.getElementById('obs-status');
+
+  $.getJSON(base + 'cliente_observacao/get/' + id, function (r) {
+    if (r.observacao) textarea.value = r.observacao;
+  });
+
+  btn.addEventListener('click', function () {
+    var payload = { clientes_id: id, observacao: textarea.value };
+    payload[csrf] = token;
+    status.textContent = 'Salvando...';
+    btn.disabled = true;
+    $.post(base + 'cliente_observacao/salvar', payload, function (r) {
+      status.style.color = r.success ? '#3fb950' : '#f85149';
+      status.textContent = r.success ? 'Salvo com sucesso.' : 'Erro ao salvar.';
+    }, 'json').always(function () { btn.disabled = false; });
+  });
+}());
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">php</span>
+            <span class="code-file">views/hooks/visualizar.php</span>
+            <button class="copy-btn">Copiar</button>
+          </div>
+          <pre><code><span class="t-var">$CI</span> = &amp;<span class="t-fn">get_instance</span>();
+<span class="t-var">$clienteId</span> = <span class="t-nb">isset</span>(<span class="t-var">$result</span>->idClientes)
+    ? (<span class="t-nb">int</span>) <span class="t-var">$result</span>->idClientes
+    : (<span class="t-nb">int</span>) <span class="t-var">$CI</span>-><span class="t-var">uri</span>-><span class="t-fn">segment</span>(<span class="t-nb">3</span>);
+<span class="t-kw">if</span> (!<span class="t-var">$clienteId</span>) <span class="t-kw">return</span>;
+
+<span class="t-var">$obs</span>   = <span class="t-var">$CI</span>-><span class="t-var">db</span>-><span class="t-fn">where</span>(<span class="t-str">'clientes_id'</span>, <span class="t-var">$clienteId</span>)
+              -><span class="t-fn">get</span>(<span class="t-str">'clientes_observacao'</span>)-><span class="t-fn">row</span>();
+<span class="t-var">$texto</span> = <span class="t-var">$obs</span> ? <span class="t-var">$obs</span>->observacao : <span class="t-str">''</span>;
+?&gt;
+&lt;div class="accordion-group widget-box" style="margin-top:8px"&gt;
+  &lt;div class="accordion-heading"&gt;
+    &lt;div class="widget-title"&gt;
+      &lt;a href="#collapseObs" data-toggle="collapse"&gt;
+        &lt;h5&gt;Observacoes Internas&lt;/h5&gt;
+      &lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="collapse accordion-body &lt;?= $texto ? 'in' : '' ?&gt;" id="collapseObs"&gt;
+    &lt;div class="widget-content"&gt;
+      &lt;?php if ($texto): ?&gt;
+        &lt;p style="white-space:pre-wrap;margin:0"&gt;&lt;?= htmlspecialchars($texto) ?&gt;&lt;/p&gt;
+      &lt;?php else: ?&gt;
+        &lt;p class="muted"&gt;Nenhuma observacao registrada.&lt;/p&gt;
+      &lt;?php endif; ?&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </section>
+    </section>
+
+    <hr />
+
+    <!-- ── Troubleshooting ───────────────────────── -->
+    <section id="troubleshooting">
+      <h2>Troubleshooting</h2>
+
+      <h3>Controller do modulo retorna 404</h3>
+      <p>
+        Verifique se o arquivo wrapper foi criado em
+        <code>application/controllers/&lt;Slug&gt;.php</code>. Caso o diretorio nao
+        tenha permissao de escrita para o servidor web, o sistema de fallback
+        via <code>$route['404_override'] = 'module_dispatch'</code> assume o
+        roteamento. Confirme que <code>Module_dispatch.php</code> existe em
+        <code>application/controllers/</code>.
+      </p>
+
+      <h3>View hook nao aparece na pagina</h3>
+      <ol>
+        <li>Confirme que o modulo esta com <code>status = 'ativo'</code> no banco.</li>
+        <li>Confirme que <code>hooks/module_hooks.php</code> existe e retorna o array <code>$moduleViewHooks</code> correto.</li>
+        <li>Confirme que o arquivo de hook referenciado existe em disco.</li>
+        <li>Confirme que a view existente chama <code>&lt;?php module_hook('nome'); ?&gt;</code> no local correto.</li>
+        <li>No arquivo de hook, use sempre <code>$CI = &amp;get_instance()</code> em vez de <code>$this</code>.</li>
+        <li>Para acessar o ID do recurso, use o fallback de URI:
+          <code>$id = isset($result-&gt;id) ? $result-&gt;id : (int) $CI-&gt;uri-&gt;segment(3);</code>
+        </li>
+      </ol>
+
+      <h3>SQL de instalacao falha silenciosamente</h3>
+      <p>
+        O <code>Module_manager</code> retorna <code>['error' =&gt; ...]</code> com a
+        mensagem do banco em caso de falha. Verifique os logs do CI3 em
+        <code>application/logs/</code> e certifique-se de que o usuario do banco tem
+        permissao <code>CREATE TABLE</code>.
+      </p>
+
+      <h3>Upload do ZIP falha com "No such file or directory"</h3>
+      <p>
+        Isso ocorre quando o ZIP contem uma subpasta raiz e a logica de unwrap falha.
+        Certifique-se de que o diretorio <code>modules/</code> tem permissao de
+        escrita para o usuario do servidor web (<code>www-data</code> em sistemas
+        Debian/Ubuntu).
+      </p>
+
+      <h3>Modulo desinstalado mas tabelas ainda existem</h3>
+      <p>
+        Verifique se <code>migrations/uninstall.sql</code> contem os comandos
+        <code>DROP TABLE IF EXISTS</code> para todas as tabelas criadas pelo modulo.
+        O arquivo e obrigatorio mesmo que esteja em branco; sua ausencia nao gera
+        erro, mas as tabelas nao serao removidas.
+      </p>
+
+      <h3>Permissoes de menu nao funcionam</h3>
+      <p>
+        O campo <code>permission</code> do item de menu deve corresponder exatamente
+        a uma permissao cadastrada no sistema de grupos. Permissoes customizadas de
+        modulos precisam ser inseridas manualmente via <code>install.php</code> na
+        tabela de permissoes do grupo do administrador.
+      </p>
+    </section>
+
+  </article>
+</div>
+
+<script>
+  // ── Active nav on scroll ──────────────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navItems.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-48px 0px -70% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+
+  // ── Progress bar ──────────────────────────────────────
+  const bar = document.getElementById('progress-bar');
+  document.addEventListener('scroll', () => {
+    const doc  = document.documentElement;
+    const pct  = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    bar.style.transform = 'scaleX(' + pct + ')';
+  }, { passive: true });
+
+  // ── Copy buttons ──────────────────────────────────────
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pre  = btn.closest('.code-block').querySelector('pre');
+      const text = pre.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copiado';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copiar';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>

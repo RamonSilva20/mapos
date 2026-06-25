@@ -137,6 +137,32 @@
                         </a>
                     </li>
                 <?php } ?>
+
+                <?php if (! empty($module_menu_items)): ?>
+                    <?php foreach ($module_menu_items as $_mmi): ?>
+                        <?php if (! $_mmi->permissao || $this->permission->checkPermission($this->session->userdata('permissao'), $_mmi->permissao)): ?>
+                            <li>
+                                <a class="tip-bottom" title="" href="<?= site_url(htmlspecialchars($_mmi->url)) ?>">
+                                    <i class='<?= htmlspecialchars($_mmi->icone) ?> iconX'></i>
+                                    <span class="title"><?= htmlspecialchars($_mmi->titulo) ?></span>
+                                    <span class="title-tooltip"><?= htmlspecialchars($_mmi->tooltip ?: $_mmi->titulo) ?></span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) { ?>
+                    <li class="<?php if (isset($menuModulos)) {
+                        echo 'active';
+                    }; ?>">
+                        <a class="tip-bottom" title="" href="<?= site_url('modulos') ?>">
+                            <i class='bx bx-plug iconX'></i>
+                            <span class="title">Módulos</span>
+                            <span class="title-tooltip">Módulos</span>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
 

@@ -54,6 +54,57 @@ class MY_Controller extends CI_Controller
         foreach ($configuracoes as $c) {
             $this->data['configuration'][$c->config] = $c->valor;
         }
+
+        // Carrega módulos ativos: package paths, view hooks e menu items
+        if ($this->CI->db->table_exists('modulos')) {
+            $activeModules = $this->CI->db
+                ->where('status', 'ativo')
+                ->get('modulos')
+                ->result();
+
+            $viewHooks       = [];
+            $controllerHooks = [];
+            foreach ($activeModules as $module) {
+                $path = FCPATH . 'modules/' . $module->slug . '/';
+                if (! is_dir($path)) {
+                    continue;
+                }
+                // Adiciona path do módulo para views, models, helpers, config
+                $this->CI->load->add_package_path($path);
+
+                // Registra view hooks e controller hooks do módulo
+                $hookFile = $path . 'hooks/module_hooks.php';
+                if (file_exists($hookFile)) {
+                    $moduleViewHooks       = [];
+                    $moduleControllerHooks = [];
+                    include $hookFile;
+                    foreach ($moduleViewHooks as $hookName => $files) {
+                        $viewHooks[$hookName] = array_merge(
+                            $viewHooks[$hookName] ?? [],
+                            (array) $files
+                        );
+                    }
+                    foreach ($moduleControllerHooks as $hookName => $files) {
+                        $controllerHooks[$hookName] = array_merge(
+                            $controllerHooks[$hookName] ?? [],
+                            (array) $files
+                        );
+                    }
+                }
+            }
+            $this->CI->config->set_item('module_view_hooks', $viewHooks);
+            $this->CI->config->set_item('module_controller_hooks', $controllerHooks);
+
+            $this->data['module_menu_items'] = $this->CI->db
+                ->select('modulo_menu_items.*')
+                ->join('modulos', 'modulos.slug = modulo_menu_items.modulo_slug')
+                ->where('modulos.status', 'ativo')
+                ->order_by('modulo_menu_items.ordem', 'ASC')
+                ->get('modulo_menu_items')
+                ->result();
+        } else {
+            $this->data['module_menu_items'] = [];
+        }
     }
 
     public function layout()

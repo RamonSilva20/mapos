@@ -566,6 +566,7 @@
                                 </div>
                             </div>
                         </div>
+                        <?php module_hook('permissoes_adicionar_extras'); ?>
                     </div>
                     <div class="form-actions">
                         <div class="span12">
