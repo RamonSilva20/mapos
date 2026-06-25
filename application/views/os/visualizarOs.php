@@ -326,6 +326,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 }
                             } ?>
                         </table>
+
+                        <?php module_hook('os_visualizar_extras'); ?>
+
                     </div>
                 </div>
             </div>

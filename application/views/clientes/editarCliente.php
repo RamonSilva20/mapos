@@ -194,6 +194,7 @@
                         </div>
                     </div>
                 </div>
+                <?php module_hook('cliente_editar_form_extras'); ?>
                 <div class="form-actions">
                     <div class="span12">
                         <div class="span6 offset3" style="display:flex;justify-content: center">
@@ -207,6 +208,7 @@
         </div>
     </div>
 </div>
+<?php module_hook('cliente_editar_extras'); ?>
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {

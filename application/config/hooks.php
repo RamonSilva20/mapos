@@ -30,5 +30,19 @@ $hook['pre_system'][] = [
     'params' => [],
 ];
 
+// Tenta criar wrappers antes do Router (funciona se application/controllers/ for gravável)
+$hook['pre_system'][] = [
+    'function' => 'ensure_module_wrappers',
+    'filename'  => 'module_wrappers.php',
+    'filepath'  => 'hooks',
+];
+
+// Fallback: carrega controller do módulo diretamente sem precisar de arquivo wrapper
+$hook['pre_controller'][] = [
+    'function' => 'load_module_controller',
+    'filename'  => 'module_wrappers.php',
+    'filepath'  => 'hooks',
+];
+
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

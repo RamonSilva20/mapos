@@ -863,6 +863,7 @@
                     </div>
                 </div>
 
+                    <?php module_hook('permissoes_editar_extras'); ?>
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">

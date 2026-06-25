@@ -9,7 +9,6 @@
 
 /vendor/
 /application/vendor/
-
 .env.local
 .env.development.local
 .env.test.local

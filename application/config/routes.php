@@ -43,7 +43,7 @@ if (! defined('BASEPATH')) {
 */
 
 $route['default_controller'] = 'mapos';
-$route['404_override'] = '';
+$route['404_override'] = 'module_dispatch';
 
 // Rotas da API
 if (filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN)) {

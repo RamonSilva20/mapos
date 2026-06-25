@@ -49,6 +49,7 @@
                         <th>Celular</th>
                         <th>Email</th>
                         <th>Tipo</th> <!-- Nova coluna para Fornecedor/Cliente -->
+                        <?php module_hook('cliente_listagem_th'); ?>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -75,6 +76,9 @@
             } else {
                 echo '<td><span class="label label-success">Cliente</span></td>';
             }
+
+            get_instance()->load->vars(['cliente_row' => $r]);
+            ob_start(); module_hook('cliente_listagem_td'); echo ob_get_clean();
 
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
