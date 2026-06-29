@@ -738,6 +738,11 @@ class Os extends MY_Controller
 
     public function excluirProduto()
     {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar O.S.');
+            redirect(base_url());
+        }
+
         $id = $this->input->post('idProduto');
         $idOs = $this->input->post('idOs');
 
