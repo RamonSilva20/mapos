@@ -493,6 +493,11 @@ class Vendas extends MY_Controller
 
     public function adicionarDesconto()
     {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar Vendas.');
+            redirect(base_url());
+        }
+
         if ($this->input->post('desconto') == '') {
             return $this->output
                 ->set_content_type('application/json')
@@ -703,6 +708,11 @@ class Vendas extends MY_Controller
 
     public function visualizarVenda($id)
     {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar Vendas.');
+            redirect(base_url());
+        }
+
         $venda = $this->Vendas_model->getById($id);
         $produtos = $this->Vendas_model->getProdutos($id);
         $total = $this->Vendas_model->getTotalVendas($id);

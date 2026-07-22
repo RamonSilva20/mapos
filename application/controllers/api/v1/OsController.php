@@ -331,7 +331,7 @@ class OsController extends REST_Controller
     public function index_delete($id)
     {
         $this->logged_user();
-        if (! $this->permission->checkPermission($this->logged_user()->level, 'dServico')) {
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'dOs')) {
             $this->response([
                 'status' => false,
                 'message' => 'Você não está autorizado a Apagar OS!',
@@ -436,6 +436,12 @@ class OsController extends REST_Controller
     public function produtos_post($id)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
 
         $_POST = (array) json_decode(trim(file_get_contents('php://input')));
         $_POST['idOsProduto'] = $id;
@@ -500,6 +506,13 @@ class OsController extends REST_Controller
     public function produtos_put($id, $idProdutos_os)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         if (! $id || ! $idProdutos_os) {
             $this->response([
                 'status' => false,
@@ -545,6 +558,13 @@ class OsController extends REST_Controller
     public function produtos_delete($id, $idProdutos_os)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         $os = $this->os_model->getById($id);
         if ($os == null) {
             $this->response([
@@ -588,6 +608,13 @@ class OsController extends REST_Controller
     public function servicos_post($id)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         $_POST = (array) json_decode(trim(file_get_contents('php://input')));
         $_POST['idOsServico'] = $id;
 
@@ -641,6 +668,13 @@ class OsController extends REST_Controller
     public function servicos_put($id, $idServicos_os)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         if (! $id || ! $idServicos_os) {
             $this->response([
                 'status' => false,
@@ -679,6 +713,13 @@ class OsController extends REST_Controller
     public function servicos_delete($id, $idServicos_os)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $idServicos_os)) {
             $this->log_app('Removeu Serviço de uma OS. ID (OS): ' . $id);
             $this->CI = &get_instance();
@@ -704,6 +745,12 @@ class OsController extends REST_Controller
     public function anotacoes_post($id)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
 
         $_POST = (array) json_decode(trim(file_get_contents('php://input')));
         $_POST['os_id'] = $id;
@@ -748,6 +795,13 @@ class OsController extends REST_Controller
     public function anotacoes_delete($id, $idAnotacao)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $idAnotacao)) {
             $this->log_app('Removeu anotação de uma OS. ID (OS): ' . $id);
 
@@ -766,6 +820,13 @@ class OsController extends REST_Controller
     public function anexos_post($id)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -866,6 +927,13 @@ class OsController extends REST_Controller
     public function anexos_delete($id, $idAnexo)
     {
         $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Editar OS!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
         if ($idAnexo != null && is_numeric($idAnexo)) {
             $this->db->where('idAnexos', $idAnexo);
             $file = $this->db->get('anexos', 1)->row();
