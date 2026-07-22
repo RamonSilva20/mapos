@@ -1,0 +1,34 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag name (e.g. v4.5.2)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git rev-parse "refs/tags/${{ inputs.tag }}" >/dev/null 2>&1 && {
+            echo "Tag already exists"
+            exit 1
+          }
+
+          git tag "${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
