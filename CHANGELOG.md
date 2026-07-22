@@ -4,6 +4,24 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.54.0] - 2026-07-22
+
+### Changed
+- Atualizado dependência guzzlehttp/guzzle. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Atualizado dependência guzzlehttp/psr7. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Atualizado dependência setasign/fpdi. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Fixed
+- Correção no erro de cálculo ao editar lançamento. [@barretowiisk](https://github.com/barretowiisk)
+- Substituição de unserialize() por json_decode() em permissões e fila de emails. [@allanbarcelos](https://github.com/allanbarcelos)
+- Correção de SQL injection em Cobrancas_model (getByOs e getByVendas). [@allanbarcelos](https://github.com/allanbarcelos)
+- Substituição de md5(time()) por random_bytes() na geração do captcha. [@Fesantt](https://github.com/Fesantt)
+- Correção de Bug ao Atualizar Status cobrança. [@cabralwms](https://github.com/cabralwms)
+- Correção em DataTables para exibir quantidade de registros por página configurado no sistema. [@cezargf](https://github.com/cezargf)
+- Correção di layout e area do cliente mobile. [@cabralwms](https://github.com/cabralwms)
+- Correção em painel. [@cabralwms](https://github.com/cabralwms)
+- Correção em permissoes de produtos em controller de OS. [@cabralwms](https://github.com/cabralwms)
+
 ## [4.53.2] - 2026-02-19
 ### Fixed
 - Ajuste para não ficar gerando logs de erro por conta da constante E_STRICT. [@cabralwms](https://github.com/cabralwms)
