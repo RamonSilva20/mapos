@@ -1,38 +1,68 @@
-name: "Generate release with vendor"
+name: Create Tag and Release
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag name (e.g. v4.5.2)"
+        required: true
+        type: string
+      ref:
+        description: "Branch or commit to tag"
+        required: false
+        default: master
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Ensure tag does not exist
+        run: |
+          if git rev-parse "refs/tags/${{ inputs.tag }}" >/dev/null 2>&1; then
+            echo "Tag ${{ inputs.tag }} already exists."
+            exit 1
+          fi
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag "${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: "8.4"
           extensions: gd, mbstring
 
       - name: Install dependencies
         run: |
           composer update --optimize-autoloader --prefer-lowest --prefer-stable
 
-      - name: List Installed Dependencies
+      - name: List installed dependencies
         run: composer show -D
 
-      - name: Create zip file with application and vendor directory
+      - name: Create release archive
         run: |
-          zip -r ${{ github.ref_name }}-release.zip ./
+          zip -r "${{ inputs.tag }}-release.zip" ./
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.ref_name }}-release.zip
+          tag_name: ${{ inputs.tag }}
+          files: "${{ inputs.tag }}-release.zip"
           generate_release_notes: true
           make_latest: true
