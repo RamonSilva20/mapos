@@ -51,24 +51,35 @@ class ClientComprasController extends REST_Controller
             ], REST_Controller::HTTP_OK);
         }
 
-        $pixKey = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $emitente = $this->mapos_model->getEmitente();
-        $qrCode = $this->os_model->getQrCode(
-            $idVendas,
-            $pixKey,
-            $emitente
-        );
-        $chaveFormatada = $this->format->formatarChave($pixKey);
-        
+        $vendaId = (int) $idVendas;
+
         $this->load->model('vendas_model');
-        $result = $this->vendas_model->getById($this->uri->segment(5));
+        $result = $this->vendas_model->getById($vendaId);
         if (empty($result)) {
             $this->response([
                 'status' => false,
                 'message' => 'Compra Não encontrada'
             ], REST_Controller::HTTP_NOT_FOUND);
         }
-        $produtos = $this->vendas_model->getProdutos($this->uri->segment(5));
+
+        // A venda precisa pertencer ao cliente autenticado.
+        if ((int) $result->clientes_id !== (int) $clientLogged->usuario->idClientes) {
+            $this->response([
+                'status' => false,
+                'message' => 'Compra Não encontrada'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $pixKey = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
+        $emitente = $this->mapos_model->getEmitente();
+        $qrCode = $this->os_model->getQrCode(
+            $vendaId,
+            $pixKey,
+            $emitente
+        );
+        $chaveFormatada = $this->format->formatarChave($pixKey);
+
+        $produtos = $this->vendas_model->getProdutos($vendaId);
         unset(
             $result->senha,
             $result->email,

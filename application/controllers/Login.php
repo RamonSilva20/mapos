@@ -17,7 +17,9 @@ class Login extends CI_Controller
     {
         $this->session->sess_destroy();
 
-        return redirect($_SERVER['HTTP_REFERER']);
+        // O Referer é controlado pelo cliente; redirecionar para ele permitiria
+        // que um terceiro enviasse o usuário para um domínio externo.
+        return redirect(site_url('login'));
     }
 
     public function verificarLogin()
@@ -49,6 +51,10 @@ class Login extends CI_Controller
 
                 // Verificar credenciais do usuário
                 if (password_verify($password, $user->senha)) {
+                    // Novo ID de sessão a cada autenticação, para que um ID
+                    // fixado antes do login não continue válido depois dele.
+                    $this->session->sess_regenerate(true);
+
                     $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
                     $this->session->set_userdata($session_admin_data);
                     log_info('Efetuou login no sistema');
@@ -59,7 +65,9 @@ class Login extends CI_Controller
                     echo json_encode($json);
                 }
             } else {
-                $json = ['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretass.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
+                // Mesma mensagem do erro de senha: mensagens distintas revelam
+                // quais e-mails possuem conta.
+                $json = ['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
                 echo json_encode($json);
             }
         }

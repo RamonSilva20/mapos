@@ -42,13 +42,13 @@ class Mine extends CI_Controller
             echo json_encode(['result' => false, 'message' => 'Por favor digite uma senha']);
         } else {
             $token = $this->check_token($this->input->post('token'));
-            $cliente = $this->check_credentials($token->email);
+            $cliente = $token ? $this->check_credentials($token->email) : null;
 
-            if ($token == null && $cliente == null) {
-                $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                $this->session->set_userdata($session_mine_data);
-                log_info('Alteração de senha. Porém, os dados de acesso estão incorretos.');
-                echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.']);
+            // O token precisa existir, estar dentro da validade, ainda não ter
+            // sido utilizado e corresponder a um cliente existente.
+            if ($token == null || $cliente == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+                log_info('Alteração de senha. Porém, o token é inválido, expirado ou já utilizado.');
+                echo json_encode(['result' => false, 'message' => 'Token inválido ou expirado. Solicite uma nova recuperação de senha.']);
             } else {
                 if ($token->email == $cliente->email) {
                     $data = [
@@ -90,110 +90,65 @@ class Mine extends CI_Controller
         } else {
             $token = $this->check_token($this->input->post('token'));
 
-            if ($this->validateDate($token->data_expiracao)) {
-                $this->session->set_flashdata(['error' => 'Token expirado']);
-                $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
-                $this->session->set_userdata($session_mine_data);
-                log_info('Digitou Token. Porém, Token expirado');
+            // Um token inexistente, expirado ou já utilizado recebe sempre a
+            // mesma resposta genérica, para não revelar quais tokens existem.
+            if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+                $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+                log_info('Digitou Token. Porém, o token é inválido, expirado ou já utilizado.');
 
                 return redirect(base_url() . 'index.php/mine');
-            } else {
-                if ($token) {
-                    if (($cliente = $this->check_credentials($token->email)) == null) {
-                        $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
-                        $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                        $this->session->set_userdata($session_mine_data);
-                        log_info('Digitou Token. Porém, os dados de acesso estão incorretos.');
-
-                        return $this->load->view('conecte/token_digita');
-                    } else {
-                        if ($token->email == $cliente->email && $token->token_utilizado == false) {
-                            return $this->load->view('conecte/nova_senha', $token);
-                        } else {
-                            $this->session->set_flashdata('error', 'Dados divergentes ou Token invalido.');
-                            $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                            $this->session->set_userdata($session_mine_data);
-                            log_info('Digitou Token. Porém, dados divergentes ou Token invalido.');
-
-                            return redirect(base_url() . 'index.php/mine');
-                        }
-                    }
-                } else {
-                    $this->session->set_flashdata(['error' => 'Token Invalido']);
-                    $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
-                    $this->session->set_userdata($session_mine_data);
-                    log_info('Digitou Token. Porém, Token invalido.');
-
-                    return $this->load->view('conecte/token_digita');
-                }
             }
+
+            $cliente = $this->check_credentials($token->email);
+
+            if ($cliente == null || $token->email != $cliente->email) {
+                $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+                log_info('Digitou Token. Porém, os dados de acesso estão incorretos.');
+
+                return redirect(base_url() . 'index.php/mine');
+            }
+
+            return $this->load->view('conecte/nova_senha', $token);
         }
         $this->load->view('conecte/token_digita');
     }
 
     public function verifyTokenSenha()
     {
-        $token = $this->uri->uri_to_assoc(3);
-        $token = $this->check_token($token['token']);
+        $segment = $this->uri->uri_to_assoc(3);
+        $token = $this->check_token($segment['token'] ?? null);
 
-        if ($token == null || $token == '') {
-            $this->session->set_flashdata(['error' => 'Token invalido']);
-            $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
-            $this->session->set_userdata($session_mine_data);
-            log_info('Acesso via link do email (Token). Porém, Token invalido.');
+        // Um token inexistente, expirado ou já utilizado recebe sempre a mesma
+        // resposta genérica, para não revelar quais tokens existem.
+        if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+            $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+            log_info('Acesso via link do email (Token). Porém, o token é inválido, expirado ou já utilizado.');
 
-            return $this->load->view('conecte/token_digita');
-        } else {
-            if ($this->validateDate($token->data_expiracao)) {
-                $this->session->set_flashdata(['error' => 'Token expirado']);
-                $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
-                $this->session->set_userdata($session_mine_data);
-                log_info('Acesso via link do email (Token). Porém, Token expirado');
-
-                return redirect(base_url() . 'index.php/mine');
-            } else {
-                if ($token) {
-                    if (($cliente = $this->check_credentials($token->email)) == null) {
-                        $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
-                        $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                        $this->session->set_userdata($session_mine_data);
-                        log_info('Acesso via link do email (Token). Porém, dados de acesso estão incorretos.');
-
-                        return $this->load->view('conecte/token_digita');
-                    } else {
-                        if ($token->email == $cliente->email && $token->token_utilizado == false) {
-                            return $this->load->view('conecte/nova_senha', $token);
-                        } else {
-                            $this->session->set_flashdata('error', 'Dados divergentes ou Token invalido.');
-                            $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                            $this->session->set_userdata($session_mine_data);
-                            log_info('Acesso via link do email (Token). Porém, dados divergentes ou Token invalido.');
-
-                            return redirect(base_url() . 'index.php/mine');
-                        }
-                    }
-                } else {
-                    $this->session->set_flashdata(['error' => 'Token Invalido']);
-                    $session_mine_data = $token->email ? ['nome' => $token->email] : ['nome' => 'Inexistente'];
-                    $this->session->set_userdata($session_mine_data);
-                    log_info('Acesso via link do email (Token). Porém, Token invalido.');
-
-                    return $this->load->view('conecte/token_digita');
-                }
-
-                return $this->load->view('conecte/nova_senha', $token);
-            }
+            return redirect(base_url() . 'index.php/mine');
         }
+
+        $cliente = $this->check_credentials($token->email);
+
+        if ($cliente == null || $token->email != $cliente->email) {
+            $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+            log_info('Acesso via link do email (Token). Porém, os dados de acesso estão incorretos.');
+
+            return redirect(base_url() . 'index.php/mine');
+        }
+
+        return $this->load->view('conecte/nova_senha', $token);
     }
 
     public function gerarTokenResetarSenha()
     {
-        if (! $cliente = $this->check_credentials($this->input->post('email'))) {
-            $this->session->set_flashdata(['error' => 'Os dados de acesso estão incorretos.']);
-            $session_mine_data = $cliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-            $this->session->set_userdata($session_mine_data);
-            log_info('Cliente solicitou alteração de senha. Porém falhou ao realizar solicitação!');
-            redirect($_SERVER['HTTP_REFERER']);
+        $emailSolicitado = (string) $this->input->post('email');
+
+        if (! $cliente = $this->check_credentials($emailSolicitado)) {
+            // Mesma resposta de sucesso quando o e-mail não existe, para não
+            // permitir enumeração de contas.
+            log_info('Cliente solicitou alteração de senha para um e-mail inexistente.');
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . html_escape($emailSolicitado));
+            redirect(base_url() . 'index.php/mine');
         } else {
             $this->load->helper('string');
             $this->load->model('resetSenhas_model', '', true);
@@ -239,6 +194,10 @@ class Mine extends CI_Controller
             if ($cliente) {
                 // Verificar credenciais do usuário
                 if (password_verify($password, $cliente->senha)) {
+                    // Novo ID de sessão a cada autenticação, para que um ID
+                    // fixado antes do login não continue válido depois dele.
+                    $this->session->sess_regenerate(true);
+
                     $session_mine_data = [
                         'nome' => $cliente->nomeCliente,
                         'cliente_id' => $cliente->idClientes,
@@ -266,7 +225,9 @@ class Mine extends CI_Controller
                     echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
                 }
             } else {
-                echo json_encode(['result' => false, 'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+                // Mesma mensagem do erro de senha: mensagens distintas revelam
+                // quais e-mails possuem cadastro.
+                echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
             }
         }
     }
@@ -733,35 +694,47 @@ class Mine extends CI_Controller
 
     public function minha_ordem_de_servico($y = null, $when = null)
     {
-        if (($y != null) && (is_numeric($y))) {
-            // Do not forget this number -> 44023
-            // function sending => y = (7653 * ID) + 44023
-            // function recieving => x = (y - 44023) / 7653
-
-            // Example ID = 2 | y = 59329
-
-            $y = intval($y);
-            $id = ($y - 44023) / 7653;
-
-            $data['menuOs'] = 'os';
-            $this->data['custom_error'] = '';
-            $this->load->model('mapos_model');
-            $this->load->model('os_model');
-            $data['result'] = $this->os_model->getById($id);
-            if ($data['result'] == null) {
-                // Resposta em caso de não encontrar a ordem de serviço
-                //$this->load->view('conecte/login');
-            } else {
-                $data['produtos'] = $this->os_model->getProdutos($id);
-                $data['servicos'] = $this->os_model->getServicos($id);
-                $data['emitente'] = $this->mapos_model->getEmitente();
-
-                $this->load->view('conecte/minha_os', $data);
-            }
-        } else {
-            // Resposta em caso de não encontrar a ordem de serviço
-            //$this->load->view('conecte/');
+        // O identificador enviado por e-mail é apenas uma ofuscação reversível
+        // (y = 7653 * ID + 44023), portanto não pode ser tratado como segredo.
+        // O cliente precisa estar autenticado e a OS precisa ser dele.
+        if (! session_id() || ! $this->session->userdata('conectado')) {
+            redirect('mine');
         }
+
+        if (($y == null) || (! is_numeric($y))) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            redirect('mine/painel');
+        }
+
+        $y = intval($y);
+        $id = ($y - 44023) / 7653;
+
+        if ($id <= 0 || floor($id) != $id) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            redirect('mine/painel');
+        }
+
+        $data['menuOs'] = 'os';
+        $this->data['custom_error'] = '';
+        $this->load->model('mapos_model');
+        $this->load->model('os_model');
+        $data['result'] = $this->os_model->getById((int) $id);
+
+        if ($data['result'] == null) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            redirect('mine/painel');
+        }
+
+        if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
+        $data['produtos'] = $this->os_model->getProdutos((int) $id);
+        $data['servicos'] = $this->os_model->getServicos((int) $id);
+        $data['emitente'] = $this->mapos_model->getEmitente();
+
+        $this->load->view('conecte/minha_os', $data);
     }
 
     public function adicionarOs()
@@ -836,25 +809,32 @@ class Mine extends CI_Controller
 
     public function detalhesOs($id = null)
     {
-        if (is_numeric($id) && $id != null) {
-            $this->load->model('mapos_model');
-            $this->load->model('os_model');
-
-            $this->data['result'] = $this->os_model->getById($id);
-            $this->data['produtos'] = $this->os_model->getProdutos($id);
-            $this->data['servicos'] = $this->os_model->getServicos($id);
-            $this->data['anexos'] = $this->os_model->getAnexos($id);
-
-            if ($this->data['result']->idClientes != $this->session->userdata('cliente_id')) {
-                $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-                redirect('mine/painel');
-            }
-
-            $this->data['output'] = 'conecte/detalhes_os';
-            $this->load->view('conecte/template', $this->data);
-        } else {
-            echo 'teste';
+        if (! session_id() || ! $this->session->userdata('conectado')) {
+            redirect('mine');
         }
+
+        if (! is_numeric($id) || $id == null) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            redirect('mine/painel');
+        }
+
+        $this->load->model('mapos_model');
+        $this->load->model('os_model');
+
+        $this->data['result'] = $this->os_model->getById((int) $id);
+
+        // Sem OS, ou OS de outro cliente, o acesso é negado.
+        if (! $this->data['result'] || $this->data['result']->idClientes != $this->session->userdata('cliente_id')) {
+            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+            redirect('mine/painel');
+        }
+
+        $this->data['produtos'] = $this->os_model->getProdutos((int) $id);
+        $this->data['servicos'] = $this->os_model->getServicos((int) $id);
+        $this->data['anexos'] = $this->os_model->getAnexos((int) $id);
+
+        $this->data['output'] = 'conecte/detalhes_os';
+        $this->load->view('conecte/template', $this->data);
     }
 
     public function cadastrar()
@@ -864,11 +844,21 @@ class Mine extends CI_Controller
         $this->data['custom_error'] = '';
         $id = 0;
 
+        $captchaEsperado = (string) $this->session->userdata('captchaWord');
+        $captchaInformado = (string) $this->input->post('captcha');
+
+        // Sem a checagem de "vazio", uma sessão sem captcha gerado compara
+        // '' com '' e libera o cadastro sem resolver a imagem.
         if ($this->form_validation->run('clientes') == false) {
             $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } elseif (strtolower($this->input->post('captcha')) != strtolower($this->session->userdata('captchaWord'))) {
+        } elseif ($captchaEsperado === '' || $captchaInformado === '' || strtolower($captchaInformado) !== strtolower($captchaEsperado)) {
+            // Um captcha só vale para uma tentativa.
+            $this->session->unset_userdata('captchaWord');
             $this->session->set_flashdata('error', 'Os caracteres da imagem não foram preenchidos corretamente!');
         } else {
+            // Consome o captcha para impedir reuso do mesmo código.
+            $this->session->unset_userdata('captchaWord');
+
             $data = [
                 'nomeCliente' => set_value('nomeCliente'),
                 'documento' => set_value('documento'),
@@ -907,15 +897,32 @@ class Mine extends CI_Controller
         if (! session_id() || ! $this->session->userdata('conectado')) {
             redirect('mine');
         }
-        if ($id != null && is_numeric($id)) {
-            $this->db->where('idAnexos', $id);
-            $file = $this->db->get('anexos', 1)->row();
 
-            $this->load->library('zip');
-            $path = $file->path;
-            $this->zip->read_file($path . '/' . $file->anexo);
-            $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        if ($id == null || ! is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Anexo não encontrado.');
+            redirect('mine/painel');
         }
+
+        $this->db->where('idAnexos', (int) $id);
+        $file = $this->db->get('anexos', 1)->row();
+
+        if (! $file) {
+            $this->session->set_flashdata('error', 'Anexo não encontrado.');
+            redirect('mine/painel');
+        }
+
+        // O anexo precisa pertencer a uma OS do cliente autenticado.
+        $this->load->model('os_model');
+        $os = $this->os_model->getById($file->os_id);
+
+        if (! $os || $os->idClientes != $this->session->userdata('cliente_id')) {
+            $this->session->set_flashdata('error', 'Anexo não encontrado.');
+            redirect('mine/painel');
+        }
+
+        $this->load->library('zip');
+        $this->zip->read_file($file->path . '/' . $file->anexo);
+        $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 
     private function check_credentials($email)
@@ -928,6 +935,12 @@ class Mine extends CI_Controller
 
     private function check_token($token)
     {
+        // Sem essa guarda, um token nulo vira "WHERE token IS NULL" e pode
+        // casar com uma linha da tabela.
+        if ($token === null || $token === '') {
+            return null;
+        }
+
         $this->db->where('token', $token);
         $this->db->limit(1);
 

@@ -18,11 +18,11 @@
             <?php endif ?>
 
             <div class="span5">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Digite o nome do documento para pesquisar" class="span12" value="<?= $this->input->get('pesquisa') ?>">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="Digite o nome do documento para pesquisar" class="span12" value="<?= html_escape($this->input->get('pesquisa')) ?>">
             </div>
             <div class="span3">
-                <input type="text" name="data" id="data" placeholder="Data de" class="span6 datepicker" value="<?= $this->input->get('data') ?>">
-                <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= $this->input->get('data2') ?>">
+                <input type="text" name="data" id="data" placeholder="Data de" class="span6 datepicker" value="<?= html_escape($this->input->get('data')) ?>">
+                <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= html_escape($this->input->get('data2')) ?>">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px"><span class="button__icon"><i class='bx bx-search-alt'></i></span></button>

@@ -51,6 +51,7 @@ class ClientLoginController extends REST_Controller
             'uid' => $cliente->idClientes,
             'nome' => $cliente->nomeCliente,
             'email' => $cliente->email,
+            'type' => REST_Controller::TOKEN_TYPE_CLIENT,
         ];
 
         $result = [

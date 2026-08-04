@@ -53,8 +53,16 @@ class Os extends MY_Controller
         $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
         $this->data['configuration']['total_rows'] = $this->os_model->count('os');
         if (count($where_array) > 0) {
-            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
-            $this->data['configuration']['first_url'] = base_url("index.php/os/gerenciar")."\?pesquisa={$pesquisa}&status={$status}&data={$inputDe}&data2={$inputAte}";
+            // Estes valores são interpolados no href dos links de paginação.
+            $query = http_build_query([
+                'pesquisa' => $pesquisa,
+                'status' => $status,
+                'data' => $inputDe,
+                'data2' => $inputAte,
+            ]);
+
+            $this->data['configuration']['suffix'] = '?' . $query;
+            $this->data['configuration']['first_url'] = base_url('index.php/os/gerenciar') . '?' . $query;
         }
 
         $this->pagination->initialize($this->data['configuration']);
@@ -861,7 +869,16 @@ class Os extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico');
+        // idOsServico compõe o caminho do diretório: sem a normalização para
+        // inteiro, "../.." escaparia de assets/anexos.
+        $idOsServico = (int) $this->input->post('idOsServico');
+
+        if ($idOsServico <= 0 || ! $this->os_model->getById($idOsServico)) {
+            echo json_encode(['result' => false, 'mensagem' => 'Ordem de serviço inválida.']);
+            exit();
+        }
+
+        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $idOsServico;
 
         // If it exist, check if it's a directory
         if (! is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
@@ -922,7 +939,7 @@ class Os extends MY_Controller
                     } else {
                         $success[] = $upload_data;
                         $this->load->model('Os_model');
-                        $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), 'thumb_' . $new_file_name, $directory);
+                        $result = $this->Os_model->anexar($idOsServico, $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $idOsServico), 'thumb_' . $new_file_name, $directory);
                         if (! $result) {
                             $error['db'][] = 'Erro ao inserir no banco de dados.';
                         }
@@ -932,7 +949,7 @@ class Os extends MY_Controller
 
                     $this->load->model('Os_model');
 
-                    $result = $this->Os_model->anexar($this->input->post('idOsServico'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $this->input->post('idOsServico')), '', $directory);
+                    $result = $this->Os_model->anexar($idOsServico, $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $idOsServico), '', $directory);
                     if (! $result) {
                         $error['db'][] = 'Erro ao inserir no banco de dados.';
                     }
@@ -943,7 +960,7 @@ class Os extends MY_Controller
         if (count($error) > 0) {
             echo json_encode(['result' => false, 'mensagem' => 'Ocorreu um erro ao processar os arquivos.', 'errors' => $error]);
         } else {
-            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $this->input->post('idOsServico'));
+            log_info('Adicionou anexo(s) a uma OS. ID (OS): ' . $idOsServico);
             echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
         }
     }

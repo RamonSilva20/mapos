@@ -6,6 +6,14 @@ if (! defined('BASEPATH')) {
 
 class Conecte_model extends CI_Model
 {
+    /**
+     * Colunas de `usuarios` que podem ser expostas na área do cliente.
+     *
+     * As consultas desta model fazem join com `usuarios`; um `SELECT *` traria
+     * junto o hash da senha do técnico para dentro da resposta ao cliente.
+     */
+    private const USUARIO_CAMPOS_PUBLICOS = 'usuarios.idUsuarios, usuarios.nome, usuarios.email, usuarios.telefone, usuarios.celular';
+
     public function add($table, $data, $returnId = false)
     {
         $this->db->insert($table, $data);
@@ -22,6 +30,7 @@ class Conecte_model extends CI_Model
 
     public function getLastOs($cliente)
     {
+        $this->db->select('os.*, ' . self::USUARIO_CAMPOS_PUBLICOS);
         $this->db->from('os');
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
@@ -46,7 +55,8 @@ class Conecte_model extends CI_Model
 
     public function getCompras($table, $fields, $where, $perpage, $start, $one, $array, $cliente)
     {
-        $this->db->select($fields);
+        // $fields costuma vir como '*', o que traria usuarios.senha pelo join.
+        $this->db->select($fields === '*' ? 'vendas.*, ' . self::USUARIO_CAMPOS_PUBLICOS : $fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'vendas.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->order_by('idVendas', 'desc');
@@ -66,7 +76,12 @@ class Conecte_model extends CI_Model
 
     public function getCobrancas($table, $fields, $where, $perpage, $start, $one, $array, $cliente)
     {
-        $this->db->select($fields);
+        // $fields costuma vir como '*', o que traria clientes.senha pelo join.
+        $this->db->select($fields === '*'
+            ? 'cobrancas.*, clientes.idClientes, clientes.nomeCliente, clientes.documento,
+               clientes.telefone, clientes.celular, clientes.email, clientes.rua, clientes.numero,
+               clientes.complemento, clientes.bairro, clientes.cidade, clientes.estado, clientes.cep'
+            : $fields);
         $this->db->from($table);
         $this->db->join('clientes', 'cobrancas.clientes_id = clientes.idClientes', 'left');
         $this->db->where('clientes_id', $cliente);
@@ -86,7 +101,8 @@ class Conecte_model extends CI_Model
 
     public function getOs($table, $fields, $where, $perpage, $start, $one, $array, $cliente)
     {
-        $this->db->select($fields);
+        // $fields costuma vir como '*', o que traria usuarios.senha pelo join.
+        $this->db->select($fields === '*' ? 'os.*, ' . self::USUARIO_CAMPOS_PUBLICOS : $fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);

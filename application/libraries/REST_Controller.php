@@ -19,6 +19,17 @@ require APPPATH . 'libraries/Format.php';
  */
 abstract class REST_Controller extends CI_Controller
 {
+    /**
+     * Público a que um JWT se destina.
+     *
+     * O `uid` de um cliente e o de um operador vêm de tabelas diferentes e
+     * colidem em valor; sem esta marcação, um token da área do cliente seria
+     * aceito como token de operador (e vice-versa).
+     */
+    const TOKEN_TYPE_USER = 'user';
+
+    const TOKEN_TYPE_CLIENT = 'client';
+
     // Note: Only the widely used HTTP status codes are documented
 
     // Informational
@@ -879,6 +890,13 @@ abstract class REST_Controller extends CI_Controller
             // Otherwise dump the output automatically
         } else {
             echo json_encode($data);
+
+            // Sem este exit, com o profiling ligado a execução seguiria após
+            // um response() de 401/403 e as checagens de permissão dos
+            // controllers deixariam de barrar a requisição.
+            if ($continue === false) {
+                exit;
+            }
         }
     }
 
@@ -2222,9 +2240,27 @@ abstract class REST_Controller extends CI_Controller
 
         $this->load->library('Authorization_Token');
         $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1], $reGenToken);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '', $reGenToken);
+
+        // Assinatura/formato inválidos derrubam a requisição mesmo na
+        // renovação de token: sem isso, $decodedToken->data nem existe.
+        if (! $decodedToken->status && ! isset($decodedToken->data)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
 
         if (! $reGenToken && ! $decodedToken->status) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
+
+        // Um token da área do cliente não pode ser usado como token de
+        // operador: o `uid` de um cliente casaria com o id de um usuário.
+        if (($decodedToken->data->type ?? null) !== self::TOKEN_TYPE_USER) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça o login novamente!',
@@ -2257,9 +2293,17 @@ abstract class REST_Controller extends CI_Controller
 
         $this->load->library('Authorization_Token');
         $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1], $reGenToken);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '', $reGenToken);
 
-        if (! $reGenToken && ! $decodedToken->status) {
+        if (! $decodedToken->status || ! isset($decodedToken->data)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
+
+        // Só tokens emitidos pelo login da área do cliente valem aqui.
+        if (($decodedToken->data->type ?? null) !== self::TOKEN_TYPE_CLIENT) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça o login novamente!',
@@ -2269,7 +2313,14 @@ abstract class REST_Controller extends CI_Controller
         $this->load->model('Clientes_model');
         $this->client = $decodedToken;
         $this->client->usuario = $this->Clientes_model->getById($decodedToken->data->uid);
-        
+
+        if (! $this->client->usuario) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
+
         return $this->client;
     }
 

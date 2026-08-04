@@ -26,7 +26,7 @@
             <div class="span3">
                 <input type="text" name="pesquisa" id="pesquisa"
                     placeholder="Buscar por Nome, Doc, Email ou Telefone..." class="span12"
-                    value="<?= $this->input->get('pesquisa') ?>">
+                    value="<?= html_escape($this->input->get('pesquisa')) ?>">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px">

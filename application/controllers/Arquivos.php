@@ -212,7 +212,8 @@ class Arquivos extends MY_Controller
         redirect(site_url('arquivos'));
     }
 
-    public function do_upload()
+    // Auxiliar interno: como método público seria acessível via /arquivos/do_upload.
+    protected function do_upload()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar arquivos.');
@@ -229,7 +230,9 @@ class Arquivos extends MY_Controller
         $config['encrypt_name'] = true;
 
         if (! is_dir('./assets/arquivos/' . $date)) {
-            mkdir('./assets/arquivos/' . $date, 0777, true);
+            // 0755: o diretório recebe uploads e não precisa ser gravável por
+            // qualquer usuário do servidor.
+            mkdir('./assets/arquivos/' . $date, 0755, true);
         }
 
         $this->load->library('upload', $config);

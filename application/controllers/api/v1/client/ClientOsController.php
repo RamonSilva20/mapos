@@ -64,18 +64,29 @@ class ClientOsController extends REST_Controller
             ], REST_Controller::HTTP_OK);
         }
         
+        $osId = (int) $id;
+
         $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['result'] = $this->os_model->getById($this->uri->segment(5));
+        $data['result'] = $this->os_model->getById($osId);
         if (empty($data['result'])) {
             $this->response([
                 'status' => false,
-                'message' => 'Ordem de serviço encontrada'
+                'message' => 'Ordem de serviço não encontrada'
             ], REST_Controller::HTTP_NOT_FOUND);
         }
-        $os = $this->os_model->getById($this->uri->segment(5));
-        $produtos = $this->os_model->getProdutos($this->uri->segment(5));
-        $servicos = $this->os_model->getServicos($this->uri->segment(5));
-        $anexos = $this->os_model->getAnexos($this->uri->segment(5));
+
+        // A OS precisa pertencer ao cliente autenticado.
+        if ((int) $data['result']->idClientes !== (int) $clientLogged->usuario->idClientes) {
+            $this->response([
+                'status' => false,
+                'message' => 'Ordem de serviço não encontrada'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $os = $data['result'];
+        $produtos = $this->os_model->getProdutos($osId);
+        $servicos = $this->os_model->getServicos($osId);
+        $anexos = $this->os_model->getAnexos($osId);
         $emitente = $this->mapos_model->getEmitente();
         $qrCode = $this->os_model->getQrCode(
             $id,

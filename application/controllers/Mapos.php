@@ -123,7 +123,8 @@ class Mapos extends MY_Controller
         return $this->layout();
     }
 
-    public function do_upload()
+    // Auxiliar interno: como método público seria acessível via /mapos/do_upload.
+    protected function do_upload()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
@@ -139,8 +140,10 @@ class Mapos extends MY_Controller
         }
 
         $this->upload_config = [
+            // SVG fora da lista: é um documento XML que pode carregar script e
+            // seria servido a partir da própria origem da aplicação.
             'upload_path' => $image_upload_folder,
-            'allowed_types' => 'png|jpg|jpeg|bmp|svg',
+            'allowed_types' => 'png|jpg|jpeg|bmp',
             'max_size' => 2048,
             'remove_space' => true,
             'encrypt_name' => true,
@@ -159,7 +162,8 @@ class Mapos extends MY_Controller
         }
     }
 
-    public function do_upload_user()
+    // Auxiliar interno: como método público seria acessível via /mapos/do_upload_user.
+    protected function do_upload_user()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
@@ -623,6 +627,10 @@ class Mapos extends MY_Controller
         $env_file = file_get_contents($env_file_path);
 
         foreach ($data as $constante => $valor) {
+            // Cada valor vira uma linha do .env. Uma quebra de linha no POST
+            // permitiria acrescentar outras variáveis de ambiente à vontade.
+            $valor = str_replace(["\r", "\n"], '', (string) $valor);
+
             if ($constante == 'API_JWT_KEY' && $valor == 'sim') {
                 $base64 = base64_encode(openssl_random_pseudo_bytes(32));
                 $valor = '"' . $base64 . '"';

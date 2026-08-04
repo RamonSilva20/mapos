@@ -277,6 +277,7 @@ class UsuariosController extends REST_Controller
                     'uid' => $user->idUsuarios,
                     'email' => $user->email,
                     'permissao' => $user->permissoes_id,
+                    'type' => REST_Controller::TOKEN_TYPE_USER,
                 ];
 
                 $result = [
@@ -319,6 +320,7 @@ class UsuariosController extends REST_Controller
                     'uid' => $user->idUsuarios,
                     'email' => $user->email,
                     'permissao' => $user->permissoes_id,
+                    'type' => REST_Controller::TOKEN_TYPE_USER,
                 ];
 
                 $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true)['permissoes']);
