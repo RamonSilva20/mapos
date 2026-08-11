@@ -152,7 +152,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * Composer >= 2
 
 ### Estrelas
-[![Estrelas](https://api.star-history.com/svg?repos=RamonSilva20/mapos&type=Date)](https://star-history.com/#RamonSilva20/mapos&Date)
+[![Estrelas](https://star-history.dera.page/svg?repos=RamonSilva20/mapos&type=Date)](https://star-history.dera.page/#RamonSilva20/mapos&Date)
 
 ### Contribuidores
 [![Contribuidores](https://contrib.rocks/image?repo=RamonSilva20/mapos)](https://github.com/RamonSilva20/mapos/graphs/contributors)
