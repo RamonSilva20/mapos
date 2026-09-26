@@ -24,6 +24,15 @@
     "scripts": {
         "format": [
             "application/vendor/bin/php-cs-fixer fix"
+        ],
+        "format:check": [
+            "application/vendor/bin/php-cs-fixer fix --dry-run --diff"
+        ],
+        "xss:check": [
+            "@php tools/check_view_escaping.php"
+        ],
+        "xss:baseline": [
+            "@php tools/check_view_escaping.php --update-baseline"
         ]
     },
     "config": {

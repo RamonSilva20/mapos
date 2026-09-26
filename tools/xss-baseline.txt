@@ -1,0 +1,10 @@
+# Baseline for tools/check_view_escaping.php
+#
+# Each entry is "application/views/relative/path.php|value expression" for a
+# place where a value intentionally reaches the page without an escaper.
+# Comment lines above an entry explain why.
+#
+# This file is intentionally empty: every view output is currently escaped.
+# Run `php tools/check_view_escaping.php --update-baseline` after adding an
+# entry on purpose, and review the diff - each line is a decision to leave a
+# value unescaped.

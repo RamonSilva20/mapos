@@ -147,7 +147,9 @@ class Mine extends CI_Controller
             // Mesma resposta de sucesso quando o e-mail não existe, para não
             // permitir enumeração de contas.
             log_info('Cliente solicitou alteração de senha para um e-mail inexistente.');
-            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . html_escape($emailSolicitado));
+            // A mensagem é escapada no momento da exibição (views com esc_msg),
+            // por isso o valor deve ser enviado puro.
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $emailSolicitado);
             redirect(base_url() . 'index.php/mine');
         } else {
             $this->load->helper('string');

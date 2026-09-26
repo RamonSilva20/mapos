@@ -3,7 +3,7 @@ $this->load->config('payment_gateways');
 ?>
 
 <script>
-    var paymentGatewaysConfig = JSON.parse("<?php echo addslashes(json_encode($this->config->item('payment_gateways'))); ?>");
+    var paymentGatewaysConfig = JSON.parse(<?= esc_json($this->config->item('payment_gateways')) ?>);
 </script>
 
 <div class="modal fade" id="modal-gerar-pagamento" tabindex="-1" role="dialog">
@@ -17,13 +17,13 @@ $this->load->config('payment_gateways');
                 <div class="modal-body">
                     <div id="forma-pag" class="">
                         <div class="form-group">
-                            <input value="<?php echo $id ?>" name="id" hidden>
-                            <input value="<?php echo $tipo ?>" name="tipo" hidden>
+                            <input value="<?php echo esc($id); ?>" name="id" hidden>
+                            <input value="<?php echo esc($tipo); ?>" name="tipo" hidden>
                             <label for="gateway_de_pagamento">Gateway de Pagamento: </label>
                             <select id="gateway_de_pagamento" class="form-control span12" name="gateway_de_pagamento" required>
                                 <option value="" selected>Escolha o gateway de pagamento</option>
                                 <?php foreach ($this->config->item('payment_gateways') as $paymentGateway) : ?>
-                                    <option value="<?php echo $paymentGateway['library_name']; ?>"><?php echo $paymentGateway['name']; ?></option>
+                                    <option value="<?php echo esc($paymentGateway['library_name']); ?>"><?php echo esc($paymentGateway['name']); ?></option>
                                 <?php endforeach ?>
                             </select>
                             <label id="label_forma_pagamento" for="forma_pagamento" hidden>Forma de Pagamento: </label>

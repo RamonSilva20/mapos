@@ -14,56 +14,56 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente</strong></td>
                             <td>
-                                <?php echo $result->nomeCliente; ?>
+                                <?php echo esc($result->nomeCliente); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Documento)</strong></td>
                             <td>
-                                <?php echo $result->documento; ?>
+                                <?php echo esc($result->documento); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Telefone)</strong></td>
                             <td>
-                                <?php echo $result->telefone; ?>
+                                <?php echo esc($result->telefone); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Celular)</strong></td>
                             <td>
-                                <?php echo $result->celular; ?>
+                                <?php echo esc($result->celular); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Email)</strong></td>
                             <td>
-                                <?php echo $result->email; ?>
+                                <?php echo esc($result->email); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Id interno (id)</strong></td>
                             <td>
-                                <?php echo $result->idCobranca; ?>
+                                <?php echo esc($result->idCobranca); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Id externo (charge_id)</strong></td>
                             <td>
-                                <?php echo $result->charge_id; ?>
+                                <?php echo esc($result->charge_id); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Gateway de Pagamento</strong></td>
                             <td>
-                                <?php echo $result->payment_gateway; ?>
+                                <?php echo esc($result->payment_gateway); ?>
                             </td>
                         </tr>
 
@@ -97,21 +97,21 @@
                         <tr>
                             <td style="text-align: right"><strong>Método de pagamento</strong></td>
                             <td>
-                                <?php echo $result->payment_method; ?>
+                                <?php echo esc($result->payment_method); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Url de pagamento</strong></td>
                             <td>
-                                <?php echo $result->payment_url; ?>
+                                <?php echo esc($result->payment_url); ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Código de barras</strong></td>
                             <td>
-                                <?php echo $result->barcode; ?>
+                                <?php echo esc($result->barcode); ?>
                             </td>
                         </tr>
 
@@ -119,7 +119,7 @@
                             <td style="text-align: right"><strong>Link</strong></td>
                             <td>
                                 <?php if ($result->link) { ?>
-                                    <a href="<?php echo $result->link; ?>" target="_blank">Abrir em nova aba</a>
+                                    <a href="<?php echo esc($result->link); ?>" target="_blank">Abrir em nova aba</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -128,7 +128,7 @@
                             <td style="text-align: right"><strong>PDF</strong></td>
                             <td>
                                 <?php if ($result->pdf) { ?>
-                                    <a href="<?php echo $result->pdf; ?>" target="_blank">Abrir em nova aba</a>
+                                    <a href="<?php echo esc($result->pdf); ?>" target="_blank">Abrir em nova aba</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -136,7 +136,7 @@
                         <tr>
                             <td style="text-align: right"><strong>Mensagem</strong></td>
                             <td>
-                                <?php echo $result->message; ?>
+                                <?php echo esc($result->message); ?>
                             </td>
                         </tr>
                     </tbody>

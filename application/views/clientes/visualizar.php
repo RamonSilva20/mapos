@@ -109,38 +109,38 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%;"><strong>Rua</strong></td>
                                     <td>
-                                        <?php echo $result->rua ?>
+                                        <?php echo esc($result->rua); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Número</strong></td>
                                     <td>
-                                        <?php echo $result->numero ?>
+                                        <?php echo esc($result->numero); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Complemento</strong></td>
                                     <td>
-                                        <?php echo $result->complemento ?>
+                                        <?php echo esc($result->complemento); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Bairro</strong></td>
                                     <td>
-                                        <?php echo $result->bairro ?>
+                                        <?php echo esc($result->bairro); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Cidade</strong></td>
                                     <td>
-                                        <?php echo $result->cidade ?> -
-                                        <?php echo $result->estado ?>
+                                        <?php echo esc($result->cidade); ?> -
+                                        <?php echo esc($result->estado); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>CEP</strong></td>
                                     <td>
-                                        <?php echo $result->cep ?>
+                                        <?php echo esc($result->cep); ?>
                                     </td>
                                 </tr>
                                 </tbody>

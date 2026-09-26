@@ -2,10 +2,10 @@
 <html lang="pt-br">
 
 <head>
-    <title><?php echo $this->config->item('app_name') ?></title>
+    <title><?php echo esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?php echo esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
@@ -55,10 +55,10 @@
                                                     </tr>
                                                 <?php } else { ?>
                                                     <tr>
-                                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                                        <td><span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br>
-                                                            <span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br>
-                                                            <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span>
+                                                        <td style="width: 25%"><img src=" <?php echo esc($emitente[0]->url_logo); ?> "></td>
+                                                        <td><span style="font-size: 20px; "> <?php echo esc($emitente[0]->nome); ?></span> </br>
+                                                            <span><?php echo esc($emitente[0]->cnpj); ?> </br> <?php echo esc($emitente[0]->rua) . ', nº:' . esc($emitente[0]->numero) . ', ' . esc($emitente[0]->bairro) . ' - ' . esc($emitente[0]->cidade) . ' - ' . esc($emitente[0]->uf); ?> </span> </br>
+                                                            <span> E-mail: <?php echo esc($emitente[0]->email) . ' - Fone: ' . esc($emitente[0]->telefone); ?></span>
                                                         </td>
                                                         <td style="width: 18%; text-align: center"><span>Emissão: <?php echo date('d/m/Y') ?></span></td>
                                                     </tr>
@@ -75,9 +75,9 @@
                                                             <li>
                                                                 <span>
                                                                     <h5>Cliente</h5>
-                                                                    <span><?php echo $result->nomeCliente ?></span><br />
-                                                                    <span><?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?></span><br />
-                                                                    <span><?php echo $result->cidade ?> - <?php echo $result->estado ?></span>
+                                                                    <span><?php echo esc($result->nomeCliente); ?></span><br />
+                                                                    <span><?php echo esc($result->rua); ?>, <?php echo esc($result->numero); ?>, <?php echo esc($result->bairro); ?></span><br />
+                                                                    <span><?php echo esc($result->cidade); ?> - <?php echo esc($result->estado); ?></span>
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -87,9 +87,9 @@
                                                                 <span>
                                                                     <h5>Responsável</h5>
                                                                 </span>
-                                                                <span><?php echo $result->nome ?></span> <br />
-                                                                <span>Telefone: <?php echo $result->telefone ?></span><br />
-                                                                <span>Email: <?php echo $result->email ?></span>
+                                                                <span><?php echo esc($result->nome); ?></span> <br />
+                                                                <span>Telefone: <?php echo esc($result->telefone); ?></span><br />
+                                                                <span>Email: <?php echo esc($result->email); ?></span>
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -236,7 +236,7 @@
     </div>
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12"> <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name'); ?> - Versão <?php echo $this->config->item('app_version'); ?></div>
+        <div id="footer" class="span12"> <?= date('Y') ?> &copy; <?php echo esc($this->config->item('app_name')); ?> - Versão <?php echo esc($this->config->item('app_version')); ?></div>
     </div>
 
     <!-- javascript

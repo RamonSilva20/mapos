@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-  <title><?= $this->config->item('app_name') ?> </title>
+  <title><?= esc($this->config->item('app_name')) ?> </title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
@@ -35,7 +35,7 @@
   ?>
       </h1>
       <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
-      <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
+      <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= esc($this->config->item('app_version')); ?>">
     </div>
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
       <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
@@ -43,7 +43,7 @@
         <div id="loginbox">
           <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <?= $this->session->flashdata('error'); ?>
+            <?= esc($this->session->flashdata('error')); ?>
           </div>
         </div>
       <?php } ?>
@@ -60,7 +60,7 @@
                     <?= '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
                   </div>
                 </div>
-                <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
+                <div id="mcell">Versão: <?= esc($this->config->item('app_version')); ?></div>
                 <div class="input-field">
                   <label class="fas fa-user" for="nome"></label>
                   <input id="email" name="email" type="text" placeholder="Email">

@@ -2,10 +2,10 @@
 <html lang="pt-br">
 
 <head>
-    <title>Mine - Área do Cliente - <?php echo $this->config->item('app_name') ?></title>
+    <title>Mine - Área do Cliente - <?php echo esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?php echo esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
@@ -65,7 +65,7 @@
             $(document).on('click', '#senhaClient', function(event) {
                 event.preventDefault();
                 var senha = $("input[name='senha']").val();
-                var token = "<?= $token ?>";
+                var token = "<?= esc($token) ?>";
 
                 $.ajax({
                     type: "POST",
@@ -107,7 +107,7 @@
     <!--Footer-part-->
     <div class="row-fluid">
         <div id="footer" class="span12" style="padding: 10px"> <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
-                <?= date('Y') ?> &copy; Ramon Silva - <?php echo $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+                <?= date('Y') ?> &copy; Ramon Silva - <?php echo esc($this->config->item('app_name')) ?> - Versão: <?= esc($this->config->item('app_version')); ?>
             </a></div>
     </div>
 

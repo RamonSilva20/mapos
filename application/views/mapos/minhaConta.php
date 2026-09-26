@@ -122,11 +122,11 @@
                 <div class="span12">
                     <ul class="site-stats">
                         <li class="bg_ls span12"><strong>Nome:
-                                <?= $usuario->nome ?></strong></li>
+                                <?= esc($usuario->nome) ?></strong></li>
                         <li class="bg_lb span12" style="margin-left: 0"><strong>Telefone:
-                                <?= $usuario->telefone ?></strong></li>
+                                <?= esc($usuario->telefone) ?></strong></li>
                         <li class="bg_lg span12" style="margin-left: 0"><strong>Email:
-                                <?= $usuario->email ?></strong></li>
+                                <?= esc($usuario->email) ?></strong></li>
                         <li class="bg_lo span12" style="margin-left: 0"><strong>Nível:
                                 <?= $usuario->permissao; ?></strong></li>
                         <li class="bg_lh span12" style="margin-left: 0; border-bottom-left-radius: 9px;border-bottom-right-radius: 9px"><strong>Acesso expira em:

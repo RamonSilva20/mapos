@@ -85,18 +85,18 @@
                                             <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                                 <<<</td> </tr> <?php
                                     } else { ?> <tr>
-                                            <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
+                                            <td style="width: 25%"><img src=" <?php echo esc($emitente->url_logo); ?> "></td>
                                             <td> <span style="font-size: 20px; ">
-                                                    <?php echo $emitente->nome; ?></span> <br />
+                                                    <?php echo esc($emitente->nome); ?></span> <br />
                                                 <span>
-                                                    <?php echo $emitente->cnpj; ?> <br />
-                                                    <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                    <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?>
+                                                    <?php echo esc($emitente->cnpj); ?> <br />
+                                                    <?php echo esc($emitente->rua) . ', nº:' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf); ?> </span> </br> <span> E-mail:
+                                                    <?php echo esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone); ?>
                                                 </span>
                                             </td>
                                             <td style="width: 20%; text-align: center">
                                                 <br />
-                                                <span>Garantia OS: <?= $osGarantia->idOs ? $osGarantia->idOs : ""?>
+                                                <span>Garantia OS: <?= ($osGarantia->idOs ? esc($osGarantia->idOs) : "") ?>
                                                 </span>
                                                 <br />
                                                 <span>Emissão:

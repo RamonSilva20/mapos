@@ -43,20 +43,20 @@
 
                                     <div class="span6" style="margin-left: 0">
                                         <h3>#Protocolo:
-                                            <?php echo $result->idOs ?>
+                                            <?php echo esc($result->idOs); ?>
                                         </h3>
                                         <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                     </div>
                                     <div class="span6">
                                         <label for="tecnico">Técnico / Responsável</label>
-                                        <input disabled="disabled" id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
+                                        <input disabled="disabled" id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo esc($result->nome); ?>" />
 
                                     </div>
                                 </div>
                                 <div class="span12" style="padding: 1%; margin-left: 0">
                                     <div class="span3">
                                         <label for="status">Status<span class="required"></span></label>
-                                        <input disabled="disabled" type="text" name="status" id="status" value="<?php echo $result->status; ?>">
+                                        <input disabled="disabled" type="text" name="status" id="status" value="<?php echo esc($result->status); ?>">
 
                                     </div>
                                     <div class="span3">
@@ -70,29 +70,29 @@
 
                                     <div class="span3">
                                         <label for="garantia">Garantia</label>
-                                        <input id="garantia" disabled="disabled" type="text" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
+                                        <input id="garantia" disabled="disabled" type="text" class="span12" name="garantia" value="<?php echo esc($result->garantia); ?>" />
                                     </div>
                                 </div>
 
 
                                 <div class="span12" style="padding: 1%; margin-left: 0">
                                     <label for="descricaoProduto">Descrição Produto/Serviço</label>
-                                    <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5" disabled><?php echo $result->descricaoProduto; ?></textarea>
+                                    <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5" disabled><?php echo esc($result->descricaoProduto); ?></textarea>
                                 </div>
 
                                 <div class="span12" style="padding: 1%; margin-left: 0">
                                     <label for="defeito">Defeito</label>
-                                    <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5" disabled><?php echo $result->defeito; ?></textarea>
+                                    <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5" disabled><?php echo esc($result->defeito); ?></textarea>
                                 </div>
 
                                 <div class="span12" style="padding: 1%; margin-left: 0">
                                     <label for="observacoes">Observações</label>
-                                    <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5" disabled><?php echo $result->observacoes; ?></textarea>
+                                    <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5" disabled><?php echo esc($result->observacoes); ?></textarea>
                                 </div>
 
                                 <div class="span12" style="padding: 1%; margin-left: 0">
                                     <label for="laudoTecnico">Laudo Técnico</label>
-                                    <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5" disabled><?php echo $result->laudoTecnico; ?></textarea>
+                                    <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5" disabled><?php echo esc($result->laudoTecnico); ?></textarea>
                                 </div>
 
                             </div>
@@ -186,7 +186,7 @@ foreach ($servicos as $s) {
                                         <form id="formAnexos" enctype="multipart/form-data" action="javascript:;" accept-charset="utf-8" s method="post">
                                             <div class="span10">
 
-                                                <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo $result->idOs ?>" />
+                                                <input type="hidden" name="idOsServico" id="idOsServico" value="<?php echo esc($result->idOs); ?>" />
                                                 <label for="">Anexo</label>
                                                 <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
                                             </div>
@@ -274,15 +274,15 @@ foreach ($servicos as $s) {
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição*</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo $result->idOs; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda - #<?php echo esc($result->idOs); ?> " />
 
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente*</label>
-                    <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                    <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
-                    <input type="hidden" name="os_id" id="os_id" value="<?php echo $result->idOs; ?>">
+                    <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo esc($result->nomeCliente); ?>" />
+                    <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo esc($result->clientes_id); ?>">
+                    <input type="hidden" name="os_id" id="os_id" value="<?php echo esc($result->idOs); ?>">
                 </div>
 
 

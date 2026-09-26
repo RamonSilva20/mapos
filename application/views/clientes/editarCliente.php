@@ -94,7 +94,7 @@
                         <div class="control-group">
                             <label for="documento" class="control-label">CPF/CNPJ</label>
                             <div class="controls">
-                                <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                                <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo esc($result->documento); ?>" />
                                 <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar(CNPJ)</button>
                             </div>
                         </div>
@@ -102,31 +102,31 @@
                             <?php echo form_hidden('idClientes', $result->idClientes) ?>
                             <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
                             <div class="controls">
-                                <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo $result->nomeCliente; ?>" />
+                                <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo esc($result->nomeCliente); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="contato" class="control-label">Contato:</label>
                             <div class="controls">
-                                <input class="contato" type="text" name="contato" value="<?php echo $result->contato; ?>" />
+                                <input class="contato" type="text" name="contato" value="<?php echo esc($result->contato); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="telefone" class="control-label">Telefone</label>
                             <div class="controls">
-                                <input id="telefone" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
+                                <input id="telefone" type="text" name="telefone" value="<?php echo esc($result->telefone); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="celular" class="control-label">Celular</label>
                             <div class="controls">
-                                <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>" />
+                                <input id="celular" type="text" name="celular" value="<?php echo esc($result->celular); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="email" class="control-label">Email</label>
                             <div class="controls">
-                                <input id="email" type="text" name="email" value="<?php echo $result->email; ?>" />
+                                <input id="email" type="text" name="email" value="<?php echo esc($result->email); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
@@ -151,37 +151,37 @@
                         <div class="control-group" class="control-label">
                             <label for="cep" class="control-label">CEP</label>
                             <div class="controls">
-                                <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
+                                <input id="cep" type="text" name="cep" value="<?php echo esc($result->cep); ?>" />
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
                             <label for="rua" class="control-label">Rua</label>
                             <div class="controls">
-                                <input id="rua" type="text" name="rua" value="<?php echo $result->rua; ?>" />
+                                <input id="rua" type="text" name="rua" value="<?php echo esc($result->rua); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="numero" class="control-label">Número</label>
                             <div class="controls">
-                                <input id="numero" type="text" name="numero" value="<?php echo $result->numero; ?>" />
+                                <input id="numero" type="text" name="numero" value="<?php echo esc($result->numero); ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label for="complemento" class="control-label">Complemento</label>
                             <div class="controls">
-                                <input id="complemento" type="text" name="complemento" value="<?php echo $result->complemento; ?>" />
+                                <input id="complemento" type="text" name="complemento" value="<?php echo esc($result->complemento); ?>" />
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
                             <label for="bairro" class="control-label">Bairro</label>
                             <div class="controls">
-                                <input id="bairro" type="text" name="bairro" value="<?php echo $result->bairro; ?>" />
+                                <input id="bairro" type="text" name="bairro" value="<?php echo esc($result->bairro); ?>" />
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
                             <label for="cidade" class="control-label">Cidade</label>
                             <div class="controls">
-                                <input id="cidade" type="text" name="cidade" value="<?php echo $result->cidade; ?>" />
+                                <input id="cidade" type="text" name="cidade" value="<?php echo esc($result->cidade); ?>" />
                             </div>
                         </div>
                         <div class="control-group" class="control-label">
@@ -229,7 +229,7 @@
             for (i in data.estados) {
                 $('#estado').append(new Option(data.estados[i].nome, data.estados[i].sigla));
             }
-            var curState = '<?php echo $result->estado; ?>';
+            var curState = '<?php echo esc($result->estado); ?>';
             if (curState) {
                 $("#estado option[value=" + curState + "]").prop("selected", true);
             }

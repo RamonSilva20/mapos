@@ -4,7 +4,7 @@ $totalProdutos = 0; ?>
 <html lang="pt-br">
 
 <head>
-    <title>Map_OS_<?php echo $result->idOs ?>_<?php echo $result->nomeCliente ?></title>
+    <title>Map_OS_<?php echo esc($result->idOs); ?>_<?php echo esc($result->nomeCliente); ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -89,13 +89,13 @@ $totalProdutos = 0; ?>
                                     <tr>
                                         <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php } else { ?>
-                                    <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <td style="width: 25% ;text-align: center" ><img src="<?php echo esc($emitente->url_logo); ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="5" style="text-align: center; font-size: 11px;" >
-                                            <span style="font-size: 12px; text-transform: uppercase"><b><?php echo $emitente->nome; ?></b></br></span>
-                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
+                                            <span style="font-size: 12px; text-transform: uppercase"><b><?php echo esc($emitente->nome); ?></b></br></span>
+                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo esc($emitente->cnpj); ?></span></br><?php } ?>
                                             <span><?php echo $emitente->rua . ', ' . $emitente->numero . '</br>' . $emitente->bairro . ', ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
-                                            <span><?php echo $emitente->email; ?> - <?php echo $emitente->telefone; ?></span>
+                                            <span><?php echo esc($emitente->email); ?> - <?php echo esc($emitente->telefone); ?></span>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -108,18 +108,18 @@ $totalProdutos = 0; ?>
                                         <ul>
                                             <li>
                                                 <span><b>CLIENTE</b></br></span>
-                                                <span><?php echo $result->nomeCliente ?></br></span>
+                                                <span><?php echo esc($result->nomeCliente); ?></br></span>
                                                 <?= !empty($result->contato_cliente) ? '<span>' . $result->contato_cliente . ' </span>' : '' ?>
                                                     <?php if ($result->celular_cliente == $result->telefone_cliente) { ?>
-                                                        <span><?= $result->celular_cliente ?></span></br>
+                                                        <span><?= esc($result->celular_cliente) ?></span></br>
                                                     <?php } else { ?>
-                                                        <?= !empty($result->telefone_cliente) ? $result->telefone_cliente : "" ?>
+                                                        <?= (!empty($result->telefone_cliente) ? esc($result->telefone_cliente) : "") ?>
                                                         <?= !empty($result->celular_cliente) && !empty($result->telefone_cliente) ? ' / ' : "" ?>
-                                                        <?= !empty($result->celular_cliente) ? $result->celular_cliente : "" ?></br>
+                                                        <?= (!empty($result->celular_cliente) ? esc($result->celular_cliente) : "") ?></br>
                                                     <?php } ?>
                                                 </span>
                                                 <?php if (!empty($result->email)) : ?>
-                                                        <span><?php echo $result->email ?></span><br>
+                                                        <span><?php echo esc($result->email); ?></span><br>
                                                 <?php endif; ?>
                                                 <span><?php
                                                     $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro]);
@@ -137,8 +137,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 </tr>
                                 <tr>
                                     <td style="text-align: center; width: 100%; font-size: 12px;">
-                                        <b>N° OS: </b><span><?php echo $result->idOs ?></span>
-                                        <span style="padding-left: 5%;"><b>Status: </b><?php echo $result->status ?></span></br>
+                                        <b>N° OS: </b><span><?php echo esc($result->idOs); ?></span>
+                                        <span style="padding-left: 5%;"><b>Status: </b><?php echo esc($result->status); ?></span></br>
                                         <b>Emissão:</b> <?php echo date('d/m/Y H:i:s') ?>
                                     </td>
                                 </tr>
@@ -152,7 +152,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td><b>Inicial: </b><?php echo date('d/m/Y', strtotime($result->dataInicial)); ?></td>
                                         <td><b>Final: </b><?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?></td>
-                                        <?php if ($result->garantia != null) { ?><td><b>Garantia:</b></br><?php echo $result->garantia . ' dia(s)'; ?><?php } ?></td>
+                                        <?php if ($result->garantia != null) { ?><td><b>Garantia:</b></br><?php echo esc($result->garantia) . ' dia(s)'; ?><?php } ?></td>
                                     </tr>
                                 <?php } ?>
 
@@ -267,8 +267,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                             <?php if ($qrCode) : ?>
                                 <td style="width: 15%; padding: 0;text-align:center;">
                                     <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                    <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                    <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>' ;?>
+                                    <img style="margin:5px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span><hr>' ;?>
                                 </td>
                             <?php endif ?>
                         <?php } ?>
@@ -297,13 +297,13 @@ $totalProdutos = 0; ?>
                                             <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<</td>
                                         </tr>
                                     <?php } else { ?>
-                                        <td style="width: 25% ;text-align: center" ><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                        <td style="width: 25% ;text-align: center" ><img src="<?php echo esc($emitente->url_logo); ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="5" style="text-align: center; font-size: 11px;" >
-                                            <span style="font-size: 12px; text-transform: uppercase"><b><?php echo $emitente->nome; ?></b></br></span>
-                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
+                                            <span style="font-size: 12px; text-transform: uppercase"><b><?php echo esc($emitente->nome); ?></b></br></span>
+                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo esc($emitente->cnpj); ?></span></br><?php } ?>
                                             <span><?php echo $emitente->rua . ', ' . $emitente->numero . '</br>' . $emitente->bairro . ', ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
-                                            <span><?php echo $emitente->email; ?> - <?php echo $emitente->telefone; ?></span>
+                                            <span><?php echo esc($emitente->email); ?> - <?php echo esc($emitente->telefone); ?></span>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -316,18 +316,18 @@ $totalProdutos = 0; ?>
                                         <ul>
                                             <li>
                                                 <span><b>CLIENTE</b></br></span>
-                                                <span><?php echo $result->nomeCliente ?></br></span>
+                                                <span><?php echo esc($result->nomeCliente); ?></br></span>
                                                 <?= !empty($result->contato_cliente) ? '<span>' . $result->contato_cliente . ' </span>' : '' ?>
                                                     <?php if ($result->celular_cliente == $result->telefone_cliente) { ?>
-                                                        <span><?= $result->celular_cliente ?></span></br>
+                                                        <span><?= esc($result->celular_cliente) ?></span></br>
                                                     <?php } else { ?>
-                                                        <?= !empty($result->telefone_cliente) ? $result->telefone_cliente : "" ?>
+                                                        <?= (!empty($result->telefone_cliente) ? esc($result->telefone_cliente) : "") ?>
                                                         <?= !empty($result->celular_cliente) && !empty($result->telefone_cliente) ? ' / ' : "" ?>
-                                                        <?= !empty($result->celular_cliente) ? $result->celular_cliente : "" ?></br>
+                                                        <?= (!empty($result->celular_cliente) ? esc($result->celular_cliente) : "") ?></br>
                                                     <?php } ?>
                                                 </span>
                                                 <?php if (!empty($result->email)) : ?>
-                                                        <span><?php echo $result->email ?></span><br>
+                                                        <span><?php echo esc($result->email); ?></span><br>
                                                 <?php endif; ?>
                                                 <span><?php
                                     $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro]);
@@ -345,8 +345,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 </tr>
                                 <tr>
                                     <td style="text-align: center; width: 100%; font-size: 12px;">
-                                        <b>N° OS: </b><span><?php echo $result->idOs ?></span>
-                                        <span style="padding-left: 5%;"><b>Status: </b><?php echo $result->status ?></span></br>
+                                        <b>N° OS: </b><span><?php echo esc($result->idOs); ?></span>
+                                        <span style="padding-left: 5%;"><b>Status: </b><?php echo esc($result->status); ?></span></br>
                                         <b>Emissão:</b> <?php echo date('d/m/Y') ?>
                                     </td>
                                 </tr>
@@ -368,7 +368,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                 </td>
                                                 <td>
                                                     <?php if ($result->garantia != null) { ?>
-                                                        <b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                                        <b>Garantia: </b><?php echo esc($result->garantia) . ' dia(s)'; ?>
                                                     <?php } ?>
                                                 </td>
                                         <?php } ?>
@@ -492,8 +492,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <?php if ($qrCode) : ?>
                                     <td style="width: 15%; padding: 0;text-align:center;">
                                         <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                        <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span><hr>' ;?>
+                                        <img style="margin:5px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                    <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span><hr>' ;?>
                                     </td>
                                 <?php endif ?>
                             <?php } ?>

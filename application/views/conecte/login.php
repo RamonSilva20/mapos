@@ -2,10 +2,10 @@
 <html lang="pt-br">
 
 <head>
-    <title><?php echo $this->config->item('app_name') ?></title>
+    <title><?php echo esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?php echo esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
@@ -62,7 +62,7 @@ $parse_email = $this->input->get('e');
                                             <img src="<?php echo base_url() ?>assets/img/logo-mapos-branco.png">
                                         </div>
                                     </div>
-                                    <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
+                                    <div id="mcell">Versão: <?= esc($this->config->item('app_version')); ?></div>
                                     <div class="control-group">
                                         <div class="controls">
                                             <div class="main_input_box">
@@ -100,24 +100,26 @@ $parse_email = $this->input->get('e');
     <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-    <?php if ($this->session->flashdata('success') != null) { ?>
+    <?php if ($var = $this->session->flashdata('success')) { ?>
         <script>
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: '<?php echo $this->session->flashdata('success'); ?>',
+                title: 'Sucesso!',
+                text: <?= esc_msg($var) ?>,
                 showConfirmButton: false,
                 timer: 4000
             })
         </script>
     <?php } ?>
 
-    <?php if ($this->session->flashdata('error') != null) { ?>
+    <?php if ($var = $this->session->flashdata('error')) { ?>
         <script>
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: '<?php echo $this->session->flashdata('error'); ?>',
+                title: 'Falha!',
+                text: <?= esc_msg($var) ?>,
                 showConfirmButton: false,
                 timer: 4000
             })

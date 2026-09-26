@@ -116,7 +116,7 @@ $totalProdutos = 0; ?>
                                 <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
-                                OS #: <?= $result->idOs ?><br>
+                                OS #: <?= esc($result->idOs) ?><br>
                                 Data Inicial: <?= date('d/m/Y', strtotime($result->dataInicial)); ?> <br>
                                 Data Final: <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
                             </td>
@@ -130,18 +130,18 @@ $totalProdutos = 0; ?>
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $result->nomeCliente ?><br>
-                                <?= $result->rua ?>, <?= $result->numero ?>, <?= $result->bairro ?><br>
-                                <?= $result->cidade ?> - <?= $result->estado ?> <br>
-                                <?= $result->email ?> <br>
-                                <?= $result->celular_cliente ?>
+                                Cliente: <?= esc($result->nomeCliente) ?><br>
+                                <?= esc($result->rua) ?>, <?= esc($result->numero) ?>, <?= esc($result->bairro) ?><br>
+                                <?= esc($result->cidade) ?> - <?= esc($result->estado) ?> <br>
+                                <?= esc($result->email) ?> <br>
+                                <?= esc($result->celular_cliente) ?>
                             </td>
 
                             <td style="text-align: right">
                                 <?= $emitente->nome; ?> <br>
-                                <?= $emitente->rua ?>, <?= $emitente->numero ?>, <?= $emitente->bairro ?><br>
-                                <?= $emitente->cidade ?> - <?= $emitente->uf ?> CEP: <?= $emitente->cep ?> <br>
-                                Responsável: <?= $result->nome ?>
+                                <?= esc($emitente->rua) ?>, <?= esc($emitente->numero) ?>, <?= esc($emitente->bairro) ?><br>
+                                <?= esc($emitente->cidade) ?> - <?= esc($emitente->uf) ?> CEP: <?= esc($emitente->cep) ?> <br>
+                                Responsável: <?= esc($result->nome) ?>
                             </td>
                         </tr>
                     </table>
@@ -153,7 +153,7 @@ $totalProdutos = 0; ?>
                     Status
                 </td>
                 <td colspan="2" style="text-align: center">
-                    <?= $result->status ?>
+                    <?= esc($result->status) ?>
                 </td>
             </tr>
 
@@ -164,7 +164,7 @@ $totalProdutos = 0; ?>
                     </td>
 
                     <td colspan="2" style="text-align: center">
-                        <?= $result->garantia ?>
+                        <?= esc($result->garantia) ?>
                     </td>
                 </tr>
             <?php } ?>

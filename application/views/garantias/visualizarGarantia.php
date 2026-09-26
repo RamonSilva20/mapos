@@ -12,7 +12,7 @@
                         echo '<a title="Editar Termo de Garantia" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/garantias/editar/' . $result->idGarantias . '">
     <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span></a>';
                     } ?>
-                    <a target="_blank" title="Imprimir" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo $result->idGarantias; ?>">
+                    <a target="_blank" title="Imprimir" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimir/<?php echo esc($result->idGarantias); ?>">
                       <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir</span></a>
                 </div>
             </div>
@@ -26,14 +26,14 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php
                                 } else { ?> <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
+                                        <td style="width: 25%"><img src=" <?php echo esc($emitente->url_logo); ?> "></td>
                                         <td> <span style="font-size: 20px; ">
-                                                <?php echo $emitente->nome; ?></span> </br><span>
-                                                <?php echo $emitente->cnpj; ?> </br>
-                                                <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></td>
+                                                <?php echo esc($emitente->nome); ?></span> </br><span>
+                                                <?php echo esc($emitente->cnpj); ?> </br>
+                                                <?php echo esc($emitente->rua) . ', nº:' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf); ?> </span> </br> <span> E-mail:
+                                                <?php echo esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone); ?></span></td>
                                         <td style="width: 18%; text-align: center">#Garantia: <span>
-                                                <?php echo $result->idGarantias ?></span></br> </br> <span>Emissão:
+                                                <?php echo esc($result->idGarantias); ?></span></br> </br> <span>Emissão:
                                                 <?php echo date('d/m/Y'); ?></span>
                                         </td>
                                     </tr>
@@ -51,11 +51,11 @@
                                                     <h5>Responsável</h5>
                                                 </span>
                                                 <span>
-                                                    <?php echo $result->nome ?></span> <br />
+                                                    <?php echo esc($result->nome); ?></span> <br />
                                                 <span>Telefone:
-                                                    <?php echo $result->telefone ?></span><br />
+                                                    <?php echo esc($result->telefone); ?></span><br />
                                                 <span>Email:
-                                                    <?php echo $result->email ?></span>
+                                                    <?php echo esc($result->email); ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -76,7 +76,7 @@
                                                 <span>
                                                     <h5>Ref. Termo</h5>
                                                 </span>
-                                                <span><?php echo $result->refGarantia ?> </span>
+                                                <span><?php echo esc($result->refGarantia); ?> </span>
                                             </li>
                                         </ul>
                                     </td>

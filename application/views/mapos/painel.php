@@ -418,12 +418,12 @@
             datasets: [{
                 label: 'Total',
                 data: [
-                    <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
+                    <?php echo(($estatisticas_financeiro->total_receita != null) ? (float) $estatisticas_financeiro->total_receita : 0.00); ?>,
+                    <?php echo(($estatisticas_financeiro->total_receita_pendente != null) ? (float) $estatisticas_financeiro->total_receita_pendente : 0.00); ?>,
+                    <?php echo((float) $estatisticas_financeiro->total_receita - (float) $estatisticas_financeiro->total_despesa); ?>,
+                    <?php echo(($estatisticas_financeiro->total_despesa != null) ? (float) $estatisticas_financeiro->total_despesa : 0.00); ?>,
+                    <?php echo(($estatisticas_financeiro->total_despesa_pendente != null) ? (float) $estatisticas_financeiro->total_despesa_pendente : 0.00); ?>,
+                    <?php echo((float) $estatisticas_financeiro->total_receita_pendente - (float) $estatisticas_financeiro->total_despesa_pendente); ?>
                 ],
 
                 backgroundColor: [
@@ -533,11 +533,11 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= esc($o->idOs) ?>
                                 </td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= esc($o->nomeCliente) ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
@@ -547,12 +547,12 @@
                                 } ?></td>
 
                                 <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                    <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($o->status) ?></span>
                                 </td>
 
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= esc($o->idOs) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -622,11 +622,11 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= esc($o->idOs) ?>
                                 </td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= esc($o->nomeCliente) ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
@@ -636,12 +636,12 @@
                                 } ?></td>
                                 
                                 <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                    <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($o->status) ?></span>
                                 </td>
 
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= esc($o->idOs) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -712,11 +712,11 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= esc($o->idOs) ?>
                                 </td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= esc($o->nomeCliente) ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
@@ -726,12 +726,12 @@
                                 } ?></td>
                                 
                                 <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                    <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($o->status) ?></span>
                                 </td>
 
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= esc($o->idOs) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -801,11 +801,11 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= esc($o->idOs) ?>
                                 </td>
 
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= esc($o->nomeCliente) ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
@@ -815,12 +815,12 @@
                                 } ?></td>
                                 
                                 <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                    <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($o->status) ?></span>
                                 </td>
 
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= esc($o->idOs) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -890,10 +890,10 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $o->idOs ?>
+                                    <?= esc($o->idOs) ?>
                                 </td>
                                 <td class="cli1">
-                                    <?= $o->nomeCliente ?>
+                                    <?= esc($o->nomeCliente) ?>
                                 </td>
 
                                 <td><?php if ($o->dataFinal != null) {
@@ -903,11 +903,11 @@
                                 } ?></td>
 
                                     <td>
-                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
+                                        <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($o->status) ?></span>
                                     </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= esc($o->idOs) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                     <?php endif ?>
                                 </td>
@@ -977,22 +977,22 @@
                             ?>
                             <tr>
                                 <td>
-                                    <?= $v->idVendas ?>
+                                    <?= esc($v->idVendas) ?>
                                 </td>
 
                                 <td class="cli1">
-                                    <?= $v->nomeCliente ?>
+                                    <?= esc($v->nomeCliente) ?>
                                 </td>
                                 <td>
                                     <?= date('d/m/Y', strtotime($v->dataVenda)) ?>
                                 </td>
                                 
                                     <td>
-                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span>
+                                        <span class="badge" style="background-color: <?= esc_css($cor) ?>; border-color: <?= esc_css($cor) ?>;"><?= esc($v->status) ?></span>
                                     </td>
                                 <td>
                                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-                                        <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= $v->idVendas ?>" class="btn-nwe tip-top" title="Visualizar">
+                                        <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= esc($v->idVendas) ?>" class="btn-nwe tip-top" title="Visualizar">
                                             <i class="bx bx-show"></i> </a>
                                    
                                     <?php endif ?>
@@ -1037,8 +1037,8 @@
                                         <?php echo ucfirst($lancamento->tipo); ?>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-truncate"><?php echo $lancamento->cliente_fornecedor; ?></td>
-                                <td class="text-truncate"><?php echo $lancamento->descricao; ?></td>
+                                <td class="text-truncate"><?php echo esc($lancamento->cliente_fornecedor); ?></td>
+                                <td class="text-truncate"><?php echo esc($lancamento->descricao); ?></td>
                                 <td><?php echo date_format(date_create($lancamento->data_vencimento), 'd/m/Y'); ?></td>
                                 <td>R$ <?php echo number_format($lancamento->valor_desconto, 2, ',', '.'); ?></td>
                             </tr>
@@ -1074,26 +1074,26 @@
                             <?php foreach ($produtos as $p) : ?>
                                 <tr>
                                     <td>
-                                        <?= $p->idProdutos ?>
+                                        <?= esc($p->idProdutos) ?>
                                     </td>
                                     <td class="cli1">
-                                        <?= $p->descricao ?>
+                                        <?= esc($p->descricao) ?>
                                     </td>
                                     <td>R$
-                                        <?= $p->precoVenda ?>
+                                        <?= esc($p->precoVenda) ?>
                                     </td>
                                     <td>
-                                        <?= $p->estoque ?>
+                                        <?= esc($p->estoque) ?>
                                     </td>
                                     <td class="ph3">
-                                        <?= $p->estoqueMinimo ?>
+                                        <?= esc($p->estoqueMinimo) ?>
                                     </td>
                                     <td>
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
+                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= esc($p->idProdutos) ?>" class="btn-nwe3 tip-top" title="Editar">
                                                 <i class="bx bx-edit"></i>
                                             </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
+                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= esc($p->idProdutos) ?>" estoque="<?= esc($p->estoque) ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
                                                 <i class="bx bx-plus-circle"></i></a>
                                         <?php endif; ?>
                                     </td>

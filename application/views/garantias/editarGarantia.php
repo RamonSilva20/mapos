@@ -31,18 +31,18 @@
                         </div>
                         <div class="span5">
                             <label for="usuarios_id">Responsável</label>
-                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $result->nome ?>" disabled />
+                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo esc($result->nome); ?>" disabled />
 
                         </div>
                         <div class="span5">
                             <label for="refGarantia">Ref. Garantia</label>
-                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>" />
+                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo esc($result->refGarantia); ?>" />
                         </div>
                         <div class="span12" style="margin-left: 0">
                             <label for="textoGarantia">
                                 <h4 class="text-center">Termo de Garantia</h4>
                             </label>
-                            <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo $result->textoGarantia ?></textarea>
+                            <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo esc($result->textoGarantia); ?></textarea>
                         </div>
                     </div>
 

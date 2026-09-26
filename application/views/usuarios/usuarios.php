@@ -49,17 +49,17 @@
                     <?php else: ?>
                         <?php foreach ($results as $r): ?>
                             <tr>
-                                <td><?= $r->idUsuarios ?></td>
-                                <td><?= $r->nome ?></td>
-                                <td><?= $r->cpf ?></td>
-                                <td><?= $r->telefone ?></td>
-                                <td><?= $r->permissao ?></td>
+                                <td><?= esc($r->idUsuarios) ?></td>
+                                <td><?= esc($r->nome) ?></td>
+                                <td><?= esc($r->cpf) ?></td>
+                                <td><?= esc($r->telefone) ?></td>
+                                <td><?= esc($r->permissao) ?></td>
                                 <?php
                                 $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';
                             $situacaoClasse = ($r->situacao == 1) ? 'situacao-ativo' : 'situacao-inativo';
                             ?>
-                                <td><span class="badge <?= $situacaoClasse ?>"><?= ucfirst($situacao) ?></span></td>
-                                <td><?= $r->dataExpiracao ?></td>
+                                <td><span class="badge <?= esc($situacaoClasse) ?>"><?= ucfirst($situacao) ?></span></td>
+                                <td><?= esc($r->dataExpiracao) ?></td>
                                 <td>
                                     <a href="<?= base_url('index.php/usuarios/editar/' . $r->idUsuarios) ?>" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>
                                 </td>
