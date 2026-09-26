@@ -76,32 +76,32 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                                 <td style="width: 60%; padding-left: 0">
                                                     <span>
                                                         <h5><b>CLIENTE</b></h5>
-                                                        <span><i class='bx bxs-business'></i> <b><?php echo $result->nomeCliente ?></b></span><br />
+                                                        <span><i class='bx bxs-business'></i> <b><?php echo html_escape($result->nomeCliente) ?></b></span><br />
                                                         <?php if (!empty($result->celular) || !empty($result->telefone) || !empty($result->contato_cliente)): ?>
                                                             <span><i class='bx bxs-phone'></i>
-                                                                <?= !empty($result->contato_cliente) ? $result->contato_cliente . ' ' : "" ?>
+                                                                <?= !empty($result->contato_cliente) ? html_escape($result->contato_cliente) . ' ' : "" ?>
                                                                 <?php if ($result->celular == $result->telefone) { ?>
-                                                                    <?= $result->celular ?>
+                                                                    <?= html_escape($result->celular) ?>
                                                                 <?php } else { ?>
-                                                                    <?= !empty($result->telefone) ? $result->telefone : "" ?>
+                                                                    <?= !empty($result->telefone) ? html_escape($result->telefone) : "" ?>
                                                                     <?= !empty($result->celular) && !empty($result->telefone) ? ' / ' : "" ?>
-                                                                    <?= !empty($result->celular) ? $result->celular : "" ?>
+                                                                    <?= !empty($result->celular) ? html_escape($result->celular) : "" ?>
                                                                 <?php } ?>
                                                             </span></br>
                                                         <?php endif; ?>
                                                         <?php $retorno_end = array_filter([$result->rua, $result->numero, $result->complemento, $result->bairro . ' - ']);
-$endereco = implode(', ', $retorno_end);
+$endereco = implode(', ', array_map('html_escape', $retorno_end));
 echo '<i class="fas fa-map-marker-alt"></i> ';
 if (!empty($endereco)) {
     echo $endereco;
 }
 if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
-    echo "<span> {$result->cep}, {$result->cidade}/{$result->estado}</span><br>";
+    echo "<span> " . html_escape($result->cep) . ", " . html_escape($result->cidade) . "/" . html_escape($result->estado) . "</span><br>";
 }
 ?>
                                                         <?php if (!empty($result->email)): ?>
                                                             <span>
-                                                                <i class="fas fa-envelope"></i> <?php echo $result->email ?>
+                                                                <i class="fas fa-envelope"></i> <?php echo html_escape($result->email) ?>
                                                             </span><br>
                                                         <?php endif; ?>
                                                     </span>
@@ -113,11 +113,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                                 <h5><b>RESPONSÁVEL</b></h5>
                                                             </span>
                                                             <span><b><i class="fas fa-user"></i>
-                                                                    <?php echo $result->nome ?></b></span><br />
+                                                                    <?php echo html_escape($result->nome) ?></b></span><br />
                                                             <span><i class="fas fa-phone"></i>
-                                                                <?php echo $result->telefone_usuario ?></span><br />
+                                                                <?php echo html_escape($result->telefone_usuario) ?></span><br />
                                                             <span><i class="fas fa-envelope"></i>
-                                                                <?php echo $result->email_usuario ?></span>
+                                                                <?php echo html_escape($result->email_usuario) ?></span>
                                                         </li>
                                                     </ul>
                                                 </td>

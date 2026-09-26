@@ -15,43 +15,43 @@
                         <tr>
                             <td style="text-align: center; width: 30%"><strong>Código de Barra</strong></td>
                             <td>
-                                <?php echo $result->codDeBarra ?>
+                                <?php echo html_escape($result->codDeBarra) ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Descrição</strong></td>
                             <td>
-                                <?php echo $result->descricao ?>
+                                <?php echo html_escape($result->descricao) ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Unidade</strong></td>
                             <td>
-                                <?php echo $result->unidade ?>
+                                <?php echo html_escape($result->unidade) ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Compra</strong></td>
                             <td>R$
-                                <?php echo $result->precoCompra; ?>
+                                <?php echo html_escape($result->precoCompra); ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Preço de Venda</strong></td>
                             <td>R$
-                                <?php echo $result->precoVenda; ?>
+                                <?php echo html_escape($result->precoVenda); ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque</strong></td>
                             <td>
-                                <?php echo $result->estoque; ?>
+                                <?php echo html_escape($result->estoque); ?>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><strong>Estoque Mínimo</strong></td>
                             <td>
-                                <?php echo $result->estoqueMinimo; ?>
+                                <?php echo html_escape($result->estoqueMinimo); ?>
                             </td>
                         </tr>
                     </tbody>

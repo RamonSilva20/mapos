@@ -25,19 +25,19 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
                                     <td>
-                                        <?php echo $result->nomeCliente ?>
+                                        <?php echo html_escape($result->nomeCliente) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Documento</strong></td>
                                     <td>
-                                        <?php echo $result->documento ?>
+                                        <?php echo html_escape($result->documento) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
                                     <td>
-                                        <?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?>
+                                        <?php echo html_escape(date('d/m/Y', strtotime($result->dataCadastro))) ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -67,25 +67,25 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Contato:</strong></td>
                                     <td>
-                                        <?php echo $result->contato ?>
+                                        <?php echo html_escape($result->contato) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
                                     <td>
-                                        <?php echo $result->telefone ?>
+                                        <?php echo html_escape($result->telefone) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Celular</strong></td>
                                     <td>
-                                        <?php echo $result->celular ?>
+                                        <?php echo html_escape($result->celular) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Email</strong></td>
                                     <td>
-                                        <?php echo $result->email ?>
+                                        <?php echo html_escape($result->email) ?>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -192,8 +192,8 @@
                         echo '<td>' . $r->idOs . '</td>';
                         echo '<td>' . $dataInicial . '</td>';
                         echo '<td>' . $dataFinal . '</td>';
-                        echo '<td>' . $r->descricaoProduto . '</td>';
-                        echo '<td>' . $r->defeito . '</td>';
+                        echo '<td>' . printSafeHtml($r->descricaoProduto) . '</td>';
+                        echo '<td>' . printSafeHtml($r->defeito) . '</td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {

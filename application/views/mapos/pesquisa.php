@@ -185,8 +185,8 @@
             echo '<tr>';
             echo '<td>' . $r->idOs . '</td>';
             echo '<td>' . $dataInicial . '</td>';
-            echo '<td>' . $r->descricaoProduto . '</td>';
-            echo '<td>' . $r->defeito . '</td>';
+            echo '<td>' . printSafeHtml($r->descricaoProduto) . '</td>';
+            echo '<td>' . printSafeHtml($r->defeito) . '</td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
