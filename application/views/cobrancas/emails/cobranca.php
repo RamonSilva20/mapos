@@ -113,7 +113,7 @@
                                 <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
-                                Cobrança #<?= $cobranca->idCobranca ?><br>
+                                Cobrança #<?= esc($cobranca->idCobranca) ?><br>
                                 Expiração: <?= $cobranca->expire_at ? date('d/m/Y', strtotime($cobranca->expire_at)) : ''; ?>
                             </td>
                         </tr>
@@ -126,10 +126,10 @@
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $cobranca->nomeCliente ?><br>
-                                <?= $cobranca->rua ?>, <?= $cobranca->numero ?>, <?= $cobranca->bairro ?><br>
-                                <?= $cobranca->cidade ?> - <?= $cobranca->estado ?> <br>
-                                <?= $cobranca->email ?> <br>
+                                Cliente: <?= esc($cobranca->nomeCliente) ?><br>
+                                <?= esc($cobranca->rua) ?>, <?= esc($cobranca->numero) ?>, <?= esc($cobranca->bairro) ?><br>
+                                <?= esc($cobranca->cidade) ?> - <?= esc($cobranca->estado) ?> <br>
+                                <?= esc($cobranca->email) ?> <br>
                             </td>
 
                             <td style="text-align: right">
@@ -152,7 +152,7 @@
                         PDF
                     </td>
                     <td colspan="3">
-                        <a href="<?= $cobranca->pdf ?>" target="_blank">Abrir em outra aba</a>
+                        <a href="<?= esc($cobranca->pdf) ?>" target="_blank">Abrir em outra aba</a>
                     </td>
                 </tr>
             <?php endif ?>
@@ -163,7 +163,7 @@
                         Link
                     </td>
                     <td colspan="3">
-                        <a href="<?= $cobranca->link ?>" target="_blank">Abrir em outra aba</a>
+                        <a href="<?= esc($cobranca->link) ?>" target="_blank">Abrir em outra aba</a>
                     </td>
                 </tr>
             <?php endif ?>
@@ -174,7 +174,7 @@
                         Código de Barras
                     </td>
                     <td colspan="3">
-                        <?= $cobranca->barcode ?>
+                        <?= esc($cobranca->barcode) ?>
                     </td>
                 </tr>
             <?php endif ?>

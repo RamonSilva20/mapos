@@ -2,10 +2,10 @@
 <html lang="pt-br">
 
 <head>
-    <title>Área do Cliente - <?php echo $this->config->item('app_name') ?></title>
+    <title>Área do Cliente - <?php echo esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?php echo esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -34,7 +34,7 @@
 
     <!--Header-part-->
     <div id="header">
-        <h1><a href="dashboard.html"><?php echo $this->config->item('app_name'); ?></a></h1>
+        <h1><a href="dashboard.html"><?php echo esc($this->config->item('app_name')); ?></a></h1>
     </div>
     <!--close-Header-part-->
 
@@ -43,7 +43,7 @@
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='bx bx-user-circle iconN1'></i> <?= $this->session->userdata('nome') ?> </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='bx bx-user-circle iconN1'></i> <?= esc($this->session->userdata('nome')) ?> </a>
                     <ul class="dropdown-menu">
                         <li class=""><a title="Meu Perfil" href="<?php echo base_url() ?>index.php/mine/conta"><i class="fas fa-user"></i> <span class="text">Meu Perfil</span></a></li>
                         <li class="divider"></li>
@@ -113,12 +113,16 @@
             <div class="row-fluid">
 
                 <div class="span12">
-                    <?php if ($var = $this->session->flashdata('success')) : ?><script>
-                            swal("Sucesso!", "<?php echo str_replace('"', '', $var); ?>", "success");
-                        </script><?php endif; ?>
-                    <?php if ($var = $this->session->flashdata('error')) : ?><script>
-                            swal("Falha!", "<?php echo str_replace('"', '', $var); ?>", "error");
-                        </script><?php endif; ?>
+                    <?php if ($var = $this->session->flashdata('success')) : ?>
+                        <script>
+                            swal('Sucesso!', <?= esc_msg($var) ?>, 'success');
+                        </script>
+                    <?php endif; ?>
+                    <?php if ($var = $this->session->flashdata('error')) : ?>
+                        <script>
+                            swal('Falha!', <?= esc_msg($var) ?>, 'error');
+                        </script>
+                    <?php endif; ?>
                     <?php if (isset($output)) {
                         $this->load->view($output);
                     } ?>
@@ -132,8 +136,8 @@
     <div class="row-fluid">
         <div id="footer" class="span12">
             <?= date('Y') ?> &copy;
-            <?php echo $this->config->item('app_name'); ?> - Versão:
-            <?php echo $this->config->item('app_version'); ?>
+            <?php echo esc($this->config->item('app_name')); ?> - Versão:
+            <?php echo esc($this->config->item('app_version')); ?>
         </div>
     </div>
 

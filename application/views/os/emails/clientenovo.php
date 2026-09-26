@@ -130,19 +130,19 @@
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $cliente->nomeCliente ?><br>
-                                <?= $cliente->rua ?>, <?= $cliente->numero ?>, <?= $cliente->bairro ?><br>
-                                <?= $cliente->cidade ?> - <?= $cliente->estado ?> <br>
-                                <?= $cliente->email ?> <br>
-                                <?= $cliente->celular ?>
+                                Cliente: <?= esc($cliente->nomeCliente) ?><br>
+                                <?= esc($cliente->rua) ?>, <?= esc($cliente->numero) ?>, <?= esc($cliente->bairro) ?><br>
+                                <?= esc($cliente->cidade) ?> - <?= esc($cliente->estado) ?> <br>
+                                <?= esc($cliente->email) ?> <br>
+                                <?= esc($cliente->celular) ?>
                             </td>
 
                             <td style="text-align: right">
                                 <?= $emitente->nome; ?> <br>
-                                <?= $emitente->rua ?>, <?= $emitente->numero ?>, <?= $emitente->bairro ?><br>
-                                <?= $emitente->cidade ?> - <?= $emitente->uf ?> <br> 
-                                CEP: <?= $emitente->cep ?> <br>
-                                <?= $emitente->telefone ?> <br>
+                                <?= esc($emitente->rua) ?>, <?= esc($emitente->numero) ?>, <?= esc($emitente->bairro) ?><br>
+                                <?= esc($emitente->cidade) ?> - <?= esc($emitente->uf) ?> <br> 
+                                CEP: <?= esc($emitente->cep) ?> <br>
+                                <?= esc($emitente->telefone) ?> <br>
 
                             </td>
                         </tr>
@@ -153,7 +153,7 @@
             <tr class="details">
             
                 <td colspan="4" style="text-align: left">
-                    Caro(a) <b><?= $cliente->nomeCliente ?></b>, 
+                    Caro(a) <b><?= esc($cliente->nomeCliente) ?></b>, 
                     bem-vindo à <?= $emitente->nome; ?>! <br>
 
                 </td>
@@ -162,7 +162,7 @@
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Por favor leia as instruções abaixo para enviar seu aparelho para o nosso time técnico: <br><br>
-                    1 - Entre em contato pelo nosso WhatsApp <?= $emitente->telefone ?> e nos informe que vai nos enviar seu aparelho; <br>
+                    1 - Entre em contato pelo nosso WhatsApp <?= esc($emitente->telefone) ?> e nos informe que vai nos enviar seu aparelho; <br>
                     2 - Entre no nosso sistema e crie sua própria Ordem de Serviço, descrevendo o defeito ou serviço a realizar no aparelho, fazendo suas observações; <br>
                     3 - Para criar uma nova Ordem de Serviço, entre no nosso sistema com seu email (usuário) e CPF (senha). Uma vez no sistema, clique em "Ordens de Serviço" e "+Adicionar OS"; <br>
                     4 - Depois da Ordem de Serviço criada, você receberá um e-mail de confirmação e poderá enviar seu aparelho para o endereço que está no cabeçalho deste e-mail. <br>

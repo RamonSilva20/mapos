@@ -29,7 +29,7 @@
                         </div>
                         <div class="span3">
                             <label for="usuarios_id">Responsável<span class="required">*</span></label>
-                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $this->session->userdata('nome_admin') ?>" disabled />
+                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo esc($this->session->userdata('nome_admin')); ?>" disabled />
                         </div>
                         <div class="span7">
                             <label for="refGarantia">Ref Garantia<span class="required">*</span></label>

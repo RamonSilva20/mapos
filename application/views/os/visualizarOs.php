@@ -13,14 +13,14 @@
                     <div class="button-container">
                         <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse"> <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span></a>
                         <div class="cascading-buttons">
-                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo $result->idOs; ?>">
+                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo esc($result->idOs); ?>">
                                 <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Papel A4</span>
                             </a>
-                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo $result->idOs; ?>">
+                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo esc($result->idOs); ?>">
                                 <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
                             </a>
                             <?php if ($result->garantias_id) { ?>
-                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo $result->idOs; ?>">
+                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo esc($result->idOs); ?>">
                                     <span class="button__icon"><i class="bx bx-paperclip"></i></span> <span class="button__text">Termo Garantia</span>
                                 </a>
                             <?php } ?>
@@ -33,13 +33,16 @@
                         $troca = [$result->nomeCliente, $result->idOs, $result->status, 'R$ ' . ($result->desconto != 0 && $result->valor_desconto != 0 ? number_format($result->valor_desconto, 2, ',', '.') : number_format($totalProdutos + $totalServico, 2, ',', '.')), strip_tags($result->descricaoProduto), ($emitente ? $emitente->nome : ''), ($emitente ? $emitente->telefone : ''), strip_tags($result->observacoes), strip_tags($result->defeito), strip_tags($result->laudoTecnico), date('d/m/Y', strtotime($result->dataFinal)), date('d/m/Y', strtotime($result->dataInicial)), $result->garantia . ' dias'];
                         $texto_de_notificacao = $this->os_model->criarTextoWhats($texto_de_notificacao, $troca);
                         if (!empty($zapnumber)) {
-                            echo '<a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="https://api.whatsapp.com/send?phone=55' . $zapnumber . '&text=' . $texto_de_notificacao . '">
+                            $whatsappUrl = 'https://api.whatsapp.com/send?phone=55' . rawurlencode($zapnumber) . '&text=' . rawurlencode($texto_de_notificacao);
+                            ?>
+                            <a title="Enviar Por WhatsApp" class="button btn btn-mini btn-success" id="enviarWhatsApp" target="_blank" href="<?= esc_url($whatsappUrl) ?>">
                                 <span class="button__icon"><i class="bx bxl-whatsapp"></i></span> <span class="button__text">WhatsApp</span>
-                            </a>';
+                            </a>
+                            <?php
                         }
                     } ?>
 
-                    <a title="Enviar OS por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo $result->idOs; ?>">
+                    <a title="Enviar OS por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo esc($result->idOs); ?>">
                         <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">via E-mail</span>
                     </a>
 
@@ -131,7 +134,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td>
                                             <b>STATUS OS: </b><br>
-                                            <?php echo $result->status ?>
+                                            <?php echo esc($result->status); ?>
                                         </td>
 
                                         <td>
@@ -146,7 +149,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
 
                                         <td>
                                             <?php if ($result->garantia) { ?>
-                                                <b>GARANTIA: </b><br><?php echo $result->garantia . ' dia(s)'; ?>
+                                                <b>GARANTIA: </b><br><?php echo esc($result->garantia) . ' dia(s)'; ?>
                                             <?php } ?>
                                         </td>
 
@@ -367,8 +370,8 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
                 <img src="<?php echo base_url(); ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
-                <img id="qrCodeImage" width="50%" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                <?php echo '<span>Chave PIX: ' . $chaveFormatada . '</span>'; ?></br>
+                <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                <?php echo '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>'; ?></br>
                 <?php if ($totalProdutos != 0 || $totalServico != 0) {
                     if ($result->valor_desconto != 0) {
                         echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
@@ -405,7 +408,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
 
             var link = $(this).attr('link');
-            var idOS = "<?php echo $result->idOs; ?>"
+            var idOS = <?php echo esc_js($result->idOs); ?>
 
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -478,7 +481,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= isset($zapnumber) ? $zapnumber : "" ?> + '&text=' + code.data;
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_js($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
             window.open(whatsappLink, '_blank');
         } else {
             swal({

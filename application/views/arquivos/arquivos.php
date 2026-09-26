@@ -56,29 +56,29 @@
                         }
     foreach ($results as $r) : ?>
                             <tr>
-                                <td><?= $r->idDocumentos ?></td>
+                                <td><?= esc($r->idDocumentos) ?></td>
                                 <td>
                                     <?php if (@getimagesize($r->path)) : ?>
-                                        <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
+                                        <a href="<?= esc($r->url) ?>"> <img src="<?= esc($r->url) ?> "></a>
                                     <?php else : ?>
                                         <span>-</span>
                                     <?php endif ?>
                                 </td>
-                                <td><?= $r->documento ?></td>
+                                <td><?= esc($r->documento) ?></td>
                                 <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
-                                <td><?= $r->descricao ?></td>
-                                <td><?= $r->tamanho ?> KB</td>
-                                <td><?= $r->tipo ?></td>
+                                <td><?= esc($r->descricao) ?></td>
+                                <td><?= esc($r->tamanho) ?> KB</td>
+                                <td><?= esc($r->tipo) ?></td>
                                 <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
                                         <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                            <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
+                                            <a href="<?= base_url() ?>index.php/arquivos/editar/<?= esc($r->idDocumentos) ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
-                                            <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
+                                            <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= esc($r->idDocumentos) ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
                                         </a>
                                     <?php endif ?>
                                 </td>

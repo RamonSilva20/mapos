@@ -128,7 +128,7 @@
             <tr class="details">
             
                 <td colspan="4" style="text-align: left">
-                    Caro <b><?= $usuario->nome ?></b>, <br>
+                    Caro <b><?= esc($usuario->nome) ?></b>, <br>
                     Um novo cliente se cadastrou no sistema. Seguem as informações sobre este cliente: <br>
                 </td>
 
@@ -153,15 +153,15 @@
                     Celular:
                 </td>
                 <td  style="text-align: left">
-                    <b> <?= $cliente->nomeCliente ?> </b><br>
-                    <?= $cliente->documento ?><br>
-                    <?= $cliente->rua ?>, <?= $cliente->numero ?> <br>
-                    <?= $cliente->complemento ?> <br>
-                    <?= $cliente->bairro ?><br>
-                    <?= $cliente->cidade ?>/<?= $cliente->estado ?> <br>
-                    <?= $cliente->cep ?> <br>
-                    <?= $cliente->email ?> <br>
-                    <?= $cliente->celular ?>
+                    <b> <?= esc($cliente->nomeCliente) ?> </b><br>
+                    <?= esc($cliente->documento) ?><br>
+                    <?= esc($cliente->rua) ?>, <?= esc($cliente->numero) ?> <br>
+                    <?= esc($cliente->complemento) ?> <br>
+                    <?= esc($cliente->bairro) ?><br>
+                    <?= esc($cliente->cidade) ?>/<?= esc($cliente->estado) ?> <br>
+                    <?= esc($cliente->cep) ?> <br>
+                    <?= esc($cliente->email) ?> <br>
+                    <?= esc($cliente->celular) ?>
                 </td>
             </tr>
 

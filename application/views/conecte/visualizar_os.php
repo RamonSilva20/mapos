@@ -9,7 +9,7 @@ $totalProdutos = 0; ?>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons" style=" padding-left:5px;">
-                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo $result->idOs; ?>">
+                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo esc($result->idOs); ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
                 </div>
             </div>
@@ -25,16 +25,16 @@ $totalProdutos = 0; ?>
                                     </tr>
                                 <?php } else { ?>
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> " style="max-height: 100px"></td>
+                                        <td style="width: 25%"><img src=" <?php echo esc($emitente->url_logo); ?> " style="max-height: 100px"></td>
                                         <td>
-                                            <span style="font-size: 20px;"><?php echo $emitente->nome; ?></span></br>
-                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo $emitente->cnpj; ?></span></br><?php } ?>
-                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?></span></br>
-                                            <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?></span></br>
-                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo $result->nome ?>
+                                            <span style="font-size: 20px;"><?php echo esc($emitente->nome); ?></span></br>
+                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo esc($emitente->cnpj); ?></span></br><?php } ?>
+                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo esc($emitente->rua) . ', ' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf); ?></span></br>
+                                            <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone); ?></span></br>
+                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo esc($result->nome); ?>
                                         </td>
                                         <td style="width: 18%; text-align: center">
-                                            <span><b>N° OS: </b><?php echo $result->idOs ?></span></br></br>
+                                            <span><b>N° OS: </b><?php echo esc($result->idOs); ?></span></br></br>
                                             <span>Emissão: <?php echo date('d/m/Y') ?></span>
                                         </td>
                                     </tr>
@@ -49,7 +49,7 @@ $totalProdutos = 0; ?>
                                     <?php if ($result->dataInicial != null) { ?>
                                         <tr>
                                             <td>
-                                                <b>STATUS OS: </b><?php echo $result->status ?>
+                                                <b>STATUS OS: </b><?php echo esc($result->status); ?>
                                             </td>
 
                                             <td>
@@ -62,7 +62,7 @@ $totalProdutos = 0; ?>
 
                                             <td>
                                                 <?php if (!empty($result->garantia)) { ?>
-                                                    <b>GARANTIA: </b><?php echo $result->garantia . ' dia(s)'; ?>
+                                                    <b>GARANTIA: </b><?php echo esc($result->garantia) . ' dia(s)'; ?>
                                                 <?php } ?>
                                             </td>
 
@@ -231,8 +231,8 @@ $totalProdutos = 0; ?>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0; text-align:center;">
                                             <img style="margin:0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . $chaveFormatada . '</span>';?>
+                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>';?>
                                         </td>
                                     <?php endif ?>
                                 <?php } ?>

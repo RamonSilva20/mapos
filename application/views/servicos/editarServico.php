@@ -14,19 +14,19 @@
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="nome" type="text" name="nome" value="<?php echo $result->nome ?>" />
+                            <input id="nome" type="text" name="nome" value="<?php echo esc($result->nome); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="preco" class="control-label"><span class="required">Preço*</span></label>
                         <div class="controls">
-                            <input id="preco" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="preco" value="<?php echo $result->preco ?>" />
+                            <input id="preco" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="preco" value="<?php echo esc($result->preco); ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="descricao" class="control-label">Descrição</label>
                         <div class="controls">
-                            <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao ?>" />
+                            <input id="descricao" type="text" name="descricao" value="<?php echo esc($result->descricao); ?>" />
                         </div>
                     </div>
                     <div class="form-actions">

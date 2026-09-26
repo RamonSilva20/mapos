@@ -145,12 +145,13 @@ composer format
 Para apenas verificar, sem alterar os arquivos:
 
 ```bash
-application/vendor/bin/php-cs-fixer fix --dry-run --diff
+composer format:check
 ```
 
 Boas práticas adicionais:
 
-- Escape a saída nas views para evitar XSS: use `html_escape()` para texto e o helper `printSafeHtml()` (`application/helpers/general_helper.php`, baseado no HTMLPurifier) quando precisar renderizar HTML vindo do usuário.
+- Escape a saída nas views para evitar XSS: use o helper que corresponde ao contexto da saída — `esc()` para texto e atributos HTML, `esc_js()` / `esc_json()` dentro de `<script>`, `esc_url()` em `href`/`src`, `esc_css()` em `style` e `esc_msg()` para mensagens do SweetAlert2. Quando precisar renderizar HTML vindo do usuário, use `printSafeHtml()` (também em `application/helpers/general_helper.php`, baseado no HTMLPurifier). Nunca use `echo` direto em uma linha do banco, valor de sessão ou de configuração.
+- Rode `composer xss:check` depois de editar views: o comando falha se algum valor chegar à página sem escape. A tabela completa de helpers está em `AGENTS.md`.
 - Use o Query Builder do CodeIgniter ou *query bindings* nos models. **Nunca** concatene entrada do usuário em SQL.
 - Valide e autorize no controller: confira o ID recebido e a permissão do usuário antes de operar sobre o registro.
 - Siga o idioma já usado no arquivo que você está editando (o código do projeto mistura português e inglês; mantenha a consistência local em vez de renomear o entorno).
@@ -282,6 +283,7 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 - [ ] O PR resolve **um** problema (evite juntar assuntos diferentes).
 - [ ] O código está formatado (`composer format`).
+- [ ] Se você editou views, `composer xss:check` passa.
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
 - [ ] A pasta `application/vendor/` não foi commitada.
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
