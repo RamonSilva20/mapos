@@ -1113,15 +1113,33 @@ class Mine extends CI_Controller
     {
         header('Content-type: image/jpeg');
 
-        $arrFont = ['font-ZXX_Noise.otf', 'font-karabine.ttf', 'font-capture.ttf', 'font-captcha.ttf'];
+        $arrFont = [
+            'font-ZXX_Noise.otf',
+            'font-karabine.ttf',
+            'font-capture.ttf',
+            'font-captcha.ttf'
+        ];
+
         shuffle($arrFont);
 
         $codigoCaptcha = substr(bin2hex(random_bytes(4)), 0, 7);
-        $img = imagecreatefromjpeg('./assets/img/captcha_bg.jpg');
-        $corCaptcha = imagecolorallocate($img, 255, 0, 0);
-        $font = './assets/font-awesome/' . $arrFont[0];
 
-        imagettftext($img, 23, 0, 5, rand(30, 35), $corCaptcha, $font, $codigoCaptcha);
+        $img = imagecreatefromjpeg(FCPATH . 'assets/img/captcha_bg.jpg');
+        $corCaptcha = imagecolorallocate($img, 255, 0, 0);
+
+        $font = FCPATH . 'assets/font-awesome/' . $arrFont[0];
+
+        imagettftext(
+            $img,
+            23,
+            0,
+            5,
+            rand(30, 35),
+            $corCaptcha,
+            $font,
+            $codigoCaptcha
+        );
+
         imagepng($img);
         imagedestroy($img);
 
