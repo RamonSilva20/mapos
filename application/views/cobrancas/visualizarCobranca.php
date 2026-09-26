@@ -14,63 +14,63 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente</strong></td>
                             <td>
-                                <?php echo esc($result->nomeCliente); ?>
+                                <?= esc($result->nomeCliente) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Documento)</strong></td>
                             <td>
-                                <?php echo esc($result->documento); ?>
+                                <?= esc($result->documento) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Telefone)</strong></td>
                             <td>
-                                <?php echo esc($result->telefone); ?>
+                                <?= esc($result->telefone) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Celular)</strong></td>
                             <td>
-                                <?php echo esc($result->celular); ?>
+                                <?= esc($result->celular) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Cliente (Email)</strong></td>
                             <td>
-                                <?php echo esc($result->email); ?>
+                                <?= esc($result->email) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Id interno (id)</strong></td>
                             <td>
-                                <?php echo esc($result->idCobranca); ?>
+                                <?= esc($result->idCobranca) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Id externo (charge_id)</strong></td>
                             <td>
-                                <?php echo esc($result->charge_id); ?>
+                                <?= esc($result->charge_id) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Gateway de Pagamento</strong></td>
                             <td>
-                                <?php echo esc($result->payment_gateway); ?>
+                                <?= esc($result->payment_gateway) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Valor da cobrança</strong></td>
                             <td>R$
-                                <?php echo number_format($result->total / 100, 2, ',', '.'); ?>
+                                <?= number_format($result->total / 100, 2, ',', '.') ?>
                             </td>
                         </tr>
 
@@ -90,28 +90,28 @@
                         <tr>
                             <td style="text-align: right"><strong>Expiração</strong></td>
                             <td>
-                                <?php echo date('d/m/Y', strtotime($result->expire_at)); ?>
+                                <?= date('d/m/Y', strtotime($result->expire_at)) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Método de pagamento</strong></td>
                             <td>
-                                <?php echo esc($result->payment_method); ?>
+                                <?= esc($result->payment_method) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Url de pagamento</strong></td>
                             <td>
-                                <?php echo esc($result->payment_url); ?>
+                                <?= esc($result->payment_url) ?>
                             </td>
                         </tr>
 
                         <tr>
                             <td style="text-align: right"><strong>Código de barras</strong></td>
                             <td>
-                                <?php echo esc($result->barcode); ?>
+                                <?= esc($result->barcode) ?>
                             </td>
                         </tr>
 
@@ -119,7 +119,7 @@
                             <td style="text-align: right"><strong>Link</strong></td>
                             <td>
                                 <?php if ($result->link) { ?>
-                                    <a href="<?php echo esc($result->link); ?>" target="_blank">Abrir em nova aba</a>
+                                    <a href="<?= esc($result->link) ?>" target="_blank">Abrir em nova aba</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -128,7 +128,7 @@
                             <td style="text-align: right"><strong>PDF</strong></td>
                             <td>
                                 <?php if ($result->pdf) { ?>
-                                    <a href="<?php echo esc($result->pdf); ?>" target="_blank">Abrir em nova aba</a>
+                                    <a href="<?= esc($result->pdf) ?>" target="_blank">Abrir em nova aba</a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -136,7 +136,7 @@
                         <tr>
                             <td style="text-align: right"><strong>Mensagem</strong></td>
                             <td>
-                                <?php echo esc($result->message); ?>
+                                <?= esc($result->message) ?>
                             </td>
                         </tr>
                     </tbody>

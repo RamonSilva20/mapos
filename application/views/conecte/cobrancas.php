@@ -65,11 +65,11 @@
         </div>
     </div>
 </div>
-<?php echo $this->pagination->create_links(); ?>
+<?= $this->pagination->create_links() ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/excluir" method="post">
+    <form action="<?= base_url() ?>index.php/cobrancas/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir cobrança</h5>
@@ -87,7 +87,7 @@
 
 
 <div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
+    <form action="<?= base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Confirmar pagamento</h5>
@@ -105,7 +105,7 @@
 
 
 <div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/cancelar" method="post">
+    <form action="<?= base_url() ?>index.php/cobrancas/cancelar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Cancelar cobrança</h5>

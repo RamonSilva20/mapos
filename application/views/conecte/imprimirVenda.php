@@ -17,7 +17,7 @@ $totalProdutos = 0;
             <header>
                 <?php if ($emitente == null) : ?>
                     <div class="alert alert-danger" role="alert">
-                        Você precisa configurar os dados do emitente. >>> <a href="<?=base_url()?>index.php/mapos/emitente">Configurar</a>
+                        Você precisa configurar os dados do emitente. >>> <a href="<?= base_url() ?>index.php/mapos/emitente">Configurar</a>
                     </div>
                 <?php else : ?>
                     <div class="imgLogo" class="align-middle">
@@ -196,7 +196,7 @@ $totalProdutos = 0;
                     <span>VENDA <b>#<?= str_pad($result->idVendas, 4, 0, STR_PAD_LEFT) ?></b></span>
                 </div>
                 <div class="vendedor">
-                    <span><b>Vendedor : <?php echo esc($result->nome); ?> </b></span>
+                    <span><b>Vendedor : <?= esc($result->nome) ?> </b></span>
                 </div>
             </footer>
         </div>

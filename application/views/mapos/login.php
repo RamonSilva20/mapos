@@ -35,7 +35,7 @@
   ?>
       </h1>
       <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
-      <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= esc($this->config->item('app_version')); ?>">
+      <img src="<?= base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= esc($this->config->item('app_version')); ?>">
     </div>
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
       <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
@@ -54,7 +54,7 @@
               <div class="content">
                 <div id="newlog">
                   <div class="icon2">
-                    <img src="<?php echo base_url() ?>assets/img/logo-two.png">
+                    <img src="<?= base_url() ?>assets/img/logo-two.png">
                   </div>
                   <div class="title01">
                     <?= '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>

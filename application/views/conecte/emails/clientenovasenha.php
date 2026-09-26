@@ -159,7 +159,7 @@
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Caso não funcione o link, por favor acessar <?= base_url() . "index.php/mine/tokenManual"?> <br><br>
+                    Caso não funcione o link, por favor acessar <?= base_url() . "index.php/mine/tokenManual" ?> <br><br>
                     Ao carregar a página você devera copiar e colar <strong><?= esc($resets_de_senha->token) ?></strong>
                 </td>
             </tr>

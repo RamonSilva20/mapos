@@ -20,7 +20,7 @@
         <?php endif; ?>
         <form class="span9" method="get" action="<?= base_url() ?>index.php/servicos" style="display: flex; justify-content: flex-end;">
             <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar por Nome ou Descrição..." class="span12" value="<?=html_escape($this->input->get('pesquisa'))?>">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar por Nome ou Descrição..." class="span12" value="<?= html_escape($this->input->get('pesquisa')) ?>">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px">
@@ -69,11 +69,11 @@
         </div>
     </div>
 </div>
-<?php echo $this->pagination->create_links(); ?>
+<?= $this->pagination->create_links() ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/servicos/excluir" method="post">
+    <form action="<?= base_url() ?>index.php/servicos/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir Serviço</h5>

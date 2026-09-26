@@ -83,7 +83,7 @@
 
 <?php $permissoes = json_decode_legacy($result->permissoes); ?>
 <div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url();?>index.php/permissoes/editar" id="formPermissao" method="post">
+    <form action="<?= base_url() ?>index.php/permissoes/editar" id="formPermissao" method="post">
         <div class="span12" style="margin-left: 0">
             <div class="widget-box">
                 <div class="widget-title">
@@ -95,8 +95,8 @@
                 <div class="widget-content">
                     <div class="span4">
                         <label>Nome da Permissão</label>
-                        <input name="nome" type="text" id="nome" class="span12" value="<?php echo esc($result->nome); ?>" />
-                        <input type="hidden" name="idPermissao" value="<?php echo esc($result->idPermissao); ?>">
+                        <input name="nome" type="text" id="nome" class="span12" value="<?= esc($result->nome) ?>" />
+                        <input type="hidden" name="idPermissao" value="<?= esc($result->idPermissao) ?>">
                     </div>
                     <div class="span3">
                         <label>Situação</label>
@@ -108,8 +108,8 @@
                                 $sim = '';
                                 $nao ='selected';
                             }?>
-                            <option value="1" <?php echo esc($sim); ?>>Ativo</option>
-                            <option value="0" <?php echo esc($nao); ?>>Inativo</option>
+                            <option value="1" <?= esc($sim) ?>>Ativo</option>
+                            <option value="0" <?= esc($nao) ?>>Inativo</option>
                         </select>
                     </div>
                     <div class="span4">
@@ -840,19 +840,19 @@
                                 <tr>
                                     <td>
                                         <label>
-                                            <input <?php echo (isset($permissoes['cAuditoria']) && $permissoes['cAuditoria'] == 1) ? 'checked' : ''; ?> name="cAuditoria" class="marcar" type="checkbox" value="1" />
+                                            <input <?= (isset($permissoes['cAuditoria']) && $permissoes['cAuditoria'] == 1) ? 'checked' : '' ?> name="cAuditoria" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Auditoria</span>
                                         </label>
                                     </td>
                                     <td>
                                         <label>
-                                            <input <?php echo (isset($permissoes['cEmail']) && $permissoes['cEmail'] == 1) ? 'checked' : ''; ?> name="cEmail" class="marcar" type="checkbox" value="1" />
+                                            <input <?= (isset($permissoes['cEmail']) && $permissoes['cEmail'] == 1) ? 'checked' : '' ?> name="cEmail" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Emails</span>
                                         </label>
                                     </td>
                                     <td>
                                         <label>
-                                            <input <?php echo (isset($permissoes['cSistema']) && $permissoes['cSistema'] == 1) ? 'checked' : ''; ?> name="cSistema" class="marcar" type="checkbox" value="1" />
+                                            <input <?= (isset($permissoes['cSistema']) && $permissoes['cSistema'] == 1) ? 'checked' : '' ?> name="cSistema" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Sistema</span>
                                         </label>
                                     </td>
@@ -868,7 +868,7 @@
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                               <button type="submit" class="button btn btn-primary">
                               <span class="button__icon"><i class='bx bx-save'></i></span><span class="button__text2">Salvar</span></button>
-                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/permissoes">
+                                <a title="Voltar" class="button btn btn-mini btn-warning" href="<?= site_url() ?>/permissoes">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
@@ -880,7 +880,7 @@
 </div>
 
 
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/validate.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#marcarTodos").change(function () {
