@@ -8,7 +8,7 @@ $this->load->config('payment_gateways');
 
 <div class="modal fade" id="modal-gerar-pagamento" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <form id="form-gerar-cobranca" name="cobranca" method="post" action="<?php echo base_url() . 'index.php/cobrancas/adicionar'; ?>">
+        <form id="form-gerar-cobranca" name="cobranca" method="post" action="<?= base_url() . 'index.php/cobrancas/adicionar' ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -17,13 +17,13 @@ $this->load->config('payment_gateways');
                 <div class="modal-body">
                     <div id="forma-pag" class="">
                         <div class="form-group">
-                            <input value="<?php echo esc($id); ?>" name="id" hidden>
-                            <input value="<?php echo esc($tipo); ?>" name="tipo" hidden>
+                            <input value="<?= esc($id) ?>" name="id" hidden>
+                            <input value="<?= esc($tipo) ?>" name="tipo" hidden>
                             <label for="gateway_de_pagamento">Gateway de Pagamento: </label>
                             <select id="gateway_de_pagamento" class="form-control span12" name="gateway_de_pagamento" required>
                                 <option value="" selected>Escolha o gateway de pagamento</option>
                                 <?php foreach ($this->config->item('payment_gateways') as $paymentGateway) : ?>
-                                    <option value="<?php echo esc($paymentGateway['library_name']); ?>"><?php echo esc($paymentGateway['name']); ?></option>
+                                    <option value="<?= esc($paymentGateway['library_name']) ?>"><?= esc($paymentGateway['name']) ?></option>
                                 <?php endforeach ?>
                             </select>
                             <label id="label_forma_pagamento" for="forma_pagamento" hidden>Forma de Pagamento: </label>

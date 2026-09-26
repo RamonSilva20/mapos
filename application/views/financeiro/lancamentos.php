@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/dayjs.min.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?= base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?= base_url() ?>assets/js/dayjs.min.js"></script>
 
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
@@ -40,7 +40,7 @@ $periodo = $this->input->get('periodo');
     <?php } ?>
 
     <div class="span12" style="margin-left: 0;margin-top: 1rem;">
-        <form action="<?php echo current_url(); ?>" method="get">
+        <form action="<?= current_url() ?>" method="get">
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
@@ -175,19 +175,19 @@ foreach ($results as $r) {
                         <tr>
                             <td colspan="6" style="text-align: right; color: green"><strong>Total Receitas:</strong></td>
                             <td colspan="6" style="text-align: left; color: green">
-                                <strong>R$ <?php echo number_format($totals['receitas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?= number_format($totals['receitas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right; color: red"><strong>Total Despesas:</strong></td>
                             <td colspan="6" style="text-align: left; color: red">
-                                <strong>R$ <?php echo number_format($totals['despesas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?= number_format($totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right"><strong>Saldo:</strong></td>
                             <td colspan="6" style="text-align: left;">
-                                <strong>R$ <?php echo number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
+                                <strong>R$ <?= number_format($totals['receitas'] - $totals['despesas'], 2, ',', '.') ?></strong>
                             </td>
                         </tr>
                     
@@ -195,10 +195,10 @@ foreach ($results as $r) {
                             <td colspan="7" style="text-align: left;"><strong>Estatísticas Gerais do Financeiro:</strong></td>
                         </tr> 
                         <tr>
-                      <td colspan="7" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_receita, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left; color: green">Total Receitas (Pagas): R$ <?= number_format($estatisticas_financeiro->total_receita, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?php echo number_format($estatisticas_financeiro->total_despesa, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left; color: red">Total Despesas (Pagas): R$ <?= number_format($estatisticas_financeiro->total_despesa, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
                       <td colspan="7" style="text-align: left;"><strong>Total Receitas (-) Despesas = Saldo Líquido: R$ <?php $sub_receita_despesa = $estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa;
@@ -212,7 +212,7 @@ echo number_format($soma_receita_despesa, 2, ',', '.') ?></td>
                       <td colspan="7" style="text-align: left;">Total Receitas Pendentes: R$ <?php  echo number_format($estatisticas_financeiro->total_receita_pendente, 2, ',', '.'); ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total Despesas Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total Despesas Pendentes: R$ <?= number_format($estatisticas_financeiro->total_despesa_pendente, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
                       <td colspan="7" style="text-align: left;">Total de Receitas Pendentes (-) Despesas Pendentes: R$ <?php $sub_recpendente_despependente = $estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente;
@@ -223,20 +223,20 @@ echo number_format($sub_recpendente_despependente, 2, ',', '.')?></td>
 echo number_format($sub_recpendente_despependente, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pagos: R$ <?= number_format($estatisticas_financeiro->total_valor_desconto, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?php echo number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Descontos aplicados á lançamentos Pendentes: R$ <?= number_format($estatisticas_financeiro->total_valor_desconto_pendente, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
                       <td colspan="7" style="text-align: left;"><strong>Total de descontos aplicados (pagos + pendentes): R$ <?php $soma_descontos_pagos = $estatisticas_financeiro->total_valor_desconto + $estatisticas_financeiro->total_valor_desconto_pendente;
 echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Receitas sem descontos aplicados (pagos + pendentes): R$ <?= number_format($estatisticas_financeiro->total_receita_sem_desconto, 2, ',', '.') ?></td>
                       </tr>
                       <tr>
-                      <td colspan="7" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?php echo number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.'); ?></td>
+                      <td colspan="7" style="text-align: left;">Total de Despesas sem descontos aplicados (pagos + pendentes): R$ <?= number_format($estatisticas_financeiro->total_despesa_sem_desconto, 2, ',', '.') ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -244,12 +244,12 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         </div>
     </div>
 
-    <?php echo $this->pagination->create_links(); ?>
+    <?= $this->pagination->create_links() ?>
 </div>
 
 <!-- Modal nova receita e despesa -->
 <div id="modalReceita" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formReceita" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita" method="post">
+    <form id="formReceita" action="<?= base_url() ?>index.php/financeiro/adicionarReceita" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Adicionar Receita/Despesa</h3>
@@ -271,7 +271,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -300,7 +300,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 		            
           <div class="span3">  
           <label for="valor_desconto">Val.Desc <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?php echo number_format("0.00", 2, ',', '.') ?>"/>
+          <input class="span12 money" id="valor_desconto" readOnly="true" title="Não altere este campo" type="text" name="valor_desconto" value="<?= number_format("0.00", 2, ',', '.') ?>"/>
         </div>
 
                 <div class="span4" style="margin-left: 0">
@@ -371,7 +371,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal nova receita e despesa parcelada -->
 <div id="modalReceitaParcelada" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form id="formReceita_parc" action="<?php echo base_url() ?>index.php/financeiro/adicionarReceita_parc" method="post">
+  <form id="formReceita_parc" action="<?= base_url() ?>index.php/financeiro/adicionarReceita_parc" method="post">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Adicionar Receita/Despesa Parcelada</h3>
@@ -388,7 +388,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
           <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?php echo current_url() ?>"/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>"/>
     	</div>	
     	        
     		<div class="span6" style="margin-left: 0"> 
@@ -416,7 +416,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 		         
           <div class="span3" style="margin-left: 0">  
 	        <label for="desconto_parc">Desconto <i class="icon-info-sign tip-left" title="Não altere esta campo, caso clicar nele e sair e ficar vázio, terá que recarregar á pagina e inserir de novo"></i></label>
-            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?php echo number_format("0.00", 2, ',', '.') ?>" style="float: left;" />
+            <input class="span6 money"  id="desconto_parc" readOnly="true" title="Não altere este campo" type="text" name="desconto_parc" value="<?= number_format("0.00", 2, ',', '.') ?>" style="float: left;" />
 	      </div>
 			
     		<div id="divParcelamento" class="span2" style="margin-left: 0">
@@ -463,7 +463,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 	    	<div class="span4" style="margin-left: 1">
 	    		<label for="dia_pgto">Data da Entrada*</label>
-	    		<input class="span12 datepicker" id="dia_pgto" type="text" name="dia_pgto" value="<?php echo date('d/m/Y'); ?>"  autocomplete="off"  required/>
+	    		<input class="span12 datepicker" id="dia_pgto" type="text" name="dia_pgto" value="<?= date('d/m/Y') ?>"  autocomplete="off"  required/>
 	    	</div>
 	    	
 	    	<div class="span4" style="margin-left: 1">
@@ -568,7 +568,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formEditar" action="<?php echo base_url() ?>index.php/financeiro/editar" method="post">
+    <form id="formEditar" action="<?= base_url() ?>index.php/financeiro/editar" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Editar Lançamento</h3>
@@ -597,7 +597,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                 <div class="span4" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="idEditar" name="id" value="" />
-                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?php echo number_format("0.00", 2, ',', '.') ?>" required />
+                    <input class="span12 money" type="text" name="valor" id="valorEditar" value="<?= number_format("0.00", 2, ',', '.') ?>" required />
                 </div>
 
         <div class="span4">  
@@ -608,7 +608,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             <div class="span2">  
             <label for="valor_desconto">Val.Desc</label>
-            <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?php echo number_format("0.00", 2, ',', '.') ?>" />
+            <input class="span12 money" id="descontoEditar" name="valor_desconto_editar" type="text" value="<?= number_format("0.00", 2, ',', '.') ?>" />
             </div>
 
                 <div class="span4" style="margin-left: 0">
@@ -685,8 +685,8 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
 
     function mostrarValor() {
@@ -910,7 +910,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>index.php/financeiro/excluirLancamento",
+                url: "<?= base_url() ?>index.php/financeiro/excluirLancamento",
                 data: "id=" + id,
                 dataType: 'json',
                 success: function(data) {
@@ -931,7 +931,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             });
             return false;
         });
-        let controlBaixa = "<?php echo esc($configuration['control_baixa']); ?>";
+        let controlBaixa = "<?= esc($configuration['control_baixa']) ?>";
         let datePickerOptions = {
             dateFormat: 'dd/mm/yy',
         };
@@ -989,7 +989,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedorEditar").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?= base_url() ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedorEditar").val(ui.item.label);
@@ -997,7 +997,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
     
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?= base_url() ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente").val(ui.item.label);
@@ -1006,7 +1006,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
           $("#cliente_busca").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?= base_url() ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_busca").val(ui.item.label);
@@ -1014,7 +1014,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#cliente_parc").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?= base_url() ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#cliente_parc").val(ui.item.label);
@@ -1023,7 +1023,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
         $("#fornecedor").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/financeiro/autoCompleteClienteAddReceita",
+            source: "<?= base_url() ?>index.php/financeiro/autoCompleteClienteAddReceita",
             minLength: 1,
             select: function(event, ui) {
                 $("#fornecedor").val(ui.item.label);

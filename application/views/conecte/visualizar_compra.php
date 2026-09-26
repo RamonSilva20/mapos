@@ -9,7 +9,7 @@
                 <h5>Venda</h5>
                 <div class="buttons">
 
-                    <a id="imprimir" target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?php echo site_url(); ?>/mine/imprimirCompra/<?php echo esc($result->idVendas); ?>"><i class="fas fa-print"></i> Imprimir</a>
+                    <a id="imprimir" target="_blank" title="Imprimir" class="btn btn-mini btn-inverse" href="<?= site_url() ?>/mine/imprimirCompra/<?= esc($result->idVendas) ?>"><i class="fas fa-print"></i> Imprimir</a>
                 </div>
             </div>
             <div class="widget-content" id="printOs">
@@ -27,16 +27,16 @@
                                 } else { ?>
 
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?php echo esc($emitente->url_logo); ?> "></td>
+                                        <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> "></td>
                                         <td> <span style="font-size: 20px; ">
-                                                <?php echo esc($emitente->nome); ?></span> </br><span>
-                                                <?php echo esc($emitente->cnpj); ?> </br>
-                                                <?php echo esc($emitente->rua) . ', nº:' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf); ?> </span> </br> <span> E-mail:
-                                                <?php echo esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone); ?> </br>
-                                                Responsável: <?php echo esc($result->nome); ?></span></td>
+                                                <?= esc($emitente->nome) ?></span> </br><span>
+                                                <?= esc($emitente->cnpj) ?> </br>
+                                                <?= esc($emitente->rua) . ', nº:' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf) ?> </span> </br> <span> E-mail:
+                                                <?= esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone) ?> </br>
+                                                Responsável: <?= esc($result->nome) ?></span></td>
                                         <td style="width: 18%; text-align: center">#Venda: <span>
-                                                <?php echo esc($result->idVendas); ?></span></br> </br> <span>Emissão:
-                                                <?php echo date('d/m/Y'); ?></span></td>
+                                                <?= esc($result->idVendas) ?></span></br> </br> <span>Emissão:
+                                                <?= date('d/m/Y') ?></span></td>
                                     </tr>
 
                                 <?php
@@ -53,30 +53,30 @@
                                                 <span>
                                                     <h5>Cliente</h5>
                                                     <span>
-                                                        <?php echo esc($result->nomeCliente); ?>
+                                                        <?= esc($result->nomeCliente) ?>
                                                     </span><br />
                                                     <span>
-                                                        <?php echo esc($result->rua); ?>, <?php echo esc($result->numero); ?>, <?php echo esc($result->bairro); ?>
+                                                        <?= esc($result->rua) ?>, <?= esc($result->numero) ?>, <?= esc($result->bairro) ?>
                                                     </span><br/>
                                                     <span>
-                                                        <?php echo esc($result->cidade); ?> - <?php echo esc($result->estado); ?> - CEP: <?php echo esc($result->cep); ?>
+                                                        <?= esc($result->cidade) ?> - <?= esc($result->estado) ?> - CEP: <?= esc($result->cep) ?>
                                                     </span><br/>
                                                     <span>
-                                                        Email: <?php echo esc($result->emailCliente); ?>
+                                                        Email: <?= esc($result->emailCliente) ?>
                                                     </span></br>
                                                     <?php if ($result->contato) { ?>
-                                                        <span>Contato: <?php echo esc($result->contato); ?> </span>
+                                                        <span>Contato: <?= esc($result->contato) ?> </span>
                                                     <?php } ?>
-                                                    <span>Celular: <?php echo esc($result->celular); ?></span>
+                                                    <span>Celular: <?= esc($result->celular) ?></span>
 							                    </span>
                                             </li>
                                         </ul>
                                     </td>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 12%; padding: 0;text-align:center;">
-                                            <img style="margin:12px 0px 0px 0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:12px 0px 0px 0px" src="<?= base_url() ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
                                             <img style="margin:5px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ;?>
+                                            <?= '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ?>
                                         </td>
                                     <?php endif ?>
                                 </tr>
@@ -89,22 +89,22 @@
                                 <?php if ($result->dataVenda != null) { ?>
                                     <tr>
                                         <td>
-                                            <b>Status Venda: </b><?php echo esc($result->status); ?>
+                                            <b>Status Venda: </b><?= esc($result->status) ?>
                                         </td>
 
                                         <td>
-                                            <b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>
+                                            <b>Data da Venda: </b><?= date('d/m/Y', strtotime($result->dataVenda)) ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->garantia) { ?>
-                                                <b>Garantia: </b><?php echo esc($result->garantia) . ' dia(s)'; ?>
+                                                <b>Garantia: </b><?= esc($result->garantia) . ' dia(s)' ?>
                                             <?php } ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->status == 'Finalizado' || $result->status == 'Faturado') { ?>
-                                                <b>Venc. da Garantia: </b><?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                                <b>Venc. da Garantia: </b><?= dateInterval($result->dataVenda, $result->garantia) ?>
                                             <?php } ?>
                                         </td>
                                     </tr>
@@ -112,7 +112,7 @@
                                 <tr>
                                     <td colspan="4">
                                             <b>Observações: </b>
-                                        <?php echo printSafeHtml($result->observacoes_cliente) ?>
+                                        <?= printSafeHtml($result->observacoes_cliente) ?>
                                     </td>
                                 </tr>
                             </tbody>
@@ -147,7 +147,7 @@
                                     <tr>
                                         <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
                                         <td><strong>R$
-                                                <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong></td>
+                                                <?= number_format($totalProdutos, 2, ',', '.') ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -157,14 +157,14 @@
                         <hr />
 
                         <h4 style="text-align: right">Valor Total: R$
-                            <?php echo number_format($totalProdutos, 2, ',', '.'); ?>
+                            <?= number_format($totalProdutos, 2, ',', '.') ?>
                         </h4>
                         <?php if ($result->valor_desconto != 0 || $result->valor_desconto != 0) { ?>
                         <h4 style="text-align: right">Desconto: R$
-                            <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?>
+                            <?= number_format($result->valor_desconto - $totalProdutos, 2, ',', '.') ?>
                         </h4>
                         <h4 style="text-align: right">Total Com Desconto: R$
-                            <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?>
+                            <?= number_format($result->valor_desconto, 2, ',', '.') ?>
                         </h4>
                         <?php } ?>
                     </div>

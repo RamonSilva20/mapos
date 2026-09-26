@@ -6,7 +6,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/mpdf-barcode.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/css/mpdf-barcode.css" />
 
 </head>
 
@@ -43,13 +43,13 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(esc(limitarTexto($string, $limite = 23))); ?>
+											<?= (esc(limitarTexto($string, $limite = 23))) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo esc($p->idProdutos); ?>
+										<?= esc($p->idProdutos) ?>
 									</b>
 									<br /> Preço: R$
 									<b>
@@ -73,13 +73,13 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(esc(limitarTexto($string, $limite = 23))); ?>
+											<?= (esc(limitarTexto($string, $limite = 23))) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo esc($p->idProdutos); ?>
+										<?= esc($p->idProdutos) ?>
 									</b>
 									<br /> Preço: R$
 									<b>
@@ -107,13 +107,13 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(esc(limitarTexto($string, $limite = 23))); ?>
+											<?= (esc(limitarTexto($string, $limite = 23))) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo esc($p->idProdutos); ?>
+										<?= esc($p->idProdutos) ?>
 									</b>
 									<br /> Preço: R$
 									<b>
@@ -139,13 +139,13 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(esc(limitarTexto($string, $limite = 23))); ?>
+											<?= (esc(limitarTexto($string, $limite = 23))) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo esc($p->idProdutos); ?>
+										<?= esc($p->idProdutos) ?>
 									</b>
 									<br /> Preço: R$
 									<b>

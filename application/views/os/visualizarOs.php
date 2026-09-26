@@ -13,14 +13,14 @@
                     <div class="button-container">
                         <a target="_blank" title="Imprimir Ordem de Serviço" class="button btn btn-mini btn-inverse"> <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span></a>
                         <div class="cascading-buttons">
-                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimir/<?php echo esc($result->idOs); ?>">
+                            <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/os/imprimir/<?= esc($result->idOs) ?>">
                                 <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Papel A4</span>
                             </a>
-                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/os/imprimirTermica/<?php echo esc($result->idOs); ?>">
+                            <a target="_blank" title="Impressão Cupom Não Fical" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/os/imprimirTermica/<?= esc($result->idOs) ?>">
                                 <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
                             </a>
                             <?php if ($result->garantias_id) { ?>
-                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/garantias/imprimirGarantiaOs/<?php echo esc($result->idOs); ?>">
+                                <a target="_blank" title="Imprimir Termo de Garantia" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/garantias/imprimirGarantiaOs/<?= esc($result->idOs) ?>">
                                     <span class="button__icon"><i class="bx bx-paperclip"></i></span> <span class="button__text">Termo Garantia</span>
                                 </a>
                             <?php } ?>
@@ -42,7 +42,7 @@
                         }
                     } ?>
 
-                    <a title="Enviar OS por E-mail" class="button btn btn-mini btn-warning" href="<?php echo site_url() ?>/os/enviar_email/<?php echo esc($result->idOs); ?>">
+                    <a title="Enviar OS por E-mail" class="button btn btn-mini btn-warning" href="<?= site_url() ?>/os/enviar_email/<?= esc($result->idOs) ?>">
                         <span class="button__icon"><i class="bx bx-envelope"></i></span> <span class="button__text">via E-mail</span>
                     </a>
 
@@ -64,10 +64,10 @@
                             <tbody>
                                 <?php if ($emitente == null) { ?>
                                     <tr>
-                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar <<< </a></td>
+                                        <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                     </tr>
                                 <?php } ?>
-                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?php echo sprintf('%04d', $result->idOs) ?></h3>
+                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?= sprintf('%04d', $result->idOs) ?></h3>
                             </tbody>
                         </table>
                         <table class="table table-condensend">
@@ -76,7 +76,7 @@
                                     <td style="width: 60%; padding-left: 0">
                                         <span>
                                             <h5><b>CLIENTE</b></h5>
-                                            <span><i class='bx bxs-business'></i> <b><?php echo html_escape($result->nomeCliente) ?></b></span><br />
+                                            <span><i class='bx bxs-business'></i> <b><?= html_escape($result->nomeCliente) ?></b></span><br />
                                             <?php if (!empty($result->celular_cliente) || !empty($result->telefone_cliente) || !empty($result->contato_cliente)): ?>
                                                 <span><i class='bx bxs-phone'></i>
                                                     <?= !empty($result->contato_cliente) ? html_escape($result->contato_cliente) . ' ' : "" ?>
@@ -102,7 +102,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
 ?>
                                             <?php if (!empty($result->email)): ?>
                                                 <span><i class="fas fa-envelope"></i>
-                                                    <?php echo html_escape($result->email) ?></span><br>
+                                                    <?= html_escape($result->email) ?></span><br>
                                             <?php endif; ?>
                                         </span>
                                     </td>
@@ -113,11 +113,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                     <h5><b>RESPONSÁVEL</b></h5>
                                                 </span>
                                                 <span><b><i class="fas fa-user"></i>
-                                                        <?php echo html_escape($result->nome) ?></b></span><br />
+                                                        <?= html_escape($result->nome) ?></b></span><br />
                                                 <span><i class="fas fa-phone"></i>
-                                                    <?php echo html_escape($result->telefone_usuario) ?></span><br />
+                                                    <?= html_escape($result->telefone_usuario) ?></span><br />
                                                 <span><i class="fas fa-envelope"></i>
-                                                    <?php echo html_escape($result->email_usuario) ?></span>
+                                                    <?= html_escape($result->email_usuario) ?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -134,22 +134,22 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td>
                                             <b>STATUS OS: </b><br>
-                                            <?php echo esc($result->status); ?>
+                                            <?= esc($result->status) ?>
                                         </td>
 
                                         <td>
                                             <b>DATA INICIAL: </b><br>
-                                            <?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                            <?= date('d/m/Y', strtotime($result->dataInicial)) ?>
                                         </td>
 
                                         <td>
                                             <b>DATA FINAL: </b><br>
-                                            <?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                            <?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?>
                                         </td>
 
                                         <td>
                                             <?php if ($result->garantia) { ?>
-                                                <b>GARANTIA: </b><br><?php echo esc($result->garantia) . ' dia(s)'; ?>
+                                                <b>GARANTIA: </b><br><?= esc($result->garantia) . ' dia(s)' ?>
                                             <?php } ?>
                                         </td>
 
@@ -166,7 +166,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td colspan="5">
                                             <b>DESCRIÇÃO: </b>
-                                            <?php echo printSafeHtml($result->descricaoProduto) ?>
+                                            <?= printSafeHtml($result->descricaoProduto) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -175,7 +175,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td colspan="5">
                                             <b>DEFEITO APRESENTADO: </b>
-                                            <?php echo printSafeHtml($result->defeito) ?>
+                                            <?= printSafeHtml($result->defeito) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -184,7 +184,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td colspan="5">
                                             <b>OBSERVAÇÕES: </b>
-                                            <?php echo printSafeHtml($result->observacoes) ?>
+                                            <?= printSafeHtml($result->observacoes) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -193,7 +193,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td colspan="5">
                                             <b>LAUDO TÉCNICO: </b>
-                                            <?php echo printSafeHtml($result->laudoTecnico) ?>
+                                            <?= printSafeHtml($result->laudoTecnico) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -202,7 +202,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td colspan="5">
                                             <strong>TERMO DE GARANTIA </strong><br>
-                                            <?php echo printSafeHtml($result->textoGarantia) ?>
+                                            <?= printSafeHtml($result->textoGarantia) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -278,7 +278,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                     <tr>
                                         <td></td>
                                         <td colspan="2" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -308,7 +308,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                             } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?= number_format($totalServico, 2, ',', '.') ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -369,9 +369,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
     <div class="modal-body">
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
-                <img src="<?php echo base_url(); ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
+                <img src="<?= base_url() ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
                 <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
-                <?php echo '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>'; ?></br>
+                <?= '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>' ?></br>
                 <?php if ($totalProdutos != 0 || $totalServico != 0) {
                     if ($result->valor_desconto != 0) {
                         echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
@@ -397,10 +397,10 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            var url = '<?= base_url() ?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
             $("#excluir-anexo").attr('link', url + id);
-            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?= base_url() ?>index.php/os/downloadanexo/" + id);
 
         });
 
@@ -408,7 +408,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
 
             var link = $(this).attr('link');
-            var idOS = "<?php echo esc($result->idOs); ?>"
+            var idOS = "<?= esc($result->idOs) ?>"
 
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -420,7 +420,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                 data: "idOs=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
+                        $("#divAnexos").load("<?= current_url() ?> #divAnexos");
                     } else {
                         swal({
                             type: "error",

@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/table-custom.css" />
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script src="<?= base_url() ?>assets/js/sweetalert2.all.min.js"></script>
 <style>
   select {
     width: 70px;
@@ -15,37 +15,37 @@
             <h5>Ordens de Serviço</h5>
         </div>
     <div class="span12" style="margin-left: 0">
-        <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
+        <form method="get" action="<?= base_url() ?>index.php/os/gerenciar">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
                 <div class="span3">
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
+                    <a href="<?= base_url() ?>index.php/os/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
                         <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Ordem de Serviço</span></a>
                 </div>
             <?php
             } ?>
 
             <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="<?=set_value('pesquisa')?>">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="<?= set_value('pesquisa') ?>">
             </div>
             <div class="span2">
                 <select name="status" id="" class="span12">
                     <option value="">Selecione status</option>
-                    <option value="Aberto" <?=$this->input->get('status') == 'Aberto' ? 'selected' : ''?>>Aberto</option>
-                    <option value="Faturado" <?=$this->input->get('status') == 'Faturado' ? 'selected' : ''?>>Faturado</option>
-                    <option value="Negociação" <?=$this->input->get('status') == 'Negociação' ? 'selected' : ''?>>Negociação</option>
-                    <option value="Em Andamento" <?=$this->input->get('status') == 'Em Andamento' ? 'selected' : ''?>>Em Andamento</option>
-                    <option value="Orçamento" <?=$this->input->get('status') == 'Orçamento' ? 'selected' : ''?>>Orçamento</option>
-                    <option value="Finalizado" <?=$this->input->get('status') == 'Finalizado' ? 'selected' : ''?>>Finalizado</option>
-                    <option value="Cancelado" <?=$this->input->get('status') == 'Cancelado' ? 'selected' : ''?>>Cancelado</option>
-                    <option value="Aguardando Peças" <?=$this->input->get('status') == 'Aguardando Peças' ? 'selected' : ''?>>Aguardando Peças</option>
-                    <option value="Aprovado" <?=$this->input->get('status') == 'Aprovado' ? 'selected' : ''?>>Aprovado</option>
+                    <option value="Aberto" <?= $this->input->get('status') == 'Aberto' ? 'selected' : '' ?>>Aberto</option>
+                    <option value="Faturado" <?= $this->input->get('status') == 'Faturado' ? 'selected' : '' ?>>Faturado</option>
+                    <option value="Negociação" <?= $this->input->get('status') == 'Negociação' ? 'selected' : '' ?>>Negociação</option>
+                    <option value="Em Andamento" <?= $this->input->get('status') == 'Em Andamento' ? 'selected' : '' ?>>Em Andamento</option>
+                    <option value="Orçamento" <?= $this->input->get('status') == 'Orçamento' ? 'selected' : '' ?>>Orçamento</option>
+                    <option value="Finalizado" <?= $this->input->get('status') == 'Finalizado' ? 'selected' : '' ?>>Finalizado</option>
+                    <option value="Cancelado" <?= $this->input->get('status') == 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
+                    <option value="Aguardando Peças" <?= $this->input->get('status') == 'Aguardando Peças' ? 'selected' : '' ?>>Aguardando Peças</option>
+                    <option value="Aprovado" <?= $this->input->get('status') == 'Aprovado' ? 'selected' : '' ?>>Aprovado</option>
                 </select>
 
             </div>
 
             <div class="span3">
-                <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="<?=html_escape($this->input->get('data'))?>">
-                <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="<?=html_escape($this->input->get('data2'))?>">
+                <input type="text" name="data" autocomplete="off" id="data" placeholder="Data Inicial" class="span6 datepicker" value="<?= html_escape($this->input->get('data')) ?>">
+                <input type="text" name="data2" autocomplete="off" id="data2" placeholder="Data Final" class="span6 datepicker" value="<?= html_escape($this->input->get('data2')) ?>">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px">
@@ -185,11 +185,11 @@ foreach ($results as $r) {
         </div>
     </div>
 
-    <?php echo $this->pagination->create_links(); ?>
+    <?= $this->pagination->create_links() ?>
 
     <!-- Modal -->
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+        <form action="<?= base_url() ?>index.php/os/excluir" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 id="myModalLabel">Excluir OS</h5>
@@ -216,7 +216,7 @@ foreach ($results as $r) {
         $(document).on('click', '#excluir-notificacao', function(event) {
             event.preventDefault();
             $.ajax({
-                    url: '<?php echo site_url() ?>/os/excluir_notificacao',
+                    url: '<?= site_url() ?>/os/excluir_notificacao',
                     type: 'GET',
                     dataType: 'json',
                 })

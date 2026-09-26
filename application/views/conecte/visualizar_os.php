@@ -9,7 +9,7 @@ $totalProdutos = 0; ?>
                 </span>
                 <h5>Ordem de Serviço</h5>
                 <div class="buttons" style=" padding-left:5px;">
-                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/mine/imprimirOs/<?php echo esc($result->idOs); ?>">
+                    <a target="_blank" title="Imprimir Relatório" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/mine/imprimirOs/<?= esc($result->idOs) ?>">
                         <span class="button__icon"><i class="bx bx-printer"></i></span> <span class="button__text">Imprimir Relatório</span></a>
                 </div>
             </div>
@@ -25,17 +25,17 @@ $totalProdutos = 0; ?>
                                     </tr>
                                 <?php } else { ?>
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?php echo esc($emitente->url_logo); ?> " style="max-height: 100px"></td>
+                                        <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> " style="max-height: 100px"></td>
                                         <td>
-                                            <span style="font-size: 20px;"><?php echo esc($emitente->nome); ?></span></br>
-                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?php echo esc($emitente->cnpj); ?></span></br><?php } ?>
-                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?php echo esc($emitente->rua) . ', ' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf); ?></span></br>
-                                            <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?php echo esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone); ?></span></br>
-                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?php echo esc($result->nome); ?>
+                                            <span style="font-size: 20px;"><?= esc($emitente->nome) ?></span></br>
+                                            <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= esc($emitente->cnpj) ?></span></br><?php } ?>
+                                            <span class="icon"><i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?= esc($emitente->rua) . ', ' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf) ?></span></br>
+                                            <span class="icon"><i class="fas fa-comments" style="margin:5px 1px"></i> E-mail: <?= esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone) ?></span></br>
+                                            <span class="icon"><i class="fas fa-user-check"></i> Responsável: <?= esc($result->nome) ?>
                                         </td>
                                         <td style="width: 18%; text-align: center">
-                                            <span><b>N° OS: </b><?php echo esc($result->idOs); ?></span></br></br>
-                                            <span>Emissão: <?php echo date('d/m/Y') ?></span>
+                                            <span><b>N° OS: </b><?= esc($result->idOs) ?></span></br></br>
+                                            <span>Emissão: <?= date('d/m/Y') ?></span>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -49,25 +49,25 @@ $totalProdutos = 0; ?>
                                     <?php if ($result->dataInicial != null) { ?>
                                         <tr>
                                             <td>
-                                                <b>STATUS OS: </b><?php echo esc($result->status); ?>
+                                                <b>STATUS OS: </b><?= esc($result->status) ?>
                                             </td>
 
                                             <td>
-                                                <b>DATA INICIAL: </b><?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>
+                                                <b>DATA INICIAL: </b><?= date('d/m/Y', strtotime($result->dataInicial)) ?>
                                             </td>
 
                                             <td>
-                                                <b>DATA FINAL: </b><?php echo $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : ''; ?>
+                                                <b>DATA FINAL: </b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?>
                                             </td>
 
                                             <td>
                                                 <?php if (!empty($result->garantia)) { ?>
-                                                    <b>GARANTIA: </b><?php echo esc($result->garantia) . ' dia(s)'; ?>
+                                                    <b>GARANTIA: </b><?= esc($result->garantia) . ' dia(s)' ?>
                                                 <?php } ?>
                                             </td>
 
                                             <td>
-                                                <b><?php if ($result->status == 'Finalizado') { ?> VENC. DA GARANTIA: </b><?php echo dateInterval($result->dataFinal, $result->garantia); ?><?php } ?>
+                                                <b><?php if ($result->status == 'Finalizado') { ?> VENC. DA GARANTIA: </b><?= dateInterval($result->dataFinal, $result->garantia) ?><?php } ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -80,7 +80,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>DESCRIÇÃO: </strong><br>
-                                                <?php echo printSafeHtml($result->descricaoProduto) ?>
+                                                <?= printSafeHtml($result->descricaoProduto) ?>
                                             </td>
                                         </tr>
 
@@ -90,7 +90,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>DEFEITO APRESENTADO: </strong><br>
-                                                <?php echo printSafeHtml($result->defeito) ?>
+                                                <?= printSafeHtml($result->defeito) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -99,7 +99,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>OBSERVAÇÕES: </strong><br>
-                                                <?php echo printSafeHtml($result->observacoes) ?>
+                                                <?= printSafeHtml($result->observacoes) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -108,7 +108,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>LAUDO TÉCNICO: </strong><br>
-                                                <?php echo printSafeHtml($result->laudoTecnico) ?>
+                                                <?= printSafeHtml($result->laudoTecnico) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -117,7 +117,7 @@ $totalProdutos = 0; ?>
                                         <tr>
                                             <td>
                                                 <strong>TERMO DE GARANTIA </strong><br>
-                                                <?php echo printSafeHtml($result->textoGarantia) ?>
+                                                <?= printSafeHtml($result->textoGarantia) ?>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -174,7 +174,7 @@ $totalProdutos = 0; ?>
                                     <tr>
                                         <td></td>
                                         <td colspan="2" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?= number_format($totalProdutos, 2, ',', '.') ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -206,7 +206,7 @@ $totalProdutos = 0; ?>
                             } ?>
                                     <tr>
                                         <td colspan="3" style="text-align: right"><strong>TOTAL:</strong></td>
-                                        <td><strong>R$ <?php echo number_format($totalServico, 2, ',', '.'); ?></strong>
+                                        <td><strong>R$ <?= number_format($totalServico, 2, ',', '.') ?></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -230,9 +230,9 @@ $totalProdutos = 0; ?>
                                 <?php if ($result->status == 'Finalizado' || $result->status == 'Aprovado') { ?>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0; text-align:center;">
-                                            <img style="margin:0px" src="<?php echo base_url(); ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:0px" src="<?= base_url() ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
                                             <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
-                                            <?php echo '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>';?>
+                                            <?= '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ?>
                                         </td>
                                     <?php endif ?>
                                 <?php } ?>
@@ -269,9 +269,9 @@ $totalProdutos = 0; ?>
             event.preventDefault();
             var link = $(this).attr('link');
             var id = $(this).attr('imagem');
-            var url = '<?php echo base_url(); ?>index.php/os/excluirAnexo/';
+            var url = '<?= base_url() ?>index.php/os/excluirAnexo/';
             $("#div-visualizar-anexo").html('<img src="' + link + '" alt="">');
-            $("#download").attr('href', "<?php echo base_url(); ?>index.php/os/downloadanexo/" + id);
+            $("#download").attr('href', "<?= base_url() ?>index.php/os/downloadanexo/" + id);
         });
     });
 </script>
@@ -300,10 +300,10 @@ $totalProdutos = 0; ?>
             }
 
             mywindow.document.write('<html><head><title>Map Os</title>');
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-style.css' />");
-            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-media.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/bootstrap.min.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/bootstrap-responsive.min.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/matrix-style.css' />");
+            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/matrix-media.css' />");
 
             mywindow.document.write("</head><body >");
             mywindow.document.write(data);

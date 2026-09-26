@@ -1,4 +1,4 @@
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?= base_url() ?>js/dist/excanvas.min.js"></script><![endif]-->
 
 <script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
@@ -8,7 +8,7 @@
 
 <link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,7 +148,7 @@
                 </div>
 
                 <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
+                    <a href="<?= base_url() ?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
                         <div><i class='bx bxs-group iconBx'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
@@ -156,7 +156,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
+                    <a href="<?= base_url() ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
                         <div><i class='bx bxs-package iconBx2'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
@@ -164,7 +164,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
+                    <a href="<?= base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
                         <div><i class='bx bxs-stopwatch iconBx3'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
@@ -172,7 +172,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
+                    <a href="<?= base_url() ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
                         <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
@@ -180,7 +180,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
+                    <a href="<?= base_url() ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
                         <div><i class='bx bxs-receipt iconBx6'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
@@ -188,7 +188,7 @@
                         </div>
                     </a>
 
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
+                    <a href="<?= base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
                         <div><i class='bx bxs-cart-alt iconBx5'></i></div>
                         <div>
                             <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
@@ -204,18 +204,18 @@
                                 <?php $diaRec = "VALOR_" . date('m') . "_REC";
                                 $diaDes = "VALOR_" . date('m') . "_DES"; ?>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
+                                <a href="<?= base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
                                     <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
                                     <div>
-                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
+                                        <div class="cardName1 cardName2">R$ <?= number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.') ?></div>
                                         <div class="cardName">Receita do dia</div>
                                     </div>
                                 </a>
 
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
+                                <a href="<?= base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
                                     <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
                                     <div>
-                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
+                                        <div class="cardName1 cardName2">R$ <?= number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.') ?></div>
                                         <div class="cardName">Despesa do dia</div>
                                     </div>
                                 </a>
@@ -240,7 +240,7 @@
                     <div class="widget-title2">
                         <h5 class="cardHeader">Balanço Mensal do Ano</h5>
                         <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
+                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?= intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
                             <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
                         </form>
                     </div>
@@ -284,18 +284,18 @@
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
                     label: 'Receita Líquida',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
+                    data: [<?= ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES) ?>
                     ],
 
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -304,18 +304,18 @@
 
                 {
                     label: 'Receita Bruta',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
+                    data: [<?= ($financeiro_mes->VALOR_JAN_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_FEV_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_MAR_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_ABR_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_MAI_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_JUN_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_JUL_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_AGO_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_SET_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_OUT_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_NOV_REC) ?>,
+                        <?= ($financeiro_mes->VALOR_DEZ_REC) ?>
                     ],
 
                     backgroundColor: 'rgba(255, 206, 86, 0.5)',
@@ -324,18 +324,18 @@
 
                 {
                     label: 'Despesas',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
+                    data: [<?= ($financeiro_mes->VALOR_JAN_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_FEV_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_MAR_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_ABR_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_MAI_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_JUN_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_JUL_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_AGO_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_SET_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_OUT_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_NOV_DES) ?>,
+                        <?= ($financeiro_mes->VALOR_DEZ_DES) ?>
                     ],
 
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -344,18 +344,18 @@
 
                 {
                     label: 'Inadimplência',
-                    data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
+                    data: [<?= ($financeiro_mesinadipl->VALOR_JAN_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_FEV_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_MAR_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_ABR_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_MAI_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_JUN_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_JUL_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_AGO_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_SET_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_OUT_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_NOV_REC) ?>,
+                        <?= ($financeiro_mesinadipl->VALOR_DEZ_REC) ?>
                     ],
 
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
@@ -418,12 +418,12 @@
             datasets: [{
                 label: 'Total',
                 data: [
-                    <?php echo(($estatisticas_financeiro->total_receita != null) ? (float) $estatisticas_financeiro->total_receita : 0.00); ?>,
-                    <?php echo(($estatisticas_financeiro->total_receita_pendente != null) ? (float) $estatisticas_financeiro->total_receita_pendente : 0.00); ?>,
-                    <?php echo((float) $estatisticas_financeiro->total_receita - (float) $estatisticas_financeiro->total_despesa); ?>,
-                    <?php echo(($estatisticas_financeiro->total_despesa != null) ? (float) $estatisticas_financeiro->total_despesa : 0.00); ?>,
-                    <?php echo(($estatisticas_financeiro->total_despesa_pendente != null) ? (float) $estatisticas_financeiro->total_despesa_pendente : 0.00); ?>,
-                    <?php echo((float) $estatisticas_financeiro->total_receita_pendente - (float) $estatisticas_financeiro->total_despesa_pendente); ?>
+                    <?= (($estatisticas_financeiro->total_receita != null) ? (float) $estatisticas_financeiro->total_receita : 0.00) ?>,
+                    <?= (($estatisticas_financeiro->total_receita_pendente != null) ? (float) $estatisticas_financeiro->total_receita_pendente : 0.00) ?>,
+                    <?= ((float) $estatisticas_financeiro->total_receita - (float) $estatisticas_financeiro->total_despesa) ?>,
+                    <?= (($estatisticas_financeiro->total_despesa != null) ? (float) $estatisticas_financeiro->total_despesa : 0.00) ?>,
+                    <?= (($estatisticas_financeiro->total_despesa_pendente != null) ? (float) $estatisticas_financeiro->total_despesa_pendente : 0.00) ?>,
+                    <?= ((float) $estatisticas_financeiro->total_receita_pendente - (float) $estatisticas_financeiro->total_despesa_pendente) ?>
                 ],
 
                 backgroundColor: [
@@ -1030,17 +1030,17 @@
                             <tr>
                                 <td>
                                     <?php if ($lancamento->tipo == 'receita'): ?>
-                                        <span class="label label-success"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
+                                        <span class="label label-success"><b><?= ucfirst($lancamento->tipo) ?></b></span>
                                     <?php elseif ($lancamento->tipo == 'despesa'): ?>
-                                        <span class="label label-important"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
+                                        <span class="label label-important"><b><?= ucfirst($lancamento->tipo) ?></b></span>
                                     <?php else: ?>
-                                        <?php echo ucfirst($lancamento->tipo); ?>
+                                        <?= ucfirst($lancamento->tipo) ?>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-truncate"><?php echo esc($lancamento->cliente_fornecedor); ?></td>
-                                <td class="text-truncate"><?php echo esc($lancamento->descricao); ?></td>
-                                <td><?php echo date_format(date_create($lancamento->data_vencimento), 'd/m/Y'); ?></td>
-                                <td>R$ <?php echo number_format($lancamento->valor_desconto, 2, ',', '.'); ?></td>
+                                <td class="text-truncate"><?= esc($lancamento->cliente_fornecedor) ?></td>
+                                <td class="text-truncate"><?= esc($lancamento->descricao) ?></td>
+                                <td><?= date_format(date_create($lancamento->data_vencimento), 'd/m/Y') ?></td>
+                                <td>R$ <?= number_format($lancamento->valor_desconto, 2, ',', '.') ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -1151,7 +1151,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'd
 
 <!-- Modal Excluir Os -->
 <div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+    <form action="<?= base_url() ?>index.php/os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>
@@ -1169,7 +1169,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'd
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?= base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -1197,7 +1197,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'd
     </form>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
 <!-- Modal Estoque-->
 <script type="text/javascript">
     $(document).ready(function() {
@@ -1256,11 +1256,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'd
             eventClick: function(info) {
                 var eventObj = info.event.extendedProps;
                 $('#modalId').html(eventObj.id);
-                $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
+                $('#modalIdVisualizar').attr("href", "<?= base_url() ?>index.php/os/visualizar/" + eventObj.id);
                 if (eventObj.editar) {
                     $('#modalIdEditar').show();
                     $('#linkExcluir').show();
-                    $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
+                    $('#modalIdEditar').attr("href", "<?= base_url() ?>index.php/os/editar/" + eventObj.id);
                     $('#modalIdExcluir').val(eventObj.id);
                 } else {
                     $('#modalIdEditar').hide();

@@ -25,25 +25,25 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->nomeCliente) ?>
+                                        <?= html_escape($result->nomeCliente) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Documento</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->documento) ?>
+                                        <?= html_escape($result->documento) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
                                     <td>
-                                        <?php echo html_escape(date('d/m/Y', strtotime($result->dataCadastro))) ?>
+                                        <?= html_escape(date('d/m/Y', strtotime($result->dataCadastro))) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Tipo do Cliente</strong></td>
                                     <td>
-                                        <?php echo $result->fornecedor == true ? 'Fornecedor' : 'Cliente'; ?>
+                                        <?= $result->fornecedor == true ? 'Fornecedor' : 'Cliente' ?>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -67,25 +67,25 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Contato:</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->contato) ?>
+                                        <?= html_escape($result->contato) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->telefone) ?>
+                                        <?= html_escape($result->telefone) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Celular</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->celular) ?>
+                                        <?= html_escape($result->celular) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Email</strong></td>
                                     <td>
-                                        <?php echo html_escape($result->email) ?>
+                                        <?= html_escape($result->email) ?>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -109,38 +109,38 @@
                                 <tr>
                                     <td style="text-align: right; width: 30%;"><strong>Rua</strong></td>
                                     <td>
-                                        <?php echo esc($result->rua); ?>
+                                        <?= esc($result->rua) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Número</strong></td>
                                     <td>
-                                        <?php echo esc($result->numero); ?>
+                                        <?= esc($result->numero) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Complemento</strong></td>
                                     <td>
-                                        <?php echo esc($result->complemento); ?>
+                                        <?= esc($result->complemento) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Bairro</strong></td>
                                     <td>
-                                        <?php echo esc($result->bairro); ?>
+                                        <?= esc($result->bairro) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>Cidade</strong></td>
                                     <td>
-                                        <?php echo esc($result->cidade); ?> -
-                                        <?php echo esc($result->estado); ?>
+                                        <?= esc($result->cidade) ?> -
+                                        <?= esc($result->estado) ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: right"><strong>CEP</strong></td>
                                     <td>
-                                        <?php echo esc($result->cep); ?>
+                                        <?= esc($result->cep) ?>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -282,7 +282,7 @@
             echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
 <span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
         } ?>
-        <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?php echo site_url() ?>/clientes">
+        <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?= site_url() ?>/clientes">
           <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
     </div>
 </div>
