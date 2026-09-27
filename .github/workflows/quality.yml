@@ -8,9 +8,38 @@ on:
 permissions:
   contents: read
 
+# Um job só, e não um por verificação. Os passos que não precisam de MySQL
+# (escaping, estilo) e os que precisam (suíte, paridade) dividiam a mesma
+# instalação de dependências e a mesma configuração de PHP, então dois jobs
+# pagavam duas vezes por download do Composer e podiam divergir na versão do PHP
+# sem ninguém perceber. A barreira de paridade precisa do mesmo banco e da
+# mesma versão da suíte, então separá-las não compraria isolamento nenhum.
 jobs:
-  checks:
+  quality:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          # A conexão do runner chega pelo bridge do Docker, não por socket, e
+          # por isso não casa com o root@localhost que a imagem cria.
+          MYSQL_ROOT_HOST: '%'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      MAPOS_TEST_DB_HOSTNAME: 127.0.0.1
+      MAPOS_TEST_DB_PORT: '3306'
+      MAPOS_TEST_DB_DATABASE: mapos_test
+      MAPOS_TEST_DB_USERNAME: root
+      MAPOS_TEST_DB_PASSWORD: root
 
     steps:
       - name: Checkout repository
@@ -34,3 +63,13 @@ jobs:
 
       - name: Check code style
         run: composer format:check
+
+      - name: Run the test suite
+        run: composer test
+
+      # A suíte monta o schema pelas migrations, e o instalador importa o
+      # banco.sql. Nada mais exercita os dois caminhos, então sem esta
+      # comparação eles podem divergir em silêncio — e foi exatamente isso que
+      # escondeu as colunas DECIMAL(10,0) do create_base por anos.
+      - name: Check banco.sql against the migrations
+        run: composer check:parity

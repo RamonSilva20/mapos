@@ -23,9 +23,13 @@ vendor/
 .idea/
 .php_cs.cache
 .php-cs-fixer.cache
+.phpunit.cache
 application/logs/*
 ci_sessions/
 
 uploads
 application/.env
 assets/userImage
+
+# Marcador de ambiente do tooling local; é um mountpoint, não um arquivo do projeto.
+.ai-jail

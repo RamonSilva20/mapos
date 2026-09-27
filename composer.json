@@ -19,7 +19,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.93.0",
         "symfony/var-dumper": "^6.4.32",
-        "fakerphp/faker": "^1.24.1"
+        "fakerphp/faker": "^1.24.1",
+        "phpunit/phpunit": "^12.5"
     },
     "scripts": {
         "format": [
@@ -33,6 +34,16 @@
         ],
         "xss:baseline": [
             "@php tools/check_view_escaping.php --update-baseline"
+        ],
+        "test": [
+            "@php application/tests/bin/setup-db.php",
+            "@php application/vendor/bin/phpunit"
+        ],
+        "test:db": [
+            "@php application/tests/bin/setup-db.php"
+        ],
+        "check:parity": [
+            "@php application/tests/bin/check-schema-parity.php"
         ]
     },
     "config": {
@@ -41,6 +52,11 @@
     "autoload": {
         "psr-4": {
             "Libraries\\": "application/libraries"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "application/tests/"
         }
     },
     "type": "project"

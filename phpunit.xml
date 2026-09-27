@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="application/vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="application/tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         beStrictAboutOutputDuringTests="false"
+         failOnWarning="true"
+         failOnNotice="true"
+         failOnDeprecation="false"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnPhpunitDeprecations="false">
+    <testsuites>
+        <testsuite name="Schema">
+            <directory>application/tests/Schema</directory>
+        </testsuite>
+        <testsuite name="Helpers">
+            <directory>application/tests/Helpers</directory>
+        </testsuite>
+        <testsuite name="Controllers">
+            <directory>application/tests/Controllers</directory>
+        </testsuite>
+        <testsuite name="Support">
+            <directory>application/tests/Support</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">application/controllers</directory>
+            <directory suffix=".php">application/models</directory>
+            <directory suffix=".php">application/helpers</directory>
+        </include>
+    </source>
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+</phpunit>
