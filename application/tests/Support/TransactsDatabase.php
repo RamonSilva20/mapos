@@ -68,9 +68,50 @@ use PHPUnit\Framework\Attributes\Before;
  *     tem um grupo só, e é ele que esta trait usa; um
  *     `$this->load->database('outro')` abriria uma segunda conexão que a
  *     transação não alcança.
+ *
+ * ## A reinstateção da linha de base
+ *
+ * A transação desfaz o que o caso escreve, mas não desfaz o que a execução
+ * ANTERIOR deixou, e é aí que entra o opt-in. Uma classe que sobrescreve
+ * `protected function resetsBaselineData(): bool` para devolver true recebe,
+ * antes de cada caso e dentro da transação que a trait acabou de abrir:
+ *
+ *   1. a conferência de que `logs` está vazia;
+ *   2. o DELETE dos usuários e a reinstallação deles por TestFixtures.
+ *
+ * Opt-in, e não automático, por dois motivos. O primeiro é de custo: uma
+ * classe que não escreve no banco não tem o que ganhar aqui, e paga o preço em
+ * todo caso. O segundo é o TransactsDatabaseTest, que precisa que `logs` NÃO
+ * seja limpa entre os seus dois casos: é justamente a linha que sobrou ou não
+ * que prova que a trait descarta em vez de commitar. Limpar `logs` aqui não
+ * custaria nada e tornaria essa prova uma tautologia.
+ *
+ * Um limite deste opt-in que vale registrar: a chamada em si é invisível de
+ * dentro da suíte. Como tudo roda dentro de transação, o estado de `usuarios` no
+ * corpo de um caso é o das fixtures com ou sem a reinstateção — desligá-la por
+ * completo deixa a suíte inteira verde, o que já foi verificado. O
+ * BaselineDataResetTest por isso chama o método diretamente, e o que pega a
+ * direção perigosa (commit em vez de rollback) é o guard de `logs`. A
+ * reinstalação que chega de uma execução anterior é barrada pelo
+ * setup-db.php, que confere as três contas antes de reaproveitar o banco.
  */
 trait TransactsDatabase
 {
+    /**
+     * A classe pede a reinstateção da linha de base antes de cada caso.
+     *
+     * Um método, e não uma propriedade, por um motivo concreto: o PHP trata a
+     * colisão entre uma propriedade de trait e uma da classe que a usa como
+     *_definition diferente_ e aborta o processo inteiro com "define the same
+     * property" — mesmo quando os tipos batem, porque os valores padrão não
+     * batem. Um método tem sobrescrita normal, e o padrão `false` é a resposta
+     * para o caso de a classe não se manifestar.
+     */
+    protected function resetsBaselineData(): bool
+    {
+        return false;
+    }
+
     /**
      * Abre a transação do caso, e recusa continuar se a anterior ficou aberta.
      *
@@ -104,6 +145,83 @@ trait TransactsDatabase
         if ($aberto !== 1) {
             $this->fail("trans_begin() retornou verdadeiro, mas o depth ficou em {$aberto} em vez de 1.");
         }
+
+        // Depois do BEGIN, nunca antes: a reinstateção também tem de ser
+        // descartada. Feita antes, um DELETE escapa da transação e sobrevive ao
+        // rollback, que é o vazamento que a trait existe para impedir.
+        if ($this->resetsBaselineData()) {
+            $this->resetBaselineData($db);
+        }
+    }
+
+    /**
+     * Devolve a linha de base ao estado em que a montagem do banco a deixou.
+     *
+     * "Linha de base" é o que existe quando nada foi escrito ainda: as três
+     * contas de usuário das fixtures. Nenhuma outra tabela é tocada, e a escolha
+     * de `usuarios` não é arbitrária — é a única que os testes alteram, porque
+     * `LoginControllerTest` muda o `dataExpiracao` de uma conta. Quando outra
+     * passar a ser alterada, é aqui que entra, e a conferência de `logs` abaixo
+     * não serve de aviso para isso: ela só enxerga o que sobreviveu a um commit.
+     *
+     * O DELETE, e não o TRUNCATE, porque TRUNCATE é DDL: ele faz commit
+     * implícito e derrubaria a transação que a trait acabou de abrir, deixando o
+     * `trans_begin()` de antes sem efeito e os testes seguintes escrevendo em
+     * autocommit. O efeito de um DELETE InnoDB dentro de transação é o mesmo e
+     * o custo é irrelevante para três linhas.
+     *
+     * E a comparação na chave primária, e não um `where('1 = 1')`: o CI3 recusa
+     * um DELETE sem WHERE (DB_query_builder.php:2192, `db_del_must_use_where`),
+     * e `idUsuarios >` diz o que quer dizer sem depender do query builder
+     * deixar passar uma condição constante. O operador vai na chave e não como
+     * segundo argumento — `where('idUsuarios', '>', 0)` monta `idUsuarios = '>'`,
+     * não casa com nada e ainda assim devolve `true`, que é a forma mais
+     * silenciosa de um DELETE não apagar nada.
+     */
+    private function resetBaselineData(object $db): void
+    {
+        // `logs` crescendo é a assinatura de uma transação que foi commitada em
+        // vez de descartada, e esta suíte grava uma linha por login bem
+        // escorado. A conferência é aqui, e não no setup, porque os dois casos
+        // do TransactsDatabaseTest são a prova de que a trait funciona: se
+        // alguma coisa limpasse `logs` entre eles, os dois passariam tanto com
+        // o rollback quanto sem ele.
+        //
+        // Limpar aqui esconderia justamente o bug que este arquivo existe para
+        // pegar, então a falha aponta a saída em vez de mascará-la.
+        $vazamento = $this->countLogs($db);
+
+        if ($vazamento > 0) {
+            $this->fail(
+                "A tabela `logs` tem {$vazamento} linha(s) que sobreviveram à transação de um teste "
+                . 'anterior. Uma transação foi commitada, ou um tearDown sem transação, ou um teste '
+                . 'que levantou exceção antes do fechamento. Este arquivo não limpa `logs` de '
+                . "propósito, porque o par que prova o rollback depende delas. Rode 'composer test:fresh' "
+                . 'se a sujeira veio de fora da suíte.'
+            );
+        }
+
+        $db->where('idUsuarios >', 0)->delete('usuarios');
+
+        TestFixtures::installUsers();
+
+        $restaurados = $db->count_all_results('usuarios');
+
+        if ($restaurados !== 3) {
+            $this->fail(
+                "A reinstateção da linha de base deixou {$restaurados} usuário(s) em vez de 3. "
+                . "O TestFixtures::installUsers() parou no meio, ou outro teste mexeu na tabela "
+                . "sem transação. Rode 'composer test:fresh' para remontar o banco."
+            );
+        }
+    }
+
+    /**
+     * @return int quantas linhas o último teste deixou em `logs`
+     */
+    private function countLogs(object $db): int
+    {
+        return (int) $db->count_all_results('logs');
     }
 
     /**

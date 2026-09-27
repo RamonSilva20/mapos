@@ -46,6 +46,21 @@ class LoginControllerTest extends ControllerTestCase
     use TransactsDatabase;
 
     /**
+     * Pede a reinstateção da linha de base antes de cada caso.
+     *
+     * A transação sozinha não dá conta desta classe: ela mexe no
+     * `dataExpiracao` das contas para cobrir o chk_date() do Login, e como uma
+     * alteração de coluna é um UPDATE comum a transação a desfaz. O que
+     * precisava mais era o outro sentido — o primeiro caso da execução anterior
+     * deixa a conta como estava, e qualquer estado que sobre de um teste que
+     * passou pelo caminho errado chegaria aqui sem ninguém reclamar.
+     */
+    protected function resetsBaselineData(): bool
+    {
+        return true;
+    }
+
+    /**
      * POST login/verificarLogin: autentica e preenche a sessão.
      */
     public function testAuthenticatesWithValidCredentials(): void

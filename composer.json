@@ -42,6 +42,9 @@
         "test:db": [
             "@php application/tests/bin/setup-db.php"
         ],
+        "test:fresh": [
+            "@php application/tests/bin/setup-db.php --fresh"
+        ],
         "check:parity": [
             "@php application/tests/bin/check-schema-parity.php"
         ]

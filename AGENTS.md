@@ -49,13 +49,14 @@ read, and its values win for anything the suite does not set itself.
 - `phpunit.xml` sets `bootstrap="application/tests/bootstrap.php"` and `failOnWarning="true"`.
 - The database name **must** end in `_test`; both scripts abort otherwise, so a
   typo cannot wipe the production database.
-- `application/tests/bin/setup-db.php` **drops and recreates** the database, then
-  builds the schema by running the migration chain (`Tools::migrate()`) and loads
-  reference data from the canonical seeds in `application/database/seeds/`
-  (`Permissoes`, `Usuarios`, `Configuracoes`), the same ones `Tools::seed()` runs.
-  This is deliberate: `banco.sql` is all `CREATE TABLE IF NOT EXISTS` with no
-  `DROP`, so importing it never exercises a single line of migration, and an
-  install built that way would never be caught before it reached a user.
+- `application/tests/bin/setup-db.php` **reuses the schema when it is current** and
+  otherwise drops and recreates the database. On a fresh database it builds the
+  schema by running the migration chain (`Tools::migrate()`) and loads reference
+  data from the canonical seeds in `application/database/seeds/` (`Permissoes`,
+  `Usuarios`, `Configuracoes`), the same ones `Tools::seed()` runs. This is
+  deliberate: `banco.sql` is all `CREATE TABLE IF NOT EXISTS` with no `DROP`, so
+  importing it never exercises a single line of migration, and an install built
+  that way would never be caught before it reached a user.
 - It adds two users on top of the seeded reference data: `inativo@admin.com`
   (`situacao` 0) and `expirado@admin.com` (`dataExpiracao` in the past), so the
   two rejection paths in `Login` are coverable. Their password is copied from the
@@ -84,12 +85,58 @@ read, and its values win for anything the suite does not set itself.
   Deprecations in *our* code are still fixed at the source, as with the null-safe
   `Login::chk_date()`.
 - Two support classes, split by lifecycle: `TestDatabase` owns credentials, the
-  `_test` name guard and the PDO lifecycle, and `TestApplication` owns booting
-  `index.php`, the reentrancy fixups and `Tools::migrate()`. The order is fixed:
-  the database must exist before the boot, because the `database` autoloader
-  connects while `index.php` boots. `TestApplication::migrate()` exists so the
+  `_test` name guard, the PDO lifecycle and the schema currency check, and
+  `TestApplication` owns booting `index.php`, the reentrancy fixups and
+  `Tools::migrate()`. The order is fixed: the database must exist before the boot,
+  because the `database` autoloader connects while `index.php` boots.
+  `TestApplication::migrate()` exists so the
   `resetSharedState()` + `ob_start()` + `migrate()` + `error_string()` sequence
   is written once instead of once per script.
+
+### Maintained schema, per-test data
+
+`setup-db.php` used to drop and recreate the database on every run, which cost
+~9.3s of the ~10s a run took: the migration chain is the expensive part, and
+running `Tools::migrate()` against an up-to-date schema takes 2ms. The split now
+is **keep the schema, clean the data**, and knowing which half a change belongs to
+is the point:
+
+- The **schema** is reused when `TestDatabase::isSchemaCurrent()` says so, which
+  needs three things: the database exists, `migrations.version` equals the newest
+  migration timestamp, and a fingerprint matches. On a reuse, `setup-db.php` runs
+  no seeds at all — the `Usuarios` seed writes an explicit `idUsuarios`, so
+  replaying it aborts with 1062 — and instead re-checks the three fixture users.
+  `Tools::migrate()` still runs on both paths: it is a 2ms no-op when the schema
+  is current, and it is what makes a half-built database self-heal.
+- The fingerprint covers every migration, the seeds and `TestFixtures.php`, and it
+  is what catches an **edit** to a file that already ran: editing a migration or a
+  seed does not change its filename, so the version stays current and a stale
+  database would otherwise be approved. It lives in
+  `sys_get_temp_dir()/mapos-test-schema/<database>.hash`, not in a table, because
+  `check-schema-parity.php` compares every `BASE TABLE` except `migrations` and a
+  new table would read as drift.
+- `composer test:fresh` (that is, `setup-db.php --fresh`) forces a full rebuild.
+  Reach for it when the reuse path is not what you want, and when a test failure
+  says the schema is short of something.
+- The **data** is cleaned per test by `TransactsDatabase`, which wraps each case in
+  a transaction and rolls it back. A class opts into the baseline reinstall by
+  overriding `resetsBaselineData()` to return `true`; before each case, inside the
+  transaction it just opened, it then deletes `usuarios` and reinstalls the three
+  fixture accounts via `TestFixtures::installUsers()`. `DELETE`, never `TRUNCATE`,
+  because TRUNCATE is DDL and would implicitly commit the transaction the trait
+  just opened. It is opt-in, not automatic, and `TransactsDatabaseTest` must not
+  opt in: its two-case pair is the proof that the trait rolls back rather than
+  commits, and cleaning `logs` between them would make that proof a tautology.
+- `resetBaselineData()` **fails loudly** if `logs` is not empty instead of cleaning
+  it, naming `composer test:fresh`. A row there is indistinguishable from a
+  committed transaction, and that is the whole point of the trait.
+- Do not extend the reinstall to `configuracoes`: 13 of its 14 rows come from the
+  seed, but `email_automatico` comes from a migration and no seed recreates it, so
+  deleting the table and replaying the seed would drop that row for good.
+- CI gains nothing in wall-clock time from this — the runner is clean and pays the
+  full migration either way. `quality.yml` runs the setup a second time and
+  **requires** the reuse message, because the only way this degrades is silently:
+  it would just rebuild everything and pass, slower.
 
 Tests are **in-process**: the app boots once inside `application/tests/bootstrap.php` and each
 test instantiates the controller directly, because restarting the CI3 lifecycle per

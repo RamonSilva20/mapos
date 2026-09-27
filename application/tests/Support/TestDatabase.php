@@ -149,6 +149,269 @@ final class TestDatabase
         return $this->database;
     }
 
+    /**
+     * O schema que este banco de teste já tem serve, ou precisa ser remontado.
+     *
+     * Montar o schema é a parte cara da suíte: a cadeia de migrations leva ~9s,
+     * e rodar Tools::migrate() contra um schema já em dia leva 2ms. A diferença
+     * inteira está no DROP, porque um banco derrubado nunca está em dia.
+     *
+     * Três condições, e as três precisam valer:
+     *
+     *   1. O banco existe.
+     *   2. A versão em `migrations` é a da migration mais recente do diretório.
+     *      Ela é mais nova quando falta migration, e mais velha quando o branch
+     *      foi trocado por um que não conhece a que rodou — nos dois casos o
+     *      certo é remontar, porque o Migrator do CI3 só sobe de versão.
+     *   3. A impressão digital dos arquivos que definem o banco bate com a que
+     *      foi gravada na última montagem.
+     *
+     * A terceira não é redundante com a segunda. Editar o *conteúdo* de uma
+     * migration que já rodou, ou de uma seed, não muda o número do arquivo, então
+     * a versão continua em dia e um banco velho passaria pelo teste. A impressão
+     * digital é o que pega isso, e o motivo de ela morar num arquivo ao lado do
+     * banco — e não numa tabela dentro dele — é que o check-schema-parity.php
+     * compara toda tabela BASE TABLE exceto `migrations`, então uma tabela a mais
+     * aqui faria o gate de paridade falhar.
+     *
+     * O arquivo some quando o /tmp é limpo, e aí a resposta é remontar uma vez e
+     * regravá-lo. Reaproveitar um banco de procedência desconhecida seria o tipo de
+     * atalho que custa horas de depuração; remontar custa 9s uma vez.
+     */
+    public function isSchemaCurrent(string $database): bool
+    {
+        static::assertDatabaseNameIsSafe($database);
+
+        $latest = static::latestMigrationVersion();
+
+        if ($latest === null) {
+            return false;
+        }
+
+        $admin = $this->pdo();
+
+        $exists = $admin->prepare(
+            'SELECT COUNT(*) AS total FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = ?'
+        );
+        $exists->execute([$database]);
+
+        if ((int) $exists->fetch()['total'] === 0) {
+            return false;
+        }
+
+        // A tabela de controle do Migrator não existe até a primeira migration, e
+        // um banco meio montado é justamente o que precisa ser remontado.
+        try {
+            $version = $admin
+                ->query("SELECT version FROM `{$database}`.`migrations` ORDER BY version DESC LIMIT 1")
+                ->fetch();
+        } catch (PDOException) {
+            return false;
+        }
+
+        if ($version === false) {
+            return false;
+        }
+
+        if (static::normalizeVersion((string) $version['version']) !== $latest) {
+            return false;
+        }
+
+        $sidecar = static::fingerprintPath($database);
+
+        return is_file($sidecar) && trim((string) file_get_contents($sidecar)) === static::schemaFingerprint();
+    }
+
+    /**
+     * Grava a impressão digital do banco que acabou de ser montado.
+     *
+     * Chamada depois de uma montagem bem-sucedida, e é o que permite à próxima
+     * execução reaproveitar. O conteúdo é só o hash: o arquivo existe para responder
+     * "isto ainda é o que foi construído?" e não guarda nada do banco.
+     */
+    public function recordSchemaFingerprint(string $database): void
+    {
+        static::assertDatabaseNameIsSafe($database);
+
+        $path = static::fingerprintPath($database);
+        $dir = dirname($path);
+
+        if (! is_dir($dir)) {
+            mkdir($dir, 0700, true);
+        }
+
+        file_put_contents($path, static::schemaFingerprint() . PHP_EOL);
+    }
+
+    /**
+     * Apaga a impressão digital, para a próxima execução remontar.
+     *
+     * É o caminho do `composer test:fresh`, e existe para que o arquivo não vire
+     * um estado que precisa ser lembrado junto com o resto do harness.
+     */
+    public function forgetSchemaFingerprint(string $database): void
+    {
+        static::assertDatabaseNameIsSafe($database);
+
+        $path = static::fingerprintPath($database);
+
+        if (is_file($path)) {
+            unlink($path);
+        }
+    }
+
+    /**
+     * A versão da migration mais recente, como o Migrator do CI3 a escreve.
+     *
+     * O número é o prefixo numérico do nome do arquivo, e é o mesmo que vai para
+     * a coluna `version` da tabela de controle. A largura é normalizada em
+     * normalizeVersion() porque a comparação é de string e um nome fora do padrão
+     * mudaria o resultado sem mudar o significado.
+     */
+    public static function latestMigrationVersion(): ?string
+    {
+        $latest = null;
+
+        foreach (static::migrationFiles() as $file) {
+            $version = static::normalizeVersion(static::versionFromFilename(basename($file)));
+
+            if ($latest === null || $version > $latest) {
+                $latest = $version;
+            }
+        }
+
+        return $latest;
+    }
+
+    private static function fingerprintPath(string $database): string
+    {
+        // O nome já passou por assertDatabaseNameIsSafe(), que exige terminar em
+        // '_test' e portanto não aceita barra nenhuma: o nome não escapa do diretório.
+        return sys_get_temp_dir() . '/mapos-test-schema/' . $database . '.hash';
+    }
+
+    /**
+     * O hash dos arquivos que decidem o que o banco contém.
+     *
+     * Só entram as migrations, as seeds e o TestFixtures. A migration mais recente
+     * já entra pela versão; repetir o conteúdo dela aqui é o que faz uma edição
+     * silenciosa dentro de uma migration que já rodou invalidar a impressão digital
+     * em vez de passar batido.
+     */
+    private static function schemaFingerprint(): string
+    {
+        return static::fingerprintFor(static::schemaFiles());
+    }
+
+    /**
+     * O núcleo puro da impressão digital, público para poder ser testado.
+     *
+     * Sem esta separação a única forma de provar que o hash muda quando o CONTEÚDO
+     * de uma migration muda seria editar uma migration de verdade, dentro de um
+     * teste. Editar `application/database/migrations/` durante a execução é pior
+     * do que não testar: um teste que morre no meio deixa o arquivo alterado, e a
+     * próxima execução_remonta o banco por causa de um resíduo do teste, que é
+     * um sintoma que não aponta para nada. Passando os arquivos de fora, o mesmo
+     * arquivo é reescrito entre dois hashes, que é a situação real.
+     *
+     * As chaves são rótulos, não caminhos: 'seeds/Usuarios.php' em vez do caminho
+     * absoluto. É o que impede o hash de depender de onde o projeto está clonado, e
+     * o que faz o rótulo — e não só o conteúdo — contar, já que renomear uma
+     * migration muda o schema sem mudar uma linha.
+     *
+     * @param  array<string, string> $labelledFiles rótulo => caminho absoluto
+     */
+    public static function fingerprintFor(array $labelledFiles): string
+    {
+        if ($labelledFiles === []) {
+            throw new RuntimeException(
+                'Uma impressão digital sem nenhum arquivo não distingue um schema de outro.'
+            );
+        }
+
+        ksort($labelledFiles);
+
+        $manifest = '';
+
+        foreach ($labelledFiles as $label => $file) {
+            if (! is_file($file) || ! is_readable($file)) {
+                throw new RuntimeException(
+                    "Não consegui ler {$file} (rótulo '{$label}') para compor a impressão digital do schema. "
+                    . 'Um arquivo de migration ou seed ausente tornaria o hash incompleto, e um hash '
+                    . 'incompleto é um banco velho aprovado como atual.'
+                );
+            }
+
+            $manifest .= $label . ':' . hash_file('sha256', $file) . "\n";
+        }
+
+        return hash('sha256', $manifest);
+    }
+
+    /**
+     * Os arquivos que definem o banco, com o rótulo de cada um.
+     *
+     * O único lugar que varre os diretórios, para que a impressão digital e a
+     * contagem da versão mais recente nunca discordem sobre o que existe.
+     *
+     * @return array<string, string> rótulo => caminho absoluto
+     */
+    private static function schemaFiles(): array
+    {
+        $root = static::envPath();
+
+        $files = [
+            'tests/Support/TestFixtures.php' => $root . '/tests/Support/TestFixtures.php',
+        ];
+
+        foreach (['migrations', 'seeds'] as $dir) {
+            foreach (glob($root . '/database/' . $dir . '/*.php') ?: [] as $file) {
+                $files[$dir . '/' . basename($file)] = $file;
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Só as migrations, para a contagem da versão mais recente.
+     *
+     * Filtra o mesmo mapa que alimenta a impressão digital, em vez de varrer o
+     * diretório de novo: dois varredores independentes do mesmo diretório podem
+     * discordar sobre o que existe, e essa discordância apareceria como "o banco
+     * está em dia mas a impressão digital não bate" sem causa visível.
+     *
+     * @return list<string>
+     */
+    private static function migrationFiles(): array
+    {
+        $files = [];
+
+        foreach (static::schemaFiles() as $label => $path) {
+            if (str_starts_with($label, 'migrations/')) {
+                $files[] = $path;
+            }
+        }
+
+        sort($files);
+
+        return $files;
+    }
+
+    private static function versionFromFilename(string $filename): string
+    {
+        return (string) preg_replace('/[^0-9].*$/', '', $filename);
+    }
+
+    /**
+     * A versão como string de largura fixa, para a comparação não depender do tipo
+     * que o driver devolveu nem do formato do nome do arquivo.
+     */
+    private static function normalizeVersion(string $version): string
+    {
+        return str_pad($version, 14, '0', STR_PAD_LEFT);
+    }
+
     public function dsn(?string $database = null): string
     {
         $dsn = "mysql:host={$this->hostname};port={$this->port};charset=utf8mb4";
@@ -175,9 +438,14 @@ final class TestDatabase
     /**
      * Apaga e recria um banco, e devolve a conexão já apontada para ele.
      *
-     * O DROP é o que torna a montagem do banco de testes realmente idempotente.
-     * O banco.sql usa CREATE TABLE IF NOT EXISTS em todas as 28 tabelas, então
-     * sem o DROP a segunda execução herda tudo que a primeira deixou para trás.
+     * O DROP é o que torna a montagem do banco de testes realmente idempotente: o
+     * banco.sql usa CREATE TABLE IF NOT EXISTS em todas as 28 tabelas, então sem
+     * o DROP a segunda execução herdaria tudo que a primeira deixou para trás.
+     *
+     * Quem chama isto é o setup-db.php, e só quando o schema não está em dia —
+     * ver isSchemaCurrent(). O caminho que economiza os ~9s da cadeia de migrations
+     * não passa por aqui, e é por isso que este método continua sendo o caminho
+     * sem recycle: dados de uma execução anterior nunca sobrevivem a ele.
      */
     public function recreate(string $database): PDO
     {

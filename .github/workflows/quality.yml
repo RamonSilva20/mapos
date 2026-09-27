@@ -67,6 +67,34 @@ jobs:
       - name: Run the test suite
         run: composer test
 
+      # O runner é limpo, então a execução acima pagou os ~9s da cadeia de
+      # migrations por completo. Esta segunda execução exercita o caminho que os
+      # desenvolvedores usam de verdade, o reaproveitamento, e é o único lugar
+      # onde ele é verificado: localmente ele só roda quando alguém lembra de
+      # rodar a suíte duas vezes.
+      #
+      # Não é uma barra de tempo, e não deveria virar uma. O ganho é do
+      # desenvolvimento local, onde o banco sobrevive entre execuções; no CI a
+      # máquina é descartada e o ganho é zero. O que se ganha aqui é a certeza de
+      # que o reaproveitamento não degradou em silêncio — degradar, aliás, é
+      # exatamente a forma como ele falha: remontar tudo e passar igual, só mais
+      # devagar. Por isso o passo exige a mensagem de reuso e não se limita a
+      # rodar o script.
+      - name: Run the schema setup again, requiring it to reuse the schema
+        run: |
+          saida=$(php application/tests/bin/setup-db.php)
+          echo "$saida"
+
+          if ! grep -q "reaproveitando" <<< "$saida"; then
+            echo "::error::A segunda montagem não reaproveitou o schema. O caminho de reuso está quebrado."
+            exit 1
+          fi
+
+          if ! grep -q "^3 usuários disponíveis" <<< "$saida"; then
+            echo "::error::O schema reaproveitado não tem as três contas de fixture."
+            exit 1
+          fi
+
       # A suíte monta o schema pelas migrations, e o instalador importa o
       # banco.sql. Nada mais exercita os dois caminhos, então sem esta
       # comparação eles podem divergir em silêncio — e foi exatamente isso que

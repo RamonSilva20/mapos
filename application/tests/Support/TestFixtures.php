@@ -20,28 +20,62 @@ final class TestFixtures
      */
     public static function install(): array
     {
-        $installed = [];
+        return array_merge(
+            self::runSeeds(['Permissoes', 'Usuarios', 'Configuracoes']),
+            self::addExtraUsers()
+        );
+    }
 
-        foreach (['Permissoes', 'Usuarios', 'Configuracoes'] as $seed) {
+    /**
+     * Só os usuários, para a reinstateção por teste.
+     *
+     * Separado de install() porque os dois chamadores precisam de coisas opostas.
+     * A montagem do banco quer as três seeds e nunca pode repeti-las: a seed
+     * Usuarios grava um idUsuarios explícito, e um segundo INSERT no mesmo
+     * AUTO_INCREMENT PRIMARY KEY aborta com 1062. A reinstateção por teste quer o
+     * contrário — apaga e regrava os usuários a cada caso.
+     *
+     * `configuracoes` é justamente o que a reinstateção não pode tocar: 13 das suas
+     * 14 linhas vêm da seed, mas a `email_automatico` vem de uma migration e
+     * nenhuma seed a recria. Apagar a tabela e rodar a seed de novo deixaria o banco
+     * sem a linha, e a montagem seguinte nem perceberia, porque reconstrói tudo do
+     * zero e voltaria a tê-la.
+     */
+    public static function installUsers(): void
+    {
+        self::runSeeds(['Usuarios']);
+
+        self::addExtraUsers();
+    }
+
+    /**
+     * Roda as seeds indicadas e devolve os nomes, na ordem em que rodaram.
+     *
+     * O corpo é único para install() e installUsers() de propósito: são as mesmas
+     * classes de seed e o mesmo tratamento da saída, que elas ecoam na saída padrão.
+     * A reinstateção por teste roda isto dentro de um gancho do PHPUnit, então a
+     * saída também precisaria sumir ali.
+     *
+     * @param  string[] $seeds
+     * @return string[]
+     */
+    private static function runSeeds(array $seeds): array
+    {
+        foreach ($seeds as $seed) {
             self::load($seed);
         }
 
-        // As seeds ecoam o progresso na saída padrão, e esta função roda no meio
-        // do setup-db.php.
         ob_start();
 
         try {
-            foreach (['Permissoes', 'Usuarios', 'Configuracoes'] as $seed) {
+            foreach ($seeds as $seed) {
                 (new $seed())->run();
-                $installed[] = $seed;
             }
-
-            $installed = array_merge($installed, self::addExtraUsers());
         } finally {
             ob_end_clean();
         }
 
-        return $installed;
+        return $seeds;
     }
 
     /**
