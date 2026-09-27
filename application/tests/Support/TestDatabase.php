@@ -25,12 +25,20 @@ use RuntimeException;
  *
  *   1. As chaves MAPOS_TEST_DB_* vêm de getenv(), que só enxerga o ambiente de
  *      verdade. Um .env não participa, então não consegue redirecionar a suíte.
- *   2. As chaves DB_* são escritas em $_ENV ANTES do safeLoad(). O Dotenv é
- *      criado com createImmutable(), que não sobrescreve o que já existe em
- *      $_ENV; é essa pré-escrita que impede um .env de desenvolvimento de
- *      apontar a suíte para o banco de desenvolvimento.
- *   3. Só depois do safeLoad() as credenciais são lidas, porque o fallback vem
- *      de $_ENV e é o Dotenv quem popula.
+ *   2. O safeLoad() vem antes de resolver as credenciais, porque o fallback delas
+ *      é lido de $_ENV e é o Dotenv quem popula.
+ *   3. Todas as cinco chaves DB_* são publicadas em $_ENV, e é a publicação — não a
+ *      ordem em relação ao Dotenv — que impede um .env de desenvolvimento de apontar
+ *      a suíte para o banco de desenvolvimento: o valor final é a sobreposição do
+ *      ambiente ou o próprio valor do .env, nunca os dois misturados.
+ *
+ * Publicar as cinco, e não só host/porta/banco, é o que impede a suíte de abrir duas
+ * conexões com credenciais diferentes. O config/database.php não conhece
+ * MAPOS_TEST_DB_*: ele lê $_ENV['DB_USERNAME'] e cai no placeholder
+ * 'enter_db_username' quando a chave não existe. Sem a publicação, o PDO do
+ * TestDatabase conectava com a senha certa e o autoloader 'database' do index.php
+ * conectava com o placeholder — o que só aparecia no CI, onde não há .env para
+ * preencher a chave por fora.
  */
 final class TestDatabase
 {
@@ -97,16 +105,28 @@ final class TestDatabase
 
         $envPath = static::envPath();
 
-        // Ver static::fromEnvironment() para por que a ordem importa.
-        $_ENV['APP_ENVIRONMENT'] = 'testing';
-        $_ENV['DB_HOSTNAME'] = $hostname;
-        $_ENV['DB_PORT'] = $port;
-        $_ENV['DB_DATABASE'] = $database;
-
         // safeLoad(), e não load(): o CI roda sem application/.env, e load()
         // lança exceção quando o arquivo não existe. Quem tem .env continua
         // sendo lido.
         Dotenv::createImmutable($envPath)->safeLoad();
+
+        // Depois do safeLoad() porque o fallback lê $_ENV, que é quem o Dotenv
+        // popula. A chave MAPOS_TEST_DB_* manda quando existe, e é isso que
+        // permite ao CI definir root/root sem depender de um .env.
+        $username = self::env('MAPOS_TEST_DB_USERNAME', $_ENV['DB_USERNAME'] ?? 'root');
+        $password = self::env('MAPOS_TEST_DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? '');
+
+        // Publicadas em $_ENV para o config/database.php — que o autoloader do
+        // index.php lê durante o boot — conectar com as mesmas credenciais que o
+        // PDO daqui. Sem isto o config cai no placeholder 'enter_db_username' e o
+        // boot falha com "Access denied" onde não existe .env (ver o docblock da
+        // classe).
+        $_ENV['APP_ENVIRONMENT'] = 'testing';
+        $_ENV['DB_HOSTNAME'] = $hostname;
+        $_ENV['DB_PORT'] = $port;
+        $_ENV['DB_DATABASE'] = $database;
+        $_ENV['DB_USERNAME'] = $username;
+        $_ENV['DB_PASSWORD'] = $password;
 
         // config.php lê estas duas chaves sem valor padrão, então a ausência
         // delas gera aviso no log e deixa a encryption_key vazia. Preenchidas
@@ -118,8 +138,8 @@ final class TestDatabase
             $hostname,
             $port,
             $database,
-            self::env('MAPOS_TEST_DB_USERNAME', $_ENV['DB_USERNAME'] ?? 'root'),
-            self::env('MAPOS_TEST_DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? ''),
+            $username,
+            $password,
             static::rootPath()
         );
     }

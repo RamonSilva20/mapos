@@ -34,9 +34,15 @@ read, and its values win for anything the suite does not set itself.
 
 - `MAPOS_TEST_DB_HOSTNAME`, `MAPOS_TEST_DB_PORT`, `MAPOS_TEST_DB_DATABASE`,
   `MAPOS_TEST_DB_USERNAME` and `MAPOS_TEST_DB_PASSWORD` select the server. They
-  default to `127.0.0.1:8989` and `mapos_test`, and the bootstrap maps them onto
-  the `DB_*` keys the app reads, before the immutable Dotenv runs, so a `.env`
-  cannot redirect the suite at the development database.
+  default to `127.0.0.1:8989` and `mapos_test`, and the bootstrap resolves them
+  (falling back to the `.env` for the credentials) and then publishes all five
+  onto the `DB_*` keys the app reads, so a `.env` cannot redirect the suite at the
+  development database. All five are published, not just the first three: the
+  suite opens two connections, the PDO here and the one the `database` autoloader
+  opens while `index.php` boots, and `config/database.php` only knows `$_ENV`. It
+  falls back to `enter_db_username` when the key is missing, which passes locally
+  — the `.env` fills it — and fails in CI, where there is no `.env`. See
+  `TestDatabase::fromEnvironment()` and `TestDatabaseTest`.
 - `APP_ENCRYPTION_KEY` and `GLOBAL_XSS_FILTERING` are filled in by the bootstrap
   only when absent, because `config.php` reads both without a fallback and the
   missing key would otherwise log a warning.
