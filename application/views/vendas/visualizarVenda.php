@@ -7,7 +7,7 @@
                         <?php
                         $editavel = $this->vendas_model->isEditable($result->idVendas);
 if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')): ?>
-                            <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?php echo base_url() . 'index.php/vendas/editar/' . $result->idVendas; ?>">
+                            <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?= base_url() . 'index.php/vendas/editar/' . $result->idVendas ?>">
                                 <span class="button__icon"><i class="bx bx-edit"></i></span>
                                 <span class="button__text">Editar</span>
                             </a>
@@ -18,14 +18,14 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                 <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span>
                             </a>
                             <div class="cascading-buttons">
-                                <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() . '/vendas/imprimirVendaOrcamento/' . $result->idVendas; ?>">
+                                <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?= site_url() . '/vendas/imprimirVendaOrcamento/' . $result->idVendas ?>">
                                     <span class="button__icon"><i class="bx bx-printer"></i></span>
                                     <span class="button__text">Orçamento</span>
                                 </a>
-                                <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimir/<?php echo $result->idVendas; ?>">
+                                <a target="_blank" title="Impressão em Papel A4" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/vendas/imprimir/<?= esc($result->idVendas) ?>">
                                     <span class="button__icon"><i class='bx bx-file'></i></span> <span class="button__text">Papel A4</span>
                                 </a>
-                                <a target="_blank" title="Impressão Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?php echo site_url() ?>/vendas/imprimirTermica/<?php echo $result->idVendas; ?>">
+                                <a target="_blank" title="Impressão Cupom Não Fiscal" class="button btn btn-mini btn-inverse" href="<?= site_url() ?>/vendas/imprimirTermica/<?= esc($result->idVendas) ?>">
                                     <span class="button__icon"><i class='bx bx-receipt'></i></span> <span class="button__text">Cupom 80mm</span>
                                 </a>
                             </div>
@@ -51,7 +51,7 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                     <tr>
                                         <td colspan="3" class="alert">
                                             Você precisa configurar os dados do emitente.
-                                            <a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <a href="<?= base_url() ?>index.php/mapos/emitente">Configurar</a>
                                         </td>
                                     </tr>
                                 <?php endif; ?>
@@ -64,10 +64,10 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                         <tbody>
                                             <?php if ($emitente == null) { ?>
                                                 <tr>
-                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar <<< </a></td>
+                                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                                 </tr>
                                             <?php } ?>
-                                            <h3><i class='bx bx-cart'></i> Venda #<?php echo sprintf('%04d', $result->idVendas) ?></h3>
+                                            <h3><i class='bx bx-cart'></i> Venda #<?= sprintf('%04d', $result->idVendas) ?></h3>
                                         </tbody>
                                     </table>
                                     <table class="table table-condensend">
@@ -76,7 +76,7 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                                 <td style="width: 60%; padding-left: 0">
                                                     <span>
                                                         <h5><b>CLIENTE</b></h5>
-                                                        <span><i class='bx bxs-business'></i> <b><?php echo html_escape($result->nomeCliente) ?></b></span><br />
+                                                        <span><i class='bx bxs-business'></i> <b><?= html_escape($result->nomeCliente) ?></b></span><br />
                                                         <?php if (!empty($result->celular) || !empty($result->telefone) || !empty($result->contato_cliente)): ?>
                                                             <span><i class='bx bxs-phone'></i>
                                                                 <?= !empty($result->contato_cliente) ? html_escape($result->contato_cliente) . ' ' : "" ?>
@@ -101,7 +101,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
 ?>
                                                         <?php if (!empty($result->email)): ?>
                                                             <span>
-                                                                <i class="fas fa-envelope"></i> <?php echo html_escape($result->email) ?>
+                                                                <i class="fas fa-envelope"></i> <?= html_escape($result->email) ?>
                                                             </span><br>
                                                         <?php endif; ?>
                                                     </span>
@@ -113,11 +113,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                                 <h5><b>RESPONSÁVEL</b></h5>
                                                             </span>
                                                             <span><b><i class="fas fa-user"></i>
-                                                                    <?php echo html_escape($result->nome) ?></b></span><br />
+                                                                    <?= html_escape($result->nome) ?></b></span><br />
                                                             <span><i class="fas fa-phone"></i>
-                                                                <?php echo html_escape($result->telefone_usuario) ?></span><br />
+                                                                <?= html_escape($result->telefone_usuario) ?></span><br />
                                                             <span><i class="fas fa-envelope"></i>
-                                                                <?php echo html_escape($result->email_usuario) ?></span>
+                                                                <?= html_escape($result->email_usuario) ?></span>
                                                         </li>
                                                     </ul>
                                                 </td>
@@ -132,20 +132,20 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <tbody>
                                     <?php if ($result->dataVenda != null): ?>
                                         <tr>
-                                            <td><b>Status Venda: </b><?php echo $result->status; ?></td>
-                                            <td><b>Data da Venda: </b><?php echo date('d/m/Y', strtotime($result->dataVenda)); ?></td>
-                                            <td><?php if ($result->garantia): ?><b>Garantia: </b><?php echo $result->garantia . ' dia(s)'; ?><?php endif; ?></td>
-                                            <td><?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto', 'Em Andamento', 'Aguardando Peças'])): ?><b>Venc. da Garantia: </b><?php echo dateInterval($result->dataVenda, $result->garantia); ?><?php endif; ?></td>
+                                            <td><b>Status Venda: </b><?= esc($result->status) ?></td>
+                                            <td><b>Data da Venda: </b><?= date('d/m/Y', strtotime($result->dataVenda)) ?></td>
+                                            <td><?php if ($result->garantia): ?><b>Garantia: </b><?= esc($result->garantia) . ' dia(s)' ?><?php endif; ?></td>
+                                            <td><?php if (in_array($result->status, ['Finalizado', 'Faturado', 'Orçamento', 'Aberto', 'Em Andamento', 'Aguardando Peças'])): ?><b>Venc. da Garantia: </b><?= dateInterval($result->dataVenda, $result->garantia) ?><?php endif; ?></td>
                                         </tr>
                                     <?php endif; ?>
                                     <?php if ($result->observacoes != null): ?>
                                     <tr>
-                                        <td colspan="4"><b>Observações Internas: </b><?php echo printSafeHtml($result->observacoes); ?></td>
+                                        <td colspan="4"><b>Observações Internas: </b><?= printSafeHtml($result->observacoes) ?></td>
                                     </tr>
                                     <?php endif; ?>
                                     <?php if ($result->observacoes_cliente != null): ?>
                                     <tr>
-                                        <td colspan="4"><b>Observações ao Cliente: </b><?php echo printSafeHtml($result->observacoes_cliente); ?></td>
+                                        <td colspan="4"><b>Observações ao Cliente: </b><?= printSafeHtml($result->observacoes_cliente) ?></td>
                                     </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -167,11 +167,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                         <?php foreach ($produtos as $p): ?>
                                             <?php $totalProdutos += $p->subTotal; ?>
                                             <tr>
-                                                <td style="width: 10%;"><?php echo $p->codDeBarra; ?></td>
-                                                <td style="width: 70%;"><?php echo $p->descricao; ?></td>
-                                                <td style="width: 5%;"><?php echo $p->quantidade; ?></td>
-                                                <td style="width: 10%;">R$ <?php echo($p->preco ?: $p->precoVenda); ?></td>
-                                                <td style="width: 10%;">R$ <?php echo number_format($p->subTotal, 2, ',', '.'); ?></td>
+                                                <td style="width: 10%;"><?= esc($p->codDeBarra) ?></td>
+                                                <td style="width: 70%;"><?= esc($p->descricao) ?></td>
+                                                <td style="width: 5%;"><?= esc($p->quantidade) ?></td>
+                                                <td style="width: 10%;">R$ <?= ($p->preco ?: $p->precoVenda) ?></td>
+                                                <td style="width: 10%;">R$ <?= number_format($p->subTotal, 2, ',', '.') ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -179,12 +179,12 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <hr>
                                 <div style="text-align: right;">
                                 <?php if ($result->valor_desconto != 0 && $result->desconto != 0): ?>
-                                    <h4>SUBTOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
-                                    <h4>DESCONTO: R$ <?php echo number_format($result->valor_desconto - $totalProdutos, 2, ',', '.'); ?></h4>
-                                    <h4>TOTAL: R$ <?php echo number_format($result->valor_desconto, 2, ',', '.'); ?></h4>
+                                    <h4>SUBTOTAL: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></h4>
+                                    <h4>DESCONTO: R$ <?= number_format($result->valor_desconto - $totalProdutos, 2, ',', '.') ?></h4>
+                                    <h4>TOTAL: R$ <?= number_format($result->valor_desconto, 2, ',', '.') ?></h4>
 
                                 <?php else: ?>
-                                    <h4 style="text-align: right">TOTAL: R$ <?php echo number_format($totalProdutos, 2, ',', '.'); ?></h4>
+                                    <h4 style="text-align: right">TOTAL: R$ <?= number_format($totalProdutos, 2, ',', '.') ?></h4>
                                 <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -208,9 +208,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
     <div class="modal-body">
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
-                <img src="<?php echo base_url(); ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
-                <img id="qrCodeImage" width="50%" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /></br>
-                <?php echo '<span>Chave PIX: ' . $chaveFormatada . '</span>'; ?></br>
+                <img src="<?= base_url() ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
+                <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                <?= '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>' ?></br>
                 <?php if ($totalProdutos != 0) {
                     if ($result->valor_desconto != 0) {
                         echo "Valor Total: R$ " . number_format($result->valor_desconto, 2, ',', '.');
@@ -281,7 +281,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= isset($zapnumber) ? $zapnumber : "" ?> + '&text=' + code.data;
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_js($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
             window.open(whatsappLink, '_blank');
         } else {
             swal({

@@ -1,6 +1,6 @@
-<script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.mask.min.js"></script>
+<script src="<?= base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?= base_url() ?>assets/js/funcoes.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -15,46 +15,46 @@
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
                 } ?>
-                <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" class="form-horizontal">
+                <form action="<?= current_url() ?>" id="formUsuario" method="post" class="form-horizontal">
                     <div class="control-group">
-                        <?php echo form_hidden('idUsuarios', $result->idUsuarios) ?>
+                        <?= form_hidden('idUsuarios', $result->idUsuarios) ?>
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="nome" type="text" name="nome" value="<?php echo $result->nome; ?>" />
+                            <input id="nome" type="text" name="nome" value="<?= esc($result->nome) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="rg" class="control-label">RG<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="rg" type="text" name="rg" value="<?php echo $result->rg; ?>" />
+                            <input id="rg" type="text" name="rg" value="<?= esc($result->rg) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="cpf" class="control-label">CPF<span class="required">*</span></label>
                         <div class="controls">
-                            <input class="cpfUser" type="text" name="cpf" value="<?php echo $result->cpf; ?>"/>
+                            <input class="cpfUser" type="text" name="cpf" value="<?= esc($result->cpf) ?>"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="telefone" class="control-label">Telefone<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="telefone" type="text" name="telefone" value="<?php echo $result->telefone; ?>" />
+                            <input id="telefone" type="text" name="telefone" value="<?= esc($result->telefone) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="celular" class="control-label">Celular</label>
                         <div class="controls">
-                            <input id="celular" type="text" name="celular" value="<?php echo $result->celular; ?>" />
+                            <input id="celular" type="text" name="celular" value="<?= esc($result->celular) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="email" class="control-label">Email<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="email" type="text" name="email" value="<?php echo $result->email; ?>" />
+                            <input id="email" type="text" name="email" value="<?= esc($result->email) ?>" />
                         </div>
                     </div>
 
@@ -69,42 +69,42 @@
                     <div class="control-group" class="control-label">
                         <label for="cep" class="control-label">CEP<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cep" type="text" name="cep" value="<?php echo $result->cep; ?>" />
+                            <input id="cep" type="text" name="cep" value="<?= esc($result->cep) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="rua" class="control-label">Rua<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="rua" type="text" name="rua" value="<?php echo $result->rua; ?>" />
+                            <input id="rua" type="text" name="rua" value="<?= esc($result->rua) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="numero" class="control-label">Numero<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="numero" type="text" name="numero" value="<?php echo $result->numero; ?>" />
+                            <input id="numero" type="text" name="numero" value="<?= esc($result->numero) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="bairro" class="control-label">Bairro<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="bairro" type="text" name="bairro" value="<?php echo $result->bairro; ?>" />
+                            <input id="bairro" type="text" name="bairro" value="<?= esc($result->bairro) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="cidade" class="control-label">Cidade<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="cidade" type="text" name="cidade" value="<?php echo $result->cidade; ?>" />
+                            <input id="cidade" type="text" name="cidade" value="<?= esc($result->cidade) ?>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="estado" class="control-label">Estado<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="estado" type="text" name="estado" value="<?php echo $result->estado; ?>" />
+                            <input id="estado" type="text" name="estado" value="<?= esc($result->estado) ?>" />
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                     <div class="control-group">
                         <label for="dataExpiracao" class="control-label">Expira em<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="dataExpiracao" type="date" name="dataExpiracao" value="<?php echo $result->dataExpiracao; ?>" />
+                            <input id="dataExpiracao" type="date" name="dataExpiracao" value="<?= esc($result->dataExpiracao) ?>" />
                         </div>
                     </div>
 
@@ -128,8 +128,8 @@
                                     $ativo = '';
                                     $inativo = 'selected';
                                 } ?>
-                                <option value="1" <?php echo $ativo; ?>>Ativo</option>
-                                <option value="0" <?php echo $inativo; ?>>Inativo</option>
+                                <option value="1" <?= esc($ativo) ?>>Ativo</option>
+                                <option value="0" <?= esc($inativo) ?>>Inativo</option>
                             </select>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                             <div class="span6 offset3" style="display:flex">
                                 <button type="submit" class="button btn btn-primary">
                                   <span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/usuarios" id="" class="button btn btn-mini btn-warning">
+                                <a href="<?= base_url() ?>index.php/usuarios" id="" class="button btn btn-mini btn-warning">
                                   <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text">Voltar</span></a>
                             </div>
                         </div>
@@ -168,7 +168,7 @@
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 

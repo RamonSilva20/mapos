@@ -2,10 +2,10 @@
 <html lang="pt-br">
 
 <head>
-    <title>Área do Cliente - <?= $this->config->item('app_name') ?></title>
+    <title>Área do Cliente - <?= esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?= $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?= esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
@@ -267,12 +267,12 @@
     <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        <?php if ($this->session->flashdata('error') != null) { ?>
-            console.log('Erro');
+        <?php if ($var = $this->session->flashdata('error')) { ?>
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: '<?= $this->session->flashdata('error') ?>',
+                title: 'Falha!',
+                text: <?= esc_msg($var) ?>,
                 showConfirmButton: false,
                 timer: 4000
             });
@@ -400,7 +400,7 @@
     <div class="row-fluid">
         <div id="footer" class="span12" style="padding: 10px">
             <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
-                <?= date('Y') ?> &copy; Ramon Silva - <?= $this->config->item('app_name') ?> - Versão: <?= $this->config->item('app_version'); ?>
+                <?= date('Y') ?> &copy; Ramon Silva - <?= esc($this->config->item('app_name')) ?> - Versão: <?= esc($this->config->item('app_version')); ?>
             </a>
         </div>
     </div>

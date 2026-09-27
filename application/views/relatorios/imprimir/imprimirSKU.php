@@ -6,11 +6,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/blue.css" class="skin-color" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/blue.css" class="skin-color" />
 </head>
 
 <body style="background-color: transparent">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <h5 style="text-align: right">Data do Relatório: <?php echo date('d/m/Y'); ?>
+                <h5 style="text-align: right">Data do Relatório: <?= date('d/m/Y') ?>
                 </h5>
             </div>
         </div>

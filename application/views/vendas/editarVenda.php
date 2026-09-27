@@ -1,12 +1,12 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?= base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css" />
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -26,26 +26,26 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divEditarVenda">
-                                <form action="<?php echo current_url(); ?>" method="post" id="formVendas">
-                                    <?php echo form_hidden('idVendas', $result->idVendas) ?>
+                                <form action="<?= current_url() ?>" method="post" id="formVendas">
+                                    <?= form_hidden('idVendas', $result->idVendas) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>Venda:
-                                            <?php echo $result->idVendas ?>
+                                            <?= esc($result->idVendas) ?>
                                         </h3>
                                         <div class="span2" style="margin-left: 0">
                                             <label for="dataFinal">Data Final</label>
-                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?php echo date('d/m/Y', strtotime($result->dataVenda)); ?>" />
+                                            <input id="dataVenda" class="span12 datepicker" type="text" name="dataVenda" value="<?= date('d/m/Y', strtotime($result->dataVenda)) ?>" />
                                         </div>
                                         <div class="span3">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
+                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?= esc($result->nomeCliente) ?>" />
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?= esc($result->clientes_id) ?>" />
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                         </div>
                                         <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= esc($result->nome) ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= esc($result->usuarios_id) ?>" />
                                         </div>
                                         <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>
@@ -65,8 +65,8 @@
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" placeholder="Em dias" min="0" max="9999"
                                                 class="span12" name="garantia"
-                                                value="<?php echo $result->garantia ?>" />
-                                            <?php echo form_error('garantia'); ?>
+                                                value="<?= esc($result->garantia) ?>" />
+                                            <?= form_error('garantia') ?>
                                         </div>
                                     </div>
 
@@ -74,14 +74,14 @@
                                         <label for="observacoes">
                                             <h4>Observações Internas</h4>
                                         </label>
-                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
+                                        <textarea class="editor" name="observacoes" id="observacoes" cols="30" rows="5"><?= esc($result->observacoes) ?></textarea>
                                     </div>
 
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes_cliente">
                                             <h4>Observações ao Cliente</h4>
                                         </label>
-                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?php echo $result->observacoes_cliente ?></textarea>
+                                        <textarea class="editor" name="observacoes_cliente" id="observacoes_cliente" cols="30" rows="5"><?= esc($result->observacoes_cliente) ?></textarea>
                                     </div>
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
@@ -96,11 +96,11 @@
                                                 <span class="button__icon"><i class="bx bx-sync"></i></span>
                                                 <span class="button__text2">Atualizar</span>
                                             </button>
-                                            <a href="<?php echo base_url() ?>index.php/vendas/visualizar/<?php echo $result->idVendas; ?>" class="button btn btn-primary">
+                                            <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= esc($result->idVendas) ?>" class="button btn btn-primary">
                                                 <span class="button__icon"><i class="bx bx-show"></i></span>
                                                 <span class="button__text2">Visualizar</span>
                                             </a>
-                                            <a href="<?php echo base_url() ?>index.php/vendas" class="button btn btn-warning">
+                                            <a href="<?= base_url() ?>index.php/vendas" class="button btn btn-warning">
                                                 <span class="button__icon"><i class="bx bx-undo"></i></span>
                                                 <span class="button__text2">Voltar</span>
                                             </a>
@@ -112,10 +112,10 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <div class="span11">
-                                    <form id="formProdutos" action="<?php echo base_url(); ?>index.php/vendas/adicionarProduto" method="post">
+                                    <form id="formProdutos" action="<?= base_url() ?>index.php/vendas/adicionarProduto" method="post">
                                         <div class="span6">
                                             <input type="hidden" name="idProduto" id="idProduto" />
-                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?php echo $result->idVendas ?>" />
+                                            <input type="hidden" name="idVendasProduto" id="idVendasProduto" value="<?= esc($result->idVendas) ?>" />
                                             <input type="hidden" name="estoque" id="estoque" value="" />
                                             <label for="">Produto</label>
                                             <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
@@ -136,9 +136,9 @@
                                     </form>
                                 </div>
                                 <div class="span11">
-                                    <form id="formDesconto" action="<?php echo base_url(); ?>index.php/vendas/adicionarDesconto" method="POST">
+                                    <form id="formDesconto" action="<?= base_url() ?>index.php/vendas/adicionarDesconto" method="POST">
                                         <div class="span1">
-                                            <input type="hidden" name="idVendas" id="idVendas" value="<?php echo $result->idVendas; ?>" />
+                                            <input type="hidden" name="idVendas" id="idVendas" value="<?= esc($result->idVendas) ?>" />
                                             <label for="">Desconto</label>
                                             <input style="width: 4em;" id="desconto" name="desconto" type="text" placeholder="0.00" maxlength="6" size="2" /><br />
                                             <strong><span style="color: red" id="errorAlert"></span></strong>
@@ -147,7 +147,7 @@
                                         <label for="">Tipo Desc.</label>
                                         <select style="width: 4em;" name="tipoDesconto" id="tipoDesconto">
                                             <option value="real">R$</option>
-                                            <option value="porcento" <?=$result->tipo_desconto == "porcento" ? "selected" : "" ?>>%</option>
+                                            <option value="porcento" <?= $result->tipo_desconto == "porcento" ? "selected" : "" ?>>%</option>
                                         </select>
                                         <strong><span style="color: red" id="errorAlert"></span></strong>
                                         </div>
@@ -193,7 +193,7 @@ foreach ($produtos as $p) {
                                         <tr>
                                             <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
                                             <td>
-                                                <div align="center"><strong>R$: <?php echo number_format($total, 2, '.', ''); ?></strong></div> <input type="hidden" id="total-venda" value="<?php echo number_format($total, 2, '.', ''); ?>">
+                                                <div align="center"><strong>R$: <?= number_format($total, 2, '.', '') ?></strong></div> <input type="hidden" id="total-venda" value="<?= number_format($total, 2, '.', '') ?>">
                                             </td>
                                         </tr>
                                         <?php if ($result->valor_desconto != 0 && $result->desconto != 0) {
@@ -201,13 +201,13 @@ foreach ($produtos as $p) {
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong><?php echo $result->tipo_desconto == "real" ? "R$ " : ""; ?> <?php echo number_format($result->desconto, 2, '.', ''); ?> <?php echo $result->tipo_desconto == "porcento" ? " %" : ""; ?></strong></div>
+                                                    <div align="center"><strong><?= $result->tipo_desconto == "real" ? "R$ " : "" ?> <?= number_format($result->desconto, 2, '.', '') ?> <?= $result->tipo_desconto == "porcento" ? " %" : "" ?></strong></div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" style="text-align: right"><strong>Total Com Desconto:</strong></td>
                                                 <td>
-                                                    <div align="center"><strong>R$: <?php echo number_format($result->valor_desconto, 2, '.', ''); ?></strong></div><input type="hidden" id="total-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?>">
+                                                    <div align="center"><strong>R$: <?= number_format($result->valor_desconto, 2, '.', '') ?></strong></div><input type="hidden" id="total-desconto" value="<?= number_format($result->valor_desconto, 2, '.', '') ?>">
                                                 </td>
                                             </tr>
                                         <?php
@@ -226,7 +226,7 @@ foreach ($produtos as $p) {
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formFaturar" action="<?php echo current_url() ?>" method="post">
+    <form id="formFaturar" action="<?= current_url() ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar Venda</h3>
@@ -235,25 +235,25 @@ foreach ($produtos as $p) {
             <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com asterisco.</div>
             <div class="span12" style="margin-left: 0">
                 <label for="descricao">Descrição</label>
-                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda Nº: <?php echo $result->idVendas; ?> " />
+                <input class="span12" id="descricao" type="text" name="descricao" value="Fatura de Venda Nº: <?= esc($result->idVendas) ?> " />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
                     <label for="cliente">Cliente*</label>
-                    <input class="span12" id="cliente" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                    <input type="hidden" name="clientes_id" id="clientes_id" value="<?php echo $result->clientes_id ?>">
-                    <input type="hidden" name="vendas_id" id="vendas_id" value="<?php echo $result->idVendas; ?>">
+                    <input class="span12" id="cliente" type="text" name="cliente" value="<?= esc($result->nomeCliente) ?>" />
+                    <input type="hidden" name="clientes_id" id="clientes_id" value="<?= esc($result->clientes_id) ?>">
+                    <input type="hidden" name="vendas_id" id="vendas_id" value="<?= esc($result->idVendas) ?>">
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span5" style="margin-left: 0">
                     <label for="valor">Valor*</label>
                     <input type="hidden" id="tipo" name="tipo" value="receita" />
-                    <input class="span12 money" id="valor" type="text" name="valor" value="<?php echo number_format($total, 2, '.', ''); ?> " />
+                    <input class="span12 money" id="valor" type="text" name="valor" value="<?= number_format($total, 2, '.', '') ?> " />
                 </div>
                 <div class="span5" style="margin-left: 2">
                     <label for="valor">Valor Com Desconto*</label>
-                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?php echo number_format($result->valor_desconto, 2, '.', ''); ?> " />
+                    <input class="span12 money" id="faturar-desconto" type="text" name="faturar-desconto" value="<?= number_format($result->valor_desconto, 2, '.', '') ?> " />
                 </div>
             </div>
             <div class="span12" style="margin-left: 0">
@@ -294,7 +294,7 @@ foreach ($produtos as $p) {
         </div>        
     </form>
 </div>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?= base_url() ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     
     $("#quantidade").keyup(function() {
@@ -417,11 +417,11 @@ foreach ($produtos as $p) {
                             title: "Sucesso",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                         /*setTimeout(function() {
-                            window.location.href = window.BaseUrl + 'index.php/vendas/editar/' + <?php echo $result->idVendas ?>;
+                            window.location.href = window.BaseUrl + 'index.php/vendas/editar/' + <?= esc($result->idVendas) ?>;
                         }, 2000);*/
                     } else {
                         Swal.fire({
@@ -429,7 +429,7 @@ foreach ($produtos as $p) {
                             title: "Atenção",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                        $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                     }
@@ -441,7 +441,7 @@ foreach ($produtos as $p) {
                         title: "Atenção",
                         text: response.responseJSON.messages
                     });
-                    $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                    $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                     $("#desconto").val("");
                     $("#resultado").val("");
                 }
@@ -491,7 +491,7 @@ foreach ($produtos as $p) {
                 } else if (qtdProdutos > 0) {
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/vendas/faturar",
+                        url: "<?= base_url() ?>index.php/vendas/faturar",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
@@ -513,7 +513,7 @@ foreach ($produtos as $p) {
             }
         });
         $("#produto").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProdutoSaida",
+            source: "<?= base_url() ?>index.php/os/autoCompleteProdutoSaida",
             minLength: 2,
             select: function(event, ui) {
                 $("#idProduto").val(ui.item.id);
@@ -523,14 +523,14 @@ foreach ($produtos as $p) {
             }
         });
         $("#cliente").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteCliente",
+            source: "<?= base_url() ?>index.php/os/autoCompleteCliente",
             minLength: 2,
             select: function(event, ui) {
                 $("#clientes_id").val(ui.item.id);
             }
         });
         $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
+            source: "<?= base_url() ?>index.php/os/autoCompleteUsuario",
             minLength: 2,
             select: function(event, ui) {
                 $("#usuarios_id").val(ui.item.id);
@@ -605,12 +605,12 @@ foreach ($produtos as $p) {
                     $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/vendas/adicionarProduto",
+                        url: "<?= base_url() ?>index.php/vendas/adicionarProduto",
                         data: dados,
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
@@ -622,7 +622,7 @@ foreach ($produtos as $p) {
                                     title: "Atenção",
                                     html: "Ocorreu um erro ao tentar adicionar produto. <br /><br />Error: " + data.messages
                                 });
-                                $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                                 $('#formProdutos')[0].reset();
                             }
                         }
@@ -639,12 +639,12 @@ foreach ($produtos as $p) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url(); ?>index.php/vendas/excluirProduto",
-                    data: "idProduto=" + idProduto + "&idVendas=" + <?= $result->idVendas ?> + "&quantidade=" + quantidade + "&produto=" + produto,
+                    url: "<?= base_url() ?>index.php/vendas/excluirProduto",
+                    data: "idProduto=" + idProduto + "&idVendas=" + <?= esc($result->idVendas) ?> + "&quantidade=" + quantidade + "&produto=" + produto,
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
-                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                             $("#resultado").val("");
                             $("#desconto").val("");
                         } else {
@@ -653,7 +653,7 @@ foreach ($produtos as $p) {
                                 title: "Atenção",
                                 html: "Ocorreu um erro ao tentar excluir produto." + data.messages
                             });
-                            $("#divProdutos").load("<?php echo current_url(); ?> #divProdutos");
+                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
                         }
                     }
                 });

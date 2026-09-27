@@ -6,11 +6,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/blue.css" class="skin-color" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/blue.css" class="skin-color" />
 </head>
 
 <body style="background-color: transparent">
@@ -39,11 +39,11 @@
                                     <?php foreach ($clientes as $c) : ?>
                                     <?php $dataCadastro = date('d/m/Y', strtotime($c->dataCadastro)) ?>
                                     <tr>
-                                        <td><?= $c->nomeCliente ?></td>
-                                        <td align="center"><?= $c->documento ?></td>
-                                        <td align="center"><?= $c->telefone ?></td>
-                                        <td align="center"><?= $c->email ?></td>
-                                        <td align="center"><?= $dataCadastro ?></td>
+                                        <td><?= esc($c->nomeCliente) ?></td>
+                                        <td align="center"><?= esc($c->documento) ?></td>
+                                        <td align="center"><?= esc($c->telefone) ?></td>
+                                        <td align="center"><?= esc($c->email) ?></td>
+                                        <td align="center"><?= esc($dataCadastro) ?></td>
                                     </tr>
                                     <?php endforeach ?>
                                 </tbody>
@@ -53,7 +53,7 @@
 
                 </div>
                 <h5 style="text-align: right; font-size: 0.8em; padding: 5px;">Data do Relatório:
-                    <?php echo date('d/m/Y'); ?>
+                    <?= date('d/m/Y') ?>
                 </h5>
 
             </div>

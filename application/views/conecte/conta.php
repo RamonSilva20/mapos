@@ -4,7 +4,7 @@
             <li class="active"><a data-toggle="tab" href="#tab1">Meus Dados</a></li>
 
             <div>
-                <a title="Editar" class="button btn btn-success" style="max-width: 140px;margin: 5px" href="<?php echo base_url() ?>index.php/mine/editarDados/<?php echo $result->idClientes ?>">
+                <a title="Editar" class="button btn btn-success" style="max-width: 140px;margin: 5px" href="<?= base_url() ?>index.php/mine/editarDados/<?= esc($result->idClientes) ?>">
                   <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text2">Editar</span></a>
             </div>
         </ul>
@@ -29,25 +29,25 @@
                                     <tr>
                                         <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
                                         <td>
-                                            <?php echo $result->nomeCliente ?>
+                                            <?= esc($result->nomeCliente) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right; width: 30%"><strong>Contato</strong></td>
                                         <td>
-                                            <?php echo $result->contato ?>
+                                            <?= esc($result->contato) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Documento</strong></td>
                                         <td>
-                                            <?php echo $result->documento ?>
+                                            <?= esc($result->documento) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Data de Cadastro</strong></td>
                                         <td>
-                                            <?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?>
+                                            <?= date('d/m/Y', strtotime($result->dataCadastro)) ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -71,19 +71,19 @@
                                     <tr>
                                         <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
                                         <td>
-                                            <?php echo $result->telefone ?>
+                                            <?= esc($result->telefone) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Celular</strong></td>
                                         <td>
-                                            <?php echo $result->celular ?>
+                                            <?= esc($result->celular) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Email</strong></td>
                                         <td>
-                                            <?php echo $result->email ?>
+                                            <?= esc($result->email) ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -107,38 +107,38 @@
                                     <tr>
                                         <td style="text-align: right; width: 30%"><strong>Rua</strong></td>
                                         <td>
-                                            <?php echo $result->rua ?>
+                                            <?= esc($result->rua) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Número</strong></td>
                                         <td>
-                                            <?php echo $result->numero ?>
+                                            <?= esc($result->numero) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Complemento</strong></td>
                                         <td>
-                                            <?php echo $result->complemento ?>
+                                            <?= esc($result->complemento) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Bairro</strong></td>
                                         <td>
-                                            <?php echo $result->bairro ?>
+                                            <?= esc($result->bairro) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>Cidade</strong></td>
                                         <td>
-                                            <?php echo $result->cidade ?> -
-                                            <?php echo $result->estado ?>
+                                            <?= esc($result->cidade) ?> -
+                                            <?= esc($result->estado) ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: right"><strong>CEP</strong></td>
                                         <td>
-                                            <?php echo $result->cep ?>
+                                            <?= esc($result->cep) ?>
                                         </td>
                                     </tr>
                                 </tbody>

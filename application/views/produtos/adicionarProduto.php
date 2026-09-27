@@ -35,18 +35,18 @@
                 <h5>Cadastro de Produto</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-                <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                <?= $custom_error ?>
+                <form action="<?= current_url() ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
                         <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo set_value('codDeBarra'); ?>" />
+                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?= set_value('codDeBarra') ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="descricao" type="text" name="descricao" value="<?php echo set_value('descricao'); ?>" />
+                            <input id="descricao" type="text" name="descricao" value="<?= set_value('descricao') ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -65,7 +65,7 @@
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?php echo set_value('precoCompra'); ?>" />
+                            <input id="precoCompra" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoCompra" value="<?= set_value('precoCompra') ?>" />
                             <strong><span style="color: red" id="errorAlert"></span><strong>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                     <div class="control-group">
                         <label for="precoVenda" class="control-label">Preço de Venda<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="precoVenda" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoVenda" value="<?php echo set_value('precoVenda'); ?>" />
+                            <input id="precoVenda" class="money" data-affixes-stay="true" data-thousands="" data-decimal="." type="text" name="precoVenda" value="<?= set_value('precoVenda') ?>" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -95,20 +95,20 @@
                     <div class="control-group">
                         <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="estoque" type="text" name="estoque" value="<?php echo set_value('estoque'); ?>" />
+                            <input id="estoque" type="text" name="estoque" value="<?= set_value('estoque') ?>" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
                         <div class="controls">
-                            <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?php echo set_value('estoqueMinimo'); ?>" />
+                            <input id="estoqueMinimo" type="text" name="estoqueMinimo" value="<?= set_value('estoqueMinimo') ?>" />
                         </div>
                     </div>
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
                                 <button type="submit" class="button btn btn-mini btn-success" style="max-width: 160px"><span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
+                                <a href="<?= base_url() ?>index.php/produtos" id="" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -118,8 +118,8 @@
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
     function calcLucro(precoCompra, Lucro) {
         var lucroTipo = $('#selectLucro').val();
@@ -181,7 +181,7 @@
 
     $(document).ready(function() {
         $(".money").maskMoney();
-        $.getJSON('<?php echo base_url() ?>assets/json/tabela_medidas.json', function(data) {
+        $.getJSON('<?= base_url() ?>assets/json/tabela_medidas.json', function(data) {
             for (i in data.medidas) {
                 $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
             }

@@ -2,21 +2,21 @@
 <html lang="pt-br">
 
 <head>
-    <title><?php echo $this->config->item('app_name') ?></title>
+    <title><?= esc($this->config->item('app_name')) ?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
+    <meta name="description" content="<?= esc($this->config->item('app_name')) . ' - ' . esc($this->config->item('app_subname')) ?>">
     <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
     <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
-    <link rel="shortcut icon" type="image/png" href="<?php echo base_url(); ?>assets/img/favicon.png" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-media.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/img/favicon.png" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-style.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-media.css" />
+    <link href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
+    <link href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>
@@ -55,12 +55,12 @@
                                                     </tr>
                                                 <?php } else { ?>
                                                     <tr>
-                                                        <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                                        <td><span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br>
-                                                            <span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua . ', nº:' . $emitente[0]->numero . ', ' . $emitente[0]->bairro . ' - ' . $emitente[0]->cidade . ' - ' . $emitente[0]->uf; ?> </span> </br>
-                                                            <span> E-mail: <?php echo $emitente[0]->email . ' - Fone: ' . $emitente[0]->telefone; ?></span>
+                                                        <td style="width: 25%"><img src=" <?= esc($emitente[0]->url_logo) ?> "></td>
+                                                        <td><span style="font-size: 20px; "> <?= esc($emitente[0]->nome) ?></span> </br>
+                                                            <span><?= esc($emitente[0]->cnpj) ?> </br> <?= esc($emitente[0]->rua) . ', nº:' . esc($emitente[0]->numero) . ', ' . esc($emitente[0]->bairro) . ' - ' . esc($emitente[0]->cidade) . ' - ' . esc($emitente[0]->uf) ?> </span> </br>
+                                                            <span> E-mail: <?= esc($emitente[0]->email) . ' - Fone: ' . esc($emitente[0]->telefone) ?></span>
                                                         </td>
-                                                        <td style="width: 18%; text-align: center"><span>Emissão: <?php echo date('d/m/Y') ?></span></td>
+                                                        <td style="width: 18%; text-align: center"><span>Emissão: <?= date('d/m/Y') ?></span></td>
                                                     </tr>
 
                                                 <?php } ?>
@@ -75,9 +75,9 @@
                                                             <li>
                                                                 <span>
                                                                     <h5>Cliente</h5>
-                                                                    <span><?php echo $result->nomeCliente ?></span><br />
-                                                                    <span><?php echo $result->rua ?>, <?php echo $result->numero ?>, <?php echo $result->bairro ?></span><br />
-                                                                    <span><?php echo $result->cidade ?> - <?php echo $result->estado ?></span>
+                                                                    <span><?= esc($result->nomeCliente) ?></span><br />
+                                                                    <span><?= esc($result->rua) ?>, <?= esc($result->numero) ?>, <?= esc($result->bairro) ?></span><br />
+                                                                    <span><?= esc($result->cidade) ?> - <?= esc($result->estado) ?></span>
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -87,9 +87,9 @@
                                                                 <span>
                                                                     <h5>Responsável</h5>
                                                                 </span>
-                                                                <span><?php echo $result->nome ?></span> <br />
-                                                                <span>Telefone: <?php echo $result->telefone ?></span><br />
-                                                                <span>Email: <?php echo $result->email ?></span>
+                                                                <span><?= esc($result->nome) ?></span> <br />
+                                                                <span>Telefone: <?= esc($result->telefone) ?></span><br />
+                                                                <span>Email: <?= esc($result->email) ?></span>
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -109,7 +109,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Descrição</strong><br>
-                                                                <?php echo printSafeHtml($result->descricaoProduto) ?>
+                                                                <?= printSafeHtml($result->descricaoProduto) ?>
                                                             </td>
                                                         </tr>
 
@@ -119,7 +119,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Defeito</strong><br>
-                                                                <?php echo printSafeHtml($result->defeito) ?>
+                                                                <?= printSafeHtml($result->defeito) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -128,7 +128,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Laudo Técnico</strong> <br>
-                                                                <?php echo printSafeHtml($result->laudoTecnico) ?>
+                                                                <?= printSafeHtml($result->laudoTecnico) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -137,7 +137,7 @@
                                                         <tr>
                                                             <td>
                                                                 <strong>Observações</strong> <br>
-                                                                <?php echo printSafeHtml($result->observacoes) ?>
+                                                                <?= printSafeHtml($result->observacoes) ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -186,7 +186,7 @@
 
                                                     <tr>
                                                         <td colspan="2" style="text-align: right"></td>
-                                                        <td style="text-align: center"><strong>Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.'); ?></strong>
+                                                        <td style="text-align: center"><strong>Total: R$ <?= number_format($totalProdutos + $totalServico, 2, ',', '.') ?></strong>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -212,8 +212,8 @@
                         function Popup(data) {
                             var mywindow = window.open('', 'MapOs', 'height=600,width=800');
                             mywindow.document.write('<html><head><title>Map Os</title>');
-                            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap.min.css' /><link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css' />");
-                            mywindow.document.write("<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-style.css' /> <link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/matrix-media.css' />");
+                            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/bootstrap.min.css' /><link rel='stylesheet' href='<?= base_url() ?>assets/css/bootstrap-responsive.min.css' />");
+                            mywindow.document.write("<link rel='stylesheet' href='<?= base_url() ?>assets/css/matrix-style.css' /> <link rel='stylesheet' href='<?= base_url() ?>assets/css/matrix-media.css' />");
 
 
                             mywindow.document.write('</head><body >');
@@ -236,13 +236,13 @@
     </div>
     <!--Footer-part-->
     <div class="row-fluid">
-        <div id="footer" class="span12"> <?= date('Y') ?> &copy; <?php echo $this->config->item('app_name'); ?> - Versão <?php echo $this->config->item('app_version'); ?></div>
+        <div id="footer" class="span12"> <?= date('Y') ?> &copy; <?= esc($this->config->item('app_name')) ?> - Versão <?= esc($this->config->item('app_version')) ?></div>
     </div>
 
     <!-- javascript
 ================================================== -->
 
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
 
 
 </body>

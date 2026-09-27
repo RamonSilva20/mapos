@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -11,30 +11,30 @@
                 <h5>Cadastro de Arquivo</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-                <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formArquivo" method="post" class="form-horizontal">
+                <?= $custom_error ?>
+                <form action="<?= current_url() ?>" id="formArquivo" method="post" class="form-horizontal">
 
 
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome do Arquivo*</label>
                         <div class="controls">
-                            <input id="nome" type="text" name="nome" value="<?php echo $result->documento; ?> " />
+                            <input id="nome" type="text" name="nome" value="<?= esc($result->documento) ?> " />
 
-                            <input id="idDocumentos" type="hidden" name="idDocumentos" value="<?php echo $result->idDocumentos; ?> " />
+                            <input id="idDocumentos" type="hidden" name="idDocumentos" value="<?= esc($result->idDocumentos) ?> " />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="descricao" class="control-label">Descrição</label>
                         <div class="controls">
-                            <textarea rows="3" cols="30" name="descricao" id="descricao"><?php echo $result->descricao; ?></textarea>
+                            <textarea rows="3" cols="30" name="descricao" id="descricao"><?= esc($result->descricao) ?></textarea>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="descricao" class="control-label">Data</label>
                         <div class="controls">
-                            <input id="data" type="text" class="datepicker" name="data" value="<?php echo date('d/m/Y', strtotime($result->cadastro)); ?>" />
+                            <input id="data" type="text" class="datepicker" name="data" value="<?= date('d/m/Y', strtotime($result->cadastro)) ?>" />
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
                         <div class="span12">
                             <div class="span6 offset3" style="display:flex;justify-content: center">
                                 <button type="submit" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                <a href="<?php echo base_url() ?>index.php/arquivos" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
+                                <a href="<?= base_url() ?>index.php/arquivos" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
     </div>
 </div>
 
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 

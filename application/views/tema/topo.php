@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-  <title><?= $configuration['app_name'] ?: 'Map-OS' ?></title>
+  <title><?= esc($configuration['app_name'] ?: 'Map-OS') ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
@@ -135,7 +135,7 @@
   echo saudacao($login); // Irá retornar conforme o horário
   ?>
       </div>
-      <div class="userT"><?= $this->session->userdata('nome_admin') ?></div>
+      <div class="userT"><?= esc($this->session->userdata('nome_admin')) ?></div>
 
       <section class="sec_profile">
         <div class="profile">

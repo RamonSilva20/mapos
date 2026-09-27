@@ -23,7 +23,7 @@
         <?php endif; ?>
         <form class="span9" method="get" action="<?= base_url() ?>index.php/produtos" style="display: flex; justify-content: flex-end;">
             <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar por Nome ou Cod. barra..." class="span12" value="<?=html_escape($this->input->get('pesquisa'))?>">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="Buscar por Nome ou Cod. barra..." class="span12" value="<?= html_escape($this->input->get('pesquisa')) ?>">
             </div>
             <div class="span1">
                 <button class="button btn btn-mini btn-warning" style="min-width: 30px">
@@ -82,11 +82,11 @@
         </div>
     </div>
 </div>
-<?php echo $this->pagination->create_links(); ?>
+<?= $this->pagination->create_links() ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/excluir" method="post">
+    <form action="<?= base_url() ?>index.php/produtos/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-trash-alt"></i> Excluir Produto</h5>
@@ -105,7 +105,7 @@
 
 <!-- Modal Estoque -->
 <div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
+    <form action="<?= base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
@@ -135,7 +135,7 @@
 
 <!-- Modal Etiquetas -->
 <div id="modal-etiquetas" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/relatorios/produtosEtiquetas" method="get">
+    <form action="<?= base_url() ?>index.php/relatorios/produtosEtiquetas" method="get">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Gerar etiquetas com Código de Barras</h5>
@@ -180,7 +180,7 @@
         </div>
     </form>
 </div>
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?= base_url() ?>assets/js/jquery.validate.js"></script>
 <!-- Modal Etiquetas e Estoque-->
 <script type="text/javascript">
     $(document).ready(function () {

@@ -5,9 +5,9 @@
     <title>Map OS</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-style.css" />
+    <link href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="<?= base_url('assets/css/custom.css'); ?>" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
@@ -82,21 +82,21 @@
                                 <tbody>
                                     <?php if ($emitente == null) { ?>
                                         <tr>
-                                            <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
+                                            <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar</a>
                                                 <<<</td> </tr> <?php
                                     } else { ?> <tr>
-                                            <td style="width: 25%"><img src=" <?php echo $emitente->url_logo; ?> "></td>
+                                            <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> "></td>
                                             <td> <span style="font-size: 20px; ">
-                                                    <?php echo $emitente->nome; ?></span> <br />
+                                                    <?= esc($emitente->nome) ?></span> <br />
                                                 <span>
-                                                    <?php echo $emitente->cnpj; ?> <br />
-                                                    <?php echo $emitente->rua . ', nº:' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br> <span> E-mail:
-                                                    <?php echo $emitente->email . ' - Fone: ' . $emitente->telefone; ?>
+                                                    <?= esc($emitente->cnpj) ?> <br />
+                                                    <?= esc($emitente->rua) . ', nº:' . esc($emitente->numero) . ', ' . esc($emitente->bairro) . ' - ' . esc($emitente->cidade) . ' - ' . esc($emitente->uf) ?> </span> </br> <span> E-mail:
+                                                    <?= esc($emitente->email) . ' - Fone: ' . esc($emitente->telefone) ?>
                                                 </span>
                                             </td>
                                             <td style="width: 20%; text-align: center">
                                                 <br />
-                                                <span>Garantia OS: <?= $osGarantia->idOs ? $osGarantia->idOs : ""?>
+                                                <span>Garantia OS: <?= ($osGarantia->idOs ? esc($osGarantia->idOs) : "") ?>
                                                 </span>
                                                 <br />
                                                 <span>Emissão:
@@ -130,7 +130,7 @@
                                             <ul>
                                                 <li>
 
-                                                    <span><?php echo printSafeHtml($osGarantia->textoGarantia) ?></span><br />
+                                                    <span><?= printSafeHtml($osGarantia->textoGarantia) ?></span><br />
                                                 </li>
                                             </ul>
                                         </td>
@@ -161,8 +161,8 @@
             </div>
         </div>
     </div>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
+    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
+    <script src="<?= base_url() ?>assets/js/matrix.js"></script>
     <script>
         window.print();
     </script>

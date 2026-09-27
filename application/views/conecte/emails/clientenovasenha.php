@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente ? $emitente->url_logo : "" ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= ($emitente ? esc($emitente->url_logo) : "") ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -130,7 +130,7 @@
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $cliente->nomeCliente ?><br>
+                                Cliente: <?= esc($cliente->nomeCliente) ?><br>
                             </td>
 
                             <td style="text-align: right">
@@ -145,7 +145,7 @@
             <tr class="details">
 
                 <td colspan="4" style="text-align: left">
-                    Caro(a) <b><?= $cliente->nomeCliente ?></b>,
+                    Caro(a) <b><?= esc($cliente->nomeCliente) ?></b>,
                     <br>
 
                 </td>
@@ -159,8 +159,8 @@
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Caso não funcione o link, por favor acessar <?= base_url() . "index.php/mine/tokenManual"?> <br><br>
-                    Ao carregar a página você devera copiar e colar <strong><?= $resets_de_senha->token ?></strong>
+                    Caso não funcione o link, por favor acessar <?= base_url() . "index.php/mine/tokenManual" ?> <br><br>
+                    Ao carregar a página você devera copiar e colar <strong><?= esc($resets_de_senha->token) ?></strong>
                 </td>
             </tr>
             <tr class="details">

@@ -45,7 +45,7 @@
         </table>
     </div>
 </div>
-<?php echo $this->pagination->create_links(); ?>
+<?= $this->pagination->create_links() ?>
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form action="<?= site_url('mapos/excluirEmail') ?>" method="post">
