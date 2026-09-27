@@ -51,15 +51,24 @@ common source of XSS, so match the row, not just the habit.
 | `esc_css($v)` | Values inside a `style` attribute | `style="color: <?= esc_css($c) ?>"` |
 | `esc_msg($v)` | Flashdata messages shown in a SweetAlert2 popup | `Swal.fire({ text: <?= esc_msg($m) ?> })` |
 | `printSafeHtml($v)` | **Only** rich text from a WYSIWYG field (HTMLPurifier) | `<?= printSafeHtml($os->defeito) ?>` |
+| *none* | A value that already holds finished markup | `<?= $modalGerarPagamento ?>` |
+
+Note on `esc_url()` and `src`: it rejects `data:`, so an `<img src>` holding a
+data URI must use `esc()`, not `esc_url()`. The QR codes rendered by
+`getQrCode()` are data URIs, and passing them through `esc_url()` returns an
+empty string and silently drops the image.
 
 Additional rules:
 
 - Escape inside string concatenation part by part: `<?= esc($a->rua) . ', ' . esc($a->numero) ?>`.
 - In `<script>`, prefer `Swal.fire({ text: ... })` over `title:`/`html:` — those are parsed as HTML.
 - `esc()` inside `value="…"` is transparent to JavaScript, because the browser decodes entities before `.val()` returns the value.
-- Values that intentionally carry pre-rendered markup (`$topo`, `$custom_error`, and anything from `printSafeHtml()`) must not be escaped again — escape them where they are built instead.
+- `esc_js()` and `esc_json()` already include the surrounding quotes for scalars, so never add manual quotes: `"<?= esc_js($v) ?>"` emits `"\"value\""`. Write `<?= esc_js($v) ?>` bare.
+- For the same reason, never pass them to `JSON.parse()` — assign the value directly: `var cfg = <?= esc_json($arr) ?>;`.
+- `esc_json()` casts scalars to string, so an int or float arrives as a JS string, not a number. Only `bool` and `null` keep their own type (`true`/`false`/`null`). Arrays and objects are emitted as a JSON literal.
+- Values that intentionally carry pre-rendered markup (`$topo`, `$custom_error`, `$modalGerarPagamento`, and anything from `printSafeHtml()`) must not be escaped again — escape them where they are built instead. These come from `$this->load->view($name, $data, true)` or from markup the controller assembled, so they are already finished HTML. Escaping one is not redundant, it is destructive: `htmlspecialchars()` turns the markup into visible text **and neutralises any `<script>` nested inside it**, which silently disables whatever that view was included for.
 - Build URLs with `rawurlencode()` on each query value, then pass the result through `esc_url()`.
-- Run `composer xss:check` after editing views. It fails when a value reaches the page without an escaper. If an omission is deliberate, record it with `composer xss:baseline` and explain it in `tools/xss-baseline.txt`.
+- Run `composer xss:check` after editing views. It runs three checks: values that reach the page without an escaper, values whose type the escaper changes (such as a `JSON.parse()` fed an escaper), and pre-rendered markup wrongly wrapped in an escaper. If an omission is deliberate, record it with `composer xss:baseline` and explain it in `tools/xss-baseline.txt`.
 
 Note: `global_xss_filtering` in `application/config/config.php` is an input
 filter, not output encoding. It does not protect values read from the database

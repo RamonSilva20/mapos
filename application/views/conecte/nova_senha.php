@@ -65,7 +65,7 @@
             $(document).on('click', '#senhaClient', function(event) {
                 event.preventDefault();
                 var senha = $("input[name='senha']").val();
-                var token = "<?= esc($token) ?>";
+                var token = <?= esc_js($token) ?>;
 
                 $.ajax({
                     type: "POST",

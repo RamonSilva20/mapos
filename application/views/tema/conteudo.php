@@ -20,10 +20,10 @@
       <div class="row-fluid">
         <div class="span12">
           <?php if ($var = $this->session->flashdata('success')): ?>
-              <script>Swal.fire({ icon: 'success', title: 'Sucesso!', text: <?= esc_msg($var) ?> });</script>
+              <script>swal('Sucesso!', <?= esc_msg($var) ?>, 'success');</script>
           <?php endif; ?>
           <?php if ($var = $this->session->flashdata('error')): ?>
-              <script>Swal.fire({ icon: 'error', title: 'Falha!', text: <?= esc_msg($var) ?> });</script>
+              <script>swal('Falha!', <?= esc_msg($var) ?>, 'error');</script>
           <?php endif; ?>
           <?php if (isset($view)) {
               echo $this->load->view($view, null, true);

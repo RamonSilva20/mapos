@@ -3,7 +3,7 @@ $this->load->config('payment_gateways');
 ?>
 
 <script>
-    var paymentGatewaysConfig = JSON.parse(<?= esc_json($this->config->item('payment_gateways')) ?>);
+    var paymentGatewaysConfig = <?= esc_json($this->config->item('payment_gateways')) ?>;
 </script>
 
 <div class="modal fade" id="modal-gerar-pagamento" tabindex="-1" role="dialog">

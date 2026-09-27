@@ -931,7 +931,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             });
             return false;
         });
-        let controlBaixa = "<?= esc($configuration['control_baixa']) ?>";
+        let controlBaixa = <?= esc_js($configuration['control_baixa']) ?>;
         let datePickerOptions = {
             dateFormat: 'dd/mm/yy',
         };

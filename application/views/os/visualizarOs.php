@@ -336,7 +336,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
     </div>
 </div>
 
-<?= esc($modalGerarPagamento) ?>
+<?= $modalGerarPagamento ?>
 
 <!-- Modal visualizar anexo -->
 <div id="modal-anexo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -408,7 +408,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
 
             var link = $(this).attr('link');
-            var idOS = "<?= esc($result->idOs) ?>"
+            var idOS = <?= esc_js($result->idOs) ?>
 
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");

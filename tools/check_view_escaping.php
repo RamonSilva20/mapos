@@ -3,8 +3,16 @@
 /**
  * check_view_escaping - guards application/views against unescaped output.
  *
- * Scans every view for value expressions that reach the page without going
- * through an escaper, and fails if any appear that are not in the baseline.
+ * Runs three independent checks over every view:
+ *
+ *   1. Escaping: value expressions that reach the page without going through an
+ *      escaper, for the wrong output context.
+ *   2. Shape: values whose *type* the chosen escaper changes, such as a
+ *      JSON.parse() fed an escaper that emits a bare JSON value.
+ *   3. Pre-rendered markup: values that already hold finished HTML being
+ *      wrapped in an escaper, which breaks the page instead of protecting it.
+ *
+ * All three fail when they appear and are not in the baseline.
  *
  * Usage:
  *   php tools/check_view_escaping.php                  # check (exit 1 on new findings)
@@ -27,6 +35,20 @@ $baselineFile = __DIR__ . '/xss-baseline.txt';
 $updateBaseline = in_array('--update-baseline', $argv, true);
 $ignoreBaseline = in_array('--no-baseline', $argv, true);
 
+/**
+ * Variables that carry finished, pre-rendered markup.
+ *
+ * These come from $this->load->view($name, $data, true) or from markup the
+ * controller built by hand, so the view must emit them raw. Escaping one is
+ * not merely redundant: htmlspecialchars() turns the markup into visible text
+ * and neutralises any <script> nested inside it, which silently disables the
+ * behaviour that view was included for.
+ *
+ * Kept as one list because both the skip rules below and the
+ * preRenderedEscaped() check read it, so the two cannot drift apart.
+ */
+$preRendered = ['$topo', '$custom_error', '$modalGerarPagamento'];
+
 // Expressions that are already safe or intentionally raw.
 $skipIfContains = [
     'esc(', 'esc_js(', 'esc_url(', 'esc_css(', 'esc_msg(', 'esc_json(',
@@ -42,10 +64,9 @@ $skipIfContains = [
     '$this->config->item(', '$this->uri->segment(',
     '$this->security->get_csrf', '$this->load->', '$this->db->count_all(',
     '$this->permission->', '$this->pagination->',
-    // Variables that intentionally carry pre-rendered, already-escaped markup.
-    '$topo', '$custom_error',
     // Ternaries that emit only literal keywords.
     "'selected'", '"selected"', "'disabled'", '"disabled"', "'checked'", '"checked"',
+    ...$preRendered,
 ];
 
 $echoShapes = [
@@ -239,6 +260,66 @@ function unescaped(string $expr, array $skipIfContains, int $depth = 0): ?string
     return null;
 }
 
+/**
+ * Detects JSON.parse() being fed a PHP echo of one of the escapers.
+ *
+ * None of the escapers can produce the string argument JSON.parse() expects:
+ * esc_json() and esc_js() emit a bare JSON value with no surrounding quotes,
+ * and esc() emits HTML entities that corrupt the payload. The config has to be
+ * assigned directly instead, e.g. `var cfg = <?= esc_json($arr) ?>;`.
+ *
+ * esc_js(json_encode($x)) is the one legitimate spelling and is allowed.
+ *
+ * Returns the offending snippet, or null when every call is well formed.
+ */
+function jsonParseEscaper(string $content): ?string
+{
+    $re = '/JSON\.parse\(\s*["\']?\s*<\?(?:=\s*esc(?:_js|_json)?\s*\(|php\s+echo\s+esc(?:_js|_json)?\s*\()(.*?)\?>(?:\s*["\'])?\s*\)?/s';
+
+    if (! preg_match_all($re, $content, $matches, PREG_OFFSET_CAPTURE)) {
+        return null;
+    }
+
+    foreach ($matches[0] as $i => $m) {
+        if (str_contains($matches[1][$i][0], 'json_encode(')) {
+            continue;
+        }
+
+        return (string) preg_replace('/\s+/', ' ', trim($m[0]));
+    }
+
+    return null;
+}
+
+const JSON_PARSE_PREFIX = 'json-parse: ';
+const PRE_RENDERED_PREFIX = 'prerendered-esc: ';
+
+/**
+ * Detects a pre-rendered markup variable being wrapped in an HTML escaper.
+ *
+ * $preRendered values are already finished markup, so escaping them breaks the
+ * page instead of protecting it. This is the inverse of the skip rule that
+ * accepts them raw, and it catches the mistake of adding the escaper later.
+ *
+ * The match is anchored on the escaper wrapping the variable directly, so a
+ * genuinely raw value such as esc($result->idOs) is not reported. The known
+ * limitation is that it cannot see markup carried by a variable that is not
+ * listed in $preRendered, nor one hidden behind a call such as trim().
+ *
+ * Returns the offending snippet, or null when nothing is mis-escaped.
+ */
+function preRenderedEscaped(string $content, array $preRendered): ?string
+{
+    $vars = implode('|', array_map(fn ($v) => preg_quote($v, '/'), $preRendered));
+    $re = '/\b(?:esc|esc_html|html_escape|htmlspecialchars)\(\s*(' . $vars . ')\s*\)/';
+
+    if (! preg_match($re, $content, $m)) {
+        return null;
+    }
+
+    return (string) preg_replace('/\s+/', ' ', trim($m[0]));
+}
+
 $findings = [];
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($viewDir));
 
@@ -271,6 +352,18 @@ foreach ($rii as $file) {
             $seen[$key] = true;
             $findings[$key] = $snippet;
         }
+    }
+
+    $snippet = jsonParseEscaper($content);
+    if ($snippet !== null) {
+        $key = $rel . '|' . JSON_PARSE_PREFIX . $snippet;
+        $findings[$key] = $snippet;
+    }
+
+    $snippet = preRenderedEscaped($content, $preRendered);
+    if ($snippet !== null) {
+        $key = $rel . '|' . PRE_RENDERED_PREFIX . $snippet;
+        $findings[$key] = $snippet;
     }
 }
 
@@ -306,13 +399,53 @@ echo 'New (unsuppressed) : ', count($new), "\n";
 echo 'Stale baseline     : ', count($stale), "\n";
 
 if ($new) {
-    echo "\nUnescaped output not present in the baseline:\n";
+    $unescaped = [];
+    $badParse = [];
+    $badPreRendered = [];
+
     foreach ($new as $key => $snippet) {
-        echo '  ', $key, "\n      raw: ", $snippet, "\n";
+        if (str_contains($key, '|' . JSON_PARSE_PREFIX)) {
+            $badParse[$key] = $snippet;
+        } elseif (str_contains($key, '|' . PRE_RENDERED_PREFIX)) {
+            $badPreRendered[$key] = $snippet;
+        } else {
+            $unescaped[$key] = $snippet;
+        }
     }
-    echo "\nFix by wrapping the value in esc() (or esc_js/esc_url/esc_css for\n";
-    echo "JS/URL/CSS contexts). If the value is intentionally pre-rendered or\n";
-    echo "literal markup, run: php tools/check_view_escaping.php --update-baseline\n";
+
+    if ($unescaped) {
+        echo "\nUnescaped output not present in the baseline:\n";
+        foreach ($unescaped as $key => $snippet) {
+            echo '  ', $key, "\n      raw: ", $snippet, "\n";
+        }
+        echo "\nFix by wrapping the value in esc() (or esc_js/esc_url/esc_css for\n";
+        echo "JS/URL/CSS contexts). If the value is intentionally pre-rendered or\n";
+        echo "literal markup, run: php tools/check_view_escaping.php --update-baseline\n";
+    }
+
+    if ($badParse) {
+        echo "\nJSON.parse() fed a value that is not a string:\n";
+        foreach ($badParse as $key => $snippet) {
+            echo '  ', $key, "\n      raw: ", $snippet, "\n";
+        }
+        echo "\nesc_json() and esc_js() already emit a bare JSON value, and esc() emits\n";
+        echo "HTML entities, so JSON.parse() can never receive a usable string. Drop\n";
+        echo "the JSON.parse() call and assign the value directly:\n";
+        echo '    var config = <?= esc_json($arr) ?>;' . "\n";
+    }
+
+    if ($badPreRendered) {
+        echo "\nPre-rendered markup escaped as if it were a plain value:\n";
+        foreach ($badPreRendered as $key => $snippet) {
+            echo '  ', $key, "\n      raw: ", $snippet, "\n";
+        }
+        echo "\nThese variables already hold finished markup, produced by\n";
+        echo "load->view(\$name, \$data, true) or built by the controller. Escaping one\n";
+        echo "turns the markup into visible text and neutralises any <script> nested\n";
+        echo "inside it. Emit it raw instead; the interpolations inside the view were\n";
+        echo "already escaped where the view builds them:\n";
+        echo '    <?= $modalGerarPagamento ?>' . "\n";
+    }
 }
 
 if ($stale) {
