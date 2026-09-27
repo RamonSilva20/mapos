@@ -18,11 +18,11 @@ class Migration_add_controle_cobrancas extends CI_Migration
             ],
             'conditional_discount_date' => [
                 'type' => 'DATE',
-                'null' => false,
+                'null' => true,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
-                'null' => false,
+                'null' => true,
             ],
             'custom_id' => [
                 'type' => 'INT',
@@ -36,7 +36,7 @@ class Migration_add_controle_cobrancas extends CI_Migration
             'message' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null' => true,
+                'null' => false,
             ],
             'payment_method' => [
                 'type' => 'VARCHAR',
@@ -56,7 +56,7 @@ class Migration_add_controle_cobrancas extends CI_Migration
             'status' => [
                 'type' => 'VARCHAR',
                 'constraint' => 36,
-                'null' => true,
+                'null' => false,
             ],
             'total' => [
                 'type' => 'VARCHAR',
@@ -66,17 +66,17 @@ class Migration_add_controle_cobrancas extends CI_Migration
             'barcode' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null' => true,
+                'null' => false,
             ],
             'link' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null' => true,
+                'null' => false,
             ],
             'payment' => [
                 'type' => 'VARCHAR',
                 'constraint' => 64,
-                'null' => true,
+                'null' => false,
             ],
             'pdf' => [
                 'type' => 'VARCHAR',
