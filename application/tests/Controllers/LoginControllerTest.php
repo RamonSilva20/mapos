@@ -3,6 +3,7 @@
 namespace Tests\Controllers;
 
 use Tests\Support\ControllerTestCase;
+use Tests\Support\TransactsDatabase;
 
 /**
  * Testa o controller Login inteiro: a tela (GET /index.php/login), o endpoint
@@ -42,6 +43,8 @@ use Tests\Support\ControllerTestCase;
  */
 class LoginControllerTest extends ControllerTestCase
 {
+    use TransactsDatabase;
+
     /**
      * POST login/verificarLogin: autentica e preenche a sessão.
      */
@@ -443,29 +446,24 @@ class LoginControllerTest extends ControllerTestCase
      * dataExpiracao é date DEFAULT NULL, então null é um valor legítimo: conta
      * sem expiração. O chk_date() antigo fazia new DateTime(null), que é
      * depreciado no PHP 8.1 e viraria erro sob failOnDeprecation.
+     *
+     * O null é gravado direto, sem salvar e restaurar o valor anterior. É a
+     * TransactsDatabase que desfaz a alteração no fim do caso, e o ganho não é
+     * só de linhas: o `finally` que fazia a restauração manual era pulado por
+     * qualquer `fail()` antes dele, e aí o `dataExpiracao` ficava null para os
+     * testes seguintes — um vazamento que só apareceria como um "conta
+     * expirada" inexplicável em outro caso.
      */
     public function testAnAccountWithoutAnExpirationDateCanLogIn(): void
     {
-        $db = $this->ci()->db;
-        $original = $db->select('dataExpiracao')
-            ->from('usuarios')
-            ->where('email', 'admin@admin.com')
-            ->limit(1)
-            ->get()
-            ->row('dataExpiracao');
+        $this->ci()->db->where('email', 'admin@admin.com')->update('usuarios', ['dataExpiracao' => null]);
 
-        $db->where('email', 'admin@admin.com')->update('usuarios', ['dataExpiracao' => null]);
+        $this->postLogin('admin@admin.com', '123456');
 
-        try {
-            $this->postLogin('admin@admin.com', '123456');
+        $response = $this->callController('Login', 'verificarLogin');
 
-            $response = $this->callController('Login', 'verificarLogin');
-
-            $this->assertTrue($response['result'], 'Uma conta sem expiração deveria entrar.');
-            $this->assertTrue($this->ci()->session->userdata('logado'));
-        } finally {
-            $db->where('email', 'admin@admin.com')->update('usuarios', ['dataExpiracao' => $original]);
-        }
+        $this->assertTrue($response['result'], 'Uma conta sem expiração deveria entrar.');
+        $this->assertTrue($this->ci()->session->userdata('logado'));
     }
 
     /**
