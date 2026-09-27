@@ -25,7 +25,7 @@ $totalProdutos = 0; ?>
                                     </tr>
                                 <?php } else { ?>
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> " style="max-height: 100px"></td>
+                                        <td style="width: 25%"><img src="<?= esc_img_src($emitente->url_logo) ?>" style="max-height: 100px"></td>
                                         <td>
                                             <span style="font-size: 20px;"><?= esc($emitente->nome) ?></span></br>
                                             <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= esc($emitente->cnpj) ?></span></br><?php } ?>
@@ -231,7 +231,7 @@ $totalProdutos = 0; ?>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0; text-align:center;">
                                             <img style="margin:0px" src="<?= base_url() ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                                             <?= '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ?>
                                         </td>
                                     <?php endif ?>

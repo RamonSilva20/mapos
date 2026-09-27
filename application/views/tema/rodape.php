@@ -11,7 +11,7 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function() {
-        var dataTableEnabled = <?= esc_js($configuration['control_datatable']) ?>;
+        var dataTableEnabled = <?= esc_json($configuration['control_datatable']) ?>;
         if(dataTableEnabled == '1') {
             $('#tabela').dataTable( {
                 "pageLength": <?= (int) $configuration['per_page'] ?>,

@@ -21,7 +21,7 @@
                     <?= $topo ?>
                     <div class="widget-title">
                         <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
+                            <?= esc($title) ?>
                         </h4>
                     </div>
                     <div class="widget_content nopadding">

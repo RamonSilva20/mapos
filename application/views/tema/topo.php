@@ -140,7 +140,7 @@
       <section class="sec_profile">
         <div class="profile">
           <div class="profile-img">
-            <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
+            <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= esc_img_src(!is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . rawurlencode($this->session->userdata('url_image_user_admin'))) ?>" alt=""></a>
           </div>
         </div>
       </section>

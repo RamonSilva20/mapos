@@ -67,7 +67,7 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                     </tr>
                                 <?php } ?>
-                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?= sprintf('%04d', $result->idOs) ?></h3>
+                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?= esc(sprintf('%04d', $result->idOs)) ?></h3>
                             </tbody>
                         </table>
                         <table class="table table-condensend">
@@ -94,7 +94,7 @@
 $endereco = implode(', ', array_map('html_escape', $retorno_end));
 echo '<i class="fas fa-map-marker-alt"></i> ';
 if (!empty($endereco)) {
-    echo $endereco;
+    echo esc($endereco);
 }
 if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
     echo "<span> " . html_escape($result->cep) . ", " . html_escape($result->cidade) . "/" . html_escape($result->estado) . "</span><br>";
@@ -370,7 +370,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
                 <img src="<?= base_url() ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
-                <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                <img id="qrCodeImage" width="50%" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                 <?= '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>' ?></br>
                 <?php if ($totalProdutos != 0 || $totalServico != 0) {
                     if ($result->valor_desconto != 0) {
@@ -408,7 +408,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
 
             var link = $(this).attr('link');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
 
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -481,7 +481,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_js($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_json($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
             window.open(whatsappLink, '_blank');
         } else {
             swal({

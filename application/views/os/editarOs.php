@@ -1135,7 +1135,7 @@ if (!$anotacoes) {
             var idProduto = $(this).attr('idAcao');
             var quantidade = $(this).attr('quantAcao');
             var produto = $(this).attr('prodAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idProduto % 1) == 0) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1166,7 +1166,7 @@ if (!$anotacoes) {
 
         $(document).on('click', '.servico', function (event) {
             var idServico = $(this).attr('idAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idServico % 1) == 0) {
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1209,7 +1209,7 @@ if (!$anotacoes) {
         $(document).on('click', '#excluir-anexo', function (event) {
             event.preventDefault();
             var link = $(this).attr('link');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -1234,7 +1234,7 @@ if (!$anotacoes) {
 
         $(document).on('click', '.anotacao', function (event) {
             var idAnotacao = $(this).attr('idAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idAnotacao % 1) == 0) {
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({

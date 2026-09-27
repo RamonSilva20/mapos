@@ -32,7 +32,7 @@
                                     <tr>
                                         <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php } else { ?> 
-                                    <td style="width: 25%; text-align: center;"><img src="<?= esc($emitente->url_logo) ?>" style="max-height: 100px"></td>
+                                    <td style="width: 25%; text-align: center;"><img src="<?= esc_img_src($emitente->url_logo) ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
                                                 <b><?= esc($emitente->nome) ?></b></span> </br><span>
@@ -132,7 +132,7 @@
                                     <tr>
                                         <td colspan="4" style="text-align: center;">
                                             <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
-                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /><br>
+                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /><br>
                                             <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= esc($chaveFormatada) ?></span>
                                         </td>
                                     </tr>

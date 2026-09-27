@@ -42,8 +42,8 @@
                                         </div>
                                         <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= esc($this->session->userdata('nome_admin')) ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= esc($this->session->userdata('id_admin')) ?>" />
                                         </div>
                                         <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>

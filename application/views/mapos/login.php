@@ -17,18 +17,25 @@
     <div class="left-login">
       <!-- Saudação -->
       <h1 class="h-one">
-        <?php
-        function saudacao($nome = '')
-        {
-            $hora = date('H');
-            if ($hora >= 00 && $hora < 12) {
-                return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
-            } elseif ($hora >= 12 && $hora < 18) {
-                return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
-            } else {
-                return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
-            }
-        }
+      <?php
+      // O guard é obrigatório: o CI3 dá include na view a cada render, e sem
+      // ele a segunda renderização no mesmo processo quebra com "Cannot
+      // redeclare". Uma requisição web morre no fim da resposta, então nunca
+      // apareceu em produção, mas trava a suíte in-process e qualquer worker
+      // que passe por esta tela.
+      if (! function_exists('saudacao')) {
+          function saudacao($nome = '')
+          {
+              $hora = date('H');
+              if ($hora >= 00 && $hora < 12) {
+                  return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+              } elseif ($hora >= 12 && $hora < 18) {
+                  return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+              } else {
+                  return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+              }
+          }
+      }
   $login = 'bem-vindo';
   echo saudacao($login);
   // Irá retornar conforme o horário:

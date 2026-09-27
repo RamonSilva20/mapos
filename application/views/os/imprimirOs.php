@@ -22,7 +22,7 @@ $totalProdutos = 0;
                     </div>
                 <?php else : ?>
                     <div class="imgLogo" class="align-middle">
-                        <img src="<?= esc($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
+                        <img src="<?= esc_img_src($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
                     </div>
                     <div class="emitente">
                         <span style="font-size: 16px;"><b><?= esc($emitente->nome) ?></b></span></br>
@@ -44,7 +44,7 @@ $totalProdutos = 0;
             <section>
                 <div class="title">
                     <?php if ($configuration['control_2vias']) : ?><span class="via">Via cliente</span><?php endif; ?>
-                    ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                    ORDEM DE SERVIÇO #<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?>
                     <span class="emissao">Emissão: <?= date('d/m/Y H:i:s') ?></span>
                 </div>
 
@@ -207,7 +207,7 @@ $totalProdutos = 0;
                     <div class="pagamento">
                         <div class="qrcode">
                             <?php if ($this->data['configuration']['pix_key']) : ?>
-                                <div><img width="130px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></div>
+                                <div><img width="130px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></div>
                                 <div style="display: flex; flex-wrap: wrap; align-content: center;">
                                     <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
                                     <div class="chavePix">Chave Pix: <b><?= esc($chaveFormatada) ?></b></div>
@@ -255,7 +255,7 @@ $totalProdutos = 0;
             <footer>
                 <div class="detalhes">
                     <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                    <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
+                    <span>ORDEM DE SERVIÇO <b>#<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?></b></span>
                     <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                 </div>
                 <div class="assinaturas">
@@ -274,7 +274,7 @@ $totalProdutos = 0;
                         </div>
                     <?php else : ?>
                         <div class="imgLogo" class="align-middle">
-                            <img src="<?= esc($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
+                            <img src="<?= esc_img_src($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
                         </div>
                         <div class="emitente">
                             <span style="font-size: 16px;"><b><?= esc($emitente->nome) ?></b></span></br>
@@ -299,7 +299,7 @@ $totalProdutos = 0;
                         <?php $totalServico = 0;
 $totalProdutos = 0; ?>
                         <?php if ($configuration['control_2vias']) : ?><span class="via">Via Empresa</span><?php endif; ?>
-                        ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                        ORDEM DE SERVIÇO #<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?>
                         <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                     </div>
 
@@ -462,7 +462,7 @@ $totalProdutos = 0; ?>
                         <div class="pagamento">
                             <div class="qrcode">
                                 <?php if ($this->data['configuration']['pix_key']) : ?>
-                                    <div><img width="130px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></div>
+                                    <div><img width="130px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></div>
                                     <div style="display: flex; flex-wrap: wrap; align-content: center;">
                                         <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
                                         <div class="chavePix">Chave Pix: <b><?= esc($chaveFormatada) ?></b></div>
@@ -510,7 +510,7 @@ $totalProdutos = 0; ?>
                 <footer>
                     <div class="detalhes">
                         <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                        <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
+                        <span>ORDEM DE SERVIÇO <b>#<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?></b></span>
                         <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                     </div>
                     <div class="assinaturas">
@@ -530,7 +530,7 @@ $totalProdutos = 0; ?>
                         </div>
                     <?php else : ?>
                         <div id="imgLogo" class="align-middle">
-                            <img src="<?= esc($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
+                            <img src="<?= esc_img_src($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
                         </div>
                         <div style="padding-left: 10px; padding-right: 10px; margin-top: 3px;">
                             <span style="font-size: 16px;"><b><?= esc($emitente->nome) ?></b></span></br>
@@ -551,7 +551,7 @@ $totalProdutos = 0; ?>
                 </header>
                 <section>
                     <div class="title">
-                        ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                        ORDEM DE SERVIÇO #<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?>
                         <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                     </div>
                     <div class="subtitle">ANEXO(S)</div>
@@ -564,7 +564,7 @@ foreach ($anexos as $a) :
         $thumb = $a->url.'/thumbs/'.$a->thumb;
         $link  = $a->url.'/'.$a->anexo;
         ?>
-                                        <img src="<?= esc($link) ?>" alt="">
+                                        <img src="<?= esc_img_src($link) ?>" alt="">
                             <?php
     endif;
 endforeach;

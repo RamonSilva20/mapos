@@ -55,7 +55,7 @@
                                                     </tr>
                                                 <?php } else { ?>
                                                     <tr>
-                                                        <td style="width: 25%"><img src=" <?= esc($emitente[0]->url_logo) ?> "></td>
+                                                        <td style="width: 25%"><img src="<?= esc_img_src($emitente[0]->url_logo) ?>"></td>
                                                         <td><span style="font-size: 20px; "> <?= esc($emitente[0]->nome) ?></span> </br>
                                                             <span><?= esc($emitente[0]->cnpj) ?> </br> <?= esc($emitente[0]->rua) . ', nº:' . esc($emitente[0]->numero) . ', ' . esc($emitente[0]->bairro) . ' - ' . esc($emitente[0]->cidade) . ' - ' . esc($emitente[0]->uf) ?> </span> </br>
                                                             <span> E-mail: <?= esc($emitente[0]->email) . ' - Fone: ' . esc($emitente[0]->telefone) ?></span>
