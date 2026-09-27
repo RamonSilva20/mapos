@@ -33,3 +33,5 @@ assets/userImage
 
 # Marcador de ambiente do tooling local; é um mountpoint, não um arquivo do projeto.
 .ai-jail
+
+/assets/arquivos/*
