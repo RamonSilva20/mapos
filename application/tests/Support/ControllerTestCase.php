@@ -34,7 +34,7 @@ abstract class ControllerTestCase extends TestCase
 
     protected function ci(): object
     {
-        return get_instance();
+        return TestApplication::superObject();
     }
 
     protected function resetApplicationState(): void
@@ -173,6 +173,26 @@ abstract class ControllerTestCase extends TestCase
         TestApplication::resetSharedState();
 
         $controller = new $class();
+
+        // O autoloader roda dentro de CI_Controller::__construct(), uma vez por
+        // controller construído, e ele carrega o banco. Loader::database()
+        // deveria devolver a conexão já aberta, mas a guarda dele testa
+        // isset($CI->db) com $CI = get_instance() — e, no meio do construtor,
+        // get_instance() é o controller que está nascendo, que ainda não tem a
+        // propriedade $db. A guarda falha, o Loader abre uma conexão nova e a
+        // guarda mesmo, que é a que o processo inteiro usa.
+        //
+        // Numa requisição web isso é inofensivo: um request, um controller, uma
+        // conexão. Na suíte não é, porque a conexão é única do processo e é nela
+        // que a transação do caso é aberta: trocá-la no meio do teste deixa a
+        // transação órfã e faz toda escrita do teste ser commitada na hora.
+        // Por isso o controller passa a apontar para a conexão do processo, e a
+        // sobra é fechada em vez de vazar.
+        if (isset($controller->db) && $controller->db !== $ci->db) {
+            $sobra = $controller->db;
+            $controller->db = $ci->db;
+            $sobra->close();
+        }
 
         ob_start();
 

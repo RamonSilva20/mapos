@@ -39,6 +39,27 @@ final class TestApplication
     ];
 
     /**
+     * O objeto super do CI3, montado uma vez por boot().
+     */
+    private static ?object $super = null;
+
+    /**
+     * O objeto super do CI3: o que Codeigniter.php constrói no boot.
+     *
+     * Enquanto um controller está em construção, get_instance() devolve o
+     * controller, não este objeto. O harness chama isto para poder falar com o
+     * super de forma estável, inclusive entre dois controllers seguidos.
+     */
+    public static function superObject(): object
+    {
+        if (self::$super === null) {
+            throw new \LogicException('TestApplication::boot() precisa rodar antes de superObject().');
+        }
+
+        return self::$super;
+    }
+
+    /**
      * Sobe o app do CI3 no ambiente de testes. Só pode ser chamado uma vez por
      * processo.
      *
@@ -92,6 +113,14 @@ final class TestApplication
         ob_start();
         require TestDatabase::rootPath() . '/index.php';
         ob_end_clean();
+
+        // O objeto super do CI3, o que Codeigniter.php constrói no boot. A partir
+        // de agora get_instance() passa a devolver controllers, porque
+        // CI_Controller::__construct() faz self::$instance =& $this, e é por
+        // isso que o harness precisa guardar esta referência: é ela que continua
+        // sendo a fonte de $ci->db, $ci->output e $ci->load para o resto do
+        // processo.
+        self::$super = get_instance();
 
         // Estado limpo para quem vier a seguir; cada caso recomeça daqui.
         $_SESSION = [];
@@ -149,7 +178,24 @@ final class TestApplication
             $this->_ci_models = [];
         };
 
-        $resetModels->call(get_instance()->load);
+        $resetModels->call(self::superObject()->load);
+
+        // CI_Controller::$instance é private static, e o último controller
+        // construído continua apontado para lá. Sem esta volta, o get_instance()
+        // de quem vem depois entrega um controller já jogado fora — e é por ele
+        // que Loader::database() resolve o $CI, o que faz a suíte abrir uma
+        // conexão nova a cada controller. O Closure::bind amarra a closure ao
+        // escopo da CI_Controller, sem objeto, para poder escrever na
+        // propriedade privada estática.
+        $restoreInstance = \Closure::bind(
+            function (object $super): void {
+                self::$instance = $super;
+            },
+            null,
+            \CI_Controller::class
+        );
+
+        $restoreInstance(self::$super);
     }
 
     /**
