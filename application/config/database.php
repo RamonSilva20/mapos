@@ -7,6 +7,7 @@ $query_builder = true;
 $db['default'] = [
     'dsn' => $_ENV['DB_DSN'] ?? '',
     'hostname' => $_ENV['DB_HOSTNAME'] ?? 'enter_hostname',
+    'port' => $_ENV['DB_PORT'] ?? '',
     'username' => $_ENV['DB_USERNAME'] ?? 'enter_db_username',
     'password' => $_ENV['DB_PASSWORD'] ?? 'enter_db_password',
     'database' => $_ENV['DB_DATABASE'] ?? 'enter_database_name',

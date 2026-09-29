@@ -1,7 +1,7 @@
 <table class="table table-bordered table-condensed">
     <tr>
         <td style="width: 180px">
-            <img style="width: 150px;" src="<?= esc($em_logo) ?>">
+            <img style="width: 150px;" src="<?= esc_img_src($em_logo) ?>">
         </td>
 
         <td>

@@ -34,7 +34,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
-                                <form action="<?= current_url() ?>" method="post" id="formOs">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formOs">
                                 <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                                     <div class="span12" style="padding: 1%;">
                                         <div class="span12 alert alert-info">

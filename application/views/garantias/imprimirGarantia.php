@@ -87,7 +87,7 @@
                                             <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar</a>
                                                 <<<</td> </tr> <?php
                                     } else { ?> <tr>
-                                            <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> "></td>
+                                            <td style="width: 25%"><img src="<?= esc_img_src($emitente->url_logo) ?>"></td>
                                             <td> <span style="font-size: 20px; ">
                                                     <?= esc($emitente->nome) ?></span> <br />
                                                 <span>

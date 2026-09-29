@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p style="margin-left:10px">
 			File: <?= esc($error['file']) ?><br />
 			Line: <?= esc($error['line']) ?><br />
-			Function: <?= $error['function'] ?>
+			Function: <?= esc($error['function']) ?>
 			</p>
 
 		<?php endif ?>

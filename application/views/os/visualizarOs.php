@@ -5,7 +5,7 @@
             <div class="widget-title" style="margin: 10px 0 0">
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . esc_url(base_url() . 'index.php/os/editar/' . rawurlencode((string) $result->idOs)) . '">
                             <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span>
                         </a>';
                     } ?>
@@ -67,7 +67,7 @@
                                         <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                     </tr>
                                 <?php } ?>
-                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?= sprintf('%04d', $result->idOs) ?></h3>
+                                <h3><i class='bx bx-file'></i> Ordem de Serviço #<?= esc(sprintf('%04d', $result->idOs)) ?></h3>
                             </tbody>
                         </table>
                         <table class="table table-condensend">
@@ -94,7 +94,7 @@
 $endereco = implode(', ', array_map('html_escape', $retorno_end));
 echo '<i class="fas fa-map-marker-alt"></i> ';
 if (!empty($endereco)) {
-    echo $endereco;
+    echo esc($endereco);
 }
 if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
     echo "<span> " . html_escape($result->cep) . ", " . html_escape($result->cidade) . "/" . html_escape($result->estado) . "</span><br>";
@@ -220,7 +220,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <tbody>
                                     <?php foreach ($anotacoes as $a) {
                                         echo '<tr>';
-                                        echo '<td>' . $a->anotacao . '</td>';
+                                        echo '<td>' . esc($a->anotacao) . '</td>';
                                         echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
                                         echo '</tr>';
                                     }
@@ -248,7 +248,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                 $thumb = $a->url . '/thumbs/' . $a->thumb;
                                                 $link = $a->url . '/' . $a->anexo;
                                             }
-                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . esc_img_src($thumb) . '" alt=""></a></div>';
                                         } ?>
                                     </th>
                                 </tbody>
@@ -269,9 +269,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <tbody>
                                     <?php foreach ($produtos as $p) {
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td>' . esc($p->descricao) . '</td>';
+                                        echo '<td>' . esc($p->quantidade) . '</td>';
+                                        echo '<td>R$ ' . esc($p->preco ?: $p->precoVenda) . '</td>';
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
@@ -300,9 +300,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 $preco = $s->preco ?: $s->precoVenda;
                                 $subtotal = $preco * ($s->quantidade ?: 1);
                                 echo '<tr>';
-                                echo '<td>' . $s->nome . '</td>';
-                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                echo '<td>R$ ' . $preco . '</td>';
+                                echo '<td>' . esc($s->nome) . '</td>';
+                                echo '<td>' . esc($s->quantidade ?: 1) . '</td>';
+                                echo '<td>R$ ' . esc($preco) . '</td>';
                                 echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                 echo '</tr>';
                             } ?>
@@ -370,7 +370,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
                 <img src="<?= base_url() ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
-                <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                <img id="qrCodeImage" width="50%" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                 <?= '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>' ?></br>
                 <?php if ($totalProdutos != 0 || $totalServico != 0) {
                     if ($result->valor_desconto != 0) {
@@ -408,7 +408,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
             event.preventDefault();
 
             var link = $(this).attr('link');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
 
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
@@ -420,7 +420,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                 data: "idOs=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                        $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                     } else {
                         swal({
                             type: "error",
@@ -481,7 +481,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_js($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_json($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
             window.open(whatsappLink, '_blank');
         } else {
             swal({

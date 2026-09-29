@@ -27,7 +27,7 @@
                                 } else { ?>
 
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> "></td>
+                                        <td style="width: 25%"><img src="<?= esc_img_src($emitente->url_logo) ?>"></td>
                                         <td> <span style="font-size: 20px; ">
                                                 <?= esc($emitente->nome) ?></span> </br><span>
                                                 <?= esc($emitente->cnpj) ?> </br>
@@ -75,7 +75,7 @@
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 12%; padding: 0;text-align:center;">
                                             <img style="margin:12px 0px 0px 0px" src="<?= base_url() ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:5px 0px 0px 0px" width="94px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                                             <?= '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ?>
                                         </td>
                                     <?php endif ?>
@@ -137,8 +137,8 @@
                                     foreach ($produtos as $p) {
                                         $totalProdutos = $totalProdutos + $p->subTotal;
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
+                                        echo '<td>' . esc($p->descricao) . '</td>';
+                                        echo '<td>' . esc($p->quantidade) . '</td>';
 
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';

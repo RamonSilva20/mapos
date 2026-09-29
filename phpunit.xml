@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="application/vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="application/tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         beStrictAboutOutputDuringTests="false"
+         failOnWarning="true"
+         failOnNotice="true"
+         failOnDeprecation="false"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnPhpunitDeprecations="false">
+    <!--
+        Um testsuite só, e não um por pasta. O PHPUnit serial não sente a
+        diferença: os quatro diretórios viram um diretório. O ParaTest sente, porque
+        ele cria um conjunto de processos por testsuite, e quatro testsuites
+        multiplicam o número de processos por quatro sem nenhuma razão — a
+        suíte é uma, e dividir o diretório não divide o trabalho.
+
+        O sufixo padrão do PHPUnit é `Test.php`, e é ele que mantém
+        `application/tests/bin/*.php` e o próprio `bootstrap.php` fora da
+        coleta.
+    -->
+    <testsuites>
+        <testsuite name="Map-OS">
+            <directory>application/tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">application/controllers</directory>
+            <directory suffix=".php">application/models</directory>
+            <directory suffix=".php">application/helpers</directory>
+        </include>
+    </source>
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+</phpunit>

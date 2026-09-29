@@ -173,7 +173,7 @@ class Migration_create_base extends CI_Migration
             ],
             'saldo' => [
                 'type' => 'DECIMAL',
-                'constraint' => 10, 2,
+                'constraint' => '10,2',
                 'null' => true,
             ],
             'cadastro' => [
@@ -584,12 +584,12 @@ class Migration_create_base extends CI_Migration
             ],
             'precoCompra' => [
                 'type' => 'DECIMAL',
-                'constraint' => 10, 2,
+                'constraint' => '10,2',
                 'null' => true,
             ],
             'precoVenda' => [
                 'type' => 'DECIMAL',
-                'constraint' => 10, 2,
+                'constraint' => '10,2',
                 'null' => false,
             ],
             'estoque' => [
@@ -694,7 +694,7 @@ class Migration_create_base extends CI_Migration
             ],
             'preco' => [
                 'type' => 'DECIMAL',
-                'constraint' => 10, 2,
+                'constraint' => '10,2',
                 'null' => false,
             ],
         ]);

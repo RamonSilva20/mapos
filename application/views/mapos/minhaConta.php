@@ -109,7 +109,7 @@
                         <section>
                             <div class="profileMC">
                                 <div class="profile-img">
-                                    <img src="<?= (!$usuario->url_image_user || !is_file(FCPATH . "assets/userImage/" . $usuario->url_image_user)) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $usuario->url_image_user ?>" alt="">
+                                    <img src="<?= esc_img_src((!$usuario->url_image_user || !is_file(FCPATH . "assets/userImage/" . $usuario->url_image_user)) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . rawurlencode($usuario->url_image_user)) ?>" alt="">
                                     <a href="#modalImageUser" data-toggle="modal" role="button"><span class="tip-top img-user button__icon" title="Alterar Foto"><i class='bx bxs-camera'></i></span></a>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                         <li class="bg_lg span12" style="margin-left: 0"><strong>Email:
                                 <?= esc($usuario->email) ?></strong></li>
                         <li class="bg_lo span12" style="margin-left: 0"><strong>Nível:
-                                <?= $usuario->permissao; ?></strong></li>
+                                <?= esc($usuario->permissao) ?></strong></li>
                         <li class="bg_lh span12" style="margin-left: 0; border-bottom-left-radius: 9px;border-bottom-right-radius: 9px"><strong>Acesso expira em:
                                 <?= date('d/m/Y', strtotime($usuario->dataExpiracao)); ?></strong></li>
                     </ul>

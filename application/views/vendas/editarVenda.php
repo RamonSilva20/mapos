@@ -26,7 +26,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divEditarVenda">
-                                <form action="<?= current_url() ?>" method="post" id="formVendas">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formVendas">
                                     <?= form_hidden('idVendas', $result->idVendas) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>Venda:
@@ -181,10 +181,10 @@ foreach ($produtos as $p) {
     $preco = $p->preco ?: $p->precoVenda;
     $total = $total + $p->subTotal;
     echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
-    echo '<td><div align="center">' . $p->quantidade . '</td>';
-    echo '<td><div align="center">R$: ' . $preco . '</td>';
-    echo '<td><div align="center"><a href="" idAcao="' . $p->idItens . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
+    echo '<td>' . esc($p->descricao) . '</td>';
+    echo '<td><div align="center">' . esc($p->quantidade) . '</td>';
+    echo '<td><div align="center">R$: ' . esc($preco) . '</td>';
+    echo '<td><div align="center"><a href="" idAcao="' . esc($p->idItens) . '" prodAcao="' . esc($p->idProdutos) . '" quantAcao="' . esc($p->quantidade) . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>';
     echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, '.', '') . '</td>';
     echo '</tr>';
 } ?>
@@ -226,7 +226,7 @@ foreach ($produtos as $p) {
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formFaturar" action="<?= current_url() ?>" method="post">
+    <form id="formFaturar" action="<?= esc_url(current_url()) ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar Venda</h3>
@@ -417,7 +417,7 @@ foreach ($produtos as $p) {
                             title: "Sucesso",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                        $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                         /*setTimeout(function() {
@@ -429,7 +429,7 @@ foreach ($produtos as $p) {
                             title: "Atenção",
                             text: response.messages
                         });
-                        $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                        $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                         $("#desconto").val("");
                         $("#resultado").val("");
                     }
@@ -441,7 +441,7 @@ foreach ($produtos as $p) {
                         title: "Atenção",
                         text: response.responseJSON.messages
                     });
-                    $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                    $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                     $("#desconto").val("");
                     $("#resultado").val("");
                 }
@@ -610,7 +610,7 @@ foreach ($produtos as $p) {
                         dataType: 'json',
                         success: function(data) {
                             if (data.result == true) {
-                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                                $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#produto").val('').focus();
@@ -622,7 +622,7 @@ foreach ($produtos as $p) {
                                     title: "Atenção",
                                     html: "Ocorreu um erro ao tentar adicionar produto. <br /><br />Error: " + data.messages
                                 });
-                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                                $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                                 $('#formProdutos')[0].reset();
                             }
                         }
@@ -644,7 +644,7 @@ foreach ($produtos as $p) {
                     dataType: 'json',
                     success: function(data) {
                         if (data.result == true) {
-                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                            $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                             $("#resultado").val("");
                             $("#desconto").val("");
                         } else {
@@ -653,7 +653,7 @@ foreach ($produtos as $p) {
                                 title: "Atenção",
                                 html: "Ocorreu um erro ao tentar excluir produto." + data.messages
                             });
-                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                            $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                         }
                     }
                 });

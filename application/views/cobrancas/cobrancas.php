@@ -42,33 +42,36 @@
                         );
 
                         echo '<tr>';
-                        echo '<td>' . $r->idCobranca . '</td>';
-                        echo '<td>' . $r->payment_gateway . '</td>';
-                        echo '<td>' . $r->payment_method . '</td>';
-                        echo '<td>' . $dataVenda . '</td>';
+                        echo '<td>' . esc($r->idCobranca) . '</td>';
+                        echo '<td>' . esc($r->payment_gateway) . '</td>';
+                        echo '<td>' . esc($r->payment_method) . '</td>';
+                        echo '<td>' . esc($dataVenda) . '</td>';
 
                         if ($r->os_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '"> Ordem de Serviço: #' . $r->os_id . '</a></td>';
+                            echo '<td><a href="' . esc_url(base_url() . 'index.php/os/visualizar/' . rawurlencode((string) $r->os_id)) . '"> Ordem de Serviço: #' . esc($r->os_id) . '</a></td>';
                         }
                         if ($r->vendas_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '"> Venda: #' . $r->vendas_id . '</a></td>';
+                            echo '<td><a href="' . esc_url(base_url() . 'index.php/vendas/visualizar/' . rawurlencode((string) $r->vendas_id)) . '"> Venda: #' . esc($r->vendas_id) . '</a></td>';
                         }
 
-                        echo '<td>' .  $cobrancaStatus . '</td>';
+                        echo '<td>' .  esc($cobrancaStatus) . '</td>';
                         echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
                         echo '<td>';
+                        $cobrancaUrl = static function (string $action) use ($r): string {
+                            return esc_url(base_url() . 'index.php/cobrancas/' . $action . '/' . rawurlencode((string) $r->idCobranca));
+                        };
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->idCobranca . '" class="btn-nwe4" title="Cancelar Cobrança"><i class="bx bx-x" ></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->idCobranca . '" class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
-                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->idCobranca . '" class="btn-nwe3" title="Confirmar pagamento"><i class="bx bx-check"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->idCobranca . '" class="btn-nwe2" title="Ver mais detalhes"><i class="bx bx-show" ></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/enviarEmail/' . $r->idCobranca . '" class="btn-nwe5" title="Enviar por E-mail"><i class="bx bx-envelope" ></i></a>';
+                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . esc($r->idCobranca) . '" class="btn-nwe4" title="Cancelar Cobrança"><i class="bx bx-x" ></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . $cobrancaUrl('atualizar') . '" class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
+                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . esc($r->idCobranca) . '" class="btn-nwe3" title="Confirmar pagamento"><i class="bx bx-check"></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . $cobrancaUrl('visualizar') . '" class="btn-nwe2" title="Ver mais detalhes"><i class="bx bx-show" ></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . $cobrancaUrl('enviarEmail') . '" class="btn-nwe5" title="Enviar por E-mail"><i class="bx bx-envelope" ></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
-                            echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
+                            echo '<a style="margin-right: 1%" href="' . esc_url($r->link) . '" target="_blank" rel="noopener noreferrer" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCobranca')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" excluir_id="' . $r->idCobranca . '" class="btn-nwe4" title="Excluir Cobrança"><i class="bx bx-trash-alt"></i></a>';
+                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" excluir_id="' . esc($r->idCobranca) . '" class="btn-nwe4" title="Excluir Cobrança"><i class="bx bx-trash-alt"></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';

@@ -8,8 +8,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <p>Type: <?= get_class($exception) ?></p>
 <p>Message: <?= esc($message) ?></p>
-<p>Filename: <?= $exception->getFile() ?></p>
-<p>Line Number: <?= $exception->getLine() ?></p>
+<p>Filename: <?= esc($exception->getFile()) ?></p>
+<p>Line Number: <?= esc($exception->getLine()) ?></p>
 
 <?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === true) : ?>
 
@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p style="margin-left:10px">
 			File: <?= esc($error['file']) ?><br />
 			Line: <?= esc($error['line']) ?><br />
-			Function: <?= $error['function'] ?>
+			Function: <?= esc($error['function']) ?>
 			</p>
 		<?php endif ?>
 

@@ -107,11 +107,11 @@
             };
 
             echo '<tr>';
-            echo '<td>' . $r->idVendas . '</td>';
-            echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
-            echo '<td class="ph1">' . $r->nome . '</td>';
-            echo '<td>' . $dataVenda . '</td>';
-            echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+            echo '<td>' . esc($r->idVendas) . '</td>';
+            echo '<td><a href="' . esc_url(base_url() . 'index.php/clientes/visualizar/' . rawurlencode((string) $r->idClientes)) . '">' . esc($r->nomeCliente) . '</a></td>';
+            echo '<td class="ph1">' . esc($r->nome) . '</td>';
+            echo '<td>' . esc($dataVenda) . '</td>';
+            echo '<td class="ph3"><span class="badge" style="background-color: ' . esc_css($corGarantia) . '; border-color: ' . esc_css($corGarantia) . '">' . esc($vencGarantia) . '</span> </td>';
 
             if ($r->faturado == 1) {
                 echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
@@ -129,24 +129,24 @@
                 echo '<td>R$ 0,00</td>';
             }
 
-            echo '<td><span class="badge" style="background-color: ' . $corStatus . '; border-color: ' . $corStatus . '">' . $r->status . '</span> </td>';
-            echo '<td>' . $faturado . '</td>';
+            echo '<td><span class="badge" style="background-color: ' . esc_css($corStatus) . '; border-color: ' . esc_css($corStatus) . '">' . esc($r->status) . '</span> </td>';
+            echo '<td>' . esc($faturado) . '</td>';
             echo '<td style="text-align:left">';
 
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirTermica/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/vendas/visualizar/' . rawurlencode((string) $r->idVendas)) . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/vendas/imprimir/' . rawurlencode((string) $r->idVendas)) . '" target="_blank" rel="noopener noreferrer" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/vendas/imprimirTermica/' . rawurlencode((string) $r->idVendas)) . '" target="_blank" rel="noopener noreferrer" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
             }
 
             $editavel = $this->vendas_model->isEditable($r->idVendas);
 
             if ($r->faturado != 1 || $editavel) {
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';
+                    echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/vendas/editar/' . rawurlencode((string) $r->idVendas)) . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';
                 }
                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
-                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="' . $r->idVendas . '" class="btn-nwe4" title="Excluir Venda"><i class="bx bx-trash-alt bx-xs"></i></a>';
+                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="' . esc($r->idVendas) . '" class="btn-nwe4" title="Excluir Venda"><i class="bx bx-trash-alt bx-xs"></i></a>';
                 }
             }
             echo '</td>';

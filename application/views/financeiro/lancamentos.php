@@ -40,7 +40,7 @@ $periodo = $this->input->get('periodo');
     <?php } ?>
 
     <div class="span12" style="margin-left: 0;margin-top: 1rem;">
-        <form action="<?= current_url() ?>" method="get">
+        <form action="<?= esc_url(current_url()) ?>" method="get">
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
@@ -141,16 +141,16 @@ foreach ($results as $r) {
         $label = 'important';
     }
     echo '<tr>';
-    echo '<td>' . $r->idLancamentos . '</td>';
-    echo '<td><span class="label label-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-    echo '<td>' . $r->cliente_fornecedor . '</td>';
-    echo '<td>' . $r->descricao . '</td>';
-    echo '<td>' . $vencimento . '</td>';
-    echo '<td>' . $status . '</td>';
-    echo '<td>' . $r->observacoes . '</td>';
-    echo '<td>' . $r->forma_pgto . '</td>';
+    echo '<td>' . esc($r->idLancamentos) . '</td>';
+    echo '<td><span class="label label-' . esc($label) . '">' . esc(ucfirst($r->tipo)) . '</span></td>';
+    echo '<td>' . esc($r->cliente_fornecedor) . '</td>';
+    echo '<td>' . esc($r->descricao) . '</td>';
+    echo '<td>' . esc($vencimento) . '</td>';
+    echo '<td>' . esc($status) . '</td>';
+    echo '<td>' . esc($r->observacoes) . '</td>';
+    echo '<td>' . esc($r->forma_pgto) . '</td>';
     echo '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; //valor total sem o desconto
-    echo  $r->tipo_desconto == "real" ? '<td>' . "R$ ".$r->desconto . '</td>' : ($r->tipo_desconto == "porcento" ? '<td>' . $r->desconto." %" . '</td>' : '<td>' . "0" . '</td>'); // valor do desconto
+    echo  $r->tipo_desconto == "real" ? '<td>' . esc("R$ " . $r->desconto) . '</td>' : ($r->tipo_desconto == "porcento" ? '<td>' . esc($r->desconto . " %") . '</td>' : '<td>0</td>'); // valor do desconto
     echo $r->valor_desconto != 0 ? '<td> R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>' : '<td> R$ ' . number_format($r->valor, 2, ',', '.') . '</td>'; // valor total  com o desconto
                            
     echo '<td>';
@@ -161,10 +161,10 @@ foreach ($results as $r) {
     }
 
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $r->valor . '" vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) . '" pagamento="' . $data_pagamento . '" baixado="' . $r->baixado . '" cliente="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" observacoes="' . $r->observacoes . '" descontos_editar="' . $r->desconto . '" valor_desconto_editar="' . ($r->valor_desconto != 0 ? $r->valor_desconto : $r->valor) . '" usuario="' . $r->nome . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
+        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" role="button" idLancamento="' . esc($r->idLancamentos) . '" descricao="' . esc($r->descricao) . '" valor="' . esc($r->valor) . '" vencimento="' . esc(date('d/m/Y', strtotime($r->data_vencimento))) . '" pagamento="' . esc($data_pagamento) . '" baixado="' . esc($r->baixado) . '" cliente="' . esc($r->cliente_fornecedor) . '" formaPgto="' . esc($r->forma_pgto) . '" tipo="' . esc($r->tipo) . '" observacoes="' . esc($r->observacoes) . '" descontos_editar="' . esc($r->desconto) . '" valor_desconto_editar="' . esc($r->valor_desconto != 0 ? $r->valor_desconto : $r->valor) . '" usuario="' . esc($r->nome) . '" class="btn-nwe3 editar" title="Editar OS"><i class="bx bx-edit"></i></a>';
     }
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-        echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . $r->idLancamentos . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
+        echo '<a href="#modalExcluir" data-toggle="modal" role="button" idLancamento="' . esc($r->idLancamentos) . '" class="btn-nwe4 excluir" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>';
     }
 
     echo '</td>';
@@ -271,7 +271,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?= esc(current_url()) ?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -388,7 +388,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
           <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>"/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?= esc(current_url()) ?>"/>
     	</div>	
     	        
     		<div class="span6" style="margin-left: 0"> 
@@ -487,84 +487,6 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
     </form>
 </div>
 
-<!-- Modal nova despesa (NAO É UTILIZADO MAIS ESSE MODAL)
-<div id="modalDespesa" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formDespesa" action="<?php // echo base_url()?>index.php/financeiro/adicionarDespesa" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3>
-        </div>
-        <div class="modal-body">
-            <div class="span12 alert alert-info" style="margin-left: 0"> Obrigatório o preenchimento dos campos com
-                asterisco.
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <label for="descricao">Descrição*</label>
-                <input class="span12" id="descricao" type="text" name="descricao" />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?php  // echo current_url()?>" />
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span12" style="margin-left: 0">
-                    <label for="fornecedor">Fornecedor / Empresa*</label>
-                    <input class="span12" id="fornecedor" type="text" name="fornecedor" />
-                    <input class="span12" id="idFornecedor" type="hidden" name="idFornecedor" />
-                </div>
-
-                <div class="span12" style="margin-left: 0">
-                    <label for="observacoes">Observações</label>
-                    <textarea class="span12" id="observacoes" name="observacoes"></textarea>
-                </div>
-
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span4" style="margin-left: 0">
-                    <label for="valor">Valor*</label>
-                    <input type="hidden" name="tipo" value="despesa" />
-                    <input class="span12 money" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal="." />
-                </div>
-                <div class="span4">
-                    <label for="vencimento">Data Vencimento*</label>
-                    <input class="span12 datepicker" autocomplete="off" type="text" name="vencimento" />
-                </div>
-
-            </div>
-            <div class="span12" style="margin-left: 0">
-                <div class="span4" style="margin-left: 0">
-                    <label for="pago">Foi Pago?</label>
-                    &nbsp &nbsp &nbsp &nbsp<input id="pago" type="checkbox" name="pago" value="1" />
-                </div>
-                <div id="divPagamento" class="span8" style=" display: none">
-                    <div class="span6">
-                        <label for="pagamento">Data Pagamento</label>
-                        <input class="span12 datepicker" autocomplete="off" id="pagamento" type="text" name="pagamento" />
-                    </div>
-
-                    <div class="span6">
-                        <label for="formaPgto">Forma Pgto</label>
-                        <select name="formaPgto" class="span12">
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="Cartão de Crédito">Cartão de Crédito</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="Boleto">Boleto</option>
-                            <option value="Depósito">Depósito</option>
-                            <option value="Débito">Débito</option>
-                            <option value="Pix">Pix</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
-                <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger" id="submitDespesa">
-                <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar Despesa</span></button>
-        </div>
-    </form>
-</div>
- -->
 
 <!-- Modal editar lançamento -->
 <div id="modalEditar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -837,41 +759,6 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
         });
 
 
-        $("#formDespesa").validate({
-            rules: {
-                descricao: {
-                    required: true
-                },
-                fornecedor: {
-                    required: true
-                },
-                valor: {
-                    required: true
-                },
-                vencimento: {
-                    required: true
-                }
-
-            },
-            messages: {
-                descricao: {
-                    required: 'Campo Requerido.'
-                },
-                fornecedor: {
-                    required: 'Campo Requerido.'
-                },
-                valor: {
-                    required: 'Campo Requerido.'
-                },
-                vencimento: {
-                    required: 'Campo Requerido.'
-                }
-            },
-            submitHandler: function(form) {
-                $("#submitDespesa").attr("disabled", true);
-                form.submit();
-            }
-        });
 
 
         $(document).on('click', '.excluir', function(event) {
@@ -931,7 +818,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             });
             return false;
         });
-        let controlBaixa = <?= esc_js($configuration['control_baixa']) ?>;
+        let controlBaixa = <?= esc_json($configuration['control_baixa']) ?>;
         let datePickerOptions = {
             dateFormat: 'dd/mm/yy',
         };

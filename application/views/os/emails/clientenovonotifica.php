@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= esc_img_src($emitente->url_logo) ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -168,7 +168,7 @@
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    <?= $emitente->nome; ?>
+                    <?= esc($emitente->nome) ?>
                 </td>
             </tr>
             

@@ -58,7 +58,7 @@
                                 $situacao = ($r->situacao == 1) ? 'Ativo' : 'Inativo';
                             $situacaoClasse = ($r->situacao == 1) ? 'situacao-ativo' : 'situacao-inativo';
                             ?>
-                                <td><span class="badge <?= esc($situacaoClasse) ?>"><?= ucfirst($situacao) ?></span></td>
+                                <td><span class="badge <?= esc($situacaoClasse) ?>"><?= esc($situacao) ?></span></td>
                                 <td><?= esc($r->dataExpiracao) ?></td>
                                 <td>
                                     <a href="<?= base_url('index.php/usuarios/editar/' . $r->idUsuarios) ?>" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>

@@ -136,7 +136,7 @@
                      echo '<div class="alert alert-danger">' . $custom_error . '</div>';
                  } ?>
             </div>
-            <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
+            <form action="<?= esc_url(current_url()) ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">

@@ -78,11 +78,11 @@
                             <td style="text-align: right"><strong>Status atual</strong></td>
                             <td>
                                 <?php
-                                    echo getCobrancaTransactionStatus(
+                                    echo esc(getCobrancaTransactionStatus(
                                         $this->config->item('payment_gateways'),
                                         $result->payment_gateway,
                                         $result->status
-                                    );
+                                    ));
                                 ?>
                             </td>
                         </tr>

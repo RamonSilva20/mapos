@@ -189,18 +189,18 @@
                         $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                         $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
                         echo '<tr>';
-                        echo '<td>' . $r->idOs . '</td>';
-                        echo '<td>' . $dataInicial . '</td>';
-                        echo '<td>' . $dataFinal . '</td>';
+                        echo '<td>' . esc($r->idOs) . '</td>';
+                        echo '<td>' . esc($dataInicial) . '</td>';
+                        echo '<td>' . esc($dataFinal) . '</td>';
                         echo '<td>' . printSafeHtml($r->descricaoProduto) . '</td>';
                         echo '<td>' . printSafeHtml($r->defeito) . '</td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            echo '<a href="' . esc_url(base_url() . 'index.php/os/visualizar/' . rawurlencode((string) $r->idOs)) . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                            echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                            echo '<a href="' . esc_url(base_url() . 'index.php/os/editar/' . rawurlencode((string) $r->idOs)) . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
                         }
 
                         echo  '</td>';
@@ -254,17 +254,17 @@
                             $faturado = 'Não';
                         }
                         echo '<tr>';
-                        echo '<td>' . $r->idVendas . '</td>';
-                        echo '<td>' . $dataVenda . '</td>';
-                        echo '<td>' . $faturado . '</td>';
-                        echo '<td>R$' . $r->valorTotal. '</td>';
+                        echo '<td>' . esc($r->idVendas) . '</td>';
+                        echo '<td>' . esc($dataVenda) . '</td>';
+                        echo '<td>' . esc($faturado) . '</td>';
+                        echo '<td>R$' . esc($r->valorTotal). '</td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                            echo '<a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                            echo '<a href="' . esc_url(base_url() . 'index.php/vendas/visualizar/' . rawurlencode((string) $r->idVendas)) . '" style="margin-right: 1%" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                            echo '<a href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+                            echo '<a href="' . esc_url(base_url() . 'index.php/vendas/editar/' . rawurlencode((string) $r->idVendas)) . '" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
                         }
                         echo  '</td>';
                         echo '</tr>';
@@ -279,7 +279,7 @@
     </div>
     <div class="modal-footer" style="display:flex;justify-content: center">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-            echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . base_url() . 'index.php/clientes/editar/' . $result->idClientes . '">
+            echo '<a title="Icon Title" class="button btn btn-mini btn-info" style="min-width: 140px; top:10px" href="' . esc_url(base_url() . 'index.php/clientes/editar/' . rawurlencode((string) $result->idClientes)) . '">
 <span class="button__icon"><i class="bx bx-edit"></i></span> <span class="button__text2"> Editar</span></a>';
         } ?>
         <a title="Voltar" class="button btn btn-mini btn-warning" style="min-width: 140px; top:10px" href="<?= site_url() ?>/clientes">

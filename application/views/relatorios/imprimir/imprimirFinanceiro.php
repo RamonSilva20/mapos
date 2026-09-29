@@ -61,15 +61,15 @@
             $totalDespesa += $l->valor_desconto != 0 ? $l->valor_desconto : $l->valor;
         }
         echo '<tr>';
-        echo '<td>' . $l->cliente_fornecedor . '</td>';
-        echo '<td>' . $l->tipo . '</td>';
+        echo '<td>' . esc($l->cliente_fornecedor) . '</td>';
+        echo '<td>' . esc($l->tipo) . '</td>';
         echo '<td>' . 'R$ ' . number_format($l->valor, 2, ',', '.') . '</td>';
         echo '<td>' . ($l->tipo_desconto == "real" ? "R$ " : "") . number_format($l->desconto, 2, ',', '.') . ($l->tipo_desconto == "porcento" ? " %" : "") . '</td>';
         echo '<td>' . 'R$ ' . number_format($l->valor_desconto != 0 ? $l->valor_desconto : $l->valor, 2, ',', '.') . '</td>';
-        echo '<td>' . $vencimento . '</td>';
-        echo '<td>' . $pagamento . '</td>';
-        echo '<td>' . $l->forma_pgto . '</td>';
-        echo '<td>' . $situacao . '</td>';
+        echo '<td>' . esc($vencimento) . '</td>';
+        echo '<td>' . esc($pagamento) . '</td>';
+        echo '<td>' . esc($l->forma_pgto) . '</td>';
+        echo '<td>' . esc($situacao) . '</td>';
         echo '</tr>';
     }
     ?>

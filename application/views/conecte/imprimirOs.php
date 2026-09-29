@@ -22,7 +22,7 @@ $totalProdutos = 0;
                     </div>
                 <?php else : ?>
                     <div class="imgLogo" class="align-middle">
-                        <img src="<?= esc($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
+                        <img src="<?= esc_img_src($emitente->url_logo) ?>" class="img-fluid" style="width:140px;">
                     </div>
                     <div class="emitente">
                         <span style="font-size: 16px;"><b><?= esc($emitente->nome) ?></b></span></br>
@@ -44,7 +44,7 @@ $totalProdutos = 0;
             <section>
                 <div class="title">
 
-                    ORDEM DE SERVIÇO #<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?>
+                    ORDEM DE SERVIÇO #<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?>
                     <span class="emissao">Emissão: <?= date('d/m/Y') ?></span>
                 </div>
 
@@ -147,8 +147,8 @@ $totalProdutos = 0;
                                 <?php foreach ($produtos as $p) :
                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                     echo '<tr>';
-                                    echo '  <td>' . $p->descricao . '</td>';
-                                    echo '  <td class="text-center">' . $p->quantidade . '</td>';
+                                    echo '  <td>' . esc($p->descricao) . '</td>';
+                                    echo '  <td class="text-center">' . esc($p->quantidade) . '</td>';
                                     echo '  <td class="text-center">' . number_format($p->preco ?: $p->precoVenda, 2, ',', '.') . '</td>';
                                     echo '  <td class="text-end">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
@@ -181,8 +181,8 @@ $totalProdutos = 0;
                         $subtotal = $preco * ($s->quantidade ?: 1);
                         $totalServico = $totalServico + $subtotal;
                         echo '<tr>';
-                        echo '  <td>' . $s->nome . '</td>';
-                        echo '  <td class="text-center">' . ($s->quantidade ?: 1) . '</td>';
+                        echo '  <td>' . esc($s->nome) . '</td>';
+                        echo '  <td class="text-center">' . esc($s->quantidade ?: 1) . '</td>';
                         echo '  <td class="text-center">' . number_format($preco, 2, ',', '.') . '</td>';
                         echo '  <td class="text-end">R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                         echo '</tr>';
@@ -200,7 +200,7 @@ $totalProdutos = 0;
                     <div class="pagamento">
                         <div class="qrcode">
                             <?php if ($chaveFormatada) : ?>
-                                <div><img width="130px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></div>
+                                <div><img width="130px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></div>
                                 <div style="display: flex; flex-wrap: wrap; align-content: center;">
                                     <div style="width: 100%; text-align:center;"><i class="fas fa-camera"></i><br />Escaneie o QRCode ao lado para pagar por Pix</div>
                                     <div class="chavePix">Chave Pix: <b><?= esc($chaveFormatada) ?></b></div>
@@ -248,7 +248,7 @@ $totalProdutos = 0;
             <footer>
                 <div class="detalhes">
                     <span>Data inicial: <b><?= date('d/m/Y', strtotime($result->dataInicial)) ?></b></span>
-                    <span>ORDEM DE SERVIÇO <b>#<?= str_pad($result->idOs, 4, 0, STR_PAD_LEFT) ?></b></span>
+                    <span>ORDEM DE SERVIÇO <b>#<?= esc(str_pad($result->idOs, 4, 0, STR_PAD_LEFT)) ?></b></span>
                     <span>Data final: <b><?= $result->dataFinal ? date('d/m/Y', strtotime($result->dataFinal)) : '' ?></b></span>
                 </div>
                 <div class="assinaturas">
