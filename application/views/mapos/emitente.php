@@ -172,15 +172,15 @@
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
-                                <td style="width: 25%"><img src="<?= $dados->url_logo; ?>"></td>
+                                <td style="width: 25%"><img src="<?= esc_img_src($dados->url_logo) ?>"></td>
                                 <td>
-                                    <span style="font-size: 20px; "><b><?= $dados->nome; ?></b></span></br>
-                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= $dados->cnpj; ?> <?php if (!empty($dados->ie)) {
-                                        echo ' - IE:' . $dados->ie;
+                                    <span style="font-size: 20px; "><b><?= esc($dados->nome) ?></b></span></br>
+                                    <i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= esc($dados->cnpj) ?> <?php if (!empty($dados->ie)) {
+                                        echo ' - IE:' . esc($dados->ie);
                                     } ?></br>
-                                    <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?= $dados->rua . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cep . ', ' . $dados->cidade . '/' . $dados->uf; ?></br>
-                                    <i class="fas fa-phone" style="margin:5px 1px"></i> <?= $dados->telefone; ?></br>
-                                    <i class="fas fa-envelope" style="margin:5px 1px"></i> <?= $dados->email; ?></br>
+                                    <i class="fas fa-map-marker-alt" style="margin:4px 3px"></i> <?= esc($dados->rua) . ', ' . esc($dados->numero) . ', ' . esc($dados->bairro) . ' - ' . esc($dados->cep) . ', ' . esc($dados->cidade) . '/' . esc($dados->uf) ?></br>
+                                    <i class="fas fa-phone" style="margin:5px 1px"></i> <?= esc($dados->telefone) ?></br>
+                                    <i class="fas fa-envelope" style="margin:5px 1px"></i> <?= esc($dados->email) ?></br>
                                     </span>
                                 </td>
                             </tr>
@@ -207,71 +207,71 @@
                 <div class="control-group">
                     <label for="nome" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="nomeEmitente" type="text" name="nome" value="<?= $dados->nome; ?>" placeholder="Razão Social*" />
-                        <input id="nome" type="hidden" name="id" value="<?= $dados->id; ?>" />
+                        <input id="nomeEmitente" type="text" name="nome" value="<?= esc($dados->nome) ?>" placeholder="Razão Social*" />
+                        <input id="nome" type="hidden" name="id" value="<?= esc($dados->id) ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cnpj" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input class="cnpjEmitente" type="text" id="documento" name="cnpj" value="<?= $dados->cnpj; ?>" placeholder="CNPJ*" title="Para ocultar o CNPJ digite 00.000.000/000-00" />
+                        <input class="cnpjEmitente" type="text" id="documento" name="cnpj" value="<?= esc($dados->cnpj) ?>" placeholder="CNPJ*" title="Para ocultar o CNPJ digite 00.000.000/000-00" />
                         <button style="top:34px;right:40px;position:absolute" id="buscar_info_cnpj" class="btn btn-xs" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"></label>
                     <div class="controls">
-                        <input type="text" name="ie" value="<?= $dados->ie; ?>" placeholder="IE" />
+                        <input type="text" name="ie" value="<?= esc($dados->ie) ?>" placeholder="IE" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="cep" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="cep" type="text" name="cep" value="<?= $dados->cep; ?>" placeholder="CEP*" />
+                        <input id="cep" type="text" name="cep" value="<?= esc($dados->cep) ?>" placeholder="CEP*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="rua" name="logradouro" value="<?= $dados->rua; ?>"
+                        <input type="text" id="rua" name="logradouro" value="<?= esc($dados->rua) ?>"
                             placeholder="Logradouro*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="numero" name="numero" value="<?= $dados->numero; ?>" placeholder="Número*" />
+                        <input type="text" id="numero" name="numero" value="<?= esc($dados->numero) ?>" placeholder="Número*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="bairro" name="bairro" value="<?= $dados->bairro; ?>" placeholder="Bairro*" />
+                        <input type="text" id="bairro" name="bairro" value="<?= esc($dados->bairro) ?>" placeholder="Bairro*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="cidade" name="cidade" value="<?= $dados->cidade; ?>" placeholder="Cidade*" />
+                        <input type="text" id="cidade" name="cidade" value="<?= esc($dados->cidade) ?>" placeholder="Cidade*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="estado" name="uf" value="<?= $dados->uf; ?>" placeholder="UF*" />
+                        <input type="text" id="estado" name="uf" value="<?= esc($dados->uf) ?>" placeholder="UF*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input type="text" id="telefone" name="telefone" value="<?= $dados->telefone; ?>"
+                        <input type="text" id="telefone" name="telefone" value="<?= esc($dados->telefone) ?>"
                             placeholder="Telefone*" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="descricao" class="control-label"><span class="required"></span></label>
                     <div class="controls">
-                        <input id="email" type="text" name="email" value="<?= $dados->email; ?>" placeholder="E-mail*" />
+                        <input id="email" type="text" name="email" value="<?= esc($dados->email) ?>" placeholder="E-mail*" />
                     </div>
                 </div>
             </div>
@@ -294,7 +294,7 @@
                     <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
                     <div class="controls">
                         <input type="file" name="userfile" value="" />
-                        <input id="nome" type="hidden" name="id" value="<?= $dados->id; ?>" />
+                        <input id="nome" type="hidden" name="id" value="<?= esc($dados->id) ?>" />
                     </div>
                 </div>
             </div>

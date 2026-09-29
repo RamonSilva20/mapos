@@ -15,7 +15,7 @@
                 <?php if ($custom_error != '') {
                     echo '<div class="alert alert-danger">' . $custom_error . '</div>';
                 } ?>
-                <form action="<?= current_url() ?>" id="formUsuario" method="post" class="form-horizontal">
+                <form action="<?= esc_url(current_url()) ?>" id="formUsuario" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?= form_hidden('idUsuarios', $result->idUsuarios) ?>
                         <label for="nome" class="control-label">Nome<span class="required">*</span></label>
@@ -145,7 +145,7 @@
                                     } else {
                                         $selected = '';
                                     }
-                                    echo '<option value="' . $p->idPermissao . '"' . $selected . '>' . $p->nome . '</option>';
+                                    echo '<option value="' . esc($p->idPermissao) . '"' . esc($selected) . '>' . esc($p->nome) . '</option>';
                                 } ?>
                             </select>
                         </div>

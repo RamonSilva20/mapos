@@ -25,7 +25,7 @@ $totalProdutos = 0; ?>
                                     </tr>
                                 <?php } else { ?>
                                     <tr>
-                                        <td style="width: 25%"><img src=" <?= esc($emitente->url_logo) ?> " style="max-height: 100px"></td>
+                                        <td style="width: 25%"><img src="<?= esc_img_src($emitente->url_logo) ?>" style="max-height: 100px"></td>
                                         <td>
                                             <span style="font-size: 20px;"><?= esc($emitente->nome) ?></span></br>
                                             <?php if ($emitente->cnpj != "00.000.000/0000-00") { ?><span class="icon"><i class="fas fa-fingerprint" style="margin:5px 1px"></i> <?= esc($emitente->cnpj) ?></span></br><?php } ?>
@@ -141,7 +141,7 @@ $totalProdutos = 0; ?>
                                             $thumb = $a->url . '/thumbs/' . $a->thumb;
                                             $link = $a->url . '/' . $a->anexo;
                                         }
-                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
+                                        echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . esc_img_src($thumb) . '" alt=""></a></div>';
                                     } ?>
                                     </th>
                                 </tbody>
@@ -164,10 +164,11 @@ $totalProdutos = 0; ?>
                                 <tbody>
                                     <?php foreach ($produtos as $p) {
                                         $totalProdutos = $totalProdutos + $p->subTotal;
+                                        $precoProduto = $p->preco ?: $p->precoVenda;
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td>' . esc($p->descricao) . '</td>';
+                                        echo '<td>' . esc($p->quantidade) . '</td>';
+                                        echo '<td>R$ ' . esc($precoProduto) . '</td>';
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
@@ -198,9 +199,9 @@ $totalProdutos = 0; ?>
                                 $preco = $s->preco ?: $s->precoVenda;
                                 $subtotal = $preco * ($s->quantidade ?: 1);
                                 echo '<tr>';
-                                echo '<td>' . $s->nome . '</td>';
-                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                echo '<td>R$ ' . $preco . '</td>';
+                                echo '<td>' . esc($s->nome) . '</td>';
+                                echo '<td>' . esc($s->quantidade ?: 1) . '</td>';
+                                echo '<td>R$ ' . esc($preco) . '</td>';
                                 echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                 echo '</tr>';
                             } ?>
@@ -231,7 +232,7 @@ $totalProdutos = 0; ?>
                                     <?php if ($qrCode) : ?>
                                         <td style="width: 15%; padding-left: 0; text-align:center;">
                                             <img style="margin:0px" src="<?= base_url() ?>assets/img/logo_pix.png" width="48px" alt="QR Code de Pagamento" /></br>
-                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                                            <img style="margin:6px 0px 0px 0px" width="94px" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                                             <?= '<span style="margin:0px;font-size: 80%;text-align:center;">Chave PIX: ' . esc($chaveFormatada) . '</span>' ?>
                                         </td>
                                     <?php endif ?>

@@ -2,7 +2,6 @@
 
 $finder = Symfony\Component\Finder\Finder::create()
     ->notPath('vendor')
-    ->notPath('bootstrap')
     ->notPath('storage')
     // Local development mounts a MySQL data directory here; it is not project code.
     ->exclude('docker/data')

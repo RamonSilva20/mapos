@@ -8,7 +8,7 @@ class Migration_add_usuarios_lancamentos extends CI_Migration
             'usuarios_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
-                'null' => true,
+                'null' => false,
             ],
         ]);
         $this->db->query('ALTER TABLE `lancamentos` ADD INDEX `fk_lancamentos_usuarios1` (`usuarios_id` ASC)');

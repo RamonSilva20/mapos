@@ -119,20 +119,24 @@
     <div id="userr" style="padding-right:45px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;">
       <div class="user-names userT0">
         <?php
-        function saudacao()
-        {
-            $hora = date('H');
-            if ($hora >= 00 && $hora < 12) {
-                return 'Bom dia, ';
-            } elseif ($hora >= 12 && $hora < 18) {
-                return 'Boa tarde, ';
-            } else {
-                return 'Boa noite, ';
+        // A view e incluída a cada render, então a função precisa do mesmo
+        // guard de `mapos/login.php`: uma segunda renderização no mesmo
+        // processo morre com "Cannot redeclare".
+        if (! function_exists('saudacao')) {
+            function saudacao()
+            {
+                $hora = date('H');
+                if ($hora >= 00 && $hora < 12) {
+                    return 'Bom dia, ';
+                } elseif ($hora >= 12 && $hora < 18) {
+                    return 'Boa tarde, ';
+                } else {
+                    return 'Boa noite, ';
+                }
             }
         }
 
-  $login = '';
-  echo saudacao($login); // Irá retornar conforme o horário
+  echo esc(saudacao()); // Irá retornar conforme o horário
   ?>
       </div>
       <div class="userT"><?= esc($this->session->userdata('nome_admin')) ?></div>
@@ -140,7 +144,7 @@
       <section class="sec_profile">
         <div class="profile">
           <div class="profile-img">
-            <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= !is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . $this->session->userdata('url_image_user_admin') ?>" alt=""></a>
+            <a href="<?= site_url('mapos/minhaConta'); ?>"><img src="<?= esc_img_src(!is_file(FCPATH . "assets/userImage/" . $this->session->userdata('url_image_user_admin')) ?  base_url() . "assets/img/User.png" : base_url() . "assets/userImage/" . rawurlencode($this->session->userdata('url_image_user_admin'))) ?>" alt=""></a>
           </div>
         </div>
       </section>

@@ -78,7 +78,24 @@ class Configuracoes extends Seeder
             ],
         ];
 
+        // Sete destas chaves já vêm das migrations, cada uma inserida com o
+        // mesmo idConfig que a seed usaria: control_baixa, control_editos,
+        // control_datatable, pix_key, os_status_list, control_edit_vendas e
+        // control_2vias. `configuracoes.config` tem UNIQUE (`unique_valor`), então
+        // um insert cego aborta com 1062 duplicate entry, e aborta logo na
+        // primeira linha — o que tornava o Tools::seed() impossível de
+        // reexecutar em qualquer instalação, inclusive numa freshly migrada,
+        // onde a migration já deixou a linha no lugar.
+        $existentes = array_column(
+            $this->db->select('config')->get($this->table)->result_array(),
+            'config'
+        );
+
         foreach ($configs as $config) {
+            if (in_array($config['config'], $existentes, true)) {
+                continue;
+            }
+
             $this->db->insert($this->table, $config);
         }
 

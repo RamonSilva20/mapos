@@ -27,7 +27,7 @@
                                 <?php if ($custom_error == true) { ?>
                                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                                 <?php } ?>
-                                <form action="<?= current_url() ?>" method="post" id="formVendas">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formVendas">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span2">
                                             <label for="dataInicial">Data da Venda<span class="required">*</span></label>
@@ -42,8 +42,8 @@
                                         </div>
                                         <div class="span3">
                                             <label for="tecnico">Vendedor<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= esc($this->session->userdata('nome_admin')) ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= esc($this->session->userdata('id_admin')) ?>" />
                                         </div>
                                         <div class="span2">
                                             <label for="status">Status<span class="required">*</span></label>

@@ -150,31 +150,31 @@ foreach ($results as $r) {
     }
 
     echo '<tr>';
-    echo '<td>' . $r->idOs . '</td>';
-    echo '<td class="cli1"><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-    echo '<td class="ph1">' . $r->nome . '</td>';
-    echo '<td>' . $dataInicial . '</td>';
-    echo '<td class="ph2">' . $dataFinal . '</td>';
-    echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
+    echo '<td>' . esc($r->idOs) . '</td>';
+    echo '<td class="cli1"><a href="' . esc_url(base_url() . 'index.php/clientes/visualizar/' . rawurlencode((string) $r->idClientes)) . '" style="margin-right: 1%">' . esc($r->nomeCliente) . '</a></td>';
+    echo '<td class="ph1">' . esc($r->nome) . '</td>';
+    echo '<td>' . esc($dataInicial) . '</td>';
+    echo '<td class="ph2">' . esc($dataFinal) . '</td>';
+    echo '<td class="ph3"><span class="badge" style="background-color: ' . esc_css($corGarantia) . '; border-color: ' . esc_css($corGarantia) . '">' . esc($vencGarantia) . '</span> </td>';
     echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
     echo '<td>R$ ' . number_format(floatval($r->desconto), 2, ',', '.') . '</td>';
     echo '<td>R$ ' . number_format(floatval($r->valor_desconto), 2, ',', '.') . '</td>';
     echo '<td class="ph4">R$ ' . number_format($r->faturado ? floatval($r->valor_desconto) : 0.00, 2, ',', '.') . '</td>';
-    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
+    echo '<td><span class="badge" style="background-color: ' . esc_css($cor) . '; border-color: ' . esc_css($cor) . '">' . esc($r->status) . '</span> </td>';
     echo '<td>';
 
     $editavel = $this->os_model->isEditable($r->idOs);
 
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
-        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimirTermica/' . $r->idOs . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
+        echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/os/visualizar/' . rawurlencode((string) $r->idOs)) . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+        echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/os/imprimir/' . rawurlencode((string) $r->idOs)) . '" target="_blank" rel="noopener noreferrer" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
+        echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/os/imprimirTermica/' . rawurlencode((string) $r->idOs)) . '" target="_blank" rel="noopener noreferrer" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
     }
     if ($editavel) {
-        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+        echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/os/editar/' . rawurlencode((string) $r->idOs)) . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
     }
     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs') && $editavel) {
-        echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';
+        echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . esc($r->idOs) . '" class="btn-nwe4" title="Excluir OS"><i class="bx bx-trash-alt"></i></a>  ';
     }
     echo '</td>';
     echo '</tr>';

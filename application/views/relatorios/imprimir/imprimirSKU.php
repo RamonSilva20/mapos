@@ -42,16 +42,16 @@
                                 <?php
                                     foreach ($resultados as $r) {
                                         echo '<tr>';
-                                        echo '<td>' . $r->idClientes . '</td>';
-                                        echo '<td>' . $r->nomeCliente . '</td>';
-                                        echo '<td>' . $r->idProdutos . '</td>';
-                                        echo '<td>' . $r->descricao . '</td>';
-                                        echo '<td>' . $r->quantidade . '</td>';
-                                        echo '<td>' . $r->idRelacionado . '</td>';
+                                        echo '<td>' . esc($r->idClientes) . '</td>';
+                                        echo '<td>' . esc($r->nomeCliente) . '</td>';
+                                        echo '<td>' . esc($r->idProdutos) . '</td>';
+                                        echo '<td>' . esc($r->descricao) . '</td>';
+                                        echo '<td>' . esc($r->quantidade) . '</td>';
+                                        echo '<td>' . esc($r->idRelacionado) . '</td>';
                                         echo '<td>' . date('d/m/Y', strtotime($r->dataOcorrencia)) . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($r->preco, 2, ',', '.') . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($r->precoTotal, 2, ',', '.') . '</td>';
-                                        echo '<td>' . $r->origem . '</td>';
+                                        echo '<td>' . esc($r->origem) . '</td>';
                                         echo '</tr>';
                                     }
     ?>

@@ -17,7 +17,7 @@
                 <li><a data-toggle="tab" href="#menu6">API</a></li>
                 <li><a data-toggle="tab" href="#menu7">E-mail</a></li>
             </ul>
-            <form action="<?= current_url() ?>" id="formConfigurar" method="post" class="form-horizontal">
+            <form action="<?= esc_url(current_url()) ?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <?= $custom_error ?>
                     <!-- Menu Gerais -->
@@ -415,7 +415,7 @@
                         <div class="control-group">
                             <label for="apiEnabled" class="control-label">URL API</label>
                             <div class="controls">
-                                <span class="span10" id="urlApi" style="margin-top:7px;"><?= trim($_ENV['APP_BASEURL'], '/') . '/' ?>index.php/api/v1</span>
+                                <span class="span10" id="urlApi" style="margin-top:7px;"><?= esc(trim($_ENV['APP_BASEURL'], '/') . '/') ?>index.php/api/v1</span>
                             </div>
                         </div>
                         <div class="control-group">

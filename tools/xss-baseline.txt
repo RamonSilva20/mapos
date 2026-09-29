@@ -1,10 +1,70 @@
 # Baseline for tools/check_view_escaping.php
 #
-# Each entry is "application/views/relative/path.php|value expression" for a
-# place where a value intentionally reaches the page without an escaper.
-# Comment lines above an entry explain why.
+# Written by `php tools/check_view_escaping.php --update-baseline`. The counts
+# below are computed from the scan that wrote the file, so they cannot describe
+# a different state than the entries that follow them.
 #
-# This file is intentionally empty: every view output is currently escaped.
+# Each entry is "application/views/relative/path.php|value expression", or
+# "application/views/relative/path.php|prefix value expression" for the checks
+# that work on the whole file. A comment line above an entry is the expression.
+#
+# ---------------------------------------------------------------------------
+# There are no "unescaped" entries below. That debt is paid: every value that
+# reaches a page now goes through an escaper chosen for its context.
+#
+# The work started because of a hole in the gate, not a decision to leave
+# anything unescaped. The fifth output form only matched an echo whose value
+# started with a dollar sign, so a line that wrapped a database value in a
+# string concatenation - the most common way this project emits one - was
+# never read by any check. The fail-closed guard
+# (EscapingChecks::unrecognizedOutput()) is what surfaced them.
+# ---------------------------------------------------------------------------
+#
+# The 13 "unrecognized-output" entries are the guard reporting
+# tokens it could not read, and they are NOT debt - no value is left
+# unescaped. Ten are the word "print" in CSS (@media print) and JavaScript
+# (window.print()): not PHP at all, so no escaper applies, and the pattern is
+# deliberately wider than the forms so that a miss fails closed.
+#
+# The other three are views/errors/cli/*.php, which CodeIgniter loads only
+# when is_cli() is true (system/core/Exceptions.php selects the 'cli'
+# subdirectory). They echo a multi-line list of values to a terminal, and in
+# that branch CI3 does not wrap the message in <p>, so the output is plain
+# text rather than markup. Running esc() over it would show "&lt;" to whoever
+# is reading the error in their console, which is the wrong trade: the sink is
+# a terminal, not a browser, so HTML-encoding it is not what makes it safe.
+# They are entries rather than silence because the guard cannot prove that, and
+# the person who reads this file is the one who can.
+#
 # Run `php tools/check_view_escaping.php --update-baseline` after adding an
 # entry on purpose, and review the diff - each line is a decision to leave a
 # value unescaped.
+#
+
+# print();
+application/views/conecte/imprimirVenda.php|unrecognized-output: print();
+# print();
+application/views/conecte/minha_os.php|unrecognized-output: print();
+# print();
+application/views/conecte/visualizar_os.php|unrecognized-output: print();
+# echo "\nERROR: ",
+application/views/errors/cli/error_404.php|unrecognized-output: echo "\nERROR: ",
+# echo "\nDatabase error: ",
+application/views/errors/cli/error_db.php|unrecognized-output: echo "\nDatabase error: ",
+# echo "\nERROR: ",
+application/views/errors/cli/error_general.php|unrecognized-output: echo "\nERROR: ",
+# print {
+application/views/garantias/imprimirGarantia.php|unrecognized-output: print {
+# print {
+application/views/garantias/imprimirGarantiaOs.php|unrecognized-output: print {
+# print();
+application/views/os/imprimirOs.php|unrecognized-output: print();
+# print {
+application/views/os/imprimirOsTermica.php|unrecognized-output: print {
+# print();
+application/views/vendas/imprimirVenda.php|unrecognized-output: print();
+# print();
+application/views/vendas/imprimirVendaOrcamento.php|unrecognized-output: print();
+# print();
+application/views/vendas/imprimirVendaTermica.php|unrecognized-output: print();
+

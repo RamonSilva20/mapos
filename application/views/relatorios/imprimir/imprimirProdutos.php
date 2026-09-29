@@ -21,7 +21,7 @@
                     <?= $topo ?>
                     <div class="widget-title">
                         <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
+                            <?= esc($title) ?>
                         </h4>
                     </div>
                     <div class="widget-content nopadding tab-content">
@@ -41,11 +41,11 @@
                                 <?php
                                     foreach ($produtos as $p) {
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td align="center">' . $p->unidade . '</td>';
-                                        echo '<td align="center">R$: ' . $p->precoCompra . '</td>';
-                                        echo '<td align="center">R$: ' . $p->precoVenda . '</td>';
-                                        echo '<td align="center">' . $p->estoque . '</td>';
+                                        echo '<td>' . esc($p->descricao) . '</td>';
+                                        echo '<td align="center">' . esc($p->unidade) . '</td>';
+                                        echo '<td align="center">R$: ' . esc($p->precoCompra) . '</td>';
+                                        echo '<td align="center">R$: ' . esc($p->precoVenda) . '</td>';
+                                        echo '<td align="center">' . esc($p->estoque) . '</td>';
                                         echo '<td align="center">R$: ' . number_format($p->valorEstoque, 2, ',', '.') . '</td>';
                                         echo '<td align="center">R$: ' . number_format(floatval($p->estoque) * floatval($p->precoCompra), 2, ',', '.') . '</td>';
                                         echo '</tr>';

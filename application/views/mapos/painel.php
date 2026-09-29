@@ -284,18 +284,18 @@
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             datasets: [{
                     label: 'Receita Líquida',
-                    data: [<?= ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES) ?>
+                    data: [<?= (float) ($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES) ?>
                     ],
 
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -304,18 +304,18 @@
 
                 {
                     label: 'Receita Bruta',
-                    data: [<?= ($financeiro_mes->VALOR_JAN_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_FEV_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_MAR_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_ABR_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_MAI_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_JUN_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_JUL_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_AGO_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_SET_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_OUT_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_NOV_REC) ?>,
-                        <?= ($financeiro_mes->VALOR_DEZ_REC) ?>
+                    data: [<?= (float) ($financeiro_mes->VALOR_JAN_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_FEV_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAR_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_ABR_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAI_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUN_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUL_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_AGO_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_SET_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_OUT_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_NOV_REC) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_DEZ_REC) ?>
                     ],
 
                     backgroundColor: 'rgba(255, 206, 86, 0.5)',
@@ -324,18 +324,18 @@
 
                 {
                     label: 'Despesas',
-                    data: [<?= ($financeiro_mes->VALOR_JAN_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_FEV_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_MAR_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_ABR_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_MAI_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_JUN_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_JUL_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_AGO_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_SET_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_OUT_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_NOV_DES) ?>,
-                        <?= ($financeiro_mes->VALOR_DEZ_DES) ?>
+                    data: [<?= (float) ($financeiro_mes->VALOR_JAN_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_FEV_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAR_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_ABR_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_MAI_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUN_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_JUL_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_AGO_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_SET_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_OUT_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_NOV_DES) ?>,
+                        <?= (float) ($financeiro_mes->VALOR_DEZ_DES) ?>
                     ],
 
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -344,18 +344,18 @@
 
                 {
                     label: 'Inadimplência',
-                    data: [<?= ($financeiro_mesinadipl->VALOR_JAN_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_FEV_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_MAR_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_ABR_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_MAI_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_JUN_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_JUL_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_AGO_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_SET_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_OUT_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_NOV_REC) ?>,
-                        <?= ($financeiro_mesinadipl->VALOR_DEZ_REC) ?>
+                    data: [<?= (float) ($financeiro_mesinadipl->VALOR_JAN_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_FEV_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_MAR_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_ABR_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_MAI_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_JUN_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_JUL_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_AGO_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_SET_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_OUT_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_NOV_REC) ?>,
+                        <?= (float) ($financeiro_mesinadipl->VALOR_DEZ_REC) ?>
                     ],
 
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
@@ -1030,16 +1030,16 @@
                             <tr>
                                 <td>
                                     <?php if ($lancamento->tipo == 'receita'): ?>
-                                        <span class="label label-success"><b><?= ucfirst($lancamento->tipo) ?></b></span>
+                                        <span class="label label-success"><b><?= esc($lancamento->tipo) ?></b></span>
                                     <?php elseif ($lancamento->tipo == 'despesa'): ?>
-                                        <span class="label label-important"><b><?= ucfirst($lancamento->tipo) ?></b></span>
+                                        <span class="label label-important"><b><?= esc($lancamento->tipo) ?></b></span>
                                     <?php else: ?>
-                                        <?= ucfirst($lancamento->tipo) ?>
+                                        <?= esc($lancamento->tipo) ?>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-truncate"><?= esc($lancamento->cliente_fornecedor) ?></td>
                                 <td class="text-truncate"><?= esc($lancamento->descricao) ?></td>
-                                <td><?= date_format(date_create($lancamento->data_vencimento), 'd/m/Y') ?></td>
+                                <td><?= esc(date_format(date_create($lancamento->data_vencimento), 'd/m/Y')) ?></td>
                                 <td>R$ <?= number_format($lancamento->valor_desconto, 2, ',', '.') ?></td>
                             </tr>
                         <?php endforeach; ?>

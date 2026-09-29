@@ -21,7 +21,7 @@
                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente e responsável.</div>
                 <?php  } ?>
 
-                <form action="<?= current_url() ?>" method="post" id="formGarantia">
+                <form action="<?= esc_url(current_url()) ?>" method="post" id="formGarantia">
 
                     <div class="span12">
                         <div class="span2">

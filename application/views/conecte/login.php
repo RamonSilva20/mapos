@@ -67,7 +67,7 @@ $parse_email = $this->input->get('e');
                                         <div class="controls">
                                             <div class="main_input_box">
                                                 <span class="add-on bg_lg"><i class='bx bx-user-plus iconU'></i></span>
-                                                <input id="email" name="email" type="text" placeholder="Email" value="<?= trim($parse_email) ?>" />
+                                                <input id="email" name="email" type="text" placeholder="Email" value="<?= esc(trim($parse_email)) ?>" />
                                             </div>
                                         </div>
                                     </div>

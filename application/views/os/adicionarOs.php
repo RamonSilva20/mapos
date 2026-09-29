@@ -27,7 +27,7 @@
                                     <div class="span12 alert alert-danger" id="divInfo" style="padding: 1%;">Dados incompletos, verifique os campos com asterisco ou se selecionou corretamente cliente, responsável e garantia.<br />Ou se tem um cliente e um termo de garantia cadastrado.</div>
                                 <?php
                                 } ?>
-                                <form action="<?= current_url() ?>" method="post" id="formOs">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formOs">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span6">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
@@ -36,8 +36,8 @@
                                         </div>
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= $this->session->userdata('nome_admin'); ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= $this->session->userdata('id_admin'); ?>" />
+                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?= esc($this->session->userdata('nome_admin')) ?>" />
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?= esc($this->session->userdata('id_admin')) ?>" />
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">

@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= esc_img_src($emitente->url_logo) ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -138,7 +138,7 @@
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente->nome; ?> <br>
+                                <?= esc($emitente->nome) ?> <br>
                                 <?= esc($emitente->rua) ?>, <?= esc($emitente->numero) ?>, <?= esc($emitente->bairro) ?><br>
                                 <?= esc($emitente->cidade) ?> - <?= esc($emitente->uf) ?> <br> 
                                 CEP: <?= esc($emitente->cep) ?> <br>
@@ -154,7 +154,7 @@
             
                 <td colspan="4" style="text-align: left">
                     Caro(a) <b><?= esc($cliente->nomeCliente) ?></b>, 
-                    bem-vindo à <?= $emitente->nome; ?>! <br>
+                    bem-vindo à <?= esc($emitente->nome) ?>! <br>
 
                 </td>
 
@@ -171,7 +171,7 @@
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    Equipe <?= $emitente->nome; ?>
+                    Equipe <?= esc($emitente->nome) ?>
                 </td>
             </tr>
             

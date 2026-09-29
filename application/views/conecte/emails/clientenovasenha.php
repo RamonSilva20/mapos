@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= ($emitente ? esc($emitente->url_logo) : "") ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= esc_img_src(($emitente ? esc($emitente->url_logo) : "")) ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -134,7 +134,7 @@
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente ? $emitente->nome : ""; ?> <br>
+                                <?= esc($emitente ? $emitente->nome : '') ?> <br>
 
                             </td>
                         </tr>
@@ -153,7 +153,7 @@
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Por favor, para mudar sua senha clique <a class="btn btn-primary stretched-link" href="<?= base_url() . "index.php/mine/verifyTokenSenha/token/" . $resets_de_senha->token ?>">AQUI</a> <br>
+                    Por favor, para mudar sua senha clique <a class="btn btn-primary stretched-link" href="<?= esc_url(base_url() . "index.php/mine/verifyTokenSenha/token/" . rawurlencode($resets_de_senha->token)) ?>">AQUI</a> <br>
                     Ao carregar a página você devera digitar sua nova senha.
                 </td>
             </tr>
@@ -166,7 +166,7 @@
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    Equipe <?= $emitente ? $emitente->nome : ""; ?>
+                    Equipe <?= esc($emitente ? $emitente->nome : '') ?>
                 </td>
             </tr>
 

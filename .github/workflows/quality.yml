@@ -8,9 +8,38 @@ on:
 permissions:
   contents: read
 
+# Um job só, e não um por verificação. Os passos que não precisam de MySQL
+# (escaping, estilo) e os que precisam (suíte, paridade) dividiam a mesma
+# instalação de dependências e a mesma configuração de PHP, então dois jobs
+# pagavam duas vezes por download do Composer e podiam divergir na versão do PHP
+# sem ninguém perceber. A barreira de paridade precisa do mesmo banco e da
+# mesma versão da suíte, então separá-las não compraria isolamento nenhum.
 jobs:
-  checks:
+  quality:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          # A conexão do runner chega pelo bridge do Docker, não por socket, e
+          # por isso não casa com o root@localhost que a imagem cria.
+          MYSQL_ROOT_HOST: '%'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      MAPOS_TEST_DB_HOSTNAME: 127.0.0.1
+      MAPOS_TEST_DB_PORT: '3306'
+      MAPOS_TEST_DB_DATABASE: mapos_test
+      MAPOS_TEST_DB_USERNAME: root
+      MAPOS_TEST_DB_PASSWORD: root
 
     steps:
       - name: Checkout repository
@@ -34,3 +63,46 @@ jobs:
 
       - name: Check code style
         run: composer format:check
+
+      - name: Run the test suite
+        run: composer test
+
+      # O runner é limpo, então a execução acima pagou os ~9s da cadeia de
+      # migrations por completo. Esta segunda execução exercita o caminho que os
+      # desenvolvedores usam de verdade, o reaproveitamento, e é o único lugar
+      # onde ele é verificado: localmente ele só roda quando alguém lembra de
+      # rodar a suíte duas vezes.
+      #
+      # Não é uma barra de tempo, e não deveria virar uma. O ganho é do
+      # desenvolvimento local, onde o banco sobrevive entre execuções; no CI a
+      # máquina é descartada e o ganho é zero. O que se ganha aqui é a certeza de
+      # que o reaproveitamento não degradou em silêncio — degradar, aliás, é
+      # exatamente a forma como ele falha: remontar tudo e passar igual, só mais
+      # devagar. Por isso o passo exige a mensagem de reuso e não se limita a
+      # rodar o script.
+      - name: Run the schema setup again, requiring it to reuse the schema
+        run: |
+          saida=$(php application/tests/bin/setup-db.php)
+          echo "$saida"
+
+          if ! grep -q "reaproveitando" <<< "$saida"; then
+            echo "::error::A segunda montagem não reaproveitou o schema. O caminho de reuso está quebrado."
+            exit 1
+          fi
+
+          # A contagem das contas é conferida dentro do setup-db.php, que sai com
+          # erro se ela não bater. Aqui o que interessa é o caminho de reuso ter
+          # chegado até o fim, e o número fica de fora do grep de propósito: ele
+          # é TestFixtures::USER_COUNT, e escrevê-lo aqui seria uma segunda
+          # fonte para a mesma verdade.
+          if ! grep -q "usuários disponíveis" <<< "$saida"; then
+            echo "::error::O schema reaproveitado não percorreu a conferência de fixtures."
+            exit 1
+          fi
+
+      # A suíte monta o schema pelas migrations, e o instalador importa o
+      # banco.sql. Nada mais exercita os dois caminhos, então sem esta
+      # comparação eles podem divergir em silêncio — e foi exatamente isso que
+      # escondeu as colunas DECIMAL(10,0) do create_base por anos.
+      - name: Check banco.sql against the migrations
+        run: composer check:parity

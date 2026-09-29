@@ -29,11 +29,11 @@
             <tbody>
                 <?php foreach ($results as $r) {
                     echo '<tr>';
-                    echo '<td>' . $r->usuario . '</td>';
+                    echo '<td>' . esc($r->usuario) . '</td>';
                     echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
-                    echo '<td>' . $r->hora . '</td>';
-                    echo '<td>' . $r->ip . '</td>';
-                    echo '<td>' . $r->tarefa . '</td>';
+                    echo '<td>' . esc($r->hora) . '</td>';
+                    echo '<td>' . esc($r->ip) . '</td>';
+                    echo '<td>' . esc($r->tarefa) . '</td>';
                     echo '</tr>';
                 } ?>
                 <?php if (!$results) { ?>

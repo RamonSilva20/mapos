@@ -7,7 +7,7 @@
                         <?php
                         $editavel = $this->vendas_model->isEditable($result->idVendas);
 if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')): ?>
-                            <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?= base_url() . 'index.php/vendas/editar/' . $result->idVendas ?>">
+                            <a title="Editar Venda" class="button btn btn-mini btn-success" href="<?= esc_url(base_url() . 'index.php/vendas/editar/' . $result->idVendas) ?>">
                                 <span class="button__icon"><i class="bx bx-edit"></i></span>
                                 <span class="button__text">Editar</span>
                             </a>
@@ -18,7 +18,7 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                 <span class="button__icon"><i class="bx bx-printer"></i></span><span class="button__text">Imprimir</span>
                             </a>
                             <div class="cascading-buttons">
-                                <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?= site_url() . '/vendas/imprimirVendaOrcamento/' . $result->idVendas ?>">
+                                <a target="_blank" title="Imprimir Orcamento A4" class="button btn btn-mini btn-inverse" href="<?= esc_url(site_url() . '/vendas/imprimirVendaOrcamento/' . $result->idVendas) ?>">
                                     <span class="button__icon"><i class="bx bx-printer"></i></span>
                                     <span class="button__text">Orçamento</span>
                                 </a>
@@ -67,7 +67,7 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
                                                     <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?= base_url() ?>index.php/mapos/emitente">Configurar <<< </a></td>
                                                 </tr>
                                             <?php } ?>
-                                            <h3><i class='bx bx-cart'></i> Venda #<?= sprintf('%04d', $result->idVendas) ?></h3>
+                                            <h3><i class='bx bx-cart'></i> Venda #<?= esc(sprintf('%04d', $result->idVendas)) ?></h3>
                                         </tbody>
                                     </table>
                                     <table class="table table-condensend">
@@ -93,7 +93,7 @@ if (($result->faturado != 1 || $editavel) && $this->permission->checkPermission(
 $endereco = implode(', ', array_map('html_escape', $retorno_end));
 echo '<i class="fas fa-map-marker-alt"></i> ';
 if (!empty($endereco)) {
-    echo $endereco;
+    echo esc($endereco);
 }
 if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) {
     echo "<span> " . html_escape($result->cep) . ", " . html_escape($result->cidade) . "/" . html_escape($result->estado) . "</span><br>";
@@ -170,7 +170,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                 <td style="width: 10%;"><?= esc($p->codDeBarra) ?></td>
                                                 <td style="width: 70%;"><?= esc($p->descricao) ?></td>
                                                 <td style="width: 5%;"><?= esc($p->quantidade) ?></td>
-                                                <td style="width: 10%;">R$ <?= ($p->preco ?: $p->precoVenda) ?></td>
+                                                <td style="width: 10%;">R$ <?= esc($p->preco ?: $p->precoVenda) ?></td>
                                                 <td style="width: 10%;">R$ <?= number_format($p->subTotal, 2, ',', '.') ?></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -209,7 +209,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         <div class="span12" id="div-pix" style="text-align: center">
             <td style="width: 15%; padding: 0;text-align:center;">
                 <img src="<?= base_url() ?>assets/img/logo_pix.png" alt="QR Code de Pagamento" /></br>
-                <img id="qrCodeImage" width="50%" src="<?= esc($qrCode) ?>" alt="QR Code de Pagamento" /></br>
+                <img id="qrCodeImage" width="50%" src="<?= esc_img_src($qrCode) ?>" alt="QR Code de Pagamento" /></br>
                 <?= '<span>Chave PIX: ' . esc($chaveFormatada) . '</span>' ?></br>
                 <?php if ($totalProdutos != 0) {
                     if ($result->valor_desconto != 0) {
@@ -281,7 +281,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_js($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= esc_json($zapnumber ?? '') ?> + '&text=' + encodeURIComponent(code.data);
             window.open(whatsappLink, '_blank');
         } else {
             swal({

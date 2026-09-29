@@ -9,7 +9,7 @@
                 </span>
                 <h5>Arquivos</h5>
             </div>
-        <form method="get" action="<?= current_url(); ?>">
+        <form method="get" action="<?= esc_url(current_url()) ?>">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
                 <div class="span3">
                     <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="button btn btn-mini btn-success" style="max-width:150px">
@@ -59,7 +59,7 @@
                                 <td><?= esc($r->idDocumentos) ?></td>
                                 <td>
                                     <?php if (@getimagesize($r->path)) : ?>
-                                        <a href="<?= esc($r->url) ?>"> <img src="<?= esc($r->url) ?> "></a>
+                                        <a href="<?= esc($r->url) ?>"> <img src="<?= esc_img_src($r->url) ?>"></a>
                                     <?php else : ?>
                                         <span>-</span>
                                     <?php endif ?>
@@ -70,11 +70,11 @@
                                 <td><?= esc($r->tamanho) ?> KB</td>
                                 <td><?= esc($r->tipo) ?></td>
                                 <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                        <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
+                                        <a href="<?= esc_url(base_url() . 'index.php/arquivos/download/' . rawurlencode($r->idDocumentos)) ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                            <a href="<?= base_url() ?>index.php/arquivos/editar/<?= esc($r->idDocumentos) ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
+                                            <a href="<?= esc_url(base_url() . 'index.php/arquivos/editar/' . rawurlencode($r->idDocumentos)) ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>

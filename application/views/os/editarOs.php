@@ -73,7 +73,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
-                                <form action="<?= current_url() ?>" method="post" id="formOs">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formOs">
                                     <?= form_hidden('idOs', $result->idOs) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>N° OS: <?= esc($result->idOs) ?></h3>
@@ -261,10 +261,10 @@ foreach ($servicos as $s) {
 foreach ($produtos as $p) {
     $total = $total + $p->subTotal;
     echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
-    echo '<td><div align="center">' . $p->quantidade . '</td>';
-    echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda) . '</td>';
-    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
+    echo '<td>' . esc($p->descricao) . '</td>';
+    echo '<td><div align="center">' . esc($p->quantidade) . '</td>';
+    echo '<td><div align="center">R$: ' . esc($p->preco ?: $p->precoVenda) . '</td>';
+    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . esc($p->idProdutos_os) . '" prodAcao="' . esc($p->idProdutos) . '" quantAcao="' . esc($p->quantidade) . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
     echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
     echo '</tr>';
 } ?>
@@ -339,10 +339,10 @@ foreach ($servicos as $s) {
     $subtotals = $preco * ($s->quantidade ?: 1);
     $totals = $totals + $subtotals;
     echo '<tr>';
-    echo '<td>' . $s->nome . '</td>';
-    echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
-    echo '<td><div align="center">R$ ' . $preco . '</div></td>';
-    echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
+    echo '<td>' . esc($s->nome) . '</td>';
+    echo '<td><div align="center">' . esc($s->quantidade ?: 1) . '</div></td>';
+    echo '<td><div align="center">R$ ' . esc($preco) . '</div></td>';
+    echo '<td><div align="center"><span idAcao="' . esc($s->idServicos_os) . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
     echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
     echo '</tr>';
 } ?>
@@ -397,8 +397,8 @@ foreach ($servicos as $s) {
                                             $link = $a->url . '/' . $a->anexo;
                                         }
                                         echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                                        <img src="' . $thumb . '" alt="">
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . esc_img_src($thumb) . '" alt="">
                                                     </a>
                                                 </div>';
                                     }
@@ -431,8 +431,8 @@ foreach ($servicos as $s) {
         foreach ($anotacoes as $a) {
             echo '<tr>';
             echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-            echo '<td>' . $a->anotacao . '</td>';
-            echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
+            echo '<td>' . esc($a->anotacao) . '</td>';
+            echo '<td><span idAcao="' . esc($a->idAnotacoes) . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
             echo '</tr>';
         }
 if (!$anotacoes) {
@@ -502,7 +502,7 @@ if (!$anotacoes) {
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
-    <form id="formFaturar" action="<?= current_url() ?>" method="post">
+    <form id="formFaturar" action="<?= esc_url(current_url()) ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar OS</h3>
@@ -984,12 +984,12 @@ if (!$anotacoes) {
                         dataType: 'json',
                         success: function (data) {
                             if (data.result == true) {
-                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                                $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#resultado").val('');
                                 $("#desconto").val('');
-                                $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                                $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
@@ -1039,12 +1039,12 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divServicos").load("<?= current_url() ?> #divServicos");
+                            $("#divServicos").load(<?= esc_json(current_url()) ?> + " #divServicos");
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
@@ -1081,7 +1081,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnotacoes").load("<?= current_url() ?> #divAnotacoes");
+                            $("#divAnotacoes").load(<?= esc_json(current_url()) ?> + " #divAnotacoes");
                             $("#anotacao").val('');
                             $('#btn-close-anotacao').trigger('click');
                             $("#divFormAnotacoes").html('');
@@ -1115,7 +1115,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                            $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                             $("#userfile").val('');
 
                         } else {
@@ -1135,7 +1135,7 @@ if (!$anotacoes) {
             var idProduto = $(this).attr('idAcao');
             var quantidade = $(this).attr('quantAcao');
             var produto = $(this).attr('prodAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idProduto % 1) == 0) {
                 $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1145,8 +1145,8 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1166,7 +1166,7 @@ if (!$anotacoes) {
 
         $(document).on('click', '.servico', function (event) {
             var idServico = $(this).attr('idAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idServico % 1) == 0) {
                 $("#divServicos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1176,8 +1176,8 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divServicos").load("<?= current_url() ?> #divServicos");
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divServicos").load(<?= esc_json(current_url()) ?> + " #divServicos");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1209,7 +1209,7 @@ if (!$anotacoes) {
         $(document).on('click', '#excluir-anexo', function (event) {
             event.preventDefault();
             var link = $(this).attr('link');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             $('#modal-anexo').modal('hide');
             $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
 
@@ -1220,7 +1220,7 @@ if (!$anotacoes) {
                 data: "idOs=" + idOS,
                 success: function (data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                        $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                     } else {
                         Swal.fire({
                             type: "error",
@@ -1234,7 +1234,7 @@ if (!$anotacoes) {
 
         $(document).on('click', '.anotacao', function (event) {
             var idAnotacao = $(this).attr('idAcao');
-            var idOS = <?= esc_js($result->idOs) ?>
+            var idOS = <?= esc_json($result->idOs) ?>;
             if ((idAnotacao % 1) == 0) {
                 $("#divAnotacoes").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                 $.ajax({
@@ -1244,7 +1244,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnotacoes").load("<?= current_url() ?> #divAnotacoes");
+                            $("#divAnotacoes").load(<?= esc_json(current_url()) ?> + " #divAnotacoes");
 
                         } else {
                             Swal.fire({
